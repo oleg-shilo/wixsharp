@@ -1,7 +1,11 @@
+<img align="right" src="https://download-codeplex.sec.s-msft.com/Download?ProjectName=wixsharp&DownloadId=872632&Build=21031" alt="" style="float:right">
+
 # Wix# (WixSharp) - managed interface for WiX
 
 **_Framework for building a complete MSI or WiX source code by using script files written with the C# syntax._**
 
+In July 2014 Wix# was migrated here on CodePlex and re-released under MIT license.
+At the time of creating this repository CS-Script has been downloaded 23,236 times.
 
 _The project has been migrated to GitHub from CodePlex [Wix#](https://wixsharp.codeplex.com/), where you can still find old releases and some useful content from the past discussions._
 
