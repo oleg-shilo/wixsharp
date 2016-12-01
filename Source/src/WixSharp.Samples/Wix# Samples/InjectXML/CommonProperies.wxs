@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product >
+    <Property Id="Prop1" Value="1" />
+    <Property Id="Prop2" Value="2" />
+    <Property Id="Prop3" Value="3" />
+    <Property Id="Prop4" Value="4" />
+  </Product>
+</Wix>
+

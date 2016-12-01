@@ -1,0 +1,1 @@
+This sample demonstrates how to define Managed Custom Actions.Execute corresponding .cmd file to build desired msi. Then execute the Install.cmd to start the installation.In this examples Managed CA just shows MessageBox and prints "Begin MyAction Hello World" into setup log file. The more complicated examples are in "Different Scenarios" directory.

@@ -1,0 +1,1431 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WixSharp.UI</name>
+    </assembly>
+    <members>
+        <member name="T:WixSharp.UI.Forms.ExitDialog">
+            <summary>
+            The standard Exit dialog
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ExitDialog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.ExitDialog"/> class.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.ExitDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ExitDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ExitDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:WixSharp.UI.Forms.FeatureItem">
+            <summary>
+            Equivalent of Microsoft.Deployment.WindowsInstaller.FeatureInfo which is read-only and doesn't work anyway (at least in WiX v3.9)
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.FeatureItem.Name">
+            <summary>
+            The name of the Feature
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.FeatureItem.ParentName">
+            <summary>
+            The name of the parent Feature
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.FeatureItem.Title">
+            <summary>
+            The title of the Feature
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.FeatureItem.Description">
+            <summary>
+            The description of the Feature
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.FeatureItem.View">
+            <summary>
+            The view of the Feature. Typically a TreeNode
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.FeatureItem.Parent">
+            <summary>
+            The parent FeatureItem
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.FeatureItem.RequestedState">
+            <summary>
+            The requested state. Defines the InstallState of the feature to be achieved as the result of the MSI execution.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.FeatureItem.CurrentState">
+            <summary>
+            The current state. Defines the InstallState of the feature before the MSI execution.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.FeatureItem.Attributes">
+            <summary>
+            The defines how the feature should be displayed in the feature tree.
+            </summary>
+        </member>
+        <member name="P:WixSharp.UI.Forms.FeatureItem.DisallowAbsent">
+            <summary>
+            Gets a value indicating whether the feature is allowed to be "absent".
+            </summary>
+            <value>
+              <c>true</c> if "disallow absent"; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:WixSharp.UI.Forms.FeatureItem.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.FeatureItem"/> class.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.FeatureItem.#ctor(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.FeatureItem"/> class.
+            </summary>
+            <param name="session">The session.</param>
+            <param name="name">The name.</param>
+        </member>
+        <member name="M:WixSharp.UI.Forms.FeatureItem.ToString">
+            <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
+        <member name="M:WixSharp.UI.Forms.FeatureItem.DetectFeatureState(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+            <summary>
+            Detects the state of the feature.
+            </summary>
+            <param name="session">The session.</param>
+            <param name="name">The name.</param>
+            <returns></returns>
+        </member>
+        <member name="T:WixSharp.UI.Forms.AdvancedFeaturesDialog">
+            <summary>
+            The standard Features dialog.  
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.AdvancedFeaturesDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.AdvancedFeaturesDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:WixSharp.UI.Forms.AdvancedFeaturesDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:WixSharp.UI.Forms.FeaturesDialog">
+            <summary>
+            The logical equivalent of the standard Features dialog. Though it implement slightly 
+            different user experience as it has checkboxes bound to the features instead of icons context menu
+            as MSI dialog has.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.FeaturesDialog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.FeaturesDialog"/> class.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.FeaturesDialog.UserSelectedItems">
+            <summary>
+            The collection of the features selected by user as the features to be installed.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.FeaturesDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.FeaturesDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:WixSharp.UI.Forms.FeaturesDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:WixSharp.UI.Forms.ManagedForm">
+            <summary>
+            The base class for all WinForm based dialogs of ManagedUI.
+            </summary>
+            <example>The following is an example of defining installation directory <c>Progam Files/My Company/My Product</c>
+            containing a single file <c>MyApp.exe</c> and subdirectory <c>Documentation</c> with <c>UserManual.pdf</c> file.
+            <code>
+            public partial class CustomDialog : ManagedForm, IManagedDialog
+            {
+                public UserNameDialog()
+                {
+                    //instantiate banner PictureBox and back/next/cancel Buttons
+                    InitializeComponent();
+                }
+                
+                void CustomDialog_Load(object sender, EventArgs e)
+                {
+                    banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
+                } 
+                
+                void back_Click(object sender, EventArgs e)
+                {
+                    Shell.GoPrev();
+                }
+                
+                void next_Click(object sender, EventArgs e)
+                {
+                    Shell.GoNext();
+                }
+                
+                void cancel_Click(object sender, EventArgs e)
+                {
+                    Shell.Cancel();
+                }
+            }
+            </code>
+            </example>
+        </member>
+        <member name="P:WixSharp.UI.Forms.ManagedForm.Shell">
+            <summary>
+            Gets or sets the UI shell (main UI window). This property is set the ManagedUI runtime (IManagedUI). 
+            On the other hand it is consumed (accessed) by the UI dialog (IManagedDialog).
+            </summary>
+            <value>
+            The shell.
+            </value>
+        </member>
+        <member name="P:WixSharp.UI.Forms.ManagedForm.MsiRuntime">
+            <summary>
+            Gets the MSI runtime context.
+            </summary>
+            <value>
+            The msi runtime.
+            </value>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ManagedForm.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+            <summary>
+            Processes information and progress messages sent to the user interface.
+            <para> This method directly mapped to the
+            <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI.ProcessMessage" />.</para>
+            </summary>
+            <param name="messageType">Type of the message.</param>
+            <param name="messageRecord">The message record.</param>
+            <param name="buttons">The buttons.</param>
+            <param name="icon">The icon.</param>
+            <param name="defaultButton">The default button.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ManagedForm.OnShellChanged">
+            <summary>
+            Called when Shell is changed. It is a good place to initialize the dialog to reflect the MSI session 
+            (e.g. localize the view).
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ManagedForm.OnExecuteComplete">
+            <summary>
+            Called when MSI execution is complete.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ManagedForm.OnExecuteStarted">
+            <summary>
+            Called when MSI execute started.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ManagedForm.OnProgress(System.Int32)">
+            <summary>
+            Called when MSI execution progress is changed.
+            </summary>
+            <param name="progressPercentage">The progress percentage.</param>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ManagedForm.Localize">
+            <summary>
+            Localizes the form and its contained <see cref="T:System.Windows.Forms.Control.Text"/> from the specified localization 
+            delegate 'localize'. 
+            <para>The method substitutes both localization file (*.wxl) entries and MSI properties contained by the input string
+            with their translated/converted values.</para>
+            <remarks>
+            Note that both localization entries and MSI properties must be enclosed in the square brackets 
+            (e.g. "[ProductName] Setup", "[InstallDirDlg_Title]").
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ManagedForm.SetShellSize(System.Int32,System.Int32)">
+            <summary>
+            Sets the size of the shell.
+            </summary>
+            <param name="width">The width.</param>
+            <param name="height">The height.</param>
+        </member>
+        <member name="T:WixSharp.UI.Forms.Extensions">
+            <summary>
+            Set of extension methods for working with ManagedUI dialogs
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.Extensions.IsViewChecked(WixSharp.UI.Forms.FeatureItem)">
+            <summary>
+            Determines whether the feature checkbox is checked.
+            </summary>
+            <param name="feature">The feature.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.UI.Forms.Extensions.ResetViewChecked(WixSharp.UI.Forms.FeatureItem)">
+            <summary>
+            Resets the whether the feature checkbox checked state to the initial stat.
+            </summary>
+            <param name="feature">The feature.</param>
+        </member>
+        <member name="M:WixSharp.UI.Forms.Extensions.DefaultIsToBeInstalled(WixSharp.UI.Forms.FeatureItem)">
+            <summary>
+            Returns default 'is to be installed' state of teh feature.
+            </summary>
+            <param name="feature">The feature.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.UI.Forms.Extensions.FeatureItem(System.Windows.Forms.TreeNode)">
+            <summary>
+            Returns the FeatireItem bound to the TreeNode.
+            </summary>
+            <param name="node">The node.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.UI.Forms.Extensions.ToArray(System.Windows.Forms.TreeNodeCollection)">
+            <summary>
+            Converts TreeNodeCollection into the TreeNode array.
+            </summary>
+            <param name="nodes">The nodes.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.UI.Forms.Extensions.AllNodes(System.Windows.Forms.TreeView)">
+            <summary>
+            Aggregates all nodes of the TreeView control.
+            </summary>
+            <param name="treeView">The tree view.</param>
+            <returns></returns>
+        </member>
+        <member name="T:WixSharp.UI.Forms.MaintenanceTypeDialog">
+            <summary>
+            The standard Maintenance Type dialog
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.MaintenanceTypeDialog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.MaintenanceTypeDialog"/> class.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.MaintenanceTypeDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.MaintenanceTypeDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:WixSharp.UI.Forms.MaintenanceTypeDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:WixSharp.UI.Forms.WelcomeDialog">
+            <summary>
+            The standard Welcome dialog
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.WelcomeDialog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.WelcomeDialog"/> class.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.WelcomeDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.WelcomeDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:WixSharp.UI.Forms.WelcomeDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:WixSharp.UI.Forms.InstallDirDialog">
+            <summary>
+            The standard InstallDir dialog
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.InstallDirDialog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.InstallDirDialog"/> class.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.InstallDirDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.InstallDirDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:WixSharp.UI.Forms.InstallDirDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:WixSharp.UI.Forms.LicenceDialog">
+            <summary>
+            The standard Licence dialog
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.LicenceDialog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.LicenceDialog"/> class.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.LicenceDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.LicenceDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:WixSharp.UI.Forms.LicenceDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:WixSharp.UI.Forms.SetupTypeDialog">
+            <summary>
+            The standard Setup Type dialog
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.SetupTypeDialog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.SetupTypeDialog"/> class.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.SetupTypeDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.SetupTypeDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:WixSharp.UI.Forms.SetupTypeDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:WixSharp.UI.Forms.ProgressDialog">
+            <summary>
+            The standard Installation Progress dialog
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ProgressDialog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.ProgressDialog"/> class.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ProgressDialog.OnShellChanged">
+            <summary>
+            Called when Shell is changed. It is a good place to initialize the dialog to reflect the MSI session 
+            (e.g. localize the view).
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ProgressDialog.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+            <summary>
+            Processes the message.
+            </summary>
+            <param name="messageType">Type of the message.</param>
+            <param name="messageRecord">The message record.</param>
+            <param name="buttons">The buttons.</param>
+            <param name="icon">The icon.</param>
+            <param name="defaultButton">The default button.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ProgressDialog.OnProgress(System.Int32)">
+            <summary>
+            Called when MSI execution progress is changed.
+            </summary>
+            <param name="progressPercentage">The progress percentage.</param>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ProgressDialog.OnExecuteComplete">
+            <summary>
+            Called when MSI execution is complete.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ProgressDialog.cancel_Click(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Click event of the cancel control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
+        </member>
+        <member name="F:WixSharp.UI.Forms.ProgressDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ProgressDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:WixSharp.UI.Forms.ProgressDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:WixSharp.UI.ManagedUI.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:WixSharp.UI.ManagedUI.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:WixSharp.UI.ManagedUI.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:WixSharp.UI.ManagedUI.Resources.WixSharp_LicenceFile">
+             <summary>
+               Looks up a localized string similar to {\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang3081{\fonttbl{\f0\fswiss\fprq2\fcharset0 Tahoma;}{\f1\fnil\fcharset0 Calibri;}}
+            {\*\generator Riched20 6.3.9600}\viewkind4\uc1 
+            \pard\b\f0\fs22\lang1033 Common Public License Version 1.0\par
+            \b0\fs20\par
+            THE ACCOMPANYING PROGRAM IS PROVIDED UNDER THE TERMS OF THIS COMMON PUBLIC LICENSE (&quot;AGREEMENT&quot;). ANY USE, REPRODUCTION OR DISTRIBUTION OF THE PROGRAM CONSTITUTES RECIPIENT&apos;S ACCEPTANCE OF THIS AGREEMENT.\par
+            \par
+            \par
+            1. DEFINITIONS \par
+            \par
+            &quot;Contri [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="P:WixSharp.UI.ManagedUI.Resources.WixUI_Bmp_Banner">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:WixSharp.UI.ManagedUI.Resources.WixUI_Bmp_Dialog">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:WixSharp.UI.ManagedUI.Resources.WixUI_en_us">
+            <summary>
+              Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
+        <member name="T:WixSharp.ManagedUI">
+             <summary>
+             Implements as standard dialog-based MSI embedded UI. 
+             <para>
+             This class allows defining separate sequences of UI dialogs for 'install' 
+             and 'modify' MSI executions. The dialog sequence can contain any mixture 
+             of built-in standard dialogs and/or custom dialogs (Form inherited from <see cref="T:WixSharp.UI.Forms.ManagedForm"/>).
+             </para>
+             </summary>
+             <example>The following is an example of installing <c>MyLibrary.dll</c> assembly and registering it in GAC.
+             <code>
+             ...
+             project.ManagedUI = new ManagedUI();
+             project.ManagedUI.InstallDialogs.Add(Dialogs.Welcome)
+                                             .Add(Dialogs.Licence)
+                                             .Add(Dialogs.SetupType)
+                                             .Add(Dialogs.Features)
+                                             .Add(Dialogs.InstallDir)
+                                             .Add(Dialogs.Progress)
+                                             .Add(Dialogs.Exit);
+            
+             project.ManagedUI.ModifyDialogs.Add(Dialogs.MaintenanceType)
+                                            .Add(Dialogs.Features)
+                                            .Add(Dialogs.Progress)
+                                            .Add(Dialogs.Exit);
+            
+             </code>
+             </example>
+        </member>
+        <member name="F:WixSharp.ManagedUI.Default">
+            <summary>
+            The default implementation of ManagedUI. It implements all major dialogs of a typical MSI UI.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ManagedUI.Empty">
+            <summary>
+            The default implementation of ManagedUI with no UI dialogs.
+            </summary>
+        </member>
+        <member name="M:WixSharp.ManagedUI.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ManagedUI"/> class.
+            </summary>
+        </member>
+        <member name="M:WixSharp.ManagedUI.BeforeBuild(WixSharp.ManagedProject)">
+            <summary>
+            This method is called (indirectly) by Wix# compiler just before building the MSI. It allows embedding UI specific resources (e.g. license file, properties)
+            into the MSI.
+            </summary>
+            <param name="project">The project.</param>
+        </member>
+        <member name="M:WixSharp.ManagedUI.ValidateUITextFile(System.String,System.Boolean)">
+            <summary>
+            Validates the UI text file (localization file) for being compatible with ManagedUI.
+            </summary>
+            <param name="file">The file.</param>
+            <param name="throwOnError">if set to <c>true</c> [throw on error].</param>
+            <returns></returns>
+        </member>
+        <member name="P:WixSharp.ManagedUI.InstallDirId">
+            <summary>
+            Gets or sets the id of the 'installdir' (destination folder) directory. It is the directory,
+            which is bound to the input UI elements of the Browse dialog (e.g. WiX BrowseDlg, Wix# InstallDirDialog).
+            </summary>
+            <value>
+            The install dir identifier.
+            </value>
+        </member>
+        <member name="P:WixSharp.ManagedUI.InstallDialogs">
+            <summary>
+            Sequence of the dialogs to be displayed during the installation of the product.
+            </summary>
+        </member>
+        <member name="P:WixSharp.ManagedUI.ModifyDialogs">
+            <summary>
+            Sequence of the dialogs to be displayed during the customization of the installed product.
+            </summary>
+        </member>
+        <member name="P:WixSharp.ManagedUI.Icon">
+            <summary>
+            A window icon that appears in the left top corner of the UI shell window.
+            </summary>
+        </member>
+        <member name="M:WixSharp.ManagedUI.Initialize(Microsoft.Deployment.WindowsInstaller.Session,System.String,Microsoft.Deployment.WindowsInstaller.InstallUIOptions@)">
+            <summary>
+            Initializes the specified session.
+            </summary>
+            <param name="session">The session.</param>
+            <param name="resourcePath">The resource path.</param>
+            <param name="uiLevel">The UI level.</param>
+            <returns></returns>
+            <exception cref="T:Microsoft.Deployment.WindowsInstaller.InstallCanceledException"></exception>
+        </member>
+        <member name="M:WixSharp.ManagedUI.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+            <summary>
+            Processes information and progress messages sent to the user interface.
+            </summary>
+            <param name="messageType">Message type.</param>
+            <param name="messageRecord">Record that contains message data.</param>
+            <param name="buttons">Message buttons.</param>
+            <param name="icon">Message box icon.</param>
+            <param name="defaultButton">Message box default button.</param>
+            <returns>
+            Result of processing the message.
+            </returns>
+            <remarks>
+            <p>
+            Win32 MSI API:
+            <a href="http://msdn.microsoft.com/library/en-us/msi/setup/embeddeduihandler.asp">EmbeddedUIHandler</a></p>
+            </remarks>
+        </member>
+        <member name="M:WixSharp.ManagedUI.Shutdown">
+            <summary>
+            Shuts down the embedded UI at the end of the installation.
+            </summary>
+            <remarks>
+            If the installation was canceled during initialization, this method will not be called.
+            If the installation was canceled or failed at any later point, this method will be called at the end.
+            <p>
+            Win32 MSI API:
+            <a href="http://msdn.microsoft.com/library/en-us/msi/setup/shutdownembeddedui.asp">ShutdownEmbeddedUI</a></p>
+            </remarks>
+        </member>
+        <member name="T:WixSharp.ShowClrDialogAction">
+             <summary>
+             Defines WiX Managed CustomAction.
+             <para>
+             Managed CustomAction can be defined either in the Wix# script or in the external assembly or C# file.
+             The only requirements for any C# method to be qualified for being Managed CustomAcyion is to
+             have DTF Action signature <c>public static ActionResult MyManagedAction(Session session)</c>, and be
+             marked with <c>[CustomAction]</c> attribute.
+             </para>
+             <para>
+             If Managed CustomAction depends on any assembly, which will not be registered with GAC on the
+             target system such assembly needs to be listed in the <see cref="F:WixSharp.ManagedAction.RefAssemblies"/>.
+             </para>
+             <remarks>
+             <see cref="T:WixSharp.ManagedAction"/> often needs to be executed with the elevated privileges. Thus after instantiation it will have
+             <see cref="F:WixSharp.Action.Impersonate"/> set to <c>false</c> and <see cref="F:WixSharp.Action.Execute"/> set to <c>Execute.deferred</c> to allow elevating.
+             </remarks>
+             </summary>
+             <example>The following is an example of using <c>MyManagedAction</c> method of the class
+             <c>CustomActions</c> as a Managed CustomAction.
+             <code>
+             class Script
+             {
+                 static public void Main(string[] args)
+                 {
+                     var project =
+                         new Project("My Product",
+            
+                             new Dir(@"%ProgramFiles%\My Company\My Product",
+            
+                                 new File(@"AppFiles\MyApp.exe",
+                                     new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
+                                     new WixSharp.Shortcut("MyApp", @"%Desktop%")),
+            
+                                 new File(@"AppFiles\Readme.txt"),
+            
+                             new ManagedAction(@"MyManagedAction"),
+            
+                             ...
+            
+                     Compiler.BuildMsi(project);
+                 }
+             }
+            
+             public class CustomActions
+             {
+                 [CustomAction]
+                 public static ActionResult MyManagedAction(Session session)
+                 {
+                     MessageBox.Show("Hello World!", "Managed CA");
+                     return ActionResult.Success;
+                 }
+             }
+             </code>
+             </example>
+        </member>
+        <member name="M:WixSharp.ShowClrDialogAction.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ShowClrDialogAction"/> class.
+            </summary>
+        </member>
+        <member name="M:WixSharp.ShowClrDialogAction.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ShowClrDialogAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
+        </member>
+        <member name="M:WixSharp.ShowClrDialogAction.#ctor(WixSharp.Id,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ShowClrDialogAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ShowClrDialogAction"/> instance.</param>
+            <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
+        </member>
+        <member name="M:WixSharp.ShowClrDialogAction.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ShowClrDialogAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.</param>
+        </member>
+        <member name="M:WixSharp.ShowClrDialogAction.#ctor(WixSharp.Id,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ShowClrDialogAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ShowClrDialogAction"/> instance.</param>
+            <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.</param>
+        </member>
+        <member name="T:WixSharp.MsiRuntime">
+            <summary>
+            Represents MSI runtime context. This class is to be used by ManagedUI dialogs to interact with the MSI session. 
+            </summary>
+        </member>
+        <member name="F:WixSharp.MsiRuntime.StartExecute">
+            <summary>
+            Starts the execution of the MSI installation.
+            </summary>
+        </member>
+        <member name="F:WixSharp.MsiRuntime.CancelExecute">
+            <summary>
+            Cancels the execution of the MSI installation, which is already started (progress is displayed).
+            </summary>
+        </member>
+        <member name="F:WixSharp.MsiRuntime.Session">
+            <summary>
+            The session object.
+            </summary>
+        </member>
+        <member name="F:WixSharp.MsiRuntime.Data">
+            <summary>
+            Repository of the session properties to be captured and transfered to the deferred CAs.for 
+            </summary>
+        </member>
+        <member name="F:WixSharp.MsiRuntime.UIText">
+            <summary>
+            Localization map. 
+            </summary>
+        </member>
+        <member name="M:WixSharp.MsiRuntime.#ctor(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.MsiRuntime"/> class.
+            </summary>
+            <param name="session">The session.</param>
+        </member>
+        <member name="M:WixSharp.MsiRuntime.GetMsiBitmap(System.String)">
+            <summary>
+            Gets the bitmap from the MSI embedded resources ('Binary' table).
+            </summary>
+            <param name="name">The name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.MsiRuntime.Localize(System.String)">
+            <summary>
+            Localizes the specified text.
+            <para>The localization is performed according two possible scenarios. The method will return the match form the MSI embedded localization file. 
+            However if it cannot find the match the method will try to find the and return the match in the MSI session properties.</para>
+            <para>This method is mainly used by 'LocalizeWith' extension for a single step localization of WinForm controls.</para>
+            </summary>
+            <param name="text">The text.</param>
+            <returns></returns>
+        </member>
+        <member name="F:WixSharp.MsiRuntime.ProductName">
+            <summary>
+            The product name
+            </summary>
+        </member>
+        <member name="P:WixSharp.MsiRuntime.InstallDir">
+            <summary>
+            The directory the product is to be installed. This field will contain a valid path only after the MSI execution started.
+            </summary>
+        </member>
+        <member name="F:WixSharp.MsiRuntime.ProductCode">
+            <summary>
+            The product code
+            </summary>
+        </member>
+        <member name="F:WixSharp.MsiRuntime.ProductVersion">
+            <summary>
+            The product version
+            </summary>
+        </member>
+        <member name="T:WixSharp.ResourcesData">
+            <summary>
+            Localization map. It is nothing else but a specialized version of a generic string-to-string Dictionary.
+            </summary>
+        </member>
+        <member name="M:WixSharp.ResourcesData.InitFromWxl(System.Byte[])">
+            <summary>
+            Initializes from WiX localization data (*.wxl).
+            </summary>
+            <param name="wxlData">The WXL file bytes.</param>
+            <returns></returns>
+        </member>
+        <member name="P:WixSharp.ResourcesData.Item(System.String)">
+            <summary>
+            Gets or sets the value associated with the specified key.
+            </summary>
+            <param name="key">The key.</param>
+            <returns></returns>
+        </member>
+        <member name="T:WixSharp.Bootstrapper.SilentBootstrapperApplication">
+            <summary>
+            Defines Wix# bootstrapper managed application with no User Interface.
+            <para>It is a design time 'adapter' for the canonical WiX managed bootstrapper application <see cref="T:WixSharp.Bootstrapper.SilentManagedBA"/>.</para>
+            <para><see cref="T:WixSharp.Bootstrapper.SilentManagedBA"/> automatically handles <see cref="T:Microsoft.Tools.WindowsInstallerXml.Bootstrapper.BootstrapperApplication"/> events and 
+            detects the current package/product state (present vs. absent). The package state detection is based on the <see cref="T:WixSharp.Bootstrapper.SilentBootstrapperApplication.PrimaryPackageId"/>. 
+            If this member is no t then the Id of the lats package in the Bundle will be used instead.</para>
+            </summary>
+            <example>
+            <code>
+             var bootstrapper =
+                 new Bundle("My Product",
+                     new PackageGroupRef("NetFx40Web"),
+                     new MsiPackage("product.msi"));
+                     
+            bootstrapper.AboutUrl = "https://wixsharp.codeplex.com/";
+            bootstrapper.IconFile = "app_icon.ico";
+            bootstrapper.Version = new Version("1.0.0.0");
+            bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
+            bootstrapper.Application = new SilentBootstrapperApplication();
+            
+            bootstrapper.Build();
+            </code>
+            </example>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.SilentBootstrapperApplication.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.SilentBootstrapperApplication"/> class.
+            </summary>
+            <param name="primaryPackageId">The primary package identifier.</param>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.SilentBootstrapperApplication.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.SilentBootstrapperApplication"/> class.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.SilentBootstrapperApplication.AutoGenerateSources(System.String)">
+            <summary>
+            Automatically generates required sources files for building the Bootstrapper. It is
+            used to automatically generate the files which, can be generated automatically without
+            user involvement (e.g. BootstrapperCore.config).
+            </summary>
+            <param name="outDir">The output directory.</param>
+        </member>
+        <member name="T:WixSharp.Bootstrapper.SilentManagedBA">
+            <summary>
+            Implements canonical WiX managed bootstrapper application without any UI.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.Run">
+            <summary>
+            Entry point that is called when the Bootstrapper application is ready to run.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.OnPlanComplete(System.Object,Microsoft.Tools.WindowsInstallerXml.Bootstrapper.PlanCompleteEventArgs)">
+            <summary>
+            Method that gets invoked when the Bootstrapper PlanComplete event is fired.
+            If the planning was successful, it instructs the Bootstrapper Engine to 
+            install the packages.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.OnDetectPackageComplete(System.Object,Microsoft.Tools.WindowsInstallerXml.Bootstrapper.DetectPackageCompleteEventArgs)">
+            <summary>
+            Method that gets invoked when the Bootstrapper DetectPackageComplete event is fired.
+            Checks the PackageId and sets the installation scenario. The PackageId is the ID
+            specified in one of the package elements (msipackage, exepackage, msppackage,
+            msupackage) in the WiX bundle.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.OnApplyComplete(System.Object,Microsoft.Tools.WindowsInstallerXml.Bootstrapper.ApplyCompleteEventArgs)">
+            <summary>
+            Method that gets invoked when the Bootstrapper ApplyComplete event is fired.
+            This is called after a bundle installation has completed. Make sure we updated the view.
+            </summary>
+        </member>
+        <member name="T:WixSharp.Forms.Dialogs">
+            <summary>
+            Set of ManagedUI dialogs (WinForm) that implement all standard MSI UI dialogs.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Forms.Dialogs.Welcome">
+            <summary>
+            The standard Welcome dialog
+            </summary>
+        </member>
+        <member name="F:WixSharp.Forms.Dialogs.Licence">
+            <summary>
+            The standard Licence dialog
+            </summary>
+        </member>
+        <member name="F:WixSharp.Forms.Dialogs.Features">
+            <summary>
+            The standard Features dialog
+            </summary>
+        </member>
+        <member name="F:WixSharp.Forms.Dialogs.InstallDir">
+            <summary>
+            The standard InstallDir dialog
+            </summary>
+        </member>
+        <member name="F:WixSharp.Forms.Dialogs.Progress">
+            <summary>
+            The standard Installation Progress dialog
+            </summary>
+        </member>
+        <member name="F:WixSharp.Forms.Dialogs.SetupType">
+            <summary>
+            The standard Setup Type dialog. To be used during the installation of the product.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Forms.Dialogs.MaintenanceType">
+            <summary>
+            The standard Maintenance Type dialog.To be used during the maintenance of the product.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Forms.Dialogs.Exit">
+            <summary>
+            The standard Exit dialog
+            </summary>
+        </member>
+        <member name="P:WixSharp.Forms.ShellView.CurrentDialog">
+            <summary>
+            Gets and sets the current dialog of the UI sequence.
+            </summary>
+            <value>The current dialog.</value>
+        </member>
+        <member name="M:WixSharp.UIExtensions.GetDirectoryPath(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+            <summary>
+            Gets the target system directory path based on specified directory name (MSI Directory table).
+            </summary>
+            <param name="session">The session.</param>
+            <param name="name">The name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.UIExtensions.LocalizeWith(System.Windows.Forms.Control,System.Func{System.String,System.String})">
+            <summary>
+            Localizes the control its contained <see cref="T:System.Windows.Forms.Control.Text"/> from the specified localization 
+            delegate 'localize'. 
+            <para>The method substitutes both localization file (*.wxl) entries and MSI properties contained by the input string
+            with their translated/converted values.</para>
+            <remarks>
+            Note that both localization entries and MSI properties must be enclosed in the square brackets 
+            (e.g. "[ProductName] Setup", "[InstallDirDlg_Title]").
+            </remarks>
+            </summary>
+            <param name="control">The control.</param>
+            <param name="localize">The localize.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.UIExtensions.LocalizeWith(System.String,System.Func{System.String,System.String})">
+            <summary>
+            Localizes the string from the specified localization delegate 'localize'.
+            <para>The method substitutes both localization file (*.wxl) entries and MSI properties contained by the input string
+            with their translated/converted values.</para>
+            <remarks>
+            Note that both localization entries and MSI properties must be enclosed in the square brackets 
+            (e.g. "[ProductName] Setup", "[InstallDirDlg_Title]").
+            </remarks>
+            </summary>
+            <param name="textToLocalize">The text to localize.</param>
+            <param name="localize">The localize.</param>
+            <returns></returns>
+        </member>
+        <member name="T:WixSharp.IUIContainer">
+            <summary>
+            Interface of the main window implementation of the MSI external/embedded UI. This interface is designed to be 
+            used by Wix#/MSI runtime (e.g. ManagedUI). It is the interface that is directly bound to the 
+            <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI"/> (e.g. <see cref="T:WixSharp.ManagedUI"/>). 
+            </summary>
+        </member>
+        <member name="M:WixSharp.IUIContainer.ShowModal(WixSharp.MsiRuntime,WixSharp.IManagedUI)">
+            <summary>
+            Shows the modal window of the MSI UI. This method is called by the <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI"/>
+            when it is initialized at runtime.
+            </summary>
+            <param name="msiRuntime">The MSI runtime.</param>
+            <param name="ui">The MSI external/embedded UI.</param>
+        </member>
+        <member name="M:WixSharp.IUIContainer.OnExecuteComplete">
+            <summary>
+            Called when MSI execution is complete.
+            </summary>
+        </member>
+        <member name="M:WixSharp.IUIContainer.OnExecuteStarted">
+            <summary>
+            Called when MSI execute started.
+            </summary>
+        </member>
+        <member name="M:WixSharp.IUIContainer.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+            <summary>
+             Processes information and progress messages sent to the user interface.
+            <para> This method directly mapped to the 
+            <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI.ProcessMessage"/>.</para>
+            </summary>
+            <param name="messageType">Type of the message.</param>
+            <param name="messageRecord">The message record.</param>
+            <param name="buttons">The buttons.</param>
+            <param name="icon">The icon.</param>
+            <param name="defaultButton">The default button.</param>
+            <returns></returns>
+        </member>
+        <member name="T:WixSharp.UIShell">
+            <summary>
+            The main window WinForms implementation of the MSI external/embedded UI. 
+            </summary>
+        </member>
+        <member name="P:WixSharp.UIShell.RuntimeContext">
+            <summary>
+            Gets the runtime context object. Typically this object is of the <see cref="T:WixSharp.MsiRuntime" /> type.
+            </summary>
+            <value>
+            The runtime context.
+            </value>
+        </member>
+        <member name="P:WixSharp.UIShell.MsiRuntime">
+            <summary>
+            Gets or sets the runtime context object. Typically this object is of the <see cref="T:WixSharp.MsiRuntime" /> type.
+            </summary>
+            <value>
+            The runtime context.
+            </value>
+            
+        </member>
+        <member name="P:WixSharp.UIShell.UI">
+            <summary>
+            Gets or sets the UI.
+            </summary>
+            <value>The UI.</value>
+        </member>
+        <member name="P:WixSharp.UIShell.UserInterrupted">
+            <summary>
+            Gets a value indicating whether the MSI session was interrupted (canceled) by user.
+            </summary>
+            <value>
+              <c>true</c> if it was user interrupted; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:WixSharp.UIShell.ErrorDetected">
+            <summary>
+            Gets a value indicating whether MSI session ended with error.
+            </summary>
+            <value>
+              <c>true</c> if error was detected; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:WixSharp.UIShell.StartExecute">
+            <summary>
+            Starts the execution of the MSI installation.
+            </summary>
+        </member>
+        <member name="P:WixSharp.UIShell.Dialogs">
+            <summary>
+            Gets the sequence of the UI dialogs specific for the current setup type (e.g. install vs. modify).
+            </summary>
+            <value>
+            The dialogs.
+            </value>
+        </member>
+        <member name="P:WixSharp.UIShell.CurrentDialog">
+            <summary>
+            Gets the current dialog of the UI sequence.
+            </summary>
+            <value>The current dialog.</value>
+        </member>
+        <member name="P:WixSharp.UIShell.CurrentDialogIndex">
+            <summary>
+            Gets or sets the current dialog by the dialog index.
+            </summary>
+            <value>The index of the current dialog.</value>
+        </member>
+        <member name="M:WixSharp.UIShell.ShowModal(WixSharp.MsiRuntime,WixSharp.IManagedUI)">
+            <summary>
+            Shows the modal window of the MSI UI. This method is called by the <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI" />
+            when it is initialized at runtime.
+            </summary>
+            <param name="msiRuntime">The MSI runtime.</param>
+            <param name="ui">The MSI external/embedded UI.</param>
+        </member>
+        <member name="M:WixSharp.UIShell.Play(WixSharp.ManagedDialogs)">
+            <summary>
+            Plays the specified dialogs in demo mode.
+            </summary>
+            <param name="dialogs">The dialogs.</param>
+        </member>
+        <member name="M:WixSharp.UIShell.Play``1">
+            <summary>
+            Plays the specified dialog in demo mode.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:WixSharp.UIShell.Play(System.Type)">
+            <summary>
+            Plays the specified dialog in demo mode.
+            </summary>
+            <param name="dialog">The dialog.</param>
+        </member>
+        <member name="P:WixSharp.UIShell.IsDemoMode">
+            <summary>
+            Gets or sets a value indicating whether the UIShell is demo mode.
+            </summary>
+            <value>
+            <c>true</c> if this instance is demo mode; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:WixSharp.UIShell.GoNext">
+            <summary>
+            Proceeds to the next UI dialog.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UIShell.GoPrev">
+            <summary>
+            Moves to the previous UI Dialog.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UIShell.GoTo(System.Int32)">
+            <summary>
+            Moves to the UI Dialog by the specified index in the <see cref="T:WixSharp.IManagedUIShell.Dialogs" /> sequence.
+            </summary>
+            <param name="index">The index.</param>
+        </member>
+        <member name="M:WixSharp.UIShell.GoTo``1">
+            <summary>
+            Moves to the UI Dialog by the specified dialog type in the <see cref="T:WixSharp.IManagedUIShell.Dialogs" /> sequence.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UIShell.Exit">
+            <summary>
+            Exits this MSI UI application.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UIShell.Cancel">
+            <summary>
+            Cancels the MSI installation.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UIShell.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+            <summary>
+            Processes information and progress messages sent to the user interface.
+            <para> This method directly mapped to the
+            <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI.ProcessMessage" />.</para>
+            </summary>
+            <param name="messageType">Type of the message.</param>
+            <param name="messageRecord">The message record.</param>
+            <param name="buttons">The buttons.</param>
+            <param name="icon">The icon.</param>
+            <param name="defaultButton">The default button.</param>
+            <returns></returns>
+        </member>
+        <member name="P:WixSharp.UIShell.Log">
+            <summary>
+            Gets the MSI log text.
+            </summary>
+            <value>
+            The log.
+            </value>
+        </member>
+        <member name="M:WixSharp.UIShell.OnExecuteStarted">
+            <summary>
+            Called when MSI execute started.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UIShell.OnExecuteComplete">
+            <summary>
+            Called when MSI execution is complete.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UIShell.InUIThread(System.Action)">
+            <summary>
+            Marshaling the action execution into UI thread
+            </summary>
+            <param name="action">The action.</param>
+        </member>
+        <member name="T:WixSharp.Win32">
+            <summary>
+            Set of Win32 API wrappers
+            </summary>
+        </member>
+        <member name="T:WixSharp.WixCLRDialog">
+            <summary>
+            Defines System.Windows.Forms.<see cref="T:System.Windows.Forms.Form" />, which is to be used as the  for custom MSI dialog.
+            <para>
+            As opposite to the WixSharp.<see cref="T:WixSharp.WixForm" /> based custom dialogs <c>WixCLRDialog</c> is instantiated not at 
+            compile but at run time. Thus it is possible to implement comprehensive deployment algorithms in any of the available Form event handlers.
+            </para>
+            <para>
+            The usual usability scenario is the injection of the managed Custom Action (for displaying the <c>WixCLRDialog</c>) 
+            into the sequence of the standard dialogs (WixSharp.<see cref="T:WixSharp.CustomUI"/>). 
+            </para>
+            <para>
+            While it is possible to construct <see cref="T:WixSharp.CustomUI"/> instance manually it is preferred to use 
+            Factory methods of  <see cref="T:WixSharp.CustomUIBuilder"/> (e.g. InjectPostLicenseClrDialog) for this.
+            </para>
+            <code>
+            static public void Main()
+            {
+                ManagedAction showDialog;
+            
+                var project = new Project("CustomDialogTest",
+                                            showDialog = new ShowClrDialogAction("ShowProductActivationDialog"));
+            
+                project.UI = WUI.WixUI_Common;
+                project.CustomUI = CustomUIBuilder.InjectPostLicenseClrDialog(showDialog.Id, " LicenseAccepted = \"1\"");
+                
+                Compiler.BuildMsi(project);
+            }
+            ...
+            public class CustomActions
+            {
+                [CustomAction]
+                public static ActionResult ShowProductActivationDialog(Session session)
+                {
+                    return WixCLRDialog.ShowAsMsiDialog(new CustomDialog(session));
+                }
+            }
+            ...
+            public partial class CustomDialog : WixCLRDialog
+            {
+                private GroupBox groupBox1;
+                private Button cancelBtn;
+                ... 
+            </code>
+            <para>
+            The all communications with the installation in progress are to be done by modifying the MSI properties or executing MSI actions 
+            via <c>Session</c> object.</para>
+            <para>
+            When closing the dialog make sure you set the DeialogResul properly. <c>WixCLRDialog</c> offers three predefined routines for setting the 
+            DialogResult:
+            <para>- MSINext</para>
+            <para>- MSIBack</para>
+            <para>- MSICancel</para>
+            By invoking these routines from the corresponding event handlers you can control your MSI UI sequence:
+            <code>
+            void cancelBtn_Click(object sender, EventArgs e)
+            {
+                MSICancel();
+            }
+            
+            void nextBtn_Click(object sender, EventArgs e)
+            {
+                MSINext();
+            }
+            
+            void backBtn_Click(object sender, EventArgs e)
+            {
+                MSIBack();
+            }
+            </code>
+            </para>
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixCLRDialog.session">
+            <summary>
+            The MSI session
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixCLRDialog.hostWindow">
+            <summary>
+            The WIN32 handle to the host window (parent MSI dialog).
+            </summary>
+        </member>
+        <member name="M:WixSharp.WixCLRDialog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.WixCLRDialog"/> class.
+            <remarks>
+            This constructor is to be used by the Visual Studio Form designer only. 
+            You should always use <c>WixCLRDialog(Session session)</c> constructor instead.
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:WixSharp.WixCLRDialog.#ctor(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.WixCLRDialog"/> class.
+            </summary>
+            <param name="session">The session.</param>
+        </member>
+        <member name="M:WixSharp.WixCLRDialog.Init">
+            <summary>
+            Inits this instance.
+            </summary>
+        </member>
+        <member name="M:WixSharp.WixCLRDialog.GetMsiForegroundWindow">
+            <summary>
+            Gets the msi foreground window.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:WixSharp.WixCLRDialog.delta">
+            <summary>
+            There is some strange resizing artifact (at least on Win7) when MoveWindow does not resize the window accurately.
+            Thus special adjustment ('delta') is needed to fix the problem.
+            <para>
+            The delta value is used in the ReplaceHost method.</para>
+            </summary>
+        </member>
+        <member name="M:WixSharp.WixCLRDialog.ReplaceHost">
+            <summary>
+            'Replaces' the current step dialog with the "itself".
+            <para>It uses WIN32 API to hide the parent native MSI dialog and place managed form dialog (itself)
+            at the same desktop location and with the same size as the parent.</para>
+            </summary>
+        </member>
+        <member name="M:WixSharp.WixCLRDialog.RestoreHost">
+            <summary>
+            Restores parent native MSI dialog after the previous <c>ReplaceHost</c> call.
+            </summary>
+        </member>
+        <member name="M:WixSharp.WixCLRDialog.MSICancel">
+            <summary>
+            Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.Cancel' value ensuring the 
+            setup is cancelled.
+            </summary>
+        </member>
+        <member name="M:WixSharp.WixCLRDialog.MSIBack">
+            <summary>
+            Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.Retry' value ensuring the 
+            setup is resumed with the previous UI sequence dialog is displayed.
+            </summary>
+        </member>
+        <member name="M:WixSharp.WixCLRDialog.MSINext">
+            <summary>
+            Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.OK' value ensuring the 
+            setup is resumed and the UI sequence advanced to the next step.
+            </summary>
+        </member>
+        <member name="M:WixSharp.WixCLRDialog.ShowAsMsiDialog(WixSharp.WixCLRDialog)">
+            <summary>
+            Shows as specified managed dialog.
+            <para>It uses WIN32 API to hide the parent native MSI dialog and place managed form dialog
+            at the same desktop location and with the same size as the parent.</para>
+            <para>It also ensures that after the managed dialog is closed the proper ActionResult is returned.</para>
+            </summary>
+            <param name="dialog">The dialog.</param>
+            <returns>ActionResult value</returns>
+        </member>
+        <member name="M:WixSharp.WixCLRDialog.GetMSIBinaryStream(System.String)">
+            <summary>
+            Gets the embedded MSI binary stream.
+            </summary>
+            <param name="binaryId">The binary id.</param>
+            <returns>Stream instance</returns>
+        </member>
+        <member name="T:Microsoft.Deployment.Samples.EmbeddedUI.InstallProgressCounter">
+            <summary>
+            Tracks MSI progress messages and converts them to usable progress.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Deployment.Samples.EmbeddedUI.InstallProgressCounter.Progress">
+            <summary>
+            Gets a number between 0 and 1 that indicates the overall installation progress.
+            </summary>
+        </member>
+    </members>
+</doc>

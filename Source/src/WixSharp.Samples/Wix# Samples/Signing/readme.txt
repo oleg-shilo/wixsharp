@@ -1,0 +1,1 @@
+This sample demonstrates how to digitally sign the prduced MSI (ddl/exe).Execute corresponding .cmd file to build desired msi. Please note that tyhe temporary certificate file (wixsharp.pfx) is fod demonstration purposes only and it is not expected to lead to succesfull signing.

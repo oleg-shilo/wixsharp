@@ -1,0 +1,1 @@
+This sample demonstrates how to build WinForm UI embedded into MSI.It is nothing else but a slightly adjusted version of EmbeddedUI sample from WiXExecute corresponding .cmd file to build desired msi. Then execute the .msi to start the installation.

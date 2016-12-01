@@ -1,0 +1,1 @@
+This sample illustrates how to change default thread ApartmentState (MTA) of the DTF CaustomAction to STA.

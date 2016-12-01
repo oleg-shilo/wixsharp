@@ -1,0 +1,1 @@
+This sample demonstrates how to assign permissions to files and/or directories.Execute corresponding .cmd file to build desired msi. Then execute the .msi to start the installation.

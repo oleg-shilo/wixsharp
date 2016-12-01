@@ -1,0 +1,1 @@
+This sample demonstrates how to install 'sys' driver.Execute corresponding .cmd file to build desired msi.  NOTE: 'driver.sys' is a mock but not are real driver. Thus running msi will fail.

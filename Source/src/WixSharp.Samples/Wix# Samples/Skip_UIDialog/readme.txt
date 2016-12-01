@@ -1,0 +1,1 @@
+This sample demonstrates how to customise the UI dialog sequence to skip the Licence dialog.Execute corresponding .cmd file to build desired msi. Then execute the .msi to start the installation.

@@ -1,0 +1,1 @@
+This sample demonstrates how to implement deployment of multiple instances of the product on the target system.Execute corresponding .cmd file to build desired msi. Then execute the install_1.cmd or install_2.cmd to start the installation.

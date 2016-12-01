@@ -1,0 +1,1 @@
+This sample demonstrates how to implemente features tree with nested features.Execute corresponding .cmd file to build desired msi. Then execute the .msi to start the installation.

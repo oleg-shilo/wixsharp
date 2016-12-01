@@ -1,0 +1,368 @@
+#region Licence...
+
+/*
+The MIT License (MIT)
+
+Copyright (c) 2014 Oleg Shilo
+
+Permission is hereby granted,
+free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+
+#endregion Licence...
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Xml.Linq;
+using IO = System.IO;
+
+namespace WixSharp
+{
+    /// <summary>
+    /// Base class for all Wix# related types
+    /// </summary>
+    public class WixObject
+    {
+        /// <summary>
+        /// Collection of Attribute/Value pairs for WiX element attributes not supported directly by Wix# objects.
+        /// <para>You should use <c>Attributes</c> if you want to inject specific XML attributes
+        /// for a given WiX element.</para>
+        /// <para>For example <c>Hotkey</c> attribute is not supported by Wix# <see cref="T:WixSharp.Shortcut"/>
+        /// but if you want them to be set in the WiX source file you may achieve this be setting
+        /// <c>WixEntity.Attributes</c> member variable:
+        /// <para> <code>new Shortcut { Attributes= new { {"Hotkey", "0"} }</code> </para>
+        /// <remarks>
+        /// You can also inject attributes into WiX components "related" to the <see cref="WixEntity"/> but not directly
+        /// represented in the Wix# entities family. For example if you need to set a custom attribute for the WiX <c>Component</c>
+        /// XML element you can use corresponding <see cref="T:WixSharp.File"/> attributes. The only difference from
+        /// the <c>Hotkey</c> example is the composite (column separated) key name:
+        /// <para> <code>new File { Attributes= new { {"Component:SharedDllRefCount", "yes"} }</code> </para>
+        /// The code above will force the Wix# compiler to insert "SharedDllRefCount" attribute into <c>Component</c>
+        /// XML element, which is automatically generated for the <see cref="T:WixSharp.File"/>.
+        /// <para>Currently the only supported "related" attribute is  <c>Component</c>.</para>
+        /// </remarks>
+        /// </para>
+        /// </summary>
+        public Dictionary<string, string> Attributes
+        {
+            get
+            {
+                ProcessAttributesDefinition();
+                return attributes;
+            }
+            set
+            {
+                attributes = value;
+            }
+        }
+
+        Dictionary<string, string> attributes = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Optional attributes of the <c>WiX Element</c> (e.g. Secure:YesNoPath) expressed as a string KeyValue pairs (e.g. "StartOnInstall=Yes; Sequence=1").
+        /// <para>OptionalAttributes just redirects all access calls to the <see cref="T:WixEntity.Attributes"/> member.</para>
+        /// <para>You can also use <see cref="T:WixEntity.AttributesDefinition"/> to keep the code cleaner.</para>
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var webSite = new WebSite
+        /// {
+        ///     Description = "MyWebSite",
+        ///     Attributes = new Dictionary&lt;string, string&gt; { { "StartOnInstall", "Yes" },  { "Sequence", "1" } }
+        ///     //or
+        ///     AttributesDefinition = "StartOnInstall=Yes; Sequence=1"
+        ///     ...
+        /// </code>
+        /// </example>
+        public string AttributesDefinition { get; set; }
+
+        void ProcessAttributesDefinition()
+        {
+            if (!AttributesDefinition.IsEmpty())
+            {
+                var attrToAdd = new Dictionary<string, string>();
+
+                foreach (string attrDef in AttributesDefinition.Trim().Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+                {
+                    try
+                    {
+                        string[] tokens = attrDef.Split("=".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                        string name = tokens[0].Trim();
+                        if (tokens.Length > 1)
+                        {
+                            string value = tokens[1].Trim();
+                            attrToAdd[name] = value;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("Invalid AttributesDefinition", e);
+                    }
+                }
+
+                this.Attributes = attrToAdd;
+            }
+        }
+
+        internal string GetAttributeDefinition(string name)
+        {
+            var preffix = name + "=";
+
+            return (AttributesDefinition ?? "").Trim()
+                                             .Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+                                             .Where(x => x.StartsWith(preffix))
+                                             .Select(x => x.Substring(preffix.Length))
+                                             .FirstOrDefault();
+        }
+
+        internal void SetAttributeDefinition(string name, string value, bool append = false)
+        {
+            var preffix = name + "=";
+
+            var allItems = (AttributesDefinition ?? "").Trim()
+                                                       .Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+                                                       .ToList();
+
+            var items = allItems;
+
+            if (value.IsNotEmpty())
+            {
+                if (append)
+                {
+                    //add index to the items with the same key
+                    var similarNamedItems = allItems.Where(x => x.StartsWith(name)).ToArray();
+                    items.Add(name + similarNamedItems.Count() + "=" + value);
+                }
+                else
+                {
+                    //reset items with the same key
+                    items.RemoveAll(x => x.StartsWith(preffix));
+                    items.Add(name + "=" + value);
+                }
+            }
+
+            AttributesDefinition = string.Join(";", items.ToArray());
+        }
+    }
+
+    /// <summary>
+    /// Alias for the <c>Dictionary&lt;string, string&gt; </c> type.
+    /// </summary>
+    public class Attributes : Dictionary<string, string>
+    {
+    }
+
+    /// <summary>
+    /// Generic <see cref="T:WixSharp.WixEntity"/> container for defining WiX <c>Package</c> element attributes.
+    /// <para>These attributes are the properties of the package to be placed in the Summary Information Stream. These are visible from COM through the IStream interface, and can be seen in Explorer.</para>
+    ///<example>The following is an example of defining the <c>Package</c> attributes.
+    ///<code>
+    /// var project =
+    ///     new Project("My Product",
+    ///         new Dir(@"%ProgramFiles%\My Company\My Product",
+    ///
+    ///     ...
+    ///
+    /// project.Package.AttributesDefinition = @"AdminImage=Yes;
+    ///                                          Comments=Release Candidate;
+    ///                                          Description=Fantastic product...";
+    ///
+    /// Compiler.BuildMsi(project);
+    /// </code>
+    /// </example>
+    /// </summary>
+    public class Package : WixEntity
+    {
+    }
+
+
+    /// <summary>
+    /// Base class for all Wix# types representing WiX XML elements (entities)
+    /// </summary>
+    public class WixEntity : WixObject
+    {
+        internal void MoveAttributesTo(WixEntity dest)
+        {
+            var attrs = this.Attributes;
+            var attrsDefinition = this.AttributesDefinition;
+            this.Attributes.Clear();
+            this.AttributesDefinition = null;
+            dest.Attributes = attrs;
+            dest.AttributesDefinition = attrsDefinition;
+        }
+
+        internal void AddInclude(string xmlFile, string parentElement)
+        {
+            SetAttributeDefinition("WixSharpCustomAttributes:xml_include", parentElement + "|" + xmlFile, append: true);
+        }
+
+        /// <summary>
+        /// Name of the <see cref="WixEntity"/>.
+        /// <para>This value is used as a <c>Name</c> for the corresponding WiX XML element.</para>
+        /// </summary>
+        public string Name = "";
+
+        /// <summary>
+        /// Gets or sets the <c>Id</c> value of the <see cref="WixEntity"/>.
+        /// <para>This value is used as a <c>Id</c> for the corresponding WiX XML element.</para>
+        /// <para>If the <see cref="Id"/> value is not specified explicitly by the user the Wix# compiler
+        /// generates it automatically insuring its uniqueness.</para>
+        /// <remarks>
+        /// <para>
+        ///  Note: The ID auto-generation is triggered on the first access (evaluation) and in order to make the id
+        ///  allocation deterministic the compiler resets ID generator just before the build starts. However if you
+        ///  accessing any auto-id before the Build*() is called you can it interferes with the ID auto generation and eventually
+        ///  lead to the WiX ID duplications. To prevent this from happening either:\n"
+        ///  - Avoid evaluating the auto-generated IDs values before the call to Build*()
+        ///  - Set the IDs (to be evaluated) explicitly
+        ///  - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";
+        /// </para>
+        /// </remarks>
+        /// </summary>
+        /// <value>The id.</value>
+        public string Id
+        {
+            get
+            {
+                if (id.IsEmpty())
+                {
+                    if (GetType() == typeof(File))
+                    { }
+
+                    if (!idMaps.ContainsKey(GetType()))
+                        idMaps[GetType()] = new Dictionary<string, int>();
+
+                    var rawName = Name.Expand();
+                    if (rawName.IsEmpty())
+                        rawName = GetType().Name;
+
+                    if (IO.Path.IsPathRooted(Name))
+                        rawName = IO.Path.GetFileName(Name).Expand();
+
+                    if (GetType() != typeof(Dir) && GetType().BaseType != typeof(Dir) && Name.IsNotEmpty())
+                        rawName = IO.Path.GetFileName(Name).Expand();
+
+                    //limit 120 chars
+                    //Maximum allowed length for a stream name is 62 characters long; In some cases more but to play it safe keep 62 limit
+                    //
+                    //Note: the total limit 62 needs to include in some cases MSI auto prefix (e.g. table name) ~15 chars
+                    // our hash code (max 10 chars) and our decoration (separators). So 30 seems to be a safe call
+                    //
+                    int maxLength = 30;
+                    if (rawName.Length > maxLength)
+                    {
+                        //some chars are illegal as star if the ID so work around this with '_' prefix
+                        rawName = "_..." + rawName.Substring(rawName.Length - maxLength);
+                    }
+
+                    string rawNameKey = rawName.ToLower();
+
+                    /*
+                     "bin\Release\similarFiles.txt" and "bin\similarfiles.txt" will produce the following IDs
+                     "Component.similarFiles.txt" and "Component.similariles.txt", which will be treated by Wix compiler as duplication
+                     */
+
+                    if (!idMaps[GetType()].ContainsSimilarKey(rawName)) //this Type has not been generated yet
+                    {
+                        idMaps[GetType()][rawNameKey] = 0;
+                        id = rawName;
+                        if (char.IsDigit(id.Last()))
+                            id += "_"; // work around for https://wixsharp.codeplex.com/workitem/142 
+                                       // to avoid potential collision between ids that end with digit 
+                                       // and auto indexed (e.g. [rawName + "." + index])  
+                    }
+                    else
+                    {
+                        //The Id has been already generated for this Type with this rawName
+                        //so just increase the index
+                        var index = idMaps[GetType()][rawNameKey] + 1;
+
+                        id = rawName + "." + index;
+                        idMaps[GetType()][rawNameKey] = index;
+                    }
+
+                    //Trace.WriteLine(">>> " + GetType() + " >>> " + id);
+
+                    if (rawName.IsNotEmpty() && char.IsDigit(rawName[0]))
+                        id = "_" + id;
+
+                    while (alreadyTakenIds.Contains(id)) //last line of defense against duplication
+                        id += "_";
+
+                    alreadyTakenIds.Add(id);
+                }
+
+                return id;
+            }
+            set
+            {
+                id = value;
+                isAutoId = false;
+            }
+        }
+
+        static List<string> alreadyTakenIds = new List<string>();
+
+        internal bool isAutoId = true;
+
+        /// <summary>
+        /// Backing value of <see cref="Id"/>.
+        /// </summary>
+        protected string id;
+
+        internal string RawId { get { return id; } }
+
+        /// <summary>
+        /// The do not reset auto-ID generator before starting the build.
+        /// </summary>
+        static public bool DoNotResetIdGenerator = true;
+
+        static Dictionary<Type, Dictionary<string, int>> idMaps = new Dictionary<Type, Dictionary<string, int>>();
+
+        /// <summary>
+        /// Resets the <see cref="Id"/> generator. This method is exercised by the Wix# compiler before any
+        /// <c>Build</c> operations to ensure reproducibility of the <see cref="Id"/> set between <c>Build()</c>
+        /// calls.
+        /// </summary>
+        static public void ResetIdGenerator()
+        {
+            if (!DoNotResetIdGenerator)
+            {
+                if (idMaps.Count > 0)
+                {
+                    Compiler.OutputWriteLine("----------------------------");
+                    Compiler.OutputWriteLine("Warning: Wix# compiler detected that some IDs has been auto-generated before the build started. " +
+                                             "This can lead to the WiX ID duplications. To prevent this from happening either:\n" +
+                                             "   - Avoid evaluating the auto-generated IDs values before the call to Build*\n" +
+                                             "   - Set the IDs (to be evaluated) explicitly\n" +
+                                             "   - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true");
+                    Compiler.OutputWriteLine("----------------------------");
+                }
+                idMaps.Clear();
+            }
+        }
+
+        internal bool IsIdSet()
+        {
+            return !id.IsEmpty();
+        }
+    }
+}

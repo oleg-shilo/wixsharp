@@ -1,0 +1,43 @@
+﻿<Window x:Class="MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="My Ugly Bootstrapper Application" Width="400" MinWidth="400" Height="200" MinHeight="200" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Window.Resources>
+
+    <Grid>
+        <TextBlock Text="Welcome to my test bootstrapper application." Margin="10" FontSize="18" HorizontalAlignment="Center" Foreground="Red" VerticalAlignment="Top" />
+        <Ellipse Height="50" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" StrokeThickness="6" Margin="10"
+                 Visibility="{Binding Path=IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Ellipse.Stroke>
+                <LinearGradientBrush>
+                    <GradientStop Color="Red" Offset="0.0"/>
+                    <GradientStop Color="White" Offset="0.9"/>
+                </LinearGradientBrush>
+            </Ellipse.Stroke>
+            <Ellipse.RenderTransform>
+                <RotateTransform x:Name="Rotator" CenterX="25" CenterY="25" Angle="0"/>
+            </Ellipse.RenderTransform>
+            <Ellipse.Triggers>
+                <EventTrigger RoutedEvent="Ellipse.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard TargetName="Rotator" TargetProperty="Angle">
+                            <DoubleAnimation By="360" Duration="0:0:2" RepeatBehavior="Forever" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Ellipse.Triggers>
+        </Ellipse>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <Button Visibility="{Binding InstallEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="10" Height="20" Width="80" Click="Install_Click">Install</Button>
+            <Button Visibility="{Binding UninstallEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="10" Height="20" Width="80" Click="Uninstall_Click">Uninstall</Button>
+            <Button Margin="10" Height="20" Width="80" Click="Exit_Click" >Exit</Button>
+        </StackPanel>
+    </Grid>
+
+</Window>

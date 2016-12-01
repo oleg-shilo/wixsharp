@@ -1,0 +1,4 @@
+The C# Intellisense is making use of the following OSS projects:
+
+* cscs.exe from the CS-Script project (http://csscript.net/) and is used under the CS-Script license: http://csscript.net/Licence.html
+* WiX from http://wixtoolset.org/

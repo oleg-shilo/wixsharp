@@ -1,0 +1,1 @@
+This sample demonstrates how to conditionally install a feature.

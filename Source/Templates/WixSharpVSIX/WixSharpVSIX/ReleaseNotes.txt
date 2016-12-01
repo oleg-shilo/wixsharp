@@ -1,0 +1,16 @@
+Removed NuGet package. 
+----
+1.0.0.2
+After multiple user feedbacks it become evident that the Project Templates with the NuGet package configuration embedded do not perform package restoring reliable.
+Thus the packages.config has been removed and now user is required to execute "Install-Package WixSharp" manually.
+
+1.0.1.0
+Added "WixSharp Setup - Custom CLR Dialog" project template.
+
+1.0.2.0
+Updated the templates items to reflect the latest WixSharp binaries.
+
+1.0.3.0-1.0.4.0
+* Updated VS project templates with auto scaling solution and font appearance
+
+

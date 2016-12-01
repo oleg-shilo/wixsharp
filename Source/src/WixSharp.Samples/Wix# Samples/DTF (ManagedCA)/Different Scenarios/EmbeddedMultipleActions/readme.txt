@@ -1,0 +1,1 @@
+This sample is an example of two ManagedCA belonging to the different sequence.

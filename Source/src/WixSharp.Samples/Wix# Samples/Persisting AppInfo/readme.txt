@@ -1,0 +1,1 @@
+This sample demonstrates how to preserve the application information (installdir) and reuse it when the application is reinstalled.Execute corresponding .cmd file to build desired msi. Then execute the .msi to start the installation.

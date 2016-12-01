@@ -1,0 +1,7 @@
+<Include>
+  <CustomAction Id="MyAction" BinaryKey="MyAction_File" DllEntry="MyAction" Impersonate="yes" Execute="immediate" Return="check" />
+
+  <InstallExecuteSequence>
+    <Custom Action="MyAction" After="InstallInitialize">(NOT Installed)</Custom>
+  </InstallExecuteSequence>
+</Include>

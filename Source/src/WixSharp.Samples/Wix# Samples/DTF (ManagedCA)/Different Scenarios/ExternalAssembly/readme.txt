@@ -1,0 +1,1 @@
+This sample demonstrates how to define Managed Custom Actions in a separate acssembly file (CustomAction.dll).Execute corresponding .cmd file to build desired msi. Then execute the Install.cmd to start the installation.Note that Managed Custom Actions depends on DispalyMessage.dll which is also distributed during the installation.

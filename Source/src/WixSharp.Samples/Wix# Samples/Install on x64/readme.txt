@@ -1,0 +1,1 @@
+This sample demonstrates how to deploy multiple files on the target system in the x64 "ProgramFiles" directory.Execute corresponding .cmd file to build desired msi. Then execute the .msi to start the installation.

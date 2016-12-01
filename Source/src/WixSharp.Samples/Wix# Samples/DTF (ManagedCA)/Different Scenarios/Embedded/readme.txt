@@ -1,0 +1,1 @@
+This sample is an equivalent of "Wix# Samples\DTF (ManagedCA)\Different\setup.cs" 

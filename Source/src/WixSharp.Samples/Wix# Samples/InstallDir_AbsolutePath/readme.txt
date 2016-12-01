@@ -1,0 +1,1 @@
+This sample demonstrates how to create setup that installs to the target directory defined as absolute path
