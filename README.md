@@ -1,4 +1,4 @@
-<img align="right" src="https://download-codeplex.sec.s-msft.com/Download?ProjectName=wixsharp&DownloadId=872632&Build=21031" alt="" style="float:right">
+<img align="right" src="https://github.com/oleg-shilo/wixsharp/blob/master/Documentation/wiki_images/wixsharp_logo.png" alt="" style="float:right">
 
 # Wix# (WixSharp) - managed interface for WiX
 
