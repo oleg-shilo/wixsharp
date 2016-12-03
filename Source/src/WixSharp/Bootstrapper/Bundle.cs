@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Linq;
 using WixSharp.CommonTasks;
+using System.Text;
 
 namespace WixSharp.Bootstrapper
 {
@@ -305,13 +306,50 @@ namespace WixSharp.Bootstrapper
         /// <returns></returns>
         public string Build(string path = null)
         {
-            if (Compiler.ClientAssembly.IsEmpty())
-                Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
+            var output = new StringBuilder();
+            Action<string> collect = line => output.AppendLine(line);
 
-            if (path == null)
-                return Compiler.Build(this);
-            else
-                return Compiler.Build(this, path);
+            Compiler.OutputWriteLine += collect;
+            try
+            {
+                if (Compiler.ClientAssembly.IsEmpty())
+                    Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
+
+                if (path == null)
+                    return Compiler.Build(this);
+                else
+                    return Compiler.Build(this, path);
+            }
+            finally
+            {
+                ValidateCompileOutput(output.ToString());
+                Compiler.OutputWriteLine -= collect;
+            }
+        }
+
+        void ValidateCompileOutput(string output)
+        {
+            if (!this.SuppressWixMbaPrereqVars && output.Contains("'WixMbaPrereqPackageId' is declared in more than one location."))
+            {
+                Compiler.OutputWriteLine("======================================================");
+                Compiler.OutputWriteLine("");
+                Compiler.OutputWriteLine("WARNING: It looks like one of the packages defines "+
+                                         "WixMbaPrereqPackageId/WixMbaPrereqLicenseUrl in addition to the definition "+
+                                         "auto-inserted by Wix# managed BA. If it is the case set your Bundle project "+
+                                         "SuppressWixMbaPrereqVars to true to fix the problem.");
+                Compiler.OutputWriteLine("");
+                Compiler.OutputWriteLine("======================================================");
+            }
+            else if (this.SuppressWixMbaPrereqVars && output.Contains("The Windows Installer XML variable !(wix.WixMbaPrereqPackageId) is unknown."))
+            {
+                Compiler.OutputWriteLine("======================================================");
+                Compiler.OutputWriteLine("");
+                Compiler.OutputWriteLine("WARNING: It looks like generation of WixMbaPrereqPackageId/WixMbaPrereqLicenseUrl "+
+                                         "was suppressed while none of other packages defines it. "+
+                                         "If it is the case set your Bundle project SuppressWixMbaPrereqVars to false to fix the problem.");
+                Compiler.OutputWriteLine("");
+                Compiler.OutputWriteLine("======================================================");
+            }
         }
 
         /// <summary>

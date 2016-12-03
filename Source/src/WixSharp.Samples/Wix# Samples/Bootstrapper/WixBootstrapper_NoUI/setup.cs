@@ -40,7 +40,7 @@ public class InstallScript
                         DisplayInternalUI = true
                     });
 
-        bootstrapper.SuppressWixMbaPrereqVars = true;
+        bootstrapper.SuppressWixMbaPrereqVars = true; //needed because NetFx40Web also defines WixMbaPrereqVars
         bootstrapper.Version = new Version("1.0.0.0");
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889c");
         

@@ -80,6 +80,8 @@ public class InstallScript
         bootstrapper.StringVariablesDefinition += "BundleVariable=333";
         bootstrapper.PreserveTempFiles = true;
 
+        //bootstrapper.SuppressWixMbaPrereqVars = true;
+
         var setup = bootstrapper.Build();
 
         //---------------------------------------------------------
