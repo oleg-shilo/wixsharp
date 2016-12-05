@@ -47,7 +47,7 @@ local.properties
 [Rr]elease/
 x64/
 build/
-[Bb]in/
+bin/
 [Oo]bj/
 
 # MSTest test Results

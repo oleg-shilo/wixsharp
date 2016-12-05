@@ -639,10 +639,12 @@ namespace WixSharp
             objFile = IO.Path.ChangeExtension(wxsFile, ".wixobj");
 
             extensionDlls = project.WixExtensions
+                                   .Select(x=>x.ExpandEnvVars())
                                    .Distinct()
                                    .Join(" ", dll => " -ext \"" + dll + "\"");
 
             string wxsFiles = project.WxsFiles
+                                     .Select(x=>x.ExpandEnvVars())
                                      .Distinct()
                                      .Join(" ", file => "\"" + file + "\"");
 
