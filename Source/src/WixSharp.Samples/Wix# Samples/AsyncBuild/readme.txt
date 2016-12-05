@@ -1,0 +1,1 @@
+This sample demonstrates how to host Wix# services in the application. The sample is based on the contribution of AlexMAZ https://github.com/oleg-shilo/wixsharp/issues/1Execute corresponding .cmd file to build desired msi. Then execute the .msi to start the installation.
