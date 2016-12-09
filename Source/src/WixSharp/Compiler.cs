@@ -1282,7 +1282,7 @@ namespace WixSharp
             {
                 prevDir = dir;
                 if (dir.Elements("Component").Count() == 0) //just a subdirectory without any installable items
-                    dir = dir.Elements("Directory").First();
+                    dir = dir.Elements("Directory").FirstOrDefault();
                 else
                     return dir; //dir containing installable items (e.g. files or shortcuts)
             }
