@@ -4,10 +4,7 @@
 
 **_Framework for building a complete MSI or WiX source code by using script files written with the C# syntax._**
 
-In July 2014 Wix# was migrated here on CodePlex and re-released under MIT license.
-At the time of creating this repository CS-Script has been downloaded 23,236 times.
-
-_The project has been migrated to GitHub from CodePlex [Wix#](https://wixsharp.codeplex.com/), where you can still find old releases and some useful content from the past discussions._
+In July 2014 Wix# was migrated to CodePlex [Wix#](https://wixsharp.codeplex.com/) and re-released under MIT license. It was subsequently migrated from CodePlex to GitHub. You can still find old releases and some useful content from the past discussions on CodePlex._
 
 ## Project Description
 
@@ -91,7 +88,7 @@ public class CustomActions
 Another important feature is the support for custom UI including WPF external UI:
 ![image](https://github.com/oleg-shilo/wixsharp/raw/master/Documentation/wiki_images/wpf_ui.png)
 
-The package in the [Releases](https://github.com/oleg-shilo/wixsharp/releases) section contains an intensive collection of Wix# samples covering the following development scenarios:
+The package in the [Releases](https://github.com/oleg-shilo/wixsharp/releases) section contains an extensive collection of Wix# samples covering the following development scenarios:
 
 * Visual Studio integration including [NuGet](https://www.nuget.org/packages/WixSharp/) packages and VS2013/2015 [project templates extension](https://visualstudiogallery.msdn.microsoft.com/4e093ce7-be66-40ed-ab16-61a1186c530e)
 * Installing file(s) into Program Files directory
@@ -125,6 +122,6 @@ The package in the [Releases](https://github.com/oleg-shilo/wixsharp/releases) s
 * Custom MSI dialogs
 * Custom WinForms dialogs
 * Custom external UI
-  * Console setup application
-  * WinForm setup application
-  * WPF setup application
+* Console setup application
+* WinForm setup application
+* WPF setup application
