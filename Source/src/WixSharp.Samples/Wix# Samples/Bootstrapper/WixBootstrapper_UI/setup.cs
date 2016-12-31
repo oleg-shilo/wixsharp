@@ -30,7 +30,7 @@ public class Script
         bootstrapper.Application = new ManagedBootstrapperApplication("%this%"); // you can also use System.Reflection.Assembly.GetExecutingAssembly().Location
 
         bootstrapper.PreserveTempFiles = true;
-            
+        bootstrapper.SuppressWixMbaPrereqVars = true;
 
         bootstrapper.Build();
         io.File.Delete(productMsi);
