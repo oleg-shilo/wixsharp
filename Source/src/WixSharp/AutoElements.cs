@@ -532,7 +532,6 @@ namespace WixSharp
             XElement product = doc.Root.Select("Product");
 
             int? absPathCount = null;
-            //XElement installDir = product.Element("Directory").Element("Directory");
             foreach (XElement dir in product.Element("Directory").Elements("Directory"))
             {
 

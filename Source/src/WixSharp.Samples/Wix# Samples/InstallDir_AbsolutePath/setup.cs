@@ -13,7 +13,6 @@ class Script
                           new Dir(@"C:\MyCompany\MyProduct", new Files(@"files\*.*")));
 
         project.UI = WUI.WixUI_ProgressOnly;
-        project.ManagedUI = ManagedUI.Default;
 
         Compiler.PreserveTempFiles = true;
         Compiler.BuildMsi(project);
