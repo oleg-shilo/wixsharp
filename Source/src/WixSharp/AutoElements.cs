@@ -357,7 +357,7 @@ namespace WixSharp
                    {
                        //components may already have explicitly set platform attribute (e.g. RegValue.Win64)
                        //if (!comp.HasAttribute("Win64"))
-                           comp.SetAttributeValue("Win64", "yes");
+                       comp.SetAttributeValue("Win64", "yes");
                    });
         }
 
@@ -530,37 +530,49 @@ namespace WixSharp
             InjectPlatformAttributes(doc);
 
             XElement product = doc.Root.Select("Product");
-            XElement installDir = product.Element("Directory").Element("Directory");
 
-            XAttribute installDirName = installDir.Attribute("Name");
-            if (IO.Path.IsPathRooted(installDirName.Value))
+            int? absPathCount = null;
+            //XElement installDir = product.Element("Directory").Element("Directory");
+            foreach (XElement dir in product.Element("Directory").Elements("Directory"))
             {
-                string absolutePath = installDirName.Value;
 
-                installDirName.Value = "ABSOLUTEPATH";
+                XElement installDir = dir;
 
-                //ManagedUI will need some hint on the install dir as it cannot rely on the session action (e.g. Set_INSTALLDIR_AbsolutePath)
-                //because it is running outside of the sequence and analyses the tables directly for the INSTALLDIR
-                product.AddElement("Property", "Id=INSTALLDIR_ABSOLUTEPATH; Value=" + absolutePath);
+                XAttribute installDirName = installDir.Attribute("Name");
+                if (IO.Path.IsPathRooted(installDirName.Value))
+                {
+                    string absolutePath = installDirName.Value;
 
-                //<SetProperty> for INSTALLDIR is an attractive approach but it doesn't allow conditional setting of 'ui' and 'execute' as required depending on UI level
-                // it is ether hard-coded 'both' or hard coded-both 'ui' or 'execute'
-                // <SetProperty Id="INSTALLDIR" Value="C:\My Company\MyProduct" Sequence="both" Before="AppSearch">
+                    if (dir == product.Element("Directory").Elements("Directory").First()) //only for the first root dir
+                    {
+                        //ManagedUI will need some hint on the install dir as it cannot rely on the session action (e.g. Set_INSTALLDIR_AbsolutePath)
+                        //because it is running outside of the sequence and analyses the tables directly for the INSTALLDIR
+                        product.AddElement("Property", "Id=INSTALLDIR_ABSOLUTEPATH; Value=" + absolutePath);
+                    }
 
-                product.Add(new XElement("CustomAction",
-                             new XAttribute("Id", "Set_INSTALLDIR_AbsolutePath"),
-                             new XAttribute("Property", installDir.Attribute("Id").Value),
-                             new XAttribute("Value", absolutePath)));
+                    installDirName.Value = $"ABSOLUTEPATH{absPathCount}";
 
-                product.SelectOrCreate("InstallExecuteSequence").Add(
-                       new XElement("Custom", "(NOT Installed) AND (UILevel < 5) AND (INSTALLDIR = ABSOLUTEPATH)",
-                           new XAttribute("Action", "Set_INSTALLDIR_AbsolutePath"),
-                           new XAttribute("Before", "AppSearch")));
+                    //<SetProperty> for INSTALLDIR is an attractive approach but it doesn't allow conditional setting of 'ui' and 'execute' as required depending on UI level
+                    // it is ether hard-coded 'both' or hard coded-both 'ui' or 'execute'
+                    // <SetProperty Id="INSTALLDIR" Value="C:\My Company\MyProduct" Sequence="both" Before="AppSearch">
 
-                product.SelectOrCreate("InstallUISequence").Add(
-                      new XElement("Custom", "(NOT Installed) AND (UILevel = 5) AND (INSTALLDIR = ABSOLUTEPATH)",
-                          new XAttribute("Action", "Set_INSTALLDIR_AbsolutePath"),
-                          new XAttribute("Before", "AppSearch")));
+                    product.Add(new XElement("CustomAction",
+                                 new XAttribute("Id", $"Set_INSTALLDIR_AbsolutePath{absPathCount}"),
+                                 new XAttribute("Property", installDir.Attribute("Id").Value),
+                                 new XAttribute("Value", absolutePath)));
+
+                    product.SelectOrCreate("InstallExecuteSequence").Add(
+                           new XElement("Custom", $"(NOT Installed) AND (UILevel < 5) AND (INSTALLDIR = ABSOLUTEPATH{absPathCount})",
+                               new XAttribute("Action", $"Set_INSTALLDIR_AbsolutePath{absPathCount}"),
+                               new XAttribute("Before", "AppSearch")));
+
+                    product.SelectOrCreate("InstallUISequence").Add(
+                          new XElement("Custom", $"(NOT Installed) AND (UILevel = 5) AND (INSTALLDIR = ABSOLUTEPATH{absPathCount})",
+                              new XAttribute("Action", $"Set_INSTALLDIR_AbsolutePath{absPathCount}"),
+                              new XAttribute("Before", "AppSearch")));
+
+                    absPathCount++;
+                }
             }
 
             foreach (XElement xDir in product.Descendants("Directory").ToArray())
