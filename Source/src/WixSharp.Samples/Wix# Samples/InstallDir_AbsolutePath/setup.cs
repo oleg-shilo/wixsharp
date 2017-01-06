@@ -10,7 +10,8 @@ class Script
     static public void Main()
     {
         var project = new ManagedProject("MyProduct",
-                          new Dir(@"C:\MyCompany\MyProduct", new Files(@"files\*.*")));
+                          new Dir(@"C:\MyCompany\MyProduct",
+                              new Files(@"files\*.*")));
 
         project.UI = WUI.WixUI_ProgressOnly;
 

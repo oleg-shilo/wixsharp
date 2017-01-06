@@ -1677,6 +1677,7 @@ namespace WixSharp
                         new XElement("Shortcut",
                             new XAttribute("Id", "Shortcut." + wFile.Id + "." + wShortcut.Id),
                             new XAttribute("WorkingDirectory", workingDir),
+                            new XAttribute("Arguments", wShortcut.Arguments),
                             new XAttribute("Directory", locationDirId),
                             new XAttribute("Name", wShortcut.Name.IsNullOrEmpty() ? IO.Path.GetFileNameWithoutExtension(wFile.Name) : wShortcut.Name + ".lnk"));
 
