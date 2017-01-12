@@ -4,6 +4,7 @@
 using System;
 using System.Xml;
 using System.Xml.Linq;
+using System.Windows.Forms;
 using WixSharp;
 
 class Script
@@ -11,7 +12,7 @@ class Script
     static public void Main(string[] args)
     {
         var project =
-            new Project("TestProduct",
+            new ManagedProject("TestProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(@"Files\1\MyApp.exe"),
                     new File(@"Files\1\MyApp.cs"),
@@ -27,9 +28,15 @@ class Script
             DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
         };
 
+        project.BeforeInstall += project_BeforeInstall;
+
         project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project, "setup.msi");
+    }
+    static void project_BeforeInstall(SetupEventArgs e)
+    {
+        MessageBox.Show(e.ToString(), "BeforeInstall");
     }
 }
 

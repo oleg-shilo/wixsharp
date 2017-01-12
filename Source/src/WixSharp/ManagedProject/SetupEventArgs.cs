@@ -119,6 +119,14 @@ namespace WixSharp
         public bool IsModifying { get { return IsInstalled && !Data["REINSTALL"].SameAs("ALL", ignoreCase: true); } }
 
         /// <summary>
+        /// Gets a value indicating whether the installed product is being upgraded.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if modifying; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsUpgrading { get { return IsModifying && UpgradingProductCode.IsNotEmpty(); } }
+
+        /// <summary>
         /// Gets a value indicating whether the installed product is being repaired.
         /// </summary>
         /// <value>

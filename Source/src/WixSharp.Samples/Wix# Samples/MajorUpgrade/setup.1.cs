@@ -4,14 +4,15 @@
 using System;
 using System.Xml;
 using System.Xml.Linq;
+using System.Windows.Forms;
 using WixSharp;
 
 class Script
 {
     static public void Main(string[] args)
     {
-        Project project =
-            new Project("MyProduct",
+        var project =
+            new ManagedProject("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(@"Files\1\MyApp.exe"),
                     new File(@"Files\1\MyApp.cs"),
@@ -22,8 +23,14 @@ class Script
 
         project.MajorUpgradeStrategy = MajorUpgradeStrategy.Default;
         project.MajorUpgradeStrategy.RemoveExistingProductAfter = Step.InstallInitialize;
+        project.BeforeInstall += project_BeforeInstall;
 
         Compiler.BuildMsi(project, "setup.1.msi");
+    }
+
+    static void project_BeforeInstall(SetupEventArgs e)
+    {
+        MessageBox.Show(e.ToString(), "BeforeInstall");
     }
 }
 

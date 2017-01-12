@@ -25,9 +25,9 @@ namespace WixSharp
      * Though in the reality it is like this:
      *        Property Name                 Install     Uninstall   Repair      Modify      Upgrade
      *        ---------------------------------------------------------------------------------------------------
-     *        Installed                     <null>      00:00:00    00:00:00    00:00:00    <not tested yet>    
-     *        REINSTALL                     <null>      <null>      All         <null>      <not tested yet>       
-     *        UPGRADINGPRODUCTCODE          <null>      <null>      <null>      <null>      <not tested yet>
+     *        Installed                     <null>      00:00:00    00:00:00    00:00:00    <00:00:00>    
+     *        REINSTALL                     <null>      <null>      All         <null>      <null>       
+     *        UPGRADINGPRODUCTCODE          <null>      <null>      <null>      <null>      <not empty>
      *      
      * */
 

@@ -249,6 +249,7 @@ namespace WixSharp
         /// </summary>
         public string User { get; set; }
 
+
         #endregion Wix SqlDatabase attributes
 
         private void AddItems(IEnumerable<WixEntity> items)

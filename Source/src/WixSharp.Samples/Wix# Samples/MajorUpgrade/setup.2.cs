@@ -12,8 +12,8 @@ public class Script
 {
     static public void Main(string[] args)
     {
-        Project project =
-            new Project("MyProduct",
+        var project =
+            new ManagedProject("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(@"Files\2\MyApp.exe"),
                     new File(@"Files\2\MyApp.cs"),
@@ -29,8 +29,13 @@ public class Script
         Compiler.WixSourceGenerated += doc => doc.Root
                                                  .Select("Product/Upgrade/UpgradeVersion")
                                                  .AddAttributes("MigrateFeatures=yes");
+        project.BeforeInstall += project_BeforeInstall;
         Compiler.PreserveTempFiles = true;
         Compiler.BuildMsi(project, "setup.2.msi");
+    }
+    static void project_BeforeInstall(SetupEventArgs e)
+    {
+        MessageBox.Show(e.ToString(), "BeforeInstall");
     }
 }
 

@@ -47,7 +47,7 @@ public class Script
 
         //project.ManagedUI = ManagedUI.Empty;
         //project.ManagedUI = ManagedUI.Default; //Wix# ManagedUI
-        project.UI = WUI.WixUI_ProgressOnly; //native MSI UI
+        project.UI = WUI.WixUI_FeatureTree; //native MSI UI
 
         project.UILoaded += project_UIInit;
         project.Load += project_Load;

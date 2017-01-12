@@ -787,7 +787,7 @@ namespace WixSharp
             {
                 location = assembly.Location;
             }
-            catch{ }
+            catch { }
 
             string scriptAsmLocation = Environment.GetEnvironmentVariable("location:" + assembly.GetHashCode());
 
@@ -1693,24 +1693,26 @@ namespace WixSharp
         /// </summary>
         static public bool IsRepairing(this Session session)
         {
-            //return session.IsInstalled() && !session.IsUninstalling();
-
+            //unfortunately experiments do not confirm the property values as they are in MSI documentation (below) for repairing scenario
+            //so implementation is based on the experimental findings instead
             //bool p_Installed = session.Property("Installed").IsNotEmpty();
             //bool p_REINSTALL = session.Property("REINSTALL").IsNotEmpty();
             //bool p_UPGRADINGPRODUCTCODE = session.Property("UPGRADINGPRODUCTCODE").IsNotEmpty();
 
-            return session.IsInstalled() && !session.IsUninstalling();
+            return session.IsInstalled() && !session.Property("REMOVE").SameAs("ALL", true);
         }
 
-        //static public bool IsModifyingChange(this Session session)
-        //{
-        //    return session.IsModifying() && session.Property("REINSTALL").IsEmpty() && session.Property("ADDLOCAL").IsEmpty();
-        //}
-        //static public bool IsModifyingRepair(this Session session)
-        //{
-        //    return session.IsModifying() && !session.Property("REINSTALL").IsEmpty();
-        //}
-
+        /// <summary>
+        /// Gets a value indicating whether the product is being upgraded. 
+        /// <para>
+        /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
+        /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
+        /// </para>
+        /// </summary>
+        static public bool IsUpgrading(this Session session)
+        {
+            return session.IsInstalled() && session.Property("UPGRADINGPRODUCTCODE").IsNotEmpty(); 
+        }
 
         /// <summary>
         /// Determines whether MSI is running in "modifying" mode.
@@ -1723,7 +1725,7 @@ namespace WixSharp
         /// <returns></returns>
         static public bool IsModifying(this Session session)
         {
-            return session.IsInstalled() && !session.IsUninstalling();
+            return session.IsInstalled() && !session.Property("REINSTALL").SameAs("All", true);
         }
 
         /// <summary>
@@ -1744,7 +1746,7 @@ namespace WixSharp
         /// Determines whether the feature is selected in the feature tree of the Features dialog
         /// and will be installed.
         /// <para>
-        /// This method will fail to retreive the correct value if called from the deferred custom action and the session properties
+        /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
         /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
         /// </para>
         /// </summary>
