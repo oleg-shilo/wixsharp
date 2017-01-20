@@ -1711,7 +1711,7 @@ namespace WixSharp
         /// </summary>
         static public bool IsUpgrading(this Session session)
         {
-            return session.IsInstalled() && session.Property("UPGRADINGPRODUCTCODE").IsNotEmpty(); 
+            return session.IsModifying() && session.Property("UPGRADINGPRODUCTCODE").IsNotEmpty(); 
         }
 
         /// <summary>
