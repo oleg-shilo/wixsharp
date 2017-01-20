@@ -11,6 +11,7 @@ using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
+using System.Diagnostics;
 
 public class Script
 {
@@ -51,9 +52,9 @@ public class Script
 
         //removing all entry dialogs and installdir
         project.ManagedUI.InstallDialogs.Add(Dialogs.Welcome)
-                                        .Add(Dialogs.Licence)
-                                        .Add(Dialogs.SetupType)
+                                        //.Add(Dialogs.Licence) //decide if show this dialog at runtime
                                         .Add(Dialogs.Features)
+                                        .Add(Dialogs.SetupType)
                                         .Add(Dialogs.InstallDir)
                                         .Add(Dialogs.Progress)
                                         .Add(Dialogs.Exit);
@@ -71,16 +72,33 @@ public class Script
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         project.ControlPanelInfo.InstallLocation = "[INSTALLDIR]";
-         
+
         project.PreserveTempFiles = true;
         project.SourceBaseDir = @"..\..\";
 
         project.BuildMsi();
     }
 
-    private static void Project_UILoaded(SetupEventArgs e)
+    static void Project_UILoaded(SetupEventArgs e)
     {
         var msiFile = e.Session.Database.FilePath;
+        
+        // Simulate analyzing the runtime conditions with the message box.
+        // Make a decision to show (or not) Licence dialog by injecting it in the Dialogs collection
+        if (MessageBox.Show("Do you want to inject 'Licence Dialog'?", "Wix#", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            e.ManagedUIShell.CurrentDialog.Shell.Dialogs.Insert(1, Dialogs.Licence);
+
+        e.ManagedUIShell.OnCurrentDialogChanged += ManagedUIShell_OnCurrentDialogChanged;
+    }
+
+    private static void ManagedUIShell_OnCurrentDialogChanged(IManagedDialog obj)
+    {
+        if (obj.GetType() == Dialogs.Licence)
+            // Simulate analyzing the runtime conditions with the message box.
+            // Make a decision to jump over the dialog in the sequence
+            if (MessageBox.Show("Do you want to skip 'Licence Dialog'?", "Wix#", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                obj.Shell.GoNext();
+
     }
 
     static void CheckCompatibility(SetupEventArgs e)
