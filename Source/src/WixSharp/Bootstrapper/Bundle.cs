@@ -184,8 +184,8 @@ namespace WixSharp.Bootstrapper
         /// <summary>
         /// The suppress auto insertion of WixMbaPrereq* variables in the bundle definition (WixMbaPrereqPackageId and WixMbaPrereqLicenseUrl).
         /// <para>BA is relying on two internal variables that reflect .NET version (and licence) that BA requires at runtime. If user defines 
-        /// custom Wix# based BA the required variables are inserted automatically. Similarly to the standards WiX/Burn BA. However some other 
-        /// bundle packages (new PackageGroupRef("NetFx40Web")) may also define these variables so some duplication/collision is possible. 
+        /// custom Wix# based BA the required variables are inserted automatically, similarly to the standards WiX/Burn BA. However some other 
+        /// bundle packages (e.g. new PackageGroupRef("NetFx40Web")) may also define these variables so some duplication/collision is possible. 
         /// To avoid this you can suppress variables auto-isertin and define them manually as needed.</para>
         ///<example>The following is an example of suppressing auto-insertion:
         /// <code>

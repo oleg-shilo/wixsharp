@@ -1200,8 +1200,8 @@
              <summary>
              The suppress auto insertion of WixMbaPrereq* variables in the bundle definition (WixMbaPrereqPackageId and WixMbaPrereqLicenseUrl).
              <para>BA is relying on two internal variables that reflect .NET version (and licence) that BA requires at runtime. If user defines 
-             custom Wix# based BA the required variables are inserted automatically. Similarly to the standards WiX/Burn BA. However some other 
-             bundle packages (new PackageGroupRef("NetFx40Web")) may also define these variables so some duplication/collision is possible. 
+             custom Wix# based BA the required variables are inserted automatically, similarly to the standards WiX/Burn BA. However some other 
+             bundle packages (e.g. new PackageGroupRef("NetFx40Web")) may also define these variables so some duplication/collision is possible. 
              To avoid this you can suppress variables auto-isertin and define them manually as needed.</para>
             <example>The following is an example of suppressing auto-insertion:
              <code>
@@ -4318,6 +4318,15 @@
             </para>
             </summary>
         </member>
+        <member name="M:WixSharp.Extensions.IsUpgrading(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Gets a value indicating whether the product is being upgraded. 
+            <para>
+            This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
+            that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
+            </para>
+            </summary>
+        </member>
         <member name="M:WixSharp.Extensions.IsModifying(Microsoft.Deployment.WindowsInstaller.Session)">
             <summary>
             Determines whether MSI is running in "modifying" mode.
@@ -4345,7 +4354,7 @@
             Determines whether the feature is selected in the feature tree of the Features dialog
             and will be installed.
             <para>
-            This method will fail to retreive the correct value if called from the deferred custom action and the session properties
+            This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
             that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
             </para>
             </summary>
@@ -7128,6 +7137,14 @@
         <member name="P:WixSharp.SetupEventArgs.IsModifying">
             <summary>
             Gets a value indicating whether the installed product is being modified.
+            </summary>
+            <value>
+            <c>true</c> if modifying; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:WixSharp.SetupEventArgs.IsUpgrading">
+            <summary>
+            Gets a value indicating whether the installed product is being upgraded.
             </summary>
             <value>
             <c>true</c> if modifying; otherwise, <c>false</c>.

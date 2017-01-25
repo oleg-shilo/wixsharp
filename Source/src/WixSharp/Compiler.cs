@@ -215,14 +215,14 @@ namespace WixSharp
         {
             try
             {
-                // /MBSBUILD:$(ProjectName)
-                var preffix = "/MBSBUILD:";
+                // /MSBUILD:$(ProjectName)
+                var preffix = "/MSBUILD:";
 
                 string arg = Environment.GetCommandLineArgs().Where(x => x.StartsWith(preffix)).LastOrDefault() ?? "";
 
                 if (arg.IsEmpty())
                 {
-                    preffix = "/MSBUILD:"; //early versions of NuGet packages had this typo
+                    preffix = "/MBSBUILD:"; //early versions of NuGet packages had this typo
                     arg = Environment.GetCommandLineArgs().Where(x => x.StartsWith(preffix)).LastOrDefault() ?? "";
                 }
 
