@@ -1,1 +1,1 @@
-WiX Toolset v3.10 (v3.10.2103.0)
+WiX Toolset v3.10.3 (v3.10.3007.0)
