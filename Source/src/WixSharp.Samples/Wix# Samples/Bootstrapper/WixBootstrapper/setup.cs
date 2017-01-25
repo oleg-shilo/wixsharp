@@ -80,14 +80,22 @@ public class InstallScript
         bootstrapper.StringVariablesDefinition += "BundleVariable=333";
         bootstrapper.PreserveTempFiles = true;
 
-        //bootstrapper.SuppressWixMbaPrereqVars = true;
+
+        // Add MspPackage manually (demo only). 
+        // In the future releases the direct support for MspPackage element will be added. 
+        // bootstrapper.WixSourceGenerated += (doc) => doc.FindSingle("Chain")
+        //                                                .AddElement("MspPackage", 
+        //                                                            "SourceFile=Patch.msp; Slipstream=no"); 
+
+        //in real life scenarios suppression may need to be enabled (see SuppressWixMbaPrereqVars documentation)
+        //bootstrapper.SuppressWixMbaPrereqVars = true; 
 
         var setup = bootstrapper.Build();
 
         //---------------------------------------------------------
 
-        //if (io.File.Exists(productMsi)) io.File.Delete(productMsi);
-        //if (io.File.Exists(crtMsi)) io.File.Delete(crtMsi);
+        if (io.File.Exists(productMsi)) io.File.Delete(productMsi);
+        if (io.File.Exists(crtMsi)) io.File.Delete(crtMsi);
     }
 
     static public string BuildMainMsi()
