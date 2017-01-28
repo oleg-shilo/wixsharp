@@ -18,6 +18,11 @@ class Script
                 new Project("My Product",
 
                     new Dir(@"%ProgramFiles%\My Company\My Product",
+                        new InternetShortcut
+                        {
+                            Name = "Wix# project page",
+                            Target = "https://github.com/oleg-shilo/wixsharp"
+                        },
                         new Dir("Samples",
                             new File(@"AppFiles\MyApp.cs")),
                         new File(@"AppFiles\MyApp.exe",

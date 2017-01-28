@@ -1202,7 +1202,7 @@
              <para>BA is relying on two internal variables that reflect .NET version (and licence) that BA requires at runtime. If user defines 
              custom Wix# based BA the required variables are inserted automatically, similarly to the standards WiX/Burn BA. However some other 
              bundle packages (e.g. new PackageGroupRef("NetFx40Web")) may also define these variables so some duplication/collision is possible. 
-             To avoid this you can suppress variables auto-isertin and define them manually as needed.</para>
+             To avoid this you can suppress variables auto-insertion and define them manually as needed.</para>
             <example>The following is an example of suppressing auto-insertion:
              <code>
              var bootstrapper = new Bundle("My Product Suite",
@@ -2383,11 +2383,11 @@
         </member>
         <member name="T:WixSharp.EventSource">
              <summary>
-             Defines Event source for windows Event Log service..
+             Defines Event source for windows Event Log service.
              </summary>
              <seealso cref="T:WixSharp.WixEntity" />
              <seealso cref="T:WixSharp.IGenericEntity" />
-             ///<example>The following is an example of creating an event source "ROOT Boilder".
+            <example>The following is an example of creating an event source "ROOT Builder".
             <code>
             var project =
              new Project("MyProduct",
@@ -2695,6 +2695,74 @@
             </summary>
         </member>
         <member name="M:WixSharp.IGenericEntity.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
+        <member name="T:WixSharp.InternetShortcut">
+             <summary>
+             Defines Event source for windows Event Log service.
+             </summary>
+             <seealso cref="T:WixSharp.WixEntity" />
+             <seealso cref="T:WixSharp.IGenericEntity" />
+            <example>The following is an example of creating a shortcut to the Wix# website.
+            <code>
+            var project =
+             new Project("MyProduct",
+                 new Dir(@"%ProgramFiles64Folder%\My Company\My Product",
+                    new InternetShortcut
+                    {
+                        Id = "OnlineDocumentationShortcut",
+                        Name = "My Online Documentation",
+                        Target = "https://github.com/oleg-shilo/wixsharp"
+                        },
+                     ...
+                     
+             project.BuildMsi();
+             </code>
+             </example>
+        </member>
+        <member name="T:WixSharp.InternetShortcut.ShortcutType">
+            <summary>
+            Type of shortcut should be created. 
+            </summary>
+            
+        </member>
+        <member name="F:WixSharp.InternetShortcut.ShortcutType.link">
+            <summary>
+            Creates .lnk files using IShellLinkW (default).
+            </summary>
+        </member>
+        <member name="F:WixSharp.InternetShortcut.ShortcutType.url">
+            <summary>
+            Creates .url files using IUniformResourceLocatorW
+            </summary>
+        </member>
+        <member name="F:WixSharp.InternetShortcut.Name">
+            <summary>
+            The name of the shortcut file, which is visible to the user. (The .lnk extension is added automatically and by default, is not shown to the user.)
+            </summary>
+        </member>
+        <member name="F:WixSharp.InternetShortcut.Id">
+            <summary>
+            Unique identifier in your installation package for this Internet shortcut.
+            </summary>
+        </member>
+        <member name="F:WixSharp.InternetShortcut.Target">
+            <summary>
+            URL that should be opened when the user selects the shortcut. Windows opens the URL in the appropriate handler for the protocol specified in the URL. Note that this is a formatted field, so you can use [#fileId] syntax to refer to a file being installed (using the file: protocol).
+            </summary>
+        </member>
+        <member name="F:WixSharp.InternetShortcut.Type">
+            <summary>
+            Which type of shortcut should be created. This attribute's value must be one of the following:
+            <para><c>url</c> - Creates .url files using IUniformResourceLocatorW.</para>
+            <para><c>link</c> - Creates .lnk files using IShellLinkW (default). </para>
+            </summary>
+        </member>
+        <member name="M:WixSharp.InternetShortcut.Process(WixSharp.ProcessingContext)">
             <summary>
             Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
             See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.

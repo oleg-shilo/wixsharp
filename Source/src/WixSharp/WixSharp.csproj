@@ -125,6 +125,7 @@
     <Compile Include="FirewallException.cs" />
     <Compile Include="FontFile.cs" />
     <Compile Include="GenericEntity.cs" />
+    <Compile Include="InternetShortcut.cs" />
     <Compile Include="MajorUpgrade.cs" />
     <Compile Include="Media.cs" />
     <Compile Include="ODBCDataSource.cs" />

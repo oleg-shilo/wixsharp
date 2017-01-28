@@ -17,11 +17,11 @@ using static WixSharp.SetupEventArgs;
 namespace WixSharp
 {
     /// <summary>
-    /// Defines Event source for windows Event Log service..
+    /// Defines Event source for windows Event Log service.
     /// </summary>
     /// <seealso cref="WixSharp.WixEntity" />
     /// <seealso cref="WixSharp.IGenericEntity" />
-    /// ///<example>The following is an example of creating an event source "ROOT Boilder".
+    ///<example>The following is an example of creating an event source "ROOT Builder".
     ///<code>
     ///var project =
     /// new Project("MyProduct",

@@ -831,7 +831,7 @@
             <summary>
             Localizes the specified text.
             <para>The localization is performed according two possible scenarios. The method will return the match form the MSI embedded localization file. 
-            However if it cannot find the match the method will try to find the and return the match in the MSI session properties.</para>
+            However if it cannot find the match the method will try to find the and return the match from the MSI session properties.</para>
             <para>This method is mainly used by 'LocalizeWith' extension for a single step localization of WinForm controls.</para>
             </summary>
             <param name="text">The text.</param>
