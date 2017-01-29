@@ -28,10 +28,9 @@ namespace WixSharp
     ///     new Dir(@"%ProgramFiles64Folder%\My Company\My Product",
     ///        new InternetShortcut
     ///        {
-    ///            Id = "OnlineDocumentationShortcut",
     ///            Name = "My Online Documentation",
     ///            Target = "https://github.com/oleg-shilo/wixsharp"
-    ///            },
+    ///        },
     ///         ...
     ///         
     /// project.BuildMsi();

@@ -14,9 +14,8 @@ class Script
     {
         try
         {
-            Project project =
+            var project =
                 new Project("My Product",
-
                     new Dir(@"%ProgramFiles%\My Company\My Product",
                         new InternetShortcut
                         {
