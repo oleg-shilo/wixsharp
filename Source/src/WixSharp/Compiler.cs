@@ -3129,6 +3129,22 @@ namespace WixSharp
             }
         }
 
+        /// <summary>
+        /// Gets list of the the mapped WiX constants.
+        /// </summary>
+        /// <param name="include64Specific">if set to <c>true</c> [include64 specific].</param>
+        /// <returns></returns>
+        public static string[] GetMappedWixConstants(bool include64Specific)
+        {
+            var result = EnvironmentConstantsMapping.Keys.ToList();
+            if (include64Specific)
+                result.AddRange(EnvironmentFolders64Mapping.Keys);
+
+            result.Sort();
+
+            return result.Distinct().ToArray();
+        }
+
         internal static Dictionary<string, string> EnvironmentFolders64Mapping = new Dictionary<string, string>
         {
             { "%ProgramFilesFolder%", "%ProgramFiles64Folder%" },

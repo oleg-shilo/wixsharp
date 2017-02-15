@@ -42,6 +42,8 @@ namespace WixSharp
     /// </para>
     ///  You can use predefined Wix# environment constants for well-known installation locations. They are directly mapped
     ///  to the corresponding WiX constants:
+    ///  <para>For the full list of the constants consult WiX documentation or use <c>Compiler.GetMappedWixConstants</c>
+    ///  to explore them programatically./</para>
     ///  <para>
     ///  <para><c>Wix#</c> - <c>WiX</c></para>
     ///  <para>%WindowsFolder% - [WindowsFolder]</para>
@@ -56,6 +58,7 @@ namespace WixSharp
     ///  <para>%SystemFolder% - [SystemFolder]</para>
     ///  <para>%TempFolder% - [TempFolder]</para>
     ///  <para>%Desktop% - [DesktopFolder]</para>
+    ///  <para>...</para>
     ///  </para>
     /// </summary>
     /// <example>The following is an example of defining installation directory <c>Progam Files/My Company/My Product</c>
@@ -291,9 +294,9 @@ namespace WixSharp
         /// <summary>
         /// Indicates if the directory is an installation directory.
         /// <para>
-        /// Wix# assigns a dedicated WiX UI property WIXUI_INSTALLDIR 
-        /// to the Id value of the directory, which is marked by user as <see cref="Dir.IsInstallDir"/> or the directory 
-        /// with the designated Dir Id value defined by Compiler.AutoGeneration.InstallDirDefaultId ('INSTALLDIR' by default). 
+        /// Wix# assigns a dedicated WiX UI property WIXUI_INSTALLDIR
+        /// to the Id value of the directory, which is marked by user as <see cref="Dir.IsInstallDir"/> or the directory
+        /// with the designated Dir Id value defined by Compiler.AutoGeneration.InstallDirDefaultId ('INSTALLDIR' by default).
         /// </para>
         /// </summary>
         public bool IsInstallDir
@@ -306,10 +309,10 @@ namespace WixSharp
             set
             {
                 // It's important to recognize that 'this' can be a composite Dir that has been unfolded into
-                // a branch of the child dirs (e.g. new Dir(@"%ProgramFiles%\CustomActionTest"). If it is the case then 
+                // a branch of the child dirs (e.g. new Dir(@"%ProgramFiles%\CustomActionTest"). If it is the case then
                 // the intention of the user when he uses initializer to set IsInstallDir is to set it for the directory itself
-                // when it is a single directory or to the lats leaf of the unfolded tree of the composite dir.   
-                // Getter should always return the own actual value as it is used by the compiler to decide if the dir 
+                // when it is a single directory or to the lats leaf of the unfolded tree of the composite dir.
+                // Getter should always return the own actual value as it is used by the compiler to decide if the dir
                 //should be assigned INSTALLDIR value
                 if (lastDir != null)
                     lastDir.isInstallDir = value;
