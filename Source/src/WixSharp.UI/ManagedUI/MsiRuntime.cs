@@ -18,23 +18,23 @@ namespace WixSharp
      * Expected to be like this:
      *        Property Name                 Install     Uninstall   Repair      Modify      Upgrade
      *        --------------------------------------------------------------------------------------
-     *        Installed                     False       True        False       True        True    
-     *        REINSTALL                     True        False       True        False       False     
-     *        UPGRADINGPRODUCTCODE          True        False       True        True        True      
-     *        
+     *        Installed                     False       True        False       True        True
+     *        REINSTALL                     True        False       True        False       False
+     *        UPGRADINGPRODUCTCODE          True        False       True        True        True
+     *
      * Though in the reality it is like this:
      *        Property Name                 Install     Uninstall   Repair      Modify      Upgrade
      *        ---------------------------------------------------------------------------------------------------
-     *        Installed                     <null>      00:00:00    00:00:00    00:00:00    <00:00:00>    
-     *        REINSTALL                     <null>      <null>      All         <null>      <null>       
+     *        Installed                     <null>      00:00:00    00:00:00    00:00:00    <00:00:00>
+     *        REINSTALL                     <null>      <null>      All         <null>      <null>
      *        UPGRADINGPRODUCTCODE          <null>      <null>      <null>      <null>      <not empty>
-     *      
+     *
      * */
 
 
 
     /// <summary>
-    /// Represents MSI runtime context. This class is to be used by ManagedUI dialogs to interact with the MSI session. 
+    /// Represents MSI runtime context. This class is to be used by ManagedUI dialogs to interact with the MSI session.
     /// </summary>
     public class MsiRuntime
     {
@@ -47,7 +47,7 @@ namespace WixSharp
         /// Cancels the execution of the MSI installation, which is already started (progress is displayed).
         /// </summary>
         public System.Action CancelExecute;
-        
+
         /// <summary>
         /// The session object.
         /// </summary>
@@ -55,8 +55,8 @@ namespace WixSharp
 
         //DOESN'T work reliably. For example if no InstallDir dialog is displayed the MSI session does not have "INSTALLDIR" property initialized.
         //The other properties (e.g. UI Level) are even never available at all.
-        //It looks like Session is initialized/updated correctly for the 'custom actions' session but not for the 'Embedded UI' session.  
-        //In fact because of these problems a session object can no longer be considered as a single connection point between all MSI runtime modules. 
+        //It looks like Session is initialized/updated correctly for the 'custom actions' session but not for the 'Embedded UI' session.
+        //In fact because of these problems a session object can no longer be considered as a single connection point between all MSI runtime modules.
         internal void CaptureSessionData()
         {
             try
@@ -75,12 +75,12 @@ namespace WixSharp
             catch { }
         }
         /// <summary>
-        /// Repository of the session properties to be captured and transfered to the deferred CAs.for 
+        /// Repository of the session properties to be captured and transfered to the deferred CAs.
         /// </summary>
         public Dictionary<string, string> Data = new Dictionary<string, string>();
 
         /// <summary>
-        /// Localization map. 
+        /// Localization map.
         /// </summary>
         public ResourcesData UIText = new ResourcesData();
 
@@ -143,7 +143,7 @@ namespace WixSharp
 
         /// <summary>
         /// Localizes the specified text.
-        /// <para>The localization is performed according two possible scenarios. The method will return the match form the MSI embedded localization file. 
+        /// <para>The localization is performed according two possible scenarios. The method will return the match form the MSI embedded localization file.
         /// However if it cannot find the match the method will try to find the and return the match from the MSI session properties.</para>
         /// <para>This method is mainly used by 'LocalizeWith' extension for a single step localization of WinForm controls.</para>
         /// </summary>
@@ -206,7 +206,7 @@ namespace WixSharp
                 try
                 {
                     System.IO.File.WriteAllBytes(tempXmlFile, wxlData);
-                    doc = XDocument.Load(tempXmlFile); //important to use Load as it will take care about encoding magic first bites of wxlData, that came from the localization file  
+                    doc = XDocument.Load(tempXmlFile); //important to use Load as it will take care about encoding magic first bites of wxlData, that came from the localization file
                 }
                 catch
                 {

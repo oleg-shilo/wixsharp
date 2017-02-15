@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WixSharp.Test, PublicKey=0024000004800000940000000602000000240000525341310004000001000100ADD2AE32C0B7319C46334E02033C7A87D10AB2FDC13B2B847CA6E5316BD4E59E9C8D51A29AF6E8E8307A938B833FAC86D7B45410DDCBD5FE5E4392B29DC6F68DFE5087CD9A22B2A0F6C4A73F03313BC9ED06960653B52BE67ED9828CE9FFE2374FA3BB223CE4885E7E62D7D18BB2DF84E561CA04A64FC84552268CAA7F23B9AD")]
 [assembly: InternalsVisibleTo("WixSharp.UI, PublicKey=0024000004800000940000000602000000240000525341310004000001000100ADD2AE32C0B7319C46334E02033C7A87D10AB2FDC13B2B847CA6E5316BD4E59E9C8D51A29AF6E8E8307A938B833FAC86D7B45410DDCBD5FE5E4392B29DC6F68DFE5087CD9A22B2A0F6C4A73F03313BC9ED06960653B52BE67ED9828CE9FFE2374FA3BB223CE4885E7E62D7D18BB2DF84E561CA04A64FC84552268CAA7F23B9AD")]
 
-// General Information about an assembly is controlled through the following 
+// General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("WixSharp")]
@@ -18,8 +18,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 
 
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
+// Setting ComVisible to false makes the types in this assembly not visible
+// to COM components.  If you need to access a type in this assembly from
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
@@ -29,9 +29,9 @@ using System.Runtime.InteropServices;
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version
-//      Minor Version 
+//      Minor Version
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.3.0.0")] 
+[assembly: AssemblyVersion("1.3.0.0")]
 [assembly: AssemblyFileVersion("1.3.0.0")]

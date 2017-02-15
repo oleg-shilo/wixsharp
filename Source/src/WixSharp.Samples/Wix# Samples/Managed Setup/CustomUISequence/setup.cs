@@ -82,7 +82,7 @@ public class Script
     static void Project_UILoaded(SetupEventArgs e)
     {
         var msiFile = e.Session.Database.FilePath;
-        
+
         // Simulate analyzing the runtime conditions with the message box.
         // Make a decision to show (or not) Licence dialog by injecting it in the Dialogs collection
         if (MessageBox.Show("Do you want to inject 'Licence Dialog'?", "Wix#", MessageBoxButtons.YesNo) == DialogResult.Yes)

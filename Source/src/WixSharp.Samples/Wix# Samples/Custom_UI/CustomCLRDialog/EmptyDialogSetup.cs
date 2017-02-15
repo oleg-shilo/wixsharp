@@ -8,7 +8,7 @@ public class EmptyDialogSetup
 {
     public static void Build()
     {
-        var project = new Project("CustomDialogTest",  
+        var project = new Project("CustomDialogTest",
                           new Dir(@"%ProgramFiles%\My Company\My Product",
                               new File("setup.exe")));
 

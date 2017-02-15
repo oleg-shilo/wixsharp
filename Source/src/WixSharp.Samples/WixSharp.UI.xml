@@ -786,7 +786,7 @@
         </member>
         <member name="T:WixSharp.MsiRuntime">
             <summary>
-            Represents MSI runtime context. This class is to be used by ManagedUI dialogs to interact with the MSI session. 
+            Represents MSI runtime context. This class is to be used by ManagedUI dialogs to interact with the MSI session.
             </summary>
         </member>
         <member name="F:WixSharp.MsiRuntime.StartExecute">
@@ -806,12 +806,12 @@
         </member>
         <member name="F:WixSharp.MsiRuntime.Data">
             <summary>
-            Repository of the session properties to be captured and transfered to the deferred CAs.for 
+            Repository of the session properties to be captured and transfered to the deferred CAs.
             </summary>
         </member>
         <member name="F:WixSharp.MsiRuntime.UIText">
             <summary>
-            Localization map. 
+            Localization map.
             </summary>
         </member>
         <member name="M:WixSharp.MsiRuntime.#ctor(Microsoft.Deployment.WindowsInstaller.Session)">
@@ -830,7 +830,7 @@
         <member name="M:WixSharp.MsiRuntime.Localize(System.String)">
             <summary>
             Localizes the specified text.
-            <para>The localization is performed according two possible scenarios. The method will return the match form the MSI embedded localization file. 
+            <para>The localization is performed according two possible scenarios. The method will return the match form the MSI embedded localization file.
             However if it cannot find the match the method will try to find the and return the match from the MSI session properties.</para>
             <para>This method is mainly used by 'LocalizeWith' extension for a single step localization of WinForm controls.</para>
             </summary>

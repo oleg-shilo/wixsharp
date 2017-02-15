@@ -22,8 +22,9 @@ class Script
                 new Certificate("NameOfCert2", StoreLocation.currentUser, StoreName.personal, @"Path\to\cert\file", authorityRequest:false));
 
         project.UI = WUI.WixUI_InstallDir;
+        //project.PreserveTempFiles = true;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-       
+
         Compiler.BuildMsi(project);
     }
 }
