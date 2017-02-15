@@ -47,6 +47,7 @@ namespace WixSharp
     ///  <para>%WindowsFolder% - [WindowsFolder]</para>
     ///  <para>%ProgramFiles% - [ProgramFilesFolder]</para>
     ///  <para>%ProgramMenu% - [ProgramMenuFolder]</para>
+    ///  <para>%CommonAppDataFolder% - [CommonAppDataFolder]</para>
     ///  <para>%AppDataFolder% - [AppDataFolder]</para>
     ///  <para>%CommonFilesFolder% - [CommonFilesFolder]</para>
     ///  <para>%LocalAppDataFolder% - [LocalAppDataFolder]</para>
