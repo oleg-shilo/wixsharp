@@ -43,7 +43,7 @@ public class InstallScript
         bootstrapper.SuppressWixMbaPrereqVars = true; //needed because NetFx40Web also defines WixMbaPrereqVars
         bootstrapper.Version = new Version("1.0.0.0");
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889c");
-        
+
         //if primary package Id is not defined then the last package will be treated as the primary one
         bootstrapper.Application = new SilentBootstrapperApplication();
 
@@ -51,7 +51,6 @@ public class InstallScript
         //bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
 
         bootstrapper.PreserveTempFiles = true;
-        bootstrapper.Build();
+        bootstrapper.Build("app_setup");
     }
 }
-

@@ -4,7 +4,7 @@ The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -37,20 +37,20 @@ namespace WixSharp
     /// <summary>
     /// Defines file to be installed.
     /// </summary>
-    /// 
+    ///
     ///<example>The following is an example of installing <c>MyApp.exe</c> file.
     ///<code>
-    /// var project = 
+    /// var project =
     ///     new Project("My Product",
-    ///     
+    ///
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
-    ///         
+    ///
     ///             new File(binaries, @"AppFiles\MyApp.exe",
     ///                 new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
     ///                 new WixSharp.Shortcut("MyApp", @"%Desktop%")),
-    ///                 
+    ///
     ///         ...
-    ///         
+    ///
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
@@ -78,7 +78,7 @@ namespace WixSharp
         /// </summary>
         /// <param name="feature"><see cref="Feature"></see> the file should be included in.</param>
         /// <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the file to be created 
+        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the file to be created
         /// during the installation.</param>
         public File(Feature feature, string sourcePath, params WixEntity[] items)
         {
@@ -92,7 +92,7 @@ namespace WixSharp
         /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="File"/> instance.</param>
         /// <param name="feature"><see cref="Feature"></see> the file should be included in.</param>
         /// <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the file to be created 
+        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the file to be created
         /// during the installation.</param>
         public File(Id id, Feature feature, string sourcePath, params WixEntity[] items)
         {
@@ -105,7 +105,7 @@ namespace WixSharp
         /// Creates instance of the <see cref="File"></see> class with properties initialized with specified parameters.
         /// </summary>
         /// <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the file to be created 
+        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the file to be created
         /// during the installation.</param>
         public File(string sourcePath, params WixEntity[] items)
         {
@@ -117,7 +117,7 @@ namespace WixSharp
         /// </summary>
         /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="File"/> instance.</param>
         /// <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the file to be created 
+        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the file to be created
         /// during the installation.</param>
         public File(Id id, string sourcePath, params WixEntity[] items)
         {
@@ -158,7 +158,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Collection of the <see cref="FileAssociation"/>s associated with the file. 
+        /// Collection of the <see cref="FileAssociation"/>s associated with the file.
         /// </summary>
         public FileAssociation[] Associations = new FileAssociation[0];
 
@@ -175,12 +175,12 @@ namespace WixSharp
         public DriverInstaller DriverInstaller = null;
 
         /// <summary>
-        /// Collection of the contained <see cref="IISVirtualDir"/>s. 
+        /// Collection of the contained <see cref="IISVirtualDir"/>s.
         /// </summary>
         public IISVirtualDir[] IISVirtualDirs = new IISVirtualDir[0];
 
         /// <summary>
-        /// Collection of the <see cref="Shortcut"/>s associated with the file. 
+        /// Collection of the <see cref="Shortcut"/>s associated with the file.
         /// </summary>
         public FileShortcut[] Shortcuts = new FileShortcut[0];
         /// <summary>
@@ -188,7 +188,7 @@ namespace WixSharp
         /// </summary>
         public Feature Feature;
         /// <summary>
-        /// Defines the installation <see cref="Condition"/>, which is to be checked during the installation to 
+        /// Defines the installation <see cref="Condition"/>, which is to be checked during the installation to
         /// determine if the file should be installed on the target system.
         /// </summary>
         public Condition Condition;
@@ -212,18 +212,17 @@ namespace WixSharp
         {
             get
             {
-                var value = GetAttributeDefinition("Component:NeverOverwrite");
-                if (value == null)
-                    return null;
+                if (attributesBag.ContainsKey("Component:NeverOverwrite"))
+                    return (attributesBag["Component:NeverOverwrite"] == "yes");
                 else
-                    return (value == "yes");
+                    return null;
             }
             set
             {
                 if (value.HasValue)
-                    SetAttributeDefinition("Component:NeverOverwrite", value.Value.ToYesNo());
-                else
-                    SetAttributeDefinition("Component:NeverOverwrite", null);
+                    attributesBag["Component:NeverOverwrite"] = value.Value.ToYesNo();
+                else if (attributesBag.ContainsKey("Component:NeverOverwrite"))
+                    attributesBag.Remove("Component:NeverOverwrite");
             }
         }
     }

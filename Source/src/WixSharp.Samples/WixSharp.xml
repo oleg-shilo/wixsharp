@@ -8456,20 +8456,20 @@
              <summary>
              Defines file to be installed.
              </summary>
-             
+            
             <example>The following is an example of installing <c>MyApp.exe</c> file.
             <code>
-             var project = 
+             var project =
                  new Project("My Product",
-                 
+            
                      new Dir(@"%ProgramFiles%\My Company\My Product",
-                     
+            
                          new File(binaries, @"AppFiles\MyApp.exe",
                              new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
                              new WixSharp.Shortcut("MyApp", @"%Desktop%")),
-                             
+            
                      ...
-                     
+            
              Compiler.BuildMsi(project);
              </code>
              </example>
@@ -8495,7 +8495,7 @@
             </summary>
             <param name="feature"><see cref="F:WixSharp.File.Feature"></see> the file should be included in.</param>
             <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the file to be created 
+            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the file to be created
             during the installation.</param>
         </member>
         <member name="M:WixSharp.File.#ctor(WixSharp.Id,WixSharp.Feature,System.String,WixSharp.WixEntity[])">
@@ -8505,7 +8505,7 @@
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.File"/> instance.</param>
             <param name="feature"><see cref="F:WixSharp.File.Feature"></see> the file should be included in.</param>
             <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the file to be created 
+            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the file to be created
             during the installation.</param>
         </member>
         <member name="M:WixSharp.File.#ctor(System.String,WixSharp.WixEntity[])">
@@ -8513,7 +8513,7 @@
             Creates instance of the <see cref="T:WixSharp.File"></see> class with properties initialized with specified parameters.
             </summary>
             <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the file to be created 
+            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the file to be created
             during the installation.</param>
         </member>
         <member name="M:WixSharp.File.#ctor(WixSharp.Id,System.String,WixSharp.WixEntity[])">
@@ -8522,12 +8522,12 @@
             </summary>
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.File"/> instance.</param>
             <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the file to be created 
+            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the file to be created
             during the installation.</param>
         </member>
         <member name="F:WixSharp.File.Associations">
             <summary>
-            Collection of the <see cref="T:WixSharp.FileAssociation"/>s associated with the file. 
+            Collection of the <see cref="T:WixSharp.FileAssociation"/>s associated with the file.
             </summary>
         </member>
         <member name="F:WixSharp.File.ServiceInstaller">
@@ -8544,12 +8544,12 @@
         </member>
         <member name="F:WixSharp.File.IISVirtualDirs">
             <summary>
-            Collection of the contained <see cref="T:WixSharp.IISVirtualDir"/>s. 
+            Collection of the contained <see cref="T:WixSharp.IISVirtualDir"/>s.
             </summary>
         </member>
         <member name="F:WixSharp.File.Shortcuts">
             <summary>
-            Collection of the <see cref="T:WixSharp.Shortcut"/>s associated with the file. 
+            Collection of the <see cref="T:WixSharp.Shortcut"/>s associated with the file.
             </summary>
         </member>
         <member name="F:WixSharp.File.Feature">
@@ -8559,7 +8559,7 @@
         </member>
         <member name="F:WixSharp.File.Condition">
             <summary>
-            Defines the installation <see cref="F:WixSharp.File.Condition"/>, which is to be checked during the installation to 
+            Defines the installation <see cref="F:WixSharp.File.Condition"/>, which is to be checked during the installation to
             determine if the file should be installed on the target system.
             </summary>
         </member>

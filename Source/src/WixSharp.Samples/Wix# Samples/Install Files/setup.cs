@@ -3,6 +3,7 @@
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -18,7 +19,10 @@ class Script
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(new Id("MyApp_file"), @"Files\Bin\MyApp.exe")),
                             new Dir(@"Docs\Manual",
-                                new File(@"Files\Docs\Manual.txt") { NeverOverwrite = true }),
+                                new File(@"Files\Docs\Manual.txt")
+                                {
+                                    NeverOverwrite = true
+                                }),
                         new Property("PropName", "<your value>"));
 
         //project.UI = WUI.WixUI_InstallDir;
@@ -30,7 +34,8 @@ class Script
 
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
-        project.BuildMsi();
+        project.BuildWxs();
+        //project.BuildMsi();
     }
 
     static void Compiler_WixSourceGenerated(XDocument document)

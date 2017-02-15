@@ -255,18 +255,17 @@ namespace WixSharp
         {
             get
             {
-                var value = GetAttributeDefinition("Component:NeverOverwrite");
-                if (value == null)
-                    return null;
+                if (attributesBag.ContainsKey("Component:NeverOverwrite"))
+                    return (attributesBag["Component:NeverOverwrite"] == "yes");
                 else
-                    return (value == "yes");
+                    return null;
             }
             set
             {
                 if (value.HasValue)
-                    SetAttributeDefinition("Component:NeverOverwrite", value.Value.ToYesNo());
-                else
-                    SetAttributeDefinition("Component:NeverOverwrite", null);
+                    attributesBag["Component:NeverOverwrite"] = value.Value.ToYesNo();
+                else if (attributesBag.ContainsKey("Component:NeverOverwrite"))
+                    attributesBag.Remove("Component:NeverOverwrite");
             }
         }
 

@@ -80,7 +80,6 @@ public class InstallScript
         bootstrapper.StringVariablesDefinition += "BundleVariable=333";
         bootstrapper.PreserveTempFiles = true;
 
-
         // Add MspPackage manually (demo only). 
         // In the future releases the direct support for MspPackage element will be added. 
         // bootstrapper.WixSourceGenerated += (doc) => doc.FindSingle("Chain")
@@ -90,7 +89,7 @@ public class InstallScript
         //in real life scenarios suppression may need to be enabled (see SuppressWixMbaPrereqVars documentation)
         //bootstrapper.SuppressWixMbaPrereqVars = true; 
 
-        var setup = bootstrapper.Build();
+        var setup = bootstrapper.Build("app_setup");
 
         //---------------------------------------------------------
 

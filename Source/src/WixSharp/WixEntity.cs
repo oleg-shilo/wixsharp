@@ -93,33 +93,27 @@ namespace WixSharp
         /// </code>
         /// </example>
         public string AttributesDefinition { get; set; }
+        internal Dictionary<string, string> attributesBag = new Dictionary<string, string>();
 
         void ProcessAttributesDefinition()
         {
             if (!AttributesDefinition.IsEmpty())
             {
                 var attrToAdd = new Dictionary<string, string>();
+                var attrs = AttributesDefinition.ToDictionary();
 
-                foreach (string attrDef in AttributesDefinition.Trim().Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+                try
                 {
-                    try
-                    {
-                        string[] tokens = attrDef.Split("=".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                        string name = tokens[0].Trim();
-                        if (tokens.Length > 1)
-                        {
-                            string value = tokens[1].Trim();
-                            attrToAdd[name] = value;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("Invalid AttributesDefinition", e);
-                    }
+                    this.Attributes = AttributesDefinition.ToDictionary();
                 }
-
-                this.Attributes = attrToAdd;
+                catch (Exception e)
+                {
+                    throw new Exception("Invalid AttributesDefinition", e);
+                }
             }
+
+            foreach (var item in attributesBag)
+                this.attributes[item.Key] = item.Value;
         }
 
         internal string GetAttributeDefinition(string name)
@@ -285,9 +279,9 @@ namespace WixSharp
                         idMaps[GetType()][rawNameKey] = 0;
                         id = rawName;
                         if (char.IsDigit(id.Last()))
-                            id += "_"; // work around for https://wixsharp.codeplex.com/workitem/142 
-                                       // to avoid potential collision between ids that end with digit 
-                                       // and auto indexed (e.g. [rawName + "." + index])  
+                            id += "_"; // work around for https://wixsharp.codeplex.com/workitem/142
+                                       // to avoid potential collision between ids that end with digit
+                                       // and auto indexed (e.g. [rawName + "." + index])
                     }
                     else
                     {
