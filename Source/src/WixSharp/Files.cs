@@ -131,7 +131,7 @@ namespace WixSharp
         public string Directory = "";
 
         /// <summary>
-        /// The filter delegate. It is applied for every file to be evaluated for the inclusion into MSI.   
+        /// The filter delegate. It is applied for every file to be evaluated for the inclusion into MSI.
         /// </summary>
         public Predicate<string> Filter = (file => true);
 
@@ -150,7 +150,7 @@ namespace WixSharp
         public WixEntity[] GetAllItems(string baseDirectory)
         {
             if (IO.Path.IsPathRooted(Directory))
-                baseDirectory = Directory; 
+                baseDirectory = Directory;
             if (baseDirectory.IsEmpty())
                 baseDirectory = Environment.CurrentDirectory;
 
@@ -163,17 +163,19 @@ namespace WixSharp
                 rootDirPath = Utils.PathCombine(baseDirectory, Directory);
 
             Action<Dir, string> AgregateSubDirs = null;
-            AgregateSubDirs = delegate(Dir parentDir, string dirPath)
+            AgregateSubDirs = delegate (Dir parentDir, string dirPath)
                                 {
                                     foreach (var subDirPath in IO.Directory.GetDirectories(dirPath))
                                     {
                                         var dirName = IO.Path.GetFileName(subDirPath);
                                         var subDir = new Dir(this.Feature, dirName, new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
-                                                                      {
-                                                                          Feature = this.Feature,
-                                                                          //ExcludeMasks = this.ExcludeMasks,
-                                                                          Filter = this.Filter
-                                                                      });
+                                                                                    {
+                                                                                        Feature = this.Feature,
+                                                                                        AttributesDefinition = this.AttributesDefinition,
+                                                                                        Attributes = this.Attributes,
+                                                                                        Filter = this.Filter
+                                                                                    });
+
                                         AgregateSubDirs(subDir, subDirPath);
 
                                         parentDir.Dirs = parentDir.Dirs.Add(subDir);
@@ -181,13 +183,14 @@ namespace WixSharp
                                 };
 
 
-            var items = new List<WixEntity> 
+            var items = new List<WixEntity>
             {
-                new DirFiles(IO.Path.Combine(rootDirPath, this.IncludeMask)) 
+                new DirFiles(IO.Path.Combine(rootDirPath, this.IncludeMask))
                 {
-                    Feature=this.Feature, 
-                    //ExcludeMasks = this.ExcludeMasks, 
-                    Filter = this.Filter 
+                    Feature = this.Feature,
+                    AttributesDefinition = this.AttributesDefinition,
+                    Attributes = this.Attributes.Clone(),
+                    Filter = this.Filter
                 }
             };
 
@@ -200,11 +203,13 @@ namespace WixSharp
             {
                 var dirName = IO.Path.GetFileName(subDirPath);
                 var subDir = new Dir(this.Feature, dirName, new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
-                                              {
-                                                  Feature = this.Feature,
-                                                  //ExcludeMasks = this.ExcludeMasks,
-                                                  Filter = this.Filter
-                                              });
+                                                            {
+                                                                Feature = this.Feature,
+                                                                AttributesDefinition = this.AttributesDefinition,
+                                                                Attributes = this.Attributes.Clone(),
+                                                                Filter = this.Filter
+                                                            });
+
                 AgregateSubDirs(subDir, subDirPath);
 
                 items.Add(subDir);

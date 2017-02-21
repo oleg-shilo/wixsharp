@@ -1500,6 +1500,19 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Clones the specified collection.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <returns></returns>
+        public static Dictionary<string, string> Clone(this Dictionary<string, string> collection)
+        {
+            var result = new Dictionary<string, string>();
+            foreach (var item in collection)
+                result[item.Key] = item.Value;
+            return result;
+        }
+
+        /// <summary>
         /// Converts the string into the <see cref="T:WixSharp.Condition"/> instance.
         /// </summary>
         /// <param name="value">The string value.</param>
@@ -1711,7 +1724,7 @@ namespace WixSharp
         /// </summary>
         static public bool IsUpgrading(this Session session)
         {
-            return session.IsModifying() && session.Property("UPGRADINGPRODUCTCODE").IsNotEmpty(); 
+            return session.IsModifying() && session.Property("UPGRADINGPRODUCTCODE").IsNotEmpty();
         }
 
         /// <summary>

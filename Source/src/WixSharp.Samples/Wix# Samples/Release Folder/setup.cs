@@ -18,7 +18,10 @@ class Script
 
                     new Files(@"..\Release Folder\Release\*.*",
                               f => !f.EndsWith(".obj") &&
-                                   !f.EndsWith(".pdb")),
+                                   !f.EndsWith(".pdb"))
+                    {
+                        AttributesDefinition = "ReadOnly=no" //all files will be marked with this attribute
+                    },
 
                     new ExeFileShortcut("Uninstall My Product", "[System64Folder]msiexec.exe", "/x [ProductCode]")));
 
@@ -34,6 +37,7 @@ class Script
 
         Compiler.PreserveTempFiles = true;
         Compiler.EmitRelativePaths = false;
-        Compiler.BuildMsi(project);
+        project.BuildMsi();
+        //project.BuildWxs();
     }
 }

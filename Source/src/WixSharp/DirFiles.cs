@@ -123,7 +123,7 @@ namespace WixSharp
         /// The relative path from source directory to directory to lookup for files matching the <see cref="DirFiles.IncludeMask"/>.
         /// </summary>
         public string Directory = "";
-        
+
         /// <summary>
         /// Wildcard pattern for files to be included into MSI.
         /// <para>Default value is <c>*.*</c>.</para>
@@ -169,9 +169,17 @@ namespace WixSharp
                     var filePath = IO.Path.GetFullPath(file);
 
                     if (Feature != null)
-                        files.Add(new File(Feature, filePath));
+                        files.Add(new File(Feature, filePath)
+                                  {
+                                      AttributesDefinition = this.AttributesDefinition,
+                                      Attributes = this.Attributes.Clone()
+                                  });
                     else
-                        files.Add(new File(filePath));
+                        files.Add(new File(filePath)
+                                  {
+                                      AttributesDefinition = this.AttributesDefinition,
+                                      Attributes = this.Attributes.Clone()
+                                  });
                 }
             }
             return files.ToArray();
