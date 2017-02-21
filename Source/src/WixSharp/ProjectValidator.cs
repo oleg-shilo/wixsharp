@@ -4,7 +4,7 @@ The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -59,8 +59,14 @@ namespace WixSharp
 
         public static void Validate(Project project)
         {
+            if (project.Media.Any() && project.GenericItems.Any(item => item is MediaTemplate))
+            {
+                throw new ValidationException("Project contains both Media and MediaTemplate elements. Use only one or another (e.g. call project.Media.Clear()).");
+            }
+
             if (project.MajorUpgradeStrategy != null)
             {
+
                 if (project.MajorUpgradeStrategy.UpgradeVersions == null && project.MajorUpgradeStrategy.PreventDowngradingVersions == null)
                 {
                     throw new UpgradeStrategyValidationException("Project MajorUpgradeStrategy.UpgradeVersions and PreventDowngradingVersions are not defined.");
@@ -109,7 +115,7 @@ namespace WixSharp
             }
 
             //important to use RawId to avoid triggering Id premature auto-generation
-            if (project.AllDirs.Count(x=>x.RawId == Compiler.AutoGeneration.InstallDirDefaultId || x.IsInstallDir) > 1)
+            if (project.AllDirs.Count(x => x.RawId == Compiler.AutoGeneration.InstallDirDefaultId || x.IsInstallDir) > 1)
                 throw new ValidationException("More than a single Dir marked as InstallDir. Ensure that only a single directory marked as InstallDir with Dir.IsInstallDir property or with the id 'INSTALLDIR' value");
 
             foreach (Dir dir in project.AllDirs)
@@ -153,8 +159,8 @@ namespace WixSharp
 
             //https://wixsharp.codeplex.com/discussions/646085
             //Have to disable validation as it only considers 'install' but not 'uninstall'.
-            //Possible solution is to annalyse the action.condition and determine if it is 
-            //install /uninstall but it is impossible to do. At least with the adequate accuracy.  
+            //Possible solution is to annalyse the action.condition and determine if it is
+            //install /uninstall but it is impossible to do. At least with the adequate accuracy.
             //var incosnistentInstalledFileActions = project.Actions
             //.OfType<InstalledFileAction>()
             //.Where(x => x.When != When.After || x.Step != Step.InstallExecute)
@@ -168,8 +174,6 @@ namespace WixSharp
             //}
             //catch { }
         }
-
-
 
         public static void ValidateCAAssembly(string file)
         {

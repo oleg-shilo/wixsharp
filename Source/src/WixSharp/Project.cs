@@ -87,6 +87,7 @@ namespace WixSharp
             var users = new List<User>();
             var sqls = new List<SqlDatabase>();
             var certs = new List<Certificate>();
+            var genericItems = new List<IGenericEntity>();
             var fwexceptions = new List<FirewallException>();
 
             if (items.OfType<Media>().Any())
@@ -136,6 +137,8 @@ namespace WixSharp
                         sqls.Add(item as SqlDatabase);
                     else if (item is Certificate)
                         certs.Add(item as Certificate);
+                    else if (item is IGenericEntity)
+                        genericItems.Add(item as IGenericEntity);
                     else
                         throw new Exception("Unexpected object type is among Project constructor arguments: " + item.GetType().Name);
                 }
@@ -151,6 +154,7 @@ namespace WixSharp
             SqlDatabases = sqls.ToArray();
             Certificates = certs.ToArray();
             FirewallExceptions = fwexceptions.ToArray();
+            GenericItems = genericItems.ToArray();
         }
 
         /// <summary>
@@ -473,6 +477,10 @@ namespace WixSharp
         /// Collection of <see cref="FirewallException"/> to be installed.
         /// </summary>
         public FirewallException[] FirewallExceptions = new FirewallException[0];
+        /// <summary>
+        /// Collection of the user defined <see cref="IGenericEntity"/> items.
+        /// </summary>
+        public IGenericEntity[] GenericItems = new IGenericEntity[0];
         /// <summary>
         /// Collection of WiX/MSI <see cref="Property"/> objects to be created during the installed.
         /// </summary>

@@ -97,7 +97,7 @@ namespace WixSharp
         /// </summary>
         /// <param name="projectId">The project id.</param>
         /// <returns></returns>
-        public XContainer ToXml(string projectId="")
+        public XContainer ToXml(string projectId = "")
         {
             if (Cabinet.IsNotEmpty())
                 Cabinet = Cabinet.Replace("{projectId}", projectId);
@@ -105,6 +105,70 @@ namespace WixSharp
             return new XElement("Media")
                        .AddAttributes(this.MapToXmlAttributes())
                        .AddAttributes(this.Attributes);
+        }
+    }
+
+    /// <summary>
+    /// MediaTeplate element describes information to automatically assign files to cabinets. A maximumum number of cabinets created is 999.
+    ///<example>The following is an example of defining the <c>MediaTemplate</c> element(s).
+    ///<code>
+    /// var project =
+    ///     new Project("My Product",
+    ///         new MediaTemplate { CompressionLevel=CompressionLevel.high },
+    ///         new Dir(@"%ProgramFiles%\My Company\My Product",
+    ///     ...
+    /// project.BuildMsi();
+    /// </code>
+    /// </example>
+    /// </summary>
+    /// <seealso cref="WixSharp.WixEntity" />
+    /// <seealso cref="WixSharp.IGenericEntity" />
+    public class MediaTemplate : WixEntity, IGenericEntity
+    {
+        /// <summary>
+        /// Templated name of the cabinet if some or all of the files stored on the media are in a cabinet file. This name must begin with either a letter or an underscore, contain maximum of five characters and {0} in the cabinet name part and must end three character extension. The default is cab{0}.cab.
+        /// </summary>
+        [WixSharp.Xml]
+        public string CabinetTemplate;
+        /// <summary>
+        /// Indicates the compression level for the Media's cabinet. This attribute can only be used in conjunction with the Cabinet attribute. The default is 'mszip'.
+        /// </summary>
+        [WixSharp.Xml]
+        public CompressionLevel? CompressionLevel;
+        /// <summary>
+        /// The disk name, which is usually the visible text printed on the disk. This localizable text is used to prompt the user when this disk needs to be inserted. This value will be used in the "[1]" of the DiskPrompt Property. Using this attribute will require you to define a DiskPrompt Property.
+        /// </summary>
+        [WixSharp.Xml]
+        public string DiskPrompt;
+        /// <summary>
+        /// Instructs the binder to embed the cabinets in the product if 'true'.
+        /// </summary>
+        [WixSharp.Xml]
+        public bool? EmbedCab;
+        /// <summary>
+        /// Maximum size of cabinet files in megabytes for large files. This attribute is used for packaging files that are larger than MaximumUncompressedMediaSize into smaller cabinets. If cabinet size exceed this value, then setting this attribute will cause the file to be split into multiple cabinets of this maximum size. For simply controlling cabinet size without file splitting use MaximumUncompressedMediaSize attribute. Setting this attribute will disable smart cabbing feature for this Fragment / Product. Setting WIX_MCSLFS environment variable can be used to override this value. Minimum allowed value of this attribute is 20 MB. Maximum allowed value and the Default value of this attribute is 2048 MB (2 GB).
+        /// </summary>
+        [WixSharp.Xml]
+        public int? MaximumCabinetSizeForLargeFileSplitting;
+        /// <summary>
+        /// Size of uncompressed files in each cabinet, in megabytes. WIX_MUMS environment variable can be used to override this value. Default value is 200 MB.
+        /// </summary>
+        [WixSharp.Xml]
+        public int? MaximumUncompressedMediaSize;
+        /// <summary>
+        /// The label attributed to the volume. This is the volume label returned by the GetVolumeInformation function. If the SourceDir property refers to a removable (floppy or CD-ROM) volume, then this volume label is used to verify that the proper disk is in the drive before attempting to install files. The entry in this column must match the volume label of the physical media.
+        /// </summary>
+        [WixSharp.Xml]
+        public string VolumeLabel;
+        /// <summary>
+        /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project" />.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        public void Process(ProcessingContext context)
+        {
+            context.XParent
+                   .Add(this.ToXElement("MediaTemplate"));
         }
     }
 }
