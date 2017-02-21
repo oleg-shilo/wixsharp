@@ -12,7 +12,7 @@ class Script
     static public void Main(string[] args)
     {
         //Note that if the install condition for the component can be set without interacting with user (e.g. analyzing registry)
-        //as part InstallExecuteSequence. However if interaction is required (e.g. message box, checkbox) install condition should 
+        //as part InstallExecuteSequence. However if interaction is required (e.g. message box, checkbox) install condition should
         //be set form InstallUISequence.
 
         var project =

@@ -14,11 +14,11 @@ namespace WixSharp
     ///     new Project("My Product",
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
     ///     ...
-    /// project.Media.Id=2;
-    /// project.Media.CompressionLevel=CompressionLevel.high;
+    /// project.Media.First().Id=2;
+    /// project.Media.First().CompressionLevel=CompressionLevel.high;
     /// //or
-    /// project.Media.AttributesDefinition = @"CompressionLevel=high;
-    ///                                        Id=2";
+    /// project.Media.First().AttributesDefinition = @"CompressionLevel=high;
+    ///                                                Id=2";
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>

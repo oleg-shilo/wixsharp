@@ -23,6 +23,8 @@ class Script
                                 {
                                     NeverOverwrite = true
                                 }),
+                        new Media(),
+                        new Media(),
                         new Property("PropName", "<your value>"));
 
         //project.UI = WUI.WixUI_InstallDir;
@@ -34,8 +36,7 @@ class Script
 
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
-        project.BuildWxs();
-        //project.BuildMsi();
+        project.BuildMsi();
     }
 
     static void Compiler_WixSourceGenerated(XDocument document)

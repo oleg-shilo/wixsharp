@@ -1160,7 +1160,8 @@ namespace WixSharp
                 package.CopyAttributeFrom(product, "Id");
 
             package.AddAttributes(project.Package.Attributes);
-            product.Add(project.Media.ToXml((project as WixEntity).Id));
+            foreach(Media item in project.Media)
+                product.Add(item.ToXml((project as WixEntity).Id));
 
             ProcessWixVariables(project, product);
             ProcessLaunchConditions(project, product);

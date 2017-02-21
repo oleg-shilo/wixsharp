@@ -23,6 +23,12 @@ namespace WixSharp.Test
         }
 
         [Fact]
+        public void ListConsts()
+        {
+            var list = Compiler.GetMappedWixConstants(true);
+        }
+
+        [Fact]
         [Description("Issue #60")]
         public void Fix_Issue_60()
         {

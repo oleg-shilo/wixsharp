@@ -42,6 +42,13 @@ class Script
 
         //project specific build event
         project.WixSourceGenerated += InjectImages;
+
+        project.WixSourceGenerated += document =>
+        {
+            document.Root.Select("Product")
+                         .AddElement("MediaTemplate", "CabinetTemplate=cab{0}.cab, CompressionLevel=mszip");
+        };
+
         //global build event
         Compiler.WixSourceGenerated += document =>
             {
@@ -51,7 +58,7 @@ class Script
                 document.FindAll("Component")
                         .ForEach(e => e.SetAttributeValue("Win64", "yes"));
 
-                //merge 'Wix/Product' elements of document with 'Wix/Product' elements of CommonProperies.wxs 
+                //merge 'Wix/Product' elements of document with 'Wix/Product' elements of CommonProperies.wxs
                 document.InjectWxs("CommonProperies.wxs");
 
                 //the commented code below is the equivalent of project.AddXmlInclude(...)
@@ -94,12 +101,12 @@ public class EventSourceEx : WixEntity, IGenericEntity
         var util = WixExtension.Util;
 
         //reflect new dependency
-        context.Project.IncludeWixExtension(util); 
+        context.Project.IncludeWixExtension(util);
 
         //serialize itself and add to the parent component
         context.XParent
                .FindSingle("Component")
-               .Add(this.ToXElement(util, "EventSource")); 
+               .Add(this.ToXElement(util, "EventSource"));
     }
 }
 

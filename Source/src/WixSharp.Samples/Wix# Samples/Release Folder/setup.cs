@@ -14,7 +14,7 @@ class Script
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
 
-                    //new Dir("Documentation", new Files(@"\\BUILDSERVER\My Product\Release\Documentation\*.*")), //uncomment if you have a real remote files to install 
+                    //new Dir("Documentation", new Files(@"\\BUILDSERVER\My Product\Release\Documentation\*.*")), //uncomment if you have a real remote files to install
 
                     new Files(@"..\Release Folder\Release\*.*",
                               f => !f.EndsWith(".obj") &&

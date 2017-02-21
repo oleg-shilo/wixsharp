@@ -4,7 +4,7 @@ The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -37,7 +37,7 @@ namespace WixSharp
 {
     // Wix/Msi bug/limitation: every component that is to be placed in the user profile has to have Registry key
     // Wix# places dummy key into every component to handle the problem
-    // Wix# auto-generates components contain RemoveFolder elements for all subfolders in the path chain. 
+    // Wix# auto-generates components contain RemoveFolder elements for all subfolders in the path chain.
     // All auto-generates components are automatically inserted in all features
 
     /// <summary>
@@ -56,12 +56,12 @@ namespace WixSharp
     ///                                     new File(@"Files\Bin\MyApp.exe"),
     ///                                     new Dir(@"Docs\Manual",
     ///                                     new File(@"Files\Docs\Manual.txt"))));
-    ///                                     
+    ///
     /// project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
     /// project.BuildMsi();
     /// </code>
     /// </example>
-    public partial class Project : WixProject 
+    public partial class Project : WixProject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class.
@@ -88,6 +88,9 @@ namespace WixSharp
             var sqls = new List<SqlDatabase>();
             var certs = new List<Certificate>();
             var fwexceptions = new List<FirewallException>();
+
+            if (items.OfType<Media>().Any())
+                this.Media.Clear();
 
             foreach (WixObject obj in items)
             {
@@ -126,7 +129,7 @@ namespace WixSharp
                     else if (item is WixGuid)
                         GUID = (item as WixGuid).Value;
                     else if (item is Media)
-                        Media = (item as Media);
+                        Media.Add(item as Media);
                     else if (item is User)
                         users.Add(item as User);
                     else if (item is SqlDatabase)
@@ -182,7 +185,7 @@ namespace WixSharp
                 {
                     s.Location = s.Location.Map64Dirs();
                 };
-                
+
                 foreach (var action in this.Actions.OfType<PathFileAction>())
                 {
                     action.AppPath = action.AppPath.Map64Dirs();
@@ -195,16 +198,16 @@ namespace WixSharp
         /// <para>These attributes are the properties about the package to be placed in the Summary Information Stream. These are visible from COM through the IStream interface, and these properties can be seen on the package in Explorer. </para>
         ///<example>The following is an example of defining the <c>Package</c> attributes.
         ///<code>
-        /// var project = 
+        /// var project =
         ///     new Project("My Product",
         ///         new Dir(@"%ProgramFiles%\My Company\My Product",
-        ///         
+        ///
         ///     ...
-        ///         
+        ///
         /// project.Package.AttributesDefinition = @"AdminImage=Yes;
         ///                                          Comments=Release candidate;
         ///                                          Description=Fantastic product...";
-        ///                                         
+        ///
         /// Compiler.BuildMsi(project);
         /// </code>
         /// </example>
@@ -216,32 +219,34 @@ namespace WixSharp
         public Platform? Platform;
 
         /// <summary>
-        /// Generic <see cref="T:WixSharp.WixEntity"/> container for defining WiX <c>Media</c> element attributes.
+        /// Collection of Media generic <see cref="T:WixSharp.WixEntity"/> containers for defining WiX <c>Media</c> elements
+        /// attributes. Project is always initialized with a sinle Media item. Though if you add multiples media items via
+        /// <see cref="T:WixSharp.Project"/> constructor it remeve the initial Media item befeore adding any new items.
         /// <para>These attributes describe a disk that makes up the source media for the installation.</para>
         ///<example>The following is an example of defining the <c>Package</c> attributes.
         ///<code>
-        /// var project = 
+        /// var project =
         ///     new Project("My Product",
         ///         new Dir(@"%ProgramFiles%\My Company\My Product",
-        ///         
+        ///
         ///     ...
-        ///         
-        /// project.Media.Id = 2;
-        /// project.CompressionLevel = CompressionLevel.mszip;
-        ///                                         
+        ///
+        /// project.Media.First().Id = 2;
+        /// project.Media.First().CompressionLevel = CompressionLevel.mszip;
+        ///
         /// Compiler.BuildMsi(project);
         /// </code>
         /// </example>
         /// </summary>
-        public Media Media = new Media();
+        public List<Media> Media = new List<Media>(new[] { new Media() });
         /// <summary>
-        /// Relative path to RTF file with the custom licence agreement to be displayed in the Licence dialog. 
+        /// Relative path to RTF file with the custom licence agreement to be displayed in the Licence dialog.
         /// If this value is not specified the default WiX licence agreement will be used.
         /// </summary>
         public string LicenceFile = "";
 
         /// <summary>
-        /// The Encoding to be used for MSI UI dialogs. If not specified the 
+        /// The Encoding to be used for MSI UI dialogs. If not specified the
         /// <c>System.Text.Encoding.Default</c> will be used.
         /// </summary>
         public Encoding Encoding = Encoding.Default;
@@ -257,10 +262,10 @@ namespace WixSharp
         public Binary EmbeddedUI = null;
 
         /// <summary>
-        /// The custom UI definition. Use CustomUIBuilder to generate the WiX UI definition or compose 
+        /// The custom UI definition. Use CustomUIBuilder to generate the WiX UI definition or compose
         /// <see cref="WixSharp.Controls.CustomUI"/> manually.
         /// </summary>
-        public Controls.CustomUI CustomUI = null; 
+        public Controls.CustomUI CustomUI = null;
 
         /// <summary>
         /// Simplifies authoring for major upgrades, including support for preventing downgrades.
@@ -268,12 +273,12 @@ namespace WixSharp
         public MajorUpgrade MajorUpgrade = null;
 
         /// <summary>
-        /// This is the value of the <c>UpgradeCode</c> attribute of the Wix <c>Product</c> element. 
-        /// <para>Both WiX and MSI consider this element as optional even it is the only available identifier 
+        /// This is the value of the <c>UpgradeCode</c> attribute of the Wix <c>Product</c> element.
+        /// <para>Both WiX and MSI consider this element as optional even it is the only available identifier
         /// for defining relationship between different versions of the same product. Wix# in contrary enforces
         /// that value to allow any future updates of the product being installed.
         /// </para>
-        /// <para> 
+        /// <para>
         /// If user doesn't specify this value Wix# engine will use <see cref="Project.GUID"/> as <c>UpgradeCode</c>.
         /// </para>
         /// </summary>
@@ -282,14 +287,14 @@ namespace WixSharp
         Guid? guid;
 
         /// <summary>
-        /// This value uniquely identifies the software product being installed. 
+        /// This value uniquely identifies the software product being installed.
         /// <para>
         /// All setup build scripts for different versions of the same product should have the same <see cref="GUID"/>.
         /// If user doesn't specify this value Wix# engine will generate new random GUID for it.
         /// </para>
-        /// <remarks>This value should not be confused with MSI <c>ProductId</c>, which is in fact 
-        /// not an identifier of the product but rather an identifier of the product particular version. 
-        /// MSI uses <c>UpgradeCode</c> as a common identification of the product regardless of it's version. 
+        /// <remarks>This value should not be confused with MSI <c>ProductId</c>, which is in fact
+        /// not an identifier of the product but rather an identifier of the product particular version.
+        /// MSI uses <c>UpgradeCode</c> as a common identification of the product regardless of it's version.
         /// <para>In a way <see cref="GUID"/> is an alias for <see cref="UpgradeCode"/>.</para>
         /// </remarks>
         /// </summary>
@@ -363,19 +368,19 @@ namespace WixSharp
 
         /// <summary>
         /// Defines Major Upgrade behavior. By default it is <c>null</c> thus upgrade is not supported.
-        /// <para>If you need to implement Major Upgrade define this member to appropriate 
+        /// <para>If you need to implement Major Upgrade define this member to appropriate
         /// <see cref="MajorUpgradeStrategy"/> instance.</para>
         /// <para><c>Note</c>: <see cref="MajorUpgradeStrategy"/> yields WiX UpgradeVersion element, which is arguably the most comprehensive
-        /// upgrade definition. However in the later versions of WiX a simplified upgrade definition has been introduced. It relies 
-        /// on MajorUpgrade WiX element. For most of the upgrade scenarios you will find MajorUpgrade allows achieve the same result with 
+        /// upgrade definition. However in the later versions of WiX a simplified upgrade definition has been introduced. It relies
+        /// on MajorUpgrade WiX element. For most of the upgrade scenarios you will find MajorUpgrade allows achieve the same result with
         /// much less effort. Wix# supports MajorUpgrade element via  <see cref="WixSharp.Project.MajorUpgrade"/> member.</para>
         /// </summary>
-        ///<example>The following is an example of building product MSI with auto uninstalling any older version of the product 
+        ///<example>The following is an example of building product MSI with auto uninstalling any older version of the product
         ///and preventing downgrading.
         ///<code>
         /// var project = new Project("My Product",
         ///                   ...
-        ///                   
+        ///
         /// project.MajorUpgradeStrategy =  new MajorUpgradeStrategy
         ///                                 {
         ///                                     UpgradeVersions = VersionRange.OlderThanThis,
@@ -386,19 +391,19 @@ namespace WixSharp
         /// </code>
         /// or the same scenario but using predefined <c>MajorUpgradeStrategy.Default</c> strategy.
         ///<code>
-        /// project.MajorUpgradeStrategy = MajorUpgradeStrategy.Default;                    
+        /// project.MajorUpgradeStrategy = MajorUpgradeStrategy.Default;
         /// </code>
         /// You can also specify custom range of versions:
         ///<code>
         /// project.MajorUpgradeStrategy =  new MajorUpgradeStrategy
         ///                                 {
-        ///                                     UpgradeVersions = new VersionRange 
-        ///                                                           { 
+        ///                                     UpgradeVersions = new VersionRange
+        ///                                                           {
         ///                                                              Minimum = "2.0.5.0", IncludeMaximum = true,
         ///                                                              Maximum = "%this%", IncludeMaximum = false
         ///                                                           },
-        ///                                     PreventDowngradingVersions = new VersionRange 
-        ///                                                           { 
+        ///                                     PreventDowngradingVersions = new VersionRange
+        ///                                                           {
         ///                                                              Minimum = "%this%", IncludeMinimum = false
         ///                                                           },
         ///                                     NewerProductInstalledErrorMessage = "Newer version already installed",
@@ -411,7 +416,7 @@ namespace WixSharp
 
         /// <summary>
         /// Generates all missing product Guids (e.g. <see cref="UpgradeCode"/> and <see cref="ProductId"/>).
-        /// <para>Wix# compiler call this method just before building the MSI. However you can call it any time 
+        /// <para>Wix# compiler call this method just before building the MSI. However you can call it any time
         /// if you want to preview auto-generated Guids.</para>
         /// </summary>
         public void GenerateProductGuids()
@@ -437,7 +442,7 @@ namespace WixSharp
             return WixGuid.HashGuidByInteger(productGuid, version.GetHashCode() + 1);
         }
         /// <summary>
-        /// This is the value of the <c>Id</c> attribute of the Wix <c>Product</c> element. 
+        /// This is the value of the <c>Id</c> attribute of the Wix <c>Product</c> element.
         /// This value is unique for any given version of a product being installed.
         /// <para></para>
         /// If user doesn't specify this value Wix# engine will derive it from
@@ -473,27 +478,27 @@ namespace WixSharp
         /// </summary>
         public Property[] Properties = new Property[0];
         /// <summary>
-        /// Indicates whether compiler should emit consistent package Id (package code). Set <c>EmitConsistentPackageId</c> to 'false' (default value) if 
-        /// you want the WiX compilers automatically generate a new package code for each new .msi file built. Or set it to 'true' if you want Wix# to auto generate a 
-        /// unique consistent package code for a given combination of the product code, product version and product upgrade code. 
+        /// Indicates whether compiler should emit consistent package Id (package code). Set <c>EmitConsistentPackageId</c> to 'false' (default value) if
+        /// you want the WiX compilers automatically generate a new package code for each new .msi file built. Or set it to 'true' if you want Wix# to auto generate a
+        /// unique consistent package code for a given combination of the product code, product version and product upgrade code.
         /// <para>
-        /// WiX package code generation policy discourages the use of this attribute as it is a primary MSI identifier 
+        /// WiX package code generation policy discourages the use of this attribute as it is a primary MSI identifier
         /// used to distinguish packages in ARP. Thus WiX tools always auto-generate the code for each build. This in turn makes it impossible to
-        /// rebuild a truly identical MSIs from the same WiX code even with the same set of product code, version and upgrade code. 
+        /// rebuild a truly identical MSIs from the same WiX code even with the same set of product code, version and upgrade code.
         /// </para><para>
-        /// This very artificial limitation has severe practical impact. For example if a specific MSI file is lost it cannot be recreated even if 
+        /// This very artificial limitation has severe practical impact. For example if a specific MSI file is lost it cannot be recreated even if
         /// the original source code that was used to built the lost MSI is available.
         /// </para><para>
-        /// From another hand Wix# encourages using a singe GUID (Project.GUID) as a primary identifier of the product. Thus all other MSI identifiers 
+        /// From another hand Wix# encourages using a singe GUID (Project.GUID) as a primary identifier of the product. Thus all other MSI identifiers
         /// can be derived by the compiler from the unique combination of this GUID and the product version. This also included generation of the package Id
         /// attribute controlled by the EmitConsistentPackageId.
         /// </para><para>
-        /// Wix# does not changes the WiX default package code generation it just gives the opportunity to control it when required. 
+        /// Wix# does not changes the WiX default package code generation it just gives the opportunity to control it when required.
         /// </para>
         /// </summary>
         public bool EmitConsistentPackageId = false;
         /// <summary>
-        /// Collection of WiX/MSI <see cref="Binary"/> objects to be embedded into MSI database. 
+        /// Collection of WiX/MSI <see cref="Binary"/> objects to be embedded into MSI database.
         /// Normally you doe not need to deal with this property as <see cref="Compiler"/> will populate
         /// it automatically.
         /// </summary>
@@ -526,7 +531,7 @@ namespace WixSharp
         /// <summary>
         /// Path to the file containing the image (e.g. bmp) setup dialogs background. If not specified default image will be used.
         /// <remarks>
-        /// <para>If the image is to be used in the default ManagedUI dialogs it will be left-docked at runtime and will effectively 
+        /// <para>If the image is to be used in the default ManagedUI dialogs it will be left-docked at runtime and will effectively
         /// play the role of a left-aligned dialog banner. Thus if it is too wide it can push away (to right) the all other UI elements.
         /// The optimal size of the image for ManagedUI is 494x312.</para>
         /// </remarks>
@@ -534,14 +539,14 @@ namespace WixSharp
         public string BackgroundImage = "";
 
         /// <summary>
-        /// Performs validation of aspect ratio for <see cref="Project.BackgroundImage"/>. Validation assists with avoiding the situations 
+        /// Performs validation of aspect ratio for <see cref="Project.BackgroundImage"/>. Validation assists with avoiding the situations
         /// when ManagedUI dialog has UI elements 'pushed away' from the view by oversizes <see cref="Project.BackgroundImage"/>.
         /// </summary>
         public bool ValidateBackgroundImage = true;
 
         private Feature _defaultFeature = new Feature("Complete");
         /// <summary>
-        /// Gets or Sets the default Feature for the project. 
+        /// Gets or Sets the default Feature for the project.
         /// All elements without an explicitly assigned Feature will be placed under the DefaultFeature.
         /// If DefaultFeature is not set, then DefaultFeature will default to a Feature with name 'Complete'.
         /// </summary>
@@ -679,7 +684,7 @@ namespace WixSharp
         /// new Project("MyProduct",
         ///     new Dir("%ProgramFiles%",
         ///         new Dir("My Company",
-        ///             new Dir("My Product", 
+        ///             new Dir("My Product",
         ///             ...
         /// </code>
         /// In the sample above the call <c>FindDir(@"%ProgramFiles%\My Company\My Product")</c> returns the last declared <see cref="T:WixSharp.Dir"/>.
@@ -720,7 +725,7 @@ namespace WixSharp
 
         string codepage = "";
         /// <summary>
-        /// Installation UI Code Page. If not specified 
+        /// Installation UI Code Page. If not specified
         /// ANSICodePage of the <see cref="T:WixSharp.WixProject.Language"/> will be used.
         /// </summary>
         public string Codepage
@@ -754,7 +759,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Path to the Localization file. 
+        /// Path to the Localization file.
         /// </summary>
         public string LocalizationFile = "";
 
