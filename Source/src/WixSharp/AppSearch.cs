@@ -52,13 +52,11 @@ namespace WixSharp.CommonTasks
         {
             var result = new List<string>();
 
-            var productCode = new StringBuilder();
+            var productCode = new StringBuilder(40);
 
             int i = 0;
             while (0 == MsiEnumProducts(i++, productCode))
             {
-                var productNameLen = 512;
-                var productName = new StringBuilder(productNameLen);
                 result.Add(productCode.ToString());
             }
 
