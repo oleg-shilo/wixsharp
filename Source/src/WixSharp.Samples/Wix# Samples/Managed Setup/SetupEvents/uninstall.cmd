@@ -1,1 +1,1 @@
-start msiexec /uninstall MyProduct.msi
+start msiexec /uninstall ManagedSetup.msi

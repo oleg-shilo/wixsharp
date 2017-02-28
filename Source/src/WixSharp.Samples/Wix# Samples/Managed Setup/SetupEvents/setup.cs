@@ -22,7 +22,7 @@ public class Script
 
         var project =
             new ManagedProject("ManagedSetup",
-                 //one of possible ways of setting custom INSTALLDIR (disabled for demo purposes) 
+                 //one of possible ways of setting custom INSTALLDIR (disabled for demo purposes)
                  new ManagedAction(Script.SetInstallDir,
                                    Return.check,
                                    When.Before,
@@ -46,8 +46,8 @@ public class Script
                );
 
         //project.ManagedUI = ManagedUI.Empty;
-        //project.ManagedUI = ManagedUI.Default; //Wix# ManagedUI
-        project.UI = WUI.WixUI_FeatureTree; //native MSI UI
+        project.ManagedUI = ManagedUI.Default; //Wix# ManagedUI
+        //project.UI = WUI.WixUI_ProgressOnly; //native MSI UI
 
         project.UILoaded += project_UIInit;
         project.Load += project_Load;
@@ -69,12 +69,14 @@ public class Script
         ///This event is fired before native MSI UI loaded (disabled for demo purposes)
         //session["INSTALLDIR"] = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\7-Zip")
         //                                            .GetValue("Path")
-        //                                            .ToString(); 
+        //                                            .ToString();
         return ActionResult.Success;
     }
 
     static void project_UIInit(SetupEventArgs e)
     {
+        MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - UIInit");
+
         e.Session["TOOLSDIR"] = @"C:\Temp\Doc";
         //set custom installdir
         //This event is fired before Wix# ManagedUI loaded (disabled for demo purposes)
@@ -95,15 +97,17 @@ public class Script
 
     static void project_Load(SetupEventArgs e)
     {
+        MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - Load");
+
         var msi = e.MsiFile;
 
         SetEnvVersion(e.Session);
 
         //MSI doesn't preserve any e.Session properties if they are accessed from deferred actions (e.g. project_AfterInstall)
-        //Wix# forces some of the properties to be persisted (via CustomActionData) by using user defined 
+        //Wix# forces some of the properties to be persisted (via CustomActionData) by using user defined
         //project.DefaultDeferredProperties ("INSTALLDIR,UILevel" by default).
         //Alternatively you can save any data to the Wix# specific fully persisted data properties "bag" SetupEventArgs.Data.
-        //SetupEventArgs.Data values can be set and accesses at any time from any custom action including deferred one.  
+        //SetupEventArgs.Data values can be set and accesses at any time from any custom action including deferred one.
         var conn = @"Data Source=.\SQLEXPRESS;Initial Catalog=RequestManagement;Integrated Security=SSPI";
         e.Data["persisted_data"] = conn;
 
@@ -118,7 +122,7 @@ public class Script
     static void project_AfterInstall(SetupEventArgs e)
     {
         //Note AfterInstall is an event based on deferred Custom Action. All properties that have
-        //been pushed to e.Session.CustomActionData with project.DefaultDeferredProperties are 
+        //been pushed to e.Session.CustomActionData with project.DefaultDeferredProperties are
         //also set as environment variables just before invoking this event handler.
         //Similarly the all content of e.Data is also pushed to the environment variables.
         MessageBox.Show(e.ToString() +

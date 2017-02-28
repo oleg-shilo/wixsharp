@@ -10,6 +10,7 @@ namespace MyProduct
     {
         public UserNameDialog()
         {
+            MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - UserNameDialog");
             InitializeComponent();
         }
 
@@ -27,9 +28,9 @@ namespace MyProduct
 
         void ResetLayout()
         {
-            // The form controls are properly anchored and will be correctly resized on parent form 
-            // resizing. However the initial sizing by WinForm runtime doesn't do a good job with DPI 
-            // other than 96. Thus manual resizing is the only reliable option apart from going WPF.  
+            // The form controls are properly anchored and will be correctly resized on parent form
+            // resizing. However the initial sizing by WinForm runtime doesn't do a good job with DPI
+            // other than 96. Thus manual resizing is the only reliable option apart from going WPF.
             float ratio = (float) banner.Image.Width / (float) banner.Image.Height;
             topPanel.Height = (int) (banner.Width / ratio);
 

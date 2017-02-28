@@ -8,7 +8,7 @@
 // This module contains the definition of the Wix# classes.
 //
 // Written by Oleg Shilo (oshilo@gmail.com)
-// Copyright (c) 2008-2012. All rights reserved.
+// Copyright (c) 2008-2017. All rights reserved.
 //
 // Redistribution and use of this code in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
