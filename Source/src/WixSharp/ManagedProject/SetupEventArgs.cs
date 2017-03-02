@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
@@ -82,7 +83,7 @@ namespace WixSharp
         /// <summary>
         /// The managed UI main window object. It is a main System.Windows.Forms.Form window of the standard Wix# embedded UI.
         /// <para>This member is only populated when it is handled by the <see cref="T:WixSharp.ManagedProject.UILoaded"/> event handler.
-        /// It has the default <c>null</c> value for all other events.</para>   
+        /// It has the default <c>null</c> value for all other events.</para>
         /// </summary>
         public IShellView ManagedUIShell = null;
 
@@ -143,8 +144,8 @@ namespace WixSharp
         public bool IsUninstalling { get { return Data["REMOVE"].SameAs("ALL", ignoreCase: true); } }
 
         /// <summary>
-        /// Gets the action name from the standard Change/Modify dialog. The action is stored in <c>MODIFY_ACTION</c> 
-        /// session property. And it can be one of these predefined values: Change, Repair or Remove. 
+        /// Gets the action name from the standard Change/Modify dialog. The action is stored in <c>MODIFY_ACTION</c>
+        /// session property. And it can be one of these predefined values: Change, Repair or Remove.
         /// <para>Note this value is set only by ManagedUI Maintenance dialog.</para>
         /// </summary>
         /// <value>The modify action.</value>
@@ -196,7 +197,7 @@ namespace WixSharp
         /// </value>
         public bool IsManagedUISession
         {
-            //depending on what stage of the MSI session IsManagedUISession call is made some of the properties 
+            //depending on what stage of the MSI session IsManagedUISession call is made some of the properties
             //may or may not be available
             get
             {
@@ -224,7 +225,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Gets the upgrading product code. Note this property is normally set by MSI for the 
+        /// Gets the upgrading product code. Note this property is normally set by MSI for the
         /// uninstall session being triggered by upgrading to a higher version.
         /// </summary>
         /// <value>The upgrading product code.</value>
@@ -233,11 +234,34 @@ namespace WixSharp
             get { return Data["UPGRADINGPRODUCTCODE"]; }
         }
 
+        public string ProductCode
+        {
+            get { return Data["ProductCode"]; }
+        }
+
+        public string UpgradeCode
+        {
+            get { return Data["UpgradeCode"]; }
+        }
+
+        //doesn't work if called from session
+        //public Version GetCurrentlyInstalledVersion()
+        //{
+        //    Version result = null;
+        //    try
+        //    {
+        //        result = AppSearch.GetProductVersionFromUpgradeCode(Data["UpgradeCode"]);
+        //    }
+        //    catch { }
+        //    return result;
+        //}
+
+
         /// <summary>
-        /// Gets or sets the Data.  
-        /// <para>Data is a free form data storage for custom user defined and Wix# generated settings. In a way it's an 
-        /// alternative to the MSI session properties. The Data interface is identical to the Session properties - 
-        /// string dictionary. Though a very important difference is that Data (as opposite to session) does maintain 
+        /// Gets or sets the Data.
+        /// <para>Data is a free form data storage for custom user defined and Wix# generated settings. In a way it's an
+        /// alternative to the MSI session properties. The Data interface is identical to the Session properties -
+        /// string dictionary. Though a very important difference is that Data (as opposite to session) does maintain
         /// the all entries during the whole MSI session. Even for the deferred action.</para>
         /// </summary>
         /// <value>
@@ -345,11 +369,15 @@ namespace WixSharp
                 "\nIsInstalling=" + IsInstalling +
                 "\nIsUninstalling=" + IsUninstalling +
                 "\nIsReparing=" + IsRepairing +
+                //"\nIsUpgrading=" + IsUpgrading + //not reliable
                 "\nIsModifying=" + IsModifying +
                 "\nModifyAction=" + ModifyAction +
+                "\nProductCode=" + ProductCode +
+                "\nUpgradeCode=" + UpgradeCode +
                 "\nUpgradingProductCode=" + UpgradingProductCode +
                 "\nIsManagedUISession=" + IsManagedUISession +
                 "\nManagedUIHandle=" + ManagedUIHandle +
+                "\n" +
                 "\n" +
                 "\np_Installed=" + Data["Installed"] +
                 "\np_REINSTALL=" + Data["REINSTALL"] +

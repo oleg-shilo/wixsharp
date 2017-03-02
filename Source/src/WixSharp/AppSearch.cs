@@ -16,9 +16,14 @@ namespace WixSharp.CommonTasks
         [DllImport("msi", CharSet = CharSet.Unicode)]
         static extern Int32 MsiGetProductInfo(string product, string property, [Out] StringBuilder valueBuf, ref Int32 len);
 
+        [DllImport("msi", CharSet = CharSet.Unicode)]
+        static extern Int32 MsiGetProductInfoEx(string product, string userSid, int context, string property, [Out] StringBuilder valueBuf, ref Int32 len);
+
         [DllImport("msi")]
         static extern int MsiEnumProducts(int iProductIndex, StringBuilder lpProductBuf);
 
+        [DllImport("msi")]
+        static extern int MsiEnumRelatedProducts(string productCode, int reserved, int iProductIndex, StringBuilder lpProductBuf);
         /// <summary>
         /// Gets the 'product code' of the installed product.
         /// </summary>
@@ -63,6 +68,21 @@ namespace WixSharp.CommonTasks
             return result.ToArray();
         }
 
+        static public string[] GetRelatedProducts(string upgradeCode)
+        {
+            var result = new List<string>();
+
+            var productCode = new StringBuilder(40);
+
+            int i = 0;
+            while (0 == MsiEnumRelatedProducts(upgradeCode, 0, i++, productCode))
+            {
+                result.Add(productCode.ToString());
+            }
+
+            return result.ToArray();
+        }
+
         /// <summary>
         /// Gets the 'product name' of the installed product.
         /// </summary>
@@ -71,6 +91,28 @@ namespace WixSharp.CommonTasks
         static public string GetProductName(string productCode)
         {
             return GetProductInfo(productCode, "ProductName");
+        }
+        /// <summary>
+        /// Gets the version of the installed product from its 'upgrade code'.
+        /// <code>
+        /// static void project_BeforeInstall(SetupEventArgs e)
+        /// {
+        ///    var detectedVersion = AppSearch.GetProductVersionFromUpgradeCode(e.UpgradeCode);
+        /// }
+        /// </code>
+        /// </summary>
+        /// <param name="upgradeCode">The product Version.</param>
+        /// <returns></returns>
+        static public Version GetProductVersionFromUpgradeCode(string upgradeCode)
+        {
+            try
+            {
+                var productCode = AppSearch.GetRelatedProducts(upgradeCode).FirstOrDefault();
+                if (productCode != null)
+                    return GetProductVersion(productCode);
+            }
+            catch { }
+            return null;
         }
 
         /// <summary>
@@ -88,9 +130,9 @@ namespace WixSharp.CommonTasks
                 int value;
                 if (int.TryParse(versionStr, out value))
                 {
-                    var major = (int)(value & 0xFF000000) >> 8 * 3;
-                    var minor = (int)(value & 0x00FF0000) >> 8 * 2;
-                    var build = (int)(value & 0x0000FFFF);
+                    var major = (int) (value & 0xFF000000) >> 8 * 3;
+                    var minor = (int) (value & 0x00FF0000) >> 8 * 2;
+                    var build = (int) (value & 0x0000FFFF);
                     return new Version(major, minor, build);
                 }
             }

@@ -1108,6 +1108,8 @@ namespace WixSharp
         /// <returns>Instance of XDocument class representing in-memory WiX XML source file.</returns>
         public static XDocument GenerateWixProj(Project project)
         {
+            project.GenerateProductGuids();
+
             project.Preprocess();
 
             ProjectValidator.Validate(project);
@@ -1116,7 +1118,6 @@ namespace WixSharp
 
             project.AutoAssignedInstallDirPath = "";
 
-            project.GenerateProductGuids();
             ResetCachedContent();
 
             string extraNamespaces = project.WixNamespaces.Distinct()

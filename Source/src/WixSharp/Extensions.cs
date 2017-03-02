@@ -18,7 +18,7 @@ using static WixSharp.SetupEventArgs;
 namespace WixSharp
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static partial class Extensions
     {
@@ -31,7 +31,7 @@ namespace WixSharp
         /// <returns></returns>
         public static T SetComponentPermanent<T>(this T obj, bool isPermanent) where T : WixEntity
         {
-            //While it is tempting to move the implementation to WixEntity the extension method gives a 
+            //While it is tempting to move the implementation to WixEntity the extension method gives a
             //better support for Fluent API as it returns not the base but the actual type.
             obj.SetAttributeDefinition("Component:Permanent", isPermanent.ToYesNo());
             return obj;
@@ -234,7 +234,7 @@ namespace WixSharp
             return obj;
         }
         /// <summary>
-        /// Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue. 
+        /// Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue.
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="name">The name.</param>
@@ -264,7 +264,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue that takes the Name/Value 
+        /// Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue that takes the Name/Value
         /// string definition as a single input parameter.
         /// </summary>
         /// <param name="obj">The object.</param>
@@ -396,8 +396,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Injects the Wxs (WiX source) into Wxs document. It merges 'Wix/Product' elements of document with 
-        /// 'Wix/Product' elements of wxsFile. 
+        /// Injects the Wxs (WiX source) into Wxs document. It merges 'Wix/Product' elements of document with
+        /// 'Wix/Product' elements of wxsFile.
         /// <para> This method is nothing else but a 'syntactic sugar' method, which wraps the following code:
         /// <code>
         /// document.Root.Select("Product")
@@ -407,9 +407,9 @@ namespace WixSharp
         /// </para>
         /// <example>The following is an example of using InjectWxs.
         /// <code>
-        /// Compiler.WixSourceGenerated += 
+        /// Compiler.WixSourceGenerated +=
         ///            document => document.InjectWxs("CommonProperies.wxs");
-        ///                 
+        ///
         /// //where CommonProperies.wxs contains the following XML
         /// &lt;?xml version=&quot;1.0&quot; encoding=&quot;Windows-1252&quot;?&gt;
         /// &lt;Wix xmlns = &quot;http://schemas.microsoft.com/wix/2006/wi&quot; &gt;
@@ -482,7 +482,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Gets the combined hash code of all items in the collection. This method is convenient to use to 
+        /// Gets the combined hash code of all items in the collection. This method is convenient to use to
         /// verify that the collections have identical items.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -517,8 +517,8 @@ namespace WixSharp
             return dest;
         }
         /// <summary>
-        /// Replaces all Wix# predefined string constants in the Wix# directory path with their WiX equivalents. 
-        /// <para>Processed string can be used as an Id for referencing from other Wix# components and setting the 
+        /// Replaces all Wix# predefined string constants in the Wix# directory path with their WiX equivalents.
+        /// <para>Processed string can be used as an Id for referencing from other Wix# components and setting the
         /// corresponding path from <c>MsiExec.exe</c> command line.</para>
         /// </summary>
         /// <param name="path">The Wix# directory path.</param>
@@ -543,7 +543,7 @@ namespace WixSharp
 
 
         /// <summary>
-        /// Returns Exception.ToString result containing no debug information. 
+        /// Returns Exception.ToString result containing no debug information.
         /// <para>
         /// Sanitizes the result before returning by removing any debug info (file locations) from the exception trace stack.
         /// </para>
@@ -658,7 +658,7 @@ namespace WixSharp
 
         static char[] xmlDelimiters = "<>".ToCharArray();
         /// <summary>
-        /// Returns the string data as a <see cref="T:System.Xml.Linq.XCData"/> if the value contains 
+        /// Returns the string data as a <see cref="T:System.Xml.Linq.XCData"/> if the value contains
         /// XML tags begin and end characters and it is not already a CDATA expression.
         /// </summary>
         /// <returns></returns>
@@ -875,7 +875,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Replaces all Wix# predefined string constants (Environment Constants) in the Wix# directory path with their WiX equivalents and escapes all WiX illegal characters (e.g. space character). 
+        /// Replaces all Wix# predefined string constants (Environment Constants) in the Wix# directory path with their WiX equivalents and escapes all WiX illegal characters (e.g. space character).
         /// <para>
         /// <para>It also replaces all "illegal" characters (e.g. !,\) with '_' character to allow the path value to be used as a WiX Id XML attribute.</para>
         /// <example>The following is an example of expanding directory name paths.
@@ -935,7 +935,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Replaces all Wix# predefined string constants (Environment Constants) in the Wix# directory path with their WiX equivalents and escapes all WiX illegal characters (e.g. space character). 
+        /// Replaces all Wix# predefined string constants (Environment Constants) in the Wix# directory path with their WiX equivalents and escapes all WiX illegal characters (e.g. space character).
         /// <para>
         /// <example>The following is an example of expanding directory name paths.
         /// <code>
@@ -1102,7 +1102,7 @@ namespace WixSharp
         }
 
         ///// <summary>
-        ///// Merge two dictionaries. If duplicated key detected its collection1's value will be replaced with the 
+        ///// Merge two dictionaries. If duplicated key detected its collection1's value will be replaced with the
         ///// value from the collection2.
         ///// </summary>
         ///// <typeparam name="T"></typeparam>
@@ -1177,10 +1177,10 @@ namespace WixSharp
         internal static XDocument AddDefaultNamespaces(this XDocument doc)
         {
             //part of Issue#67 workaround
-            //For some reason after changing the XML namespace dox.ToString() triggers exception "The prefix '' cannot be redefined 
+            //For some reason after changing the XML namespace dox.ToString() triggers exception "The prefix '' cannot be redefined
             //from 'http://schemas.microsoft.com/wix/2006/wi' to '' within the same start element tag."
-            //This error leads to the failure of the XML serialization with StringWriterWithEncoding (in BuildWxs). 
-            //Strangle enough serialization is affected by presence of WixVariable element !!?? 
+            //This error leads to the failure of the XML serialization with StringWriterWithEncoding (in BuildWxs).
+            //Strangle enough serialization is affected by presence of WixVariable element !!??
             //While ToString fails always
             if (CanSetXmlNamespaceSafely)
             {
@@ -1255,7 +1255,7 @@ namespace WixSharp
         /// <code>
         /// project.AddXmlInclude("CommonProperies.wxi")
         ///        .AddXmlInclude("CommonProperies2.wxi");
-        /// 
+        ///
         /// new File(@"Files\Bin\MyApp.exe")
         ///           .AddXmlInclude("FileItems.wxi", parentElement: "Component");
         /// </code>
@@ -1485,7 +1485,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Merges and replaces key values in a given dictionary (<c>map</c> parameter) with another dictionary values. Another dictionary 
+        /// Merges and replaces key values in a given dictionary (<c>map</c> parameter) with another dictionary values. Another dictionary
         /// is provided in a serialized form (<c>data</c> parameter).
         /// </summary>
         /// <param name="map">The dictionary, which is a subject of the merge operation.</param>
@@ -1627,7 +1627,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Fluent version of the <see cref="T:System.String.IsNullOrEmpty"/> for analysing the string value 
+        /// Fluent version of the <see cref="T:System.String.IsNullOrEmpty"/> for analysing the string value
         /// for being <c>null</c> or empty.
         /// </summary>
         /// <param name="obj">A <see cref="T:System.String"/> whose value to analyse.</param>
@@ -1698,7 +1698,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Gets a value indicating whether the product is being repaired. 
+        /// Gets a value indicating whether the product is being repaired.
         /// <para>
         /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
         /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
@@ -1716,10 +1716,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Gets a value indicating whether the product is being upgraded. 
+        /// Gets a value indicating whether the product is being upgraded.
         /// <para>
         /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
         /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
+        /// </para>
+        /// <para>
+        /// This method relies on "UPGRADINGPRODUCTCODE", which is not set by MSI until previous version is uninstalled. Thus it may not be the
+        /// most practical way of detecting upgrades. Use AppSearch.GetProductVersionFromUpgradeCode as a more reliable alternative.
         /// </para>
         /// </summary>
         static public bool IsUpgrading(this Session session)
@@ -1784,8 +1788,8 @@ namespace WixSharp
 
         /// <summary>
         /// Returns the value of the named property of the specified <see cref="T:Microsoft.Deployment.WindowsInstaller.Session"/> object.
-        /// <para>It can be uses as a generic way of accessing the properties as it redirects (transparently) access to the 
-        /// <see cref="T:Microsoft.Deployment.WindowsInstaller.Session.CustomActionData"/> if the session is terminated (e.g. in deferred 
+        /// <para>It can be uses as a generic way of accessing the properties as it redirects (transparently) access to the
+        /// <see cref="T:Microsoft.Deployment.WindowsInstaller.Session.CustomActionData"/> if the session is terminated (e.g. in deferred
         /// custom actions).</para>
         /// </summary>
         /// <param name="session">The session.</param>
@@ -1887,7 +1891,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// A simple generic wrapper around MSI View open operation. It retrieves all view data and returns it as a 
+        /// A simple generic wrapper around MSI View open operation. It retrieves all view data and returns it as a
         /// collection of dictionaries (set of named values).
         /// </summary>
         /// <param name="session">The session.</param>
@@ -2124,11 +2128,11 @@ namespace WixSharp
     /// {
     ///     [Xml]
     ///     public InstallEvent? On;
-    /// 
+    ///
     ///     [Xml]
     ///     public string Property;
-    ///     
-    ///     [Xml]    
+    ///
+    ///     [Xml]
     ///     public string Id;
     /// }
     /// </code>
@@ -2136,7 +2140,7 @@ namespace WixSharp
     public static class XmlMapping
     {
         /// <summary>
-        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked with 
+        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked with
         /// <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
         /// </summary>
         /// <param name="obj"></param>
@@ -2153,7 +2157,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked with 
+        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked with
         /// <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
         /// </summary>
         /// <param name="obj">The obj.</param>
@@ -2171,7 +2175,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Serializes the object into XML based on the members marked with 
+        /// Serializes the object into XML based on the members marked with
         /// <see cref="WixSharp.XmlAttribute"/>.
         /// </summary>
         /// <param name="obj"></param>
@@ -2242,7 +2246,7 @@ namespace WixSharp
     }
 
     /// <summary>
-    /// The attribute indicating the type member being mapped to XML element. Used by Wix# compiler to emmit XML base on CLR types.  
+    /// The attribute indicating the type member being mapped to XML element. Used by Wix# compiler to emmit XML base on CLR types.
     /// </summary>
     public class XmlAttribute : Attribute
     {

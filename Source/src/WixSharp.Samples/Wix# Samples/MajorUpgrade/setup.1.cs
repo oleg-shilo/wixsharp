@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Windows.Forms;
 using WixSharp;
+using WixSharp.CommonTasks;
 
 class Script
 {
@@ -30,7 +31,7 @@ class Script
 
     static void project_BeforeInstall(SetupEventArgs e)
     {
-        MessageBox.Show(e.ToString(), "BeforeInstall");
+        MessageBox.Show(e.ToString(), "BeforeInstall " + AppSearch.GetProductVersionFromUpgradeCode(e.UpgradeCode));
     }
 }
 

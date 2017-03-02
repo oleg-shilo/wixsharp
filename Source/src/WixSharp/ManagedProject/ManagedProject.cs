@@ -13,10 +13,10 @@ using System.Diagnostics;
 namespace WixSharp
 {
     /// <summary>
-    /// Extends <see cref="T:WixSharp.Project"/> with runtime event-driven behavior ans managed UI (see <see cref="T:WixSharp.ManagedUI"/> and 
+    /// Extends <see cref="T:WixSharp.Project"/> with runtime event-driven behavior ans managed UI (see <see cref="T:WixSharp.ManagedUI"/> and
     /// <see cref="T:WixSharp.UI.Forms.ManagedForm"/>).
     /// <para>
-    /// The managed project has three very important events that are raised during deployment at run: Load/BeforeInstall/AfterInstall. 
+    /// The managed project has three very important events that are raised during deployment at run: Load/BeforeInstall/AfterInstall.
     /// </para>
     /// <remark>
     /// ManagedProject still maintains backward compatibility for the all older features. That is why it is important to distinguish the use cases
@@ -39,11 +39,11 @@ namespace WixSharp
     /// <example>The following is an example of a simple setup handling the three setup events at runtime.
     /// <code>
     /// var project = new ManagedProject("ManagedSetup",
-    ///                   new Dir(@"%ProgramFiles%\My Company\My Product", 
+    ///                   new Dir(@"%ProgramFiles%\My Company\My Product",
     ///                       new File(@"..\Files\bin\MyApp.exe")));
     ///
     /// project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-    /// 
+    ///
     /// project.ManagedUI = ManagedUI.Empty;
     ///
     /// project.Load += project_Load;
@@ -76,7 +76,7 @@ namespace WixSharp
 
 
         /// <summary>
-        /// Gets or sets a value indicating whether the full or reduced custom drawing algorithm should be used for rendering the Features dialog 
+        /// Gets or sets a value indicating whether the full or reduced custom drawing algorithm should be used for rendering the Features dialog
         /// tree view control. The reduced algorithm involves no manual positioning of the visual elements so it handles better custom screen resolutions.
         /// However it also leads to the slightly less intuitive tree view item appearance.
         /// <para>Reduced custom drawing will render disabled tree view items with the text grayed out.</para>
@@ -116,7 +116,7 @@ namespace WixSharp
         public delegate void SetupEventHandler(SetupEventArgs e);
 
         /// <summary>
-        /// Indicates if the installations should be aborted if managed event handler throws an unhanded exception. 
+        /// Indicates if the installations should be aborted if managed event handler throws an unhanded exception.
         /// <para>
         /// Aborting is the default behavior if this field is not set.
         /// </para>
@@ -129,9 +129,9 @@ namespace WixSharp
         public event SetupEventHandler UIInitialized;
 
         /// <summary>
-        /// Occurs on EmbeddedUI loaded and ShellView (main window) is displayed but before first dialog is positioned within ShellView. 
+        /// Occurs on EmbeddedUI loaded and ShellView (main window) is displayed but before first dialog is positioned within ShellView.
         /// It is only invoked if ManagedUI is set.
-        /// <para>Note that this event is fired on the loading the UI main window thus it's not a good stage for any decision regarding 
+        /// <para>Note that this event is fired on the loading the UI main window thus it's not a good stage for any decision regarding
         /// aborting/continuing the whole setup process. That is UILoaded event will ignore any value set to SetupEventArgs.Result by the user.
         /// </para>
         /// </summary>
@@ -153,7 +153,7 @@ namespace WixSharp
         public event SetupEventHandler AfterInstall;
 
         /// <summary>
-        /// An instance of ManagedUI defining MSI UI dialogs sequence. User should set it if he/she wants native MSI dialogs to be 
+        /// An instance of ManagedUI defining MSI UI dialogs sequence. User should set it if he/she wants native MSI dialogs to be
         /// replaced by managed ones.
         /// </summary>
         public IManagedUI ManagedUI;
@@ -270,7 +270,7 @@ namespace WixSharp
         /// <summary>
         /// Flags that indicates if <c>WixSharp_InitRuntime_Action</c> custom action should be always scheduled. The default value is <c>true</c>.
         /// <para><c>WixSharp_InitRuntime_Action</c> is the action, which ManagedSetup performs at startup (before AppSearch).
-        /// In this action the most important MSI properties are pushed into Session.CustomActionData. These properties are typically consumed 
+        /// In this action the most important MSI properties are pushed into Session.CustomActionData. These properties are typically consumed
         /// from other custom actions (e.g. Project.AfterInstall event) and they are:
         /// <list type="bullet">
         /// <item><description>Installed</description></item>
@@ -282,7 +282,7 @@ namespace WixSharp
         /// <item><description>WIXSHARP_MANAGED_UI</description></item>
         /// </list>
         /// </para>
-        /// <para>However in same cases (e.g. oversizes msi file) it is desirable to minimize amount of time the msi loaded into memory 
+        /// <para>However in same cases (e.g. oversizes msi file) it is desirable to minimize amount of time the msi loaded into memory
         /// (e.g. by custom actions). Thus setting AlwaysScheduleInitRuntime to <c>false</c> will prevent scheduling <c>WixSharp_InitRuntime_Action</c>
         /// unless any of the ManagedProject events (e.g. Project.AfterInstall) has user handler assigned.
         /// </para>
@@ -298,7 +298,7 @@ namespace WixSharp
             {
                 preprocessed = true;
 
-                //It is too late to set prerequisites. Launch conditions are evaluated after UI is popped up.   
+                //It is too late to set prerequisites. Launch conditions are evaluated after UI is popped up.
                 //this.SetNetFxPrerequisite(Condition.Net35_Installed, "Please install .NET v3.5 first.");
 
                 if (ManagedUI?.Icon != null)
@@ -528,6 +528,8 @@ namespace WixSharp
                 data["Installed"] = session["Installed"];
                 data["REMOVE"] = session["REMOVE"];
                 data["ProductName"] = session["ProductName"];
+                data["ProductCode"] = session["ProductCode"];
+                data["UpgradeCode"] = session["UpgradeCode"];
                 data["REINSTALL"] = session["REINSTALL"];
                 data["MsiFile"] = session["OriginalDatabase"];
                 data["UPGRADINGPRODUCTCODE"] = session["UPGRADINGPRODUCTCODE"];

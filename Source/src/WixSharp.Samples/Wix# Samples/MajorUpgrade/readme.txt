@@ -8,5 +8,5 @@ Execute build.cmd file to build setup.msi files.
 It is an older technique, which has been superseded by simplified MajorUpgrade element in WiX v3.5.
 Execute build.cmd file to build msi files (setup.1.msi and setup.2.msi) for two versions of the same product. 
 
-Then execute the setup.1.msi to start the installation of the version 1.0.0. Aftere that execute the setup.2.msi. 
+Then execute the setup.1.msi to start the installation of the version 1.0.0. After that execute the setup.2.msi. 
 Note installation of version 2.0.0 will automatically uninstall version 1.0.0

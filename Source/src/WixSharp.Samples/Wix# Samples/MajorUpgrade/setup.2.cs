@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
+using WixSharp.CommonTasks;
 
 public class Script
 {
@@ -24,18 +25,20 @@ public class Script
         project.MajorUpgradeStrategy = MajorUpgradeStrategy.Default;
         project.MajorUpgradeStrategy.PreventDowngradingVersions.OnlyDetect = false;
 
-        //Of course you can use 'bool VersionRange.MigrateFeatures'. The following is just an 
+        //Of course you can use 'bool VersionRange.MigrateFeatures'. The following is just an
         //example of how to access WiX attributes if they are not covered by Wix#
         Compiler.WixSourceGenerated += doc => doc.Root
                                                  .Select("Product/Upgrade/UpgradeVersion")
                                                  .AddAttributes("MigrateFeatures=yes");
         project.BeforeInstall += project_BeforeInstall;
+
         Compiler.PreserveTempFiles = true;
         Compiler.BuildMsi(project, "setup.2.msi");
     }
+
     static void project_BeforeInstall(SetupEventArgs e)
     {
-        MessageBox.Show(e.ToString(), "BeforeInstall");
+        MessageBox.Show(e.ToString(), "BeforeInstall "+ AppSearch.GetProductVersionFromUpgradeCode(e.UpgradeCode));
     }
 }
 
