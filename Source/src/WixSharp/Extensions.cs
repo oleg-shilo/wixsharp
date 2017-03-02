@@ -1722,7 +1722,7 @@ namespace WixSharp
         /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
         /// </para>
         /// <para>
-        /// This method relies on "UPGRADINGPRODUCTCODE", which is not set by MSI until previous version is uninstalled. Thus it may not be the
+        /// This method relies on "UPGRADINGPRODUCTCODE" property, which is not set by MSI until previous version is uninstalled. Thus it may not be the
         /// most practical way of detecting upgrades. Use AppSearch.GetProductVersionFromUpgradeCode as a more reliable alternative.
         /// </para>
         /// </summary>

@@ -121,6 +121,10 @@ namespace WixSharp
 
         /// <summary>
         /// Gets a value indicating whether the installed product is being upgraded.
+        /// <para>
+        /// This property relies on "UPGRADINGPRODUCTCODE" MSI property, which is not set by MSI until previous version is uninstalled. Thus it may not be the 
+        /// most practical way of detecting upgrades. Use AppSearch.GetProductVersionFromUpgradeCode as a more reliable alternative.
+        /// </para>
         /// </summary>
         /// <value>
         /// <c>true</c> if modifying; otherwise, <c>false</c>.
