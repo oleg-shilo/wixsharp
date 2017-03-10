@@ -152,6 +152,13 @@
             Gets array of 'product codes' (GUIDs) of all installed products.
             </summary>
         </member>
+        <member name="M:WixSharp.CommonTasks.AppSearch.GetRelatedProducts(System.String)">
+            <summary>
+            Gets the related products (products with the same <c>UpgradeCode</c>).
+            </summary>
+            <param name="upgradeCode">The upgrade code.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.CommonTasks.AppSearch.GetProductName(System.String)">
             <summary>
             Gets the 'product name' of the installed product.
@@ -162,6 +169,12 @@
         <member name="M:WixSharp.CommonTasks.AppSearch.GetProductVersionFromUpgradeCode(System.String)">
             <summary>
             Gets the version of the installed product from its 'upgrade code'.
+            <code>
+            static void project_BeforeInstall(SetupEventArgs e)
+            {
+               var detectedVersion = AppSearch.GetProductVersionFromUpgradeCode(e.UpgradeCode);
+            }
+            </code>
             </summary>
             <param name="upgradeCode">The product Version.</param>
             <returns></returns>
@@ -3609,9 +3622,9 @@
             <summary>
             Collection of generic WixSharp extension methods
             </summary>
-            <summary>
+             <summary>
             
-            </summary>
+             </summary>
         </member>
         <member name="M:WixSharp.Extensions.Is64OS">
             <summary>
@@ -3738,7 +3751,7 @@
         </member>
         <member name="M:WixSharp.Extensions.SetAttribute(System.Xml.Linq.XElement,System.String,System.Object)">
             <summary>
-            Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue. 
+            Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue.
             </summary>
             <param name="obj">The object.</param>
             <param name="name">The name.</param>
@@ -3747,7 +3760,7 @@
         </member>
         <member name="M:WixSharp.Extensions.SetAttribute(System.Xml.Linq.XElement,System.String)">
             <summary>
-            Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue that takes the Name/Value 
+            Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue that takes the Name/Value
             string definition as a single input parameter.
             </summary>
             <param name="obj">The object.</param>
@@ -3821,37 +3834,37 @@
             <returns>The instance of the <see cref="T:System.Xml.Linq.XElement"/> to copy the attribute to.</returns>
         </member>
         <member name="M:WixSharp.Extensions.InjectWxs(System.Xml.Linq.XDocument,System.String)">
-            <summary>
-            Injects the Wxs (WiX source) into Wxs document. It merges 'Wix/Product' elements of document with 
-            'Wix/Product' elements of wxsFile. 
-            <para> This method is nothing else but a 'syntactic sugar' method, which wraps the following code:
-            <code>
-            document.Root.Select("Product")
-                         .Add(XDocument.Load(wxsFile)
-                         .Root.Select("Product").Elements());
-            </code>
-            </para>
-            <example>The following is an example of using InjectWxs.
-            <code>
-            Compiler.WixSourceGenerated += 
-                       document => document.InjectWxs("CommonProperies.wxs");
-                            
-            //where CommonProperies.wxs contains the following XML
-            &lt;?xml version=&quot;1.0&quot; encoding=&quot;Windows-1252&quot;?&gt;
-            &lt;Wix xmlns = &quot;http://schemas.microsoft.com/wix/2006/wi&quot; &gt;
-              &lt;Product&gt;
-                &lt;Property Id=&quot;Prop1&quot; Value=&quot;1&quot; /&gt;
-                &lt;Property Id=&quot;Prop2&quot; Value=&quot;2&quot; /&gt;
-                &lt;Property Id=&quot;Prop3&quot; Value=&quot;3&quot; /&gt;
-                &lt;Property Id=&quot;Prop4&quot; Value=&quot;4&quot; /&gt;
-              &lt;/Product&gt;
-            &lt;/Wix&gt;
-            </code>
-            </example>
-            </summary>
-            <param name="document">The document.</param>
-            <param name="wxsFile">The WXS file.</param>
-            <returns></returns>
+             <summary>
+             Injects the Wxs (WiX source) into Wxs document. It merges 'Wix/Product' elements of document with
+             'Wix/Product' elements of wxsFile.
+             <para> This method is nothing else but a 'syntactic sugar' method, which wraps the following code:
+             <code>
+             document.Root.Select("Product")
+                          .Add(XDocument.Load(wxsFile)
+                          .Root.Select("Product").Elements());
+             </code>
+             </para>
+             <example>The following is an example of using InjectWxs.
+             <code>
+             Compiler.WixSourceGenerated +=
+                        document => document.InjectWxs("CommonProperies.wxs");
+            
+             //where CommonProperies.wxs contains the following XML
+             &lt;?xml version=&quot;1.0&quot; encoding=&quot;Windows-1252&quot;?&gt;
+             &lt;Wix xmlns = &quot;http://schemas.microsoft.com/wix/2006/wi&quot; &gt;
+               &lt;Product&gt;
+                 &lt;Property Id=&quot;Prop1&quot; Value=&quot;1&quot; /&gt;
+                 &lt;Property Id=&quot;Prop2&quot; Value=&quot;2&quot; /&gt;
+                 &lt;Property Id=&quot;Prop3&quot; Value=&quot;3&quot; /&gt;
+                 &lt;Property Id=&quot;Prop4&quot; Value=&quot;4&quot; /&gt;
+               &lt;/Product&gt;
+             &lt;/Wix&gt;
+             </code>
+             </example>
+             </summary>
+             <param name="document">The document.</param>
+             <param name="wxsFile">The WXS file.</param>
+             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.ReadAttribute(System.Xml.Linq.XElement,System.String)">
             <summary>
@@ -3881,7 +3894,7 @@
         </member>
         <member name="M:WixSharp.Extensions.GetItemsHashCode``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
-            Gets the combined hash code of all items in the collection. This method is convenient to use to 
+            Gets the combined hash code of all items in the collection. This method is convenient to use to
             verify that the collections have identical items.
             </summary>
             <typeparam name="T"></typeparam>
@@ -3900,8 +3913,8 @@
         </member>
         <member name="M:WixSharp.Extensions.ToDirID(System.String)">
             <summary>
-            Replaces all Wix# predefined string constants in the Wix# directory path with their WiX equivalents. 
-            <para>Processed string can be used as an Id for referencing from other Wix# components and setting the 
+            Replaces all Wix# predefined string constants in the Wix# directory path with their WiX equivalents.
+            <para>Processed string can be used as an Id for referencing from other Wix# components and setting the
             corresponding path from <c>MsiExec.exe</c> command line.</para>
             </summary>
             <param name="path">The Wix# directory path.</param>
@@ -3917,7 +3930,7 @@
         </member>
         <member name="M:WixSharp.Extensions.ToPublicString(System.Exception)">
             <summary>
-            Returns Exception.ToString result containing no debug information. 
+            Returns Exception.ToString result containing no debug information.
             <para>
             Sanitizes the result before returning by removing any debug info (file locations) from the exception trace stack.
             </para>
@@ -3976,7 +3989,7 @@
         </member>
         <member name="M:WixSharp.Extensions.ToXValue(System.Object)">
             <summary>
-            Returns the string data as a <see cref="T:System.Xml.Linq.XCData"/> if the value contains 
+            Returns the string data as a <see cref="T:System.Xml.Linq.XCData"/> if the value contains
             XML tags begin and end characters and it is not already a CDATA expression.
             </summary>
             <returns></returns>
@@ -4101,7 +4114,7 @@
         </member>
         <member name="M:WixSharp.Extensions.Expand(System.String)">
             <summary>
-            Replaces all Wix# predefined string constants (Environment Constants) in the Wix# directory path with their WiX equivalents and escapes all WiX illegal characters (e.g. space character). 
+            Replaces all Wix# predefined string constants (Environment Constants) in the Wix# directory path with their WiX equivalents and escapes all WiX illegal characters (e.g. space character).
             <para>
             <para>It also replaces all "illegal" characters (e.g. !,\) with '_' character to allow the path value to be used as a WiX Id XML attribute.</para>
             <example>The following is an example of expanding directory name paths.
@@ -4134,7 +4147,7 @@
         </member>
         <member name="M:WixSharp.Extensions.ExpandWixEnvConsts(System.String)">
             <summary>
-            Replaces all Wix# predefined string constants (Environment Constants) in the Wix# directory path with their WiX equivalents and escapes all WiX illegal characters (e.g. space character). 
+            Replaces all Wix# predefined string constants (Environment Constants) in the Wix# directory path with their WiX equivalents and escapes all WiX illegal characters (e.g. space character).
             <para>
             <example>The following is an example of expanding directory name paths.
             <code>
@@ -4230,23 +4243,23 @@
             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.AddXmlInclude``1(``0,System.String,System.String)">
-            <summary>
-            Adds the XML (*.wxi) include.
-            <example>The following is an example of including external XML files.
-            <code>
-            project.AddXmlInclude("CommonProperies.wxi")
-                   .AddXmlInclude("CommonProperies2.wxi");
+             <summary>
+             Adds the XML (*.wxi) include.
+             <example>The following is an example of including external XML files.
+             <code>
+             project.AddXmlInclude("CommonProperies.wxi")
+                    .AddXmlInclude("CommonProperies2.wxi");
             
-            new File(@"Files\Bin\MyApp.exe")
-                      .AddXmlInclude("FileItems.wxi", parentElement: "Component");
-            </code>
-            </example>
-            </summary>
-            <typeparam name="T">The type of the T.</typeparam>
-            <param name="entity">The entity.</param>
-            <param name="xmlFile">The XML file.</param>
-            <param name="parentElement">The parent element.</param>
-            <returns></returns>
+             new File(@"Files\Bin\MyApp.exe")
+                       .AddXmlInclude("FileItems.wxi", parentElement: "Component");
+             </code>
+             </example>
+             </summary>
+             <typeparam name="T">The type of the T.</typeparam>
+             <param name="entity">The entity.</param>
+             <param name="xmlFile">The XML file.</param>
+             <param name="parentElement">The parent element.</param>
+             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.AddWixFragment(System.Xml.Linq.XElement,System.Xml.Linq.XElement[])">
             <summary>
@@ -4351,7 +4364,7 @@
         </member>
         <member name="M:WixSharp.Extensions.MergeReplace(System.Collections.Generic.Dictionary{System.String,System.String},System.String)">
             <summary>
-            Merges and replaces key values in a given dictionary (<c>map</c> parameter) with another dictionary values. Another dictionary 
+            Merges and replaces key values in a given dictionary (<c>map</c> parameter) with another dictionary values. Another dictionary
             is provided in a serialized form (<c>data</c> parameter).
             </summary>
             <param name="map">The dictionary, which is a subject of the merge operation.</param>
@@ -4419,7 +4432,7 @@
         </member>
         <member name="M:WixSharp.Extensions.IsNullOrEmpty(System.String)">
             <summary>
-            Fluent version of the <see cref="T:System.String.IsNullOrEmpty"/> for analysing the string value 
+            Fluent version of the <see cref="T:System.String.IsNullOrEmpty"/> for analysing the string value
             for being <c>null</c> or empty.
             </summary>
             <param name="obj">A <see cref="T:System.String"/> whose value to analyse.</param>
@@ -4458,7 +4471,7 @@
         </member>
         <member name="M:WixSharp.Extensions.IsRepairing(Microsoft.Deployment.WindowsInstaller.Session)">
             <summary>
-            Gets a value indicating whether the product is being repaired. 
+            Gets a value indicating whether the product is being repaired.
             <para>
             This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
             that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
@@ -4467,10 +4480,14 @@
         </member>
         <member name="M:WixSharp.Extensions.IsUpgrading(Microsoft.Deployment.WindowsInstaller.Session)">
             <summary>
-            Gets a value indicating whether the product is being upgraded. 
+            Gets a value indicating whether the product is being upgraded.
             <para>
             This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
             that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
+            </para>
+            <para>
+            This method relies on "UPGRADINGPRODUCTCODE" property, which is not set by MSI until previous version is uninstalled. Thus it may not be the
+            most practical way of detecting upgrades. Use AppSearch.GetProductVersionFromUpgradeCode as a more reliable alternative.
             </para>
             </summary>
         </member>
@@ -4519,8 +4536,8 @@
         <member name="M:WixSharp.Extensions.Property(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
             <summary>
             Returns the value of the named property of the specified <see cref="T:Microsoft.Deployment.WindowsInstaller.Session"/> object.
-            <para>It can be uses as a generic way of accessing the properties as it redirects (transparently) access to the 
-            <see cref="T:Microsoft.Deployment.WindowsInstaller.Session.CustomActionData"/> if the session is terminated (e.g. in deferred 
+            <para>It can be uses as a generic way of accessing the properties as it redirects (transparently) access to the
+            <see cref="T:Microsoft.Deployment.WindowsInstaller.Session.CustomActionData"/> if the session is terminated (e.g. in deferred
             custom actions).</para>
             </summary>
             <param name="session">The session.</param>
@@ -4553,7 +4570,7 @@
         </member>
         <member name="M:WixSharp.Extensions.OpenView(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
             <summary>
-            A simple generic wrapper around MSI View open operation. It retrieves all view data and returns it as a 
+            A simple generic wrapper around MSI View open operation. It retrieves all view data and returns it as a
             collection of dictionaries (set of named values).
             </summary>
             <param name="session">The session.</param>
@@ -7292,6 +7309,10 @@
         <member name="P:WixSharp.SetupEventArgs.IsUpgrading">
             <summary>
             Gets a value indicating whether the installed product is being upgraded.
+            <para>
+            This property relies on "UPGRADINGPRODUCTCODE" MSI property, which is not set by MSI until previous version is uninstalled. Thus it may not be the 
+            most practical way of detecting upgrades. Use AppSearch.GetProductVersionFromUpgradeCode as a more reliable alternative.
+            </para>
             </summary>
             <value>
             <c>true</c> if modifying; otherwise, <c>false</c>.
@@ -7365,6 +7386,22 @@
             uninstall session being triggered by upgrading to a higher version.
             </summary>
             <value>The upgrading product code.</value>
+        </member>
+        <member name="P:WixSharp.SetupEventArgs.ProductCode">
+            <summary>
+            Gets the product code.
+            </summary>
+            <value>
+            The product code.
+            </value>
+        </member>
+        <member name="P:WixSharp.SetupEventArgs.UpgradeCode">
+            <summary>
+            Gets the upgrade code.
+            </summary>
+            <value>
+            The upgrade code.
+            </value>
         </member>
         <member name="P:WixSharp.SetupEventArgs.Data">
             <summary>
@@ -8292,26 +8329,26 @@
             <returns></returns>
         </member>
         <member name="T:WixSharp.XmlMapping">
-            <summary>
-            Serializes CLR entity into XML, based on the type members being marked for the serialization with <see cref="T:WixSharp.XmlAttribute"/>.
-            <code>
-            public class RemoveFolderEx : WixEntity, IGenericEntity
-            {
-                [Xml]
-                public InstallEvent? On;
+             <summary>
+             Serializes CLR entity into XML, based on the type members being marked for the serialization with <see cref="T:WixSharp.XmlAttribute"/>.
+             <code>
+             public class RemoveFolderEx : WixEntity, IGenericEntity
+             {
+                 [Xml]
+                 public InstallEvent? On;
             
-                [Xml]
-                public string Property;
-                
-                [Xml]    
-                public string Id;
-            }
-            </code>
-            </summary>
+                 [Xml]
+                 public string Property;
+            
+                 [Xml]
+                 public string Id;
+             }
+             </code>
+             </summary>
         </member>
         <member name="M:WixSharp.XmlMapping.ToXElement(WixSharp.WixObject,System.Xml.Linq.XName)">
             <summary>
-            Serializes the <see cref="T:WixSharp.WixObject"/> into XML based on the members marked with 
+            Serializes the <see cref="T:WixSharp.WixObject"/> into XML based on the members marked with
             <see cref="T:WixSharp.XmlAttribute"/> and <see cref="P:WixSharp.WixObject.Attributes"/>.
             </summary>
             <param name="obj"></param>
@@ -8320,7 +8357,7 @@
         </member>
         <member name="M:WixSharp.XmlMapping.ToXElement(WixSharp.WixObject,WixSharp.WixExtension,System.String)">
             <summary>
-            Serializes the <see cref="T:WixSharp.WixObject"/> into XML based on the members marked with 
+            Serializes the <see cref="T:WixSharp.WixObject"/> into XML based on the members marked with
             <see cref="T:WixSharp.XmlAttribute"/> and <see cref="P:WixSharp.WixObject.Attributes"/>.
             </summary>
             <param name="obj">The obj.</param>
@@ -8330,7 +8367,7 @@
         </member>
         <member name="M:WixSharp.XmlMapping.MapToXmlAttributes(System.Object)">
             <summary>
-            Serializes the object into XML based on the members marked with 
+            Serializes the object into XML based on the members marked with
             <see cref="T:WixSharp.XmlAttribute"/>.
             </summary>
             <param name="obj"></param>
@@ -8338,7 +8375,7 @@
         </member>
         <member name="T:WixSharp.XmlAttribute">
             <summary>
-            The attribute indicating the type member being mapped to XML element. Used by Wix# compiler to emmit XML base on CLR types.  
+            The attribute indicating the type member being mapped to XML element. Used by Wix# compiler to emmit XML base on CLR types.
             </summary>
         </member>
         <member name="P:WixSharp.XmlAttribute.Name">

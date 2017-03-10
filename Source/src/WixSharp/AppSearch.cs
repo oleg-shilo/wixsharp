@@ -68,6 +68,11 @@ namespace WixSharp.CommonTasks
             return result.ToArray();
         }
 
+        /// <summary>
+        /// Gets the related products (products with the same <c>UpgradeCode</c>).
+        /// </summary>
+        /// <param name="upgradeCode">The upgrade code.</param>
+        /// <returns></returns>
         static public string[] GetRelatedProducts(string upgradeCode)
         {
             var result = new List<string>();

@@ -238,11 +238,22 @@ namespace WixSharp
             get { return Data["UPGRADINGPRODUCTCODE"]; }
         }
 
+        /// <summary>
+        /// Gets the product code.
+        /// </summary>
+        /// <value>
+        /// The product code.
+        /// </value>
         public string ProductCode
         {
             get { return Data["ProductCode"]; }
         }
-
+        /// <summary>
+        /// Gets the upgrade code.
+        /// </summary>
+        /// <value>
+        /// The upgrade code.
+        /// </value>
         public string UpgradeCode
         {
             get { return Data["UpgradeCode"]; }
