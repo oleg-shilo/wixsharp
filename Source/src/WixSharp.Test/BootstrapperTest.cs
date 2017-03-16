@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using WixSharp.Bootstrapper;
@@ -200,6 +201,42 @@ namespace WixSharp.Test
   </BootstrapperApplicationRef>
   <Chain />
 </Bundle>";
+            Assert.Equal(expected, xml);
+        }
+
+        [Fact]
+        public void ExitCodeTest1()
+        {
+            var package = new ExePackage(@"c:\1.exe");
+            package.ExitCodes.Add(new ExitCode()
+            {
+                Behavior = BehaviorValues.error,
+                Value = "1001"
+
+            });
+            package.ExitCodes.Add(new ExitCode()
+            {
+                Behavior = BehaviorValues.forceReboot,
+                Value = "1002"
+            });
+            package.ExitCodes.Add(new ExitCode()
+            {
+                Behavior = BehaviorValues.scheduleReboot,
+                Value = "1003"
+            });
+            package.ExitCodes.Add(new ExitCode()
+            {
+                Behavior = BehaviorValues.success,
+                Value = "1004"
+            });
+            package.ExitCodes.Add(new ExitCode()
+            {
+                Behavior = BehaviorValues.success,
+            });
+
+            var xml = package.ToXml().First().ToString();
+            string expected =
+                "<ExePackage SourceFile=\"c:\\1.exe\">\r\n  <ExitCode Behavior=\"error\" Value=\"1001\" />\r\n  <ExitCode Behavior=\"forceReboot\" Value=\"1002\" />\r\n  <ExitCode Behavior=\"scheduleReboot\" Value=\"1003\" />\r\n  <ExitCode Behavior=\"success\" Value=\"1004\" />\r\n  <ExitCode Behavior=\"success\" />\r\n</ExePackage>";
             Assert.Equal(expected, xml);
         }
     }

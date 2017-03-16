@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.Win32;
 using System.Linq;
 using System.Xml.Linq;
@@ -102,13 +104,14 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         public ExePackage()
         {
+            ExitCodes = new List<ExitCode>();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExePackage"/> class.
         /// </summary>
         /// <param name="path">The path.</param>
-        public ExePackage(string path)
+        public ExePackage(string path):this()
         {
             //Name = System.IO.Path.GetFileName(path).Expand();
             SourceFile = path;
@@ -147,6 +150,13 @@ namespace WixSharp.Bootstrapper
         public string DetectCondition;
 
         /// <summary>
+        /// Describes map of exit code returned from executable package to a bootstrapper behavior.
+        ///http://wixtoolset.org/documentation/manual/v3/xsd/wix/exitcode.html
+        /// </summary>
+        public List<ExitCode> ExitCodes;
+
+
+        /// <summary>
         /// Emits WiX XML.
         /// </summary>
         /// <returns></returns>
@@ -162,9 +172,14 @@ namespace WixSharp.Bootstrapper
             root.AddAttributes(this.Attributes)
                 .Add(this.MapToXmlAttributes());
 
+
             if (Payloads.Any())
                 Payloads.ForEach(p => root.Add(new XElement("Payload", new XAttribute("SourceFile", p))));
 
+            foreach (var exitCode in ExitCodes)
+            {
+                root.Add(exitCode.ToXElement());
+            }
             return new[] { root };
         }
     }
@@ -296,7 +311,57 @@ namespace WixSharp.Bootstrapper
             return new[] { new XElement("RollbackBoundary") };
         }
     }
+
+    public class ExitCode
+    {
+        /// <summary>
+        /// Exit code returned from executable package.
+        /// If no value is provided it means all values not explicitly set default to this behavior.
+        /// </summary>
+        [Xml]
+        public string Value;
+        /// <summary>
+        /// Choose one of the supported behaviors error codes: success, error, scheduleReboot, forceReboot.
+        /// This attribute's value must be one of the following:
+        /// success
+        /// error
+        /// scheduleReboot
+        /// forceReboot
+        /// </summary>
+        [Xml]
+        public BehaviorValues Behavior;
+
+        public XElement ToXElement()
+        {
+            var element = new XElement("ExitCode", new XAttribute("Behavior", Behavior));
+            if (Value != null)
+            {
+                element.Add(new XAttribute("Value", Value));
+            }
+            return element;
+        }
+    }
 #pragma warning disable 1591
+
+    public enum BehaviorValues
+    {
+        /// <summary>
+        /// return success on specified error code
+        /// </summary>
+        success,
+        /// <summary>
+        /// return error on specified error code
+        /// </summary>
+        error,
+        /// <summary>
+        /// schedule reboot on specified error code
+        /// </summary>
+        scheduleReboot,
+        /// <summary>
+        /// force reboot on specified error code
+        /// </summary>
+        forceReboot,
+    }
     public enum SearchResult
     {
         /// <summary>
