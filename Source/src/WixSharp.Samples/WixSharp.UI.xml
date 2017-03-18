@@ -1385,7 +1385,7 @@
         <member name="M:WixSharp.WixCLRDialog.MSICancel">
             <summary>
             Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.Cancel' value ensuring the 
-            setup is cancelled.
+            setup is canceled.
             </summary>
         </member>
         <member name="M:WixSharp.WixCLRDialog.MSIBack">

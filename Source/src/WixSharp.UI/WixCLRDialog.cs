@@ -296,7 +296,7 @@ namespace WixSharp
 
         /// <summary>
         /// Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.Cancel' value ensuring the 
-        /// setup is cancelled.
+        /// setup is canceled.
         /// </summary>
         public void MSICancel()
         {

@@ -91,14 +91,13 @@ public class Script
         e.ManagedUIShell.OnCurrentDialogChanged += ManagedUIShell_OnCurrentDialogChanged;
     }
 
-    private static void ManagedUIShell_OnCurrentDialogChanged(IManagedDialog obj)
+    static void ManagedUIShell_OnCurrentDialogChanged(IManagedDialog obj)
     {
         if (obj.GetType() == Dialogs.Licence)
             // Simulate analyzing the runtime conditions with the message box.
             // Make a decision to jump over the dialog in the sequence
             if (MessageBox.Show("Do you want to skip 'Licence Dialog'?", "Wix#", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 obj.Shell.GoNext();
-
     }
 
     static void CheckCompatibility(SetupEventArgs e)
