@@ -3225,7 +3225,7 @@ namespace WixSharp
 
         static XElement AddDir(XElement parent, Dir wDir)
         {
-            string name = wDir.Name;
+            string name = wDir.Name.Expand(); //name needs to be escaped
             string id = "";
 
             if (wDir.IsIdSet())
@@ -3241,7 +3241,6 @@ namespace WixSharp
                     Compiler.EnvironmentConstantsMapping.ContainsValue(wDir.Name.TrimStart('[').TrimEnd(']')))  // [ProgramFilesFolder]
                 {
                     id = wDir.Name.Expand();
-                    name = wDir.Name.Expand(); //name needs to be escaped
                 }
                 else
                 {
