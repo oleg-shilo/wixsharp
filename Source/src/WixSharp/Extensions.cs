@@ -918,6 +918,18 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Determines whether the value is a WiX constant (e.g. 'SystenFolder').
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified value is a WiX constant; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsWixConstant(this string value)
+        {
+            return Compiler.EnvironmentConstantsMapping.ContainsValue(value);
+        }
+
+        /// <summary>
         /// Maps the Wix# constants included in path into their x64 equivalents.
         /// <para>For example %ProgramFiles%\My Company\My Product should be preprocessed into %ProgramFiles64%\My Company\My Product</para>
         /// </summary>

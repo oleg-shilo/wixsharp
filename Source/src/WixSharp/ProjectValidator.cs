@@ -115,7 +115,7 @@ namespace WixSharp
             }
 
             //important to use RawId to avoid triggering Id premature auto-generation
-            if (project.AllDirs.Count(x => x.RawId == Compiler.AutoGeneration.InstallDirDefaultId || x.IsInstallDir) > 1)
+            if (project.AllDirs.Count(x => (x.RawId == Compiler.AutoGeneration.InstallDirDefaultId && Compiler.AutoGeneration.InstallDirDefaultId != null) || x.IsInstallDir) > 1)
                 throw new ValidationException("More than a single Dir marked as InstallDir. Ensure that only a single directory marked as InstallDir with Dir.IsInstallDir property or with the id 'INSTALLDIR' value");
 
             foreach (Dir dir in project.AllDirs)

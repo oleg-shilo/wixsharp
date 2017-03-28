@@ -291,7 +291,7 @@ namespace WixSharp
                     {
                         if (injected)
                         {
-                            auto_gen_elements.ToList().ForEach(e=>e.Remove());
+                            auto_gen_elements.ToList().ForEach(e => e.Remove());
                             doc.Save(projFile);
                         }
                     }
@@ -1161,7 +1161,7 @@ namespace WixSharp
                 package.CopyAttributeFrom(product, "Id");
 
             package.AddAttributes(project.Package.Attributes);
-            foreach(Media item in project.Media)
+            foreach (Media item in project.Media)
                 product.Add(item.ToXml((project as WixEntity).Id));
 
             ProcessWixVariables(project, product);
@@ -1326,8 +1326,13 @@ namespace WixSharp
                     logicalPath += "\\" + firstDirWithItems.Name;
                 }
 
-                if ((!firstDirWithItems.IsIdSet() || firstDirWithItems.isAutoId) && !Compiler.AutoGeneration.InstallDirDefaultId.IsEmpty())
+                if ((!firstDirWithItems.IsIdSet() || firstDirWithItems.isAutoId) &&
+                    !dirId.IsEmpty())
                 {
+                    if (firstDirWithItems.Id.IsWixConstant())
+                        Compiler.OutputWriteLine($"WARNING: Special folder directory ID '{firstDirWithItems.Id}' has been reset to '{dirId}'.\n" +
+                                                  "If it was not intended disable auto assignment by setting 'Compiler.AutoGeneration.InstallDirDefaultId' to null.\n");
+
                     firstDirWithItems.Id = dirId;
                     return logicalPath;
                 }
@@ -1671,7 +1676,7 @@ namespace WixSharp
                     file.Add(new XAttribute("KeyPath", "yes"),
                              new XAttribute("Assembly", ".net"),
                              new XAttribute("AssemblyManifest", fileId),
-                             new XAttribute("ProcessorArchitecture", ((Assembly) wFile).ProcessorArchitecture.ToString()));
+                             new XAttribute("ProcessorArchitecture", ((Assembly)wFile).ProcessorArchitecture.ToString()));
                 }
 
 
@@ -2686,7 +2691,7 @@ namespace WixSharp
 
                 if (wAction is SetPropertyAction)
                 {
-                    var wSetPropAction = (SetPropertyAction) wAction;
+                    var wSetPropAction = (SetPropertyAction)wAction;
 
                     var actionId = wSetPropAction.Id;
 
@@ -2707,7 +2712,7 @@ namespace WixSharp
                 }
                 else if (wAction is ScriptFileAction)
                 {
-                    var wScriptAction = (ScriptFileAction) wAction;
+                    var wScriptAction = (ScriptFileAction)wAction;
 
                     sequences.ForEach(sequence =>
                          sequence.Add(new XElement("Custom", wAction.Condition.ToXValue(),
@@ -2729,7 +2734,7 @@ namespace WixSharp
                 }
                 else if (wAction is ScriptAction)
                 {
-                    var wScriptAction = (ScriptAction) wAction;
+                    var wScriptAction = (ScriptAction)wAction;
 
                     sequences.ForEach(sequence =>
                         sequence.Add(new XElement("Custom", wAction.Condition.ToXValue(),
@@ -2747,7 +2752,7 @@ namespace WixSharp
                 }
                 else if (wAction is ManagedAction)
                 {
-                    var wManagedAction = (ManagedAction) wAction;
+                    var wManagedAction = (ManagedAction)wAction;
                     var asmFile = Utils.PathCombine(wProject.SourceBaseDir, wManagedAction.ActionAssembly);
                     var packageFile = asmFile.PathChangeDirectory(wProject.OutDir.PathGetFullPath())
                                              .PathChangeExtension(".CA.dll");
@@ -2819,7 +2824,7 @@ namespace WixSharp
                 }
                 else if (wAction is WixQuietExecAction)
                 {
-                    var quietExecAction = (WixQuietExecAction) wAction;
+                    var quietExecAction = (WixQuietExecAction)wAction;
                     var cmdLineActionId = wAction.Name.Expand();
                     var setCmdLineActionId = "Set_" + cmdLineActionId;
 
@@ -2856,7 +2861,7 @@ namespace WixSharp
                 }
                 else if (wAction is InstalledFileAction)
                 {
-                    var fileAction = (InstalledFileAction) wAction;
+                    var fileAction = (InstalledFileAction)wAction;
 
                     sequences.ForEach(sequence =>
                         sequence.Add(
@@ -2877,7 +2882,7 @@ namespace WixSharp
                 }
                 else if (wAction is BinaryFileAction)
                 {
-                    var binaryAction = (BinaryFileAction) wAction;
+                    var binaryAction = (BinaryFileAction)wAction;
 
                     sequences.ForEach(sequence =>
                         sequence.Add(
@@ -2898,7 +2903,7 @@ namespace WixSharp
                 }
                 else if (wAction is PathFileAction)
                 {
-                    var fileAction = (PathFileAction) wAction;
+                    var fileAction = (PathFileAction)wAction;
 
                     sequences.ForEach(sequence =>
                         sequence.Add(
@@ -2946,7 +2951,7 @@ namespace WixSharp
                     foreach (var item in AppDomain.CurrentDomain.GetAssemblies())
                         try
                         {
-                            var attr = (System.Reflection.AssemblyDescriptionAttribute) item.GetCustomAttributes(typeof(System.Reflection.AssemblyDescriptionAttribute), false).FirstOrDefault();
+                            var attr = (System.Reflection.AssemblyDescriptionAttribute)item.GetCustomAttributes(typeof(System.Reflection.AssemblyDescriptionAttribute), false).FirstOrDefault();
                             if (attr != null && IO.File.Exists(attr.Description))
                             {
                                 clientAssembly = item.Location;

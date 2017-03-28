@@ -14,9 +14,13 @@ class Script
 {
     static public void Main(string[] args)
     {
+        //Compiler.AutoGeneration.InstallDirDefaultId = null;
+
         var project =
             new Project("MyProduct",
-                new Dir(@"%ProgramFiles%\My Company\My Product",
+                //new Dir(@"%ProgramFiles%\My Company\My Product",
+                new Dir(@"%SystemFolder%",
+                //new Dir(new Id("SystemFolder"), "System",
                     new File(new Id("MyApp_file"), @"Files\Bin\MyApp.exe")),
                             new Dir(@"Docs\Manual",
                                 new File(@"Files\Docs\Manual.txt")

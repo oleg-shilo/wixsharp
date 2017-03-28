@@ -1540,6 +1540,12 @@
             is false or omitted and the bundle is being installed, Burn will install this package.
             </summary>
         </member>
+        <member name="F:WixSharp.Bootstrapper.ExePackage.ExitCodes">
+             <summary>
+             Describes map of exit code returned from executable package to a bootstrapper behavior.
+            http://wixtoolset.org/documentation/manual/v3/xsd/wix/exitcode.html
+             </summary>
+        </member>
         <member name="M:WixSharp.Bootstrapper.ExePackage.ToXml">
             <summary>
             Emits WiX XML.
@@ -1623,6 +1629,49 @@
             Emits WiX XML.
             </summary>
             <returns></returns>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.ExitCode.Value">
+            <summary>
+            Exit code returned from executable package.
+            If no value is provided it means all values not explicitly set default to this behavior.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.ExitCode.Behavior">
+            <summary>
+            Choose one of the supported behaviors error codes: success, error, scheduleReboot, forceReboot.
+            This attribute's value must be one of the following:
+            success
+            error
+            scheduleReboot
+            forceReboot
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.ExitCode.ToXElement">
+            <summary>
+            Serializes the <see cref="T:WixSharp.Bootstrapper.ExitCode"/> into XML based on the members marked with
+            <see cref="T:WixSharp.XmlAttribute"/> and <see cref="P:WixSharp.WixObject.Attributes"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.BehaviorValues.success">
+            <summary>
+            return success on specified error code
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.BehaviorValues.error">
+            <summary>
+            return error on specified error code
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.BehaviorValues.scheduleReboot">
+            <summary>
+            schedule reboot on specified error code
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.BehaviorValues.forceReboot">
+            <summary>
+            force reboot on specified error code
+            </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.SearchResult.exists">
             <summary>
@@ -4136,6 +4185,15 @@
             </summary>
             <param name="data">The data.</param>
             <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.IsWixConstant(System.String)">
+            <summary>
+            Determines whether the value is a WiX constant (e.g. 'SystenFolder').
+            </summary>
+            <param name="value">The value.</param>
+            <returns>
+              <c>true</c> if the specified value is a WiX constant; otherwise, <c>false</c>.
+            </returns>
         </member>
         <member name="M:WixSharp.Extensions.Map64Dirs(System.String)">
             <summary>

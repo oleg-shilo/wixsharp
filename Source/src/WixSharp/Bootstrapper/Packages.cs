@@ -331,6 +331,11 @@ namespace WixSharp.Bootstrapper
         [Xml]
         public BehaviorValues Behavior;
 
+        /// <summary>
+        /// Serializes the <see cref="WixSharp.Bootstrapper.ExitCode"/> into XML based on the members marked with
+        /// <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
+        /// </summary>
+        /// <returns></returns>
         public XElement ToXElement()
         {
             var element = new XElement("ExitCode", new XAttribute("Behavior", Behavior));
