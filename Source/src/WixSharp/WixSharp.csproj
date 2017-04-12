@@ -121,6 +121,7 @@
     <Compile Include="Certificate.cs" />
     <Compile Include="CommonTasks.cs" />
     <Compile Include="Compiler.Bootstrapper.cs" />
+    <Compile Include="NativeImage.cs" />
     <Compile Include="EventSource.cs" />
     <Compile Include="FirewallException.cs" />
     <Compile Include="FontFile.cs" />

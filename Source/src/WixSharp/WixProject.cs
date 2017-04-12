@@ -119,8 +119,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// WiX linker <c>Light.exe</c> options.
-        /// <para>The default value is "-sw1076 -sw1079" (disable warning 1076 and 1079).</para>
+        /// WiX linker <c>Light.exe</c> options (e.g. -sice:ICE30).
+        /// <para>The default value is "-sw1076 -sw1079" (disable warning 1076 and 1079). </para>
         /// </summary>
         public string LightOptions = "";
 

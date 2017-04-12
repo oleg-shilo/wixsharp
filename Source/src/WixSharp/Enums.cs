@@ -260,10 +260,9 @@ namespace WixSharp
         Before
     }
 
-
     /// <summary>
     /// Use this enum to specify the installation scope of this package: per-machine or per-user.
-    /// The enum values are mapped to the WiX InstallScope attribute of the Package element.  
+    /// The enum values are mapped to the WiX InstallScope attribute of the Package element.
     /// </summary>
     public enum InstallScope
     {
@@ -271,6 +270,7 @@ namespace WixSharp
         /// Set this value to declare that the package is a per-machine installation and requires elevated privileges to install. Sets the ALLUSERS property to 1.
         /// </summary>
         perMachine,
+
         /// <summary>
         /// Set this value to declare that the package is a per-user installation and does not require elevated privileges to install. Sets the package's InstallPrivileges attribute to "limited."
         /// </summary>
@@ -294,6 +294,33 @@ namespace WixSharp
     }
 
     /// <summary>
+    /// Sets the platform(s) for which native images will be generated.
+    /// </summary>
+    public class NativeImagePlatform : StringEnum<NativeImagePlatform>
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NativeImagePlatform"/> class.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public NativeImagePlatform(string value) : base(value) { }
+
+        /// <summary>
+        /// Attempt to generate native images only for the 32-bit version of the .NET Framework on the target machine. If the 32-bit version of the .NET Framework 2.0 or newer is not present on the target machine, native image custom actions will not be scheduled. This is the default value.
+        /// </summary>
+        public static NativeImagePlatform x86 = new NativeImagePlatform("32bit"); //it's illegal to start member name from digit (e.g. NativeImagePlatform.32bit)
+
+        /// <summary>
+        /// Attempt to generate native images only for the 64-bit version of the .NET Framework on the target machine. If a 64-bit version of the .NET Framework 2.0 or newer is not present on the target machine, native image custom actions will not be scheduled.
+        /// </summary>
+        public static NativeImagePlatform x64 = new NativeImagePlatform("64bit");
+
+        /// <summary>
+        /// Attempt to generate native images for the 32-bit and 64-bit versions of the .NET Framework on the target machine. If a version of the .NET Framework 2.0 or newer is not present on the target machine for a processor architecture, native image custom actions will not be scheduled for that processor architecture.
+        /// </summary>
+        public static NativeImagePlatform all = new NativeImagePlatform("all");
+    }
+
+    /// <summary>
     /// Sets the <see cref="T:WixSharp.Project.Package.Platform"/>) for the target platform type.
     /// </summary>
     public enum Platform
@@ -302,14 +329,17 @@ namespace WixSharp
         /// Set this value to declare that the package is an x86 package.
         /// </summary>
         x86,
+
         /// <summary>
         /// Set this value to declare that the package is an ia64 package. This value requires that the InstallerVersion property be set to 200 or greater.
         /// </summary>
         ia64,
+
         /// <summary>
         ///  Set this value to declare that the package is an x64 package. This value requires that the InstallerVersion property be set to 200 or greater.
         /// </summary>
         x64,
+
         /// <summary>
         ///  Set this value to declare that the package is an arm package. This value requires that the  InstallerVersion property be set to 500 or greater.
         /// </summary>
@@ -337,6 +367,7 @@ namespace WixSharp
         currentUser,
         localMachine
     }
+
 #pragma warning restore 1591
 
     /// <summary>
@@ -548,19 +579,22 @@ namespace WixSharp
     public enum ProcessorArchitecture
     {
         /// <summary>
-        /// The file is a .NET Framework assembly that is processor-neutral. 
+        /// The file is a .NET Framework assembly that is processor-neutral.
         /// </summary>
         msil,
+
         /// <summary>
-        /// The file is a .NET Framework assembly for the x86 processor. 
+        /// The file is a .NET Framework assembly for the x86 processor.
         /// </summary>
         x86,
+
         /// <summary>
-        /// The file is a .NET Framework assembly for the x64 processor. 
+        /// The file is a .NET Framework assembly for the x64 processor.
         /// </summary>
         x64,
+
         /// <summary>
-        /// The file is a .NET Framework assembly for the ia64 processor. 
+        /// The file is a .NET Framework assembly for the ia64 processor.
         /// </summary>
         ia64
     }
@@ -571,15 +605,17 @@ namespace WixSharp
     public enum DriverArchitecture
     {
         /// <summary>
-        /// The driver is for the x86 processor. 
+        /// The driver is for the x86 processor.
         /// </summary>
         x86,
+
         /// <summary>
-        /// The driver is for the x64 processor. 
+        /// The driver is for the x64 processor.
         /// </summary>
         x64,
+
         /// <summary>
-        /// The driver is for the ia64 processor. 
+        /// The driver is for the ia64 processor.
         /// </summary>
         ia64
     }
@@ -590,15 +626,17 @@ namespace WixSharp
     public enum RegistryKeyAction
     {
         /// <summary>
-        /// Creates the key, if absent, when the parent component is installed. 
+        /// Creates the key, if absent, when the parent component is installed.
         /// </summary>
         create,
+
         /// <summary>
         /// Creates the key, if absent, when the parent component is installed then remove the key with all its values and subkeys when the parent component is uninstalled.
         /// </summary>
         createAndRemoveOnUninstall,
+
         /// <summary>
-        /// Does nothing; this element is used merely in WiX authoring for organization and does nothing to the final output. 
+        /// Does nothing; this element is used merely in WiX authoring for organization and does nothing to the final output.
         /// </summary>
         none
     }

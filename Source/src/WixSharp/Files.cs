@@ -29,6 +29,7 @@ THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IO = System.IO;
 
 namespace WixSharp
@@ -147,6 +148,9 @@ namespace WixSharp
         /// <param name="baseDirectory">The base directory for file analysis. It is used in conjunction with
         /// relative <see cref="Files.Directory"/>. Though <see cref="Files.Directory"/> takes precedence if it is an absolute path.</param>
         /// <returns>Array of <see cref="WixEntity"/> instances, which are either <see cref="File"/> or/and <see cref="Dir"/> objects.</returns>
+        // in anticipation of issues#48
+        // <param name="parentWixDir">Parent Wix# directory</param>
+        //public WixEntity[] GetAllItems(string baseDirectory, Dir parentWixDir = null)
         public WixEntity[] GetAllItems(string baseDirectory)
         {
             if (IO.Path.IsPathRooted(Directory))
@@ -168,20 +172,25 @@ namespace WixSharp
                                     foreach (var subDirPath in IO.Directory.GetDirectories(dirPath))
                                     {
                                         var dirName = IO.Path.GetFileName(subDirPath);
-                                        var subDir = new Dir(this.Feature, dirName, new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
-                                                                                    {
-                                                                                        Feature = this.Feature,
-                                                                                        AttributesDefinition = this.AttributesDefinition,
-                                                                                        Attributes = this.Attributes,
-                                                                                        Filter = this.Filter
-                                                                                    });
+
+                                        // in anticipation of issues#48
+                                        //var subDir = parentDir.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true));
+                                        Dir subDir = null;
+
+                                        if (subDir == null)
+                                            subDir = new Dir(this.Feature, dirName, new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
+                                            {
+                                                Feature = this.Feature,
+                                                AttributesDefinition = this.AttributesDefinition,
+                                                Attributes = this.Attributes,
+                                                Filter = this.Filter
+                                            });
 
                                         AgregateSubDirs(subDir, subDirPath);
 
                                         parentDir.Dirs = parentDir.Dirs.Add(subDir);
                                     }
                                 };
-
 
             var items = new List<WixEntity>
             {
@@ -194,21 +203,25 @@ namespace WixSharp
                 }
             };
 
-
-
             if (!IO.Directory.Exists(rootDirPath))
                 throw new IO.DirectoryNotFoundException(rootDirPath);
 
             foreach (var subDirPath in System.IO.Directory.GetDirectories(rootDirPath))
             {
                 var dirName = IO.Path.GetFileName(subDirPath);
-                var subDir = new Dir(this.Feature, dirName, new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
-                                                            {
-                                                                Feature = this.Feature,
-                                                                AttributesDefinition = this.AttributesDefinition,
-                                                                Attributes = this.Attributes.Clone(),
-                                                                Filter = this.Filter
-                                                            });
+
+                // in anticipation of issues#48
+                //var subDir = parentWixDir?.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true));
+
+                Dir subDir = null;
+                if (subDir == null)
+                    subDir = new Dir(this.Feature, dirName, new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
+                    {
+                        Feature = this.Feature,
+                        AttributesDefinition = this.AttributesDefinition,
+                        Attributes = this.Attributes.Clone(),
+                        Filter = this.Filter
+                    });
 
                 AgregateSubDirs(subDir, subDirPath);
 

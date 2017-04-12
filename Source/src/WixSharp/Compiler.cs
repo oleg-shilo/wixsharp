@@ -189,7 +189,7 @@ namespace WixSharp
         static public ResolveEventHandler AssemblyResolve;
 
         /// <summary>
-        /// WiX linker <c>Light.exe</c> options.
+        /// WiX linker <c>Light.exe</c> options (e.g. -sice:ICE30).
         /// <para>The default value is "-sw1076 -sw1079" (disable warning 1076 and 1079).</para>
         /// </summary>
         static public string LightOptions = "-sw1076 -sw1079";
@@ -1752,14 +1752,17 @@ namespace WixSharp
                     file.Add(shortcutElement);
                 }
 
-                //insert file related IIS virtual directories
+                // insert file related IIS virtual directories
                 InsertIISElements(dirItem, comp, wFile.IISVirtualDirs, wProject);
 
-                //insert file owned permissions
+                // insert file owned permissions
                 ProcessFilePermissions(wProject, wFile, file);
 
-                //insert file owned Firewall exception
+                // insert file owned Firewall exception
                 ProcessFileFirewallException(wProject, wFile, file);
+
+                // Expand/serialize file owned generic items and insert the in to the `File` element
+                ProcessGenericItems(wFile, wProject, featureComponents, defaultFeatureComponents, file);
             }
         }
 
@@ -1920,6 +1923,37 @@ namespace WixSharp
                 var componentsBefore = getAllComponents();
 
                 foreach (IGenericEntity item in wDir.GenericItems)
+                    item.Process(context);
+
+                var componentsAfter = getAllComponents();
+                var compsWithFeature = featureComponents.SelectMany(x => x.Value)
+                                                        .Concat(defaultFeatureComponents)
+                                                        .Distinct();
+
+                var newComponetsWithoutFeature = componentsAfter.Except(componentsBefore)
+                                                                .Except(compsWithFeature);
+
+                defaultFeatureComponents.AddRange(newComponetsWithoutFeature);
+            }
+        }
+
+        static void ProcessGenericItems(File file, Project wProject, Dictionary<Feature, List<string>> featureComponents, List<string> defaultFeatureComponents, XElement fileItem)
+        {
+            if (file.GenericItems.Any())
+            {
+                var context = new ProcessingContext
+                {
+                    Project = wProject,
+                    Parent = file,
+                    XParent = fileItem,
+                    FeatureComponents = featureComponents
+                };
+
+                Func<string[]> getAllComponents = () => fileItem.Document.Root.Descendants("Component").Select(x => x.Attribute("Id").Value).ToArray();
+
+                var componentsBefore = getAllComponents();
+
+                foreach (IGenericEntity item in file.GenericItems)
                     item.Process(context);
 
                 var componentsAfter = getAllComponents();

@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,7 +24,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
+
 namespace WixSharp
 {
     /// <summary>
@@ -39,14 +42,14 @@ namespace WixSharp
     /// {
     ///     Name = "CustomActionTest",
     ///     UI = WUI.WixUI_ProgressOnly,
-    ///     
+    ///
     ///     Dirs = new[]
-    ///     { 
+    ///     {
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
     ///             new Assembly(@"MyLibrary.dll", true))
     ///     }
     /// };
-    /// 
+    ///
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
@@ -56,29 +59,34 @@ namespace WixSharp
         /// Default constructor. Creates instance of the <see cref="Assembly"></see> class.
         /// </summary>
         public Assembly() { }
+
         /// <summary>
         /// Creates instance of the <see cref="Assembly"></see> class with properties initialized with specified parameters.
         /// </summary>
         /// <param name="feature"><see cref="Feature"></see> the assembly file should be included in.</param>
         /// <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
         /// <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
-        public Assembly(Feature feature, string sourcePath, bool registerInGAC, params FileShortcut[] items)
+        /// <param name="items">Optional parameters defining additional members (e.g. <see cref="FileShortcut"/> shortcuts to
+        /// the file to be created during the installation).</param>
+        public Assembly(Feature feature, string sourcePath, bool registerInGAC, params WixEntity[] items)
             : base(feature, sourcePath, items)
         {
             RegisterInGAC = registerInGAC;
         }
+
         /// <summary>
         /// Creates instance of the <see cref="Assembly"></see> class with properties initialized with specified parameters.
         /// </summary>
         /// <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
         /// <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
-        public Assembly(string sourcePath, bool registerInGAC, params FileShortcut[] items)
+        /// <param name="items">Optional parameters defining additional members (e.g. <see cref="FileShortcut"/> shortcuts to the file
+        /// to be created during the installation).</param>
+        public Assembly(string sourcePath, bool registerInGAC, params WixEntity[] items)
             : base(sourcePath, items)
         {
             RegisterInGAC = registerInGAC;
         }
+
         /// <summary>
         /// Creates instance of the <see cref="Assembly"></see> class with properties initialized with specified parameters.
         /// </summary>
@@ -86,24 +94,28 @@ namespace WixSharp
         /// <param name="feature"><see cref="Feature"></see> the assembly file should be included in.</param>
         /// <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
         /// <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
-        public Assembly(Id id, Feature feature, string sourcePath, bool registerInGAC, params FileShortcut[] items)
+        /// <param name="items">Optional parameters defining additional members (e.g. <see cref="FileShortcut"/> shortcuts to the file to
+        /// be created during the installation).</param>
+        public Assembly(Id id, Feature feature, string sourcePath, bool registerInGAC, params WixEntity[] items)
             : base(id, feature, sourcePath, items)
         {
             RegisterInGAC = registerInGAC;
         }
+
         /// <summary>
         /// Creates instance of the <see cref="Assembly"></see> class with properties initialized with specified parameters.
         /// </summary>
         /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="Assembly"/> instance.</param>
         /// <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
         /// <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
-        public Assembly(Id id, string sourcePath, bool registerInGAC, params FileShortcut[] items)
+        /// <param name="items">Optional parameters defining additional members (e.g. <see cref="FileShortcut"/> shortcuts to
+        /// the file to be created during the installation).</param>
+        public Assembly(Id id, string sourcePath, bool registerInGAC, params WixEntity[] items)
             : base(id, sourcePath, items)
         {
             RegisterInGAC = registerInGAC;
         }
+
         /// <summary>
         /// Creates instance of the <see cref="Assembly"></see> class with properties initialized with specified parameters.
         /// </summary>
@@ -111,26 +123,30 @@ namespace WixSharp
         /// <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
         /// <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
         /// <param name="processorArchitecture">Specifies the architecture for this assembly. </param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
-        public Assembly(Feature feature, string sourcePath, bool registerInGAC, ProcessorArchitecture processorArchitecture, params FileShortcut[] items)
+        /// <param name="items">Optional parameters defining additional members (e.g. <see cref="FileShortcut"/> shortcuts to the file
+        /// to be created during the installation).</param>
+        public Assembly(Feature feature, string sourcePath, bool registerInGAC, ProcessorArchitecture processorArchitecture, params WixEntity[] items)
             : base(feature, sourcePath, items)
         {
             RegisterInGAC = registerInGAC;
             ProcessorArchitecture = processorArchitecture;
         }
+
         /// <summary>
         /// Creates instance of the <see cref="Assembly"></see> class with properties initialized with specified parameters.
         /// </summary>
         /// <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
         /// <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
         /// <param name="processorArchitecture">Specifies the architecture for this assembly. </param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
-        public Assembly(string sourcePath, bool registerInGAC, ProcessorArchitecture processorArchitecture, params FileShortcut[] items)
+        /// <param name="items">Optional parameters defining additional members (e.g. <see cref="FileShortcut"/> shortcuts to
+        /// the file to be created during the installation).</param>
+        public Assembly(string sourcePath, bool registerInGAC, ProcessorArchitecture processorArchitecture, params WixEntity[] items)
             : base(sourcePath, items)
         {
             RegisterInGAC = registerInGAC;
             ProcessorArchitecture = processorArchitecture;
         }
+
         /// <summary>
         /// Creates instance of the <see cref="Assembly"></see> class with properties initialized with specified parameters.
         /// </summary>
@@ -139,13 +155,15 @@ namespace WixSharp
         /// <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
         /// <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
         /// <param name="processorArchitecture">Specifies the architecture for this assembly. </param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
-        public Assembly(Id id, Feature feature, string sourcePath, bool registerInGAC, ProcessorArchitecture processorArchitecture, params FileShortcut[] items)
+        /// <param name="items">Optional parameters defining additional members (e.g. <see cref="FileShortcut"/> shortcuts to the file
+        /// to be created during the installation).</param>
+        public Assembly(Id id, Feature feature, string sourcePath, bool registerInGAC, ProcessorArchitecture processorArchitecture, params WixEntity[] items)
             : base(id, feature, sourcePath, items)
         {
             RegisterInGAC = registerInGAC;
             ProcessorArchitecture = processorArchitecture;
         }
+
         /// <summary>
         /// Creates instance of the <see cref="Assembly"></see> class with properties initialized with specified parameters.
         /// </summary>
@@ -153,17 +171,20 @@ namespace WixSharp
         /// <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
         /// <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
         /// <param name="processorArchitecture">Specifies the architecture for this assembly. </param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
-        public Assembly(Id id, string sourcePath, bool registerInGAC, ProcessorArchitecture processorArchitecture, params FileShortcut[] items)
+        /// <param name="items">Optional parameters defining additional members (e.g. <see cref="FileShortcut"/> shortcuts to the file
+        /// to be created during the installation).</param>
+        public Assembly(Id id, string sourcePath, bool registerInGAC, ProcessorArchitecture processorArchitecture, params WixEntity[] items)
             : base(id, sourcePath, items)
         {
             RegisterInGAC = registerInGAC;
             ProcessorArchitecture = processorArchitecture;
         }
+
         /// <summary>
-        /// Defines if the assembly file needs to be registered in GAC during the installation. 
+        /// Defines if the assembly file needs to be registered in GAC during the installation.
         /// </summary>
         public bool RegisterInGAC = false;
+
         /// <summary>
         /// Specifies the architecture for this assembly.
         /// </summary>

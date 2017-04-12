@@ -1,4 +1,5 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
@@ -23,7 +24,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
 
 using System;
 using System.Collections.Generic;
@@ -217,6 +219,7 @@ namespace WixSharp
         /// </example>
         /// </summary>
         public Package Package = new Package();
+
         /// <summary>
         /// The target platform type.
         /// </summary>
@@ -243,6 +246,7 @@ namespace WixSharp
         /// </example>
         /// </summary>
         public List<Media> Media = new List<Media>(new[] { new Media() });
+
         /// <summary>
         /// Relative path to RTF file with the custom licence agreement to be displayed in the Licence dialog.
         /// If this value is not specified the default WiX licence agreement will be used.
@@ -254,6 +258,7 @@ namespace WixSharp
         /// <c>System.Text.Encoding.Default</c> will be used.
         /// </summary>
         public Encoding Encoding = Encoding.Default;
+
         /// <summary>
         /// Type of the MSI User Interface. This value is assigned to the <c>UIRef</c> WiX element during the compilation.
         /// If not specified <see cref="WUI.WixUI_Minimal"/> will used.
@@ -359,7 +364,6 @@ namespace WixSharp
         /// </example>
         public RebootSupressing? RebootSupressing;
 
-
         /// <summary>
         /// Use this attribute if you need to specify the installation scope of this package: per-machine or per-user.
         /// </summary>
@@ -445,6 +449,7 @@ namespace WixSharp
         {
             return WixGuid.HashGuidByInteger(productGuid, version.GetHashCode() + 1);
         }
+
         /// <summary>
         /// This is the value of the <c>Id</c> attribute of the Wix <c>Product</c> element.
         /// This value is unique for any given version of a product being installed.
@@ -453,38 +458,47 @@ namespace WixSharp
         /// project <see cref="Project.GUID"/> and the product <see cref="Project.Version"/>.
         /// </summary>
         public Guid? ProductId;
+
         /// <summary>
         /// Collection of <see cref="Dir"/>s to be installed.
         /// </summary>
         public Dir[] Dirs = new Dir[0];
+
         /// <summary>
         /// Collection of <see cref="Actions"/>s to be performed during the installation.
         /// </summary>
         public Action[] Actions = new Action[0];
+
         /// <summary>
         /// Collection of <see cref="RegValue"/>s to be set during the installation.
         /// </summary>
         public RegValue[] RegValues = new RegValue[0];
+
         /// <summary>
         /// Collection of <see cref="EnvironmentVariable"/>s to be set during the installation.
         /// </summary>
         public EnvironmentVariable[] EnvironmentVariables = new EnvironmentVariable[0];
+
         /// <summary>
         /// Collection of <see cref="Certificate"/> to be installed.
         /// </summary>
         public Certificate[] Certificates = new Certificate[0];
+
         /// <summary>
         /// Collection of <see cref="FirewallException"/> to be installed.
         /// </summary>
         public FirewallException[] FirewallExceptions = new FirewallException[0];
+
         /// <summary>
         /// Collection of the user defined <see cref="IGenericEntity"/> items.
         /// </summary>
         public IGenericEntity[] GenericItems = new IGenericEntity[0];
+
         /// <summary>
         /// Collection of WiX/MSI <see cref="Property"/> objects to be created during the installed.
         /// </summary>
         public Property[] Properties = new Property[0];
+
         /// <summary>
         /// Indicates whether compiler should emit consistent package Id (package code). Set <c>EmitConsistentPackageId</c> to 'false' (default value) if
         /// you want the WiX compilers automatically generate a new package code for each new .msi file built. Or set it to 'true' if you want Wix# to auto generate a
@@ -505,16 +519,19 @@ namespace WixSharp
         /// </para>
         /// </summary>
         public bool EmitConsistentPackageId = false;
+
         /// <summary>
         /// Collection of WiX/MSI <see cref="Binary"/> objects to be embedded into MSI database.
         /// Normally you doe not need to deal with this property as <see cref="Compiler"/> will populate
         /// it automatically.
         /// </summary>
         public Binary[] Binaries = new Binary[0];
+
         /// <summary>
         /// Collection of paths to the assemblies referenced by <see cref="ManagedAction"/>s.
         /// </summary>
         public List<string> DefaultRefAssemblies = new List<string>();
+
         /// <summary>
         /// Collection of the <see cref="T:WixSharp.LaunchCondition"/>s associated with the setup.
         /// </summary>
@@ -553,6 +570,7 @@ namespace WixSharp
         public bool ValidateBackgroundImage = true;
 
         private Feature _defaultFeature = new Feature("Complete");
+
         /// <summary>
         /// Gets or Sets the default Feature for the project.
         /// All elements without an explicitly assigned Feature will be placed under the DefaultFeature.
@@ -590,9 +608,14 @@ namespace WixSharp
             while (iterator < dirList.Count)
             {
                 foreach (Files dirItems in dirList[iterator].FileCollections)
+                    // in anticipation of issues#48
+                    //foreach (WixEntity item in dirItems.GetAllItems(SourceBaseDir, dirList[iterator]))
                     foreach (WixEntity item in dirItems.GetAllItems(SourceBaseDir))
                         if (item is DirFiles)
                             dirList[iterator].DirFileCollections = dirList[iterator].DirFileCollections.Add(item as DirFiles);
+
+                        // in anticipation of issues#48
+                        //else if (item is Dir && !dirList[iterator].Dirs.Contains(item))
                         else if (item is Dir)
                             dirList[iterator].Dirs = dirList[iterator].Dirs.Add(item as Dir);
 
@@ -622,6 +645,7 @@ namespace WixSharp
 
             return this;
         }
+
         /// <summary>
         /// Returns all <see cref="File"/>s of the <see cref="Project"/> matching the <paramref name="match"/> pattern.
         /// </summary>
@@ -634,6 +658,7 @@ namespace WixSharp
                     select f)
                     .ToArray();
         }
+
         /// <summary>
         /// Flattened "view" of all <see cref="File"/>s of the <see cref="Project"/>.
         /// </summary>
@@ -683,7 +708,6 @@ namespace WixSharp
             }
         }
 
-
         /// <summary>
         /// Finds <see cref="T:WixSharp.Dir"/> corresponding to the specified path.
         /// </summary>
@@ -732,6 +756,7 @@ namespace WixSharp
         public int InstallerVersion = 200;
 
         string codepage = "";
+
         /// <summary>
         /// Installation UI Code Page. If not specified
         /// ANSICodePage of the <see cref="T:WixSharp.WixProject.Language"/> will be used.
@@ -743,7 +768,7 @@ namespace WixSharp
                 if (!codepage.IsEmpty())
                     return codepage;
                 else
-                    return Encoding.GetEncoding(new CultureInfo(Language.Split(',',';').FirstOrDefault()).TextInfo.ANSICodePage).WebName;
+                    return Encoding.GetEncoding(new CultureInfo(Language.Split(',', ';').FirstOrDefault()).TextInfo.ANSICodePage).WebName;
             }
             set
             {
@@ -756,9 +781,12 @@ namespace WixSharp
         /// </summary>
         public string Culture
         {
-            get { return string.Join(",", Language.Split(',', ';')
-                                                  .Select(x => new CultureInfo(x.Trim()).Name)
-                                                  .ToArray());}
+            get
+            {
+                return string.Join(",", Language.Split(',', ';')
+                                                .Select(x => new CultureInfo(x.Trim()).Name)
+                                                .ToArray());
+            }
         }
 
         internal bool IsLocalized

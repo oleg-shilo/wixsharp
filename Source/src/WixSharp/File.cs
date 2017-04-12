@@ -1,4 +1,5 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
@@ -23,7 +24,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
 
 using IO = System.IO;
 using System.Linq;
@@ -33,7 +35,6 @@ using System.Xml.Linq;
 
 namespace WixSharp
 {
-
     /// <summary>
     /// Defines file to be installed.
     /// </summary>
@@ -73,27 +74,29 @@ namespace WixSharp
         /// Initializes a new instance of the <see cref="File"/> class.
         /// </summary>
         public File() { }
+
         /// <summary>
         /// Creates instance of the <see cref="File"></see> class with properties initialized with specified parameters.
         /// </summary>
         /// <param name="feature"><see cref="Feature"></see> the file should be included in.</param>
         /// <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the file to be created
-        /// during the installation.</param>
+        /// <param name="items">Optional parameters defining additional members (e.g. <see cref="FileShortcut"/> shortcuts
+        /// to the file to be created during the installation).</param>
         public File(Feature feature, string sourcePath, params WixEntity[] items)
         {
             Name = sourcePath;
             Feature = feature;
             AddItems(items);
         }
+
         /// <summary>
         /// Creates instance of the <see cref="File"></see> class with properties initialized with specified parameters.
         /// </summary>
         /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="File"/> instance.</param>
         /// <param name="feature"><see cref="Feature"></see> the file should be included in.</param>
         /// <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the file to be created
-        /// during the installation.</param>
+        /// <param name="items">Optional parameters defining additional members (e.g. <see cref="FileShortcut"/> shortcuts
+        /// to the file to be created during the installation).</param>
         public File(Id id, Feature feature, string sourcePath, params WixEntity[] items)
         {
             Id = id.Value;
@@ -101,24 +104,26 @@ namespace WixSharp
             Feature = feature;
             AddItems(items);
         }
+
         /// <summary>
         /// Creates instance of the <see cref="File"></see> class with properties initialized with specified parameters.
         /// </summary>
         /// <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the file to be created
-        /// during the installation.</param>
+        /// <param name="items">Optional parameters defining additional members (e.g. <see cref="FileShortcut"/> shortcuts
+        /// to the file to be created during the installation).</param>
         public File(string sourcePath, params WixEntity[] items)
         {
             Name = sourcePath;
             AddItems(items);
         }
+
         /// <summary>
         /// Creates instance of the <see cref="File"></see> class with properties initialized with specified parameters.
         /// </summary>
         /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="File"/> instance.</param>
         /// <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-        /// <param name="items">Optional <see cref="FileShortcut"/> parameters defining shortcuts to the file to be created
-        /// during the installation.</param>
+        /// <param name="items">Optional parameters defining additional members (e.g. <see cref="FileShortcut"/> shortcuts
+        /// to the file to be created during the installation).</param>
         public File(Id id, string sourcePath, params WixEntity[] items)
         {
             Id = id.Value;
@@ -134,6 +139,8 @@ namespace WixSharp
             ServiceInstaller = items.OfType<ServiceInstaller>().FirstOrDefault();
             DriverInstaller = items.OfType<DriverInstaller>().FirstOrDefault();
             Permissions = items.OfType<FilePermission>().ToArray();
+            GenericItems = items.OfType<IGenericEntity>().ToArray();
+
             FirewallExceptions = items.OfType<FirewallException>().ToArray();
 
             var firstUnExpectedItem = items.Except(Shortcuts)
@@ -141,12 +148,13 @@ namespace WixSharp
                                            .Except(IISVirtualDirs)
                                            .Except(Permissions)
                                            .Except(FirewallExceptions)
+                                           .Except(GenericItems.Cast<WixEntity>())
                                            .Where(x => x != ServiceInstaller)
                                            .Where(x => x != DriverInstaller)
                                            .ToArray();
 
             if (firstUnExpectedItem.Any())
-                throw new ApplicationException("{0} is unexpected. Only {2}, {3}, {4}, {5}, {6} and {7} items can be added to {1}".FormatWith(
+                throw new ApplicationException("{0} is unexpected. Only {2}, {3}, {4}, {5}, {6}, {7} and {8} items can be added to {1}".FormatWith(
                                                 firstUnExpectedItem.First().GetType(),
                                                 this.GetType(),
                                                 typeof(FileShortcut),
@@ -154,7 +162,8 @@ namespace WixSharp
                                                 typeof(ServiceInstaller),
                                                 typeof(FilePermission),
                                                 typeof(DriverInstaller),
-                                                typeof(FirewallException)));
+                                                typeof(FirewallException),
+                                                typeof(IGenericEntity)));
         }
 
         /// <summary>
@@ -183,23 +192,33 @@ namespace WixSharp
         /// Collection of the <see cref="Shortcut"/>s associated with the file.
         /// </summary>
         public FileShortcut[] Shortcuts = new FileShortcut[0];
+
         /// <summary>
         /// <see cref="Feature"></see> the file belongs to.
         /// </summary>
         public Feature Feature;
+
         /// <summary>
         /// Defines the installation <see cref="Condition"/>, which is to be checked during the installation to
         /// determine if the file should be installed on the target system.
         /// </summary>
         public Condition Condition;
+
         /// <summary>
         /// Collection of <see cref="T:WixSharp.FilePermission" /> to be applied to the file.
         /// </summary>
         public FilePermission[] Permissions = new FilePermission[0];
+
         /// <summary>
         /// Collection of <see cref="T:WixSharp.FirewallException" /> to be applied to the file.
         /// </summary>
         public FirewallException[] FirewallExceptions = new FirewallException[0];
+
+        /// <summary>
+        /// Collection of <see cref="T:WixSharp.IGenericEntity" /> to be applied to the file.
+        /// </summary>
+        public IGenericEntity[] GenericItems = new IGenericEntity[0];
+
         /// <summary>
         /// Gets or sets the NeverOverwrite attribute of the associated WiX component.
         /// <para>If this attribute is set to 'true', the installer does not install or reinstall the component

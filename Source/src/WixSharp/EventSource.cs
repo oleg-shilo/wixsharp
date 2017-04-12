@@ -33,7 +33,7 @@ namespace WixSharp
     ///             EventMessageFile = @"%SystemRoot%\Microsoft.NET\Framework\v2.0.50727\EventLogMessages.dll"
     ///         },
     ///         ...
-    ///         
+    ///
     /// project.BuildMsi();
     /// </code>
     /// </example>
@@ -66,7 +66,7 @@ namespace WixSharp
         ///             EventMessageFile = @"%SystemRoot%\Microsoft.NET\Framework\v2.0.50727\EventLogMessages.dll"
         ///         },
         ///         ...
-        ///         
+        ///
         /// project.BuildMsi();
         /// </code>
         /// </example>
@@ -87,5 +87,4 @@ namespace WixSharp
                    .Add(this.ToXElement(WixExtension.Util, "EventSource"));
         }
     }
-
 }

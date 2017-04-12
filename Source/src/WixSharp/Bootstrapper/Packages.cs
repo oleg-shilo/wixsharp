@@ -111,7 +111,7 @@ namespace WixSharp.Bootstrapper
         /// Initializes a new instance of the <see cref="ExePackage"/> class.
         /// </summary>
         /// <param name="path">The path.</param>
-        public ExePackage(string path):this()
+        public ExePackage(string path) : this()
         {
             //Name = System.IO.Path.GetFileName(path).Expand();
             SourceFile = path;
@@ -155,7 +155,6 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         public List<ExitCode> ExitCodes;
 
-
         /// <summary>
         /// Emits WiX XML.
         /// </summary>
@@ -171,7 +170,6 @@ namespace WixSharp.Bootstrapper
 
             root.AddAttributes(this.Attributes)
                 .Add(this.MapToXmlAttributes());
-
 
             if (Payloads.Any())
                 Payloads.ForEach(p => root.Add(new XElement("Payload", new XAttribute("SourceFile", p))));
@@ -312,6 +310,9 @@ namespace WixSharp.Bootstrapper
         }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     public class ExitCode
     {
         /// <summary>
@@ -320,6 +321,7 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         [Xml]
         public string Value;
+
         /// <summary>
         /// Choose one of the supported behaviors error codes: success, error, scheduleReboot, forceReboot.
         /// This attribute's value must be one of the following:
@@ -346,6 +348,7 @@ namespace WixSharp.Bootstrapper
             return element;
         }
     }
+
 #pragma warning disable 1591
 
     public enum BehaviorValues
@@ -354,31 +357,37 @@ namespace WixSharp.Bootstrapper
         /// return success on specified error code
         /// </summary>
         success,
+
         /// <summary>
         /// return error on specified error code
         /// </summary>
         error,
+
         /// <summary>
         /// schedule reboot on specified error code
         /// </summary>
         scheduleReboot,
+
         /// <summary>
         /// force reboot on specified error code
         /// </summary>
         forceReboot,
     }
+
     public enum SearchResult
     {
         /// <summary>
         /// Saves true if a matching registry entry or file is found; false otherwise.
         /// </summary>
         exists,
+
         /// <summary>
         /// Saves the value of the registry key in the variable. Can only be used with RegistrySearch. This is the default.
         /// </summary>
         value,
+
         /// <summary>
-        /// Saves the version information for files that have it (.exe, .dll); zero-version (0.0.0.0) otherwise. Can only be used with FileSearch. 
+        /// Saves the version information for files that have it (.exe, .dll); zero-version (0.0.0.0) otherwise. Can only be used with FileSearch.
         /// </summary>
         version
     }
@@ -389,6 +398,7 @@ namespace WixSharp.Bootstrapper
         /// Returns the unformatted value directly from the registry. For example, a REG_DWORD value of '1' is returned as '1', not '#1'.
         /// </summary>
         raw,
+
         /// <summary>
         /// Returns the value formatted as Windows Installer would. For example, a REG_DWORD value of '1' is returned as '#1', not '1'.
         /// </summary>
@@ -396,5 +406,4 @@ namespace WixSharp.Bootstrapper
     }
 
 #pragma warning restore 1591
-
 }
