@@ -160,7 +160,7 @@ namespace WixSharp
         /// <summary>
         /// <see cref="Feature"></see> the Wix object belongs to. This member is processed only for the
         /// WiX objects/elements that can be associated with the features (e.g. WebSite, FirewallException, ODBCDataSource, User,
-        /// EnvironmentVariable, Merge, Dir, RegFile, RegValue, Shortcut, SqlDatabase).
+        /// EnvironmentVariable, Merge, Dir, RegFile, RegValue, Shortcut, SqlDatabase, SqlScript).
         /// <remarks>
         /// <para>
         /// Wix# makes an emphasis on the main stream scenarios when an entity (e.g. File) belongs to a single feature.

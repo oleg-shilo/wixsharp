@@ -13,8 +13,8 @@ class Script
                 new FirewallException("notepad")  //global exception
                 {
                     RemoteAddress = "127.0.0.1, 127.0.0.2, 127.0.0.3".Split(','),
-                    Port="8080", 
-                    //Program = "notepad.exe" 
+                    Port = "8080",
+                    //Program = "notepad.exe"
                 },
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(@"Files\Bin\MyApp.exe",

@@ -765,14 +765,14 @@
              {
                  Name = "CustomActionTest",
                  UI = WUI.WixUI_ProgressOnly,
-                 
+            
                  Dirs = new[]
-                 { 
+                 {
                      new Dir(@"%ProgramFiles%\My Company\My Product",
                          new Assembly(@"MyLibrary.dll", true))
                  }
              };
-             
+            
              Compiler.BuildMsi(project);
              </code>
              </example>
@@ -782,24 +782,26 @@
             Default constructor. Creates instance of the <see cref="T:WixSharp.Assembly"></see> class.
             </summary>
         </member>
-        <member name="M:WixSharp.Assembly.#ctor(WixSharp.Feature,System.String,System.Boolean,WixSharp.FileShortcut[])">
+        <member name="M:WixSharp.Assembly.#ctor(WixSharp.Feature,System.String,System.Boolean,WixSharp.WixEntity[])">
             <summary>
             Creates instance of the <see cref="T:WixSharp.Assembly"></see> class with properties initialized with specified parameters.
             </summary>
             <param name="feature"><see cref="T:WixSharp.Feature"></see> the assembly file should be included in.</param>
             <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
             <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
+            <param name="items">Optional parameters defining additional members (e.g. <see cref="T:WixSharp.FileShortcut"/> shortcuts to
+            the file to be created during the installation).</param>
         </member>
-        <member name="M:WixSharp.Assembly.#ctor(System.String,System.Boolean,WixSharp.FileShortcut[])">
+        <member name="M:WixSharp.Assembly.#ctor(System.String,System.Boolean,WixSharp.WixEntity[])">
             <summary>
             Creates instance of the <see cref="T:WixSharp.Assembly"></see> class with properties initialized with specified parameters.
             </summary>
             <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
             <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
+            <param name="items">Optional parameters defining additional members (e.g. <see cref="T:WixSharp.FileShortcut"/> shortcuts to the file
+            to be created during the installation).</param>
         </member>
-        <member name="M:WixSharp.Assembly.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.Boolean,WixSharp.FileShortcut[])">
+        <member name="M:WixSharp.Assembly.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.Boolean,WixSharp.WixEntity[])">
             <summary>
             Creates instance of the <see cref="T:WixSharp.Assembly"></see> class with properties initialized with specified parameters.
             </summary>
@@ -807,18 +809,20 @@
             <param name="feature"><see cref="T:WixSharp.Feature"></see> the assembly file should be included in.</param>
             <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
             <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
+            <param name="items">Optional parameters defining additional members (e.g. <see cref="T:WixSharp.FileShortcut"/> shortcuts to the file to
+            be created during the installation).</param>
         </member>
-        <member name="M:WixSharp.Assembly.#ctor(WixSharp.Id,System.String,System.Boolean,WixSharp.FileShortcut[])">
+        <member name="M:WixSharp.Assembly.#ctor(WixSharp.Id,System.String,System.Boolean,WixSharp.WixEntity[])">
             <summary>
             Creates instance of the <see cref="T:WixSharp.Assembly"></see> class with properties initialized with specified parameters.
             </summary>
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.Assembly"/> instance.</param>
             <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
             <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
+            <param name="items">Optional parameters defining additional members (e.g. <see cref="T:WixSharp.FileShortcut"/> shortcuts to
+            the file to be created during the installation).</param>
         </member>
-        <member name="M:WixSharp.Assembly.#ctor(WixSharp.Feature,System.String,System.Boolean,WixSharp.ProcessorArchitecture,WixSharp.FileShortcut[])">
+        <member name="M:WixSharp.Assembly.#ctor(WixSharp.Feature,System.String,System.Boolean,WixSharp.ProcessorArchitecture,WixSharp.WixEntity[])">
             <summary>
             Creates instance of the <see cref="T:WixSharp.Assembly"></see> class with properties initialized with specified parameters.
             </summary>
@@ -826,18 +830,20 @@
             <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
             <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
             <param name="processorArchitecture">Specifies the architecture for this assembly. </param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
+            <param name="items">Optional parameters defining additional members (e.g. <see cref="T:WixSharp.FileShortcut"/> shortcuts to the file
+            to be created during the installation).</param>
         </member>
-        <member name="M:WixSharp.Assembly.#ctor(System.String,System.Boolean,WixSharp.ProcessorArchitecture,WixSharp.FileShortcut[])">
+        <member name="M:WixSharp.Assembly.#ctor(System.String,System.Boolean,WixSharp.ProcessorArchitecture,WixSharp.WixEntity[])">
             <summary>
             Creates instance of the <see cref="T:WixSharp.Assembly"></see> class with properties initialized with specified parameters.
             </summary>
             <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
             <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
             <param name="processorArchitecture">Specifies the architecture for this assembly. </param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
+            <param name="items">Optional parameters defining additional members (e.g. <see cref="T:WixSharp.FileShortcut"/> shortcuts to
+            the file to be created during the installation).</param>
         </member>
-        <member name="M:WixSharp.Assembly.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.Boolean,WixSharp.ProcessorArchitecture,WixSharp.FileShortcut[])">
+        <member name="M:WixSharp.Assembly.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.Boolean,WixSharp.ProcessorArchitecture,WixSharp.WixEntity[])">
             <summary>
             Creates instance of the <see cref="T:WixSharp.Assembly"></see> class with properties initialized with specified parameters.
             </summary>
@@ -846,9 +852,10 @@
             <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
             <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
             <param name="processorArchitecture">Specifies the architecture for this assembly. </param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
+            <param name="items">Optional parameters defining additional members (e.g. <see cref="T:WixSharp.FileShortcut"/> shortcuts to the file
+            to be created during the installation).</param>
         </member>
-        <member name="M:WixSharp.Assembly.#ctor(WixSharp.Id,System.String,System.Boolean,WixSharp.ProcessorArchitecture,WixSharp.FileShortcut[])">
+        <member name="M:WixSharp.Assembly.#ctor(WixSharp.Id,System.String,System.Boolean,WixSharp.ProcessorArchitecture,WixSharp.WixEntity[])">
             <summary>
             Creates instance of the <see cref="T:WixSharp.Assembly"></see> class with properties initialized with specified parameters.
             </summary>
@@ -856,11 +863,12 @@
             <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
             <param name="registerInGAC">Defines if the assembly file needs to be registered in GAC during the installation. </param>
             <param name="processorArchitecture">Specifies the architecture for this assembly. </param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the assembly file to be created during the installation.</param>
+            <param name="items">Optional parameters defining additional members (e.g. <see cref="T:WixSharp.FileShortcut"/> shortcuts to the file
+            to be created during the installation).</param>
         </member>
         <member name="F:WixSharp.Assembly.RegisterInGAC">
             <summary>
-            Defines if the assembly file needs to be registered in GAC during the installation. 
+            Defines if the assembly file needs to be registered in GAC during the installation.
             </summary>
         </member>
         <member name="F:WixSharp.Assembly.ProcessorArchitecture">
@@ -1630,6 +1638,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:WixSharp.Bootstrapper.ExitCode">
+             <summary>
+            
+             </summary>
+        </member>
         <member name="F:WixSharp.Bootstrapper.ExitCode.Value">
             <summary>
             Exit code returned from executable package.
@@ -1685,7 +1698,7 @@
         </member>
         <member name="F:WixSharp.Bootstrapper.SearchResult.version">
             <summary>
-            Saves the version information for files that have it (.exe, .dll); zero-version (0.0.0.0) otherwise. Can only be used with FileSearch. 
+            Saves the version information for files that have it (.exe, .dll); zero-version (0.0.0.0) otherwise. Can only be used with FileSearch.
             </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.SearchFormat.raw">
@@ -1989,11 +2002,6 @@
             <param name="certificatePath">The certificate path.</param>
             <param name="request">if set to <c>true</c> [request].</param>
         </member>
-        <member name="F:WixSharp.Certificate.Feature">
-            <summary>
-            <see cref="F:WixSharp.Certificate.Feature"></see> the WebSite belongs to.
-            </summary>
-        </member>
         <member name="F:WixSharp.Certificate.BinaryKey">
             <summary>
             The Id of a Binary instance that is the certificate to be installed
@@ -2151,7 +2159,7 @@
         </member>
         <member name="F:WixSharp.Compiler.LightOptions">
             <summary>
-            WiX linker <c>Light.exe</c> options.
+            WiX linker <c>Light.exe</c> options (e.g. -sice:ICE30).
             <para>The default value is "-sw1076 -sw1079" (disable warning 1076 and 1079).</para>
             </summary>
         </member>
@@ -2457,6 +2465,94 @@
             <param name="pattern">The wildcard pattern to convert.</param>
             <returns>A regex equivalent of the given wildcard.</returns>
         </member>
+        <member name="T:WixSharp.NativeImage">
+            <summary>
+            Improves the performance of managed applications by creating native images. Requires the .NET Framework 2.0 or newer to be installed on the target machine since it runs NGen.
+            </summary>
+            <example>The following is an example of defining an assembly file that needs to have native image generated for x86 platform.
+            <code>
+            new Project("MyProduct",
+                new Dir(@"%ProgramFiles%\MyCompany\MyProduct",
+                    new Files(@"Release\Bin\logger.dll",
+                        new NativeImage { Platform = NativeImagePlatform.x86}),
+                    ...
+            </code>
+            </example>
+            <seealso cref="T:WixSharp.WixEntity" />
+            <seealso cref="T:WixSharp.IGenericEntity" />
+        </member>
+        <member name="P:WixSharp.NativeImage.Id">
+            <summary>
+            Gets or sets the <c>Id</c> value of the <see cref="T:WixSharp.WixEntity"/>.
+            <para>This value is used as a <c>Id</c> for the corresponding WiX XML element.</para>
+            <para>If the <see cref="P:WixSharp.NativeImage.Id"/> value is not specified explicitly by the user the Wix# compiler
+            generates it automatically insuring its uniqueness.</para>
+            <remarks>
+             Note: The ID auto-generation is triggered on the first access (evaluation) and in order to make the id
+             allocation deterministic the compiler resets ID generator just before the build starts. However if you
+             accessing any auto-id before the Build*() is called you can it interferes with the ID auto generation and eventually
+             lead to the WiX ID duplications. To prevent this from happening either:"
+             <para> - Avoid evaluating the auto-generated IDs values before the call to Build*()</para>
+             <para> - Set the IDs (to be evaluated) explicitly</para>
+             <para> - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";</para>
+            </remarks>
+            </summary>
+            <value>The id.</value>
+        </member>
+        <member name="F:WixSharp.NativeImage.Platform">
+            <summary>
+            Sets the platform(s) for which native images will be generated.
+            </summary>
+        </member>
+        <member name="F:WixSharp.NativeImage.Priority">
+            <summary>
+            Sets the priority of generating the native images for this assembly.This attribute's value must be one of the following:
+            0 - This is the highest priority, it means that image generation occurs syncronously during the setup process.This option will slow down setup performance.
+            1 - This will queue image generation to the NGen service to occur immediately.This option will slow down setup performance.
+            2 - This will queue image generation to the NGen service to occur after all priority 1 assemblies have completed.This option will slow down setup performance.
+            3 - This is the lowest priority, it will queue image generation to occur when the machine is idle.This option should not slow down setup performance. This is the default value.
+            </summary>
+        </member>
+        <member name="F:WixSharp.NativeImage.AppBaseDirectory">
+            <summary>
+            The directory to use for locating dependent assemblies. For DLL assemblies and assemblies installed to the Global Assembly Cache (GAC), this attribute should be set to the directory of the application which loads this assembly. For EXE assemblies, this attribute does not need to be set because NGen will use the directory of the assembly file by default.
+            <para></para>
+            <para>
+            The value can be in the form of a directory identifier, or a formatted string that resolves to either a directory identifier or a full path to a directory.
+            </para>
+            </summary>
+        </member>
+        <member name="F:WixSharp.NativeImage.AssemblyApplication">
+            <summary>
+            The application which will load this assembly. For DLL assemblies which are loaded via reflection, this attribute should be set to indicate the application which will load this assembly. The configuration of the application (usually specified via an exe.config file) will be used to determine how to resolve dependencies for this assembly.
+            <para>
+            The value can be in the form of a file identifier, or a formatted string that resolves to either a file identifier or a full path to a file.
+            </para>
+            <para>
+            When a shared component is loaded at run time, using the Load method, the application's configuration file determines the dependencies that are loaded for the shared component — for example, the version of a dependency that is loaded. This attribute gives guidance on which dependencies would be loaded at run time in order to figure out which dependency assemblies will also need to have native images generated (assuming the Dependency attribute is not set to "no").
+            </para>
+            <para>
+            This attribute cannot be set if the AssemblyApplication attribute is set on the parent File element (please note that these attributes both refer to the same application assembly but do very different things: specifiying File/@AssemblyApplication will force an assembly to install to a private location next to the indicated application, whereas this AssemblyApplication attribute will be used to help resolve dependent assemblies while generating native images for this assembly).
+            </para>
+            </summary>
+        </member>
+        <member name="F:WixSharp.NativeImage.Debug">
+            <summary>
+            Set to "true" to generate native images that can be used under a debugger. The default value is "false".
+            </summary>
+        </member>
+        <member name="F:WixSharp.NativeImage.Profile">
+            <summary>
+            Set to "false" to generate native images that can be used under a profiler. The default value is "false".
+            </summary>
+        </member>
+        <member name="M:WixSharp.NativeImage.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
         <member name="T:WixSharp.EventSource">
              <summary>
              Defines Event source for windows Event Log service.
@@ -2475,7 +2571,7 @@
                          EventMessageFile = @"%SystemRoot%\Microsoft.NET\Framework\v2.0.50727\EventLogMessages.dll"
                      },
                      ...
-                     
+            
              project.BuildMsi();
              </code>
              </example>
@@ -2506,7 +2602,7 @@
                          EventMessageFile = @"%SystemRoot%\Microsoft.NET\Framework\v2.0.50727\EventLogMessages.dll"
                      },
                      ...
-                     
+            
              project.BuildMsi();
              </code>
              </example>
@@ -2520,8 +2616,8 @@
         </member>
         <member name="T:WixSharp.FirewallException">
             <summary>
-            Registers an exception for a program or a specific port and protocol in the Windows Firewall on 
-            Windows XP SP2, Windows Server 2003 SP1, and later. 
+            Registers an exception for a program or a specific port and protocol in the Windows Firewall on
+            Windows XP SP2, Windows Server 2003 SP1, and later.
             </summary>
             <remarks>
             FirewallException is a Wix# representation of WiX FirewallException Element (Firewall Extension)
@@ -2530,11 +2626,11 @@
             <code>
             var project =
                 new Project("MyProduct",
-                    new Dir(@"%ProgramFiles%\My Company\My Product", 
-                        new File(@"Files\Bin\MyApp.exe", 
-                            new FirewallException("MyApp") 
-                            { 
-                                RemoteAddress = "127.0.0.1, 127.0.0.2, 127.0.0.3".Split(',') 
+                    new Dir(@"%ProgramFiles%\My Company\My Product",
+                        new File(@"Files\Bin\MyApp.exe",
+                            new FirewallException("MyApp")
+                            {
+                                RemoteAddress = "127.0.0.1, 127.0.0.2, 127.0.0.3".Split(',')
                             }
                             ...
             </code>
@@ -2548,14 +2644,14 @@
         <member name="F:WixSharp.FirewallException.File">
             <summary>
             Identifier of a file to be granted access to all incoming ports and protocols. If you use File, you cannot also use Program.
-            If you use File and also Port or Protocol in the same FirewallException element, 
-            the exception will fail to install on Windows XP and Windows Server 2003. IgnoreFailure="yes" can be used to ignore the resulting failure, 
+            If you use File and also Port or Protocol in the same FirewallException element,
+            the exception will fail to install on Windows XP and Windows Server 2003. IgnoreFailure="yes" can be used to ignore the resulting failure,
             but the exception will not be added.
             </summary>
         </member>
         <member name="F:WixSharp.FirewallException.IgnoreFailure">
             <summary>
-            If "true", failures to register this firewall exception will be silently ignored. If "false" (the default), 
+            If "true", failures to register this firewall exception will be silently ignored. If "false" (the default),
             failures will cause rollback.
             </summary>
         </member>
@@ -2566,9 +2662,9 @@
         </member>
         <member name="F:WixSharp.FirewallException.Port">
             <summary>
-            Port to allow through the firewall for this exception. 
-            If you use Port and also File or Program in the same FirewallException element, the exception will fail to 
-            install on Windows XP and Windows Server 2003. IgnoreFailure="yes" can be used to ignore the resulting failure, 
+            Port to allow through the firewall for this exception.
+            If you use Port and also File or Program in the same FirewallException element, the exception will fail to
+            install on Windows XP and Windows Server 2003. IgnoreFailure="yes" can be used to ignore the resulting failure,
             but the exception will not be added.
             </summary>
         </member>
@@ -2588,15 +2684,15 @@
             Path to a target program to be granted access to all incoming ports and protocols. Note that this is a formatted
             field, so you can use [#fileId] syntax to refer to a file being installed. If you use Program, you cannot also use File.
             If you use Program and also Port or Protocol in the same FirewallException element, the exception will fail to install
-            on Windows XP and Windows Server 2003. IgnoreFailure="yes" can be used to ignore the resulting failure, but the 
+            on Windows XP and Windows Server 2003. IgnoreFailure="yes" can be used to ignore the resulting failure, but the
             exception will not be added.
             </summary>
         </member>
         <member name="F:WixSharp.FirewallException.Protocol">
             <summary>
             IP protocol used for this firewall exception. If Port is defined, "tcp" is assumed if the protocol is not specified.
-            <para>If you use Protocol and also File or Program in the same FirewallException element, the exception will fail to 
-            install on Windows XP and Windows Server 2003. IgnoreFailure="yes" can be used to ignore the resulting failure, but 
+            <para>If you use Protocol and also File or Program in the same FirewallException element, the exception will fail to
+            install on Windows XP and Windows Server 2003. IgnoreFailure="yes" can be used to ignore the resulting failure, but
             the exception will not be added.This attribute's value must be one of the following:
             </para>
             <list type="bullet">
@@ -2607,9 +2703,9 @@
         </member>
         <member name="F:WixSharp.FirewallException.Scope">
             <summary>
-            The scope of this firewall exception, which indicates whether incoming connections can come from any computer 
-            including those on the Internet or only those on the local network subnet. To more precisely specify allowed remote 
-            address, specify a custom scope using RemoteAddress child elements. This attribute's value must be one of the 
+            The scope of this firewall exception, which indicates whether incoming connections can come from any computer
+            including those on the Internet or only those on the local network subnet. To more precisely specify allowed remote
+            address, specify a custom scope using RemoteAddress child elements. This attribute's value must be one of the
             following:
             <list type="bullet">
             <item><description>any</description></item>
@@ -2619,8 +2715,8 @@
         </member>
         <member name="F:WixSharp.FirewallException.RemoteAddress">
             <summary>
-            A remote address to which the port or program can listen. Address formats vary based on the version of Windows and 
-            Windows Firewall the program is being installed on. For Windows XP SP2 and Windows Server 2003 SP1, see 
+            A remote address to which the port or program can listen. Address formats vary based on the version of Windows and
+            Windows Firewall the program is being installed on. For Windows XP SP2 and Windows Server 2003 SP1, see
             RemoteAddresses Property. For Windows Vista and Windows Server 2008, see RemoteAddresses Property.
             </summary>
         </member>
@@ -2647,11 +2743,6 @@
             </summary>
             <param name="id">The id.</param>
             <param name="name">The name.</param>
-        </member>
-        <member name="F:WixSharp.FirewallException.Feature">
-            <summary>
-            <see cref="F:WixSharp.FirewallException.Feature"></see> the FirewallException belongs to.
-            </summary>
         </member>
         <member name="M:WixSharp.FirewallException.ToXml">
             <summary>
@@ -3115,21 +3206,21 @@
         <member name="T:WixSharp.ODBCDataSource">
              <summary>
              Represents an ODBCDataSource to be registered.
-             
+            
             <example>The following is an example of using ODBCDataSource.
             <code>
-             var project = 
+             var project =
                  new Project("My Product",
-                 
+            
                      new Dir(@"%ProgramFiles%\My Company\My Product",
                      ...
-                     
+            
                          new ODBCDataSource("DsnName", "SQL Server", true, true,
                              new Property("Database", "MyDb"),
                              new Property("Server", "MyServer")),
-                             
+            
                      ...
-                     
+            
              Compiler.BuildMsi(project);
              </code>
              </example>
@@ -3141,34 +3232,29 @@
             </summary>
         </member>
         <member name="M:WixSharp.ODBCDataSource.#ctor(System.String,System.String,System.Boolean,System.Boolean,WixSharp.WixEntity[])">
-            <summary>
-            Creates instance of the <see cref="T:WixSharp.ODBCDataSource"></see> class with properties initialized with specified parameters.
-            </summary>
-            <param name="name">The name with which the odbc datasource is registered</param>
-            <param name="driverName">The odbc driver named</param>
-            <param name="keyPath">a boolean value indicating if the element is a KeyPath or not</param>
-            <param name="perMachine">a boolean value to set machine or user level registration of the data source</param>
-            <param name="items">Optional parameters defining properties for dsn registration.
-            These are driver specific</param>
+             <summary>
+             Creates instance of the <see cref="T:WixSharp.ODBCDataSource"></see> class with properties initialized with specified parameters.
+             </summary>
+             <param name="name">The name with which the odbc datasource is registered</param>
+             <param name="driverName">The odbc driver named</param>
+             <param name="keyPath">a boolean value indicating if the element is a KeyPath or not</param>
+             <param name="perMachine">a boolean value to set machine or user level registration of the data source</param>
+             <param name="items">Optional parameters defining properties for dsn registration.
+             These are driver specific</param>
             
         </member>
         <member name="M:WixSharp.ODBCDataSource.#ctor(WixSharp.Feature,System.String,System.String,System.Boolean,System.Boolean,WixSharp.WixEntity[])">
-            <summary>
-            Creates instance of the <see cref="T:WixSharp.ODBCDataSource"></see> class with properties initialized with specified parameters.
-            </summary>
-            <param name="feature">The feature the datasource will be added to</param>
-            <param name="name">The name with which the odbc datasource is registered</param>
-            <param name="driverName">The odbc driver named</param>
-            <param name="keyPath">a boolean value indicating if the element is a KeyPath or not</param>
-            <param name="perMachine">a boolean value to set machine or user level registration of the data source</param>
-            <param name="items">Optional parameters defining properties for dsn registration.
-            These are driver specific</param>
+             <summary>
+             Creates instance of the <see cref="T:WixSharp.ODBCDataSource"></see> class with properties initialized with specified parameters.
+             </summary>
+             <param name="feature">The feature the datasource will be added to</param>
+             <param name="name">The name with which the odbc datasource is registered</param>
+             <param name="driverName">The odbc driver named</param>
+             <param name="keyPath">a boolean value indicating if the element is a KeyPath or not</param>
+             <param name="perMachine">a boolean value to set machine or user level registration of the data source</param>
+             <param name="items">Optional parameters defining properties for dsn registration.
+             These are driver specific</param>
             
-        </member>
-        <member name="F:WixSharp.ODBCDataSource.Feature">
-            <summary>
-            <see cref="F:WixSharp.ODBCDataSource.Feature"></see> the file belongs to.
-            </summary>
         </member>
         <member name="P:WixSharp.ODBCDataSource.DriverName">
             <summary>
@@ -4109,11 +4195,41 @@
         </member>
         <member name="M:WixSharp.Extensions.PathChangeDirectory(System.String,System.String)">
             <summary>
-            The change directory of the file path.
+            The change the directory of the file path.
             </summary>
             <param name="path">The path.</param>
-            <param name="newDir">The new dir.</param>
+            <param name="newDir">The new directory.</param>
             <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.PathChangeFileName(System.String,System.String)">
+            <summary>
+            The change the file name of the file path.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="newFileName">The new file name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.PathJoin(System.String,System.String[])">
+             <summary>
+            
+             </summary>
+             <param name="path"></param>
+             <param name="items"></param>
+             <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.PathGetDirName(System.String)">
+            <summary>
+            Identical to <see cref="M:System.IO.Path.GetDirectoryName(System.String)"/>. It is useful for Wix# consuming code as it allows avoiding
+            "using System.IO;" directive, which interferes with Wix# types.
+            </summary>
+            <param name="path">The path.</param>
+        </member>
+        <member name="M:WixSharp.Extensions.PathGetFileName(System.String)">
+            <summary>
+            Identical to <see cref="M:System.IO.Path.GetFileName(System.String)"/>. It is useful for Wix# consuming code as it allows avoiding
+            "using System.IO;" directive, which interferes with Wix# types.
+            </summary>
+            <param name="path">The path.</param>
         </member>
         <member name="M:WixSharp.Extensions.PathChangeExtension(System.String,System.String)">
             <summary>
@@ -4776,11 +4892,6 @@
             <param name="dbOptions">The database options.</param>
             <param name="items">The items.</param>
         </member>
-        <member name="P:WixSharp.SqlDatabase.Feature">
-            <summary>
-            <see cref="P:WixSharp.SqlDatabase.Feature"></see> the SqlDatabase belongs to.
-            </summary>
-        </member>
         <member name="F:WixSharp.SqlDatabase.SqlScripts">
             <summary>
             The SQL scripts
@@ -4943,14 +5054,6 @@
             <param name="sql"></param>
             <param name="rollbackOptions"></param>
         </member>
-        <member name="P:WixSharp.SqlString.Feature">
-            <summary>
-            <see cref="P:WixSharp.SqlString.Feature"></see> the SqlString belongs to.
-            </summary>
-            <value>
-            The feature.
-            </value>
-        </member>
         <member name="P:WixSharp.SqlString.ContinueOnError">
             <summary>
             Maps to the ContinueOnError property of SqlString
@@ -5079,11 +5182,6 @@
             <param name="feature"></param>
             <param name="binaryKey"></param>
             <param name="rollbackOptions"></param>
-        </member>
-        <member name="P:WixSharp.SqlScript.Feature">
-            <summary>
-            Gets or sets the feature the SqlScript belongs to.
-            </summary>
         </member>
         <member name="P:WixSharp.SqlScript.BinaryKey">
             <summary>
@@ -5278,11 +5376,6 @@
             <param name="feature">The feature.</param>
             <param name="name">The name.</param>
             <param name="domain">The domain.</param>
-        </member>
-        <member name="F:WixSharp.User.Feature">
-            <summary>
-            <see cref="F:WixSharp.User.Feature"></see> the User belongs to.
-            </summary>
         </member>
         <member name="F:WixSharp.User.WixIncludeInComponent">
             <summary>
@@ -5560,8 +5653,8 @@
         </member>
         <member name="F:WixSharp.WixProject.LightOptions">
             <summary>
-            WiX linker <c>Light.exe</c> options.
-            <para>The default value is "-sw1076 -sw1079" (disable warning 1076 and 1079).</para>
+            WiX linker <c>Light.exe</c> options (e.g. -sice:ICE30).
+            <para>The default value is "-sw1076 -sw1079" (disable warning 1076 and 1079). </para>
             </summary>
         </member>
         <member name="F:WixSharp.WixProject.CandleOptions">
@@ -6490,7 +6583,7 @@
              </summary>
             <example>The following is an example of associating file extension ".my" with installed application MyViewer.exe.
             <code>
-             var project = 
+             var project =
                  new Project("My Product",
                      new Dir(@"%ProgramFiles%\My Company\My Product",
                          new Dir(@"Notepad",
@@ -6499,7 +6592,7 @@
                      new EnvironmentVariable("MYPRODUCT_DIR", "[INSTALLDIR]"),
                      new EnvironmentVariable("PATH", "[INSTALLDIR]") { Part = EnvVarPart.last });
                      ...
-                     
+            
              Compiler.BuildMsi(project);
              </code>
              </example>
@@ -6523,7 +6616,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.EnvironmentVariable"/> class.
             </summary>
-            <param name="feature"><see cref="F:WixSharp.EnvironmentVariable.Feature"></see> the environment variable should be included in.</param>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the environment variable should be included in.</param>
             <param name="name">The name of the environment variable.</param>
             <param name="value">The value of the environment variable.</param>
         </member>
@@ -6532,13 +6625,13 @@
             Initializes a new instance of the <see cref="T:WixSharp.EnvironmentVariable"/> class.
             </summary>
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.EnvironmentVariable"/> instance.</param>
-            <param name="feature"><see cref="F:WixSharp.EnvironmentVariable.Feature"></see> the environment variable should be included in.</param>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the environment variable should be included in.</param>
             <param name="name">The name.</param>
             <param name="value">The value.</param>
         </member>
         <member name="F:WixSharp.EnvironmentVariable.System">
             <summary>
-            Specifies that the environment variable should be added to the system environment space. The default is 'no' which 
+            Specifies that the environment variable should be added to the system environment space. The default is 'no' which
             indicates the environment variable is added to the user environment space.
             </summary>
         </member>
@@ -6549,13 +6642,8 @@
         </member>
         <member name="F:WixSharp.EnvironmentVariable.Value">
             <summary>
-            The value to set into the environment variable. If this attribute is not set, the environment variable is removed 
+            The value to set into the environment variable. If this attribute is not set, the environment variable is removed
             during installation if it exists on the machine.
-            </summary>
-        </member>
-        <member name="F:WixSharp.EnvironmentVariable.Feature">
-            <summary>
-            <see cref="F:WixSharp.EnvironmentVariable.Feature"></see> the environment variable belongs to.
             </summary>
         </member>
         <member name="F:WixSharp.EnvironmentVariable.Action">
@@ -6570,7 +6658,7 @@
         </member>
         <member name="F:WixSharp.EnvironmentVariable.Condition">
             <summary>
-            Defines the installation <see cref="F:WixSharp.EnvironmentVariable.Condition"/>, which is to be checked during the installation to 
+            Defines the installation <see cref="F:WixSharp.EnvironmentVariable.Condition"/>, which is to be checked during the installation to
             determine if the registry value should be created on the target system.
             </summary>
         </member>
@@ -7527,21 +7615,21 @@
              <summary>
              Defines MergeModule to be embedded into MSI.
              <para>
-             Note that WiX syntax allows Merge element to belong to the Product element. However the documentation (WiX v3.0.4917.0) explicitly requires 
+             Note that WiX syntax allows Merge element to belong to the Product element. However the documentation (WiX v3.0.4917.0) explicitly requires
              it to be nested inside of the Directory element (even if there is no neither technical nor logical reason for this). Thus Wix# simply follows
-             the WiX convention. 
+             the WiX convention.
              </para>
              </summary>
-             
+            
             <example>The following is an example of using <c>MyMergeModule.msm</c> file.
             <code>
-             var project = 
+             var project =
                 new Project("MyMergeModule",
                     new Dir(@"%ProgramFiles%\My Company",
                         new Merge("MyMergeModule.msm")));,
-                             
+            
                      ...
-                     
+            
              Compiler.BuildMsi(project);
              </code>
              </example>
@@ -7561,22 +7649,17 @@
             <summary>
             Creates instance of the <see cref="T:WixSharp.Merge"></see> class with properties initialized with specified parameters.
             </summary>
-            <param name="feature"><see cref="F:WixSharp.Merge.Feature"></see> the msm should be included in.</param>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the msm should be included in.</param>
             <param name="sourceFile">Relative path to the msm file to be taken for building the MSI.</param>
         </member>
         <member name="F:WixSharp.Merge.FileCompression">
             <summary>
-            Specifies if the files in the merge module should be compressed. 
+            Specifies if the files in the merge module should be compressed.
             </summary>
         </member>
         <member name="F:WixSharp.Merge.SourceFile">
             <summary>
             Path to the merge module file.
-            </summary>
-        </member>
-        <member name="F:WixSharp.Merge.Feature">
-            <summary>
-            <see cref="F:WixSharp.Merge.Feature"></see> the merge module belongs to.
             </summary>
         </member>
         <member name="T:WixSharp.NativeBootstrapper">
@@ -8160,7 +8243,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.Dir"/> class with properties/fields initialized with specified parameters
             </summary>
-            <param name="feature"><see cref="F:WixSharp.Dir.Feature"></see> the directory should be included in.</param>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the directory should be included in.</param>
             <param name="targetPath">The name of the directory. Note if the directory is a root installation directory <c>targetPath</c> must
             be specified as a full path. However if the directory is a nested installation directory the name must be a directory name only.</param>
             <param name="items">Any <see cref="T:WixSharp.WixEntity"/> which can be contained by directory (e.g. file, subdirectory).</param>
@@ -8170,7 +8253,7 @@
             Initializes a new instance of the <see cref="T:WixSharp.Dir"/> class with properties/fields initialized with specified parameters.
             </summary>
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.Dir"/> instance.</param>
-            <param name="feature"><see cref="F:WixSharp.Dir.Feature"></see> the directory should be included in.</param>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the directory should be included in.</param>
             <param name="targetPath">The name of the directory. Note if the directory is a root installation directory <c>targetPath</c> must
             be specified as a full path. However if the directory is a nested installation directory the name must be a directory name only.</param>
             <param name="items">Any <see cref="T:WixSharp.WixEntity"/> which can be contained by directory (e.g. file, subdirectory).</param>
@@ -8234,11 +8317,6 @@
         <member name="F:WixSharp.Dir.Permissions">
             <summary>
             Collection of directory permissions to be applied to this directory.
-            </summary>
-        </member>
-        <member name="F:WixSharp.Dir.Feature">
-            <summary>
-            <see cref="F:WixSharp.Dir.Feature"></see> the directory belongs to.
             </summary>
         </member>
         <member name="P:WixSharp.Dir.IsInstallDir">
@@ -8308,7 +8386,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.Files"/> class with properties/fields initialized with specified parameters.
             </summary>
-            <param name="feature"><see cref="F:WixSharp.Files.Feature"></see> the directory files should be included in.</param>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the directory files should be included in.</param>
             <param name="sourcePath">The relative path to source directory. It must include wildcard pattern for files to be included
             into MSI (e.g. <c>new Files(@"Release\Bin\*.*")</c>).</param>
         </member>
@@ -8316,16 +8394,11 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.Files"/> class with properties/fields initialized with specified parameters.
             </summary>
-            <param name="feature"><see cref="F:WixSharp.Files.Feature"></see> the directory files should be included in.</param>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the directory files should be included in.</param>
             <param name="sourcePath">The relative path to source directory. It must include wildcard pattern for files to be included
             into MSI (e.g. <c>new Files(@"Release\Bin\*.*")</c>).</param>
             <param name="filter">Filter to be applied for every file to be evaluated for the inclusion into MSI.
             (e.g. <c>new Files(typical, @"Release\Bin\*.dll", f => !f.EndsWith(".Test.dll"))</c>).</param>
-        </member>
-        <member name="F:WixSharp.Files.Feature">
-            <summary>
-            <see cref="F:WixSharp.Files.Feature"></see> the files belongs to.
-            </summary>
         </member>
         <member name="F:WixSharp.Files.Directory">
             <summary>
@@ -8343,13 +8416,14 @@
             <para>Default value is <c>*.*</c>.</para>
             </summary>
         </member>
-        <member name="M:WixSharp.Files.GetAllItems(System.String)">
+        <member name="M:WixSharp.Files.GetAllItems(System.String,WixSharp.Dir)">
             <summary>
             Analyses <paramref name="baseDirectory"/> and returns all files (including subdirectories) matching <see cref="F:WixSharp.Files.IncludeMask"/>.
             </summary>
             <param name="baseDirectory">The base directory for file analysis. It is used in conjunction with
             relative <see cref="F:WixSharp.Files.Directory"/>. Though <see cref="F:WixSharp.Files.Directory"/> takes precedence if it is an absolute path.</param>
             <returns>Array of <see cref="T:WixSharp.WixEntity"/> instances, which are either <see cref="T:WixSharp.File"/> or/and <see cref="T:WixSharp.Dir"/> objects.</returns>
+            <param name="parentWixDir">Parent Wix# directory</param>
         </member>
         <member name="T:WixSharp.SerializingExtensions">
             <summary>
@@ -8672,28 +8746,28 @@
             <summary>
             Creates instance of the <see cref="T:WixSharp.File"></see> class with properties initialized with specified parameters.
             </summary>
-            <param name="feature"><see cref="F:WixSharp.File.Feature"></see> the file should be included in.</param>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the file should be included in.</param>
             <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the file to be created
-            during the installation.</param>
+            <param name="items">Optional parameters defining additional members (e.g. <see cref="T:WixSharp.FileShortcut"/> shortcuts
+            to the file to be created during the installation).</param>
         </member>
         <member name="M:WixSharp.File.#ctor(WixSharp.Id,WixSharp.Feature,System.String,WixSharp.WixEntity[])">
             <summary>
             Creates instance of the <see cref="T:WixSharp.File"></see> class with properties initialized with specified parameters.
             </summary>
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.File"/> instance.</param>
-            <param name="feature"><see cref="F:WixSharp.File.Feature"></see> the file should be included in.</param>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the file should be included in.</param>
             <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the file to be created
-            during the installation.</param>
+            <param name="items">Optional parameters defining additional members (e.g. <see cref="T:WixSharp.FileShortcut"/> shortcuts
+            to the file to be created during the installation).</param>
         </member>
         <member name="M:WixSharp.File.#ctor(System.String,WixSharp.WixEntity[])">
             <summary>
             Creates instance of the <see cref="T:WixSharp.File"></see> class with properties initialized with specified parameters.
             </summary>
             <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the file to be created
-            during the installation.</param>
+            <param name="items">Optional parameters defining additional members (e.g. <see cref="T:WixSharp.FileShortcut"/> shortcuts
+            to the file to be created during the installation).</param>
         </member>
         <member name="M:WixSharp.File.#ctor(WixSharp.Id,System.String,WixSharp.WixEntity[])">
             <summary>
@@ -8701,8 +8775,8 @@
             </summary>
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.File"/> instance.</param>
             <param name="sourcePath">Relative path to the file to be taken for building the MSI.</param>
-            <param name="items">Optional <see cref="T:WixSharp.FileShortcut"/> parameters defining shortcuts to the file to be created
-            during the installation.</param>
+            <param name="items">Optional parameters defining additional members (e.g. <see cref="T:WixSharp.FileShortcut"/> shortcuts
+            to the file to be created during the installation).</param>
         </member>
         <member name="F:WixSharp.File.Associations">
             <summary>
@@ -8731,11 +8805,6 @@
             Collection of the <see cref="T:WixSharp.Shortcut"/>s associated with the file.
             </summary>
         </member>
-        <member name="F:WixSharp.File.Feature">
-            <summary>
-            <see cref="F:WixSharp.File.Feature"></see> the file belongs to.
-            </summary>
-        </member>
         <member name="F:WixSharp.File.Condition">
             <summary>
             Defines the installation <see cref="F:WixSharp.File.Condition"/>, which is to be checked during the installation to
@@ -8750,6 +8819,11 @@
         <member name="F:WixSharp.File.FirewallExceptions">
             <summary>
             Collection of <see cref="T:WixSharp.FirewallException" /> to be applied to the file.
+            </summary>
+        </member>
+        <member name="F:WixSharp.File.GenericItems">
+            <summary>
+            Collection of <see cref="T:WixSharp.IGenericEntity" /> to be applied to the file.
             </summary>
         </member>
         <member name="P:WixSharp.File.NeverOverwrite">
@@ -8811,7 +8885,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.DirFiles"/> class with properties/fields initialized with specified parameters.
             </summary>
-            <param name="feature"><see cref="F:WixSharp.DirFiles.Feature"></see> the directory files should be included in.</param>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the directory files should be included in.</param>
             <param name="sourcePath">The relative path to directory source directory. It must include wildcard pattern for files to be included
             into MSI (e.g. <c>new DirFiles(@"Release\Bin\*.*")</c>).</param>
         </member>
@@ -8819,16 +8893,11 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.DirFiles"/> class with properties/fields initialized with specified parameters.
             </summary>
-            <param name="feature"><see cref="F:WixSharp.DirFiles.Feature"></see> the directory files should be included in.</param>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the directory files should be included in.</param>
             <param name="sourcePath">The relative path to directory source directory. It must include wildcard pattern for files to be included
             into MSI (e.g. <c>new DirFiles(@"Release\Bin\*.*")</c>).</param>
             <param name="filter">Filter to be applied for every file to be evaluated for the inclusion into MSI.
             (e.g. <c>new Files(typical, @"Release\Bin\*.dll", f => !f.EndsWith(".Test.dll"))</c>).</param>
-        </member>
-        <member name="F:WixSharp.DirFiles.Feature">
-            <summary>
-            <see cref="F:WixSharp.DirFiles.Feature"></see> the directory files belong to.
-            </summary>
         </member>
         <member name="F:WixSharp.DirFiles.Directory">
             <summary>
@@ -10127,19 +10196,19 @@
         </member>
         <member name="T:WixSharp.RegFile">
              <summary>
-             Defines the registry file (*.reg) containing the entries to be installed. 
+             Defines the registry file (*.reg) containing the entries to be installed.
              <para>
              Compiler uses the data from this class to call <see cref="T:WixSharp.CommonTasks.ImportRegFile"/>
              internally and inject imported <see cref="T:WixSharp.RegValue"/>s into the <see cref="T:WixSharp.Project"/>.
-             </para>  
+             </para>
              </summary>
-             <example>The following sample demonstrates how to install Registry entries imported from 
+             <example>The following sample demonstrates how to install Registry entries imported from
              the reg file:
-             <code> 
-             var project = 
-                 new Project("MyProduct", 
-                     new Dir(@"%ProgramFiles%\My Company\My Product", 
-                         new File(@"readme.txt")), 
+             <code>
+             var project =
+                 new Project("MyProduct",
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+                         new File(@"readme.txt")),
                      new RegFile("MyProduct.reg"),
                      ...
             
@@ -10167,31 +10236,26 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegFile"/> class.
             </summary>
-            <param name="feature"><see cref="F:WixSharp.RegFile.Feature"></see> the registry value should be included in.</param>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the registry value should be included in.</param>
             <param name="path">The path.</param>
-        </member>
-        <member name="F:WixSharp.RegFile.Feature">
-            <summary>
-            <see cref="F:WixSharp.RegFile.Feature"></see> the registry value belongs to.
-            </summary>
         </member>
         <member name="T:WixSharp.RegValue">
              <summary>
              Defines registry value to be installed.
              </summary>
-            <example>The following is a complete example of the setup for installing a file and two 
+            <example>The following is a complete example of the setup for installing a file and two
             registry values (string value <c>Message</c> and integer value <c>Count</c> ).
             <code>
             static public void Main(string[] args)
             {
-                 var project = 
+                 var project =
                      new Project("MyProduct",
                          new Dir(@"%ProgramFiles%\My Company\My Product",
                              new File(@"readme.txt")),
-                     
+            
                          new RegValue(RegistryHive.LocalMachine, "Software\\My Company\\My Product", "Message", "Hello"),
                          new RegValue(RegistryHive.LocalMachine, "Software\\My Company\\My Product", "Count", 777));
-                         
+            
                  Compiler.BuildMsi(project);
              }
              </code>
@@ -10223,7 +10287,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegValue"/> class with properties initialized with specified parameters.
             </summary>
-            <param name="feature"><see cref="F:WixSharp.RegValue.Feature"></see> the registry value should be included in.</param>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the registry value should be included in.</param>
             <param name="root">The registry hive name.</param>
             <param name="key">The registry key name.</param>
             <param name="name">The registry entry name.</param>
@@ -10253,7 +10317,7 @@
             Initializes a new instance of the <see cref="T:WixSharp.RegValue"/> class with properties initialized with specified parameters.
             </summary>
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.RegValue"/> instance.</param>
-            <param name="feature"><see cref="F:WixSharp.RegValue.Feature"></see> the registry value should be included in.</param>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the registry value should be included in.</param>
             <param name="root">The registry hive name.</param>
             <param name="key">The registry key name.</param>
             <param name="name">The registry entry name.</param>
@@ -10276,21 +10340,16 @@
             The registry entry value.
             </summary>
         </member>
-        <member name="F:WixSharp.RegValue.Feature">
-            <summary>
-            <see cref="F:WixSharp.RegValue.Feature"></see> the registry value belongs to.
-            </summary>
-        </member>
         <member name="F:WixSharp.RegValue.Condition">
             <summary>
-            Defines the installation <see cref="F:WixSharp.RegValue.Condition"/>, which is to be checked during the installation to 
+            Defines the installation <see cref="F:WixSharp.RegValue.Condition"/>, which is to be checked during the installation to
             determine if the registry value should be created on the target system.
             </summary>
         </member>
         <member name="F:WixSharp.RegValue.Win64">
             <summary>
-            Facilitates the installation of packages that include both 32-bit and 64-bit components. 
-            Set this attribute to 'yes' to mark the corresponding RegValue as a 64-bit component. 
+            Facilitates the installation of packages that include both 32-bit and 64-bit components.
+            Set this attribute to 'yes' to mark the corresponding RegValue as a 64-bit component.
             </summary>
         </member>
         <member name="F:WixSharp.RegValue.RegistryKeyAction">
@@ -10933,11 +10992,6 @@
             <summary>
             The directory where the shortcut should be installed.
             <para>This value is a processed only for shortcuts which belong to the <see cref="T:WixSharp.File"/> element.</para>
-            </summary>
-        </member>
-        <member name="F:WixSharp.Shortcut.Feature">
-            <summary>
-            <see cref="F:WixSharp.Shortcut.Feature"></see> the shortcut belongs to.
             </summary>
         </member>
         <member name="F:WixSharp.Shortcut.WorkingDirectory">
@@ -12036,6 +12090,42 @@
             </code>
             </example>
         </member>
+        <member name="F:WixSharp.WixObject.Feature">
+            <summary>
+            <see cref="F:WixSharp.WixObject.Feature"></see> the Wix object belongs to. This member is processed only for the
+            WiX objects/elements that can be associated with the features (e.g. WebSite, FirewallException, ODBCDataSource, User,
+            EnvironmentVariable, Merge, Dir, RegFile, RegValue, Shortcut, SqlDatabase, SqlScript).
+            <remarks>
+            <para>
+            Wix# makes an emphasis on the main stream scenarios when an entity (e.g. File) belongs to a single feature.
+            And this member is to serve these scenarios via constructors or initializers.
+            </para>
+            However MSI/WiX allows the same component to be included into multiple features. If it is what your deployment logic dictates
+            then you need to use <see cref="F:WixSharp.WixObject.Features"/>.
+            </remarks>
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixObject.Features">
+            <summary>
+            The collection of <see cref="F:WixSharp.WixObject.Feature"></see>s the Wix object belongs to. This member is processed only for the
+            WiX objects/elements that can be associated with the features (e.g. WebSite, FirewallException, ODBCDataSource, User,
+            EnvironmentVariable, Merge, Dir, RegFile, RegValue, Shortcut, SqlDatabase).
+            <remarks>
+            Note, this member is convenient for scenarios where the same component is to be included into multiple features.
+            However, if the component is to be associated only with a single feature then <see cref="F:WixSharp.WixObject.Feature"/>
+            is a more convenient choice as it can be initialized either via constructors or object initializers.eature.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:WixSharp.WixObject.ActualFeatures">
+            <summary>
+            Gets the actual list of features associated with the Wix object/element. It is a combined
+            collection of <see cref="F:WixSharp.WixObject.Features"/> and <see cref="F:WixSharp.WixObject.Feature"/>.  union of the
+            </summary>
+            <value>
+            The actual features.
+            </value>
+        </member>
         <member name="T:WixSharp.Attributes">
             <summary>
             Alias for the <c>Dictionary&lt;string, string&gt; </c> type.
@@ -12080,15 +12170,13 @@
             <para>If the <see cref="P:WixSharp.WixEntity.Id"/> value is not specified explicitly by the user the Wix# compiler
             generates it automatically insuring its uniqueness.</para>
             <remarks>
-            <para>
              Note: The ID auto-generation is triggered on the first access (evaluation) and in order to make the id
              allocation deterministic the compiler resets ID generator just before the build starts. However if you
              accessing any auto-id before the Build*() is called you can it interferes with the ID auto generation and eventually
-             lead to the WiX ID duplications. To prevent this from happening either:\n"
-             - Avoid evaluating the auto-generated IDs values before the call to Build*()
-             - Set the IDs (to be evaluated) explicitly
-             - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";
-            </para>
+             lead to the WiX ID duplications. To prevent this from happening either:"
+             <para> - Avoid evaluating the auto-generated IDs values before the call to Build*()</para>
+             <para> - Set the IDs (to be evaluated) explicitly</para>
+             <para> - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";</para>
             </remarks>
             </summary>
             <value>The id.</value>
@@ -12393,7 +12481,7 @@
         <member name="T:WixSharp.InstallScope">
             <summary>
             Use this enum to specify the installation scope of this package: per-machine or per-user.
-            The enum values are mapped to the WiX InstallScope attribute of the Package element.  
+            The enum values are mapped to the WiX InstallScope attribute of the Package element.
             </summary>
         </member>
         <member name="F:WixSharp.InstallScope.perMachine">
@@ -12420,6 +12508,32 @@
              <summary>
             
              </summary>
+        </member>
+        <member name="T:WixSharp.NativeImagePlatform">
+            <summary>
+            Sets the platform(s) for which native images will be generated.
+            </summary>
+        </member>
+        <member name="M:WixSharp.NativeImagePlatform.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.NativeImagePlatform"/> class.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="F:WixSharp.NativeImagePlatform.x86">
+            <summary>
+            Attempt to generate native images only for the 32-bit version of the .NET Framework on the target machine. If the 32-bit version of the .NET Framework 2.0 or newer is not present on the target machine, native image custom actions will not be scheduled. This is the default value.
+            </summary>
+        </member>
+        <member name="F:WixSharp.NativeImagePlatform.x64">
+            <summary>
+            Attempt to generate native images only for the 64-bit version of the .NET Framework on the target machine. If a 64-bit version of the .NET Framework 2.0 or newer is not present on the target machine, native image custom actions will not be scheduled.
+            </summary>
+        </member>
+        <member name="F:WixSharp.NativeImagePlatform.all">
+            <summary>
+            Attempt to generate native images for the 32-bit and 64-bit versions of the .NET Framework on the target machine. If a version of the .NET Framework 2.0 or newer is not present on the target machine for a processor architecture, native image custom actions will not be scheduled for that processor architecture.
+            </summary>
         </member>
         <member name="T:WixSharp.Platform">
             <summary>
@@ -12658,22 +12772,22 @@
         </member>
         <member name="F:WixSharp.ProcessorArchitecture.msil">
             <summary>
-            The file is a .NET Framework assembly that is processor-neutral. 
+            The file is a .NET Framework assembly that is processor-neutral.
             </summary>
         </member>
         <member name="F:WixSharp.ProcessorArchitecture.x86">
             <summary>
-            The file is a .NET Framework assembly for the x86 processor. 
+            The file is a .NET Framework assembly for the x86 processor.
             </summary>
         </member>
         <member name="F:WixSharp.ProcessorArchitecture.x64">
             <summary>
-            The file is a .NET Framework assembly for the x64 processor. 
+            The file is a .NET Framework assembly for the x64 processor.
             </summary>
         </member>
         <member name="F:WixSharp.ProcessorArchitecture.ia64">
             <summary>
-            The file is a .NET Framework assembly for the ia64 processor. 
+            The file is a .NET Framework assembly for the ia64 processor.
             </summary>
         </member>
         <member name="T:WixSharp.DriverArchitecture">
@@ -12683,17 +12797,17 @@
         </member>
         <member name="F:WixSharp.DriverArchitecture.x86">
             <summary>
-            The driver is for the x86 processor. 
+            The driver is for the x86 processor.
             </summary>
         </member>
         <member name="F:WixSharp.DriverArchitecture.x64">
             <summary>
-            The driver is for the x64 processor. 
+            The driver is for the x64 processor.
             </summary>
         </member>
         <member name="F:WixSharp.DriverArchitecture.ia64">
             <summary>
-            The driver is for the ia64 processor. 
+            The driver is for the ia64 processor.
             </summary>
         </member>
         <member name="T:WixSharp.RegistryKeyAction">
@@ -12703,7 +12817,7 @@
         </member>
         <member name="F:WixSharp.RegistryKeyAction.create">
             <summary>
-            Creates the key, if absent, when the parent component is installed. 
+            Creates the key, if absent, when the parent component is installed.
             </summary>
         </member>
         <member name="F:WixSharp.RegistryKeyAction.createAndRemoveOnUninstall">
@@ -12713,7 +12827,7 @@
         </member>
         <member name="F:WixSharp.RegistryKeyAction.none">
             <summary>
-            Does nothing; this element is used merely in WiX authoring for organization and does nothing to the final output. 
+            Does nothing; this element is used merely in WiX authoring for organization and does nothing to the final output.
             </summary>
         </member>
         <member name="T:WixSharp.WixQuietExecAction">

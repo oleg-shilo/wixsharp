@@ -613,14 +613,14 @@ namespace WixSharp
             {
                 foreach (Files dirItems in dirList[iterator].FileCollections)
                     // in anticipation of issues#48
-                    //foreach (WixEntity item in dirItems.GetAllItems(SourceBaseDir, dirList[iterator]))
-                    foreach (WixEntity item in dirItems.GetAllItems(SourceBaseDir))
+                    //foreach (WixEntity item in dirItems.GetAllItems(SourceBaseDir))
+                    foreach (WixEntity item in dirItems.GetAllItems(SourceBaseDir, dirList[iterator]))
                         if (item is DirFiles)
                             dirList[iterator].DirFileCollections = dirList[iterator].DirFileCollections.Add(item as DirFiles);
 
                         // in anticipation of issues#48
-                        //else if (item is Dir && !dirList[iterator].Dirs.Contains(item))
-                        else if (item is Dir)
+                        //else if (item is Dir)
+                        else if (item is Dir && !dirList[iterator].Dirs.Contains(item))
                             dirList[iterator].Dirs = dirList[iterator].Dirs.Add(item as Dir);
 
                 foreach (Dir dir in dirList[iterator].Dirs)

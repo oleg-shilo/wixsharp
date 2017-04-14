@@ -122,11 +122,6 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// <see cref="Feature"></see> the files belongs to.
-        /// </summary>
-        public Feature Feature;
-
-        /// <summary>
         /// The relative path to source directory to search for files matching the <see cref="Files.IncludeMask"/>.
         /// </summary>
         public string Directory = "";
@@ -148,10 +143,10 @@ namespace WixSharp
         /// <param name="baseDirectory">The base directory for file analysis. It is used in conjunction with
         /// relative <see cref="Files.Directory"/>. Though <see cref="Files.Directory"/> takes precedence if it is an absolute path.</param>
         /// <returns>Array of <see cref="WixEntity"/> instances, which are either <see cref="File"/> or/and <see cref="Dir"/> objects.</returns>
+        /// <param name="parentWixDir">Parent Wix# directory</param>
         // in anticipation of issues#48
-        // <param name="parentWixDir">Parent Wix# directory</param>
-        //public WixEntity[] GetAllItems(string baseDirectory, Dir parentWixDir = null)
-        public WixEntity[] GetAllItems(string baseDirectory)
+        //public WixEntity[] GetAllItems(string baseDirectory)
+        public WixEntity[] GetAllItems(string baseDirectory, Dir parentWixDir = null)
         {
             if (IO.Path.IsPathRooted(Directory))
                 baseDirectory = Directory;
@@ -174,8 +169,8 @@ namespace WixSharp
                                         var dirName = IO.Path.GetFileName(subDirPath);
 
                                         // in anticipation of issues#48
-                                        //var subDir = parentDir.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true));
-                                        Dir subDir = null;
+                                        var subDir = parentDir.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true));
+                                        //Dir subDir = null;
 
                                         if (subDir == null)
                                             subDir = new Dir(dirName, new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
@@ -213,9 +208,9 @@ namespace WixSharp
                 var dirName = IO.Path.GetFileName(subDirPath);
 
                 // in anticipation of issues#48
-                //var subDir = parentWixDir?.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true));
+                var subDir = parentWixDir?.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true));
+                //Dir subDir = null;
 
-                Dir subDir = null;
                 if (subDir == null)
                     subDir = new Dir(dirName, new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
                     {

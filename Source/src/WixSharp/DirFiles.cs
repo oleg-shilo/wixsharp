@@ -115,11 +115,6 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// <see cref="Feature"></see> the directory files belong to.
-        /// </summary>
-        public Feature Feature;
-
-        /// <summary>
         /// The relative path from source directory to directory to lookup for files matching the <see cref="DirFiles.IncludeMask"/>.
         /// </summary>
         public string Directory = "";

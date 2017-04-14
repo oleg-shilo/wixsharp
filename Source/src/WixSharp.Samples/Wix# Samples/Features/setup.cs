@@ -29,22 +29,17 @@ class Script
                         new File(@"Files\Docs\Tutorial.txt")
                         {
                             Features = new[] { docsLight, tuts }
-                        }
-
-                        //new Files(docs, @"Files\test\*")
-                        //, new Files(tuts, @"Files\test\*")
-                        ),
+                        }),
                     new Dir(docs, "logdocs", new DirPermission("Everyone", GenericPermission.All)),
                     new Dir(tuts, "logtuts", new DirPermission("Everyone", GenericPermission.All))));
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.UI = WUI.WixUI_FeatureTree;
-        //project.LightOptions += "-sice:ICE30";
 
         project.DefaultFeature = binaries; //this line is optional
 
         project.PreserveTempFiles = true;
 
-        project.BuildMsiCmd();
+        project.BuildMsi();
     }
 }

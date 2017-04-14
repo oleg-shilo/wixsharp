@@ -440,14 +440,6 @@ namespace WixSharp
 
         #endregion Constructors
 
-        /// <summary>
-        /// <see cref="Feature"></see> the SqlString belongs to.
-        /// </summary>
-        /// <value>
-        /// The feature.
-        /// </value>
-        public Feature Feature { get; set; }
-
         #region Wix SqlString attributes
 
         /// <summary>
@@ -647,11 +639,6 @@ namespace WixSharp
         }
 
         #endregion Constructors
-
-        /// <summary>
-        /// Gets or sets the feature the SqlScript belongs to.
-        /// </summary>
-        public Feature Feature { get; set; }
 
         #region Wix SqlScript attributes
 
