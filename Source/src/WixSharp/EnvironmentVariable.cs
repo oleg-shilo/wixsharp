@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2015 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -24,7 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#endregion
+#endregion Licence...
 
 using System;
 using System.Collections.Generic;
@@ -32,13 +33,12 @@ using System.Xml.Linq;
 
 namespace WixSharp
 {
-
     /// <summary>
     /// Defines FileType association to be created for the file extension and the installed file/application (parent  <see cref="T:WixSharp.File"/>).
     /// </summary>
     ///<example>The following is an example of associating file extension ".my" with installed application MyViewer.exe.
     ///<code>
-    /// var project = 
+    /// var project =
     ///     new Project("My Product",
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
     ///             new Dir(@"Notepad",
@@ -47,7 +47,7 @@ namespace WixSharp
     ///         new EnvironmentVariable("MYPRODUCT_DIR", "[INSTALLDIR]"),
     ///         new EnvironmentVariable("PATH", "[INSTALLDIR]") { Part = EnvVarPart.last });
     ///         ...
-    ///         
+    ///
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
@@ -63,6 +63,7 @@ namespace WixSharp
             this.Name = name;
             this.Value = value;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EnvironmentVariable"/> class.
         /// </summary>
@@ -105,33 +106,34 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Specifies that the environment variable should be added to the system environment space. The default is 'no' which 
+        /// Specifies that the environment variable should be added to the system environment space. The default is 'no' which
         /// indicates the environment variable is added to the user environment space.
         /// </summary>
         public bool? System;
+
         /// <summary>
         /// Specifies that the environment variable should not be removed on uninstall.
         /// </summary>
         public bool? Permanent;
+
         /// <summary>
-        /// The value to set into the environment variable. If this attribute is not set, the environment variable is removed 
+        /// The value to set into the environment variable. If this attribute is not set, the environment variable is removed
         /// during installation if it exists on the machine.
         /// </summary>
         public string Value = null;
-        /// <summary>
-        /// <see cref="Feature"></see> the environment variable belongs to.
-        /// </summary>
-        public Feature Feature;
+
         /// <summary>
         /// Specifies whether the environmental variable should be created, set or removed when the parent component is installed. <see cref="T:WixSharp.EnvironmentVariable.Action"/>.
         /// </summary>
         public EnvVarAction Action = EnvVarAction.set;
+
         /// <summary>
         /// Indicates how value should be set.
         /// </summary>
         public EnvVarPart? Part;
+
         /// <summary>
-        /// Defines the installation <see cref="Condition"/>, which is to be checked during the installation to 
+        /// Defines the installation <see cref="Condition"/>, which is to be checked during the installation to
         /// determine if the registry value should be created on the target system.
         /// </summary>
         public Condition Condition;

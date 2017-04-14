@@ -91,8 +91,10 @@ public class EventSourceEx : WixEntity, IGenericEntity
 {
     [WixSharp.Xml]
     new public string Name;
+
     [WixSharp.Xml]
     public string Log;
+
     [WixSharp.Xml]
     public string EventMessageFile;
 
@@ -109,5 +111,3 @@ public class EventSourceEx : WixEntity, IGenericEntity
                .Add(this.ToXElement(util, "EventSource"));
     }
 }
-
-

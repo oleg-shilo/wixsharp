@@ -174,10 +174,10 @@ namespace WixSharp
                             throw new Exception("Invalid map entry", e);
                         }
                 }
-
             }
             return retval;
         }
+
         /// <summary>
         /// Adds the element to a given XML element. It is a Fluent version of <see cref="T:System.Xml.Linq.XElement.Add"/>.
         /// </summary>
@@ -233,6 +233,7 @@ namespace WixSharp
                .ForEach(f => obj.SetAttribute(f.Name, f.GetValue(src)));
             return obj;
         }
+
         /// <summary>
         /// Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue.
         /// </summary>
@@ -248,12 +249,12 @@ namespace WixSharp
             }
             else if (value is bool?)
             {
-                var attrValue = (bool?) value;
+                var attrValue = (bool?)value;
                 obj.SetAttributeValue(name, attrValue.ToNullOrYesNo());
             }
             else if (value is bool)
             {
-                var attrValue = (bool) value;
+                var attrValue = (bool)value;
                 obj.SetAttributeValue(name, attrValue.ToYesNo());
             }
             else
@@ -280,6 +281,7 @@ namespace WixSharp
                 obj.SetAttributeValue(pair.Key, pair.Value);
             return obj;
         }
+
         /// <summary>
         /// Adds the attributes to the to a given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
         /// </summary>
@@ -292,6 +294,7 @@ namespace WixSharp
                 obj.Add(item);
             return obj;
         }
+
         /// <summary>
         /// Adds the attributes to the to a given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
         /// </summary>
@@ -376,6 +379,7 @@ namespace WixSharp
 
             return null;
         }
+
         /// <summary>
         /// Copies attribute value from one <see cref="T:System.Xml.Linq.XElement"/> to another. If the attribute already exists, its value is modified.
         /// </summary>
@@ -428,7 +432,6 @@ namespace WixSharp
         /// <returns></returns>
         public static XDocument InjectWxs(this XDocument document, string wxsFile)
         {
-
             document.Root.Select("Product")
                          .Add(XDocument.Load(wxsFile)
                                        .Root.Select("Product").Elements());
@@ -497,6 +500,7 @@ namespace WixSharp
             }
             return hash.ToString().GetHashCode();
         }
+
         /// <summary>
         /// Copies attribute value from one <see cref="T:System.Xml.Linq.XElement"/> to another. If the attribute already exists, its value is modified.
         /// </summary>
@@ -516,6 +520,7 @@ namespace WixSharp
             }
             return dest;
         }
+
         /// <summary>
         /// Replaces all Wix# predefined string constants in the Wix# directory path with their WiX equivalents.
         /// <para>Processed string can be used as an Id for referencing from other Wix# components and setting the
@@ -541,7 +546,6 @@ namespace WixSharp
             return result;
         }
 
-
         /// <summary>
         /// Returns Exception.ToString result containing no debug information.
         /// <para>
@@ -564,7 +568,6 @@ namespace WixSharp
                                     return l;
                             })
                             .ToArray();
-
 
             return string.Join(Environment.NewLine, lines);
         }
@@ -653,10 +656,11 @@ namespace WixSharp
         {
             int result = 0;
             int.TryParse(value, out result);
-            return (IntPtr) result;
+            return (IntPtr)result;
         }
 
         static char[] xmlDelimiters = "<>".ToCharArray();
+
         /// <summary>
         /// Returns the string data as a <see cref="T:System.Xml.Linq.XCData"/> if the value contains
         /// XML tags begin and end characters and it is not already a CDATA expression.
@@ -744,6 +748,7 @@ namespace WixSharp
         {
             return text?.Replace(whitespace, "");
         }
+
         /// <summary>
         /// Simple wrapper around System.String.Compare(string strA, string strB, bool ignoreCase);
         /// </summary>
@@ -798,14 +803,57 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// The change directory of the file path.
+        /// The change the directory of the file path.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <param name="newDir">The new dir.</param>
+        /// <param name="newDir">The new directory.</param>
         /// <returns></returns>
         public static string PathChangeDirectory(this string path, string newDir)
         {
             return IO.Path.Combine(newDir, IO.Path.GetFileName(path));
+        }
+
+        /// <summary>
+        /// The change the file name of the file path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="newFileName">The new file name.</param>
+        /// <returns></returns>
+        public static string PathChangeFileName(this string path, string newFileName)
+        {
+            return IO.Path.Combine(IO.Path.GetDirectoryName(path), newFileName);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        public static string PathJoin(this string path, params string[] items)
+        {
+            return IO.Path.Combine(path, IO.Path.GetFileName(path));
+        }
+
+        /// <summary>
+        /// Identical to <see cref="System.IO.Path.GetDirectoryName(string)"/>. It is useful for Wix# consuming code as it allows avoiding
+        /// "using System.IO;" directive, which interferes with Wix# types.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        public static string PathGetDirName(this string path)
+
+        {
+            return IO.Path.GetDirectoryName(path);
+        }
+
+        /// <summary>
+        /// Identical to <see cref="System.IO.Path.GetFileName(string)"/>. It is useful for Wix# consuming code as it allows avoiding
+        /// "using System.IO;" directive, which interferes with Wix# types.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        public static string PathGetFileName(this string path)
+        {
+            return IO.Path.GetFileName(path);
         }
 
         /// <summary>
@@ -1031,8 +1079,8 @@ namespace WixSharp
             if (!typeof(T).IsEnum)
                 throw new ArgumentException("T must be an enumerated type");
 
-            int iObj = ((IConvertible) obj).ToInt32(null);
-            int iEnumValue = ((IConvertible) enumValue).ToInt32(null);
+            int iObj = ((IConvertible)obj).ToInt32(null);
+            int iEnumValue = ((IConvertible)enumValue).ToInt32(null);
 
             return (iObj & iEnumValue) == iEnumValue;
         }
@@ -1072,6 +1120,7 @@ namespace WixSharp
         {
             return string.IsNullOrEmpty(s);
         }
+
         /// <summary>
         /// Determines whether the given string is empty or not.
         /// </summary>
@@ -1083,6 +1132,7 @@ namespace WixSharp
         {
             return !string.IsNullOrEmpty(s);
         }
+
         /// <summary>
         /// Returns all leading white-space characters.
         /// </summary>
@@ -1094,7 +1144,6 @@ namespace WixSharp
         {
             return s.Length - s.TrimStart('\n', '\r', '\t', ' ').Length;
         }
-
 
         /// <summary>
         /// Concats the specified strings. In the result string all items are separated with the specified delimiter.
@@ -1138,7 +1187,6 @@ namespace WixSharp
         {
             string[] parts = path.Split('/');
 
-
             var e = (from el in element.Elements()
                      where el.Name.LocalName == parts[0]
                      select el).GetEnumerator();
@@ -1176,6 +1224,7 @@ namespace WixSharp
         }
 
         static bool? canSetXmlNamespaceSafely;
+
         static bool CanSetXmlNamespaceSafely
         {
             get
@@ -1253,7 +1302,13 @@ namespace WixSharp
             return element.Name.LocalName.SameAs(elementName, ignoreCase);
         }
 
-        internal static void Map(this Dictionary<Feature, List<string>> featureComponents, Feature feature, string componentId)
+        internal static void Map(this Dictionary<Feature, List<string>> featureComponents, IEnumerable<Feature> features, string componentId)
+        {
+            foreach (var item in features)
+                featureComponents.MapOld(item, componentId);
+        }
+
+        internal static void MapOld(this Dictionary<Feature, List<string>> featureComponents, Feature feature, string componentId)
         {
             if (!featureComponents.ContainsKey(feature))
                 featureComponents[feature] = new List<string>();
@@ -1307,6 +1362,7 @@ namespace WixSharp
         }
 
         static Dictionary<string, int> autoXIds = new Dictionary<string, int>();
+
         static void EnsureId(this XElement element)
         {
             if (element.Attribute("Id") == null)
@@ -1564,9 +1620,9 @@ namespace WixSharp
                 foreach (var item in items)
                     retval.Add(item);
 
-                return (T[]) retval.ToArray(typeof(T));
+                return (T[])retval.ToArray(typeof(T));
             }
-            return (T[]) obj;
+            return (T[])obj;
         }
 
         /// <summary>
@@ -1589,9 +1645,9 @@ namespace WixSharp
 
                 retval.Add(item);
 
-                return (T1[]) retval.ToArray(typeof(T1));
+                return (T1[])retval.ToArray(typeof(T1));
             }
-            return (T1[]) obj;
+            return (T1[])obj;
         }
 
         /// <summary>
@@ -1616,10 +1672,11 @@ namespace WixSharp
                     foreach (var i in items)
                         retval.Add(i);
 
-                return (T1[]) retval.ToArray(typeof(T1));
+                return (T1[])retval.ToArray(typeof(T1));
             }
-            return (T1[]) obj;
+            return (T1[])obj;
         }
+
         /// <summary>
         /// Combines given <see cref="T:System.Collections.Generic.List"/> items with items of another <see cref="T:System.Collections.Generic.List"/>.
         /// </summary>
@@ -1796,6 +1853,7 @@ namespace WixSharp
         {
             return (level & InstallUIOptions.Full) != InstallUIOptions.Full;
         }
+
         /////////////////////////////////////////////////////////////
 
         /// <summary>
@@ -1959,7 +2017,7 @@ namespace WixSharp
                         }
                         ms.Seek(0, IO.SeekOrigin.Begin);
 
-                        return (Bitmap) Bitmap.FromStream(ms);
+                        return (Bitmap)Bitmap.FromStream(ms);
                     }
                 }
             }
@@ -2127,6 +2185,7 @@ namespace WixSharp
     class WixItems : WixObject
     {
         public IEnumerable<WixObject> Items;
+
         public WixItems(IEnumerable<WixObject> items)
         {
             Items = items;
@@ -2212,7 +2271,7 @@ namespace WixSharp
             var items = fields.Combine<MemberInfo>(props)
                               .Select(x =>
                               {
-                                  var xmlAttr = (XmlAttribute) x.GetCustomAttributes(typeof(XmlAttribute), false)
+                                  var xmlAttr = (XmlAttribute)x.GetCustomAttributes(typeof(XmlAttribute), false)
                                                                 .FirstOrDefault();
                                   string name = null;
                                   if (xmlAttr != null)
@@ -2247,7 +2306,7 @@ namespace WixSharp
                 }
                 else if (item.Value is bool)
                 {
-                    xmlValue = ((bool) item.Value).ToYesNo();
+                    xmlValue = ((bool)item.Value).ToYesNo();
                 }
 
                 result.Add(new XAttribute(item.Name, xmlValue));

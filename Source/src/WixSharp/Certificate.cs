@@ -162,11 +162,6 @@ namespace WixSharp
 
         #endregion constructors
 
-        /// <summary>
-        /// <see cref="Feature"></see> the WebSite belongs to.
-        /// </summary>
-        public Feature Feature;
-
         #region attributes
 
         /// <summary>

@@ -14,14 +14,12 @@ class Script
             UI = WUI.WixUI_ProgressOnly,
 
             Dirs = new[]
-            { 
-            	new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new Assembly(@"CSScriptLibrary.dll", true))
+            {
+                new Dir(@"%ProgramFiles%\My Company\My Product",
+                    new Assembly(@"CSScriptLibrary.dll", true,
+                        new NativeImage { Platform = NativeImagePlatform.x86}))
             }
         };
         Compiler.BuildMsi(project);
     }
 }
-
-
-

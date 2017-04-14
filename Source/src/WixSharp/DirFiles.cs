@@ -168,18 +168,13 @@ namespace WixSharp
                 {
                     var filePath = IO.Path.GetFullPath(file);
 
-                    if (Feature != null)
-                        files.Add(new File(Feature, filePath)
-                                  {
-                                      AttributesDefinition = this.AttributesDefinition,
-                                      Attributes = this.Attributes.Clone()
-                                  });
-                    else
-                        files.Add(new File(filePath)
-                                  {
-                                      AttributesDefinition = this.AttributesDefinition,
-                                      Attributes = this.Attributes.Clone()
-                                  });
+                    files.Add(new File(filePath)
+                    {
+                        Feature = this.Feature,
+                        Features = this.Features,
+                        AttributesDefinition = this.AttributesDefinition,
+                        Attributes = this.Attributes.Clone()
+                    });
                 }
             }
             return files.ToArray();

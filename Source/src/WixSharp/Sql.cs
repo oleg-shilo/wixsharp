@@ -88,7 +88,6 @@ namespace WixSharp
             Feature = feature;
         }
 
-
         /// <summary>
         /// Creates an instance of the <see cref="SqlDatabase"/> representing the database <paramref name="database"/>@<paramref name="server"/>
         /// </summary>
@@ -174,14 +173,10 @@ namespace WixSharp
         #endregion Constructors
 
         /// <summary>
-        /// <see cref="Feature"></see> the SqlDatabase belongs to.
-        /// </summary>
-        public Feature Feature { get; set; }
-
-        /// <summary>
         /// The SQL scripts
         /// </summary>
         public SqlScript[] SqlScripts = new SqlScript[0];
+
         /// <summary>
         /// The SQL strings
         /// </summary>
@@ -248,7 +243,6 @@ namespace WixSharp
         /// Maps to the User property of SqlDatabase
         /// </summary>
         public string User { get; set; }
-
 
         #endregion Wix SqlDatabase attributes
 

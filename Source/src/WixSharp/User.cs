@@ -3,7 +3,6 @@ using System.Xml.Linq;
 
 namespace WixSharp
 {
-
     /// <summary>
     /// Represents a WixUtilExtension User
     /// </summary>
@@ -109,12 +108,7 @@ namespace WixSharp
             Domain = domain;
         }
 
-        #endregion
-
-        /// <summary>
-        /// <see cref="Feature"></see> the User belongs to.
-        /// </summary>
-        public Feature Feature;
+        #endregion Constructors
 
         /// <summary>
         /// Requests that the User element is included inside a Component element - allowing the User to be installed.
@@ -203,7 +197,7 @@ namespace WixSharp
         /// </summary>
         public bool? Vital; //only allowed under a component
 
-        #endregion
+        #endregion Wix User attributes
 
         /// <summary>
         /// Gets a value indicated if this User must be generated under a Component element or not.

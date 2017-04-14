@@ -194,11 +194,6 @@ namespace WixSharp
         public FileShortcut[] Shortcuts = new FileShortcut[0];
 
         /// <summary>
-        /// <see cref="Feature"></see> the file belongs to.
-        /// </summary>
-        public Feature Feature;
-
-        /// <summary>
         /// Defines the installation <see cref="Condition"/>, which is to be checked during the installation to
         /// determine if the file should be installed on the target system.
         /// </summary>

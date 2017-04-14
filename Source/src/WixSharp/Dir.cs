@@ -211,6 +211,7 @@ namespace WixSharp
         public Dir[] Dirs = new Dir[0];
 
         internal Dir AutoParent;
+
         internal Dir GetRootAutoParent()
         {
             Dir result = this.AutoParent;
@@ -228,7 +229,6 @@ namespace WixSharp
         {
             return Dirs.Any(x => x.AutoParent == this);
         }
-
 
         /// <summary>
         /// Collection of the contained <see cref="File"/>s.
@@ -287,11 +287,6 @@ namespace WixSharp
         public DirPermission[] Permissions = new DirPermission[0];
 
         /// <summary>
-        /// <see cref="Feature"></see> the directory belongs to.
-        /// </summary>
-        public Feature Feature;
-
-        /// <summary>
         /// Indicates if the directory is an installation directory.
         /// <para>
         /// Wix# assigns a dedicated WiX UI property WIXUI_INSTALLDIR
@@ -320,6 +315,7 @@ namespace WixSharp
                     this.isInstallDir = value;
             }
         }
+
         bool isInstallDir;
 
         ///// <summary>
@@ -327,7 +323,6 @@ namespace WixSharp
         ///// determine if the directory should be installed.
         ///// </summary>
         //public Condition Condition;
-
 
         /// <summary>
         ///  Returns the WiX <c>Directory</c> as a string.
@@ -411,9 +406,6 @@ namespace WixSharp
             Permissions = dirPermissions.ToArray();
             ODBCDataSources = odbcSources.ToArray();
             IISVirtualDirs = iisVirtualDirs.ToArray();
-
         }
     }
-
-
 }

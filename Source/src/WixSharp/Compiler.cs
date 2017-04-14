@@ -1569,9 +1569,9 @@ namespace WixSharp
                 {
                     string compId = wDir.Id + ".EmptyDirectory";
 
-                    if (wDir.Feature != null)
+                    if (wDir.ActualFeatures.Any())
                     {
-                        featureComponents.Map(wDir.Feature, compId);
+                        featureComponents.Map(wDir.ActualFeatures, compId);
                     }
                     else
                     {
@@ -1586,10 +1586,10 @@ namespace WixSharp
             }
             else
             {
-                if (wDir.Feature != null)
+                if (wDir.ActualFeatures.Any())
                 {
                     string compId = "Component." + wDir.Id;
-                    featureComponents.Map(wDir.Feature, compId);
+                    featureComponents.Map(wDir.ActualFeatures, compId);
                     dirItem.AddElement(
                             new XElement("Component",
                                 new XAttribute("Id", compId),
@@ -1614,9 +1614,9 @@ namespace WixSharp
             if (wDir.IISVirtualDirs.Any())
             {
                 string compId = "Component." + wDir.Id + ".VirtDir";
-                var feature = wDir.Feature;
-                if (feature != null)
-                    featureComponents.Map(wDir.Feature, compId);
+                
+                if (wDir.ActualFeatures.Any())
+                    featureComponents.Map(wDir.ActualFeatures, compId);
                 else
                     defaultFeatureComponents.Add(compId);
 
@@ -1636,9 +1636,9 @@ namespace WixSharp
                 string fileId = wFile.Id;
                 string compId = "Component." + wFile.Id;
 
-                if (wFile.Feature != null)
+                if (wFile.ActualFeatures.Any())
                 {
-                    featureComponents.Map(wFile.Feature, compId);
+                    featureComponents.Map(wFile.ActualFeatures, compId);
                 }
                 else
                 {
@@ -1772,8 +1772,8 @@ namespace WixSharp
             foreach (Shortcut wShortcut in wDir.Shortcuts)
             {
                 string compId = wShortcut.Id;
-                if (wShortcut.Feature != null)
-                    featureComponents.Map(wShortcut.Feature, compId);
+                if (wShortcut.ActualFeatures.Any())
+                    featureComponents.Map(wShortcut.ActualFeatures, compId);
                 else
                     defaultFeatureComponents.Add(compId);
 
@@ -1809,8 +1809,8 @@ namespace WixSharp
                 string dsnId = wODBCDataSource.Id;
                 string compId = "Component." + wODBCDataSource.Id;
 
-                if (wODBCDataSource.Feature != null)
-                    featureComponents.Map(wODBCDataSource.Feature, compId);
+                if (wODBCDataSource.ActualFeatures.Any())
+                    featureComponents.Map(wODBCDataSource.ActualFeatures, compId);
                 else
                     defaultFeatureComponents.Add(compId);
 
@@ -2157,8 +2157,8 @@ namespace WixSharp
                     string compId = "Registry" + count;
 
                     //all registry of this level belong to the same component
-                    if (regVal.Feature != null)
-                        featureComponents.Map(regVal.Feature, compId);
+                    if (regVal.ActualFeatures.Any())
+                        featureComponents.Map(regVal.ActualFeatures, compId);
                     else
                         defaultFeatureComponents.Add(compId);
 
@@ -2226,8 +2226,8 @@ namespace WixSharp
                 string compId = "EnvVars" + count;
 
                 //all registry of this level belong to the same component
-                if (envVar.Feature != null)
-                    featureComponents.Map(envVar.Feature, compId);
+                if (envVar.ActualFeatures.Any())
+                    featureComponents.Map(envVar.ActualFeatures, compId);
                 else
                     defaultFeatureComponents.Add(compId);
 
@@ -2261,8 +2261,8 @@ namespace WixSharp
                     componentCount++;
                     var compId = "User" + componentCount;
 
-                    if (user.Feature != null)
-                        featureComponents.Map(user.Feature, compId);
+                    if (user.ActualFeatures.Any())
+                        featureComponents.Map(user.ActualFeatures, compId);
                     else
                         defaultFeatureComponents.Add(compId);
 
@@ -2299,8 +2299,8 @@ namespace WixSharp
                     componentCount++;
                     var compId = "SqlDatabase" + componentCount;
 
-                    if (sqlDb.Feature != null)
-                        featureComponents.Map(sqlDb.Feature, compId);
+                    if (sqlDb.ActualFeatures.Any())
+                        featureComponents.Map(sqlDb.ActualFeatures, compId);
                     else
                         defaultFeatureComponents.Add(compId);
 
@@ -2355,8 +2355,8 @@ namespace WixSharp
                 scriptCount++;
                 var compId = "SqlScript" + scriptCount;
 
-                if (sqlScript.Feature != null)
-                    featureComponents.Map(sqlScript.Feature, compId);
+                if (sqlScript.ActualFeatures.Any())
+                    featureComponents.Map(sqlScript.ActualFeatures, compId);
                 else
                     defaultFeatureComponents.Add(compId);
 
@@ -2386,8 +2386,8 @@ namespace WixSharp
                 stringCount++;
                 var compId = "SqlString" + stringCount;
 
-                if (sqlString.Feature != null)
-                    featureComponents.Map(sqlString.Feature, compId);
+                if (sqlString.ActualFeatures.Any())
+                    featureComponents.Map(sqlString.ActualFeatures, compId);
                 else
                     defaultFeatureComponents.Add(compId);
 
@@ -2420,8 +2420,8 @@ namespace WixSharp
 
                 var compId = "FirewallException" + componentCount;
 
-                if (item.Feature != null)
-                    featureComponents.Map(item.Feature, compId);
+                if (item.ActualFeatures.Any())
+                    featureComponents.Map(item.ActualFeatures, compId);
                 else
                     defaultFeatureComponents.Add(compId);
 
@@ -2449,8 +2449,8 @@ namespace WixSharp
 
                 var compId = "Certificate" + componentCount;
 
-                if (certificate.Feature != null)
-                    featureComponents.Map(certificate.Feature, compId);
+                if (certificate.ActualFeatures.Any())
+                    featureComponents.Map(certificate.ActualFeatures, compId);
                 else
                     defaultFeatureComponents.Add(compId);
 

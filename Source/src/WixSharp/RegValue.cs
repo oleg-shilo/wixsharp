@@ -1,8 +1,9 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 Copyright (c) 2014 Oleg Shilo
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -19,28 +20,29 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
+
 using System;
 using System.Linq;
 using Microsoft.Win32;
 
 namespace WixSharp
 {
-
     /// <summary>
-    /// Defines the registry file (*.reg) containing the entries to be installed. 
+    /// Defines the registry file (*.reg) containing the entries to be installed.
     /// <para>
     /// Compiler uses the data from this class to call <see cref="T:WixSharp.CommonTasks.ImportRegFile"/>
     /// internally and inject imported <see cref="RegValue"/>s into the <see cref="Project"/>.
-    /// </para>  
+    /// </para>
     /// </summary>
-    /// <example>The following sample demonstrates how to install Registry entries imported from 
+    /// <example>The following sample demonstrates how to install Registry entries imported from
     /// the reg file:
-    /// <code> 
-    /// var project = 
-    ///     new Project("MyProduct", 
-    ///         new Dir(@"%ProgramFiles%\My Company\My Product", 
-    ///             new File(@"readme.txt")), 
+    /// <code>
+    /// var project =
+    ///     new Project("MyProduct",
+    ///         new Dir(@"%ProgramFiles%\My Company\My Product",
+    ///             new File(@"readme.txt")),
     ///         new RegFile("MyProduct.reg"),
     ///         ...
     ///
@@ -53,12 +55,14 @@ namespace WixSharp
         /// The path to the registry file (*.reg).
         /// </summary>
         public string Path = null;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RegFile"/> class.
         /// </summary>
         public RegFile()
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RegFile"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -78,29 +82,24 @@ namespace WixSharp
             Path = path;
             Feature = feature;
         }
-
-        /// <summary>
-        /// <see cref="Feature"></see> the registry value belongs to.
-        /// </summary>
-        public Feature Feature;
     }
 
     /// <summary>
     /// Defines registry value to be installed.
     /// </summary>
-    ///<example>The following is a complete example of the setup for installing a file and two 
+    ///<example>The following is a complete example of the setup for installing a file and two
     ///registry values (string value <c>Message</c> and integer value <c>Count</c> ).
     ///<code>
     ///static public void Main(string[] args)
     ///{
-    ///     var project = 
+    ///     var project =
     ///         new Project("MyProduct",
     ///             new Dir(@"%ProgramFiles%\My Company\My Product",
     ///                 new File(@"readme.txt")),
-    ///         
+    ///
     ///             new RegValue(RegistryHive.LocalMachine, "Software\\My Company\\My Product", "Message", "Hello"),
     ///             new RegValue(RegistryHive.LocalMachine, "Software\\My Company\\My Product", "Count", 777));
-    ///             
+    ///
     ///     Compiler.BuildMsi(project);
     /// }
     /// </code>
@@ -111,6 +110,7 @@ namespace WixSharp
         /// Initializes a new instance of the <see cref="RegValue"/> class.
         /// </summary>
         public RegValue() { }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RegValue"/> class with properties initialized with specified parameters.
         /// </summary>
@@ -123,6 +123,7 @@ namespace WixSharp
             Key = key;
             Value = value;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RegValue"/> class with properties initialized with specified parameters.
         /// </summary>
@@ -137,6 +138,7 @@ namespace WixSharp
             Key = key;
             Value = value;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RegValue"/> class with properties initialized with specified parameters.
         /// </summary>
@@ -153,6 +155,7 @@ namespace WixSharp
             Value = value;
             Feature = feature;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RegValue"/> class with properties initialized with specified parameters.
         /// </summary>
@@ -167,6 +170,7 @@ namespace WixSharp
             Key = key;
             Value = value;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RegValue"/> class with properties initialized with specified parameters.
         /// </summary>
@@ -183,6 +187,7 @@ namespace WixSharp
             Key = key;
             Value = value;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RegValue"/> class with properties initialized with specified parameters.
         /// </summary>
@@ -207,37 +212,40 @@ namespace WixSharp
         /// <para>Default value is <c>RegistryHive.CurrentUser</c></para>
         /// </summary>
         public RegistryHive Root = RegistryHive.CurrentUser;
+
         /// <summary>
         /// The registry key name.
         /// <para>Default value is <c>String.Empty</c></para>
         /// </summary>
         public string Key = "";
+
         /// <summary>
         /// The registry entry value.
         /// </summary>
         public object Value = null;
+
         /// <summary>
-        /// <see cref="Feature"></see> the registry value belongs to.
-        /// </summary>
-        public Feature Feature;
-        /// <summary>
-        /// Defines the installation <see cref="Condition"/>, which is to be checked during the installation to 
+        /// Defines the installation <see cref="Condition"/>, which is to be checked during the installation to
         /// determine if the registry value should be created on the target system.
         /// </summary>
         public Condition Condition;
+
         /// <summary>
-        /// Facilitates the installation of packages that include both 32-bit and 64-bit components. 
-        /// Set this attribute to 'yes' to mark the corresponding RegValue as a 64-bit component. 
+        /// Facilitates the installation of packages that include both 32-bit and 64-bit components.
+        /// Set this attribute to 'yes' to mark the corresponding RegValue as a 64-bit component.
         /// </summary>
         public bool Win64 = false;
+
         /// <summary>
         /// Set this to create an empty key, if absent, when the parent component is installed.
         /// </summary>
         public RegistryKeyAction RegistryKeyAction = RegistryKeyAction.none;
+
         /// <summary>
         /// Set this to create an empty key, if absent, when the parent component is installed.
         /// </summary>
         public bool ForceCreateOnInstall;
+
         /// <summary>
         /// Set this to remove the key with all its values and subkeys when the parent component is uninstalled.
         /// </summary>

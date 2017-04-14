@@ -178,9 +178,10 @@ namespace WixSharp
                                         Dir subDir = null;
 
                                         if (subDir == null)
-                                            subDir = new Dir(this.Feature, dirName, new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
+                                            subDir = new Dir(dirName, new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
                                             {
                                                 Feature = this.Feature,
+                                                Features = this.Features,
                                                 AttributesDefinition = this.AttributesDefinition,
                                                 Attributes = this.Attributes,
                                                 Filter = this.Filter
@@ -197,6 +198,7 @@ namespace WixSharp
                 new DirFiles(IO.Path.Combine(rootDirPath, this.IncludeMask))
                 {
                     Feature = this.Feature,
+                    Features = this.Features,
                     AttributesDefinition = this.AttributesDefinition,
                     Attributes = this.Attributes.Clone(),
                     Filter = this.Filter
@@ -215,9 +217,10 @@ namespace WixSharp
 
                 Dir subDir = null;
                 if (subDir == null)
-                    subDir = new Dir(this.Feature, dirName, new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
+                    subDir = new Dir(dirName, new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
                     {
                         Feature = this.Feature,
+                        Features = this.Features,
                         AttributesDefinition = this.AttributesDefinition,
                         Attributes = this.Attributes.Clone(),
                         Filter = this.Filter

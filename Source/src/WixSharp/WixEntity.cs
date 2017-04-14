@@ -93,6 +93,7 @@ namespace WixSharp
         /// </code>
         /// </example>
         public string AttributesDefinition { get; set; }
+
         internal Dictionary<string, string> attributesBag = new Dictionary<string, string>();
 
         void ProcessAttributesDefinition()
@@ -155,6 +156,51 @@ namespace WixSharp
 
             AttributesDefinition = string.Join(";", items.ToArray());
         }
+
+        /// <summary>
+        /// <see cref="Feature"></see> the Wix object belongs to. This member is processed only for the
+        /// WiX objects/elements that can be associated with the features (e.g. WebSite, FirewallException, ODBCDataSource, User,
+        /// EnvironmentVariable, Merge, Dir, RegFile, RegValue, Shortcut, SqlDatabase).
+        /// <remarks>
+        /// <para>
+        /// Wix# makes an emphasis on the main stream scenarios when an entity (e.g. File) belongs to a single feature.
+        /// And this member is to serve these scenarios via constructors or initializers.
+        /// </para>
+        /// However MSI/WiX allows the same component to be included into multiple features. If it is what your deployment logic dictates
+        /// then you need to use <see cref="WixSharp.WixObject.Features"/>.
+        /// </remarks>
+        /// </summary>
+        public Feature Feature;
+
+        /// <summary>
+        /// The collection of <see cref="Feature"></see>s the Wix object belongs to. This member is processed only for the
+        /// WiX objects/elements that can be associated with the features (e.g. WebSite, FirewallException, ODBCDataSource, User,
+        /// EnvironmentVariable, Merge, Dir, RegFile, RegValue, Shortcut, SqlDatabase).
+        /// <remarks>
+        /// Note, this member is convenient for scenarios where the same component is to be included into multiple features.
+        /// However, if the component is to be associated only with a single feature then <see cref="WixSharp.WixObject.Feature"/>
+        /// is a more convenient choice as it can be initialized either via constructors or object initializers.eature.
+        /// </remarks>
+        /// </summary>
+        public Feature[] Features = new Feature[0];
+
+        /// <summary>
+        /// Gets the actual list of features associated with the Wix object/element. It is a combined
+        /// collection of <see cref="WixSharp.WixObject.Features"/> and <see cref="WixSharp.WixObject.Feature"/>.  union of the
+        /// </summary>
+        /// <value>
+        /// The actual features.
+        /// </value>
+        public Feature[] ActualFeatures
+        {
+            get
+            {
+                return Features.Concat(new[] { Feature })
+                               .Where(x => x != null)
+                               .Distinct()
+                               .ToArray();
+            }
+        }
     }
 
     /// <summary>
@@ -186,7 +232,6 @@ namespace WixSharp
     public class Package : WixEntity
     {
     }
-
 
     /// <summary>
     /// Base class for all Wix# types representing WiX XML elements (entities)

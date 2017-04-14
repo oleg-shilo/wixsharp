@@ -8,15 +8,17 @@ class Script
 {
     static public void Main(string[] args)
     {
-        // Note you can detect at runtime if the feature hs been marked for installation by using condition
+        // Note you can detect at runtime if the feature has been marked for installation by using condition
         // like this Condition.Create("ADDLOCAL >< \"your_feature_name\"")
 
         var binaries = new Feature("MyApp Binaries", "Application binaries");
         var docs = new Feature("MyApp Documentation");
+        var docsLight = new Feature("MyApp Ligh Documentation");
         var tuts = new Feature("MyApp Tutorial");
 
         docs.Add(tuts);
         binaries.Add(docs);
+        binaries.Add(docsLight);
 
         var project =
             new Project("MyProduct",
@@ -24,20 +26,25 @@ class Script
                     new File(binaries, @"Files\Bin\MyApp.exe"),
                     new Dir(@"Docs\Manual",
                         new File(docs, @"Files\Docs\Manual.txt"),
-                        new File(tuts, @"Files\Docs\Tutorial.txt")),
+                        new File(@"Files\Docs\Tutorial.txt")
+                        {
+                            Features = new[] { docsLight, tuts }
+                        }
+
+                        //new Files(docs, @"Files\test\*")
+                        //, new Files(tuts, @"Files\test\*")
+                        ),
                     new Dir(docs, "logdocs", new DirPermission("Everyone", GenericPermission.All)),
                     new Dir(tuts, "logtuts", new DirPermission("Everyone", GenericPermission.All))));
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.UI = WUI.WixUI_FeatureTree;
+        //project.LightOptions += "-sice:ICE30";
 
-        project.DefaultFeature = binaries; //this line is optional 
+        project.DefaultFeature = binaries; //this line is optional
 
         project.PreserveTempFiles = true;
 
-        project.BuildMsi();
+        project.BuildMsiCmd();
     }
 }
-
-
-

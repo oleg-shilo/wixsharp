@@ -7,21 +7,21 @@ namespace WixSharp
 {
     /// <summary>
     /// Represents an ODBCDataSource to be registered.
-    /// 
+    ///
     ///<example>The following is an example of using ODBCDataSource.
     ///<code>
-    /// var project = 
+    /// var project =
     ///     new Project("My Product",
-    ///     
+    ///
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
     ///         ...
-    ///         
+    ///
     ///             new ODBCDataSource("DsnName", "SQL Server", true, true,
     ///                 new Property("Database", "MyDb"),
     ///                 new Property("Server", "MyServer")),
-    ///                 
+    ///
     ///         ...
-    ///         
+    ///
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
@@ -44,7 +44,7 @@ namespace WixSharp
         /// <param name="perMachine">a boolean value to set machine or user level registration of the data source</param>
         /// <param name="items">Optional parameters defining properties for dsn registration.
         /// These are driver specific</param>
-        /// 
+        ///
         public ODBCDataSource(string name, string driverName, bool keyPath, bool perMachine, params WixEntity[] items)
         {
             Name = name;
@@ -65,7 +65,7 @@ namespace WixSharp
         /// <param name="perMachine">a boolean value to set machine or user level registration of the data source</param>
         /// <param name="items">Optional parameters defining properties for dsn registration.
         /// These are driver specific</param>
-        /// 
+        ///
         public ODBCDataSource(Feature feature, string name, string driverName, bool keyPath, bool perMachine, params WixEntity[] items)
         {
             Feature = feature;
@@ -76,11 +76,6 @@ namespace WixSharp
 
             AddItems(items);
         }
-
-        /// <summary>
-        /// <see cref="Feature"></see> the file belongs to.
-        /// </summary>
-        public Feature Feature;
 
         /// <summary>
         /// String containing ODBC driver Name
@@ -105,7 +100,6 @@ namespace WixSharp
         /// </summary>
         public Property[] Properties = new Property[0];
 
-
         void AddItems(WixEntity[] items)
         {
             var props = new List<Property>();
@@ -117,7 +111,6 @@ namespace WixSharp
                 else
                     throw new Exception(item.GetType().Name + " is not expected to be a child of WixSharp.ODBCDataSource");
             }
-
 
             Properties = props.ToArray();
         }

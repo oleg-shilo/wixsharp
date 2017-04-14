@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,9 +24,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
 
 using System.Xml.Linq;
+
 namespace WixSharp
 {
     /// <summary>
@@ -46,37 +49,40 @@ namespace WixSharp
         /// <para>This value is a processed only for shortcuts which belong to the <see cref="Dir"/> element.</para>
         /// </summary>
         public string Target = "";
+
         /// <summary>
         /// The shortcut arguments.
         /// </summary>
         public string Arguments = "";
+
         /// <summary>
         /// The directory where the shortcut should be installed.
         /// <para>This value is a processed only for shortcuts which belong to the <see cref="File"/> element.</para>
         /// </summary>
         public string Location = "";
-        /// <summary>
-        /// <see cref="Feature"></see> the shortcut belongs to.
-        /// </summary>
-        public Feature Feature;
+
         /// <summary>
         /// "Working Directory" for the shortcut to be installed. If <see cref="WorkingDirectory"/> is not specified
         /// it will be set in the installed shortcut to the location of the file the shortcut points to.
         /// </summary>
         public string WorkingDirectory = "";
+
         /// <summary>
         /// Defines the launch <see cref="Condition"/> which is to be checked during the installation to
         /// determine if the shortcut should be installed.
         /// </summary>
         public Condition Condition;
+
         /// <summary>
         /// Defines icon file for the shortcut. Relative or absolute path to the source file containing icons (exe, dll or ico).
         /// </summary>
         public string IconFile = "";
+
         /// <summary>
         /// The zero-based index of the icon associated with this ProgId. The default value is 0.
         /// </summary>
         public int IconIndex = 0;
+
         /// <summary>
         /// Whether this shortcut is to be advertised. The default is <c>false</c>.
         /// </summary>
