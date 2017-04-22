@@ -67,7 +67,7 @@ public class InstallScript
                                      new UtilRegistrySearch
                                      {
                                          Root = RegistryHive.LocalMachine,
-                                         Key = @"Key=SOFTWARE\Microsoft\Net Framework Setup\NDP\v4\Full",
+                                         Key = @"SOFTWARE\Microsoft\Net Framework Setup\NDP\v4\Full",
                                          Value = "Version",
                                          Variable = "Netfx4FullVersion"
                                      },

@@ -3264,7 +3264,14 @@ namespace WixSharp
 
         static XElement AddDir(XElement parent, Dir wDir)
         {
-            string name = wDir.Name.Expand(); //name needs to be escaped
+            string name;
+            // name needs to be escaped but only if it is not an absolute path.
+            // Absolute path is going to be handled via auto-injection and 
+            if (IO.Path.IsPathRooted(wDir.Name))
+                name = wDir.Name;
+            else
+                name = wDir.Name.Expand();
+
             string id = "";
 
             if (wDir.IsIdSet())

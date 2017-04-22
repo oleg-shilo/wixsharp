@@ -9,7 +9,7 @@ class Script
 {
     static public void Main()
     {
-        var project = new ManagedProject("MyProduct",
+        var project = new Project("MyProduct",
                           new Dir(@"C:\MyCompany\MyProduct",
                               new Files(@"files\*.*")));
 

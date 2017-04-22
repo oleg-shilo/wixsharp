@@ -20,11 +20,11 @@ class Script
             {
                 new SetPropertyAction("Gritting", "Hello World!"),
                 new SetPropertyAction("Title", "SetProperties Test"),
-new SetPropertyAction("NOTEPAD_FILE", @"C:\boot.ini")
-{
-    When = When.Before,
-    Step = Step.AppSearch
-},
+                new SetPropertyAction("NOTEPAD_FILE", @"C:\boot.ini")
+                {
+                    When = When.Before,
+                    Step = Step.AppSearch
+                },
 
                 new ManagedAction(@"ShowGritting"),
                 new WixQuietExecAction("notepad.exe", "[NOTEPAD_FILE]"),
@@ -57,6 +57,3 @@ public class CustonActions
         return ActionResult.Success;
     }
 }
-
-
-

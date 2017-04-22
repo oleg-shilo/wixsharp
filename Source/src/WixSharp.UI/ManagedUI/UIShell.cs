@@ -420,7 +420,7 @@ namespace WixSharp
                         {
                             if (messageType == InstallMessage.Info)
                             {
-                                if (messageRecord.ToString().Contains("User cancelled installation")) //there is no other way
+                                if (messageRecord.ToString().Contains("User canceled installation")) //there is no other way
                                     UserInterrupted = true;
                             }
 
