@@ -10,6 +10,7 @@ class Script
     static public void Main()
     {
         var project = new Project("MyProduct",
+                          new Dir(@"C:\MyCompany2", new File("setup.cs")),
                           new Dir(@"C:\MyCompany\MyProduct",
                               new Files(@"files\*.*")));
 

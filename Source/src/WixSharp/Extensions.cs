@@ -142,6 +142,30 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Determines whether the string is an absolute path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        ///   <c>true</c> if it is an absolute path; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsAbsolutePath(this string path)
+        {
+            return IO.Path.IsPathRooted(path);
+        }
+
+        /// <summary>
+        /// Gets the index of an item from the collection.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection">The collection.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        public static int FindIndex<T>(this IEnumerable<T> collection, T item)
+        {
+            return collection.ToArray().FindIndex(x => x.Equals(item));
+        }
+
+        /// <summary>
         /// Converts key/value map into the dictionary. The map entry format
         /// is as follows: &lt;key&gt;=&lt;value&gt;[;&lt;key&gt;=&lt;value&gt;].
         /// </summary>

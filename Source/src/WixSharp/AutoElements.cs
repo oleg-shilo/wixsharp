@@ -45,12 +45,14 @@ namespace WixSharp
         /// The feature will be enabled automatically when needed
         /// </summary>
         Automatic,
+
         /// <summary>
-        /// The feature will be enabled 
+        /// The feature will be enabled
         /// </summary>
         Enabled,
+
         /// <summary>
-        /// The feature will be disabled 
+        /// The feature will be disabled
         /// </summary>
         Disabled
     }
@@ -78,7 +80,7 @@ namespace WixSharp
         /// Controls automatic insertion of CreateFolder and RemoveFolder for the directories containing no files.
         /// Required for: NativeBootstrapper, EmbeddedMultipleActions,  EmptyDirectories, InstallDir, Properties,
         /// ReleaseFolder, Shortcuts and WildCardFiles samples.
-        /// <para>If set to <c>Automatic</c> then the compiler will enable this feature only if any empty directory 
+        /// <para>If set to <c>Automatic</c> then the compiler will enable this feature only if any empty directory
         /// is detected in the project definition.</para>
         /// </summary>
         public static CompilerSupportState SupportEmptyDirectories = CompilerSupportState.Automatic;
@@ -89,8 +91,8 @@ namespace WixSharp
         /// ReleaseFolder, Shortcuts and WildCardFiles samples.
         /// <para>Can also be managed by disabling ICE validation via Light.exe command line arguments.</para>
         /// <para>
-        /// This flag is a lighter alternative of DisableAutoCreateFolder. 
-        /// See: http://stackoverflow.com/questions/10358989/wix-using-keypath-on-components-directories-files-registry-etc-etc 
+        /// This flag is a lighter alternative of DisableAutoCreateFolder.
+        /// See: http://stackoverflow.com/questions/10358989/wix-using-keypath-on-components-directories-files-registry-etc-etc
         /// for some background info.
         /// </para>
         /// </summary>
@@ -467,9 +469,9 @@ namespace WixSharp
                             {
                                 var dirId = parent.Attribute("Id").Value;
                                 if (Compiler.EnvironmentConstantsMapping.ContainsValue(dirId))
-                                    break; //stop when reached start of user defined subdirs chain: TARGETDIR/ProgramFilesFolder!!!/ProgramFilesFolder.Company/INSTALLDIR 
+                                    break; //stop when reached start of user defined subdirs chain: TARGETDIR/ProgramFilesFolder!!!/ProgramFilesFolder.Company/INSTALLDIR
 
-                                //just folder with nothing in it but not the last leaf 
+                                //just folder with nothing in it but not the last leaf
                                 doc.CrteateComponentFor(parent);
                             }
                             parent = parent.Parent("Directory");
@@ -489,7 +491,7 @@ namespace WixSharp
                         foreach (XElement item in componentsWithNoFiles)
                         {
                             // Ridiculous MSI constrains:
-                            //  * you cannot install install empty folders 
+                            //  * you cannot install install empty folders
                             //    - workaround is to insert empty component with CreateFolder element
                             //  * if Component+CreateFolder element is inserted the folder will not be removed on uninstall
                             //    - workaround is to insert RemoveFolder element in to empty component as well
@@ -497,7 +499,7 @@ namespace WixSharp
                             //    any parent folder with no files/components will not be removed on uninstall.
                             //    - workaround is to insert Component+Create+RemoveFolder elements in any parent folder with no files.
                             //
-                            // OMG!!!! If it is not over-engineering I don't know what is. 
+                            // OMG!!!! If it is not over-engineering I don't know what is.
 
                             bool oldAlgorithm = false;
 
@@ -534,7 +536,6 @@ namespace WixSharp
             int? absPathCount = null;
             foreach (XElement dir in product.Element("Directory").Elements("Directory"))
             {
-
                 XElement installDir = dir;
 
                 XAttribute installDirName = installDir.Attribute("Name");
@@ -555,21 +556,26 @@ namespace WixSharp
                     // it is ether hard-coded 'both' or hard coded-both 'ui' or 'execute'
                     // <SetProperty Id="INSTALLDIR" Value="C:\My Company\MyProduct" Sequence="both" Before="AppSearch">
 
+                    string actualDirName = installDir.Attribute("Id").Value;
+                    string customAction = $"Set_DirAbsolutePath{absPathCount}";
+
                     product.Add(new XElement("CustomAction",
-                                 new XAttribute("Id", $"Set_INSTALLDIR_AbsolutePath{absPathCount}"),
-                                 new XAttribute("Property", installDir.Attribute("Id").Value),
+                                 new XAttribute("Id", customAction),
+                                 new XAttribute("Property", actualDirName),
                                  new XAttribute("Value", absolutePath)));
 
                     product.SelectOrCreate("InstallExecuteSequence").Add(
-                           new XElement("Custom", $"(NOT Installed) AND (UILevel < 5) AND (INSTALLDIR = ABSOLUTEPATH{absPathCount})",
-                               new XAttribute("Action", $"Set_INSTALLDIR_AbsolutePath{absPathCount}"),
+                           new XElement("Custom", $"(NOT Installed) AND (UILevel < 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
+                               new XAttribute("Action", customAction),
                                new XAttribute("Before", "AppSearch")));
 
                     product.SelectOrCreate("InstallUISequence").Add(
-                          new XElement("Custom", $"(NOT Installed) AND (UILevel = 5) AND (INSTALLDIR = ABSOLUTEPATH{absPathCount})",
-                              new XAttribute("Action", $"Set_INSTALLDIR_AbsolutePath{absPathCount}"),
+                          new XElement("Custom", $"(NOT Installed) AND (UILevel = 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
+                              new XAttribute("Action", customAction),
                               new XAttribute("Before", "AppSearch")));
 
+                    if (absPathCount == null)
+                        absPathCount = 0;
                     absPathCount++;
                 }
             }
@@ -672,7 +678,6 @@ namespace WixSharp
             }
         }
 
-
         internal static void NormalizeFilePaths(XDocument doc, string sourceBaseDir, bool emitRelativePaths)
         {
             string rootDir = sourceBaseDir;
@@ -692,7 +697,6 @@ namespace WixSharp
                                     else
                                         attr.Value = Path.GetFullPath(attr.Value);
                                 });
-
                 };
 
             normalize(doc.Root.FindAll("Icon"), "SourceFile");
