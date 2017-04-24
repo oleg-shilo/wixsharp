@@ -964,14 +964,9 @@ namespace WixSharp
         /// <returns>Replacement result.</returns>
         public static string Expand(this string path)
         {
-            //directory ID (e.g. %ProgramFiles%\My Company\My Product should be interpreted as ProgramFilesFolder\My Company\My Product)
-            foreach (string key in Compiler.EnvironmentConstantsMapping.Keys)
-                path = path.Replace(key, Compiler.EnvironmentConstantsMapping[key])
-                           .Replace("[" + Compiler.EnvironmentConstantsMapping[key] + "]", Compiler.EnvironmentConstantsMapping[key]);
-
             var result = path.ExpandWixEnvConsts()
-                   .Replace("\\", ".")
-                   .EscapeIllegalCharacters();
+                             .Replace("\\", ".")
+                             .EscapeIllegalCharacters();
 
             if (result.FirstOrDefault() == '.')
                 result = "_" + result.Substring(1);

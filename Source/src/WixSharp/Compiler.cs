@@ -3276,7 +3276,8 @@ namespace WixSharp
             if (isAbsolutePathDir)
                 name = wDir.Name;
             else
-                name = wDir.Name.Expand();
+                //Issue #45 Can't install dll to windows/system32 
+                name = wDir.Name.ExpandWixEnvConsts();
 
             string id = "";
 
