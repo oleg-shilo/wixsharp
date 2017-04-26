@@ -41,7 +41,7 @@ using System.Threading;
 namespace WixSharp.CommonTasks
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public static partial class Tasks
     {
@@ -188,7 +188,13 @@ namespace WixSharp.CommonTasks
 
             var tool = new ExternalTool
             {
-                WellKnownLocations = wellKnownLocations ?? @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin",
+                WellKnownLocations = wellKnownLocations ?? @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin;" +
+                                                           @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin;" +
+                                                           @"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool" +
+                                                           @"C:\Program Files(x86)\Windows Kits\8.0\bin\x86;" +
+                                                           @"C:\Program Files(x86)\Windows Kits\8.1\bin\x86;" +
+                                                           @"C:\Program Files(x86)\Windows Kits\10\bin\x86;" +
+                                                           @"C:\Program Files(x86)\Windows Kits\10\bin\10.0.15063.0\x86",
                 ExePath = "signtool.exe",
                 Arguments = args
             };
@@ -403,6 +409,7 @@ namespace WixSharp.CommonTasks
             action.RefAssemblies = action.RefAssemblies.AddRange(files);
             return action;
         }
+
         //////////////////////////////////////////////////////////////////
 
         /// <summary>
@@ -416,6 +423,7 @@ namespace WixSharp.CommonTasks
             file.Associations = file.Associations.AddRange(items);
             return file;
         }
+
         /// <summary>
         /// Adds the shortcut.
         /// </summary>
@@ -427,6 +435,7 @@ namespace WixSharp.CommonTasks
             file.Shortcuts = file.Shortcuts.AddRange(items);
             return file;
         }
+
         //////////////////////////////////////////////////////////////////
         /// <summary>
         /// Adds the dir.
@@ -528,7 +537,7 @@ namespace WixSharp.CommonTasks
 
         /// <summary>
         /// Sets the Project version from the file version of the file specified by it's ID.
-        /// <para>This method sets project WixSourceGenerated event handler and injects 
+        /// <para>This method sets project WixSourceGenerated event handler and injects
         /// "!(bind.FileVersion.&lt;file ID&gt;" into the XML Product's Version attribute.</para>
         /// <remarks>
         /// If <c>SetVersionFrom</c> is used then Wix# is no longer responsible for setting the product version.
@@ -571,8 +580,8 @@ namespace WixSharp.CommonTasks
         /// <para>If the file is a native binary then file version is returned.</para>
         /// </summary>
         /// <remarks>
-        /// Attempt to extract the assembly version may fail because the dll/exe file may not be an assembly 
-        /// or because it can be in the wrong assembly format (x64 vs x86). In any case the method will fall back to 
+        /// Attempt to extract the assembly version may fail because the dll/exe file may not be an assembly
+        /// or because it can be in the wrong assembly format (x64 vs x86). In any case the method will fall back to
         /// the file version.</remarks>
         /// <param name="project">The project.</param>
         /// <param name="filePath">The file path.</param>
@@ -590,8 +599,8 @@ namespace WixSharp.CommonTasks
         /// <para>If the file is a native binary then file version is returned.</para>
         /// </summary>
         /// <remarks>
-        /// Attempt to extract the assembly version may fail because the dll/exe file may not be an assembly 
-        /// or because it can be in the wrong assembly format (x64 vs x86). In any case the method will fall back to 
+        /// Attempt to extract the assembly version may fail because the dll/exe file may not be an assembly
+        /// or because it can be in the wrong assembly format (x64 vs x86). In any case the method will fall back to
         /// the file version.</remarks>
         /// <param name="filePath">The file path.</param>
         /// <returns></returns>
@@ -841,7 +850,7 @@ namespace WixSharp.CommonTasks
         /// </example>
         static public XElement SetConfigAttribute(this XElement config, string elementPath, string value)
         {
-            var valueAttr = ((IEnumerable) config.XPathEvaluate(elementPath)).Cast<XAttribute>().FirstOrDefault();
+            var valueAttr = ((IEnumerable)config.XPathEvaluate(elementPath)).Cast<XAttribute>().FirstOrDefault();
 
             if (valueAttr != null)
                 valueAttr.Value = value;
@@ -944,13 +953,11 @@ namespace WixSharp.CommonTasks
                 return database.Tables["MsiEmbeddedUI"] != null;
             }
         }
-
     }
-
 }
 
 /// <summary>
-/// A generic utility class for running console application tools (e.g. compilers, utilities) 
+/// A generic utility class for running console application tools (e.g. compilers, utilities)
 /// </summary>
 public class ExternalTool
 {
@@ -967,11 +974,11 @@ public class ExternalTool
     public string Arguments { set; get; }
 
     /// <summary>
-    /// Gets or sets the well known locations for probing the exe file. 
+    /// Gets or sets the well known locations for probing the exe file.
     /// <para>
-    /// By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>. By settin <c>WellKnownLocations</c> 
-    /// you can add som extra probing locations. The directories must be separated by the ';' character. 
-    /// </para> 
+    /// By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>. By settin <c>WellKnownLocations</c>
+    /// you can add som extra probing locations. The directories must be separated by the ';' character.
+    /// </para>
     /// </summary>
     /// <value>The well known locations.</value>
     public string WellKnownLocations { set; get; }
