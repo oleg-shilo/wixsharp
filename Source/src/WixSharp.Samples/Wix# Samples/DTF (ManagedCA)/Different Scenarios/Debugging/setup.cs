@@ -22,7 +22,10 @@ class Script
             }
         };
 
-        Compiler.BuildMsi(project);
+        // uncomment the line below if you want to troubleshoot packaging assembly with MakeSfxCA.exe
+        //var batchFile = Compiler.BuildPackageAsmCmd(typeof(Script).Assembly.Location);
+
+        project.BuildMsi();
     }
 }
 
@@ -39,6 +42,3 @@ public class CustomActions
         return ActionResult.Success;
     }
 }
-
-
-

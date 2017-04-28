@@ -3040,10 +3040,21 @@ namespace WixSharp
         /// <param name="platform">The platform.</param>
         /// <param name="embeddedUI">if set to <c>true</c> the assembly as an 'EmbeddedUI' assembly.</param>
         /// <returns>Batch file path.</returns>
-        static public string BuildPackageAsmCmd(string asm, string nativeDll, string[] refAssemblies, string outDir, string configFilePath, Platform? platform = null, bool embeddedUI = false)
+        static public string BuildPackageAsmCmd(string asm, string nativeDll = null, string[] refAssemblies = null, string outDir = null, string configFilePath = null, Platform? platform = null, bool embeddedUI = false)
         {
+            if (ClientAssembly.IsEmpty())
+                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
+
             string batchFile = IO.Path.Combine(outDir, "Build_CA_DLL.cmd");
-            PackageManagedAsm(asm, nativeDll, refAssemblies, outDir, configFilePath, platform, embeddedUI, batchFile);
+
+            PackageManagedAsm(asm, 
+                              nativeDll ?? asm.PathChangeExtension(".CA.dll"), 
+                              refAssemblies ?? new string[0], 
+                              outDir ?? asm.PathGetDirName(), 
+                              configFilePath, 
+                              platform, 
+                              embeddedUI, 
+                              batchFile);
             return batchFile;
         }
         /// <summary>

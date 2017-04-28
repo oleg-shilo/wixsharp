@@ -39,8 +39,6 @@ class Script
 
     static void Compiler_WixSourceGenerated(XDocument document)
     {
-
-
         //Will make MyApp.exe directory writable.
         //It is actually a bad practice to write to program files and this code is provided for sample purposes only.
         document.FindAll("Component")
@@ -48,4 +46,3 @@ class Script
                 .AddElement("CreateFolder/Permission", "User=Everyone;GenericAll=yes");
     }
 }
-

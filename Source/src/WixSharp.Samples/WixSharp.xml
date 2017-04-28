@@ -245,9 +245,9 @@
             <returns></returns>
         </member>
         <member name="T:WixSharp.CommonTasks.Tasks">
-            <summary>
+             <summary>
             
-            </summary>
+             </summary>
         </member>
         <member name="M:WixSharp.CommonTasks.Tasks.BuildBootstrapper(System.String,System.String,System.String,System.String,System.Boolean,System.String)">
              <summary>
@@ -561,7 +561,7 @@
         <member name="M:WixSharp.CommonTasks.Tasks.SetVersionFrom(WixSharp.Project,System.String)">
             <summary>
             Sets the Project version from the file version of the file specified by it's ID.
-            <para>This method sets project WixSourceGenerated event handler and injects 
+            <para>This method sets project WixSourceGenerated event handler and injects
             "!(bind.FileVersion.&lt;file ID&gt;" into the XML Product's Version attribute.</para>
             <remarks>
             If <c>SetVersionFrom</c> is used then Wix# is no longer responsible for setting the product version.
@@ -587,8 +587,8 @@
             <para>If the file is a native binary then file version is returned.</para>
             </summary>
             <remarks>
-            Attempt to extract the assembly version may fail because the dll/exe file may not be an assembly 
-            or because it can be in the wrong assembly format (x64 vs x86). In any case the method will fall back to 
+            Attempt to extract the assembly version may fail because the dll/exe file may not be an assembly
+            or because it can be in the wrong assembly format (x64 vs x86). In any case the method will fall back to
             the file version.</remarks>
             <param name="project">The project.</param>
             <param name="filePath">The file path.</param>
@@ -602,8 +602,8 @@
             <para>If the file is a native binary then file version is returned.</para>
             </summary>
             <remarks>
-            Attempt to extract the assembly version may fail because the dll/exe file may not be an assembly 
-            or because it can be in the wrong assembly format (x64 vs x86). In any case the method will fall back to 
+            Attempt to extract the assembly version may fail because the dll/exe file may not be an assembly
+            or because it can be in the wrong assembly format (x64 vs x86). In any case the method will fall back to
             the file version.</remarks>
             <param name="filePath">The file path.</param>
             <returns></returns>
@@ -12971,7 +12971,7 @@
         </member>
         <member name="T:ExternalTool">
             <summary>
-            A generic utility class for running console application tools (e.g. compilers, utilities) 
+            A generic utility class for running console application tools (e.g. compilers, utilities)
             </summary>
         </member>
         <member name="P:ExternalTool.ExePath">
@@ -12988,11 +12988,11 @@
         </member>
         <member name="P:ExternalTool.WellKnownLocations">
             <summary>
-            Gets or sets the well known locations for probing the exe file. 
+            Gets or sets the well known locations for probing the exe file.
             <para>
-            By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>. By settin <c>WellKnownLocations</c> 
-            you can add som extra probing locations. The directories must be separated by the ';' character. 
-            </para> 
+            By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>. By settin <c>WellKnownLocations</c>
+            you can add som extra probing locations. The directories must be separated by the ';' character.
+            </para>
             </summary>
             <value>The well known locations.</value>
         </member>
