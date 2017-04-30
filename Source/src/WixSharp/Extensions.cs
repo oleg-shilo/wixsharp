@@ -571,6 +571,16 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Converts string to <see cref="WixSharp.Id"/>.
+        /// </summary>
+        /// <param name="obj">Id string value.</param>
+        /// <returns></returns>
+        public static Id ToId(this string obj)
+        {
+            return new Id(obj);
+        }
+
+        /// <summary>
         /// Returns Exception.ToString result containing no debug information.
         /// <para>
         /// Sanitizes the result before returning by removing any debug info (file locations) from the exception trace stack.
