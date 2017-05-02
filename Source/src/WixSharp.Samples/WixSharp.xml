@@ -4081,6 +4081,13 @@
             <param name="defaultValue">The default value.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.ToId(System.String)">
+            <summary>
+            Converts string to <see cref="T:WixSharp.Id"/>.
+            </summary>
+            <param name="obj">Id string value.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.ToPublicString(System.Exception)">
             <summary>
             Returns Exception.ToString result containing no debug information.

@@ -9,9 +9,10 @@ class Script
 {
     static public void Main()
     {
-        var project = new ManagedProject("MyProduct",
-                                         new Dir(new Id("DIR1"), "root1", new File("setup.cs")),
-                                         new Dir(new Id("DIR2"), "root2", new Files(@"files\*.*")));
+        var project =
+            new ManagedProject("MyProduct",
+                new Dir(new Id("DIR1"), "root1", new File("setup.cs")),
+                new Dir(new Id("DIR2"), "root2", new Files(@"files\*.*")));
 
         project.UI = WUI.WixUI_ProgressOnly;
         project.Load += Project_Load;
