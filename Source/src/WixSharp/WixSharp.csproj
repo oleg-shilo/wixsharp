@@ -131,6 +131,7 @@
     <Compile Include="Media.cs" />
     <Compile Include="ODBCDataSource.cs" />
     <Compile Include="Permissions.cs" />
+    <Compile Include="Properties\AssemblyInfo.version.cs" />
     <Compile Include="Reboot.cs" />
     <Compile Include="SharedExtensions.cs" />
     <Compile Include="Sql.cs" />

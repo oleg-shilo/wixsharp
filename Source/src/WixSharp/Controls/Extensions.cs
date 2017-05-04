@@ -1,7 +1,15 @@
 namespace WixSharp.Controls
 {
+    /// <summary>
+    /// Generic extension methods for <see cref="WixSharp.Controls"/>
+    /// </summary>
     public static partial class Extensions
     {
+        /// <summary>
+        /// Copies the common properties from one <see cref="IWixControl"/> to another.
+        /// </summary>
+        /// <param name="destControl">The dest control.</param>
+        /// <param name="srcControl">The source control.</param>
         public static void CopyCommonPropertiesFrom(this WixSharp.Controls.Control destControl, IWixControl srcControl)
         {
             var formControl = (System.Windows.Forms.Control)srcControl;
@@ -38,6 +46,12 @@ namespace WixSharp.Controls
             }
         }
 
+        /// <summary>
+        /// Converts <see cref="IWixControl"/> into an instance of <see cref="WixSharp.Controls.Control"/>.
+        /// </summary>
+        /// <param name="srcControl">The source control.</param>
+        /// <param name="controlType">Type of the control.</param>
+        /// <returns></returns>
         public static WixSharp.Controls.Control ConvertToWControl(this IWixControl srcControl, ControlType controlType)
         {
             var wControl = new WixSharp.Controls.Control { Type = controlType.ToString() };
@@ -68,10 +82,16 @@ namespace WixSharp.Controls
 #pragma warning disable 1591
 
     public class WixControlDesigner : WixControlDesigner<WixControl> { }
+
     public class WixButtonDesigner : WixControlDesigner<WixButton> { }
+
     public class WixLabelDesigner : WixControlDesigner<WixLabel> { }
+
     public class WixFormDesigner : WixControlDesigner<WixForm> { }
+
     public class WixCheckBoxDesigner : WixControlDesigner<WixCheckBox> { }
+
     public class WixTextBoxDesigner : WixControlDesigner<WixTextBox> { }
+
 #pragma warning restore 1591
 }

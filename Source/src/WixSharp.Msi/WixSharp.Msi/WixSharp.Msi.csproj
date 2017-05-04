@@ -80,6 +80,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\WixSharp\Properties\AssemblyInfo.version.cs">
+      <Link>Properties\AssemblyInfo.version.cs</Link>
+    </Compile>
     <Compile Include="..\..\WixSharp\SharedExtensions.cs">
       <Link>SharedExtensions.cs</Link>
     </Compile>

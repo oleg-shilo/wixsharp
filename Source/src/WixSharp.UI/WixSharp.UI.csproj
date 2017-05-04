@@ -64,6 +64,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\WixSharp\Properties\AssemblyInfo.version.cs">
+      <Link>Properties\AssemblyInfo.version.cs</Link>
+    </Compile>
     <Compile Include="ManagedUI\Forms\ExitDialog.cs">
       <SubType>Form</SubType>
     </Compile>

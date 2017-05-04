@@ -4,6 +4,26 @@
         <name>WixSharp.Lab</name>
     </assembly>
     <members>
+        <member name="T:WixSharp.Controls.Extensions">
+            <summary>
+            Generic extension methods for <see cref="N:WixSharp.Controls"/>
+            </summary>
+        </member>
+        <member name="M:WixSharp.Controls.Extensions.CopyCommonPropertiesFrom(WixSharp.Controls.Control,WixSharp.Controls.IWixControl)">
+            <summary>
+            Copies the common properties from one <see cref="T:WixSharp.Controls.IWixControl"/> to another.
+            </summary>
+            <param name="destControl">The dest control.</param>
+            <param name="srcControl">The source control.</param>
+        </member>
+        <member name="M:WixSharp.Controls.Extensions.ConvertToWControl(WixSharp.Controls.IWixControl,WixSharp.Controls.ControlType)">
+            <summary>
+            Converts <see cref="T:WixSharp.Controls.IWixControl"/> into an instance of <see cref="T:WixSharp.Controls.Control"/>.
+            </summary>
+            <param name="srcControl">The source control.</param>
+            <param name="controlType">Type of the control.</param>
+            <returns></returns>
+        </member>
         <member name="F:WixSharp.Controls.Extensions.WixScalingFactor">
             <summary>
             The WiX UI scaling factor.
