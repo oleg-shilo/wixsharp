@@ -26,10 +26,10 @@ class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
-        //Note: setting x64 is done via XML injection for demo purposes only.
-        //The x64 install can be achieved by "project.Platform = Platform.x64;"
+        // Note: setting x64 is done via XML injection for demo purposes only.
+        // The x64 install can be achieved by "project.Platform = Platform.x64;"
 
-        //AddXmlInclude can also be applied to any WixShari entity (e.g. new File("...").AddXmlInclude("FileCommonProperies.wxi")
+        // AddXmlInclude can also be applied to any WixShari entity (e.g. new File("...").AddXmlInclude("FileCommonProperies.wxi")
 
         project.IncludeWixExtension(WixExtension.Util)
                .AddXmlInclude("CommonProperies.wxi")
@@ -40,16 +40,17 @@ class Script
                             <ComponentRef Id=""Component.MyApp.exe"" />
                         </Feature>"));
 
-        //project specific build event
+        // project specific build event
         project.WixSourceGenerated += InjectImages;
 
+        project.Media.Clear(); // clear default media as we will add it via MediaTemplate
         project.WixSourceGenerated += document =>
         {
             document.Root.Select("Product")
-                         .AddElement("MediaTemplate", "CabinetTemplate=cab{0}.cab, CompressionLevel=mszip");
+                         .AddElement("MediaTemplate", "CabinetTemplate=cab{0}.cab; CompressionLevel=mszip");
         };
 
-        //global build event
+        // global build event
         Compiler.WixSourceGenerated += document =>
             {
                 document.Root.Select("Product/Package")
@@ -58,11 +59,11 @@ class Script
                 document.FindAll("Component")
                         .ForEach(e => e.SetAttributeValue("Win64", "yes"));
 
-                //merge 'Wix/Product' elements of document with 'Wix/Product' elements of CommonProperies.wxs
+                // merge 'Wix/Product' elements of document with 'Wix/Product' elements of CommonProperies.wxs
                 document.InjectWxs("CommonProperies.wxs");
 
-                //the commented code below is the equivalent of project.AddXmlInclude(...)
-                //document.FindSingle("Product").Add(new XProcessingInstruction("include", "CommonProperies.wxi"));
+                // the commented code below is the equivalent of project.AddXmlInclude(...)
+                // document.FindSingle("Product").Add(new XProcessingInstruction("include", "CommonProperies.wxi"));
             };
 
         project.PreserveTempFiles = true;
@@ -77,14 +78,14 @@ class Script
                                new XAttribute("Id", "WixUIBannerBmp"),
                                new XAttribute("Value", @"Images\bannrbmp.bmp")));
 
-        //alternative syntax
+        // alternative syntax
         productElement.AddElement("WixVariable", @"Id=WixUIDialogBmp;Value=Images\dlgbmp.bmp");
     }
 }
 
 /// <summary>
 /// Very lean (ad hock) implementation of EventSource element (http://wixtoolset.org/documentation/manual/v3/xsd/util/eventsource.html)
-/// Wix# already includes its own implementation of EvnetSource and this example only provided for a demo on how to add support for the
+/// Wix# already includes its own implementation of EvnetSource and this example only provided as a demo for adding support for the
 /// WiX elements, which are not supported natively by Wix#.
 /// </summary>
 public class EventSourceEx : WixEntity, IGenericEntity
@@ -102,10 +103,10 @@ public class EventSourceEx : WixEntity, IGenericEntity
     {
         var util = WixExtension.Util;
 
-        //reflect new dependency
+        // reflect new dependency
         context.Project.IncludeWixExtension(util);
 
-        //serialize itself and add to the parent component
+        // serialize itself and add to the parent component
         context.XParent
                .FindSingle("Component")
                .Add(this.ToXElement(util, "EventSource"));

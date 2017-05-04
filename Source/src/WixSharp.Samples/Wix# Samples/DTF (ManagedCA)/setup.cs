@@ -15,7 +15,7 @@ public class Script
     static public void Main(string[] args)
     {
         var project = new Project("CustomActionTest",
-                new Dir(@"%ProgramFiles%\My Company\My Product", 
+                new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("setup.cs")),
                 new ManagedAction(CustomActions.MyAction, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed));
 
@@ -23,7 +23,7 @@ public class Script
         project.ControlPanelInfo.NoModify = true;
 
         //project.Platform = Platform.x64;
-        project.PreserveTempFiles = false;
+        project.PreserveTempFiles = true;
         project.BuildMsi();
     }
 
@@ -42,7 +42,7 @@ public class Script
         ///This event is fired before native MSI UI loaded (disabled for demo purposes)
         //session["INSTALLDIR"] = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\7-Zip")
         //                                            .GetValue("Path")
-        //                                            .ToString(); 
+        //                                            .ToString();
         return ActionResult.Success;
     }
 }

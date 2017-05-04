@@ -13,7 +13,7 @@ class Script
 
         var binaries = new Feature("MyApp Binaries", "Application binaries");
         var docs = new Feature("MyApp Documentation");
-        var docsLight = new Feature("MyApp Ligh Documentation");
+        var docsLight = new Feature("MyApp Light Documentation");
         var tuts = new Feature("MyApp Tutorial");
 
         docs.Add(tuts);

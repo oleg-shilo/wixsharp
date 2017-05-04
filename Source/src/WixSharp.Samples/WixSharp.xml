@@ -516,6 +516,14 @@
             <param name="items">The items.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddFeatures(WixSharp.Dir,WixSharp.Feature[])">
+            <summary>
+            Adds the features.
+            </summary>
+            <param name="dir">The dir.</param>
+            <param name="items">The items.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.CommonTasks.Tasks.AddMergeModule(WixSharp.Dir,WixSharp.Merge[])">
             <summary>
             Adds the merge module.

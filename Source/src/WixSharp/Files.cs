@@ -30,6 +30,7 @@ THE SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WixSharp.CommonTasks;
 using IO = System.IO;
 
 namespace WixSharp
@@ -161,32 +162,30 @@ namespace WixSharp
             else
                 rootDirPath = Utils.PathCombine(baseDirectory, Directory);
 
-            Action<Dir, string> AgregateSubDirs = null;
-            AgregateSubDirs = delegate (Dir parentDir, string dirPath)
-                                {
-                                    foreach (var subDirPath in IO.Directory.GetDirectories(dirPath))
-                                    {
-                                        var dirName = IO.Path.GetFileName(subDirPath);
+            void AgregateSubDirs(Dir parentDir, string dirPath)
+            {
+                foreach (var subDirPath in IO.Directory.GetDirectories(dirPath))
+                {
+                    var dirName = IO.Path.GetFileName(subDirPath);
 
-                                        // in anticipation of issues#48
-                                        var subDir = parentDir.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true));
-                                        //Dir subDir = null;
+                    Dir subDir = parentDir.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true)) ?? new Dir(dirName);
 
-                                        if (subDir == null)
-                                            subDir = new Dir(dirName, new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
-                                            {
-                                                Feature = this.Feature,
-                                                Features = this.Features,
-                                                AttributesDefinition = this.AttributesDefinition,
-                                                Attributes = this.Attributes,
-                                                Filter = this.Filter
-                                            });
+                    subDir.AddFeatures(this.ActualFeatures);
+                    subDir.AddDirFileCollection(
+                                        new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
+                                        {
+                                            Feature = this.Feature,
+                                            Features = this.Features,
+                                            AttributesDefinition = this.AttributesDefinition,
+                                            Attributes = this.Attributes,
+                                            Filter = this.Filter
+                                        });
 
-                                        AgregateSubDirs(subDir, subDirPath);
+                    AgregateSubDirs(subDir, subDirPath);
 
-                                        parentDir.Dirs = parentDir.Dirs.Add(subDir);
-                                    }
-                                };
+                    parentDir.Dirs = parentDir.Dirs.Add(subDir);
+                }
+            };
 
             var items = new List<WixEntity>
             {
@@ -207,19 +206,18 @@ namespace WixSharp
             {
                 var dirName = IO.Path.GetFileName(subDirPath);
 
-                // in anticipation of issues#48
-                var subDir = parentWixDir?.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true));
-                //Dir subDir = null;
+                var subDir = parentWixDir?.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true)) ?? new Dir(dirName);
 
-                if (subDir == null)
-                    subDir = new Dir(dirName, new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
-                    {
-                        Feature = this.Feature,
-                        Features = this.Features,
-                        AttributesDefinition = this.AttributesDefinition,
-                        Attributes = this.Attributes.Clone(),
-                        Filter = this.Filter
-                    });
+                subDir.AddFeatures(this.ActualFeatures);
+                subDir.AddDirFileCollection(
+                                    new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
+                                    {
+                                        Feature = this.Feature,
+                                        Features = this.Features,
+                                        AttributesDefinition = this.AttributesDefinition,
+                                        Attributes = this.Attributes,
+                                        Filter = this.Filter
+                                    });
 
                 AgregateSubDirs(subDir, subDirPath);
 
