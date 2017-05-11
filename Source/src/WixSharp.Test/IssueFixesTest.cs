@@ -47,7 +47,6 @@ namespace WixSharp.Test
             Assert.Equal(firstPos, lastPos);
         }
 
-
         [Fact]
         [Description("Issue #37")]
         public void Should_Preserve_ConstantsInAttrDefs()
@@ -64,7 +63,6 @@ namespace WixSharp.Test
                                 WebSite = new WebSite("[IIS_SITE_NAME]", "[IIS_SITE_ADDRESS]:[IIS_SITE_PORT]"),
                                 WebAppPool = new WebAppPool("MyWebApp", "Identity=applicationPoolIdentity")
                             }))));
-
 
             string wxs = project.BuildWxs();
 
@@ -85,7 +83,6 @@ namespace WixSharp.Test
                 new Project("My Product",
                     dir1 = new Dir(@"%ProgramFiles%\MyCompany",
                         dir2 = new Dir("MyWebApp", new File("Default.aspx"))));
-
 
             dir1.AttributesDefinition = "DiskId=1";
             dir2.AttributesDefinition = "DiskId=2";
@@ -157,7 +154,6 @@ namespace WixSharp.Test
                            new Dir(@"%PersonalFolder%\Test Project",
                                new File(@"Files\Baskets.bbd")));
 
-
             project.WixSourceGenerated += xml =>
             {
                 var dir = xml.FindAll("Directory")
@@ -199,9 +195,9 @@ namespace WixSharp.Test
                               .Where(x => x.HasAttribute("Name", "Test Project") && x.Parent.HasAttribute("Name", "PersonalFolder"))
                               .First();
 
-            var comp = dir.FindSingle("Component");
-            comp.AddElement("RemoveFolder", "On=uninstall; Id=" + dir.Attribute("Id").Value);
-            comp.AddElement("RegistryValue", @"Root=HKCU; Key=Software\[Manufacturer]\[ProductName]; Type=string; Value=; KeyPath=yes");
+            dir.FindFirst("Component")
+               .AddElement("RemoveFolder", "On=uninstall; Id=" + dir.Attribute("Id").Value)
+               .AddElement("RegistryValue", @"Root=HKCU; Key=Software\[Manufacturer]\[ProductName]; Type=string; Value=; KeyPath=yes");
         }
 
         [Fact]
@@ -277,8 +273,6 @@ namespace WixSharp.Test
                                          .FirstOrDefault(e => e.HasLocalName("Feature")
                                                            && e.HasAttribute("Title", value => value == "Documentation 03"));
             Assert.NotNull(doc3Feature);
-
-
         }
 
         [Fact]
@@ -323,7 +317,6 @@ namespace WixSharp.Test
 
                 project.BuildMsi();
             }
-
         }
     }
 }

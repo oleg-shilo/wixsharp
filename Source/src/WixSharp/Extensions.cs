@@ -1461,6 +1461,17 @@ namespace WixSharp
         {
             return element.Descendants().Where(x => x.Name.LocalName == elementName).ToArray();
         }
+        
+        /// <summary>
+        /// Selects the first descendant element with a given name (LocalName). 
+        /// </summary>
+        /// <param name="element">The element to be searched.</param>
+        /// <param name="elementName">The element local name.</param>
+        /// <returns>The element matching the name.</returns>
+        public static XElement FindFirst(this XContainer element, string elementName)
+        {
+            return element.Descendants().Where(x => x.Name.LocalName == elementName).FirstOrDefault();
+        }
 
         /// <summary>
         /// Removes the element from its current parent and inserts it into another element.

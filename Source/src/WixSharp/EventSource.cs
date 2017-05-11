@@ -83,7 +83,7 @@ namespace WixSharp
             context.Project.IncludeWixExtension(WixExtension.Util);
 
             context.XParent
-                   .FindSingle("Component")
+                   .FindFirst("Component")
                    .Add(this.ToXElement(WixExtension.Util, "EventSource"));
         }
     }

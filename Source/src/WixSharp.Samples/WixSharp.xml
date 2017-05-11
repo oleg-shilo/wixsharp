@@ -4510,6 +4510,14 @@
             <param name="elementName">The element local name.</param>
             <returns>The elements matching the name.</returns>
         </member>
+        <member name="M:WixSharp.Extensions.FindFirst(System.Xml.Linq.XContainer,System.String)">
+            <summary>
+            Selects the first descendant element with a given name (LocalName). 
+            </summary>
+            <param name="element">The element to be searched.</param>
+            <param name="elementName">The element local name.</param>
+            <returns>The element matching the name.</returns>
+        </member>
         <member name="M:WixSharp.Extensions.MoveTo(System.Xml.Linq.XElement,System.Xml.Linq.XElement)">
             <summary>
             Removes the element from its current parent and inserts it into another element.

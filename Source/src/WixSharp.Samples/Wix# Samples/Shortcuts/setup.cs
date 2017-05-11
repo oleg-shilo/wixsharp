@@ -25,12 +25,13 @@ class Script
                         new Dir("Samples",
                             new File(@"AppFiles\MyApp.cs")),
                         new File(@"AppFiles\MyApp.exe",
-                            new FileShortcut("MyApp", "INSTALLDIR"), //INSTALLDIR is the ID of "%ProgramFiles%\My Company\My Product" 
-                            new FileShortcut("MyApp", @"%Desktop%") { IconFile = @"AppFiles\Icon.ico", WorkingDirectory = "%Temp%", Arguments="777" }),
+                            new FileShortcut("MyApp", "INSTALLDIR"), //INSTALLDIR is the ID of "%ProgramFiles%\My Company\My Product"
+                            new FileShortcut("MyApp", @"%Desktop%") { IconFile = @"AppFiles\Icon.ico", WorkingDirectory = "%Temp%", Arguments = "777" }),
                         new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")
                         {
                             WorkingDirectory = "%Temp%"
-                        }),
+                        }
+                        ),
 
                     new Dir(@"%ProgramMenu%\My Company\My Product",
                         new ExeFileShortcut("Samples", @"[" + @"%ProgramFiles%\My Company\My Product\Samples".ToDirID() + "]", ""),

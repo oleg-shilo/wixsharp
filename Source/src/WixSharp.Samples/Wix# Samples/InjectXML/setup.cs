@@ -108,7 +108,7 @@ public class EventSourceEx : WixEntity, IGenericEntity
 
         // serialize itself and add to the parent component
         context.XParent
-               .FindSingle("Component")
+               .FindFirst("Component")
                .Add(this.ToXElement(util, "EventSource"));
     }
 }
