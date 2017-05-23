@@ -190,7 +190,7 @@ namespace WixSharp.CommonTasks
             {
                 WellKnownLocations = wellKnownLocations ?? @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin;" +
                                                            @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin;" +
-                                                           @"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool" +
+                                                           @"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool;" +
                                                            @"C:\Program Files(x86)\Windows Kits\8.0\bin\x86;" +
                                                            @"C:\Program Files(x86)\Windows Kits\8.1\bin\x86;" +
                                                            @"C:\Program Files(x86)\Windows Kits\10\bin\x86;" +
