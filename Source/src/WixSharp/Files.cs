@@ -210,12 +210,12 @@ namespace WixSharp
             {
                 var dirName = IO.Path.GetFileName(subDirPath);
 
-                var subDir = parentWixDir?.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true)) ?? new Dir(dirName);
+                var subDir = parentWixDir?.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true));
 
                 if (subDir == null)
                 {
                     subDir = new Dir(dirName);
-                    parentWixDir.AddDir(subDir);
+                    items.Add(subDir);
                 }
 
                 subDir.AddFeature(this.ActualFeatures);
@@ -230,8 +230,6 @@ namespace WixSharp
                                     });
 
                 AgregateSubDirs(subDir, subDirPath);
-
-                items.Add(subDir);
             }
 
             return items.ToArray();
