@@ -168,9 +168,15 @@ namespace WixSharp
                 {
                     var dirName = IO.Path.GetFileName(subDirPath);
 
-                    Dir subDir = parentDir.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true)) ?? new Dir(dirName);
+                    Dir subDir = parentDir.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true));
 
-                    subDir.AddFeatures(this.ActualFeatures);
+                    if (subDir == null)
+                    {
+                        subDir = new Dir(dirName);
+                        parentDir.AddDir(subDir);
+                    }
+
+                    subDir.AddFeature(this.ActualFeatures);
                     subDir.AddDirFileCollection(
                                         new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
                                         {
@@ -182,8 +188,6 @@ namespace WixSharp
                                         });
 
                     AgregateSubDirs(subDir, subDirPath);
-
-                    parentDir.Dirs = parentDir.Dirs.Add(subDir);
                 }
             };
 
@@ -208,7 +212,13 @@ namespace WixSharp
 
                 var subDir = parentWixDir?.Dirs.FirstOrDefault(dir => dir.Name.SameAs(dirName, ignoreCase: true)) ?? new Dir(dirName);
 
-                subDir.AddFeatures(this.ActualFeatures);
+                if (subDir == null)
+                {
+                    subDir = new Dir(dirName);
+                    parentWixDir.AddDir(subDir);
+                }
+
+                subDir.AddFeature(this.ActualFeatures);
                 subDir.AddDirFileCollection(
                                     new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
                                     {
