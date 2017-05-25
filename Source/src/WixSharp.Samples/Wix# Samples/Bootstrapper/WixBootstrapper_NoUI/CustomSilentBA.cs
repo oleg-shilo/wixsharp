@@ -3,12 +3,14 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
+
 #if WIX4
 using WixToolset.Bootstrapper;
 #else
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-#endif
 
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+
+#endif
 
 [assembly: BootstrapperApplication(typeof(CustomSilentBA))]
 
@@ -26,15 +28,15 @@ public class CustomSilentBA : BootstrapperApplication
             {
                 //Debug.Assert(false);
 
-                //Presence or absence of MyProductPackageId product will be a deciding factor 
-                //for initializing BA for Install or Uninstall.
+                //Presence or absence of MyProductPackageId product will be a deciding factor
+                //for initializing BA for Install, Uninstall or Modify.
                 if (e.PackageId == "MyProductPackageId")
-                    {
-                        if (e.State == PackageState.Absent)
-                            this.Engine.Plan(LaunchAction.Install);
-                        else if (e.State == PackageState.Present)
-                            this.Engine.Plan(LaunchAction.Uninstall);
-                    }
+                {
+                    if (e.State == PackageState.Absent)
+                        this.Engine.Plan(LaunchAction.Install);
+                    else if (e.State == PackageState.Present)
+                        this.Engine.Plan(LaunchAction.Uninstall);
+                }
             };
 
             PlanComplete += (s, e) =>

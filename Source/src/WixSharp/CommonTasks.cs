@@ -479,7 +479,20 @@ namespace WixSharp.CommonTasks
         /// <param name="dir">The dir.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
+        [Obsolete(message: "This method name is obsolete use `AddFeature` instead")]
         static public Dir AddFeatures(this Dir dir, params Feature[] items)
+        {
+            dir.Features = dir.Features.AddRange(items).Distinct().ToArray();
+            return dir;
+        }
+
+        // <summary>
+        /// Adds the feature(s).
+        /// </summary>
+        /// <param name="dir">The dir.</param>
+        /// <param name="items">The items.</param>
+        /// <returns></returns>
+        static public Dir AddFeature(this Dir dir, params Feature[] items)
         {
             dir.Features = dir.Features.AddRange(items).Distinct().ToArray();
             return dir;

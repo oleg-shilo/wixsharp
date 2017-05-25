@@ -44,7 +44,7 @@ namespace WpfSetup
             else
                 base.StartInstall("CUSTOM_UI=true ADDLOCAL=Binaries");
         }
-       
+
         public MyProductSetup(string msiFile, bool enableLoging = true)
             : base(msiFile, enableLoging)
         {
@@ -57,7 +57,6 @@ namespace WpfSetup
             //Uncomment if you want to see current action name changes. Otherwise it is too quick.
             //ProgressStepDelay = 50;
         }
-
 
         private void MyProductSetup_SetupStarted()
         {

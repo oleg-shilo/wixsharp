@@ -524,6 +524,7 @@
             <param name="items">The items.</param>
             <returns></returns>
         </member>
+        <!-- Badly formed XML comment ignored for member "M:WixSharp.CommonTasks.Tasks.AddFeature(WixSharp.Dir,WixSharp.Feature[])" -->
         <member name="M:WixSharp.CommonTasks.Tasks.AddMergeModule(WixSharp.Dir,WixSharp.Merge[])">
             <summary>
             Adds the merge module.
@@ -4035,6 +4036,15 @@
             <param name="attributeName">Name of the attribute.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.DistinctBy``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Object})">
+            <summary>
+            Selects distinct items from the collection.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="list">The list.</param>
+            <param name="keySelector">The key selector.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
             <summary>
             A generic LINQ equivalent of C# foreach loop.
@@ -4512,7 +4522,7 @@
         </member>
         <member name="M:WixSharp.Extensions.FindFirst(System.Xml.Linq.XContainer,System.String)">
             <summary>
-            Selects the first descendant element with a given name (LocalName). 
+            Selects the first descendant element with a given name (LocalName).
             </summary>
             <param name="element">The element to be searched.</param>
             <param name="elementName">The element local name.</param>
@@ -9858,7 +9868,7 @@
             <param name="ignoreEmptyDirectories">if set to <c>true</c> empty directories are ignored and not added to the project.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Project.FindFile(System.Predicate{WixSharp.File})">
+        <member name="M:WixSharp.Project.FindFile(System.Func{WixSharp.File,System.Boolean})">
             <summary>
             Returns all <see cref="T:WixSharp.File"/>s of the <see cref="T:WixSharp.Project"/> matching the <paramref name="match"/> pattern.
             </summary>

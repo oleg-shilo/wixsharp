@@ -477,6 +477,18 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Selects distinct items from the collection.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list">The list.</param>
+        /// <param name="keySelector">The key selector.</param>
+        /// <returns></returns>
+        public static IEnumerable<T> DistinctBy<T>(this IEnumerable<T> list, Func<T, object> keySelector)
+        {
+            return list.GroupBy(keySelector).Select(x => x.First());
+        }
+
+        /// <summary>
         /// A generic LINQ equivalent of C# foreach loop.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -1461,9 +1473,9 @@ namespace WixSharp
         {
             return element.Descendants().Where(x => x.Name.LocalName == elementName).ToArray();
         }
-        
+
         /// <summary>
-        /// Selects the first descendant element with a given name (LocalName). 
+        /// Selects the first descendant element with a given name (LocalName).
         /// </summary>
         /// <param name="element">The element to be searched.</param>
         /// <param name="elementName">The element local name.</param>

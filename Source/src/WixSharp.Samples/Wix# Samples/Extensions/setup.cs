@@ -92,7 +92,7 @@ public class RemoveFolderEx : WixEntity, IGenericEntity
         XElement element = this.ToXElement(WixExtension.Util.ToXName("RemoveFolderEx"));
 
         context.XParent
-               .FindSingle("Component")
+               .FindFirst("Component")
                .Add(element);
     }
 

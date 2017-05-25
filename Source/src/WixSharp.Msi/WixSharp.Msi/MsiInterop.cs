@@ -3,9 +3,10 @@ using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Text;
 
-//This file is an equivalent of the <1% functionality of the original MsiInterop.cs that was removed (after commit#30c275e5fd0a) 
+//This file is an equivalent of the <1% functionality of the original MsiInterop.cs (https://github.com/jkuemerle/MsiInterop) that was removed (after commit#30c275e5fd0a)
 //because of the licensing clash (MIT vs LGPL).
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
 namespace WindowsInstaller
 {
     public enum MsiError : UInt32
@@ -131,5 +132,8 @@ namespace WindowsInstaller
 
         [DllImport("msi", CharSet = CharSet.Auto)]
         extern static public MsiError MsiViewGetColumnInfo(IntPtr view, MsiColInfoType type, out IntPtr record);
+
+        [DllImport("msi", CharSet = CharSet.Auto)]
+        extern static public MsiError MsiGetProperty(IntPtr install, string name, StringBuilder value, ref uint valueSize);
     }
 }
