@@ -2094,7 +2094,7 @@ namespace WixSharp
             // (capitalized). Thus the id auto-assignment cannot be used as it creates non public id(s).   
             var absolutePathDirs = wProject.AllDirs.Where(x => !x.IsIdSet() && x.Name.IsAbsolutePath()).ToArray();
             foreach (var item in absolutePathDirs)
-                item.Id = $"TARGETDIR{absolutePathDirs.FindIndex(item)+1}";
+                item.Id = $"TARGETDIR{absolutePathDirs.FindIndex(item) + 1}";
 
             foreach (Dir wDir in wDirs)
             {
@@ -2836,20 +2836,32 @@ namespace WixSharp
                                             new XAttribute("Property", wAction.Id),
                                             new XAttribute("Value", mapping)));
 
+                            var stepAttr = wAction.SequenceNumber.HasValue ?
+                                                    new XAttribute("Sequence", wAction.SequenceNumber.Value) :
+                                                    new XAttribute("After", "InstallInitialize");
+
+                            if (wAction.RawId == nameof(ManagedProjectActions.WixSharp_AfterInstall_Action))
+                            {
+                                // Inject fetching properties CA just before the deferred action AfterInstrallEventHandler.
+                                // This might be a good practice to do for all deferred actions. However it's hard to predict the 
+                                // full impact of the auto-change for all user defined deferred actions. So limit the technique 
+                                // to the deferred actions defined by WixSharp itself only.
+
+                                stepAttr = sequenceNumberAttr;
+                                sequenceNumberAttr = new XAttribute("After", setPropValuesId);
+                            }
+
                             sequences.ForEach(sequence =>
-                                sequence.Add(
-                                    new XElement("Custom",
-                                        new XAttribute("Action", setPropValuesId),
-                                        wAction.SequenceNumber.HasValue ?
-                                            new XAttribute("Sequence", wAction.SequenceNumber.Value) :
-                                            new XAttribute("After", "InstallInitialize"))));
+                                sequence.Add(new XElement("Custom", 
+                                                 new XAttribute("Action", setPropValuesId),
+                                                 stepAttr)));
                         }
                     }
 
                     sequences.ForEach(sequence =>
-                        sequence.Add(new XElement("Custom", wAction.Condition.ToXValue(),
-                                         new XAttribute("Action", wAction.Id),
-                                         sequenceNumberAttr)));
+                    sequence.Add(new XElement("Custom", wAction.Condition.ToXValue(),
+                                     new XAttribute("Action", wAction.Id),
+                                     sequenceNumberAttr)));
 
                     product.Add(new XElement("CustomAction",
                                     new XAttribute("Id", wAction.Id),
@@ -3047,13 +3059,13 @@ namespace WixSharp
 
             string batchFile = IO.Path.Combine(outDir, "Build_CA_DLL.cmd");
 
-            PackageManagedAsm(asm, 
-                              nativeDll ?? asm.PathChangeExtension(".CA.dll"), 
-                              refAssemblies ?? new string[0], 
-                              outDir ?? asm.PathGetDirName(), 
-                              configFilePath, 
-                              platform, 
-                              embeddedUI, 
+            PackageManagedAsm(asm,
+                              nativeDll ?? asm.PathChangeExtension(".CA.dll"),
+                              refAssemblies ?? new string[0],
+                              outDir ?? asm.PathGetDirName(),
+                              configFilePath,
+                              platform,
+                              embeddedUI,
                               batchFile);
             return batchFile;
         }
