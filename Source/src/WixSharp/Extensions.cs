@@ -1599,7 +1599,7 @@ namespace WixSharp
         /// <returns></returns>
         public static string UnescapeKeyValue(this string data)
         {
-            return data.Replace("{$NL}", "=")
+            return data.Replace("{$NL}", "\n")
                        .Replace("{$SMCOL}", ";")
                        .Replace("{$EQV}", "=");
         }
