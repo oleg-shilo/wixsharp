@@ -486,7 +486,7 @@ namespace WixSharp.CommonTasks
             return dir;
         }
 
-        // <summary>
+        /// <summary>
         /// Adds the feature(s).
         /// </summary>
         /// <param name="dir">The dir.</param>

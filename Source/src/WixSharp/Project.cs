@@ -327,7 +327,7 @@ namespace WixSharp
         public ProductInfo ControlPanelInfo = new ProductInfo();
 
         /// <summary>
-        /// Provideds fine control over rebooting at the end of installation.
+        /// Provides fine control over rebooting at the end of installation.
         /// <para>If set it creates <c>ScheduleReboot</c> element in the <c>InstallExecuteSequence</c> or <c>InstallUISequence</c>.</para>
         /// </summary>
         /// <example>

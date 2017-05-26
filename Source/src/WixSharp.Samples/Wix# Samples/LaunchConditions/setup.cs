@@ -10,9 +10,9 @@ class Script
 {
     static public void Main(string[] args)
     {
-        //Both methods produce the sameWiX/MSI 
+        //Both methods produce the sameWiX/MSI
         //CheckDotNetByAnalysingRegistryValue();
-        //CheckDotNetWithBuildinTasObsolete(); 
+        //CheckDotNetWithBuildinTasObsolete();
 
         //And of course you can use PropertyRef("NETFRAMEWORK20"), see PropertyRef sample for details
         CheckDotNetWithBuildinTask();
@@ -46,9 +46,3 @@ class Script
         Compiler.BuildMsi(project);
     }
 }
-
-
-
-
-
-

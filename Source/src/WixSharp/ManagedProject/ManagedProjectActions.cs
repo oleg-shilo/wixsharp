@@ -9,67 +9,67 @@ using System.Windows.Forms;
 namespace WixSharp
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class ManagedProjectActions
     {
         /// <summary>
-        /// Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer. 
+        /// Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
         /// </summary>
         /// <param name="session">The session.</param>
         /// <returns></returns>
         [CustomAction]
         public static ActionResult WixSharp_InitRuntime_Action(Session session)
         {
-            //Debugger.Launch();
+            // Debugger.Launch();
             return ManagedProject.Init(session);
         }
 
         /// <summary>
-        /// Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer. 
+        /// Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
         /// </summary>
         /// <param name="session">The session.</param>
         /// <returns></returns>
         [CustomAction]
         public static ActionResult WixSharp_Load_Action(Session session)
         {
-            //Debugger.Launch(); 
+            // Debugger.Launch();
             return ManagedProject.InvokeClientHandlers(session, "Load");
         }
 
         /// <summary>
-        /// Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer. 
+        /// Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
         /// </summary>
         /// <param name="session">The session.</param>
         /// <returns></returns>
         [CustomAction]
         public static ActionResult WixSharp_BeforeInstall_Action(Session session)
         {
-            //Debugger.Launch(); 
+            // Debugger.Launch();
             return ManagedProject.InvokeClientHandlers(session, "BeforeInstall");
         }
 
         /// <summary>
-        /// Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer. 
+        /// Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
         /// </summary>
         /// <param name="session">The session.</param>
         /// <returns></returns>
         [CustomAction]
         public static ActionResult WixSharp_AfterInstall_Action(Session session)
         {
-            //Debugger.Launch(); 
+            //Debugger.Launch();
             return ManagedProject.InvokeClientHandlers(session, "AfterInstall");
         }
 
         /// <summary>
-        /// Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer. 
+        /// Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
         /// </summary>
         /// <param name="session">The session.</param>
         /// <returns></returns>
         [CustomAction]
         public static ActionResult CancelRequestHandler(Session session)
         {
-            //Debugger.Launch(); 
+            //Debugger.Launch();
             bool canceled = session.IsCancelRequestedFromUI();
             if (canceled)
                 return ActionResult.UserExit;
@@ -78,7 +78,6 @@ namespace WixSharp
         }
     }
 
-
     internal static class Reflect
     {
         public static string GetMemberName(Expression expression)
@@ -86,7 +85,7 @@ namespace WixSharp
             switch (expression.NodeType)
             {
                 case ExpressionType.MemberAccess:
-                    var memberExpression = (MemberExpression) expression;
+                    var memberExpression = (MemberExpression)expression;
 
                     string supername = null;
                     if (memberExpression.Expression != null)
@@ -98,11 +97,11 @@ namespace WixSharp
                     return String.Concat(supername, '.', memberExpression.Member.Name);
 
                 case ExpressionType.Call:
-                    var callExpression = (MethodCallExpression) expression;
+                    var callExpression = (MethodCallExpression)expression;
                     return callExpression.Method.Name;
 
                 case ExpressionType.Convert:
-                    var unaryExpression = (UnaryExpression) expression;
+                    var unaryExpression = (UnaryExpression)expression;
                     return GetMemberName(unaryExpression.Operand);
 
                 case ExpressionType.Constant:
@@ -127,7 +126,7 @@ namespace WixSharp
         public static string PropertyName<T>(Expression<Func<T>> expression)
         {
             if (expression.Body.NodeType == ExpressionType.MemberAccess)
-                return ((MemberExpression) expression.Body).Member.Name;
+                return ((MemberExpression)expression.Body).Member.Name;
             throw new ArgumentException("The expression is not a property access expression");
         }
 

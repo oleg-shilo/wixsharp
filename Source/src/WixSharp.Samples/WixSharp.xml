@@ -524,7 +524,14 @@
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:WixSharp.CommonTasks.Tasks.AddFeature(WixSharp.Dir,WixSharp.Feature[])" -->
+        <member name="M:WixSharp.CommonTasks.Tasks.AddFeature(WixSharp.Dir,WixSharp.Feature[])">
+            <summary>
+            Adds the feature(s).
+            </summary>
+            <param name="dir">The dir.</param>
+            <param name="items">The items.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.CommonTasks.Tasks.AddMergeModule(WixSharp.Dir,WixSharp.Merge[])">
             <summary>
             Adds the merge module.
@@ -7201,41 +7208,41 @@
             <returns></returns>
         </member>
         <member name="T:WixSharp.ManagedProjectActions">
-            <summary>
+             <summary>
             
-            </summary>
+             </summary>
         </member>
         <member name="M:WixSharp.ManagedProjectActions.WixSharp_InitRuntime_Action(Microsoft.Deployment.WindowsInstaller.Session)">
             <summary>
-            Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer. 
+            Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.ManagedProjectActions.WixSharp_Load_Action(Microsoft.Deployment.WindowsInstaller.Session)">
             <summary>
-            Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer. 
+            Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.ManagedProjectActions.WixSharp_BeforeInstall_Action(Microsoft.Deployment.WindowsInstaller.Session)">
             <summary>
-            Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer. 
+            Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.ManagedProjectActions.WixSharp_AfterInstall_Action(Microsoft.Deployment.WindowsInstaller.Session)">
             <summary>
-            Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer. 
+            Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.ManagedProjectActions.CancelRequestHandler(Microsoft.Deployment.WindowsInstaller.Session)">
             <summary>
-            Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer. 
+            Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
@@ -9616,7 +9623,7 @@
         </member>
         <member name="F:WixSharp.Project.ScheduleReboot">
             <summary>
-            Provideds fine control over rebooting at the end of installation.
+            Provides fine control over rebooting at the end of installation.
             <para>If set it creates <c>ScheduleReboot</c> element in the <c>InstallExecuteSequence</c> or <c>InstallUISequence</c>.</para>
             </summary>
             <example>

@@ -7,7 +7,9 @@ using System.Text;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 using IO = System.IO;
+
 using System.IO;
+
 using System.Diagnostics;
 
 namespace WixSharp
@@ -73,7 +75,6 @@ namespace WixSharp
             : base(name, items)
         {
         }
-
 
         /// <summary>
         /// Gets or sets a value indicating whether the full or reduced custom drawing algorithm should be used for rendering the Features dialog
@@ -201,8 +202,8 @@ namespace WixSharp
                     }
 
                     if (location.IsEmpty())
-                        throw new ApplicationException($"The location of the assembly for ManagedProject event handler ({type}) cannot be obtained.\n"+
-                                                        "The assembly must be a file based one but it looks like it was loaded from memory.\n"+
+                        throw new ApplicationException($"The location of the assembly for ManagedProject event handler ({type}) cannot be obtained.\n" +
+                                                        "The assembly must be a file based one but it looks like it was loaded from memory.\n" +
                                                         "If you are using CS-Script to build MSI ensure it has 'InMemoryAssembly' set to false.");
 
                     if (!this.DefaultRefAssemblies.Contains(location))
@@ -559,7 +560,6 @@ namespace WixSharp
                 result.Data.InitFrom(data);
                 result.Data.SetEnvironmentVariables();
                 session.CustomActionData.SetEnvironmentVariables();
-
             }
             catch (Exception e)
             {
