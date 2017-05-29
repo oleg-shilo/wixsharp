@@ -7,7 +7,9 @@ using System.Diagnostics;
 #if WIX4
 using WixToolset.Bootstrapper;
 #else
+
 using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+
 #endif
 
 [assembly: BootstrapperApplication(typeof(WixSharp.Bootstrapper.SilentManagedBA))]
@@ -17,8 +19,8 @@ namespace WixSharp.Bootstrapper
     /// <summary>
     /// Defines Wix# bootstrapper managed application with no User Interface.
     /// <para>It is a design time 'adapter' for the canonical WiX managed bootstrapper application <see cref="T:WixSharp.Bootstrapper.SilentManagedBA"/>.</para>
-    /// <para><see cref="T:WixSharp.Bootstrapper.SilentManagedBA"/> automatically handles <see cref="BootstrapperApplication"/> events and 
-    /// detects the current package/product state (present vs. absent). The package state detection is based on the <see cref="T:WixSharp.Bootstrapper.SilentBootstrapperApplication.PrimaryPackageId"/>. 
+    /// <para><see cref="T:WixSharp.Bootstrapper.SilentManagedBA"/> automatically handles <see cref="BootstrapperApplication"/> events and
+    /// detects the current package/product state (present vs. absent). The package state detection is based on the <see cref="T:WixSharp.Bootstrapper.SilentBootstrapperApplication.PrimaryPackageId"/>.
     /// If this member is no t then the Id of the lats package in the Bundle will be used instead.</para>
     /// </summary>
     /// <example>
@@ -27,13 +29,13 @@ namespace WixSharp.Bootstrapper
     ///      new Bundle("My Product",
     ///          new PackageGroupRef("NetFx40Web"),
     ///          new MsiPackage("product.msi"));
-    ///          
+    ///
     /// bootstrapper.AboutUrl = "https://wixsharp.codeplex.com/";
     /// bootstrapper.IconFile = "app_icon.ico";
     /// bootstrapper.Version = new Version("1.0.0.0");
     /// bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
     /// bootstrapper.Application = new SilentBootstrapperApplication();
-    /// 
+    ///
     /// bootstrapper.Build();
     /// </code>
     /// </example>
@@ -55,7 +57,6 @@ namespace WixSharp.Bootstrapper
         public SilentBootstrapperApplication()
             : base(typeof(SilentManagedBA).Assembly.Location)
         {
-
         }
 
         /// <summary>
@@ -84,6 +85,7 @@ namespace WixSharp.Bootstrapper
         AutoResetEvent done = new AutoResetEvent(false);
 
         static internal string PrimaryPackageIdVariableName = "_WixSharp.Bootstrapper.SilentManagedBA.PrimaryPackageId";
+
         string PrimaryPackageId
         {
             get
@@ -113,6 +115,7 @@ namespace WixSharp.Bootstrapper
             else
             {
                 ApplyComplete += OnApplyComplete;
+                DetectComplete += OnDetectComplete;
                 DetectPackageComplete += OnDetectPackageComplete;
                 PlanComplete += OnPlanComplete;
                 Engine.Detect();
@@ -121,9 +124,19 @@ namespace WixSharp.Bootstrapper
             Engine.Quit(0);
         }
 
+        private void OnDetectComplete(object sender, DetectCompleteEventArgs e)
+        {
+            if (this.Command.Action == LaunchAction.Uninstall)
+            {
+                Engine.Log(LogLevel.Verbose, "Invoking automatic plan for uninstall");
+                Engine.Plan(LaunchAction.Uninstall);
+                //Engine.Quit(0); // Doesn't really required
+            }
+        }
+
         /// <summary>
         /// Method that gets invoked when the Bootstrapper PlanComplete event is fired.
-        /// If the planning was successful, it instructs the Bootstrapper Engine to 
+        /// If the planning was successful, it instructs the Bootstrapper Engine to
         /// install the packages.
         /// </summary>
         void OnPlanComplete(object sender, PlanCompleteEventArgs e)

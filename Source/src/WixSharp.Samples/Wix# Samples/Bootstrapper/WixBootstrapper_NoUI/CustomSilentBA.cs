@@ -18,7 +18,7 @@ public class CustomSilentBA : BootstrapperApplication
 {
     protected override void Run()
     {
-        MessageBox.Show("CustomSilentBA just starting...");
+        //MessageBox.Show("CustomSilentBA just starting...");
 
         try
         {
@@ -29,13 +29,23 @@ public class CustomSilentBA : BootstrapperApplication
                 //Debug.Assert(false);
 
                 //Presence or absence of MyProductPackageId product will be a deciding factor
-                //for initializing BA for Install, Uninstall or Modify.
+                //for initializing BA in Install, Uninstall or Modify mode.
                 if (e.PackageId == "MyProductPackageId")
                 {
                     if (e.State == PackageState.Absent)
                         this.Engine.Plan(LaunchAction.Install);
                     else if (e.State == PackageState.Present)
                         this.Engine.Plan(LaunchAction.Uninstall);
+                }
+            };
+
+            DetectComplete += (s, e) =>
+            {
+                if (this.Command.Action == LaunchAction.Uninstall)
+                {
+                    // needed for handling update scenarios
+                    Engine.Log(LogLevel.Verbose, "Invoking automatic plan for uninstall");
+                    Engine.Plan(LaunchAction.Uninstall);
                 }
             };
 
