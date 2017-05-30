@@ -333,6 +333,7 @@
         <member name="M:WixSharp.CommonTasks.Tasks.DigitalySign(System.String,System.String,System.String,System.String,System.String,System.String)">
              <summary>
              Applies digital signature to a file (e.g. msi, exe, dll) with MS <c>SignTool.exe</c> utility.
+             Please use <see cref="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String)"/> for signing applying digital sign to a Bootstrapper.
              </summary>
              <param name="fileToSign">The file to sign.</param>
              <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
@@ -349,6 +350,62 @@
              <code>
              WixSharp.CommonTasks.Tasks.DigitalySign(
                  "Setup.msi",
+                 "MyCert.pfx",
+                 "http://timestamp.verisign.com/scripts/timstamp.dll",
+                 "MyPassword",
+                 null);
+             </code>
+             </example>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String)">
+             <summary>
+             Applies digital signature to a Bootstrapper and the Bootstrapper engine with MS <c>SignTool.exe</c> utility. 
+             <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about Bootstrapper engine signing</a>
+             </summary>
+             <param name="bootstrapperFileToSign">The Bootstrapper file to sign.</param>
+             <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
+             with the <c>password</c> parameter.</param>
+             <param name="timeURL">The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
+             A warning is generated if timestamping fails.</param>
+             <param name="password">The password to use when opening the PFX file. Should be <c>null</c> if no password required.</param>
+             <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
+             <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
+             If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
+             <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
+            
+             <example>The following is an example of signing <c>Setup.msi</c> file.
+             <code>
+             WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(
+                 "SetupBootstrapper.exe",
+                 "MyCert.pfx",
+                 "http://timestamp.verisign.com/scripts/timstamp.dll",
+                 "MyPassword",
+                 null);
+             </code>
+             </example>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapperEngine(System.String,System.String,System.String,System.String,System.String,System.String)">
+             <summary>
+             Applies digital sign to a Bootstrapper engine with MS <c>SignTool.exe</c> utility.
+             Bootstrapper file is not signing by this method, engine only.
+             Please use <see cref="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String)"/> for signing both (bootstrapper and Bootstrapper engine) instead.
+             <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about Bootstrapper engine signing</a>
+             </summary>
+             <param name="bootstrapperFileToSign">The Bootstrapper file to sign.</param>
+             <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
+             with the <c>password</c> parameter.</param>
+             <param name="timeURL">The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
+             A warning is generated if timestamping fails.</param>
+             <param name="password">The password to use when opening the PFX file. Should be <c>null</c> if no password required.</param>
+             <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
+             <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
+             If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
+             <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
+            
+             <example>The following is an example of signing <c>Setup.msi</c> file.
+             <code>
+             WixSharp.CommonTasks.Tasks.DigitalySignBootstrapperEngine(
+                 "SetupBootstrapper.exe",
                  "MyCert.pfx",
                  "http://timestamp.verisign.com/scripts/timstamp.dll",
                  "MyPassword",
@@ -1177,6 +1234,11 @@
             indicate the version of the OS.
             </summary>
         </member>
+        <member name="F:WixSharp.Bootstrapper.Bundle.DigitalySign">
+            <summary>
+            Parameters of digitaly sign
+            </summary>
+        </member>
         <member name="F:WixSharp.Bootstrapper.Bundle.DisableRemove">
             <summary>
             Determines whether the bundle can be removed via the Programs and Features (also known as Add/Remove Programs). If the value is
@@ -1725,6 +1787,60 @@
         <member name="F:WixSharp.Bootstrapper.SearchFormat.compatible">
             <summary>
             Returns the value formatted as Windows Installer would. For example, a REG_DWORD value of '1' is returned as '#1', not '1'.
+            </summary>
+        </member>
+        <member name="T:WixSharp.DigitalySign">
+            <summary>
+            Container of the parameters of the Digitaly Signing
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalySign.PfxFilePath">
+            <summary>Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
+            with the <see cref="P:WixSharp.DigitalySign.Password"/> property.
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalySign.TimeUrl">
+            <summary>The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
+            A warning is generated if timestamping fails.
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalySign.Password">
+            <summary>
+            The password to use when opening the PFX file. Should be <c>null</c> if no password required.
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalySign.Description">
+            <summary>
+            Description of the signed content.
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalySign.OptionalArguments">
+            <summary>
+            Extra arguments to pass to the <c>SignTool.exe</c> utility.
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalySign.WellKnownLocations">
+            <summary>
+            The optional ';' separated list of directories where SignTool.exe can be located.
+            If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)
+            </summary>
+        </member>
+        <member name="M:WixSharp.DigitalySign.Apply(System.String)">
+            <summary>
+            Apply digitaly sign to the file
+            </summary>
+            <param name="fileToSign">The file to sign.</param>
+            <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
+        </member>
+        <member name="M:WixSharp.DigitalySign.PrepareOptionalArguments">
+            <summary>
+            Prepare optional arguments by adding custom arguments with current signer specific
+            </summary>
+            <returns>Final version of the optional arguments</returns>
+        </member>
+        <member name="T:WixSharp.DigitalySignBootstrapper">
+            <summary>
+            Container of the parameters of the Digitaly Signing of the Bootstrapper
             </summary>
         </member>
         <member name="T:WixSharp.DriverInstaller">
@@ -8563,6 +8679,20 @@
             <param name="obj"></param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.XmlMapping.ToSecureString(System.String)">
+            <summary>
+            Converts source string to SecureString
+            </summary>
+            <param name="source">Insecure string</param>
+            <returns>Secure version of the source string</returns>
+        </member>
+        <member name="M:WixSharp.XmlMapping.ToInsecureString(System.Security.SecureString)">
+            <summary>
+            Converts secure version of the string to insecure string
+            </summary>
+            <param name="input">Secure string</param>
+            <returns>Insecure version of the SecureString</returns>
+        </member>
         <member name="T:WixSharp.XmlAttribute">
             <summary>
             The attribute indicating the type member being mapped to XML element. Used by Wix# compiler to emmit XML base on CLR types.
@@ -9506,6 +9636,11 @@
         <member name="F:WixSharp.Project.Description">
             <summary>
             The product full name or description.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Project.DigitalySign">
+            <summary>
+            Parameters of digitaly sign of this project
             </summary>
         </member>
         <member name="F:WixSharp.Project.Package">

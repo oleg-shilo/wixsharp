@@ -113,6 +113,8 @@
     <Compile Include="AutoElements.cs" />
     <Compile Include="Bootstrapper\UtilFileSearch.cs" />
     <Compile Include="Bootstrapper\UtilRegistrySearch.cs" />
+    <Compile Include="DigitalSign.cs" />
+    <Compile Include="DigitalySignBootstrapper.cs" />
     <Compile Include="DriverInstaller.cs" />
     <Compile Include="BinaryFileAction.cs" />
     <Compile Include="Bootstrapper\Bundle.cs" />

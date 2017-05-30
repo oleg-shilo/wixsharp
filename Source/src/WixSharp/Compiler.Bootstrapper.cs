@@ -123,6 +123,10 @@ namespace WixSharp
                             Compiler.OutputWriteLine(" UpgradeCode: {" + project.UpgradeCode + "}\n");
                             IO.File.Delete(objFile);
                             IO.File.Delete(pdbFile);
+
+                            var digitalySign = project.DigitalySign;
+                            if (digitalySign != null)
+                                digitalySign.Apply(outFile);
                         }
                     }
                     else

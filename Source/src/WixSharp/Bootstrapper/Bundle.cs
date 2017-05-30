@@ -108,6 +108,12 @@ namespace WixSharp.Bootstrapper
         public string Condition;
 
         /// <summary>
+        /// Parameters of digitaly sign
+        /// </summary>
+        [Xml]
+        public DigitalySignBootstrapper DigitalySign;
+
+        /// <summary>
         /// Determines whether the bundle can be removed via the Programs and Features (also known as Add/Remove Programs). If the value is
         /// "yes" then the "Uninstall" button will not be displayed. The default is "no" which ensures there is an "Uninstall" button to remove
         /// the bundle. If the "DisableModify" attribute is also "yes" or "button" then the bundle will not be displayed in Progams and

@@ -12,6 +12,8 @@ using Microsoft.Win32;
 using IO = System.IO;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security;
 using System.Text.RegularExpressions;
 using static WixSharp.SetupEventArgs;
 
@@ -2365,6 +2367,43 @@ namespace WixSharp
             }
 
             return result.ToArray();
+        }
+
+        /// <summary>
+        /// Converts source string to SecureString
+        /// </summary>
+        /// <param name="source">Insecure string</param>
+        /// <returns>Secure version of the source string</returns>
+        public static SecureString ToSecureString(this string source)
+        {
+            if (string.IsNullOrEmpty(source))
+                return null;
+
+            var result = new SecureString();
+            foreach (char c in source)
+                result.AppendChar(c);
+
+            result.MakeReadOnly();
+
+            return result;
+        }
+
+        /// <summary>
+        /// Converts secure version of the string to insecure string
+        /// </summary>
+        /// <param name="input">Secure string</param>
+        /// <returns>Insecure version of the SecureString</returns>
+        public static string ToInsecureString(this SecureString input)
+        {
+            IntPtr bstr = Marshal.SecureStringToBSTR(input);
+            try
+            {
+                return Marshal.PtrToStringBSTR(bstr);
+            }
+            finally
+            {
+                Marshal.FreeBSTR(bstr);
+            }
         }
     }
 

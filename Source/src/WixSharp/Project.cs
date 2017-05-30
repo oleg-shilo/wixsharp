@@ -168,6 +168,11 @@ namespace WixSharp
         /// </summary>
         public string Description = "";
 
+        /// <summary>
+        /// Parameters of digitaly sign of this project
+        /// </summary>
+        public DigitalySign DigitalySign;
+
         internal virtual void Preprocess()
         {
             var managedActions = this.Actions.OfType<ManagedAction>()
