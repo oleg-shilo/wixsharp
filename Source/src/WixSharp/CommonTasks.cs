@@ -150,7 +150,7 @@ namespace WixSharp.CommonTasks
 
         /// <summary>
         /// Applies digital signature to a file (e.g. msi, exe, dll) with MS <c>SignTool.exe</c> utility.
-        /// Please use <see cref="DigitalySignBootstrapper"/> for signing applying digital sign to a Bootstrapper.
+        /// Please use <see cref="DigitalySignBootstrapper"/> for signing a bootstrapper.
         /// </summary>
         /// <param name="fileToSign">The file to sign.</param>
         /// <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
@@ -177,15 +177,15 @@ namespace WixSharp.CommonTasks
         {
             //"C:\Program Files\\Microsoft SDKs\Windows\v6.0A\bin\signtool.exe" sign /f "pfxFile" /p password /v "fileToSign" /t timeURL
             //string args = "sign /v /f \"" + pfxFile + "\" \"" + fileToSign + "\"";
-            string args = "sign /v /f \"" + pfxFile + "\"";
+            string args = $"sign /v /f \"{pfxFile}\"";
             if (timeURL != null)
-                args += " /t \"" + timeURL + "\"";
+                args += $" /t \"{timeURL}\"";
             if (password != null)
-                args += " /p \"" + password + "\"";
+                args += $" /p \"{password}\"";
             if (!optionalArguments.IsEmpty())
                 args += " " + optionalArguments;
 
-            args += " \"" + fileToSign + "\"";
+            args += $" \"{fileToSign}\"";
 
             var tool = new ExternalTool
             {
@@ -203,10 +203,10 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Applies digital signature to a Bootstrapper and the Bootstrapper engine with MS <c>SignTool.exe</c> utility. 
-        /// <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about Bootstrapper engine signing</a>
+        /// Applies digital signature to a bootstrapper and the bootstrapper engine with MS <c>SignTool.exe</c> utility.
+        /// <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about bootstrapper engine signing</a>
         /// </summary>
-        /// <param name="bootstrapperFileToSign">The Bootstrapper file to sign.</param>
+        /// <param name="bootstrapperFileToSign">The bootstrapper file to sign.</param>
         /// <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
         /// with the <c>password</c> parameter.</param>
         /// <param name="timeURL">The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
@@ -217,7 +217,7 @@ namespace WixSharp.CommonTasks
         /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
-        /// <example>The following is an example of signing <c>Setup.msi</c> file.
+        /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file.
         /// <code>
         /// WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(
         ///     "SetupBootstrapper.exe",
@@ -238,9 +238,9 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Applies digital sign to a Bootstrapper engine with MS <c>SignTool.exe</c> utility.
-        /// Bootstrapper file is not signing by this method, engine only.
-        /// Please use <see cref="DigitalySignBootstrapper"/> for signing both (bootstrapper and Bootstrapper engine) instead.
+        /// Applies digital signature to a bootstrapper engine with MS <c>SignTool.exe</c> utility.
+        /// Note : this method doesn't sign the bootstrapper file but the engine only.
+        /// Please use <see cref="DigitalySignBootstrapper"/> for signing both (bootstrapper and bootstrapper engine) instead.
         /// <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about Bootstrapper engine signing</a>
         /// </summary>
         /// <param name="bootstrapperFileToSign">The Bootstrapper file to sign.</param>
@@ -254,14 +254,14 @@ namespace WixSharp.CommonTasks
         /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
-        /// <example>The following is an example of signing <c>Setup.msi</c> file.
+        /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file engine.
         /// <code>
         /// WixSharp.CommonTasks.Tasks.DigitalySignBootstrapperEngine(
         ///     "SetupBootstrapper.exe",
         ///     "MyCert.pfx",
         ///     "http://timestamp.verisign.com/scripts/timstamp.dll",
         ///     "MyPassword",
-        ///     null);
+        ///      null);
         /// </code>
         /// </example>
         static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
@@ -275,7 +275,7 @@ namespace WixSharp.CommonTasks
                 var tool = new ExternalTool
                 {
                     ExePath = insigniaPath,
-                    Arguments = string.Format("-ib \"{0}\" -o \"{1}\"", bootstrapperFileToSign, enginePath)
+                    Arguments = "-ib \"{0}\" -o \"{1}\"".FormatWith(bootstrapperFileToSign, enginePath)
                 };
 
                 var retval = tool.ConsoleRun();
@@ -289,7 +289,7 @@ namespace WixSharp.CommonTasks
                 tool = new ExternalTool
                 {
                     ExePath = insigniaPath,
-                    Arguments = string.Format("-ab \"{1}\" \"{0}\" -o \"{0}\"", bootstrapperFileToSign, enginePath)
+                    Arguments = "-ab \"{1}\" \"{0}\" -o \"{0}\"".FormatWith(bootstrapperFileToSign, enginePath)
                 };
 
                 tool.ConsoleRun();
