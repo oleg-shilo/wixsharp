@@ -3,7 +3,7 @@
 namespace WixSharp
 {
     /// <summary>
-    /// Container of the parameters of the Digital Signingature of the Bootstrapper
+    /// Container with the parameters of the digital signature of the Bootstrapper
     /// </summary>
     public class DigitalSignatureBootstrapper : DigitalSignature
     {

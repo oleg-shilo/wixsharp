@@ -4,7 +4,7 @@ using System.Security;
 namespace WixSharp
 {
     /// <summary>
-    /// Container of the parameters of the Digitaly Signing
+    /// Container with the parameters of the digital signature
     /// </summary>
     public class DigitalSignature
     {
