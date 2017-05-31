@@ -6,7 +6,7 @@ namespace WixSharp
     /// <summary>
     /// Container of the parameters of the Digitaly Signing
     /// </summary>
-    public class DigitalySign
+    public class DigitalSignature
     {
         private SecureString _password;
 
@@ -31,6 +31,9 @@ namespace WixSharp
 
         /// <summary>
         /// Description of the signed content.
+        /// Is passed to the /d parameter of the <c>SignTool.exe</c>
+        /// UAC uses this Description when asks the user about user rights elevation.
+        /// UAC uses temporary file name instead if no Description provided.
         /// </summary>
         public string Description { get; set; }
 
@@ -46,18 +49,24 @@ namespace WixSharp
         public string WellKnownLocations { get; set; }
 
         /// <summary>
-        /// Apply digitaly sign to the file
+        /// Applies digital signature to a file
         /// </summary>
         /// <param name="fileToSign">The file to sign.</param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         public virtual int Apply(string fileToSign)
         {
-            return CommonTasks.Tasks.DigitalySign(fileToSign, PfxFilePath, TimeUrl.AbsoluteUri, Password,
+            var retValue = CommonTasks.Tasks.DigitalySign(fileToSign, PfxFilePath, TimeUrl.AbsoluteUri, Password,
                 PrepareOptionalArguments(), WellKnownLocations);
+
+            Console.WriteLine(retValue != 0
+                ? $"Could not sign the {fileToSign} file."
+                : $"The file {fileToSign} was signed successfully.");
+
+            return retValue;
         }
 
         /// <summary>
-        /// Prepare optional arguments by adding custom arguments with current signer specific
+        /// Preparing optional arguments by adding custom arguments with current signer specific
         /// </summary>
         /// <returns>Final version of the optional arguments</returns>
         protected virtual string PrepareOptionalArguments()
@@ -65,7 +74,7 @@ namespace WixSharp
             if (Description.IsNullOrEmpty())
                 return OptionalArguments;
 
-            return string.Format("{0} /d \"{1}\"", OptionalArguments, Description);
+            return $"{OptionalArguments} /d \"{Description}\"";
         }
     }
 }

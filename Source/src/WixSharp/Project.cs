@@ -171,7 +171,7 @@ namespace WixSharp
         /// <summary>
         /// Parameters of digitaly sign of this project
         /// </summary>
-        public DigitalySign DigitalySign;
+        public DigitalSignature DigitalSignature;
 
         internal virtual void Preprocess()
         {

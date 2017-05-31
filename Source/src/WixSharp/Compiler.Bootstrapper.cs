@@ -124,9 +124,7 @@ namespace WixSharp
                             IO.File.Delete(objFile);
                             IO.File.Delete(pdbFile);
 
-                            var digitalySign = project.DigitalySign;
-                            if (digitalySign != null)
-                                digitalySign.Apply(outFile);
+                            project.DigitalSignature?.Apply(outFile);
                         }
                     }
                     else
