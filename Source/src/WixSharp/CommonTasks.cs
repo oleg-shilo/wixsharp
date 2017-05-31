@@ -150,6 +150,7 @@ namespace WixSharp.CommonTasks
 
         /// <summary>
         /// Applies digital signature to a file (e.g. msi, exe, dll) with MS <c>SignTool.exe</c> utility.
+        /// Please use <see cref="DigitalySignBootstrapper"/> for signing applying digital sign to a Bootstrapper.
         /// </summary>
         /// <param name="fileToSign">The file to sign.</param>
         /// <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
@@ -199,6 +200,105 @@ namespace WixSharp.CommonTasks
                 Arguments = args
             };
             return tool.ConsoleRun();
+        }
+
+        /// <summary>
+        /// Applies digital signature to a Bootstrapper and the Bootstrapper engine with MS <c>SignTool.exe</c> utility. 
+        /// <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about Bootstrapper engine signing</a>
+        /// </summary>
+        /// <param name="bootstrapperFileToSign">The Bootstrapper file to sign.</param>
+        /// <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
+        /// with the <c>password</c> parameter.</param>
+        /// <param name="timeURL">The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
+        /// A warning is generated if timestamping fails.</param>
+        /// <param name="password">The password to use when opening the PFX file. Should be <c>null</c> if no password required.</param>
+        /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
+        /// <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
+        /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
+        /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
+        ///
+        /// <example>The following is an example of signing <c>Setup.msi</c> file.
+        /// <code>
+        /// WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(
+        ///     "SetupBootstrapper.exe",
+        ///     "MyCert.pfx",
+        ///     "http://timestamp.verisign.com/scripts/timstamp.dll",
+        ///     "MyPassword",
+        ///     null);
+        /// </code>
+        /// </example>
+        static public int DigitalySignBootstrapper(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
+            string optionalArguments = null, string wellKnownLocations = null)
+        {
+            var retval = DigitalySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations);
+            if (retval != 0)
+                return retval;
+
+            return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations);
+        }
+
+        /// <summary>
+        /// Applies digital sign to a Bootstrapper engine with MS <c>SignTool.exe</c> utility.
+        /// Bootstrapper file is not signing by this method, engine only.
+        /// Please use <see cref="DigitalySignBootstrapper"/> for signing both (bootstrapper and Bootstrapper engine) instead.
+        /// <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about Bootstrapper engine signing</a>
+        /// </summary>
+        /// <param name="bootstrapperFileToSign">The Bootstrapper file to sign.</param>
+        /// <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
+        /// with the <c>password</c> parameter.</param>
+        /// <param name="timeURL">The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
+        /// A warning is generated if timestamping fails.</param>
+        /// <param name="password">The password to use when opening the PFX file. Should be <c>null</c> if no password required.</param>
+        /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
+        /// <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
+        /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
+        /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
+        ///
+        /// <example>The following is an example of signing <c>Setup.msi</c> file.
+        /// <code>
+        /// WixSharp.CommonTasks.Tasks.DigitalySignBootstrapperEngine(
+        ///     "SetupBootstrapper.exe",
+        ///     "MyCert.pfx",
+        ///     "http://timestamp.verisign.com/scripts/timstamp.dll",
+        ///     "MyPassword",
+        ///     null);
+        /// </code>
+        /// </example>
+        static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
+            string optionalArguments = null, string wellKnownLocations = null)
+        {
+            var insigniaPath = IO.Path.Combine(Compiler.WixLocation, "insignia.exe");
+            string enginePath = IO.Path.GetTempFileName();
+
+            try
+            {
+                var tool = new ExternalTool
+                {
+                    ExePath = insigniaPath,
+                    Arguments = string.Format("-ib \"{0}\" -o \"{1}\"", bootstrapperFileToSign, enginePath)
+                };
+
+                var retval = tool.ConsoleRun();
+                if (retval != 0)
+                    return retval;
+
+                retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations);
+                if (retval != 0)
+                    return retval;
+
+                tool = new ExternalTool
+                {
+                    ExePath = insigniaPath,
+                    Arguments = string.Format("-ab \"{1}\" \"{0}\" -o \"{0}\"", bootstrapperFileToSign, enginePath)
+                };
+
+                tool.ConsoleRun();
+                return retval;
+            }
+            finally
+            {
+                IO.File.Delete(enginePath);
+            }
         }
 
         //static Task<T> ExecuteInNewContext<T>(Func<T> action)
