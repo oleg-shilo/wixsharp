@@ -1791,7 +1791,7 @@
         </member>
         <member name="T:WixSharp.DigitalSignature">
             <summary>
-            Container of the parameters of the Digitaly Signing
+            Container with the parameters of the digital signature
             </summary>
         </member>
         <member name="P:WixSharp.DigitalSignature.PfxFilePath">
@@ -1812,6 +1812,9 @@
         <member name="P:WixSharp.DigitalSignature.Description">
             <summary>
             Description of the signed content.
+            Is passed to the /d parameter of the <c>SignTool.exe</c>
+            UAC uses this Description when asks the user about user rights elevation.
+            UAC uses temporary file name instead if no Description provided.
             </summary>
         </member>
         <member name="P:WixSharp.DigitalSignature.OptionalArguments">
@@ -1834,13 +1837,13 @@
         </member>
         <member name="M:WixSharp.DigitalSignature.PrepareOptionalArguments">
             <summary>
-            Prepare optional arguments by adding custom arguments with current signer specific
+            Preparing optional arguments by adding custom arguments with current signer specific
             </summary>
             <returns>Final version of the optional arguments</returns>
         </member>
         <member name="T:WixSharp.DigitalSignatureBootstrapper">
             <summary>
-            Container of the parameters of the Digital Signingature of the Bootstrapper
+            Container with the parameters of the digital signature of the Bootstrapper
             </summary>
         </member>
         <member name="M:WixSharp.DigitalSignatureBootstrapper.Apply(System.String)">
