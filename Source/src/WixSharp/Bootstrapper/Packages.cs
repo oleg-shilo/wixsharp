@@ -220,12 +220,19 @@ namespace WixSharp.Bootstrapper
         public bool? DisplayInternalUI;
 
         /// <summary>
+        /// Specifies whether the MSI will be displayed in Programs and Features (also known as Add/Remove Programs). If "yes" is specified the MSI package 
+        /// information will be displayed in Programs and Features. The default "no" indicates the MSI will not be displayed.
+        /// </summary>
+        [Xml]
+        public bool? Visible;
+
+        /// <summary>
         /// MSI properties to be set based on the value of a burn engine expression. This is a KeyValue mapping expression of the following format:
         /// <para>&lt;key&gt;=&lt;value&gt;[;&lt;key&gt;=&lt;value&gt;]</para>
         /// <para><c>Example:</c> "COMMANDARGS=[CommandArgs];GLOBAL=yes""</para>
         /// </summary>
         public string MsiProperties;
-
+        
         /// <summary>
         /// The default MsiProperties of a package .
         /// <para>This value is merged with user defined <see cref="WixSharp.Bootstrapper.MsiPackage.MsiProperties"/>.</para>
