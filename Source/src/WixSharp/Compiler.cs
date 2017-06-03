@@ -834,6 +834,8 @@ namespace WixSharp
 
                             IO.Path.ChangeExtension(wxsFile, ".wixpdb").DeleteIfExists();
                             IO.Path.ChangeExtension(path, ".wixpdb").DeleteIfExists();
+
+                            project.DigitalSignature?.Apply(outFile);
                         }
                     }
                     else
