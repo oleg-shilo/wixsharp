@@ -13,9 +13,6 @@ class Script
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(@"Files\Bin\MyApp.exe")))
-            // new File(@"Files\Bin\MyApp.exe"),
-            // new Dir(@"Docs\Manual",
-            //     new File(@"Files\Docs\Manual.txt"))))
             {
                 DigitalSignature = new DigitalSignature
                 {
