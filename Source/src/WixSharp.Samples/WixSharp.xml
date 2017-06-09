@@ -1234,6 +1234,11 @@
             indicate the version of the OS.
             </summary>
         </member>
+        <member name="F:WixSharp.Bootstrapper.Bundle.DigitalSignature">
+            <summary>
+            Parameters of digitaly sign
+            </summary>
+        </member>
         <member name="F:WixSharp.Bootstrapper.Bundle.DisableRemove">
             <summary>
             Determines whether the bundle can be removed via the Programs and Features (also known as Add/Remove Programs). If the value is
@@ -1789,6 +1794,70 @@
             <summary>
             Returns the value formatted as Windows Installer would. For example, a REG_DWORD value of '1' is returned as '#1', not '1'.
             </summary>
+        </member>
+        <member name="T:WixSharp.DigitalSignature">
+            <summary>
+            Container with the parameters of the digital signature
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalSignature.PfxFilePath">
+            <summary>Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
+            with the <see cref="P:WixSharp.DigitalSignature.Password"/> property.
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalSignature.TimeUrl">
+            <summary>The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
+            A warning is generated if timestamping fails.
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalSignature.Password">
+            <summary>
+            The password to use when opening the PFX file. Should be <c>null</c> if no password required.
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalSignature.Description">
+            <summary>
+            Description of the signed content.
+            Is passed to the /d parameter of the <c>SignTool.exe</c>
+            UAC uses this Description when asks the user about user rights elevation.
+            UAC uses temporary file name instead if no Description provided.
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalSignature.OptionalArguments">
+            <summary>
+            Extra arguments to pass to the <c>SignTool.exe</c> utility.
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalSignature.WellKnownLocations">
+            <summary>
+            The optional ';' separated list of directories where SignTool.exe can be located.
+            If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)
+            </summary>
+        </member>
+        <member name="M:WixSharp.DigitalSignature.Apply(System.String)">
+            <summary>
+            Applies digital signature to a file
+            </summary>
+            <param name="fileToSign">The file to sign.</param>
+            <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
+        </member>
+        <member name="M:WixSharp.DigitalSignature.PrepareOptionalArguments">
+            <summary>
+            Preparing optional arguments by adding custom arguments with current signer specific
+            </summary>
+            <returns>Final version of the optional arguments</returns>
+        </member>
+        <member name="T:WixSharp.DigitalSignatureBootstrapper">
+            <summary>
+            Container with the parameters of the digital signature of the Bootstrapper
+            </summary>
+        </member>
+        <member name="M:WixSharp.DigitalSignatureBootstrapper.Apply(System.String)">
+            <summary>
+            Applies digital signature to a Bootstrapper file
+            </summary>
+            <param name="bootstrapperFileToSign">The Bootstrapper file to sign.</param>
+            <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         </member>
         <member name="T:WixSharp.DriverInstaller">
              <summary>
@@ -8626,6 +8695,20 @@
             <param name="obj"></param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.XmlMapping.ToSecureString(System.String)">
+            <summary>
+            Converts source string to SecureString
+            </summary>
+            <param name="source">Insecure string</param>
+            <returns>Secure version of the source string</returns>
+        </member>
+        <member name="M:WixSharp.XmlMapping.ToInsecureString(System.Security.SecureString)">
+            <summary>
+            Converts secure version of the string to insecure string
+            </summary>
+            <param name="input">Secure string</param>
+            <returns>Insecure version of the SecureString</returns>
+        </member>
         <member name="T:WixSharp.XmlAttribute">
             <summary>
             The attribute indicating the type member being mapped to XML element. Used by Wix# compiler to emmit XML base on CLR types.
@@ -9569,6 +9652,11 @@
         <member name="F:WixSharp.Project.Description">
             <summary>
             The product full name or description.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Project.DigitalSignature">
+            <summary>
+            Parameters of digitaly sign of this project
             </summary>
         </member>
         <member name="F:WixSharp.Project.Package">
