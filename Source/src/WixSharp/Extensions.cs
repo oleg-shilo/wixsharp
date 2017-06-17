@@ -1061,6 +1061,30 @@ namespace WixSharp
             return path;
         }
 
+        /// <summary>
+        /// Unescape '\%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product"). 
+        /// <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent 
+        /// "%ProgramFiles%\My Product" being later converted into "ProgramFilesFolder\My Product"</para>
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        internal static string UnEscapeEnvars(this string text)
+        {
+            return text.Replace("\\%", "%");
+        }
+
+        /// <summary>
+        /// Escape '%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product"). 
+        /// <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent 
+        /// "%ProgramFiles%\My Product" being later converted into "ProgramFilesFolder\My Product"</para>
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        internal static string EscapeEnvars(this string text)
+        {
+            return text.Replace("%", "\\%");
+        }
+
         internal static string ReplaceWixSharpEnvConsts(this string path)
         {
             //%ProgramFiles%\My Company\My Product -> [ProgramFilesFolder]\My Company\My Product

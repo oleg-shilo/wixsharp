@@ -4518,6 +4518,24 @@
             <param name="path">The Wix# directory path.</param>
             <returns>Replacement result.</returns>
         </member>
+        <member name="M:WixSharp.Extensions.UnEscapeEnvars(System.String)">
+            <summary>
+            Unescape '\%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product"). 
+            <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent 
+            "%ProgramFiles%\My Product" being later converted into "ProgramFilesFolder\My Product"</para>
+            </summary>
+            <param name="text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.EscapeEnvars(System.String)">
+            <summary>
+            Escape '%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product"). 
+            <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent 
+            "%ProgramFiles%\My Product" being later converted into "ProgramFilesFolder\My Product"</para>
+            </summary>
+            <param name="text"></param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.ExpandEnvVars(System.String)">
             <summary>
             Expands the EnvironmentVariable It is nothing else but a an extension method wrapping Environment.ExpandEnvironmentVariables to allow fluent API.
