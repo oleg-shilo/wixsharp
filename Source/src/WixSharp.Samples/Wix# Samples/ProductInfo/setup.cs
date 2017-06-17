@@ -15,7 +15,7 @@ class Script
 
         project.UI = WUI.WixUI_Minimal;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-        
+
         project.ControlPanelInfo.Comments = "Simple test msi";
         project.ControlPanelInfo.Readme = "https://wixsharp.codeplex.com/manual";
         project.ControlPanelInfo.HelpLink = "https://wixsharp.codeplex.com/support";
@@ -35,6 +35,3 @@ class Script
         Compiler.BuildMsi(project);
     }
 }
-
-
-
