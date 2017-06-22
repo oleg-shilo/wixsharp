@@ -882,7 +882,7 @@ namespace WixSharp
             if (ClientAssembly.IsEmpty())
                 ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
 
-            WixEntity.ResetIdGenerator();
+            WixEntity.ResetIdGenerator(false);
             string file = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, project.OutFileName) + ".wxs");
 
             if (IO.File.Exists(file))
