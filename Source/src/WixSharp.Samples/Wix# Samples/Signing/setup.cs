@@ -12,7 +12,7 @@ class Script
         Project project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File(@"C:\tools\VideoRecorder\AForge.Video.dll")))
+                    new File(@"Files\Bin\MyApp.exe")))
             {
                 DigitalSignature = new DigitalSignature
                 {
@@ -28,6 +28,3 @@ class Script
         Compiler.BuildMsi(project);
     }
 }
-
-
-

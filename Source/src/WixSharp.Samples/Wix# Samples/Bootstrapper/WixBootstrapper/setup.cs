@@ -46,7 +46,7 @@ public class InstallScript
 
                     //msiOnlinePackage, //just a demo sample
 
-                    new MsiPackage(crtMsi) { DisplayInternalUI = true, MsiProperties = "PACKAGE_PROPERTY=[BundleVariable]" },
+                    new MsiPackage(crtMsi) { DisplayInternalUI = true, Visible = true, MsiProperties = "PACKAGE_PROPERTY=[BundleVariable]" },
                     new MsiPackage(productMsi) { DisplayInternalUI = true });
 
         bootstrapper.AboutUrl = "https://wixsharp.codeplex.com/";
@@ -55,13 +55,13 @@ public class InstallScript
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
         bootstrapper.Application.LogoFile = "logo.png";
         bootstrapper.Application.LicensePath = "licence.html";  //HyperlinkLicense app with embedded license file
-        //bootstrapper.Application.LicensePath = "licence.rtf"; //RtfLicense app with embedded license file 
+        //bootstrapper.Application.LicensePath = "licence.rtf"; //RtfLicense app with embedded license file
         //bootstrapper.Application.LicensePath = "http://opensource.org/licenses/MIT"; //HyperlinkLicense app with online license file
         //bootstrapper.Application.LicensePath = null; //HyperlinkLicense app with no license
 
         bootstrapper.IncludeWixExtension(WixExtension.Util);
 
-        // The code below sets WiX variables 'Netfx4FullVersion' and 'AdobeInstalled'. Note it has no affect on 
+        // The code below sets WiX variables 'Netfx4FullVersion' and 'AdobeInstalled'. Note it has no affect on
         //the runtime behavior and use of 'FileSearch' and "RegistrySearch" only provided as an example.
         bootstrapper.AddWixFragment("Wix/Bundle",
                                      new UtilRegistrySearch
@@ -80,14 +80,14 @@ public class InstallScript
         bootstrapper.StringVariablesDefinition += "BundleVariable=333";
         bootstrapper.PreserveTempFiles = true;
 
-        // Add MspPackage manually (demo only). 
-        // In the future releases the direct support for MspPackage element will be added. 
+        // Add MspPackage manually (demo only).
+        // In the future releases the direct support for MspPackage element will be added.
         // bootstrapper.WixSourceGenerated += (doc) => doc.FindSingle("Chain")
-        //                                                .AddElement("MspPackage", 
-        //                                                            "SourceFile=Patch.msp; Slipstream=no"); 
+        //                                                .AddElement("MspPackage",
+        //                                                            "SourceFile=Patch.msp; Slipstream=no");
 
         //in real life scenarios suppression may need to be enabled (see SuppressWixMbaPrereqVars documentation)
-        //bootstrapper.SuppressWixMbaPrereqVars = true; 
+        //bootstrapper.SuppressWixMbaPrereqVars = true;
 
         var setup = bootstrapper.Build("app_setup");
 

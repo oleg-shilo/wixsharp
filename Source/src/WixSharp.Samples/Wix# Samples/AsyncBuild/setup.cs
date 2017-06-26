@@ -36,7 +36,6 @@ class Script
     }
 }
 
-
 public static class WixSharpAsyncHelper
 {
     public static Task<string> BuildAsync(this Project project)

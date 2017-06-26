@@ -43,7 +43,7 @@ using IO = System.IO;
 
 namespace WixSharp
 {
-    //This code requires heavy optimization and refactoring. Toady it serves the purpose of refining the API.  
+    //This code requires heavy optimization and refactoring. Toady it serves the purpose of refining the API.
     public partial class Compiler
     {
         /// <summary>
@@ -142,7 +142,6 @@ namespace WixSharp
                                 IO.File.Delete(file);
                         }
                         catch { }
-
             }
             finally
             {
@@ -170,7 +169,7 @@ namespace WixSharp
             path = path.ExpandEnvVars();
 
             //System.Diagnostics.Debug.Assert(false);
-            string wixLocationEnvVar = $"set WixLocation={WixLocation}"+Environment.NewLine;
+            string wixLocationEnvVar = $"set WixLocation={WixLocation}" + Environment.NewLine;
             string compiler = Utils.PathCombine(WixLocation, "candle.exe");
             string linker = Utils.PathCombine(WixLocation, "light.exe");
             string batchFile = path;
@@ -199,7 +198,7 @@ namespace WixSharp
                     wxsFiles += " \"" + file + "\"";
 
                 var candleOptions = CandleOptions + " " + project.CandleOptions;
-                string batchFileContent = wixLocationEnvVar + "\"" + compiler + "\" " + candleOptions + " " + extensionDlls + " \"" + IO.Path.GetFileName(wxsFile) + "\" "+ wxsFiles + "\r\n";
+                string batchFileContent = wixLocationEnvVar + "\"" + compiler + "\" " + candleOptions + " " + extensionDlls + " \"" + IO.Path.GetFileName(wxsFile) + "\" " + wxsFiles + "\r\n";
 
                 //Run(compiler, CandleOptions + " " + extensionDlls + " \"" + wxsFile + "\" -out \"" + objFile + "\"");
 
@@ -224,7 +223,6 @@ namespace WixSharp
             return path;
         }
 
-
         /// <summary>
         /// Builds the WiX source file (*.wxs) from the specified <see cref="Bundle"/> instance.
         /// </summary>
@@ -241,7 +239,7 @@ namespace WixSharp
 
                 project.Validate();
 
-                WixEntity.ResetIdGenerator();
+                WixEntity.ResetIdGenerator(false);
                 string file = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, project.OutFileName) + ".wxs");
 
                 if (IO.File.Exists(file))
@@ -256,7 +254,7 @@ namespace WixSharp
 
                 var doc = XDocument.Parse(
                        @"<?xml version=""1.0"" encoding=""utf-8""?>
-                             "+$"<Wix xmlns=\"{wix3Namespace}\" {extraNamespaces} "+@" >
+                             " + $"<Wix xmlns=\"{wix3Namespace}\" {extraNamespaces} " + @" >
                         </Wix>");
 
                 doc.Root.Add(project.ToXml());
@@ -320,5 +318,4 @@ namespace WixSharp
             return IO.File.Exists(outFile) ? outFile : null;
         }
     }
-
 }

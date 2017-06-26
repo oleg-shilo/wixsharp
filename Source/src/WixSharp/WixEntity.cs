@@ -381,9 +381,15 @@ namespace WixSharp
         /// </summary>
         static public void ResetIdGenerator()
         {
+            idMaps.Clear();
+            alreadyTakenIds.Clear();
+        }
+
+        static internal void ResetIdGenerator(bool supressWarning)
+        {
             if (!DoNotResetIdGenerator)
             {
-                if (idMaps.Count > 0)
+                if (idMaps.Count > 0 && !supressWarning)
                 {
                     Compiler.OutputWriteLine("----------------------------");
                     Compiler.OutputWriteLine("Warning: Wix# compiler detected that some IDs has been auto-generated before the build started. " +
@@ -394,6 +400,7 @@ namespace WixSharp
                     Compiler.OutputWriteLine("----------------------------");
                 }
                 idMaps.Clear();
+                alreadyTakenIds.Clear();
             }
         }
 

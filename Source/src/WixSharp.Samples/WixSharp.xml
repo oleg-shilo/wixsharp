@@ -1668,6 +1668,12 @@
             displayed on top of any bootstrapper application UI.
             </summary>
         </member>
+        <member name="F:WixSharp.Bootstrapper.MsiPackage.Visible">
+            <summary>
+            Specifies whether the MSI will be displayed in Programs and Features (also known as Add/Remove Programs). If "yes" is specified the MSI package 
+            information will be displayed in Programs and Features. The default "no" indicates the MSI will not be displayed.
+            </summary>
+        </member>
         <member name="F:WixSharp.Bootstrapper.MsiPackage.MsiProperties">
             <summary>
             MSI properties to be set based on the value of a burn engine expression. This is a KeyValue mapping expression of the following format:
@@ -4511,6 +4517,24 @@
             </summary>
             <param name="path">The Wix# directory path.</param>
             <returns>Replacement result.</returns>
+        </member>
+        <member name="M:WixSharp.Extensions.UnEscapeEnvars(System.String)">
+            <summary>
+            Unescape '\%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product"). 
+            <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent 
+            "%ProgramFiles%\My Product" being later converted into "ProgramFilesFolder\My Product"</para>
+            </summary>
+            <param name="text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.EscapeEnvars(System.String)">
+            <summary>
+            Escape '%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product"). 
+            <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent 
+            "%ProgramFiles%\My Product" being later converted into "ProgramFilesFolder\My Product"</para>
+            </summary>
+            <param name="text"></param>
+            <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.ExpandEnvVars(System.String)">
             <summary>

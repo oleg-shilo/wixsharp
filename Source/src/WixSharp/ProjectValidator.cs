@@ -1,4 +1,5 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
@@ -23,7 +24,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -32,8 +35,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Microsoft.Deployment.WindowsInstaller;
+
 using IO = System.IO;
 using Reflection = System.Reflection;
+
 using System.Drawing;
 
 namespace WixSharp
@@ -66,7 +71,6 @@ namespace WixSharp
 
             if (project.MajorUpgradeStrategy != null)
             {
-
                 if (project.MajorUpgradeStrategy.UpgradeVersions == null && project.MajorUpgradeStrategy.PreventDowngradingVersions == null)
                 {
                     throw new UpgradeStrategyValidationException("Project MajorUpgradeStrategy.UpgradeVersions and PreventDowngradingVersions are not defined.");
@@ -222,7 +226,13 @@ namespace WixSharp
             if (asm == null)
                 asm = System.Reflection.Assembly.ReflectionOnlyLoadFrom(file);
 
-            return IO.Path.Combine(dir, asm.ManifestModule.ScopeName);
+            var name = asm.ManifestModule.ScopeName;
+            if (Path.GetExtension(name) != Path.GetExtension(file))
+            {
+                name = Path.GetFileNameWithoutExtension(name) + Path.GetExtension(file);
+            }
+
+            return IO.Path.Combine(dir, name);
         }
 
         public void ValidateCAAssembly(string file, string dtfAsm)

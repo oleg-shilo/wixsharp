@@ -882,7 +882,7 @@ namespace WixSharp
             if (ClientAssembly.IsEmpty())
                 ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
 
-            WixEntity.ResetIdGenerator();
+            WixEntity.ResetIdGenerator(false);
             string file = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, project.OutFileName) + ".wxs");
 
             if (IO.File.Exists(file))
@@ -2192,7 +2192,7 @@ namespace WixSharp
                     if (!regVal.Key.IsEmpty())
                         regKeyEl.Add(new XAttribute("Key", regVal.Key));
 
-                    string stringValue = regVal.RegValueString.ExpandWixEnvConsts();
+                    string stringValue = regVal.RegValueString.ExpandWixEnvConsts().UnEscapeEnvars();
                     if (regValEl.Attribute("Type").Value == "multiString")
                     {
                         foreach (string line in stringValue.GetLines())
