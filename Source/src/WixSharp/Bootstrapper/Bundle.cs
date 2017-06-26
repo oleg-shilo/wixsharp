@@ -110,7 +110,6 @@ namespace WixSharp.Bootstrapper
         /// <summary>
         /// Parameters of digitaly sign
         /// </summary>
-        [Xml]
         public DigitalSignatureBootstrapper DigitalSignature;
 
         /// <summary>
