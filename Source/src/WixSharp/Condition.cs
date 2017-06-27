@@ -195,6 +195,26 @@ namespace WixSharp
         /// </summary>
         public readonly static Condition Net45_Installed = new Condition(" (NETFRAMEWORK45 >= '#378389') ");
         /// <summary>
+        /// The .NET4.5.1 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+        /// </summary>
+        public readonly static Condition Net451_Installed = new Condition(" (NETFRAMEWORK45 >= '#378675') ");
+        /// <summary>
+        /// The .NET4.5.2 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+        /// </summary>
+        public readonly static Condition Net452_Installed = new Condition(" (NETFRAMEWORK45 >= '#379893') ");
+        /// <summary>
+        /// The .NET4.6 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+        /// </summary>
+        public readonly static Condition Net46_Installed = new Condition(" (NETFRAMEWORK45 >= '#393295') ");
+        /// <summary>
+        /// The .NET4.6.1 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+        /// </summary>
+        public readonly static Condition Net461_Installed = new Condition(" (NETFRAMEWORK45 >= '#394254') ");
+        /// <summary>
+        /// The .NET4.6.2 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+        /// </summary>
+        public readonly static Condition Net462_Installed = new Condition(" (NETFRAMEWORK45 >= '#394802 ') ");
+        /// <summary>
         /// The .NET3.0 SP installed. This condition is to be used in Project.SetNetFxPrerequisite.
         /// </summary>
         public readonly static Condition Net30_SP_Installed = new Condition(" (NETFRAMEWORK30_SP_LEVEL and NOT NETFRAMEWORK30_SP_LEVEL='#0') ");
