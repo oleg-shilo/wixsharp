@@ -909,7 +909,8 @@ namespace WixSharp
             XDocument doc = GenerateWixProj(project);
 
             IndjectCustomUI(project.CustomUI, doc);
-            AutoElements.InjectAutoElementsHandler(doc);
+
+            AutoElements.InjectAutoElementsHandler(doc, project);
             DefaultWixSourceGeneratedHandler(doc);
             AutoElements.NormalizeFilePaths(doc, project.SourceBaseDir, EmitRelativePaths);
 

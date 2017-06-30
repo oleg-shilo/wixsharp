@@ -861,6 +861,11 @@ namespace WixSharp
             return IO.Path.Combine(newDir, IO.Path.GetFileName(path));
         }
 
+        public static string PathCombine(this string path1, string path2)
+        {
+            return IO.Path.Combine(path1, path2);
+        }
+
         /// <summary>
         /// The change the file name of the file path.
         /// </summary>
@@ -889,9 +894,13 @@ namespace WixSharp
         /// </summary>
         /// <param name="path">The path.</param>
         public static string PathGetDirName(this string path)
-
         {
             return IO.Path.GetDirectoryName(path);
+        }
+
+        public static string ToAbsolutePath(this string path)
+        {
+            return IO.Path.GetFullPath(path.IsEmpty() ? Environment.CurrentDirectory : path);
         }
 
         /// <summary>
@@ -1062,8 +1071,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Unescape '\%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product"). 
-        /// <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent 
+        /// Unescape '\%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product").
+        /// <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent
         /// "%ProgramFiles%\My Product" being later converted into "ProgramFilesFolder\My Product"</para>
         /// </summary>
         /// <param name="text"></param>
@@ -1074,8 +1083,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Escape '%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product"). 
-        /// <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent 
+        /// Escape '%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product").
+        /// <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent
         /// "%ProgramFiles%\My Product" being later converted into "ProgramFilesFolder\My Product"</para>
         /// </summary>
         /// <param name="text"></param>

@@ -8,11 +8,9 @@ using System.Text;
 
 namespace WixSharp.Bootstrapper
 {
-    //Useful stuff to have a look at: 
+    //Useful stuff to have a look at:
     //http://neilsleightholm.blogspot.com.au/2012/05/wix-burn-tipstricks.html
     //https://wixwpf.codeplex.com/
-
-
 
     /// <summary>
     /// Class for defining a WiX standard Burn-based bootstrapper. By default the bootstrapper is using WiX default WiX bootstrapper UI.
@@ -24,13 +22,13 @@ namespace WixSharp.Bootstrapper
     ///          new PackageGroupRef("NetFx40Web"),
     ///          new MsiPackage("productA.msi"),
     ///          new MsiPackage("productB.msi"));
-    ///          
+    ///
     /// bootstrapper.AboutUrl = "https://wixsharp.codeplex.com/";
     /// bootstrapper.IconFile = "app_icon.ico";
     /// bootstrapper.Version = new Version("1.0.0.0");
     /// bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
     /// bootstrapper.Application.LogoFile = "logo.png";
-    /// 
+    ///
     /// bootstrapper.Build();
     /// </code>
     /// </example>
@@ -61,20 +59,20 @@ namespace WixSharp.Bootstrapper
         /// <summary>
         /// The disable rollbackSpecifies whether the bundle will attempt to rollback packages executed in the chain.
         /// If "true" is specified then when a vital package fails to install only that package will rollback and the chain will stop with the error.
-        /// The default is "false" which indicates all packages executed during the chain will be rolldback to their previous state when a vital package fails.
+        /// The default is "false" which indicates all packages executed during the chain will be rollback to their previous state when a vital package fails.
         /// </summary>
         public bool? DisableRollback;
 
         /// <summary>
-        /// Specifies whether the bundle will attempt to create a system restore point when executing the chain. If "true" is specified then a system restore 
-        /// point will not be created. The default is "false" which indicates a system restore point will be created when the bundle is installed, uninstalled, 
+        /// Specifies whether the bundle will attempt to create a system restore point when executing the chain. If "true" is specified then a system restore
+        /// point will not be created. The default is "false" which indicates a system restore point will be created when the bundle is installed, uninstalled,
         /// repaired, modified, etc. If the system restore point cannot be created, the bundle will log the issue and continue.
         /// </summary>
         public bool? DisableSystemRestore;
 
         /// <summary>
-        /// Specifies whether the bundle will start installing packages while other packages are still being cached. 
-        /// If "true", packages will start executing when a rollback boundary is encountered. The default is "false" 
+        /// Specifies whether the bundle will start installing packages while other packages are still being cached.
+        /// If "true", packages will start executing when a rollback boundary is encountered. The default is "false"
         /// which dictates all packages must be cached before any packages will start to be installed.
         /// </summary>
         public bool? ParallelCache;
@@ -108,14 +106,14 @@ namespace WixSharp.Bootstrapper
         public string Condition;
 
         /// <summary>
-        /// Parameters of digitaly sign
+        /// Parameters of digitally sign
         /// </summary>
         public DigitalSignatureBootstrapper DigitalSignature;
 
         /// <summary>
         /// Determines whether the bundle can be removed via the Programs and Features (also known as Add/Remove Programs). If the value is
         /// "yes" then the "Uninstall" button will not be displayed. The default is "no" which ensures there is an "Uninstall" button to remove
-        /// the bundle. If the "DisableModify" attribute is also "yes" or "button" then the bundle will not be displayed in Progams and
+        /// the bundle. If the "DisableModify" attribute is also "yes" or "button" then the bundle will not be displayed in Programs and
         /// Features and another mechanism (such as registering as a related bundle addon) must be used to ensure the bundle can be removed.
         /// </summary>
         [Xml]
@@ -188,9 +186,9 @@ namespace WixSharp.Bootstrapper
 
         /// <summary>
         /// The suppress auto insertion of WixMbaPrereq* variables in the bundle definition (WixMbaPrereqPackageId and WixMbaPrereqLicenseUrl).
-        /// <para>BA is relying on two internal variables that reflect .NET version (and licence) that BA requires at runtime. If user defines 
-        /// custom Wix# based BA the required variables are inserted automatically, similarly to the standards WiX/Burn BA. However some other 
-        /// bundle packages (e.g. new PackageGroupRef("NetFx40Web")) may also define these variables so some duplication/collision is possible. 
+        /// <para>BA is relying on two internal variables that reflect .NET version (and license) that BA requires at runtime. If user defines
+        /// custom Wix# based BA the required variables are inserted automatically, similarly to the standards WiX/Burn BA. However some other
+        /// bundle packages (e.g. new PackageGroupRef("NetFx40Web")) may also define these variables so some duplication/collision is possible.
         /// To avoid this you can suppress variables auto-insertion and define them manually as needed.</para>
         ///<example>The following is an example of suppressing auto-insertion:
         /// <code>
@@ -201,7 +199,7 @@ namespace WixSharp.Bootstrapper
         ///                            Id = "MyProductPackageId",
         ///                            DisplayInternalUI = true
         ///                        });
-        /// 
+        ///
         /// bootstrapper.SuppressWixMbaPrereqVars = true;
         /// </code>
         /// </example>
@@ -286,11 +284,11 @@ namespace WixSharp.Bootstrapper
         }
 
         /// <summary>
-        /// The Bundle string variables. 
+        /// The Bundle string variables.
         /// </summary>
         /// <para>The variables are defined as a named values map.</para>
-        /// <para>If you need to access the variable value from the Package 
-        /// you will need to add the MsiProperty mapped to this variable. 
+        /// <para>If you need to access the variable value from the Package
+        /// you will need to add the MsiProperty mapped to this variable.
         /// </para>
         /// <example>
         /// <code>
@@ -338,9 +336,9 @@ namespace WixSharp.Bootstrapper
             {
                 Compiler.OutputWriteLine("======================================================");
                 Compiler.OutputWriteLine("");
-                Compiler.OutputWriteLine("WARNING: It looks like one of the packages defines "+
-                                         "WixMbaPrereqPackageId/WixMbaPrereqLicenseUrl in addition to the definition "+
-                                         "auto-inserted by Wix# managed BA. If it is the case set your Bundle project "+
+                Compiler.OutputWriteLine("WARNING: It looks like one of the packages defines " +
+                                         "WixMbaPrereqPackageId/WixMbaPrereqLicenseUrl in addition to the definition " +
+                                         "auto-inserted by Wix# managed BA. If it is the case set your Bundle project " +
                                          "SuppressWixMbaPrereqVars to 'true' to fix the problem.");
                 Compiler.OutputWriteLine("");
                 Compiler.OutputWriteLine("======================================================");
@@ -349,8 +347,8 @@ namespace WixSharp.Bootstrapper
             {
                 Compiler.OutputWriteLine("======================================================");
                 Compiler.OutputWriteLine("");
-                Compiler.OutputWriteLine("WARNING: It looks like generation of WixMbaPrereqPackageId/WixMbaPrereqLicenseUrl "+
-                                         "was suppressed while none of other packages defines it. "+
+                Compiler.OutputWriteLine("WARNING: It looks like generation of WixMbaPrereqPackageId/WixMbaPrereqLicenseUrl " +
+                                         "was suppressed while none of other packages defines it. " +
                                          "If it is the case set your Bundle project SuppressWixMbaPrereqVars to false to fix the problem.");
                 Compiler.OutputWriteLine("");
                 Compiler.OutputWriteLine("======================================================");

@@ -363,7 +363,7 @@ namespace WixSharp
                    });
         }
 
-        static void ExpandCustomAttributes(XDocument doc)
+        static void ExpandCustomAttributes(XDocument doc, Project project)
         {
             foreach (XAttribute instructionAttr in doc.Root.Descendants().Select(x => x.Attribute("WixSharpCustomAttributes")).Where(x => x != null))
             {
@@ -372,7 +372,7 @@ namespace WixSharp
                 foreach (string item in instructionAttr.Value.Split(';'))
                     if (item.IsNotEmpty())
                     {
-                        if (!ExpandCustomAttribute(sourceElement, item))
+                        if (!ExpandCustomAttribute(sourceElement, item, project))
                             throw new ApplicationException("Cannot resolve custom attribute definition:" + item);
                     }
 
@@ -380,9 +380,9 @@ namespace WixSharp
             }
         }
 
-        static Func<XElement, string, bool> ExpandCustomAttribute = DefaultExpandCustomAttribute;
+        static Func<XElement, string, Project, bool> ExpandCustomAttribute = DefaultExpandCustomAttribute;
 
-        static bool DefaultExpandCustomAttribute(XElement source, string item)
+        static bool DefaultExpandCustomAttribute(XElement source, string item, Project project)
         {
             var attrParts = item.Split('=');
             var keyParts = attrParts.First().Split(':');
@@ -433,7 +433,18 @@ namespace WixSharp
 
                 if (placement != null)
                 {
-                    placement.Add(new XProcessingInstruction("include", xmlFile));
+                    string xmlFilePath;
+
+                    // Strangely enough all relative paths in the wxs are resolved with respect to the
+                    // process CurrrentDir but includes it is resolved with respect to the location of the
+                    // wxs file containing the include statement. Thus if there is any discrepancy between
+                    // source and output dirs then it is safer to use absolute paths instead of relative.
+                    if (!xmlFile.IsAbsolutePath() && project.SourceBaseDir != project.OutDir)
+                        xmlFilePath = project.SourceBaseDir.ToAbsolutePath().PathCombine(xmlFile);
+                    else
+                        xmlFilePath = xmlFile;
+
+                    placement.Add(new XProcessingInstruction("include", xmlFilePath));
                     return true;
                 }
             }
@@ -524,9 +535,9 @@ namespace WixSharp
             }
         }
 
-        internal static void InjectAutoElementsHandler(XDocument doc)
+        internal static void InjectAutoElementsHandler(XDocument doc, Project project)
         {
-            ExpandCustomAttributes(doc);
+            ExpandCustomAttributes(doc, project);
             InjectShortcutIcons(doc);
             HandleEmptyDirectories(doc);
             InjectPlatformAttributes(doc);
