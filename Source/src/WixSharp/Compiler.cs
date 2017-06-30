@@ -707,7 +707,7 @@ namespace WixSharp
 
                 // if multiple files are specified candle expect a path for the -out switch
                 // or no path at all (use current directory)
-
+                // note the '\' character must be escaped twice: as a C# string and as a CMD char
                 if (outDir.IsNotEmpty())
                     candleCmdLineParams.AppendFormat(" -out \"{0}\\\\\"", outDir);
             }
@@ -727,7 +727,7 @@ namespace WixSharp
 
             string fragmentObjectFiles = project.WxsFiles
                                                 .Distinct()
-                                                .Join(" ", file => "\"" + IO.Path.GetFileNameWithoutExtension(file) + ".wixobj\"");
+                                                .Join(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"" );
 
             var lightCmdLineParams = new StringBuilder();
 
@@ -2855,7 +2855,7 @@ namespace WixSharp
                             }
 
                             sequences.ForEach(sequence =>
-                                sequence.Add(new XElement("Custom", 
+                                sequence.Add(new XElement("Custom",
                                                  new XAttribute("Action", setPropValuesId),
                                                  stepAttr)));
                         }
