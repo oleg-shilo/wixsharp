@@ -810,7 +810,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Returns true if bothe values represent the same path.
+        /// Returns true if both values represent the same path.
         /// </summary>
         /// <param name="pathA">The path a.</param>
         /// <param name="pathB">The path b.</param>
@@ -825,7 +825,7 @@ namespace WixSharp
 
         /// <summary>
         /// Gets the location of the assembly.
-        /// <p>Can discover the original location of the asssembly being loaded from memory in case of a CS-Script assembly.
+        /// <p>Can discover the original location of the assembly being loaded from memory in case of a CS-Script assembly.
         /// </p>
         /// </summary>
         /// <param name="assembly">The assembly.</param>
@@ -861,6 +861,12 @@ namespace WixSharp
             return IO.Path.Combine(newDir, IO.Path.GetFileName(path));
         }
 
+        /// <summary>
+        /// Combines path parts. Encapsulates <see cref="System.IO.Path.Combine"/>
+        /// </summary>
+        /// <param name="path1">The path1.</param>
+        /// <param name="path2">The path2.</param>
+        /// <returns></returns>
         public static string PathCombine(this string path1, string path2)
         {
             return IO.Path.Combine(path1, path2);
@@ -898,6 +904,11 @@ namespace WixSharp
             return IO.Path.GetDirectoryName(path);
         }
 
+        /// <summary>
+        /// Converts string value representing path into an absolute path. If string is null or empty it is treated as the CurrentDirectory equivalent.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
         public static string ToAbsolutePath(this string path)
         {
             return IO.Path.GetFullPath(path.IsEmpty() ? Environment.CurrentDirectory : path);

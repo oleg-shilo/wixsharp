@@ -1156,26 +1156,26 @@
             <returns></returns>
         </member>
         <member name="T:WixSharp.Bootstrapper.Bundle">
-            <summary>
-            Class for defining a WiX standard Burn-based bootstrapper. By default the bootstrapper is using WiX default WiX bootstrapper UI.
-            </summary>
-            <example>The following is an example of defining a bootstrapper for two msi files and .NET Web setup.
-            <code>
-             var bootstrapper =
-                 new Bundle("My Product",
-                     new PackageGroupRef("NetFx40Web"),
-                     new MsiPackage("productA.msi"),
-                     new MsiPackage("productB.msi"));
-                     
-            bootstrapper.AboutUrl = "https://wixsharp.codeplex.com/";
-            bootstrapper.IconFile = "app_icon.ico";
-            bootstrapper.Version = new Version("1.0.0.0");
-            bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
-            bootstrapper.Application.LogoFile = "logo.png";
+             <summary>
+             Class for defining a WiX standard Burn-based bootstrapper. By default the bootstrapper is using WiX default WiX bootstrapper UI.
+             </summary>
+             <example>The following is an example of defining a bootstrapper for two msi files and .NET Web setup.
+             <code>
+              var bootstrapper =
+                  new Bundle("My Product",
+                      new PackageGroupRef("NetFx40Web"),
+                      new MsiPackage("productA.msi"),
+                      new MsiPackage("productB.msi"));
             
-            bootstrapper.Build();
-            </code>
-            </example>
+             bootstrapper.AboutUrl = "https://wixsharp.codeplex.com/";
+             bootstrapper.IconFile = "app_icon.ico";
+             bootstrapper.Version = new Version("1.0.0.0");
+             bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
+             bootstrapper.Application.LogoFile = "logo.png";
+            
+             bootstrapper.Build();
+             </code>
+             </example>
         </member>
         <member name="M:WixSharp.Bootstrapper.Bundle.#ctor">
             <summary>
@@ -1193,20 +1193,20 @@
             <summary>
             The disable rollbackSpecifies whether the bundle will attempt to rollback packages executed in the chain.
             If "true" is specified then when a vital package fails to install only that package will rollback and the chain will stop with the error.
-            The default is "false" which indicates all packages executed during the chain will be rolldback to their previous state when a vital package fails.
+            The default is "false" which indicates all packages executed during the chain will be rollback to their previous state when a vital package fails.
             </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.Bundle.DisableSystemRestore">
             <summary>
-            Specifies whether the bundle will attempt to create a system restore point when executing the chain. If "true" is specified then a system restore 
-            point will not be created. The default is "false" which indicates a system restore point will be created when the bundle is installed, uninstalled, 
+            Specifies whether the bundle will attempt to create a system restore point when executing the chain. If "true" is specified then a system restore
+            point will not be created. The default is "false" which indicates a system restore point will be created when the bundle is installed, uninstalled,
             repaired, modified, etc. If the system restore point cannot be created, the bundle will log the issue and continue.
             </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.Bundle.ParallelCache">
             <summary>
-            Specifies whether the bundle will start installing packages while other packages are still being cached. 
-            If "true", packages will start executing when a rollback boundary is encountered. The default is "false" 
+            Specifies whether the bundle will start installing packages while other packages are still being cached.
+            If "true", packages will start executing when a rollback boundary is encountered. The default is "false"
             which dictates all packages must be cached before any packages will start to be installed.
             </summary>
         </member>
@@ -1236,14 +1236,14 @@
         </member>
         <member name="F:WixSharp.Bootstrapper.Bundle.DigitalSignature">
             <summary>
-            Parameters of digitaly sign
+            Parameters of digitally sign
             </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.Bundle.DisableRemove">
             <summary>
             Determines whether the bundle can be removed via the Programs and Features (also known as Add/Remove Programs). If the value is
             "yes" then the "Uninstall" button will not be displayed. The default is "no" which ensures there is an "Uninstall" button to remove
-            the bundle. If the "DisableModify" attribute is also "yes" or "button" then the bundle will not be displayed in Progams and
+            the bundle. If the "DisableModify" attribute is also "yes" or "button" then the bundle will not be displayed in Programs and
             Features and another mechanism (such as registering as a related bundle addon) must be used to ensure the bundle can be removed.
             </summary>
         </member>
@@ -1305,9 +1305,9 @@
         <member name="F:WixSharp.Bootstrapper.Bundle.SuppressWixMbaPrereqVars">
              <summary>
              The suppress auto insertion of WixMbaPrereq* variables in the bundle definition (WixMbaPrereqPackageId and WixMbaPrereqLicenseUrl).
-             <para>BA is relying on two internal variables that reflect .NET version (and licence) that BA requires at runtime. If user defines 
-             custom Wix# based BA the required variables are inserted automatically, similarly to the standards WiX/Burn BA. However some other 
-             bundle packages (e.g. new PackageGroupRef("NetFx40Web")) may also define these variables so some duplication/collision is possible. 
+             <para>BA is relying on two internal variables that reflect .NET version (and license) that BA requires at runtime. If user defines
+             custom Wix# based BA the required variables are inserted automatically, similarly to the standards WiX/Burn BA. However some other
+             bundle packages (e.g. new PackageGroupRef("NetFx40Web")) may also define these variables so some duplication/collision is possible.
              To avoid this you can suppress variables auto-insertion and define them manually as needed.</para>
             <example>The following is an example of suppressing auto-insertion:
              <code>
@@ -1318,7 +1318,7 @@
                                         Id = "MyProductPackageId",
                                         DisplayInternalUI = true
                                     });
-             
+            
              bootstrapper.SuppressWixMbaPrereqVars = true;
              </code>
              </example>
@@ -1347,11 +1347,11 @@
         </member>
         <member name="F:WixSharp.Bootstrapper.Bundle.StringVariablesDefinition">
             <summary>
-            The Bundle string variables. 
+            The Bundle string variables.
             </summary>
             <para>The variables are defined as a named values map.</para>
-            <para>If you need to access the variable value from the Package 
-            you will need to add the MsiProperty mapped to this variable. 
+            <para>If you need to access the variable value from the Package
+            you will need to add the MsiProperty mapped to this variable.
             </para>
             <example>
             <code>
@@ -4360,7 +4360,7 @@
         </member>
         <member name="M:WixSharp.Extensions.SamePathAs(System.String,System.String)">
             <summary>
-            Returns true if bothe values represent the same path.
+            Returns true if both values represent the same path.
             </summary>
             <param name="pathA">The path a.</param>
             <param name="pathB">The path b.</param>
@@ -4369,7 +4369,7 @@
         <member name="M:WixSharp.Extensions.GetLocation(System.Reflection.Assembly)">
             <summary>
             Gets the location of the assembly.
-            <p>Can discover the original location of the asssembly being loaded from memory in case of a CS-Script assembly.
+            <p>Can discover the original location of the assembly being loaded from memory in case of a CS-Script assembly.
             </p>
             </summary>
             <param name="assembly">The assembly.</param>
@@ -4381,6 +4381,14 @@
             </summary>
             <param name="path">The path.</param>
             <param name="newDir">The new directory.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.PathCombine(System.String,System.String)">
+            <summary>
+            Combines path parts. Encapsulates <see cref="M:System.IO.Path.Combine(System.String,System.String)"/>
+            </summary>
+            <param name="path1">The path1.</param>
+            <param name="path2">The path2.</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.PathChangeFileName(System.String,System.String)">
@@ -4405,6 +4413,13 @@
             "using System.IO;" directive, which interferes with Wix# types.
             </summary>
             <param name="path">The path.</param>
+        </member>
+        <member name="M:WixSharp.Extensions.ToAbsolutePath(System.String)">
+            <summary>
+            Converts string value representing path into an absolute path. If string is null or empty it is treated as the CurrentDirectory equivalent.
+            </summary>
+            <param name="path">The path.</param>
+            <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.PathGetFileName(System.String)">
             <summary>
@@ -4520,8 +4535,8 @@
         </member>
         <member name="M:WixSharp.Extensions.UnEscapeEnvars(System.String)">
             <summary>
-            Unescape '\%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product"). 
-            <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent 
+            Unescape '\%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product").
+            <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent
             "%ProgramFiles%\My Product" being later converted into "ProgramFilesFolder\My Product"</para>
             </summary>
             <param name="text"></param>
@@ -4529,8 +4544,8 @@
         </member>
         <member name="M:WixSharp.Extensions.EscapeEnvars(System.String)">
             <summary>
-            Escape '%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product"). 
-            <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent 
+            Escape '%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product").
+            <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent
             "%ProgramFiles%\My Product" being later converted into "ProgramFilesFolder\My Product"</para>
             </summary>
             <param name="text"></param>
@@ -8334,6 +8349,31 @@
         <member name="F:WixSharp.Condition.Net45_Installed">
             <summary>
             The .NET4.5 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Condition.Net451_Installed">
+            <summary>
+            The .NET4.5.1 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Condition.Net452_Installed">
+            <summary>
+            The .NET4.5.2 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Condition.Net46_Installed">
+            <summary>
+            The .NET4.6 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Condition.Net461_Installed">
+            <summary>
+            The .NET4.6.1 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Condition.Net462_Installed">
+            <summary>
+            The .NET4.6.2 installed. This condition is to be used in Project.SetNetFxPrerequisite.
             </summary>
         </member>
         <member name="F:WixSharp.Condition.Net30_SP_Installed">
