@@ -7405,5 +7405,10 @@
             Telemetry URL format for the distribution.
             </summary>
         </member>
+        <member name="F:Microsoft.Tools.WindowsInstallerXml.WixDistribution.VSExtensionsLandingUrl">
+            <summary>
+            VS Extensions Landing page Url for the distribution.
+            </summary>
+        </member>
     </members>
 </doc>

@@ -12,12 +12,11 @@ namespace WixSharp.Test
 
             value = RegFileImporter.Deserialize(@"""\""[INSTALLDIR]7zFM.exe\"" \""%1\""""", Encoding.Unicode);
             Assert.IsType<string>(value);
-            Assert.Equal(value, @"""[INSTALLDIR]7zFM.exe"" ""%1""");
+            Assert.Equal(value, @"""[INSTALLDIR]7zFM.exe"" ""\%1""");
 
             value = RegFileImporter.Deserialize("\"test\"", Encoding.Unicode);
             Assert.IsType<string>(value);
             Assert.Equal(value, "test");
-
 
             value = RegFileImporter.Deserialize("dword:00000020", Encoding.Unicode);
             Assert.IsType<int>(value);
@@ -32,6 +31,5 @@ namespace WixSharp.Test
             Assert.IsType<string>(value);
             Assert.Equal(value, "one\r\ntwo\r\nthree");
         }
-
     }
 }

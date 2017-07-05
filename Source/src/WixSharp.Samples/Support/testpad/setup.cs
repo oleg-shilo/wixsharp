@@ -14,6 +14,8 @@ class Script
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(@"Files\Bin\MyApp.exe"),
                     new Dir(@"Docs\Manual",
+                        new File(@"Files\Docs\Manual.txt")),
+                    new Dir(@"Docs-x64\Manual",
                         new File(@"Files\Docs\Manual.txt"))));
 
         project.UI = WUI.WixUI_InstallDir;
