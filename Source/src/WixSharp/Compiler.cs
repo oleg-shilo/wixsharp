@@ -210,33 +210,36 @@ namespace WixSharp
 
         static string FindWixBinPackage(string projectFile)
         {
-            var projectDir = IO.Path.GetDirectoryName(projectFile);
-            var solutionDir = IO.Path.GetDirectoryName(projectDir);
-            var packageDir = IO.Path.Combine(projectDir, "packages");
-
-            if (!IO.Directory.Exists(packageDir))
-                packageDir = IO.Path.Combine(solutionDir, "packages");
-
-            if (IO.Directory.Exists(packageDir))
+            string probePackages(string packageDir)
             {
-                //search for the highest version of the WiX SDK version
-                var packages = IO.Directory.GetDirectories(packageDir, "WixSharp.wix.bin.*")
-                                           .Select(d => new
-                                           {
-                                               Path = d,
-                                               Version = new Version(IO.Path.GetFileName(d).Replace("WixSharp.wix.bin.", ""))
-                                           })
-                                           .OrderBy(x => x.Version)
-                                           .ToArray();
-                if (packages.Any())
+                if (IO.Directory.Exists(packageDir))
                 {
-                    var binDir = IO.Path.Combine(packages.LastOrDefault().Path, @"tools\bin");
-                    if (IO.Directory.Exists(binDir))
-                        return binDir;
-                }
+                    //search for the highest version of the WiX SDK version
+                    var packages = IO.Directory.GetDirectories(packageDir, "WixSharp.wix.bin.*")
+                                               .Select(d => new
+                                               {
+                                                   Path = d,
+                                                   Version = new Version(d.PathGetFileName().Replace("WixSharp.wix.bin.", ""))
+                                               })
+                                               .OrderBy(x => x.Version);
+                    if (packages.Any())
+                    {
+                        var binDir = IO.Path.Combine(packages.LastOrDefault().Path, @"tools\bin");
+                        if (IO.Directory.Exists(binDir))
+                            return binDir;
+                    }
 
+                }
+                return null;
             }
-            return null;
+
+            var projectDir = projectFile.PathGetDirName();
+            var solutionDir = projectDir.PathGetDirName();
+            var globalPackages = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\.nuget\packages");
+
+            return probePackages(projectDir.PathCombine("packages")) ??
+                   probePackages(solutionDir.PathCombine("packages")) ??
+                   probePackages(globalPackages);
         }
 
         static void EnsureVSIntegration()
@@ -727,7 +730,7 @@ namespace WixSharp
 
             string fragmentObjectFiles = project.WxsFiles
                                                 .Distinct()
-                                                .Join(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"" );
+                                                .Join(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"");
 
             var lightCmdLineParams = new StringBuilder();
 
