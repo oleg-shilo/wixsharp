@@ -113,7 +113,7 @@ namespace WixSharp
                 if (invalidAspectRatio)
                     throw new ValidationException(
                         "Project.BackgroundImage has incompatible (with ManagedUI default dialogs) aspect ratio. The expected ratio is close to W(156)/H(312). " +
-                        "The background image in ManagedUI dialogs is left-docked at runtime and if it's too wide it can push away (to right) " +
+                        "The background image (left side banner) in ManagedUI dialogs is left-docked at runtime and if it's too wide it can push away (to right) " +
                         "the all other UI elements. " +
                         "You can suppress image validation by setting Project.ValidateBackgroundImage to 'false'.");
             }

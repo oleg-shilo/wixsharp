@@ -2,6 +2,7 @@ using Microsoft.Deployment.WindowsInstaller;
 using System.Drawing;
 using System.Windows.Forms;
 using WixSharp;
+
 namespace WixSharp.UI.Forms
 {
     /// <summary>
@@ -17,22 +18,22 @@ namespace WixSharp.UI.Forms
     ///         //instantiate banner PictureBox and back/next/cancel Buttons
     ///         InitializeComponent();
     ///     }
-    ///     
+    ///
     ///     void CustomDialog_Load(object sender, EventArgs e)
     ///     {
     ///         banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
-    ///     } 
-    ///     
+    ///     }
+    ///
     ///     void back_Click(object sender, EventArgs e)
     ///     {
     ///         Shell.GoPrev();
     ///     }
-    ///     
+    ///
     ///     void next_Click(object sender, EventArgs e)
     ///     {
     ///         Shell.GoNext();
     ///     }
-    ///     
+    ///
     ///     void cancel_Click(object sender, EventArgs e)
     ///     {
     ///         Shell.Cancel();
@@ -42,10 +43,13 @@ namespace WixSharp.UI.Forms
     /// </example>
     public class ManagedForm : Form, IManagedDialog
     {
+        internal static int IdealBackgroundImageWidth = 156;
+        internal static int IdealBackgroundImageHeight = 312;
+
         IManagedUIShell shell;
 
         /// <summary>
-        /// Gets or sets the UI shell (main UI window). This property is set the ManagedUI runtime (IManagedUI). 
+        /// Gets or sets the UI shell (main UI window). This property is set the ManagedUI runtime (IManagedUI).
         /// On the other hand it is consumed (accessed) by the UI dialog (IManagedDialog).
         /// </summary>
         /// <value>
@@ -90,7 +94,7 @@ namespace WixSharp.UI.Forms
         }
 
         /// <summary>
-        /// Called when Shell is changed. It is a good place to initialize the dialog to reflect the MSI session 
+        /// Called when Shell is changed. It is a good place to initialize the dialog to reflect the MSI session
         /// (e.g. localize the view).
         /// </summary>
         virtual protected void OnShellChanged()
@@ -120,12 +124,12 @@ namespace WixSharp.UI.Forms
         }
 
         /// <summary>
-        /// Localizes the form and its contained <see cref="T:System.Windows.Forms.Control.Text"/> from the specified localization 
-        /// delegate 'localize'. 
+        /// Localizes the form and its contained <see cref="T:System.Windows.Forms.Control.Text"/> from the specified localization
+        /// delegate 'localize'.
         /// <para>The method substitutes both localization file (*.wxl) entries and MSI properties contained by the input string
         /// with their translated/converted values.</para>
         /// <remarks>
-        /// Note that both localization entries and MSI properties must be enclosed in the square brackets 
+        /// Note that both localization entries and MSI properties must be enclosed in the square brackets
         /// (e.g. "[ProductName] Setup", "[InstallDirDlg_Title]").
         /// </remarks>
         /// </summary>

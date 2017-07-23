@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace WixSharp.UI.Forms
@@ -29,15 +30,15 @@ namespace WixSharp.UI.Forms
             // resizing. However the initial sizing by WinForm runtime doesn't a do good job with DPI
             // other than 96. Thus manual resizing is the only reliable option apart from going WPF.
 
-            var bHeight = (int) (next.Height * 2.3);
+            var bHeight = (int)(next.Height * 2.3);
 
             var upShift = bHeight - bottomPanel.Height;
             bottomPanel.Top -= upShift;
             bottomPanel.Height = bHeight;
 
             imgPanel.Height = this.ClientRectangle.Height - bottomPanel.Height;
-            float ratio = (float) image.Image.Width / (float) image.Image.Height;
-            image.Width = (int) (image.Height * ratio);
+            float ratio = (float)image.Image.Width / (float)image.Image.Height;
+            image.Width = (int)(image.Height * ratio);
 
             textPanel.Left = image.Right + 5;
             textPanel.Width = (bottomPanel.Width - image.Width) - 10;

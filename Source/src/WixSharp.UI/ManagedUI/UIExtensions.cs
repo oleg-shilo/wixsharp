@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+
 using io = System.IO;
+
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,6 +12,11 @@ using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
 using sys = System.Windows.Forms;
 using System.Drawing.Imaging;
+
+using System.Windows.Forms;
+
+using WixSharp.UI.Forms;
+using System.Threading;
 
 namespace WixSharp
 {
@@ -27,6 +34,7 @@ namespace WixSharp
     //    static Type ProgressDialog = typeof(ProgressDialog);
     //}
 #pragma warning disable 1591
+
     public static class UIExtensions
     {
         public static System.Drawing.Icon GetAssiciatedIcon(this string extension)
@@ -59,6 +67,35 @@ namespace WixSharp
             return control;
         }
 
+        public static bool IsReadOnly(this TreeNode node)
+        {
+            return node is ReadOnlyTreeNode r_node && r_node.IsReadOnly;
+        }
+
+        public static bool IsModified(this TreeNode node)
+        {
+            return node is ReadOnlyTreeNode r_node && r_node.Checked != r_node.DefaultChecked;
+        }
+
+        public static void ResetCheckedToDefault(this TreeNode node, int delay = -1)
+        {
+            if (node is ReadOnlyTreeNode _node && _node.IsReadOnly)
+            {
+                if (delay == -1)
+                    node.Checked = _node.DefaultChecked;
+                else
+                    ThreadPool.QueueUserWorkItem(x =>
+                    {
+                        Thread.Sleep(delay);
+
+                        node.TreeView.BeginInvoke((MethodInvoker)delegate
+                        {
+                            node.Checked = _node.DefaultChecked;
+                        });
+                    });
+            }
+        }
+
         public static sys.Control ClearChildren(this sys.Control control)
         {
             foreach (sys.Control item in control.Controls)
@@ -67,14 +104,15 @@ namespace WixSharp
             control.Controls.Clear();
             return control;
         }
+
 #pragma warning restore 1591
 
         //NOT RELIABLE
-        //The detection of the installdir is not deterministic. For example 'Shortcuts' sample has 
-        //three logical installdirs INSTALLDIR, DesktopFolder and ProgramMenuFolder. The INSTALLDIR 
-        //is the real one that we need to discover but there is no way to understand its role by analyzing 
-        //the MSI tables. And the other problem is that we cannot rely on its name as user can overwrite it. 
-        //WIX solves this problem by requiring the user explicitly link the installdir ID to the WIXUI_INSTALLDIR 
+        //The detection of the installdir is not deterministic. For example 'Shortcuts' sample has
+        //three logical installdirs INSTALLDIR, DesktopFolder and ProgramMenuFolder. The INSTALLDIR
+        //is the real one that we need to discover but there is no way to understand its role by analyzing
+        //the MSI tables. And the other problem is that we cannot rely on its name as user can overwrite it.
+        //WIX solves this problem by requiring the user explicitly link the installdir ID to the WIXUI_INSTALLDIR
         //property: <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR"  />.
         //public static string GetInstallDirectoryName(this Session session)
         //{
@@ -143,7 +181,7 @@ namespace WixSharp
         {
             string extenalFile = Utils.PathCombine(srcDir, extenalFilePath);
 
-            if (extenalFilePath.IsNotEmpty()) //important to test before PathComibed 
+            if (extenalFilePath.IsNotEmpty()) //important to test before PathComibed
                 return extenalFile;
 
             var file = Path.Combine(outDir, fileName);
@@ -164,12 +202,12 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Localizes the control its contained <see cref="T:System.Windows.Forms.Control.Text"/> from the specified localization 
-        /// delegate 'localize'. 
+        /// Localizes the control its contained <see cref="T:System.Windows.Forms.Control.Text"/> from the specified localization
+        /// delegate 'localize'.
         /// <para>The method substitutes both localization file (*.wxl) entries and MSI properties contained by the input string
         /// with their translated/converted values.</para>
         /// <remarks>
-        /// Note that both localization entries and MSI properties must be enclosed in the square brackets 
+        /// Note that both localization entries and MSI properties must be enclosed in the square brackets
         /// (e.g. "[ProductName] Setup", "[InstallDirDlg_Title]").
         /// </remarks>
         /// </summary>
@@ -193,7 +231,6 @@ namespace WixSharp
             return control;
         }
 
-
         static Regex locRegex = new Regex(@"\[.+?\]");
         static Regex cleanRegex = new Regex(@"{\\(.*?)}"); //removes font info "{\WixUI_Font_Bigger}Welcome to the [ProductName] Setup Wizard"
 
@@ -202,7 +239,7 @@ namespace WixSharp
         /// <para>The method substitutes both localization file (*.wxl) entries and MSI properties contained by the input string
         /// with their translated/converted values.</para>
         /// <remarks>
-        /// Note that both localization entries and MSI properties must be enclosed in the square brackets 
+        /// Note that both localization entries and MSI properties must be enclosed in the square brackets
         /// (e.g. "[ProductName] Setup", "[InstallDirDlg_Title]").
         /// </remarks>
         /// </summary>
@@ -212,7 +249,6 @@ namespace WixSharp
         public static string LocalizeWith(this string textToLocalize, Func<string, string> localize)
         {
             if (textToLocalize.IsEmpty()) return textToLocalize;
-
 
             var result = new StringBuilder(textToLocalize);
 

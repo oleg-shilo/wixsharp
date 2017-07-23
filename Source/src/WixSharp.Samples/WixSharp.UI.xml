@@ -141,7 +141,7 @@
         </member>
         <member name="T:WixSharp.UI.Forms.FeaturesDialog">
             <summary>
-            The logical equivalent of the standard Features dialog. Though it implement slightly 
+            The logical equivalent of the standard Features dialog. Though it implement slightly
             different user experience as it has checkboxes bound to the features instead of icons context menu
             as MSI dialog has.
             </summary>
@@ -174,46 +174,46 @@
             </summary>
         </member>
         <member name="T:WixSharp.UI.Forms.ManagedForm">
-            <summary>
-            The base class for all WinForm based dialogs of ManagedUI.
-            </summary>
-            <example>The following is an example of defining installation directory <c>Progam Files/My Company/My Product</c>
-            containing a single file <c>MyApp.exe</c> and subdirectory <c>Documentation</c> with <c>UserManual.pdf</c> file.
-            <code>
-            public partial class CustomDialog : ManagedForm, IManagedDialog
-            {
-                public UserNameDialog()
-                {
-                    //instantiate banner PictureBox and back/next/cancel Buttons
-                    InitializeComponent();
-                }
-                
-                void CustomDialog_Load(object sender, EventArgs e)
-                {
-                    banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
-                } 
-                
-                void back_Click(object sender, EventArgs e)
-                {
-                    Shell.GoPrev();
-                }
-                
-                void next_Click(object sender, EventArgs e)
-                {
-                    Shell.GoNext();
-                }
-                
-                void cancel_Click(object sender, EventArgs e)
-                {
-                    Shell.Cancel();
-                }
-            }
-            </code>
-            </example>
+             <summary>
+             The base class for all WinForm based dialogs of ManagedUI.
+             </summary>
+             <example>The following is an example of defining installation directory <c>Progam Files/My Company/My Product</c>
+             containing a single file <c>MyApp.exe</c> and subdirectory <c>Documentation</c> with <c>UserManual.pdf</c> file.
+             <code>
+             public partial class CustomDialog : ManagedForm, IManagedDialog
+             {
+                 public UserNameDialog()
+                 {
+                     //instantiate banner PictureBox and back/next/cancel Buttons
+                     InitializeComponent();
+                 }
+            
+                 void CustomDialog_Load(object sender, EventArgs e)
+                 {
+                     banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
+                 }
+            
+                 void back_Click(object sender, EventArgs e)
+                 {
+                     Shell.GoPrev();
+                 }
+            
+                 void next_Click(object sender, EventArgs e)
+                 {
+                     Shell.GoNext();
+                 }
+            
+                 void cancel_Click(object sender, EventArgs e)
+                 {
+                     Shell.Cancel();
+                 }
+             }
+             </code>
+             </example>
         </member>
         <member name="P:WixSharp.UI.Forms.ManagedForm.Shell">
             <summary>
-            Gets or sets the UI shell (main UI window). This property is set the ManagedUI runtime (IManagedUI). 
+            Gets or sets the UI shell (main UI window). This property is set the ManagedUI runtime (IManagedUI).
             On the other hand it is consumed (accessed) by the UI dialog (IManagedDialog).
             </summary>
             <value>
@@ -243,7 +243,7 @@
         </member>
         <member name="M:WixSharp.UI.Forms.ManagedForm.OnShellChanged">
             <summary>
-            Called when Shell is changed. It is a good place to initialize the dialog to reflect the MSI session 
+            Called when Shell is changed. It is a good place to initialize the dialog to reflect the MSI session
             (e.g. localize the view).
             </summary>
         </member>
@@ -265,12 +265,12 @@
         </member>
         <member name="M:WixSharp.UI.Forms.ManagedForm.Localize">
             <summary>
-            Localizes the form and its contained <see cref="T:System.Windows.Forms.Control.Text"/> from the specified localization 
-            delegate 'localize'. 
+            Localizes the form and its contained <see cref="T:System.Windows.Forms.Control.Text"/> from the specified localization
+            delegate 'localize'.
             <para>The method substitutes both localization file (*.wxl) entries and MSI properties contained by the input string
             with their translated/converted values.</para>
             <remarks>
-            Note that both localization entries and MSI properties must be enclosed in the square brackets 
+            Note that both localization entries and MSI properties must be enclosed in the square brackets
             (e.g. "[ProductName] Setup", "[InstallDirDlg_Title]").
             </remarks>
             </summary>
@@ -1012,12 +1012,12 @@
         </member>
         <member name="M:WixSharp.UIExtensions.LocalizeWith(System.Windows.Forms.Control,System.Func{System.String,System.String})">
             <summary>
-            Localizes the control its contained <see cref="T:System.Windows.Forms.Control.Text"/> from the specified localization 
-            delegate 'localize'. 
+            Localizes the control its contained <see cref="T:System.Windows.Forms.Control.Text"/> from the specified localization
+            delegate 'localize'.
             <para>The method substitutes both localization file (*.wxl) entries and MSI properties contained by the input string
             with their translated/converted values.</para>
             <remarks>
-            Note that both localization entries and MSI properties must be enclosed in the square brackets 
+            Note that both localization entries and MSI properties must be enclosed in the square brackets
             (e.g. "[ProductName] Setup", "[InstallDirDlg_Title]").
             </remarks>
             </summary>
@@ -1031,7 +1031,7 @@
             <para>The method substitutes both localization file (*.wxl) entries and MSI properties contained by the input string
             with their translated/converted values.</para>
             <remarks>
-            Note that both localization entries and MSI properties must be enclosed in the square brackets 
+            Note that both localization entries and MSI properties must be enclosed in the square brackets
             (e.g. "[ProductName] Setup", "[InstallDirDlg_Title]").
             </remarks>
             </summary>

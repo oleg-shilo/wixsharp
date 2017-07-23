@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
@@ -89,13 +90,14 @@ namespace WixSharp.UI.Forms
     }
 
 #pragma warning disable 1591
+
     public class ReadOnlyTreeNode : TreeNode
     {
         public bool IsReadOnly { get; set; }
+        public bool DefaultChecked { get; set; }
 
         public class Behavior
         {
-
             public static void AttachTo(TreeView treeView, bool drawTextOnly = false)
             {
                 if (drawTextOnly)
@@ -108,24 +110,34 @@ namespace WixSharp.UI.Forms
                     treeView.DrawMode = TreeViewDrawMode.OwnerDrawAll;
                     treeView.DrawNode += treeView_DrawNode;
                 }
-                treeView.BeforeCheck += treeView_BeforeCheck;
+                treeView.AfterCheck += treeView_AfterCheck;
             }
 
-            static void treeView_BeforeCheck(object sender, TreeViewCancelEventArgs e)
+            static void treeView_AfterCheck(object sender, TreeViewEventArgs e)
             {
-                if (IsReadOnly(e.Node))
+                // TreeView has a nasty way of interacting with the user.
+                // Canceling check event on treeView.BeforeCheck works very well but
+                // it does not stop double-clicking from toggling the box.
+                // Handling NodeMouseDoubleClick doesn't do any good as internally it is still handled
+                // and the CheckBox state gets changed regardless of user event handler.
+                // Thus the only way to do this is to schedule "check rollback" in the UI thread
+                // Later enough to be done after all internal routines are finished.
+                // Scheduling additional "early" rollbacks not required but do a better job in terms
+                // of responsiveness (user impression).
+
+                // Yes it's elegant, but necessary since TreeView doesn't support read-only mode for nodes.
+
+                if (e.Node.IsReadOnly() && e.Node.IsModified())
                 {
-                    e.Cancel = true;
+                    e.Node.ResetCheckedToDefault();
+                    e.Node.ResetCheckedToDefault(200);
+                    e.Node.ResetCheckedToDefault(700);
+                    e.Node.ResetCheckedToDefault(1000);
                 }
             }
 
             static Pen dotPen = new Pen(Color.FromArgb(128, 128, 128)) { DashStyle = DashStyle.Dot };
             static Brush selectionModeBrush = new SolidBrush(Color.FromArgb(51, 153, 255));
-
-            static bool IsReadOnly(TreeNode node)
-            {
-                return (node is ReadOnlyTreeNode) && (node as ReadOnlyTreeNode).IsReadOnly;
-            }
 
             static int cIndentBy = -1;
             static int cMargin = -1;
@@ -138,7 +150,7 @@ namespace WixSharp.UI.Forms
                 if (bounds.Height < 1 || bounds.Width < 1)
                     return;
 
-                var treeView = (TreeView) sender;
+                var treeView = (TreeView)sender;
 
                 bounds.Width += 5; //found by experiment that text can swallow last character
 
@@ -149,7 +161,7 @@ namespace WixSharp.UI.Forms
                 }
                 else
                 {
-                    if (IsReadOnly(e.Node))
+                    if (e.Node.IsReadOnly())
                         e.Graphics.DrawString(e.Node.Text, treeView.Font, Brushes.Gray, bounds);
                     else
                         e.Graphics.DrawString(e.Node.Text, treeView.Font, Brushes.Black, bounds);
@@ -158,8 +170,8 @@ namespace WixSharp.UI.Forms
 
             static void treeView_DrawNode(object sender, DrawTreeNodeEventArgs e)
             {
-                var treeView = (TreeView) sender;
-                
+                var treeView = (TreeView)sender;
+
                 try
                 {
                     //Loosely based on Jason Williams solution (http://stackoverflow.com/questions/1003459/c-treeview-owner-drawing-with-ownerdrawtext-and-the-weird-black-highlighting-w)
@@ -171,7 +183,6 @@ namespace WixSharp.UI.Forms
                         cIndentBy = e.Bounds.Height;
                         cMargin = e.Bounds.Height / 2;
                     }
-
 
                     Rectangle itemRect = e.Bounds;
                     e.Graphics.FillRectangle(Brushes.White, itemRect);
@@ -187,7 +198,6 @@ namespace WixSharp.UI.Forms
                     int indent = (e.Node.Level * cIndentBy) + cMargin;
                     int iconLeft = indent;                                          // lines left position
                     int checkboxLeft = iconLeft + iconWidth;                        // +/- icon left position
-
 
                     int textLeft = checkboxLeft + checkboxWidth;                   // text left position
                     if (!treeView.CheckBoxes)
@@ -227,7 +237,6 @@ namespace WixSharp.UI.Forms
                     // Draw (plus/minus) icon if required
                     if (e.Node.Nodes.Count > 0)
                     {
-
                         var element = e.Node.IsExpanded ? VisualStyleElement.TreeView.Glyph.Opened : VisualStyleElement.TreeView.Glyph.Closed;
                         var renderer = new VisualStyleRenderer(element);
                         var iconTrueSize = renderer.GetPartSize(e.Graphics, ThemeSizeType.True);
@@ -236,17 +245,22 @@ namespace WixSharp.UI.Forms
 
                         //e.Graphics.FillRectangle(Brushes.Salmon, bounds);
 
-                        //deflate (resize and center) icon within bounds 
+                        //deflate (resize and center) icon within bounds
                         var dif = (iconWidth - iconTrueSize.Height) / 2 - 1; //-1 is to compensate for rounding as icon is not getting rendered if the bounds is too small
                         bounds.Inflate(-dif, -dif);
                         renderer.DrawBackground(e.Graphics, bounds);
+                    }
+
+                    if (e.Node.IsReadOnly())
+                    {
+                        Debug.WriteLine($"Painting  {e.Node.Text}.Checked: {e.Node.Checked}");
                     }
 
                     //Checkbox
                     if (treeView.CheckBoxes)
                     {
                         var element = e.Node.Checked ? VisualStyleElement.Button.CheckBox.CheckedNormal : VisualStyleElement.Button.CheckBox.UncheckedNormal;
-                        if (IsReadOnly(e.Node))
+                        if (e.Node.IsReadOnly())
                             element = e.Node.Checked ? VisualStyleElement.Button.CheckBox.CheckedDisabled : VisualStyleElement.Button.CheckBox.UncheckedDisabled;
 
                         var renderer = new VisualStyleRenderer(element);
@@ -267,7 +281,7 @@ namespace WixSharp.UI.Forms
                             FormatFlags = StringFormatFlags.NoWrap,
                         };
 
-                        var bounds = new Rectangle(itemRect.Left + textLeft, itemRect.Top, (int) (textSize.Width + 2), itemRect.Height);
+                        var bounds = new Rectangle(itemRect.Left + textLeft, itemRect.Top, (int)(textSize.Width + 2), itemRect.Height);
 
                         if (e.Node.IsSelected)
                         {
@@ -277,12 +291,11 @@ namespace WixSharp.UI.Forms
                         else
                         {
                             var brush = Brushes.Black;
-                            if (IsReadOnly(e.Node))
+                            if (e.Node.IsReadOnly())
                                 brush = Brushes.Gray;
 
                             e.Graphics.DrawString(e.Node.Text, treeView.Font, brush, bounds, drawFormat);
                         }
-
                     }
 
                     // Focus rectangle around the text
@@ -307,6 +320,7 @@ namespace WixSharp.UI.Forms
                 }
             }
         }
+
 #pragma warning restore 1591
     }
 }
