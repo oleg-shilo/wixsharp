@@ -13,7 +13,8 @@ public class Script
         var productProj =
             new Project("My Product",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File("readme.txt"))) { InstallScope = InstallScope.perMachine };
+                    new File("readme.txt")))
+            { InstallScope = InstallScope.perMachine };
 
         productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
         string productMsi = productProj.BuildMsi();
@@ -32,7 +33,7 @@ public class Script
         bootstrapper.PreserveTempFiles = true;
         bootstrapper.SuppressWixMbaPrereqVars = true;
 
-        bootstrapper.Build();
+        bootstrapper.Build("my_app.exe");
         io.File.Delete(productMsi);
     }
 }

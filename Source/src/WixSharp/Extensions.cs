@@ -728,6 +728,19 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Creates an Instance of <see cref="WixSharp.Bootstrapper.Payload"/> for the specified `sourceFile`.
+        /// </summary>
+        /// <param name="sourceFile">The source file.</param>
+        /// <returns></returns>
+        public static Bootstrapper.Payload ToPayload(this string sourceFile)
+        {
+            if (sourceFile.IsNotEmpty())
+                return new Bootstrapper.Payload { SourceFile = sourceFile };
+            else
+                return null;
+        }
+
+        /// <summary>
         /// Converts semicolon or comma delimited list of language/culture name into the list of LCIDs.
         /// </summary>
         /// <param name="languages">The languages.</param>

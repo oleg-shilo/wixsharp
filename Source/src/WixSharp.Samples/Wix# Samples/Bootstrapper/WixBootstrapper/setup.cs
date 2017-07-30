@@ -6,6 +6,7 @@
 using System;
 using System.Xml;
 using System.Xml.Linq;
+using System.Linq;
 using io = System.IO;
 using WixSharp;
 using WixSharp.Bootstrapper;
@@ -47,7 +48,7 @@ public class InstallScript
                     //msiOnlinePackage, //just a demo sample
 
                     new MsiPackage(crtMsi) { DisplayInternalUI = true, Visible = true, MsiProperties = "PACKAGE_PROPERTY=[BundleVariable]" },
-                    new MsiPackage(productMsi) { DisplayInternalUI = true });
+                    new MsiPackage(productMsi) { DisplayInternalUI = true, Payloads = new[] { "script.dll".ToPayload() }, });
 
         bootstrapper.AboutUrl = "https://wixsharp.codeplex.com/";
         bootstrapper.IconFile = "app_icon.ico";
@@ -79,7 +80,6 @@ public class InstallScript
                                      });
         bootstrapper.StringVariablesDefinition += "BundleVariable=333";
         bootstrapper.PreserveTempFiles = true;
-
         // Add MspPackage manually (demo only).
         // In the future releases the direct support for MspPackage element will be added.
         // bootstrapper.WixSourceGenerated += (doc) => doc.FindSingle("Chain")
@@ -88,7 +88,6 @@ public class InstallScript
 
         //in real life scenarios suppression may need to be enabled (see SuppressWixMbaPrereqVars documentation)
         //bootstrapper.SuppressWixMbaPrereqVars = true;
-
         var setup = bootstrapper.Build("app_setup");
 
         //---------------------------------------------------------

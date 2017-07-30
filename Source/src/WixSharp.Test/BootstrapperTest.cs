@@ -44,7 +44,7 @@ namespace WixSharp.Test
             {
                 Id = "package1",
                 Name = "Setup1",
-                Payloads = new[] { @"Samples\setup1.dll", @"Samples\setup2.dll", },
+                Payloads = new[] { @"Samples\setup1.dll".ToPayload(), @"Samples\setup2.dll".ToPayload(), },
                 InstallCommand = "/q /norestart",
                 Permanent = true,
             };
@@ -63,7 +63,7 @@ namespace WixSharp.Test
         {
             var entity = new MsiPackage(@"Samples\SetupA.msi")
             {
-                Payloads = new[] { @"Samples\setup1.dll", @"Samples\setup2.dll", },
+                Payloads = new[] { @"Samples\setup1.dll".ToPayload(), @"Samples\setup2.dll".ToPayload(), },
                 Permanent = true,
                 MsiProperties = "TRANSFORMS=[CommandArgs];GLOBAL=yes"
             };
@@ -88,7 +88,7 @@ namespace WixSharp.Test
                     new PackageGroupRef("NetFx40Web"),
                     new ExePackage(@"Samples\Setup1.exe")
                     {
-                        Payloads = new[] { @"Samples\setup1.dll" },
+                        Payloads = new[] { @"Samples\setup1.dll".ToPayload() },
                         InstallCommand = "/q /norestart",
                         PerMachine = true
                     },
