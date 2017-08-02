@@ -78,7 +78,12 @@
         </member>
         <member name="F:WixSharp.UI.Forms.FeatureItem.Attributes">
             <summary>
-            The defines how the feature should be displayed in the feature tree.
+            Defines how the feature should be displayed in the feature tree.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.FeatureItem.Display">
+            <summary>
+            Determines the initial display of this feature in the feature tree.
             </summary>
         </member>
         <member name="P:WixSharp.UI.Forms.FeatureItem.DisallowAbsent">

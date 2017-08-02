@@ -54,7 +54,7 @@ namespace WixSharp.UI.Forms
 
             banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
             BuildFeaturesHierarchy();
-
+            
             ResetLayout();
         }
 
@@ -116,12 +116,12 @@ namespace WixSharp.UI.Forms
 
                 item.View = view;
 
-                if (item.Parent != null)
-                {
+                if (item.Parent != null && item.Display != FeatureDisplay.hidden)
                     (item.Parent.View as TreeNode).Nodes.Add(view); //link child view to parent view
-                }
 
-                //find all children
+                // even if the item is hidden process all its children so the correct hierarchy is established
+
+                // find all children
                 features.Where(x => x.ParentName == item.Name)
                         .ForEach(c =>
                                  {
@@ -131,10 +131,15 @@ namespace WixSharp.UI.Forms
 
                 if (UserSelectedItems != null)
                     view.Checked = UserSelectedItems.Contains((view.Tag as FeatureItem).Name);
+
+                if (item.Display == FeatureDisplay.expand)
+                    view.Expand();
+
             }
 
             //add views to the treeView control
-            rootItems.Select(x => x.View)
+            rootItems.Where(x => x.Display != FeatureDisplay.hidden)
+                     .Select(x => x.View)
                      .Cast<TreeNode>()
                      .ForEach(node => featuresTree.Nodes.Add(node));
 

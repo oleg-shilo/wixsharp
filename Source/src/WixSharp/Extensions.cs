@@ -585,6 +585,39 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Determines if the integer is an even value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsEven(this int value)
+        {
+            return (value % 2) == 0;
+        }
+
+        /// <summary>
+        /// Determines if the integer is an odd value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsOdd(this int value)
+        {
+            return (value % 2) != 0;
+        }
+
+        /// <summary>
+        /// Determines the <see cref="WixSharp.FeatureDisplay"/> from a given integer.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public static FeatureDisplay MapToFeatureDisplay(this int value)
+        {
+            // https://msdn.microsoft.com/en-us/library/windows/desktop/aa368585%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396
+            return value == 0 ? FeatureDisplay.hidden :
+                   value.IsEven() ? FeatureDisplay.collapse :
+                   FeatureDisplay.expand;
+        }
+
+        /// <summary>
         /// Converts string to <see cref="WixSharp.Id"/>.
         /// </summary>
         /// <param name="obj">Id string value.</param>

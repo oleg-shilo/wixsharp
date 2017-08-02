@@ -48,7 +48,7 @@ public class InstallScript
                     //msiOnlinePackage, //just a demo sample
 
                     new MsiPackage(crtMsi) { DisplayInternalUI = true, Visible = true, MsiProperties = "PACKAGE_PROPERTY=[BundleVariable]" },
-                    new MsiPackage(productMsi) { DisplayInternalUI = true, Payloads = new[] { "script.dll".ToPayload() }, });
+                    new MsiPackage(productMsi) { DisplayInternalUI = true, Payloads = new[] { "script.dll".ToPayload() } });
 
         bootstrapper.AboutUrl = "https://wixsharp.codeplex.com/";
         bootstrapper.IconFile = "app_icon.ico";
@@ -80,6 +80,7 @@ public class InstallScript
                                      });
         bootstrapper.StringVariablesDefinition += "BundleVariable=333";
         bootstrapper.PreserveTempFiles = true;
+
         // Add MspPackage manually (demo only).
         // In the future releases the direct support for MspPackage element will be added.
         // bootstrapper.WixSourceGenerated += (doc) => doc.FindSingle("Chain")

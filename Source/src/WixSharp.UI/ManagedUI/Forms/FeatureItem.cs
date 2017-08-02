@@ -1,5 +1,6 @@
 using Microsoft.Deployment.WindowsInstaller;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace WixSharp.UI.Forms
@@ -13,14 +14,17 @@ namespace WixSharp.UI.Forms
         /// The name of the Feature
         /// </summary>
         public string Name;
+
         /// <summary>
         /// The name of the parent Feature
         /// </summary>
         public string ParentName;
+
         /// <summary>
         /// The title of the Feature
         /// </summary>
         public string Title;
+
         /// <summary>
         /// The description of the Feature
         /// </summary>
@@ -30,6 +34,7 @@ namespace WixSharp.UI.Forms
         /// The view of the Feature. Typically a TreeNode
         /// </summary>
         public object View;
+
         /// <summary>
         /// The parent FeatureItem
         /// </summary>
@@ -39,15 +44,21 @@ namespace WixSharp.UI.Forms
         /// The requested state. Defines the InstallState of the feature to be achieved as the result of the MSI execution.
         /// </summary>
         public InstallState RequestedState;
+
         /// <summary>
         /// The current state. Defines the InstallState of the feature before the MSI execution.
         /// </summary>
         public InstallState CurrentState;
 
         /// <summary>
-        /// The defines how the feature should be displayed in the feature tree.
+        /// Defines how the feature should be displayed in the feature tree.
         /// </summary>
         public FeatureAttributes Attributes;
+
+        /// <summary>
+        /// Determines the initial display of this feature in the feature tree.
+        /// </summary>
+        public FeatureDisplay Display;
 
         /// <summary>
         /// Gets a value indicating whether the feature is allowed to be "absent".
@@ -74,6 +85,8 @@ namespace WixSharp.UI.Forms
         /// <param name="name">The name.</param>
         public FeatureItem(Session session, string name)
         {
+            // Debug.Assert(false);
+
             var data = session.OpenView("select * from Feature where Feature = '" + name + "'");
 
             Dictionary<string, object> row = data.FirstOrDefault();
@@ -82,8 +95,11 @@ namespace WixSharp.UI.Forms
             {
                 Name = name;
                 ParentName = (string)row["Feature_Parent"];
-                Title = (string)row["Title"].ToString();
+                Title = (string)row["Title"];
                 Description = (string)row["Description"];
+
+                var rawDisplay = (int)row["Display"];
+                Display = rawDisplay.MapToFeatureDisplay();
 
                 var defaultState = (InstallState)row["Level"];
 

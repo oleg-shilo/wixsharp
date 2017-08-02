@@ -640,4 +640,25 @@ namespace WixSharp
         /// </summary>
         none
     }
+
+    /// <summary>
+    /// Determines the initial display of this feature in the feature tree.
+    /// </summary>
+    public enum FeatureDisplay
+    {
+        /// <summary>
+        /// Initially shows the feature collapsed. This is the default value.
+        /// </summary>
+        collapse,
+
+        /// <summary>
+        ///  Initially shows the feature expanded.
+        /// </summary>
+        expand,
+
+        /// <summary>
+        ///  Prevents the feature from displaying in the user interface.
+        /// </summary>
+        hidden
+    }
 }
