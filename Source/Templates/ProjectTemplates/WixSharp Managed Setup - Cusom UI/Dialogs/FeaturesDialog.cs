@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
+
 using WixSharp;
 using WixSharp.UI.Forms;
 
 namespace WixSharpSetup.Dialogs
 {
     /// <summary>
-    /// The logical equivalent of the standard Features dialog. Though it implement slightly 
+    /// The logical equivalent of the standard Features dialog. Though it implement slightly
     /// different user experience as it has checkboxes bound to the features instead of icons context menu
     /// as MSI dialog has.
     /// </summary>
     public partial class FeaturesDialog : ManagedForm, IManagedDialog
     {
         /*https://msdn.microsoft.com/en-us/library/aa367536(v=vs.85).aspx
-         * ADDLOCAL - list of features to install 
-         * REMOVE - list of features to uninstall 
-         * ADDDEFAULT - list of features to set to their default state 
+         * ADDLOCAL - list of features to install
+         * REMOVE - list of features to uninstall
+         * ADDDEFAULT - list of features to set to their default state
          * REINSTALL - list of features to repair*/
 
         FeatureItem[] features;
@@ -56,28 +57,28 @@ namespace WixSharpSetup.Dialogs
 
             banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
             BuildFeaturesHierarchy();
-
+            
             ResetLayout();
         }
 
         void ResetLayout()
         {
-            // The form controls are properly anchored and will be correctly resized on parent form 
-            // resizing. However the initial sizing by WinForm runtime doesn't a do good job with DPI 
-            // other than 96. Thus manual resizing is the only reliable option apart from going WPF.  
+            // The form controls are properly anchored and will be correctly resized on parent form
+            // resizing. However the initial sizing by WinForm runtime doesn't a do good job with DPI
+            // other than 96. Thus manual resizing is the only reliable option apart from going WPF.
 
-            float ratio = (float) banner.Image.Width / (float) banner.Image.Height;
-            topPanel.Height = (int) (banner.Width / ratio);
+            float ratio = (float)banner.Image.Width / (float)banner.Image.Height;
+            topPanel.Height = (int)(banner.Width / ratio);
             topBorder.Top = topPanel.Height + 1;
 
-            var upShift = (int) (next.Height * 2.3) - bottomPanel.Height;
+            var upShift = (int)(next.Height * 2.3) - bottomPanel.Height;
             bottomPanel.Top -= upShift;
             bottomPanel.Height += upShift;
 
             middlePanel.Top = topBorder.Bottom + 5;
             middlePanel.Height = (bottomPanel.Top - 5) - middlePanel.Top;
 
-            featuresTree.Width = (int) ((middlePanel.Width / 3.0) * 1.75);
+            featuresTree.Width = (int)((middlePanel.Width / 3.0) * 1.75);
 
             descriptionPanel.Left = featuresTree.Right + 10;
             descriptionPanel.Width = middlePanel.Width - descriptionPanel.Left - 10;
@@ -90,8 +91,8 @@ namespace WixSharpSetup.Dialogs
 
         void BuildFeaturesHierarchy()
         {
-            //Cannot use MsiRuntime.Session.Features (FeatureInfo collection). 
-            //This WiX feature is just not implemented yet. All members except 'Name' throw InvalidHandeException 
+            //Cannot use MsiRuntime.Session.Features (FeatureInfo collection).
+            //This WiX feature is just not implemented yet. All members except 'Name' throw InvalidHandeException
             //Thus instead of using FeatureInfo just collect the names and query database for the rest of the properties.
             string[] names = MsiRuntime.Session.Features.Select(x => x.Name).ToArray();
 
@@ -112,17 +113,18 @@ namespace WixSharpSetup.Dialogs
                     Text = item.Title,
                     Tag = item, //link view to model
                     IsReadOnly = item.DisallowAbsent,
+                    DefaultChecked = item.DefaultIsToBeInstalled(),
                     Checked = item.DefaultIsToBeInstalled()
                 };
 
                 item.View = view;
 
-                if (item.Parent != null)
-                {
+                if (item.Parent != null && item.Display != FeatureDisplay.hidden)
                     (item.Parent.View as TreeNode).Nodes.Add(view); //link child view to parent view
-                }
 
-                //find all children
+                // even if the item is hidden process all its children so the correct hierarchy is established
+
+                // find all children
                 features.Where(x => x.ParentName == item.Name)
                         .ForEach(c =>
                                  {
@@ -132,10 +134,15 @@ namespace WixSharpSetup.Dialogs
 
                 if (UserSelectedItems != null)
                     view.Checked = UserSelectedItems.Contains((view.Tag as FeatureItem).Name);
+
+                if (item.Display == FeatureDisplay.expand)
+                    view.Expand();
+
             }
 
             //add views to the treeView control
-            rootItems.Select(x => x.View)
+            rootItems.Where(x => x.Display != FeatureDisplay.hidden)
+                     .Select(x => x.View)
                      .Cast<TreeNode>()
                      .ForEach(node => featuresTree.Nodes.Add(node));
 
@@ -186,6 +193,7 @@ namespace WixSharpSetup.Dialogs
         }
 
         bool isAutoCheckingActive = false;
+
         void featuresTree_AfterCheck(object sender, TreeViewEventArgs e)
         {
             if (isAutoCheckingActive)
@@ -200,7 +208,6 @@ namespace WixSharpSetup.Dialogs
                     var node = queue.Dequeue();
                     node.Checked = newState;
                     queue.EnqueueRange(node.Nodes.ToArray());
-
                 }
 
                 if (e.Node.Checked)
@@ -224,5 +231,4 @@ namespace WixSharpSetup.Dialogs
             isAutoCheckingActive = true;
         }
     }
-
 }
