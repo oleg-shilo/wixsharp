@@ -21,12 +21,12 @@ public class Script
 
     static public void Main()
     {
-        var binaries = new Feature("Binaries", "Product binaries", true, false) { Display = FeatureDisplay.expand };
+        var binaries = new Feature("Binaries", "Product binaries", true, false);
         var docs = new Feature("Documentation", "Product documentation (manuals and user guides)", true) { Display = FeatureDisplay.expand };
         var tuts = new Feature("Tutorials", "Product tutorials", false) { Display = FeatureDisplay.expand };
         var manuals = new Feature("Manuals", "Product Manuals", false) { Display = FeatureDisplay.expand };
-        var user_manuals = new Feature("User Manuals", "User Manuals", false) { Display = FeatureDisplay.expand };
-        var dev_manuals = new Feature("Developer Manuals", "Developer Manuals", false) { Display = FeatureDisplay.expand };
+        var user_manuals = new Feature("User Manuals", "User Manuals", false);
+        var dev_manuals = new Feature("Developer Manuals", "Developer Manuals", false);
 
         docs.Children.Add(tuts);
         tuts.Children.Add(manuals);
