@@ -86,6 +86,12 @@
             Determines the initial display of this feature in the feature tree.
             </summary>
         </member>
+        <member name="F:WixSharp.UI.Forms.FeatureItem.RawDisplay">
+            <summary>
+            Determines the order and initial display of this feature in the feature tree. It is a raw value of the
+            `Display` attribute of the `Feature` WiX element.
+            </summary>
+        </member>
         <member name="P:WixSharp.UI.Forms.FeatureItem.DisallowAbsent">
             <summary>
             Gets a value indicating whether the feature is allowed to be "absent".

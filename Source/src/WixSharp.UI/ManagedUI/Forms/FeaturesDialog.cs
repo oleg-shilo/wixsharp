@@ -54,7 +54,7 @@ namespace WixSharp.UI.Forms
 
             banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
             BuildFeaturesHierarchy();
-            
+
             ResetLayout();
         }
 
@@ -96,7 +96,9 @@ namespace WixSharp.UI.Forms
             features = names.Select(name => new FeatureItem(MsiRuntime.Session, name)).ToArray();
 
             //build the hierarchy tree
-            var rootItems = features.Where(x => x.ParentName.IsEmpty()).ToArray();
+            var rootItems = features.Where(x => x.ParentName.IsEmpty())
+                                    .OrderBy(x => x.RawDisplay)
+                                    .ToArray();
 
             var itemsToProcess = new Queue<FeatureItem>(rootItems); //features to find the children for
 
@@ -134,7 +136,6 @@ namespace WixSharp.UI.Forms
 
                 if (item.Display == FeatureDisplay.expand)
                     view.Expand();
-
             }
 
             //add views to the treeView control

@@ -216,6 +216,7 @@ namespace WixSharp
         public Feature Add(params Feature[] features)
         {
             Children.AddRange(features);
+            features.ForEach(x => x.Parent = this);
             return this;
         }
 

@@ -61,6 +61,12 @@ namespace WixSharp.UI.Forms
         public FeatureDisplay Display;
 
         /// <summary>
+        /// Determines the order and initial display of this feature in the feature tree. It is a raw value of the
+        /// `Display` attribute of the `Feature` WiX element.
+        /// </summary>
+        public int RawDisplay;
+
+        /// <summary>
         /// Gets a value indicating whether the feature is allowed to be "absent".
         /// </summary>
         /// <value>
@@ -98,8 +104,8 @@ namespace WixSharp.UI.Forms
                 Title = (string)row["Title"];
                 Description = (string)row["Description"];
 
-                var rawDisplay = (int)row["Display"];
-                Display = rawDisplay.MapToFeatureDisplay();
+                RawDisplay = (int)row["Display"];
+                Display = RawDisplay.MapToFeatureDisplay();
 
                 var defaultState = (InstallState)row["Level"];
 
