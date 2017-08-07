@@ -161,7 +161,8 @@ namespace WixSharp.CommonTasks
         /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
         /// <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
         /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
-        /// <param name="useCertificateStore"></param>
+        /// <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
+        /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
         /// <example>The following is an example of signing <c>Setup.msi</c> file.
@@ -171,7 +172,8 @@ namespace WixSharp.CommonTasks
         ///     "MyCert.pfx",
         ///     "http://timestamp.verisign.com/scripts/timstamp.dll",
         ///     "MyPassword",
-        ///     null);
+        ///     null,
+        ///     false);
         /// </code>
         /// </example>
         static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password, 

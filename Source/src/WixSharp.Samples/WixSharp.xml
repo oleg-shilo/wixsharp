@@ -330,7 +330,7 @@
             Thus bootstrapper will execute <c>PrimaryFile</c> without launching <c>PrerequisiteFile</c> first.</param>
             <returns>Path to the built bootstrapper file. Returns <c>null</c> if bootstrapper cannot be built.</returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySign(System.String,System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySign(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean)">
              <summary>
              Applies digital signature to a file (e.g. msi, exe, dll) with MS <c>SignTool.exe</c> utility.
              Please use <see cref="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String)"/> for signing a bootstrapper.
@@ -344,6 +344,8 @@
              <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
              <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
              If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
+             <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
+             from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
              <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
             
              <example>The following is an example of signing <c>Setup.msi</c> file.
@@ -353,7 +355,8 @@
                  "MyCert.pfx",
                  "http://timestamp.verisign.com/scripts/timstamp.dll",
                  "MyPassword",
-                 null);
+                 null,
+                 false);
              </code>
              </example>
         </member>
@@ -1895,6 +1898,12 @@
             <summary>
             The optional ';' separated list of directories where SignTool.exe can be located.
             If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalSignature.UseCertificateStore">
+            <summary>
+            A flag indicating if the value of <see cref="P:WixSharp.DigitalSignature.PfxFilePath"/> is a name of the subject of the signing certificate
+            from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.
             </summary>
         </member>
         <member name="M:WixSharp.DigitalSignature.Apply(System.String)">

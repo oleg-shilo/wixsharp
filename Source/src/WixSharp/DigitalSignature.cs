@@ -49,6 +49,13 @@ namespace WixSharp
         public string WellKnownLocations { get; set; }
 
         /// <summary>
+        /// A flag indicating if the value of <see cref="WixSharp.DigitalSignature.PfxFilePath"/> is a name of the subject of the signing certificate
+        /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.
+        /// </summary>
+        public bool UseCertificateStore { get; set; }
+
+
+        /// <summary>
         /// Applies digital signature to a file
         /// </summary>
         /// <param name="fileToSign">The file to sign.</param>
@@ -56,7 +63,7 @@ namespace WixSharp
         public virtual int Apply(string fileToSign)
         {
             var retValue = CommonTasks.Tasks.DigitalySign(fileToSign, PfxFilePath, TimeUrl.AbsoluteUri, Password,
-                PrepareOptionalArguments(), WellKnownLocations);
+                PrepareOptionalArguments(), WellKnownLocations, UseCertificateStore);
 
             Console.WriteLine(retValue != 0
                 ? $"Could not sign the {fileToSign} file."
