@@ -161,6 +161,7 @@ namespace WixSharp.CommonTasks
         /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
         /// <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
         /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
+        /// <param name="useCertificateStore"></param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
         /// <example>The following is an example of signing <c>Setup.msi</c> file.
@@ -173,11 +174,15 @@ namespace WixSharp.CommonTasks
         ///     null);
         /// </code>
         /// </example>
-        static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password, string optionalArguments = null, string wellKnownLocations = null)
+        static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password, 
+            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false)
         {
             //"C:\Program Files\\Microsoft SDKs\Windows\v6.0A\bin\signtool.exe" sign /f "pfxFile" /p password /v "fileToSign" /t timeURL
             //string args = "sign /v /f \"" + pfxFile + "\" \"" + fileToSign + "\"";
-            string args = $"sign /v /f \"{pfxFile}\"";
+
+            string certPlace = useCertificateStore ? "/n" : "/f";
+
+            string args = $"sign /v {certPlace} \"{pfxFile}\"";
             if (timeURL != null)
                 args += $" /t \"{timeURL}\"";
             if (password != null)
