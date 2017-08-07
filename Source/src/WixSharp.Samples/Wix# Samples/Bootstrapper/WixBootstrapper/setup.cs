@@ -63,7 +63,7 @@ public class InstallScript
         bootstrapper.IncludeWixExtension(WixExtension.Util);
 
         // The code below sets WiX variables 'Netfx4FullVersion' and 'AdobeInstalled'. Note it has no affect on
-        //the runtime behavior and use of 'FileSearch' and "RegistrySearch" only provided as an example.
+        //the runtime behavior and 'FileSearch' and "RegistrySearch" are only provided as an example.
         bootstrapper.AddWixFragment("Wix/Bundle",
                                      new UtilRegistrySearch
                                      {
