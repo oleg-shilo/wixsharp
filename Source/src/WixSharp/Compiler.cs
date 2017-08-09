@@ -757,7 +757,7 @@ namespace WixSharp
 
             try
             {
-                //System.Diagnostics.Debug.Assert(false);
+                // System.Diagnostics.Debug.Assert(false);
                 Compiler.TempFiles.Clear();
                 string compiler = Utils.PathCombine(WixLocation, @"candle.exe");
                 string linker = Utils.PathCombine(WixLocation, @"light.exe");
@@ -3032,11 +3032,12 @@ namespace WixSharp
         /// </summary>
         static public bool IgnoreClientAssemblyPDB = false;
 
-        internal static string ResolveClientAsm(string asmName, string outDir)
+        internal static string ResolveClientAsm(string outDir)
         {
             //restore the original assembly name as MakeSfxCA does not like renamed assemblies
             string newName = Utils.OriginalAssemblyFile(ClientAssembly);
             newName = newName.PathChangeDirectory(outDir);
+
 
             if (!ClientAssembly.SamePathAs(newName))
             {
@@ -3118,7 +3119,7 @@ namespace WixSharp
             var outDll = IO.Path.GetFullPath(nativeDll);
             var asmFile = IO.Path.GetFullPath(asm);
 
-            var clientAsmPath = ResolveClientAsm(asmFile, outDir);
+            var clientAsmPath = ResolveClientAsm(outDir);
             if (asmFile.EndsWith("%this%"))
                 asmFile = clientAsmPath;
 
@@ -3141,7 +3142,7 @@ namespace WixSharp
 
                 if (file == "%this%")
                 {
-                    refAasmFile = ResolveClientAsm(file, outDir);
+                    refAasmFile = ResolveClientAsm(outDir);
                 }
                 else
                 {
