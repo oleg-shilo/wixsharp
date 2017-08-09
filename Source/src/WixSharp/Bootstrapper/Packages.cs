@@ -186,7 +186,7 @@ namespace WixSharp.Bootstrapper
                 .Add(this.MapToXmlAttributes());
 
             if (Payloads.Any())
-                Payloads.ForEach(p => root.Add(new XElement("Payload", new XAttribute("SourceFile", p))));
+                Payloads.ForEach(p => root.Add(p.ToXElement("Payload")));
 
             foreach (var exitCode in ExitCodes)
             {
