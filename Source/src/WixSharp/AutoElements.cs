@@ -150,7 +150,8 @@ namespace WixSharp
         {
             if (!DisableAutoKeyPath)
             {
-                //a component must have KeyPath set on itself or on a single (just one) nested element
+                // A component must have KeyPath set on itself or on a single (just one) nested element.
+                // may conflict with the folder removal (https://github.com/oleg-shilo/wixsharp/issues/123).
                 if (!xComponent.HasKeyPathElements())
                     xComponent.SetAttribute("KeyPath=yes");
             }
@@ -236,6 +237,11 @@ namespace WixSharp
         static bool ContainsFiles(this XElement xComp)
         {
             return xComp.Elements("File").Any();
+        }
+
+        static bool ContainsFilesOrRegistries(this XElement xComp)
+        {
+            return xComp.Elements("File").Any() || xComp.Elements("RegistryKey").Any();
         }
 
         static bool ContainsComponents(this XElement xDir)
@@ -597,9 +603,9 @@ namespace WixSharp
 
                 if (dirComponents.Any())
                 {
-                    var componentsWithNoFiles = dirComponents.Where(x => !x.ContainsFiles()).ToArray();
+                    var componentsWithNoFilesOrRegestry = dirComponents.Where(x => !x.ContainsFilesOrRegistries()).ToArray();
 
-                    foreach (XElement item in componentsWithNoFiles)
+                    foreach (XElement item in componentsWithNoFilesOrRegestry)
                     {
                         //if (!item.Attribute("Id").Value.EndsWith(".EmptyDirectory"))
                         EnsureKeyPath(item);
