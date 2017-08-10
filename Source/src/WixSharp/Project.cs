@@ -389,7 +389,7 @@ namespace WixSharp
         /// <see cref="MajorUpgradeStrategy"/> instance.</para>
         /// <para><c>Note</c>: <see cref="MajorUpgradeStrategy"/> yields WiX UpgradeVersion element, which is arguably the most comprehensive
         /// upgrade definition. However in the later versions of WiX a simplified upgrade definition has been introduced. It relies
-        /// on MajorUpgrade WiX element. For most of the upgrade scenarios you will find MajorUpgrade allows achieve the same result with
+        /// on MajorUpgrade WiX element. For most of the upgrade scenarios you will find that MajorUpgrade allows to achieve the same result with
         /// much less effort. Wix# supports MajorUpgrade element via  <see cref="WixSharp.Project.MajorUpgrade"/> member.</para>
         /// </summary>
         ///<example>The following is an example of building product MSI with auto uninstalling any older version of the product

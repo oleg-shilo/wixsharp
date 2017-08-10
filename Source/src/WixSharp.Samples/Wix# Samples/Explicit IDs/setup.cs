@@ -1,6 +1,7 @@
 //css_dir ..\..\;
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 //css_ref System.Core.dll;
+using Microsoft.Win32;
 using System;
 using System.Linq;
 using WixSharp;
@@ -11,11 +12,14 @@ class Script
     {
         var project =
             new Project("MyProduct",
+                new RegValue(RegistryHive.LocalMachine, "Software\\My Company\\My Product", "MyRegKey", "1"),
                 new Dir(new Id("PRODUCT_INSTALLDIR"), @"%ProgramFiles%\My Company\My Product",
                     new File(new Id("App_File"), @"Files\Bin\MyApp.exe"),
                     new Dir(@"Docs\Manual",
                         new File(new Id("Manual_File"), @"Files\Docs\Manual.txt"))));
 
+        project.PreserveTempFiles = true;
+        project.UI = WUI.WixUI_ProgressOnly;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         Compiler.BuildMsi(project);
@@ -58,16 +62,13 @@ class Script
                          new File(@"Files\Docs\Manual.txt") { Id = "Manual_File" })));
 
         //Note: the first dir in the project constructor is converted
-        //in the sequence of nested dirs based on the 'path'. There the first dir is 
+        //in the sequence of nested dirs based on the 'path'. There the first dir is
         //%ProgramFiles% and the last one is 'My Product'.
-        //We need to set the Id to the 'My Product' 
-        project.AllDirs.Single(d=>d.Name == "My Product").Id = "PRODUCT_INSTALLDIR";
+        //We need to set the Id to the 'My Product'
+        project.AllDirs.Single(d => d.Name == "My Product").Id = "PRODUCT_INSTALLDIR";
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         Compiler.BuildWxs(project);
     }
 }
-
-
-

@@ -34,6 +34,3 @@ class Script
         MessageBox.Show(e.ToString(), "BeforeInstall " + AppSearch.GetProductVersionFromUpgradeCode(e.UpgradeCode));
     }
 }
-
-
-
