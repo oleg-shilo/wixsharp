@@ -39,6 +39,8 @@ namespace WixSharp
 
             string content = System.IO.File.ReadAllText(regFile);
 
+            content  = Regex.Replace(content, @"\r\n|\n\r|\n|\r", "\r\n");
+
             var parser = new RegParser();
 
             char[] delimiter = new[] { '\\' };
