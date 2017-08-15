@@ -160,7 +160,8 @@ namespace WixSharp
                     {
                         if (record != null)
                         {
-                            var subDir = record.GetString("DefaultDir").Split('|').Last();
+                            // [<internal_id>|]<name>[:<source_name>]
+                            var subDir = record.GetString("DefaultDir").Split('|').Last().Split(':').First();
                             path.Add(subDir);
 
                             if (!record.IsNull("Directory_Parent"))
