@@ -22,7 +22,7 @@ class Script
 
         project.MajorUpgrade = new MajorUpgrade
         {
-            //AllowSameVersionUpgrades = true, //uncomment this if the the upgrade version is different by only the fourth field
+            //AllowSameVersionUpgrades = true, //uncomment this if the upgrade version is different by only the fourth field
             Schedule = UpgradeSchedule.afterInstallInitialize,
             DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
         };
@@ -33,11 +33,9 @@ class Script
 
         Compiler.BuildMsi(project, "setup.msi");
     }
+
     static void project_BeforeInstall(SetupEventArgs e)
     {
         MessageBox.Show(e.ToString(), "BeforeInstall");
     }
 }
-
-
-
