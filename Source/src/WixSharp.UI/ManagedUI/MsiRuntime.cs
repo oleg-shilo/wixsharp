@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+
 using io = System.IO;
+
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -30,8 +32,6 @@ namespace WixSharp
      *        UPGRADINGPRODUCTCODE          <null>      <null>      <null>      <null>      <not empty>
      *
      * */
-
-
 
     /// <summary>
     /// Represents MSI runtime context. This class is to be used by ManagedUI dialogs to interact with the MSI session.
@@ -74,6 +74,7 @@ namespace WixSharp
             }
             catch { }
         }
+
         /// <summary>
         /// Repository of the session properties to be captured and transfered to the deferred CAs.
         /// </summary>
@@ -135,7 +136,7 @@ namespace WixSharp
             {
                 byte[] data = Session.ReadBinary(name);
                 using (Stream s = new MemoryStream(data))
-                    return (Bitmap) Bitmap.FromStream(s);
+                    return (Bitmap)Bitmap.FromStream(s);
             }
             catch { }
             return null;
@@ -171,14 +172,17 @@ namespace WixSharp
         /// The product name
         /// </summary>
         public string ProductName;
+
         /// <summary>
         /// The directory the product is to be installed. This field will contain a valid path only after the MSI execution started.
         /// </summary>
         public string InstallDir { get; internal set; }
+
         /// <summary>
         /// The product code
         /// </summary>
         public string ProductCode;
+
         /// <summary>
         /// The product version
         /// </summary>
@@ -243,5 +247,4 @@ namespace WixSharp
             }
         }
     }
-
 }

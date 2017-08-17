@@ -5041,6 +5041,15 @@
             <param name="name">The name.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.QueryProperty(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+            <summary>
+            Queries MSI database directly for the table 'Property' value. This method is particularly useful for the stages when WiX session 
+            object is not fully initialized. For example properties are not discovered yet during EmbeddedUI loading event.
+            </summary>
+            <param name="session">The session.</param>
+            <param name="name">The name.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.SaveBinary(Microsoft.Deployment.WindowsInstaller.Session,System.String,System.String)">
             <summary>
             Saves the binary (from the Binary table) into the file.
@@ -7246,19 +7255,19 @@
         <member name="T:WixSharp.IProgressDialog">
             <summary>
             Interface of a typical UI dialog for reflecting the installation progress. It is functionally a typical
-            <see cref="T:WixSharp.IManagedDialog"/> except that it initiates the MSI execution by calling 
-            <see cref="T:WixSharp.IManagedUIShell.StartExecute"/> on loading the dialog. ManagedUI dialogs sequence 
-            should have only a single dialog of this type. 
+            <see cref="T:WixSharp.IManagedDialog"/> except that it initiates the MSI execution by calling
+            <see cref="T:WixSharp.IManagedUIShell.StartExecute"/> on loading the dialog. ManagedUI dialogs sequence
+            should have only a single dialog of this type.
             </summary>
         </member>
         <member name="T:WixSharp.IManagedDialog">
             <summary>
-            Interface of a typical UI dialog managed by shell (the main window) of the MSI external/embedded UI. 
+            Interface of a typical UI dialog managed by shell (the main window) of the MSI external/embedded UI.
             </summary>
         </member>
         <member name="P:WixSharp.IManagedDialog.Shell">
             <summary>
-            Gets or sets the UI shell (main UI window). This property is set the ManagedUI runtime (IManagedUI). 
+            Gets or sets the UI shell (main UI window). This property is set the ManagedUI runtime (IManagedUI).
             On the other hand it is consumed (accessed) by the UI dialog (IManagedDialog).
             </summary>
             <value>
@@ -7268,7 +7277,7 @@
         <member name="M:WixSharp.IManagedDialog.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
             <summary>
             Processes information and progress messages sent to the user interface.
-            <para> This method directly mapped to the 
+            <para> This method directly mapped to the
             <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI.ProcessMessage"/>.</para>
             </summary>
             <param name="messageType">Type of the message.</param>
@@ -7319,7 +7328,7 @@
         </member>
         <member name="T:WixSharp.IManagedUIShell">
             <summary>
-            Interface of the main window implementation of the MSI external/embedded UI. This interface is designed to be 
+            Interface of the main window implementation of the MSI external/embedded UI. This interface is designed to be
             used by the Wix#/MSI UI dialogs. It is the interface that is directly available for all UI dialogs and it
             allows the dialogs accessing the MSI runtime context.
             </summary>
@@ -7410,15 +7419,15 @@
         </member>
         <member name="T:WixSharp.IManagedUI">
             <summary>
-            Interface for an embedded external user interface implementing Wix# ManagedUI architecture (ManagedUI runtime). 
-            <para>The interface itself is reasonable simple and it basically implements the 
+            Interface for an embedded external user interface implementing Wix# ManagedUI architecture (ManagedUI runtime).
+            <para>The interface itself is reasonable simple and it basically implements the
             collection/sequence of the runtime UI dialogs with a couple of methods for integrating the ManagedUI
             with the MSI.</para>
             </summary>
         </member>
         <member name="P:WixSharp.IManagedUI.InstallDirId">
             <summary>
-            Gets or sets the id of the 'installdir' (destination folder) directory. It is the directory, 
+            Gets or sets the id of the 'installdir' (destination folder) directory. It is the directory,
             which is bound to the input UI elements of the Browse dialog (e.g. WiX BrowseDlg, Wix# InstallDirDialog).
             </summary>
             <value>
@@ -7442,14 +7451,14 @@
         </member>
         <member name="M:WixSharp.IManagedUI.BeforeBuild(WixSharp.ManagedProject)">
             <summary>
-            This method is called (indirectly) by Wix# compiler just befor building the MSI. It allows embedding UI specific resources (e.g. license file, properties)
+            This method is called (indirectly) by Wix# compiler just before building the MSI. It allows embedding UI specific resources (e.g. license file, properties)
             into the MSI.
             </summary>
             <param name="project">The project.</param>
         </member>
         <member name="T:WixSharp.ManagedDialogs">
             <summary>
-            Customized version of 'List&lt;Type&gt;', containing Fluent extension methods 
+            Customized version of 'List&lt;Type&gt;', containing Fluent extension methods
             </summary>
         </member>
         <member name="M:WixSharp.ManagedDialogs.Add``1">
@@ -7736,7 +7745,14 @@
             The UI level.
             </value>
         </member>
-        <member name="F:WixSharp.SetupEventArgs.ManagedUIShell">
+        <member name="P:WixSharp.SetupEventArgs.ManagedUIShell">
+            <summary>
+            The managed UI main window object. It is a main System.Windows.Forms.Form window of the standard Wix# embedded UI.
+            <para>This member is only populated when it is handled by the <see cref="T:WixSharp.ManagedProject.UILoaded"/> event handler.
+            It has the default <c>null</c> value for all other events.</para>
+            </summary>
+        </member>
+        <member name="F:WixSharp.SetupEventArgs.ManagedUI">
             <summary>
             The managed UI main window object. It is a main System.Windows.Forms.Form window of the standard Wix# embedded UI.
             <para>This member is only populated when it is handled by the <see cref="T:WixSharp.ManagedProject.UILoaded"/> event handler.
@@ -7779,7 +7795,7 @@
             <summary>
             Gets a value indicating whether the installed product is being upgraded.
             <para>
-            This property relies on "UPGRADINGPRODUCTCODE" MSI property, which is not set by MSI until previous version is uninstalled. Thus it may not be the 
+            This property relies on "UPGRADINGPRODUCTCODE" MSI property, which is not set by MSI until previous version is uninstalled. Thus it may not be the
             most practical way of detecting upgrades. Use AppSearch.GetProductVersionFromUpgradeCode as a more reliable alternative.
             </para>
             </summary>

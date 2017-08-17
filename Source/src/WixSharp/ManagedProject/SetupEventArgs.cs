@@ -63,6 +63,7 @@ namespace WixSharp
         /// Gets name of the product being installed
         /// </summary>
         public string ProductName { get { return Data["ProductName"]; } }
+
         /// <summary>
         /// Gets a value indicating whether Authored UI and wizard dialog boxes suppressed.
         /// </summary>
@@ -85,7 +86,15 @@ namespace WixSharp
         /// <para>This member is only populated when it is handled by the <see cref="T:WixSharp.ManagedProject.UILoaded"/> event handler.
         /// It has the default <c>null</c> value for all other events.</para>
         /// </summary>
-        public IShellView ManagedUIShell = null;
+        [Obsolete(message: "This member name is obsolete use `ManagedUI` instead")]
+        public IShellView ManagedUIShell { get { return ManagedUI; } set { ManagedUI = value; } }
+
+        /// <summary>
+        /// The managed UI main window object. It is a main System.Windows.Forms.Form window of the standard Wix# embedded UI.
+        /// <para>This member is only populated when it is handled by the <see cref="T:WixSharp.ManagedProject.UILoaded"/> event handler.
+        /// It has the default <c>null</c> value for all other events.</para>
+        /// </summary>
+        public IShellView ManagedUI = null;
 
         /// <summary>
         /// Gets a value indicating whether the event handler is executed from the elevated context.
@@ -122,7 +131,7 @@ namespace WixSharp
         /// <summary>
         /// Gets a value indicating whether the installed product is being upgraded.
         /// <para>
-        /// This property relies on "UPGRADINGPRODUCTCODE" MSI property, which is not set by MSI until previous version is uninstalled. Thus it may not be the 
+        /// This property relies on "UPGRADINGPRODUCTCODE" MSI property, which is not set by MSI until previous version is uninstalled. Thus it may not be the
         /// most practical way of detecting upgrades. Use AppSearch.GetProductVersionFromUpgradeCode as a more reliable alternative.
         /// </para>
         /// </summary>
@@ -248,6 +257,7 @@ namespace WixSharp
         {
             get { return Data["ProductCode"]; }
         }
+
         /// <summary>
         /// Gets the upgrade code.
         /// </summary>
@@ -270,7 +280,6 @@ namespace WixSharp
         //    catch { }
         //    return result;
         //}
-
 
         /// <summary>
         /// Gets or sets the Data.
@@ -299,7 +308,7 @@ namespace WixSharp
         /// </summary>
         internal void SaveData()
         {
-            if(this.Session.IsActive())
+            if (this.Session.IsActive())
                 this.Session["WIXSHARP_RUNTIME_DATA"] = Data.ToString();
         }
 

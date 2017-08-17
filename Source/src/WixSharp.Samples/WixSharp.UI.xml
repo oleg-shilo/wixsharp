@@ -1013,6 +1013,27 @@
             </summary>
             <value>The current dialog.</value>
         </member>
+        <member name="M:WixSharp.UIExtensions.MsiRuntime(WixSharp.IManagedUIShell)">
+            <summary>
+            MsiRuntime object associated with the ManagedUI shell.
+            </summary>
+            <param name="shell">The shell.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.UIExtensions.MsiRuntime(WixSharp.IManagedDialog)">
+            <summary>
+            MsiRuntime object associated with the ManagedUI dialog.
+            </summary>
+            <param name="dialog">The dialog.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.UIExtensions.Session(WixSharp.IManagedDialog)">
+            <summary>
+            Session object associated with the ManagedUI dialog.
+            </summary>
+            <param name="dialog">The dialog.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.UIExtensions.GetDirectoryPath(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
             <summary>
             Gets the target system directory path based on specified directory name (MSI Directory table).
@@ -1052,9 +1073,9 @@
         </member>
         <member name="T:WixSharp.IUIContainer">
             <summary>
-            Interface of the main window implementation of the MSI external/embedded UI. This interface is designed to be 
-            used by Wix#/MSI runtime (e.g. ManagedUI). It is the interface that is directly bound to the 
-            <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI"/> (e.g. <see cref="T:WixSharp.ManagedUI"/>). 
+            Interface of the main window implementation of the MSI external/embedded UI. This interface is designed to be
+            used by Wix#/MSI runtime (e.g. ManagedUI). It is the interface that is directly bound to the
+            <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI"/> (e.g. <see cref="T:WixSharp.ManagedUI"/>).
             </summary>
         </member>
         <member name="M:WixSharp.IUIContainer.ShowModal(WixSharp.MsiRuntime,WixSharp.IManagedUI)">
@@ -1078,7 +1099,7 @@
         <member name="M:WixSharp.IUIContainer.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
             <summary>
              Processes information and progress messages sent to the user interface.
-            <para> This method directly mapped to the 
+            <para> This method directly mapped to the
             <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI.ProcessMessage"/>.</para>
             </summary>
             <param name="messageType">Type of the message.</param>
@@ -1090,7 +1111,7 @@
         </member>
         <member name="T:WixSharp.UIShell">
             <summary>
-            The main window WinForms implementation of the MSI external/embedded UI. 
+            The main window WinForms implementation of the MSI external/embedded UI.
             </summary>
         </member>
         <member name="P:WixSharp.UIShell.RuntimeContext">
@@ -1102,12 +1123,12 @@
             </value>
         </member>
         <member name="P:WixSharp.UIShell.MsiRuntime">
-            <summary>
-            Gets or sets the runtime context object. Typically this object is of the <see cref="T:WixSharp.MsiRuntime" /> type.
-            </summary>
-            <value>
-            The runtime context.
-            </value>
+             <summary>
+             Gets or sets the runtime context object. Typically this object is of the <see cref="T:WixSharp.MsiRuntime" /> type.
+             </summary>
+             <value>
+             The runtime context.
+             </value>
             
         </member>
         <member name="P:WixSharp.UIShell.UI">

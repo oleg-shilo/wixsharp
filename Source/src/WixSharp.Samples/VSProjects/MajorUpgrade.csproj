@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -74,6 +74,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\WixSharp.UI\WixSharp.UI.csproj">
+      <Project>{79033a3e-565e-47a3-93f6-d95789b024fc}</Project>
+      <Name>WixSharp.UI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\WixSharp\WixSharp.csproj">
       <Project>{8860B29B-749F-4925-86C8-F9C4B93C9DA5}</Project>
       <Name>WixSharp</Name>

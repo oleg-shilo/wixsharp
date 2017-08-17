@@ -16,6 +16,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Text.RegularExpressions;
 using static WixSharp.SetupEventArgs;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
@@ -2015,6 +2016,32 @@ namespace WixSharp
                 return session[name];
             else
                 return (session.CustomActionData.ContainsKey(name) ? session.CustomActionData[name] : "");
+        }
+
+        /// <summary>
+        /// Queries MSI database directly for the table 'Property' value. This method is particularly useful for the stages when WiX session 
+        /// object is not fully initialized. For example properties are not discovered yet during EmbeddedUI loading event.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        public static string QueryProperty(this Session session, string name)
+        {
+            return (string)session.Database.ExecuteScalar($"SELECT `Value` FROM `Property` WHERE `Property` = '{name}'");
+        }
+
+        public static Version LookupInstalledVersion(this Session session)
+        {
+            return AppSearch.GetProductVersionFromUpgradeCode(session.QueryUpgradeCode());
+        }
+        public static string QueryUpgradeCode(this Session session)
+        {
+            return session.QueryProperty("UpgradeCode");
+        }
+
+        public static Version QueryProductVersion(this Session session)
+        {
+            return new Version(session.QueryProperty("ProductVersion"));
         }
 
         internal static AppData InitFrom(this AppData data, Session session)

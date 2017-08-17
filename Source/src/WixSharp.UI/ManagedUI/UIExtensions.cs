@@ -67,6 +67,40 @@ namespace WixSharp
             return control;
         }
 
+        /// <summary>
+        /// MsiRuntime object associated with the ManagedUI shell.
+        /// </summary>
+        /// <param name="shell">The shell.</param>
+        /// <returns></returns>
+        public static MsiRuntime MsiRuntime(this IManagedUIShell shell)
+        {
+            return shell.RuntimeContext as MsiRuntime;
+        }
+
+        public static void GoNext(this IShellView view) => view.Shell.GoNext();
+
+        public static void GoTo<T>(this IShellView view) => view.Shell.GoTo<T>();
+
+        /// <summary>
+        /// MsiRuntime object associated with the ManagedUI dialog.
+        /// </summary>
+        /// <param name="dialog">The dialog.</param>
+        /// <returns></returns>
+        public static MsiRuntime MsiRuntime(this IManagedDialog dialog)
+        {
+            return dialog.Shell.RuntimeContext as MsiRuntime;
+        }
+
+        /// <summary>
+        /// Session object associated with the ManagedUI dialog.
+        /// </summary>
+        /// <param name="dialog">The dialog.</param>
+        /// <returns></returns>
+        public static Session Session(this IManagedDialog dialog)
+        {
+            return dialog.Shell.MsiRuntime().Session;
+        }
+
         public static bool IsReadOnly(this TreeNode node)
         {
             return node is ReadOnlyTreeNode r_node && r_node.IsReadOnly;

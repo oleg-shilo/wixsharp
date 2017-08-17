@@ -8,16 +8,18 @@ using Microsoft.Deployment.Samples.EmbeddedUI;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
+
 using forms = System.Windows.Forms;
+
 using System.Diagnostics;
 using System.Drawing;
 
 namespace WixSharp
 {
     /// <summary>
-    /// Interface of the main window implementation of the MSI external/embedded UI. This interface is designed to be 
-    /// used by Wix#/MSI runtime (e.g. ManagedUI). It is the interface that is directly bound to the 
-    /// <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI"/> (e.g. <see cref="T:WixSharp.ManagedUI"/>). 
+    /// Interface of the main window implementation of the MSI external/embedded UI. This interface is designed to be
+    /// used by Wix#/MSI runtime (e.g. ManagedUI). It is the interface that is directly bound to the
+    /// <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI"/> (e.g. <see cref="T:WixSharp.ManagedUI"/>).
     /// </summary>
     interface IUIContainer
     {
@@ -28,10 +30,12 @@ namespace WixSharp
         /// <param name="msiRuntime">The MSI runtime.</param>
         /// <param name="ui">The MSI external/embedded UI.</param>
         void ShowModal(MsiRuntime msiRuntime, IManagedUI ui);
+
         /// <summary>
         /// Called when MSI execution is complete.
         /// </summary>
         void OnExecuteComplete();
+
         /// <summary>
         /// Called when MSI execute started.
         /// </summary>
@@ -39,7 +43,7 @@ namespace WixSharp
 
         /// <summary>
         ///  Processes information and progress messages sent to the user interface.
-        /// <para> This method directly mapped to the 
+        /// <para> This method directly mapped to the
         /// <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI.ProcessMessage"/>.</para>
         /// </summary>
         /// <param name="messageType">Type of the message.</param>
@@ -51,9 +55,8 @@ namespace WixSharp
         MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, MessageButtons buttons, MessageIcon icon, MessageDefaultButton defaultButton);
     }
 
-
     /// <summary>
-    /// The main window WinForms implementation of the MSI external/embedded UI. 
+    /// The main window WinForms implementation of the MSI external/embedded UI.
     /// </summary>
     public partial class UIShell : IUIContainer, IManagedUIShell
     {
@@ -71,9 +74,9 @@ namespace WixSharp
         /// <value>
         /// The runtime context.
         /// </value>
-        /// 
+        ///
         internal MsiRuntime MsiRuntime { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the UI.
         /// </summary>
@@ -86,14 +89,15 @@ namespace WixSharp
         /// <value>
         ///   <c>true</c> if it was user interrupted; otherwise, <c>false</c>.
         /// </value>
-        public bool UserInterrupted { get; private set; }
+        public bool UserInterrupted { get; set; }
+
         /// <summary>
         /// Gets a value indicating whether MSI session ended with error.
         /// </summary>
         /// <value>
         ///   <c>true</c> if error was detected; otherwise, <c>false</c>.
         /// </value>
-        public bool ErrorDetected { get; private set; }
+        public bool ErrorDetected { get; set; }
 
         /// <summary>
         /// Starts the execution of the MSI installation.
@@ -143,14 +147,13 @@ namespace WixSharp
 
                 try
                 {
-
                     if (currentViewIndex >= 0 && currentViewIndex < Dialogs.Count)
                     {
                         shellView.ClearChildren();
 
                         Type viewType = Dialogs[currentViewIndex];
 
-                        var view = (Form) Activator.CreateInstance(viewType);
+                        var view = (Form)Activator.CreateInstance(viewType);
 
                         view.LocalizeWith(MsiRuntime.Localize);
                         view.FormBorderStyle = forms.FormBorderStyle.None;
@@ -161,9 +164,9 @@ namespace WixSharp
                         view.Size = shellView.ClientSize;
                         view.Location = new System.Drawing.Point(0, 0);
 
-                        CurrentDialog = (IManagedDialog) view;
+                        CurrentDialog = (IManagedDialog)view;
                         CurrentDialog.Shell = this;
-                         
+
                         view.Parent = shellView;
                         view.Visible = true;
                         shellView.Text = view.Text;
@@ -200,26 +203,30 @@ namespace WixSharp
             UI = ui;
             MsiRuntime = msiRuntime;
 
-            ActionResult result = ManagedProject.InvokeClientHandlers(MsiRuntime.Session, "UIInitialized");
+            if (MsiRuntime.Session.IsInstalling())
+            {
+                Dialogs = ui.InstallDialogs;
+            }
+            else if (MsiRuntime.Session.IsRepairing())
+            {
+                Dialogs = ui.ModifyDialogs;
+            }
+
+            if (Dialogs.Any())
+            {
+                shellView = new ShellView { Shell = this };
+            }
+
+            ActionResult result = ManagedProject.InvokeClientHandlers(MsiRuntime.Session, "UIInitialized", shellView as IShellView);
             MsiRuntime.Data.MergeReplace(MsiRuntime.Session["WIXSHARP_RUNTIME_DATA"]); //data may be changed in the client handler
 
             if (result == ActionResult.Success)
             {
-                if (MsiRuntime.Session.IsInstalling())
+                if (shellView != null)
                 {
-                    Dialogs = ui.InstallDialogs;
-                }
-                else if (MsiRuntime.Session.IsRepairing())
-                {
-                    Dialogs = ui.ModifyDialogs;
-                }
-
-                if (Dialogs.Any())
-                {
-                    shellView = new ShellView();
                     shellView.Load += (s, e) =>
                     {
-                        MsiRuntime.Session["WIXSHARP_MANAGED_UI_HANDLE"] = 
+                        MsiRuntime.Session["WIXSHARP_MANAGED_UI_HANDLE"] =
                         MsiRuntime.Data["WIXSHARP_MANAGED_UI_HANDLE"] = shellView.Handle.ToString();
                         try
                         {
@@ -228,9 +235,17 @@ namespace WixSharp
                                 shellView.Icon = new Icon(stream);
                         }
                         catch { }
-                        ManagedProject.InvokeClientHandlers(MsiRuntime.Session, "UILoaded", (IShellView) shellView);
+
+                        var loadad_result = ManagedProject.InvokeClientHandlers(MsiRuntime.Session, "UILoaded", (IShellView)shellView);
+                        if (loadad_result != ActionResult.Success)
+                        {
+                            // aborting UI dialogs sequence from here is not possible as this event is
+                            // simply called when Shell is loaded but not when dialogs are progressing in the sequence.
+                            MsiRuntime.Session.Log("UILoaded returned " + loadad_result);
+                        }
                         MsiRuntime.Data.MergeReplace(MsiRuntime.Session["WIXSHARP_RUNTIME_DATA"]); ; //data may be changed in the client handler
                     };
+
                     GoNext();
                     shellView.ShowDialog();
                 }
@@ -408,7 +423,7 @@ namespace WixSharp
                 this.progressCounter.ProcessMessage(messageType, messageRecord);
 
                 if (CurrentDialog != null)
-                    InUIThread(() => CurrentDialog.OnProgress((int) Math.Round(100 * this.progressCounter.Progress)));
+                    InUIThread(() => CurrentDialog.OnProgress((int)Math.Round(100 * this.progressCounter.Progress)));
 
                 switch (messageType)
                 {
@@ -462,10 +477,10 @@ namespace WixSharp
                     result = CurrentDialog.ProcessMessage(messageType, messageRecord, buttons, icon, defaultButton);
             });
             return result;
-
         }
 
         StringBuilder log = new StringBuilder();
+
         /// <summary>
         /// Gets the MSI log text.
         /// </summary>

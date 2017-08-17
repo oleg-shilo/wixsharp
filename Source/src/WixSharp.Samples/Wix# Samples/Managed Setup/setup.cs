@@ -26,7 +26,7 @@ public class Script
                     new File(binaries, @"Files\bin\MyApp.exe"),
                     new Dir("Docs",
                         new File(docs, "readme.txt"),
-                        new File(tuts, "setup.cs"))) );
+                        new File(tuts, "setup.cs"))));
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 

@@ -9,21 +9,21 @@ namespace WixSharp
 {
     /// <summary>
     /// Interface of a typical UI dialog for reflecting the installation progress. It is functionally a typical
-    /// <see cref="T:WixSharp.IManagedDialog"/> except that it initiates the MSI execution by calling 
-    /// <see cref="T:WixSharp.IManagedUIShell.StartExecute"/> on loading the dialog. ManagedUI dialogs sequence 
-    /// should have only a single dialog of this type. 
+    /// <see cref="T:WixSharp.IManagedDialog"/> except that it initiates the MSI execution by calling
+    /// <see cref="T:WixSharp.IManagedUIShell.StartExecute"/> on loading the dialog. ManagedUI dialogs sequence
+    /// should have only a single dialog of this type.
     /// </summary>
     public interface IProgressDialog : IManagedDialog
     {
     }
 
     /// <summary>
-    /// Interface of a typical UI dialog managed by shell (the main window) of the MSI external/embedded UI. 
+    /// Interface of a typical UI dialog managed by shell (the main window) of the MSI external/embedded UI.
     /// </summary>
     public interface IManagedDialog
     {
         /// <summary>
-        /// Gets or sets the UI shell (main UI window). This property is set the ManagedUI runtime (IManagedUI). 
+        /// Gets or sets the UI shell (main UI window). This property is set the ManagedUI runtime (IManagedUI).
         /// On the other hand it is consumed (accessed) by the UI dialog (IManagedDialog).
         /// </summary>
         /// <value>
@@ -33,7 +33,7 @@ namespace WixSharp
 
         /// <summary>
         /// Processes information and progress messages sent to the user interface.
-        /// <para> This method directly mapped to the 
+        /// <para> This method directly mapped to the
         /// <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI.ProcessMessage"/>.</para>
         /// </summary>
         /// <param name="messageType">Type of the message.</param>
@@ -48,10 +48,12 @@ namespace WixSharp
         /// Called when MSI execution is complete.
         /// </summary>
         void OnExecuteComplete();
+
         /// <summary>
         /// Called when MSI execute started.
         /// </summary>
         void OnExecuteStarted();
+
         /// <summary>
         /// Called when MSI execution progress is changed.
         /// </summary>
@@ -81,10 +83,12 @@ namespace WixSharp
         /// </summary>
         /// <value>The current dialog.</value>
         IManagedDialog CurrentDialog { get; }
+
+        IManagedUIShell Shell { get; }
     }
 
     /// <summary>
-    /// Interface of the main window implementation of the MSI external/embedded UI. This interface is designed to be 
+    /// Interface of the main window implementation of the MSI external/embedded UI. This interface is designed to be
     /// used by the Wix#/MSI UI dialogs. It is the interface that is directly available for all UI dialogs and it
     /// allows the dialogs accessing the MSI runtime context.
     /// </summary>
@@ -97,6 +101,7 @@ namespace WixSharp
         /// The runtime context.
         /// </value>
         object RuntimeContext { get; }
+
         /// <summary>
         /// Gets the MSI log text.
         /// </summary>
@@ -104,20 +109,22 @@ namespace WixSharp
         /// The log.
         /// </value>
         string Log { get; }
+
         /// <summary>
         /// Gets a value indicating whether the MSI session was interrupted (canceled) by user.
         /// </summary>
         /// <value>
         ///   <c>true</c> if it was user interrupted; otherwise, <c>false</c>.
         /// </value>
-        bool UserInterrupted { get; }
+        bool UserInterrupted { get; set; }
+
         /// <summary>
         /// Gets a value indicating whether MSI session ended with error.
         /// </summary>
         /// <value>
         ///   <c>true</c> if error was detected; otherwise, <c>false</c>.
         /// </value>
-        bool ErrorDetected { get; }
+        bool ErrorDetected { get; set; }
 
         /// <summary>
         /// Gets the sequence of the UI dialogs specific for the current setup type (e.g. install vs. modify).
@@ -131,31 +138,38 @@ namespace WixSharp
         /// Proceeds to the next UI dialog.
         /// </summary>
         void GoNext();
+
         /// <summary>
         /// Moves to the previous UI Dialog.
         /// </summary>
         void GoPrev();
+
         /// <summary>
         /// Moves to the UI Dialog by the specified index in the <see cref="T:WixSharp.IManagedUIShell.Dialogs"/> sequence.
         /// </summary>
         /// <param name="index">The index.</param>
         void GoTo(int index);
+
         /// <summary>
         /// Moves to the UI Dialog by the specified index in the <see cref="T:WixSharp.IManagedUIShell.Dialogs"/> sequence.
         /// </summary>
         void GoTo<T>();
+
         /// <summary>
         /// Cancels the MSI installation.
         /// </summary>
         void Cancel();
+
         /// <summary>
         /// Exits this MSI UI application.
         /// </summary>
         void Exit();
+
         /// <summary>
         /// Starts the execution of the MSI installation.
         /// </summary>
         void StartExecute();
+
         /// <summary>
         /// Gets or sets a value indicating whether this instance is demo mode.
         /// </summary>
@@ -166,15 +180,15 @@ namespace WixSharp
     }
 
     /// <summary>
-    /// Interface for an embedded external user interface implementing Wix# ManagedUI architecture (ManagedUI runtime). 
-    /// <para>The interface itself is reasonable simple and it basically implements the 
+    /// Interface for an embedded external user interface implementing Wix# ManagedUI architecture (ManagedUI runtime).
+    /// <para>The interface itself is reasonable simple and it basically implements the
     /// collection/sequence of the runtime UI dialogs with a couple of methods for integrating the ManagedUI
     /// with the MSI.</para>
     /// </summary>
     public interface IManagedUI
     {
         /// <summary>
-        /// Gets or sets the id of the 'installdir' (destination folder) directory. It is the directory, 
+        /// Gets or sets the id of the 'installdir' (destination folder) directory. It is the directory,
         /// which is bound to the input UI elements of the Browse dialog (e.g. WiX BrowseDlg, Wix# InstallDirDialog).
         /// </summary>
         /// <value>
@@ -186,26 +200,27 @@ namespace WixSharp
         /// A window icon that appears in the left top corner of the UI shell window.
         /// </summary>
         string Icon { get; set; }
+
         /// <summary>
         /// Sequence of the dialogs to be displayed during the installation of the product.
         /// </summary>
         ManagedDialogs InstallDialogs { get; }
+
         /// <summary>
         /// Sequence of the dialogs to be displayed during the customization of the installed product.
         /// </summary>
         ManagedDialogs ModifyDialogs { get; }
 
         /// <summary>
-        /// This method is called (indirectly) by Wix# compiler just befor building the MSI. It allows embedding UI specific resources (e.g. license file, properties)
+        /// This method is called (indirectly) by Wix# compiler just before building the MSI. It allows embedding UI specific resources (e.g. license file, properties)
         /// into the MSI.
         /// </summary>
         /// <param name="project">The project.</param>
         void BeforeBuild(ManagedProject project);
     }
 
-
     /// <summary>
-    /// Customized version of 'List&lt;Type&gt;', containing Fluent extension methods 
+    /// Customized version of 'List&lt;Type&gt;', containing Fluent extension methods
     /// </summary>
     public class ManagedDialogs : List<Type>
     {
@@ -219,6 +234,7 @@ namespace WixSharp
             base.Add(typeof(T));
             return this;
         }
+
         /// <summary>
         /// Adds an Type object to the end of the collections.
         /// </summary>
