@@ -493,7 +493,7 @@ namespace WixSharp
         internal static ActionResult InvokeClientHandlers(Session session, string eventName, IShellView UIShell = null)
         {
             var eventArgs = Convert(session);
-            eventArgs.ManagedUIShell = UIShell;
+            eventArgs.ManagedUI = UIShell;
 
             try
             {

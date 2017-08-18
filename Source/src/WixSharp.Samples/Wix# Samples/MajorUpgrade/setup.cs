@@ -13,11 +13,19 @@ class Script
 {
     static public void Main(string[] args)
     {
-        // ManagedUIAproach();
-        NativeUIApproach();
+        // MSI/WiX upgrade support (e.g. via MajorUpgrade element) works correctly regardless of the UI technology.
+        // However it hooks into UI sequence to show upgrade failure message only with native UI but not with the
+        // EmbeddedUI (ManagedUI). Thus prompting the user about version incompatibility (downgrading) and skipping
+        // the rest of the UI steps needs to be done explicitly if EmbeddedUI (ManagedUI) is in place.
+        //
+        // Note: in silent mode neither native nor ManagedUI is engaged so MajorUpgrade logs the error and exit
+        // without any prompt if incompatibility is detected.
+
+        ManagedUIAproach();
+        //NativeUIApproach();
     }
 
-    static void NativeUIApproach()
+    static ManagedProject CreateProject()
     {
         var project =
             new ManagedProject("TestProduct",
@@ -36,50 +44,53 @@ class Script
             DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
         };
 
+        return project;
+    }
+
+    static void NativeUIApproach()
+    {
+        ManagedProject project = CreateProject();
+
         Compiler.BuildMsi(project, "setup.msi");
     }
 
     static public void ManagedUIAproach()
     {
-        var project =
-            new ManagedProject("TestProduct",
-                new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File(@"Files\1\MyApp.exe"),
-                    new File(@"Files\1\MyApp.cs"),
-                    new File(@"Files\1\readme.txt")));
+        ManagedProject project = CreateProject();
 
-        project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-        project.Version = new Version("1.0.209.10040");
+        // Note the `ScheduleDowngradeUICheck` method parameters in the code below are for demo purpose only.
+        // They can be completely omitted as in this sample they are identical to their default values.
 
-        project.MajorUpgrade = new MajorUpgrade
-        {
-            //AllowSameVersionUpgrades = true, //uncomment this if the upgrade version is different by only the fourth field
-            Schedule = UpgradeSchedule.afterInstallInitialize,
-            DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
-        };
-
-        // If you want to use ManagedUI, you will need to search for any existing product installation
-        // from the UI code (e.g. event handler). This is because WiX MajorUpgrade is only integrated with
-        // native MSI UI and does not know how to prompt user about the version incompatibility if EmbeddedUI
-        // (ManagedUI) is in place.
-        // Note: in silent mode neither native nor ManagedUI is engaged so MajorUpgrade logs the error and exit
-        // without any prompt if incompatibility is detected.
         project.ManagedUI = ManagedUI.Default;
-        project.UIInitialized += Project_UIInitialized;
+        project.ScheduleDowngradeUICheck(
+           "Later version of the product is already installed : ${installedVersion}",
+            (thisVersion, installedVersion) => thisVersion <= installedVersion);
 
         Compiler.BuildMsi(project, "setup.msi");
     }
 
-    static void Project_UIInitialized(SetupEventArgs e)
+    static public void ManagedUICustomCheckAproach()
     {
-        Version installedVersion = e.Session.LookupInstalledVersion();
-        Version thisVersion = e.Session.QueryProductVersion();
+        ManagedProject project = CreateProject();
 
-        if (installedVersion != null && installedVersion >= thisVersion)
+        // Note the `project.UIInitialized += ...` code below is for demo purpose only. It to demonstrates custom handling
+        // of downgrade condition. This code can be replaced with a single equivalent call `project.ScheduleDowngradeUICheck();`
+
+        project.ManagedUI = ManagedUI.Default;
+        project.UIInitialized += (SetupEventArgs e) =>
         {
-            MessageBox.Show("Later version of the product is already installed : " + installedVersion);
-            e.ManagedUI.Shell.ErrorDetected = true;
-            e.ManagedUI.Shell.GoTo<ExitDialog>();
-        }
+            Version installedVersion = e.Session.LookupInstalledVersion();
+            Version thisVersion = e.Session.QueryProductVersion();
+
+            if (thisVersion <= installedVersion)
+            {
+                MessageBox.Show("Later version of the product is already installed : " + installedVersion);
+
+                e.ManagedUI.Shell.ErrorDetected = true;
+                e.Result = ActionResult.UserExit;
+            }
+        };
+
+        Compiler.BuildMsi(project, "setup.msi");
     }
 }

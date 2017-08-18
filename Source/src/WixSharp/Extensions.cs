@@ -508,6 +508,20 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Determines whether the input value is one of the specified values.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">The value.</param>
+        /// <param name="values">The values.</param>
+        /// <returns>
+        ///   <c>true</c> if [is one of] [the specified values]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsOneOf<T>(this T value, params T[] values)
+        {
+            return values.Any(x => value.Equals(x));
+        }
+
+        /// <summary>
         /// Enqueues the range of the items into a instance of the  <see cref="T:System.Collections.Generics.Queue"/>.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -2019,7 +2033,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Queries MSI database directly for the table 'Property' value. This method is particularly useful for the stages when WiX session 
+        /// Queries MSI database directly for the table 'Property' value. This method is particularly useful for the stages when WiX session
         /// object is not fully initialized. For example properties are not discovered yet during EmbeddedUI loading event.
         /// </summary>
         /// <param name="session">The session.</param>
@@ -2030,15 +2044,31 @@ namespace WixSharp
             return (string)session.Database.ExecuteScalar($"SELECT `Value` FROM `Property` WHERE `Property` = '{name}'");
         }
 
+        /// <summary>
+        /// Lookups the installed version.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
         public static Version LookupInstalledVersion(this Session session)
         {
             return AppSearch.GetProductVersionFromUpgradeCode(session.QueryUpgradeCode());
         }
+
+        /// <summary>
+        /// Queries the upgrade code.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
         public static string QueryUpgradeCode(this Session session)
         {
             return session.QueryProperty("UpgradeCode");
         }
 
+        /// <summary>
+        /// Queries the product version.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
         public static Version QueryProductVersion(this Session session)
         {
             return new Version(session.QueryProperty("ProductVersion"));

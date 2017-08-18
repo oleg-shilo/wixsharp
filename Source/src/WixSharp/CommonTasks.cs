@@ -37,6 +37,7 @@ using WixSharp.Controls;
 using IO = System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace WixSharp.CommonTasks
 {
@@ -176,7 +177,7 @@ namespace WixSharp.CommonTasks
         ///     false);
         /// </code>
         /// </example>
-        static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password, 
+        static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false)
         {
             //"C:\Program Files\\Microsoft SDKs\Windows\v6.0A\bin\signtool.exe" sign /f "pfxFile" /p password /v "fileToSign" /t timeURL
@@ -490,6 +491,66 @@ namespace WixSharp.CommonTasks
         static public Project AddBinary(this Project project, params Binary[] items)
         {
             project.Binaries = project.Binaries.AddRange(items).Distinct().ToArray();
+            return project;
+        }
+
+        /// <summary>
+        /// Delegate for detection of the "downgrade" condition. Should return <c>true</c> if the downgrading is detected.
+        /// </summary>
+        /// <param name="thisVersion">The version of the product being installed.</param>
+        /// <param name="installedVersion">The detected installed product version.</param>
+        /// <returns></returns>
+        public delegate bool DowngradeErrorCheck(Version thisVersion, Version installedVersion);
+
+        /// <summary>
+        /// Schedules the upgrade compatibility check for ManagedUI.
+        /// </summary>
+        /// <example>The following is an example of using MajorUpgrade with ManagedUI.
+        /// <code>
+        /// ...
+        /// project.ManagedUI = ManagedUI.Default;
+        /// ...
+        /// project.ScheduleDowngradeUICheck();
+        /// // or
+        /// project.UIInitialized += (SetupEventArgs e) =>
+        /// {
+        ///     Version installedVersion = e.Session.LookupInstalledVersion();
+        ///     Version thisVersion = e.Session.QueryProductVersion();
+        ///
+        ///     if (thisVersion &lt;= installedVersion)
+        ///     {
+        ///         MessageBox.Show("Later version of the product is already installed : " + installedVersion);
+        ///
+        ///         e.ManagedUI.Shell.ErrorDetected = true;
+        ///         e.Result = ActionResult.UserExit;
+        ///     }
+        /// };
+        ///
+        /// </code>
+        /// </example>
+        /// <param name="project">The project.</param>
+        /// <param name="downgradeErrorMessage">The downgrade error message. The default value is <c>"Later version of the product is already installed: ${installedVersion}"</c></param>
+        /// <param name="downgradeErrorCheck">The check delegate. Should return <c>true</c> if the downgrading is detected.
+        /// The default value is <c>(thisVersion, installedVersion) => thisVersion &lt;= installedVersion"</c>.</param>
+        /// <returns></returns>
+        static public ManagedProject ScheduleDowngradeUICheck(this ManagedProject project, string downgradeErrorMessage = "Later version of the product is already installed: ${installedVersion}", DowngradeErrorCheck downgradeErrorCheck = null)
+        {
+            project.UIInitialized += (SetupEventArgs e) =>
+            {
+                Version installedVersion = e.Session.LookupInstalledVersion();
+                Version thisVersion = e.Session.QueryProductVersion();
+
+                if (downgradeErrorCheck == null)
+                    downgradeErrorCheck = (thisVer, foundVer) => thisVer <= foundVer;
+
+                if (downgradeErrorCheck(thisVersion, installedVersion))
+                {
+                    MessageBox.Show(downgradeErrorMessage.Replace("${installedVersion}", installedVersion.ToString()));
+
+                    e.ManagedUI.Shell.ErrorDetected = true;
+                    e.Result = ActionResult.UserExit;
+                }
+            };
             return project;
         }
 

@@ -220,7 +220,7 @@ namespace WixSharp
             ActionResult result = ManagedProject.InvokeClientHandlers(MsiRuntime.Session, "UIInitialized", shellView as IShellView);
             MsiRuntime.Data.MergeReplace(MsiRuntime.Session["WIXSHARP_RUNTIME_DATA"]); //data may be changed in the client handler
 
-            if (result == ActionResult.Success)
+            if (result != ActionResult.Failure)
             {
                 if (shellView != null)
                 {
@@ -236,17 +236,29 @@ namespace WixSharp
                         }
                         catch { }
 
-                        var loadad_result = ManagedProject.InvokeClientHandlers(MsiRuntime.Session, "UILoaded", (IShellView)shellView);
-                        if (loadad_result != ActionResult.Success)
+                        result = ManagedProject.InvokeClientHandlers(MsiRuntime.Session, "UILoaded", (IShellView)shellView);
+                        if (result != ActionResult.Success)
                         {
                             // aborting UI dialogs sequence from here is not possible as this event is
                             // simply called when Shell is loaded but not when dialogs are progressing in the sequence.
-                            MsiRuntime.Session.Log("UILoaded returned " + loadad_result);
+                            MsiRuntime.Session.Log("UILoaded returned " + result);
                         }
                         MsiRuntime.Data.MergeReplace(MsiRuntime.Session["WIXSHARP_RUNTIME_DATA"]); ; //data may be changed in the client handler
                     };
 
-                    GoNext();
+                    if (result == ActionResult.SkipRemainingActions)
+                    {
+                        result = ActionResult.Success;
+                        if (Dialogs.Contains(typeof(UI.Forms.ProgressDialog)))
+                            GoTo<UI.Forms.ProgressDialog>();
+                        else
+                            GoToLast();
+                    }
+                    else if (result == ActionResult.UserExit)
+                        GoToLast();
+                    else
+                        GoNext();
+
                     shellView.ShowDialog();
                 }
                 else
@@ -382,6 +394,16 @@ namespace WixSharp
         public void GoTo<T>()
         {
             int index = Dialogs.FindIndex(t => t == typeof(T));
+            if (index != -1)
+                CurrentDialogIndex = index;
+        }
+
+        /// <summary>
+        /// Moves to the UI Dialog by the last dialog in the <see cref="T:WixSharp.IManagedUIShell.Dialogs" /> sequence.
+        /// </summary>
+        public void GoToLast()
+        {
+            int index = Dialogs.Count - 1;
             if (index != -1)
                 CurrentDialogIndex = index;
         }
