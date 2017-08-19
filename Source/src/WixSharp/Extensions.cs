@@ -945,14 +945,16 @@ namespace WixSharp
         }
 
         /// <summary>
-        ///
+        /// Equivalent of <see cref="System.IO.Path.Combine"/>.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="items"></param>
         /// <returns></returns>
         public static string PathJoin(this string path, params string[] items)
         {
-            return IO.Path.Combine(path, IO.Path.GetFileName(path));
+            foreach (var item in items)
+                path = IO.Path.Combine(path, item);
+            return path;
         }
 
         /// <summary>
