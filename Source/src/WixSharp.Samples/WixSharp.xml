@@ -520,6 +520,47 @@
             <param name="items">The items.</param>
             <returns></returns>
         </member>
+        <member name="T:WixSharp.CommonTasks.Tasks.DowngradeErrorCheck">
+            <summary>
+            Delegate for detection of the "downgrade" condition. Should return <c>true</c> if the downgrading is detected.
+            </summary>
+            <param name="thisVersion">The version of the product being installed.</param>
+            <param name="installedVersion">The detected installed product version.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.ScheduleDowngradeUICheck(WixSharp.ManagedProject,System.String,WixSharp.CommonTasks.Tasks.DowngradeErrorCheck)">
+             <summary>
+             Schedules the upgrade compatibility check for ManagedUI.
+             </summary>
+             <example>The following is an example of using MajorUpgrade with ManagedUI.
+             <code>
+             ...
+             project.ManagedUI = ManagedUI.Default;
+             ...
+             project.ScheduleDowngradeUICheck();
+             // or
+             project.UIInitialized += (SetupEventArgs e) =>
+             {
+                 Version installedVersion = e.Session.LookupInstalledVersion();
+                 Version thisVersion = e.Session.QueryProductVersion();
+            
+                 if (thisVersion &lt;= installedVersion)
+                 {
+                     MessageBox.Show("Later version of the product is already installed : " + installedVersion);
+            
+                     e.ManagedUI.Shell.ErrorDetected = true;
+                     e.Result = ActionResult.UserExit;
+                 }
+             };
+            
+             </code>
+             </example>
+             <param name="project">The project.</param>
+             <param name="downgradeErrorMessage">The downgrade error message. The default value is <c>"Later version of the product is already installed: ${installedVersion}"</c></param>
+             <param name="downgradeErrorCheck">The check delegate. Should return <c>true</c> if the downgrading is detected.
+             The default value is <c>(thisVersion, installedVersion) => thisVersion &lt;= installedVersion"</c>.</param>
+             <returns></returns>
+        </member>
         <member name="M:WixSharp.CommonTasks.Tasks.AddEnvironmentVariable(WixSharp.Project,WixSharp.EnvironmentVariable[])">
             <summary>
             Adds the environment variable.
@@ -4265,6 +4306,17 @@
             <param name="action">The action.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.IsOneOf``1(``0,``0[])">
+            <summary>
+            Determines whether the input value is one of the specified values.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value">The value.</param>
+            <param name="values">The values.</param>
+            <returns>
+              <c>true</c> if [is one of] [the specified values]; otherwise, <c>false</c>.
+            </returns>
+        </member>
         <member name="M:WixSharp.Extensions.EnqueueRange``1(System.Collections.Generic.Queue{``0},System.Collections.Generic.IEnumerable{``0})">
             <summary>
             Enqueues the range of the items into a instance of the  <see cref="T:System.Collections.Generics.Queue"/>.
@@ -5043,11 +5095,32 @@
         </member>
         <member name="M:WixSharp.Extensions.QueryProperty(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
             <summary>
-            Queries MSI database directly for the table 'Property' value. This method is particularly useful for the stages when WiX session 
+            Queries MSI database directly for the table 'Property' value. This method is particularly useful for the stages when WiX session
             object is not fully initialized. For example properties are not discovered yet during EmbeddedUI loading event.
             </summary>
             <param name="session">The session.</param>
             <param name="name">The name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.LookupInstalledVersion(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Lookups the installed version.
+            </summary>
+            <param name="session">The session.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.QueryUpgradeCode(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Queries the upgrade code.
+            </summary>
+            <param name="session">The session.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.QueryProductVersion(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Queries the product version.
+            </summary>
+            <param name="session">The session.</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.SaveBinary(Microsoft.Deployment.WindowsInstaller.Session,System.String,System.String)">

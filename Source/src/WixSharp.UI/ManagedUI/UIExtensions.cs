@@ -17,6 +17,7 @@ using System.Windows.Forms;
 
 using WixSharp.UI.Forms;
 using System.Threading;
+using System.Diagnostics;
 
 namespace WixSharp
 {

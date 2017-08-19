@@ -486,7 +486,7 @@
         </member>
         <member name="M:WixSharp.UI.Forms.ProgressDialog.OnShellChanged">
             <summary>
-            Called when Shell is changed. It is a good place to initialize the dialog to reflect the MSI session 
+            Called when Shell is changed. It is a good place to initialize the dialog to reflect the MSI session
             (e.g. localize the view).
             </summary>
         </member>
@@ -1231,6 +1231,11 @@
         <member name="M:WixSharp.UIShell.GoTo``1">
             <summary>
             Moves to the UI Dialog by the specified dialog type in the <see cref="T:WixSharp.IManagedUIShell.Dialogs" /> sequence.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UIShell.GoToLast">
+            <summary>
+            Moves to the UI Dialog by the last dialog in the <see cref="T:WixSharp.IManagedUIShell.Dialogs" /> sequence.
             </summary>
         </member>
         <member name="M:WixSharp.UIShell.Exit">

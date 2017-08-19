@@ -328,6 +328,9 @@ namespace WixSharp
 
                 if (ManagedUI != null)
                 {
+                    if (this.MajorUpgrade?.ScheduleManagedUICheck == true)
+                        this.ScheduleDowngradeUICheck(this.MajorUpgrade.DowngradeErrorMessage);
+
                     this.AddProperty(new Property("WixSharp_UI_INSTALLDIR", ManagedUI.InstallDirId ?? "INSTALLDIR"));
 
                     ManagedUI.BeforeBuild(this);

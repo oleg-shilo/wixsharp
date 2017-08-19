@@ -21,8 +21,10 @@ class Script
         // Note: in silent mode neither native nor ManagedUI is engaged so MajorUpgrade logs the error and exit
         // without any prompt if incompatibility is detected.
 
-        ManagedUIAproach();
-        //NativeUIApproach();
+        UniversalApproach();
+        // NativeUIApproach();
+        // ManagedUIAproach();
+        // ManagedUICustomCheckAproach();
     }
 
     static ManagedProject CreateProject()
@@ -35,7 +37,7 @@ class Script
                     new File(@"Files\1\readme.txt")));
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-        project.Version = new Version("1.0.709.10040");
+        project.Version = new Version("1.0.209.10040");
 
         project.MajorUpgrade = new MajorUpgrade
         {
@@ -50,6 +52,20 @@ class Script
     static void NativeUIApproach()
     {
         ManagedProject project = CreateProject();
+
+        Compiler.BuildMsi(project, "setup.msi");
+    }
+
+    static void UniversalApproach()
+    {
+        ManagedProject project = CreateProject();
+
+        // MajorUpgrade.Default has ScheduleManagedUICheck set to 'true'
+        // and this in turn will trigger internal call to ScheduleDowngradeUICheck
+        // if project.ManagedUI is set.
+
+        project.ManagedUI = ManagedUI.Default;
+        project.MajorUpgrade = MajorUpgrade.Default;
 
         Compiler.BuildMsi(project, "setup.msi");
     }

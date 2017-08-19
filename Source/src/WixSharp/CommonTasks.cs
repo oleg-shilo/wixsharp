@@ -494,6 +494,8 @@ namespace WixSharp.CommonTasks
             return project;
         }
 
+        public static Func<string, string> UILocalize = null;
+
         /// <summary>
         /// Delegate for detection of the "downgrade" condition. Should return <c>true</c> if the downgrading is detected.
         /// </summary>
@@ -535,8 +537,11 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public ManagedProject ScheduleDowngradeUICheck(this ManagedProject project, string downgradeErrorMessage = "Later version of the product is already installed: ${installedVersion}", DowngradeErrorCheck downgradeErrorCheck = null)
         {
+            project.AddProperty(new Property("downgradeErrorMessage", downgradeErrorMessage));
+
             project.UIInitialized += (SetupEventArgs e) =>
             {
+                // Debug.Assert(false);
                 Version installedVersion = e.Session.LookupInstalledVersion();
                 Version thisVersion = e.Session.QueryProductVersion();
 
@@ -545,7 +550,12 @@ namespace WixSharp.CommonTasks
 
                 if (downgradeErrorCheck(thisVersion, installedVersion))
                 {
-                    MessageBox.Show(downgradeErrorMessage.Replace("${installedVersion}", installedVersion.ToString()));
+                    var msg = e.Session.QueryProperty("downgradeErrorMessage").Replace("${installedVersion}", installedVersion.ToString());
+                    if (UILocalize != null)
+                        msg = UILocalize(msg);
+
+                    e.Session.Log("Error: " + msg);
+                    MessageBox.Show(msg);
 
                     e.ManagedUI.Shell.ErrorDetected = true;
                     e.Result = ActionResult.UserExit;

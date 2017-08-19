@@ -40,6 +40,7 @@ using IO = System.IO;
 using Reflection = System.Reflection;
 
 using System.Drawing;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {

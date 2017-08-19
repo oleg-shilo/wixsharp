@@ -7,6 +7,15 @@ namespace WixSharp
     /// </summary>
     public class MajorUpgrade
     {
+        public bool ScheduleManagedUICheck = false;
+
+        public static MajorUpgrade Default = new MajorUpgrade
+        {
+            ScheduleManagedUICheck = true,
+            Schedule = UpgradeSchedule.afterInstallInitialize,
+            DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
+        };
+
         /// <summary>
         /// When set to "false" (the default), products with lower version numbers are blocked from installing when a product with a higher version
         /// is installed; the DowngradeErrorMessage attribute must also be specified.
