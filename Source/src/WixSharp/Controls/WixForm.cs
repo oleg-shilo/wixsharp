@@ -84,7 +84,7 @@ namespace WixSharp.Controls
         /// <param name="name">The property name.</param>
         /// <param name="value">The property value.</param>
         /// <param name="condition">The action condition.</param>
-        public void SetPrperty(string name, string value, string condition = "1")
+        public void SetProperty(string name, string value, string condition = "1")
         {
             dialogActions.Add(new ControlActionData { Property = name, Value = value, Condition = condition });
         }
