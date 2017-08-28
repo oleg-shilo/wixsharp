@@ -391,6 +391,9 @@ namespace WixSharp
         static bool DefaultExpandCustomAttribute(XElement source, string item, Project project)
         {
             var attrParts = item.Split('=');
+            // {dep}ProductKey=12345 vs Component:{dep}ProductKey=12345
+            if (item.StartsWith("{"))
+                item = ":" + item;
             var keyParts = attrParts.First().Split(':');
 
             string element = keyParts.First();
@@ -402,7 +405,7 @@ namespace WixSharp
                 XElement destElement = source.Parent("Component");
                 if (destElement != null)
                 {
-                    destElement.SetAttributeValue(key, value);
+                    destElement.SetAttribute(key, value);
                     return true;
                 }
             }
@@ -411,7 +414,7 @@ namespace WixSharp
             {
                 source.Parent("Product")
                       .SelectOrCreate("Icon")
-                      .SetAttributeValue(key, value);
+                      .SetAttribute(key, value);
                 return true;
             }
 
@@ -421,9 +424,15 @@ namespace WixSharp
                 var elements = source.Document.Descendants("Custom").Where(e => e.Attribute("Action").Value == id);
                 if (elements.Any())
                 {
-                    elements.ForEach(e => e.SetAttributeValue(key, value));
+                    elements.ForEach(e => e.SetAttribute(key, value));
                     return true;
                 }
+            }
+
+            if (key.StartsWith("{"))
+            {
+                source.SetAttribute(key, value);
+                return true;
             }
 
             if (key.StartsWith("xml_include"))

@@ -318,12 +318,6 @@ namespace WixSharp
 
         bool isInstallDir;
 
-        ///// <summary>
-        ///// Defines the launch <see cref="Condition"/>, which is to be checked during the installation to
-        ///// determine if the directory should be installed.
-        ///// </summary>
-        //public Condition Condition;
-
         /// <summary>
         ///  Returns the WiX <c>Directory</c> as a string.
         /// </summary>

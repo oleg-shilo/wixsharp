@@ -58,6 +58,11 @@ namespace WixSharp
         /// The code above will force the Wix# compiler to insert "SharedDllRefCount" attribute into <c>Component</c>
         /// XML element, which is automatically generated for the <see cref="T:WixSharp.File"/>.
         /// <para>Currently the only supported "related" attribute is  <c>Component</c>.</para>
+        /// <para>Note the attribute key can include xml namespace prefix:
+        /// <code>
+        /// { "{dep}ProviderKey", "01234567-8901-2345-6789-012345678901" }
+        /// </code>
+        /// Though in this case the required namespace must be already added to the element/document.</para>
         /// </remarks>
         /// </para>
         /// </summary>
@@ -80,6 +85,11 @@ namespace WixSharp
         /// Optional attributes of the <c>WiX Element</c> (e.g. Secure:YesNoPath) expressed as a string KeyValue pairs (e.g. "StartOnInstall=Yes; Sequence=1").
         /// <para>OptionalAttributes just redirects all access calls to the <see cref="T:WixEntity.Attributes"/> member.</para>
         /// <para>You can also use <see cref="T:WixEntity.AttributesDefinition"/> to keep the code cleaner.</para>
+        /// <para>Note <c>name</c> can include xml namespace prefix:
+        /// <code>
+        /// AttributesDefinition = "{dep}ProviderKey=01234567-8901-2345-6789-012345678901"
+        /// </code>
+        /// Though in this case the required namespace must be already added to the element/document.</para>
         /// </summary>
         /// <example>
         /// <code>

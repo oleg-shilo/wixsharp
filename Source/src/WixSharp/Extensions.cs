@@ -263,6 +263,11 @@ namespace WixSharp
 
         /// <summary>
         /// Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue.
+        /// <para>Note <c>name</c> can include xml namespace prefix:
+        /// <code>
+        /// element.SetAttribute("{dep}ProviderKey", "01234567-8901-2345-6789-012345678901");
+        /// </code>
+        /// Though in this case the required namespace must be already added to the element/document.</para>
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="name">The name.</param>
@@ -270,23 +275,36 @@ namespace WixSharp
         /// <returns></returns>
         public static XElement SetAttribute(this XElement obj, string name, object value)
         {
+            XName x_name = name;
+
+            if (name.StartsWith("{"))
+            {
+                var tokens = name.Substring(1).Split(new[] { '}' }, 2);
+                var xml_namespace = tokens.First();
+                var prefix = obj.GetNamespaceOfPrefix(xml_namespace);
+                if (prefix == null)
+                    throw new Exception($"Cannot find XML namespace prefix '{xml_namespace}'");
+
+                x_name = obj.GetNamespaceOfPrefix(xml_namespace) + tokens.Last();
+            }
+
             if (value is string && (value as string).IsEmpty())
             {
-                obj.SetAttributeValue(name, null);
+                obj.SetAttributeValue(x_name, null);
             }
             else if (value is bool?)
             {
                 var attrValue = (bool?)value;
-                obj.SetAttributeValue(name, attrValue.ToNullOrYesNo());
+                obj.SetAttributeValue(x_name, attrValue.ToNullOrYesNo());
             }
             else if (value is bool)
             {
                 var attrValue = (bool)value;
-                obj.SetAttributeValue(name, attrValue.ToYesNo());
+                obj.SetAttributeValue(x_name, attrValue.ToYesNo());
             }
             else
             {
-                obj.SetAttributeValue(name, value);
+                obj.SetAttributeValue(x_name, value);
             }
             return obj;
         }
@@ -332,14 +350,16 @@ namespace WixSharp
         {
             if (attributes.Any())
             {
-                var optimizedAttributes = attributes.Where(x => !x.Key.Contains(":")).ToDictionary(t => t.Key, t => t.Value);
+                var optimizedAttributes = attributes.Where(x => !x.Key.Contains(":") && !x.Key.Contains(":{") && !x.Key.StartsWith("{"));
 
-                var compositValues = string.Join(";", attributes.Where(x => x.Key.Contains(":")).Select(x => x.Key + "=" + x.Value).ToArray());
+                var optimizedAttributesMap = optimizedAttributes.ToDictionary(t => t.Key, t => t.Value);
+
+                var compositValues = string.Join(";", attributes.Except(optimizedAttributes).Select(x => x.Key + "=" + x.Value).ToArray());
                 if (compositValues.IsNotEmpty())
-                    optimizedAttributes.Add("WixSharpCustomAttributes", compositValues);
+                    optimizedAttributesMap.Add("WixSharpCustomAttributes", compositValues);
 
-                foreach (var key in optimizedAttributes.Keys)
-                    obj.SetAttributeValue(key, optimizedAttributes[key]);
+                foreach (var key in optimizedAttributesMap.Keys)
+                    obj.SetAttributeValue(key, optimizedAttributesMap[key]);
             }
             return obj;
         }

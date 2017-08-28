@@ -38,7 +38,7 @@ class Script
 
     static public void BuildWithAttributes()
     {
-        //this sample is inly useful for the demonstration of how to work with AttributesDefinition and XML jnjection
+        //this sample is inly useful for the demonstration of how to work with AttributesDefinition and XML injection
 
         var project =
             new Project("MyProduct",

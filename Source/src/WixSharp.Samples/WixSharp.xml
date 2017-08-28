@@ -4166,6 +4166,8 @@
         <member name="M:WixSharp.Extensions.SetAttribute(System.Xml.Linq.XElement,System.String,System.Object)">
             <summary>
             Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue.
+            <para><c>name</c> can include xml namespace prefix (e.g. element.SetAttribute("{dep}ProviderKey", "01234567-8901-2345-6789-012345678901")).
+            Though in this case the required namespace must be already added to the element/document.</para>
             </summary>
             <param name="obj">The object.</param>
             <param name="name">The name.</param>
@@ -4552,12 +4554,12 @@
             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.PathJoin(System.String,System.String[])">
-             <summary>
-            
-             </summary>
-             <param name="path"></param>
-             <param name="items"></param>
-             <returns></returns>
+            <summary>
+            Equivalent of <see cref="M:System.IO.Path.Combine(System.String,System.String)"/>.
+            </summary>
+            <param name="path"></param>
+            <param name="items"></param>
+            <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.PathGetDirName(System.String)">
             <summary>
@@ -10054,7 +10056,7 @@
         </member>
         <member name="F:WixSharp.Project.RebootSupressing">
             <summary>
-            Provideds fine control over rebooting at the end of installation.
+            Provides fine control over rebooting at the end of installation.
             <para>If set it creates MSI <c>REBOOT</c> property with the user specified value <see cref="F:WixSharp.Project.RebootSupressing"/>.</para>
             </summary>
             <example>

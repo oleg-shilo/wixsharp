@@ -1,14 +1,49 @@
 //css_ref ..\..\WixSharp.dll;
 //css_ref System.Core.dll;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using WixSharp;
+using WixSharp.CommonTasks;
 using WixSharp.Forms;
 
 // Truly a throw away project for dev testing
 
 class Script
 {
+    static void prepare_dirs(string root)
+    {
+        for (int i = 0; i < 40; i++)
+        {
+            var dir = root.PathJoin(i.ToString());
+            System.IO.Directory.CreateDirectory(dir);
+            System.IO.File.WriteAllText(dir.PathJoin($"file_{i}.txt"), i.ToString());
+        }
+    }
+
     static public void Main(string[] args)
+    {
+        // prepare_dirs("dirs"); return;
+
+        // var project = new ManagedProject("MyProduct",
+        //                  new Dir(@"C:\MyCompany2", new File("setup.cs")),
+        //                  new Dir(@"C:\MyCompany\MyProduct",
+        //                      new Files(@"dirs\*.*")));
+
+        var dirs = System.IO.Directory.GetFiles("dirs", "*", System.IO.SearchOption.AllDirectories)
+                                      .Select(x => x.PathGetFullPath())
+                                      .Select(x => new Dir(x.PathGetDirName(),
+                                                        new File(x)))
+                                      .ToArray();
+        var project = new ManagedProject("MyProduct", dirs);
+
+        project.UI = WUI.WixUI_ProgressOnly;
+
+        Compiler.PreserveTempFiles = true;
+        Compiler.BuildMsi(project);
+    }
+
+    static public void Main1(string[] args)
     {
         var application = new Feature("Application") { Name = "Application", Description = "Application" };
         var drivers = new Feature("Drivers") { Name = "Drivers", Description = "Drivers", AttributesDefinition = $"Display = {FeatureDisplay.expand}" };

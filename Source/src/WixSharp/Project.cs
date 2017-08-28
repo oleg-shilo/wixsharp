@@ -360,7 +360,7 @@ namespace WixSharp
         public ForceReboot ForceReboot;
 
         /// <summary>
-        /// Provideds fine control over rebooting at the end of installation.
+        /// Provides fine control over rebooting at the end of installation.
         /// <para>If set it creates MSI <c>REBOOT</c> property with the user specified value <see cref="RebootSupressing"/>.</para>
         /// </summary>
         /// <example>
