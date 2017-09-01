@@ -110,7 +110,7 @@ namespace WixSharp.UI.Forms
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.White;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Location = new System.Drawing.Point(19, 31);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(164, 13);
@@ -120,7 +120,7 @@ namespace WixSharp.UI.Forms
             // titleLbl
             // 
             this.titleLbl.AutoSize = true;
-            this.titleLbl.BackColor = System.Drawing.Color.White;
+            this.titleLbl.BackColor = System.Drawing.Color.Transparent;
             this.titleLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.titleLbl.Location = new System.Drawing.Point(11, 8);
             this.titleLbl.Name = "titleLbl";
@@ -145,12 +145,13 @@ namespace WixSharp.UI.Forms
             // 
             this.accepted.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.accepted.BackColor = System.Drawing.Color.Transparent;
             this.accepted.Location = new System.Drawing.Point(14, 219);
             this.accepted.Name = "accepted";
             this.accepted.Size = new System.Drawing.Size(455, 26);
             this.accepted.TabIndex = 3;
             this.accepted.Text = "[LicenseAgreementDlgLicenseAcceptedCheckBox]";
-            this.accepted.UseVisualStyleBackColor = true;
+            this.accepted.UseVisualStyleBackColor = false;
             this.accepted.CheckedChanged += new System.EventHandler(this.accepted_CheckedChanged);
             // 
             // bottomPanel

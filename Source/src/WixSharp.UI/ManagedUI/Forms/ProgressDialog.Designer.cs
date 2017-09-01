@@ -91,7 +91,7 @@
             // dialogText
             // 
             this.dialogText.AutoSize = true;
-            this.dialogText.BackColor = System.Drawing.Color.White;
+            this.dialogText.BackColor = System.Drawing.Color.Transparent;
             this.dialogText.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dialogText.Location = new System.Drawing.Point(11, 22);
             this.dialogText.Name = "dialogText";
@@ -195,6 +195,7 @@
             // description
             // 
             this.description.AutoSize = true;
+            this.description.BackColor = System.Drawing.Color.Transparent;
             this.description.Location = new System.Drawing.Point(29, 95);
             this.description.Name = "description";
             this.description.Size = new System.Drawing.Size(132, 13);
@@ -203,6 +204,7 @@
             // 
             // currentActionLabel
             // 
+            this.currentActionLabel.BackColor = System.Drawing.Color.Transparent;
             this.currentActionLabel.Location = new System.Drawing.Point(29, 144);
             this.currentActionLabel.Name = "currentActionLabel";
             this.currentActionLabel.Size = new System.Drawing.Size(132, 13);

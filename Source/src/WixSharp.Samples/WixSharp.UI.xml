@@ -130,7 +130,7 @@
         </member>
         <member name="T:WixSharp.UI.Forms.AdvancedFeaturesDialog">
             <summary>
-            The standard Features dialog.  
+            The standard Features dialog.
             </summary>
         </member>
         <member name="F:WixSharp.UI.Forms.AdvancedFeaturesDialog.components">

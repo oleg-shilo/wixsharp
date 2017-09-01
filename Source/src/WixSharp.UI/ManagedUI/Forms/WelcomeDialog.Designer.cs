@@ -29,24 +29,24 @@
         private void InitializeComponent()
         {
             this.imgPanel = new System.Windows.Forms.Panel();
+            this.textPanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.image = new System.Windows.Forms.PictureBox();
             this.bottomPanel = new System.Windows.Forms.Panel();
+            this.bottomBorder = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.back = new System.Windows.Forms.Button();
             this.next = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
-            this.bottomBorder = new System.Windows.Forms.Panel();
-            this.textPanel = new System.Windows.Forms.Panel();
             this.imgPanel.SuspendLayout();
+            this.textPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.image)).BeginInit();
             this.bottomPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.textPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panel2
+            // imgPanel
             // 
             this.imgPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -54,14 +54,27 @@
             this.imgPanel.Controls.Add(this.textPanel);
             this.imgPanel.Controls.Add(this.image);
             this.imgPanel.Location = new System.Drawing.Point(0, 0);
-            this.imgPanel.Name = "panel2";
+            this.imgPanel.Name = "imgPanel";
             this.imgPanel.Size = new System.Drawing.Size(494, 312);
             this.imgPanel.TabIndex = 4;
+            // 
+            // textPanel
+            // 
+            this.textPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textPanel.Controls.Add(this.label1);
+            this.textPanel.Controls.Add(this.label2);
+            this.textPanel.Location = new System.Drawing.Point(162, 12);
+            this.textPanel.Name = "textPanel";
+            this.textPanel.Size = new System.Drawing.Size(326, 294);
+            this.textPanel.TabIndex = 4;
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(3, 14);
             this.label1.Name = "label1";
@@ -74,6 +87,7 @@
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Location = new System.Drawing.Point(4, 75);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(316, 209);
@@ -103,6 +117,16 @@
             this.bottomPanel.Name = "bottomPanel";
             this.bottomPanel.Size = new System.Drawing.Size(494, 49);
             this.bottomPanel.TabIndex = 1;
+            // 
+            // bottomBorder
+            // 
+            this.bottomBorder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.bottomBorder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.bottomBorder.Location = new System.Drawing.Point(0, 0);
+            this.bottomBorder.Name = "bottomBorder";
+            this.bottomBorder.Size = new System.Drawing.Size(494, 1);
+            this.bottomBorder.TabIndex = 5;
             // 
             // tableLayoutPanel1
             // 
@@ -163,28 +187,6 @@
             this.cancel.UseVisualStyleBackColor = true;
             this.cancel.Click += new System.EventHandler(this.cancel_Click);
             // 
-            // bottomBorder
-            // 
-            this.bottomBorder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.bottomBorder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.bottomBorder.Location = new System.Drawing.Point(0, 0);
-            this.bottomBorder.Name = "bottomBorder";
-            this.bottomBorder.Size = new System.Drawing.Size(494, 1);
-            this.bottomBorder.TabIndex = 5;
-            // 
-            // panel
-            // 
-            this.textPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textPanel.Controls.Add(this.label1);
-            this.textPanel.Controls.Add(this.label2);
-            this.textPanel.Location = new System.Drawing.Point(162, 12);
-            this.textPanel.Name = "panel";
-            this.textPanel.Size = new System.Drawing.Size(326, 294);
-            this.textPanel.TabIndex = 4;
-            // 
             // WelcomeDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -197,11 +199,11 @@
             this.Text = "[WelcomeDlg_Title]";
             this.Load += new System.EventHandler(this.WelcomeDialog_Load);
             this.imgPanel.ResumeLayout(false);
+            this.textPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.image)).EndInit();
             this.bottomPanel.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.textPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
