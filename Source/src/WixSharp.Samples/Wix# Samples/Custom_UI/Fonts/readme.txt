@@ -1,0 +1,2 @@
+This sample demonstrates how to customize fonts used in the CustomMSIDialogs
+Use VS project to build and run the build script to author the desired msi. Then execute the .msi to start the installation.
