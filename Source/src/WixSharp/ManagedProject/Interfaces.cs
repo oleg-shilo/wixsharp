@@ -127,6 +127,16 @@ namespace WixSharp
         bool ErrorDetected { get; set; }
 
         /// <summary>
+        /// First detected error message.
+        /// </summary>
+        string FirstErrorMessage { get; set; }
+
+        /// <summary>
+        /// Last detected error message.
+        /// </summary>
+        string LastErrorMessage { get; set; }
+
+        /// <summary>
         /// Gets the sequence of the UI dialogs specific for the current setup type (e.g. install vs. modify).
         /// </summary>
         /// <value>
