@@ -30,7 +30,7 @@
         {
             this.imgPanel = new System.Windows.Forms.Panel();
             this.textPanel = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.title = new System.Windows.Forms.Label();
             this.description = new System.Windows.Forms.Label();
             this.image = new System.Windows.Forms.PictureBox();
             this.bottomPanel = new System.Windows.Forms.Panel();
@@ -61,7 +61,7 @@
             // 
             // textPanel
             // 
-            this.textPanel.Controls.Add(this.label1);
+            this.textPanel.Controls.Add(this.title);
             this.textPanel.Controls.Add(this.description);
             this.textPanel.Location = new System.Drawing.Point(177, 17);
             this.textPanel.Name = "textPanel";
@@ -70,15 +70,15 @@
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.title.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(299, 61);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "[ExitDialogTitle]";
+            this.title.BackColor = System.Drawing.Color.Transparent;
+            this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.title.Location = new System.Drawing.Point(3, 0);
+            this.title.Name = "label1";
+            this.title.Size = new System.Drawing.Size(299, 61);
+            this.title.TabIndex = 6;
+            this.title.Text = "[ExitDialogTitle]";
             // 
             // description
             // 
@@ -220,7 +220,7 @@
         #endregion
 
         private System.Windows.Forms.Label description;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label title;
         private System.Windows.Forms.Panel bottomPanel;
         private System.Windows.Forms.PictureBox image;
         private System.Windows.Forms.LinkLabel viewLog;
