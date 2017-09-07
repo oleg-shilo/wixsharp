@@ -22,7 +22,8 @@ namespace WixSharp.UI.Forms
             image.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Dialog");
             if (Shell.UserInterrupted || Shell.ErrorDetected)
             {
-                description.Text = "[UserExitDescription1]";
+                this.description.Text = "[UserExitDescription1]";
+                this.title.Text = "[UserExitTitle]";
                 this.Localize();
             }
 

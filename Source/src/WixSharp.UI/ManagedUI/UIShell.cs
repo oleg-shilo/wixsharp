@@ -100,6 +100,16 @@ namespace WixSharp
         public bool ErrorDetected { get; set; }
 
         /// <summary>
+        /// First detected error message.
+        /// </summary>
+        public string FirstErrorMessage { get; set; }
+
+        /// <summary>
+        /// Last detected error message.
+        /// </summary>
+        public string LastErrorMessage { get; set; }
+
+        /// <summary>
         /// Starts the execution of the MSI installation.
         /// </summary>
         public void StartExecute()
@@ -152,7 +162,7 @@ namespace WixSharp
                 {
                     if (currentViewIndex >= 0 && currentViewIndex < Dialogs.Count)
                     {
-                        shellView.ClearChildren();
+                        this.shellView.ClearChildren();
 
                         Type viewType = Dialogs[currentViewIndex];
 
@@ -160,24 +170,24 @@ namespace WixSharp
 
                         view.LocalizeWith(MsiRuntime.Localize);
                         view.FormBorderStyle = forms.FormBorderStyle.None;
-                        shellView.ControlBox = view.ControlBox;
+                        this.shellView.ControlBox = view.ControlBox;
                         view.TopLevel = false;
                         //view.Dock = DockStyle.Fill; //do not use Dock as it interferes with scaling
                         view.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-                        view.Size = shellView.ClientSize;
+                        view.Size = this.shellView.ClientSize;
                         view.Location = new System.Drawing.Point(0, 0);
 
                         CurrentDialog = (IManagedDialog)view;
                         CurrentDialog.Shell = this;
 
-                        view.Parent = shellView;
+                        view.Parent = this.shellView;
                         view.Visible = true;
-                        shellView.Text = view.Text;
+                        this.shellView.Text = view.Text;
 
-                        if (shellView is ShellView)
+                        if (this.shellView is ShellView)
                         {
-                            (shellView as ShellView).CurrentDialog = CurrentDialog;
-                            (shellView as ShellView).RaiseCurrentDialogChanged(CurrentDialog);
+                            (this.shellView as ShellView).CurrentDialog = CurrentDialog;
+                            (this.shellView as ShellView).RaiseCurrentDialogChanged(CurrentDialog);
                         }
 
                         try
@@ -215,28 +225,28 @@ namespace WixSharp
                 Dialogs = ui.ModifyDialogs;
 
             if (Dialogs.Any())
-                shellView = new ShellView { Shell = this };
+                this.shellView = new ShellView { Shell = this };
 
-            ActionResult result = ManagedProject.InvokeClientHandlers(MsiRuntime.Session, "UIInitialized", shellView as IShellView);
+            ActionResult result = ManagedProject.InvokeClientHandlers(MsiRuntime.Session, "UIInitialized", this.shellView as IShellView);
             MsiRuntime.Data.MergeReplace(MsiRuntime.Session["WIXSHARP_RUNTIME_DATA"]); //data may be changed in the client handler
 
             if (result != ActionResult.Failure)
             {
-                if (shellView != null)
+                if (this.shellView != null)
                 {
-                    shellView.Load += (s, e) =>
+                    this.shellView.Load += (s, e) =>
                     {
                         MsiRuntime.Session["WIXSHARP_MANAGED_UI_HANDLE"] =
-                        MsiRuntime.Data["WIXSHARP_MANAGED_UI_HANDLE"] = shellView.Handle.ToString();
+                        MsiRuntime.Data["WIXSHARP_MANAGED_UI_HANDLE"] = this.shellView.Handle.ToString();
                         try
                         {
                             var data = MsiRuntime.Session.GetEmbeddedData("ui_shell_icon");
                             using (var stream = new System.IO.MemoryStream(data))
-                                shellView.Icon = new Icon(stream);
+                                this.shellView.Icon = new Icon(stream);
                         }
                         catch { }
 
-                        result = ManagedProject.InvokeClientHandlers(MsiRuntime.Session, "UILoaded", (IShellView)shellView);
+                        result = ManagedProject.InvokeClientHandlers(MsiRuntime.Session, "UILoaded", (IShellView)this.shellView);
                         if (result != ActionResult.Success)
                         {
                             // aborting UI dialogs sequence from here is not possible as this event is
@@ -259,7 +269,7 @@ namespace WixSharp
                     else
                         GoNext();
 
-                    shellView.ShowDialog();
+                    this.shellView.ShowDialog();
                 }
                 else
                 {
@@ -318,9 +328,9 @@ namespace WixSharp
             MsiRuntime = new MsiRuntime(dummySession);
             Dialogs = dialogs;
 
-            shellView = new ShellView();
+            this.shellView = new ShellView();
             GoNext();
-            shellView.ShowDialog();
+            this.shellView.ShowDialog();
         }
 
         static string BuildUiPlayerResources()
@@ -413,7 +423,7 @@ namespace WixSharp
         /// </summary>
         public void Exit()
         {
-            shellView.Close();
+            this.shellView.Close();
         }
 
         /// <summary>
@@ -454,27 +464,46 @@ namespace WixSharp
                     case InstallMessage.Progress: break;
                     case InstallMessage.Error:
                     case InstallMessage.Warning:
+                    case InstallMessage.User:
                     case InstallMessage.Info:
                     default:
                         {
+                            if (messageType == InstallMessage.Error || messageType == InstallMessage.Warning || messageType == InstallMessage.User)
+                            {
+                                MessageBox.Show(this.shellView, messageRecord.ToString(), "Attention", (MessageBoxButtons)(int)buttons, (MessageBoxIcon)(int)icon, (MessageBoxDefaultButton)(int)defaultButton);
+                            }
+
                             if (messageType == InstallMessage.Info)
                             {
                                 if (messageRecord.ToString().Contains("User canceled installation")) //there is no other way
-                                    UserInterrupted = true;
+                                {
+                                    this.UserInterrupted = true;
+                                }
                             }
 
                             if (messageType == InstallMessage.Error)
-                                ErrorDetected = true;
+                            {
+                                this.ErrorDetected = true;
+                                string messageText = messageRecord.ToString();
+                                if (string.IsNullOrEmpty(this.FirstErrorMessage))
+                                {
+                                    this.FirstErrorMessage = messageText;
+                                }
+                                this.LastErrorMessage = messageText;
+                            }
 
                             if (messageType == InstallMessage.InstallEnd)
                             {
                                 try
                                 {
                                     string lastValue = messageRecord[messageRecord.FieldCount].ToString(); //MSI record is actually 1-based
-                                    ErrorDetected = (lastValue == "3");
-                                    UserInterrupted = (lastValue == "2");
+                                    this.ErrorDetected = (lastValue == "3");
+                                    this.UserInterrupted = (lastValue == "2");
                                 }
-                                catch { }//nothing we can do really
+                                catch
+                                {
+                                    //nothing we can do really
+                                }
                                 finished = true;
                             }
 
@@ -545,8 +574,8 @@ namespace WixSharp
         /// <param name="action">The action.</param>
         public void InUIThread(System.Action action)
         {
-            if (shellView != null)
-                shellView.Invoke(action);
+            if (this.shellView != null)
+                this.shellView.Invoke(action);
             else
                 action();
         }
