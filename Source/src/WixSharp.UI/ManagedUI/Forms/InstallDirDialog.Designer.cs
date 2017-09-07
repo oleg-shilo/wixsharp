@@ -31,9 +31,11 @@
             this.components = new System.ComponentModel.Container();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.installDir = new System.Windows.Forms.TextBox();
+            this.middlePanel = new System.Windows.Forms.Panel();
             this.change = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.installDir = new System.Windows.Forms.TextBox();
+            this.topBorder = new System.Windows.Forms.Panel();
             this.topPanel = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -44,14 +46,12 @@
             this.next = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
             this.border1 = new System.Windows.Forms.Panel();
-            this.topBorder = new System.Windows.Forms.Panel();
-            this.middlePanel = new System.Windows.Forms.Panel();
             this.contextMenuStrip1.SuspendLayout();
+            this.middlePanel.SuspendLayout();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.banner)).BeginInit();
             this.bottomPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.middlePanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -67,14 +67,18 @@
             this.copyToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             // 
-            // installDir
+            // middlePanel
             // 
-            this.installDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.middlePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.installDir.Location = new System.Drawing.Point(3, 56);
-            this.installDir.Name = "installDir";
-            this.installDir.Size = new System.Drawing.Size(443, 20);
-            this.installDir.TabIndex = 13;
+            this.middlePanel.Controls.Add(this.change);
+            this.middlePanel.Controls.Add(this.label3);
+            this.middlePanel.Controls.Add(this.installDir);
+            this.middlePanel.Location = new System.Drawing.Point(22, 75);
+            this.middlePanel.Name = "middlePanel";
+            this.middlePanel.Size = new System.Drawing.Size(449, 139);
+            this.middlePanel.TabIndex = 16;
             // 
             // change
             // 
@@ -97,6 +101,25 @@
             this.label3.TabIndex = 11;
             this.label3.Text = "[InstallDirDlgFolderLabel]";
             // 
+            // installDir
+            // 
+            this.installDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.installDir.Location = new System.Drawing.Point(3, 56);
+            this.installDir.Name = "installDir";
+            this.installDir.Size = new System.Drawing.Size(443, 20);
+            this.installDir.TabIndex = 13;
+            // 
+            // topBorder
+            // 
+            this.topBorder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.topBorder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.topBorder.Location = new System.Drawing.Point(0, 58);
+            this.topBorder.Name = "topBorder";
+            this.topBorder.Size = new System.Drawing.Size(494, 1);
+            this.topBorder.TabIndex = 15;
+            // 
             // topPanel
             // 
             this.topPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -114,11 +137,12 @@
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Location = new System.Drawing.Point(19, 31);
+            this.label2.Location = new System.Drawing.Point(18, 31);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(122, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "[InstallDirDlgDescription]";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label1
             // 
@@ -223,29 +247,6 @@
             this.border1.Size = new System.Drawing.Size(494, 1);
             this.border1.TabIndex = 14;
             // 
-            // topBorder
-            // 
-            this.topBorder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.topBorder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.topBorder.Location = new System.Drawing.Point(0, 58);
-            this.topBorder.Name = "topBorder";
-            this.topBorder.Size = new System.Drawing.Size(494, 1);
-            this.topBorder.TabIndex = 15;
-            // 
-            // middlePanel
-            // 
-            this.middlePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.middlePanel.Controls.Add(this.change);
-            this.middlePanel.Controls.Add(this.label3);
-            this.middlePanel.Controls.Add(this.installDir);
-            this.middlePanel.Location = new System.Drawing.Point(22, 75);
-            this.middlePanel.Name = "middlePanel";
-            this.middlePanel.Size = new System.Drawing.Size(449, 139);
-            this.middlePanel.TabIndex = 16;
-            // 
             // InstallDirDialog
             // 
             this.ClientSize = new System.Drawing.Size(494, 361);
@@ -257,14 +258,14 @@
             this.Text = "[InstallDirDlg_Title]";
             this.Load += new System.EventHandler(this.InstallDirDialog_Load);
             this.contextMenuStrip1.ResumeLayout(false);
+            this.middlePanel.ResumeLayout(false);
+            this.middlePanel.PerformLayout();
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.banner)).EndInit();
             this.bottomPanel.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.middlePanel.ResumeLayout(false);
-            this.middlePanel.PerformLayout();
             this.ResumeLayout(false);
 
         }

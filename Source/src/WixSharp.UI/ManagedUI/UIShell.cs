@@ -107,7 +107,10 @@ namespace WixSharp
             //Debug.Assert(false);
             started = true;
             if (!IsDemoMode)
+            {
+                UACRevealer.Enter();
                 MsiRuntime.StartExecute();
+            }
         }
 
         InstallProgressCounter progressCounter = new InstallProgressCounter(0.5);
@@ -203,6 +206,8 @@ namespace WixSharp
             UI = ui;
             MsiRuntime = msiRuntime;
             Tasks.UILocalize = text => text.LocalizeWith(msiRuntime.Localize);
+
+            UACRevealer.Enabled = !MsiRuntime.Session.Property("UAC_REVEALER_ENABLED").IsEmpty();
 
             if (MsiRuntime.Session.IsInstalling())
                 Dialogs = ui.InstallDialogs;
@@ -437,6 +442,8 @@ namespace WixSharp
         {
             try
             {
+                UACRevealer.Exit();
+
                 this.progressCounter.ProcessMessage(messageType, messageRecord);
 
                 if (CurrentDialog != null)

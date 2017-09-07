@@ -48,10 +48,12 @@ namespace Microsoft.Deployment.Samples.EmbeddedUI
         {
             try
             {
+                WixSharp.CommonTasks.UACRevealer.Exit();
+
                 this.progressCounter.ProcessMessage(messageType, messageRecord);
                 this.progressBar.Value = this.progressBar.Minimum +
                     this.progressCounter.Progress * (this.progressBar.Maximum - this.progressBar.Minimum);
-                this.progressLabel.Content = "" + (int) Math.Round(100 * this.progressCounter.Progress) + "%";
+                this.progressLabel.Content = "" + (int)Math.Round(100 * this.progressCounter.Progress) + "%";
 
                 switch (messageType)
                 {
@@ -94,6 +96,7 @@ namespace Microsoft.Deployment.Samples.EmbeddedUI
 
         private void installButton_Click(object sender, RoutedEventArgs e)
         {
+            WixSharp.CommonTasks.UACRevealer.Enter();
             this.installButton.Visibility = Visibility.Hidden;
             this.progressBar.Visibility = Visibility.Visible;
             this.progressLabel.Visibility = Visibility.Visible;

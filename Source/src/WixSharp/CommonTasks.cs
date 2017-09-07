@@ -1157,6 +1157,78 @@ namespace WixSharp.CommonTasks
             }
         }
     }
+
+    /// <summary>
+    /// UAC prompt revealer. This is a work around for the MSI limitation/problem with EmbeddedUI UAC prompt.
+    /// <para> The symptom of the problem is the UAC prompt not being displayed during the elevation but rather
+    /// minimized on the taskbar. It's caused by the fact the all background applications (including MSI runtime)
+    /// supposed to register the main window for UAC prompt. And, MSI does not doe the registration for EmbeddedUI.
+    /// </para>
+    /// <para>Call <c>UACRevealer.Enter</c> just before triggering UAC (staring the actual install). This will
+    /// "steal" the focus from the MSI EmbeddedUI window. This in turn will bring UAC prompt to foreground.</para>
+    /// <para>Call <c>UACRevealer.Exit</c> just after UAC prompt has been closed to dispose UACRevealer.
+    /// </para>
+    /// <para> See "Use the HWND Property to Be Acknowledged as a Foreground Application" section at
+    /// https://msdn.microsoft.com/en-us/library/bb756922.aspx
+    /// </para>
+    /// </summary>
+    public static class UACRevealer
+    {
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool MoveWindow(IntPtr hwnd, int x, int y, int cx, int cy, bool repaint);
+
+        /// <summary>
+        /// Activates UACRevealer
+        /// </summary>
+        public static void Enter()
+        {
+            // https://superuser.com/questions/89008/vista-admin-user-dialog-hidden
+            // https://msdn.microsoft.com/en-us/library/bb756922.aspx
+
+            // #151: UAC prompt appears minimized on TaskBar.
+            // MSI is a background process (service) thus it is responsible for passing its
+            // main window handle to the UAC. It does it correctly for its own UI but not for
+            // the embedded one.
+            // A simple work around allows to fix this behaver without begging MS for fixing MSI.
+            // It seems that just having a foreground process main window (e.g. notepad.exe)
+            // with the focus is enough to trick the UAC into believing that UAC prompt needs to
+            // be displayed. Tested on Win10.
+
+            if (Enabled)
+                try
+                {
+                    var exe = "notepad.exe";
+                    UAC_revealer = System.Diagnostics.Process.Start(exe);
+                    UAC_revealer.WaitForInputIdle(2000);
+                    if (UAC_revealer.MainWindowHandle != IntPtr.Zero)
+                    {
+                        MoveWindow(UAC_revealer.MainWindowHandle, 0, 0, 30, 30, true);
+                    }
+                }
+                catch { }
+        }
+
+        /// <summary>
+        /// Deactivates UACRevealer
+        /// </summary>
+        public static void Exit()
+        {
+            if (UAC_revealer != null)
+            {
+                try { UAC_revealer.Kill(); }
+                catch { }
+                UAC_revealer = null;
+            }
+        }
+
+        /// <summary>
+        /// Enables UACRevealer support. This flag is required for enabling UAC prompt work around for
+        /// the WixSharp built-in EmbeddedUI (ManagedUI).
+        /// </summary>
+        public static bool Enabled = true;
+
+        static System.Diagnostics.Process UAC_revealer;
+    }
 }
 
 /// <summary>

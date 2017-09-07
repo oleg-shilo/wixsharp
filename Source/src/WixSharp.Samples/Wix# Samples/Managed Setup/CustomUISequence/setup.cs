@@ -15,10 +15,6 @@ using System.Diagnostics;
 
 public class Script
 {
-    static Script()
-    {
-    }
-
     static public void Main()
     {
         var binaries = new Feature("Binaries", "Product binaries", true, false);
@@ -85,8 +81,8 @@ public class Script
 
         // Simulate analyzing the runtime conditions with the message box.
         // Make a decision to show (or not) Licence dialog by injecting it in the Dialogs collection
-        if (MessageBox.Show("Do you want to inject 'Licence Dialog'?", "Wix#", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            e.ManagedUIShell.CurrentDialog.Shell.Dialogs.Insert(1, Dialogs.Licence);
+        // if (MessageBox.Show("Do you want to inject 'Licence Dialog'?", "Wix#", MessageBoxButtons.YesNo) == DialogResult.Yes)
+        //     e.ManagedUIShell.CurrentDialog.Shell.Dialogs.Insert(1, Dialogs.Licence);
 
         e.ManagedUIShell.OnCurrentDialogChanged += ManagedUIShell_OnCurrentDialogChanged;
     }
