@@ -520,6 +520,17 @@
             <param name="items">The items.</param>
             <returns></returns>
         </member>
+        <member name="F:WixSharp.CommonTasks.Tasks.UILocalize">
+            <summary>
+            Localizes the string from the specified localization delegate 'localize'.
+            <para>This field is initialized by ManagedUI with the localization routine
+            that is specific for the MSI being executed. You can use this delegate to
+            do the localization of user content at runtime.</para>
+            <code>
+            var localized = Tasks.UILocalize("A later version of [ProductName] is already installed. Setup will now exit.");
+            </code>
+            </summary>
+        </member>
         <member name="T:WixSharp.CommonTasks.Tasks.DowngradeErrorCheck">
             <summary>
             Delegate for detection of the "downgrade" condition. Should return <c>true</c> if the downgrading is detected.
@@ -7477,6 +7488,14 @@
             </summary>
             <value>
               <c>true</c> if it was user interrupted; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:WixSharp.IManagedUIShell.Errors">
+            <summary>
+            Gets the MSI installation errors.
+            </summary>
+            <value>
+            The errors.
             </value>
         </member>
         <member name="P:WixSharp.IManagedUIShell.ErrorDetected">

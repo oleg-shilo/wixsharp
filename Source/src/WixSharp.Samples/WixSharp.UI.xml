@@ -1153,6 +1153,14 @@
               <c>true</c> if error was detected; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="P:WixSharp.UIShell.Errors">
+            <summary>
+            Gets the MSI installation errors.
+            </summary>
+            <value>
+            The errors.
+            </value>
+        </member>
         <member name="M:WixSharp.UIShell.StartExecute">
             <summary>
             Starts the execution of the MSI installation.

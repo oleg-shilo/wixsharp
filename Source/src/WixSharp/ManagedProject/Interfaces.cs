@@ -119,6 +119,14 @@ namespace WixSharp
         bool UserInterrupted { get; set; }
 
         /// <summary>
+        /// Gets the MSI installation errors.
+        /// </summary>
+        /// <value>
+        /// The errors.
+        /// </value>
+        List<string> Errors { get; }
+
+        /// <summary>
         /// Gets a value indicating whether MSI session ended with error.
         /// </summary>
         /// <value>

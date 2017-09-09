@@ -494,6 +494,15 @@ namespace WixSharp.CommonTasks
             return project;
         }
 
+        /// <summary>
+        /// Localizes the string from the specified localization delegate 'localize'.
+        /// <para>This field is initialized by ManagedUI with the localization routine
+        /// that is specific for the MSI being executed. You can use this delegate to
+        /// do the localization of user content at runtime.</para>
+        /// <code>
+        /// var localized = Tasks.UILocalize("A later version of [ProductName] is already installed. Setup will now exit.");
+        /// </code>
+        /// </summary>
         public static Func<string, string> UILocalize = null;
 
         /// <summary>

@@ -13,6 +13,7 @@ using forms = System.Windows.Forms;
 
 using System.Diagnostics;
 using System.Drawing;
+using System.Collections.Generic;
 
 namespace WixSharp
 {
@@ -98,6 +99,14 @@ namespace WixSharp
         ///   <c>true</c> if error was detected; otherwise, <c>false</c>.
         /// </value>
         public bool ErrorDetected { get; set; }
+
+        /// <summary>
+        /// Gets the MSI installation errors.
+        /// </summary>
+        /// <value>
+        /// The errors.
+        /// </value>
+        public List<string> Errors { get; private set; } = new List<string>();
 
         /// <summary>
         /// Starts the execution of the MSI installation.
@@ -464,7 +473,10 @@ namespace WixSharp
                             }
 
                             if (messageType == InstallMessage.Error)
+                            {
                                 ErrorDetected = true;
+                                Errors.Add(messageRecord.ToString());
+                            }
 
                             if (messageType == InstallMessage.InstallEnd)
                             {
