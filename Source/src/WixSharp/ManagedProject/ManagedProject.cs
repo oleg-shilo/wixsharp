@@ -328,9 +328,6 @@ namespace WixSharp
 
                 if (ManagedUI != null)
                 {
-                    if (this.MajorUpgrade?.ScheduleManagedUICheck == true)
-                        this.ScheduleDowngradeUICheck(this.MajorUpgrade.DowngradeErrorMessage);
-
                     this.AddProperty(new Property("WixSharp_UI_INSTALLDIR", ManagedUI.InstallDirId ?? "INSTALLDIR"));
                     if (AutoElements.EnableUACRevealer)
                         this.AddProperty(new Property("UAC_REVEALER_ENABLED", "true"));

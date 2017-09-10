@@ -7,11 +7,18 @@ namespace WixSharp
     /// </summary>
     public class MajorUpgrade
     {
-        public bool ScheduleManagedUICheck = false;
-
+        /// <summary>
+        /// The predefined instance of the <c>MajorUpgrade</c>. It is the equivalent of the code below:
+        /// <code>
+        /// project.MajorUpgrade = new MajorUpgrade
+        /// {
+        ///     Schedule = UpgradeSchedule.afterInstallInitialize,
+        ///     DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
+        /// };
+        /// </code>
+        /// </summary>
         public static MajorUpgrade Default = new MajorUpgrade
         {
-            ScheduleManagedUICheck = true,
             Schedule = UpgradeSchedule.afterInstallInitialize,
             DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
         };

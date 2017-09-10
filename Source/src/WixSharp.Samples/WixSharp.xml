@@ -539,39 +539,6 @@
             <param name="installedVersion">The detected installed product version.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.ScheduleDowngradeUICheck(WixSharp.ManagedProject,System.String,WixSharp.CommonTasks.Tasks.DowngradeErrorCheck)">
-             <summary>
-             Schedules the upgrade compatibility check for ManagedUI.
-             </summary>
-             <example>The following is an example of using MajorUpgrade with ManagedUI.
-             <code>
-             ...
-             project.ManagedUI = ManagedUI.Default;
-             ...
-             project.ScheduleDowngradeUICheck();
-             // or
-             project.UIInitialized += (SetupEventArgs e) =>
-             {
-                 Version installedVersion = e.Session.LookupInstalledVersion();
-                 Version thisVersion = e.Session.QueryProductVersion();
-            
-                 if (thisVersion &lt;= installedVersion)
-                 {
-                     MessageBox.Show("Later version of the product is already installed : " + installedVersion);
-            
-                     e.ManagedUI.Shell.ErrorDetected = true;
-                     e.Result = ActionResult.UserExit;
-                 }
-             };
-            
-             </code>
-             </example>
-             <param name="project">The project.</param>
-             <param name="downgradeErrorMessage">The downgrade error message. The default value is <c>"Later version of the product is already installed: ${installedVersion}"</c></param>
-             <param name="downgradeErrorCheck">The check delegate. Should return <c>true</c> if the downgrading is detected.
-             The default value is <c>(thisVersion, installedVersion) => thisVersion &lt;= installedVersion"</c>.</param>
-             <returns></returns>
-        </member>
         <member name="M:WixSharp.CommonTasks.Tasks.AddEnvironmentVariable(WixSharp.Project,WixSharp.EnvironmentVariable[])">
             <summary>
             Adds the environment variable.
@@ -3256,6 +3223,18 @@
             Simplifies authoring for major upgrades, including support for preventing downgrades.
             </summary>
         </member>
+        <member name="F:WixSharp.MajorUpgrade.Default">
+            <summary>
+            The predefined instance of the <c>MajorUpgrade</c>. It is the equivalent of the code below:
+            <code>
+            project.MajorUpgrade = new MajorUpgrade
+            {
+                Schedule = UpgradeSchedule.afterInstallInitialize,
+                DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
+            };
+            </code>
+            </summary>
+        </member>
         <member name="F:WixSharp.MajorUpgrade.AllowDowngrades">
             <summary>
             When set to "false" (the default), products with lower version numbers are blocked from installing when a product with a higher version
@@ -4084,18 +4063,18 @@
             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.AsWixVarToPath(System.String)">
-            <summary>
-            'Interprets' a string as a WiX constant and expands into a proper Fiel System path. For example "DesktopFolder"
-            will be expanded into "[SysDrive]:\Users\[user]\Desktop". Tis method is a logical equivalent of C# Environment.GetFolderPath. 
-            Though it handles discrepancies between 'special folders' mapping in .NET and WiX.
+             <summary>
+             'Interprets' a string as a WiX constant and expands into a proper File System path. For example "DesktopFolder"
+             will be expanded into "[SysDrive]:\Users\[user]\Desktop". This method is a logical equivalent of C# Environment.GetFolderPath.
+             Though it handles discrepancies between 'special folders' mapping in .NET and WiX.
             
-            <remarks>
-            The method will always be called from x86 runtime as MSI always loads ManagedUI in x86 host. 
-            From the other hand CustomActions are called in the deployment specific CPU type context.
-            </remarks>
-            </summary>
-            <param name="path">The path.</param>
-            <returns></returns>
+             <remarks>
+             The method will always be called from x86 runtime as MSI always loads ManagedUI in x86 host.
+             From the other hand CustomActions are called in the deployment specific CPU type context.
+             </remarks>
+             </summary>
+             <param name="path">The path.</param>
+             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.SetComponentPermanent``1(``0,System.Boolean)">
             <summary>

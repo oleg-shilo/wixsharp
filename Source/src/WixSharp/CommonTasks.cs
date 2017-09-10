@@ -512,67 +512,7 @@ namespace WixSharp.CommonTasks
         /// <param name="installedVersion">The detected installed product version.</param>
         /// <returns></returns>
         public delegate bool DowngradeErrorCheck(Version thisVersion, Version installedVersion);
-
-        /// <summary>
-        /// Schedules the upgrade compatibility check for ManagedUI.
-        /// </summary>
-        /// <example>The following is an example of using MajorUpgrade with ManagedUI.
-        /// <code>
-        /// ...
-        /// project.ManagedUI = ManagedUI.Default;
-        /// ...
-        /// project.ScheduleDowngradeUICheck();
-        /// // or
-        /// project.UIInitialized += (SetupEventArgs e) =>
-        /// {
-        ///     Version installedVersion = e.Session.LookupInstalledVersion();
-        ///     Version thisVersion = e.Session.QueryProductVersion();
-        ///
-        ///     if (thisVersion &lt;= installedVersion)
-        ///     {
-        ///         MessageBox.Show("Later version of the product is already installed : " + installedVersion);
-        ///
-        ///         e.ManagedUI.Shell.ErrorDetected = true;
-        ///         e.Result = ActionResult.UserExit;
-        ///     }
-        /// };
-        ///
-        /// </code>
-        /// </example>
-        /// <param name="project">The project.</param>
-        /// <param name="downgradeErrorMessage">The downgrade error message. The default value is <c>"Later version of the product is already installed: ${installedVersion}"</c></param>
-        /// <param name="downgradeErrorCheck">The check delegate. Should return <c>true</c> if the downgrading is detected.
-        /// The default value is <c>(thisVersion, installedVersion) => thisVersion &lt;= installedVersion"</c>.</param>
-        /// <returns></returns>
-        static public ManagedProject ScheduleDowngradeUICheck(this ManagedProject project, string downgradeErrorMessage = "Later version of the product is already installed: ${installedVersion}", DowngradeErrorCheck downgradeErrorCheck = null)
-        {
-            project.AddProperty(new Property("downgradeErrorMessage", downgradeErrorMessage));
-
-            project.UIInitialized += (SetupEventArgs e) =>
-            {
-                // Debug.Assert(false);
-                Version installedVersion = e.Session.LookupInstalledVersion();
-                Version thisVersion = e.Session.QueryProductVersion();
-
-                if (downgradeErrorCheck == null)
-                    downgradeErrorCheck = (thisVer, foundVer) => thisVer <= foundVer;
-
-                if (downgradeErrorCheck(thisVersion, installedVersion))
-                {
-                    var msg = e.Session.QueryProperty("downgradeErrorMessage").Replace("${installedVersion}", installedVersion.ToString());
-                    if (UILocalize != null)
-                        msg = UILocalize(msg);
-
-                    e.Session.Log("Error: " + msg);
-                    MessageBox.Show(msg);
-
-                    e.ManagedUI.Shell.ErrorDetected = true;
-                    e.Result = ActionResult.UserExit;
-                }
-            };
-            return project;
-        }
-
+        
         /// <summary>
         /// Adds the environment variable.
         /// </summary>

@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace WixSharp.UI.Forms
@@ -35,6 +36,13 @@ namespace WixSharp.UI.Forms
             }
 
             ResetLayout();
+
+            // show error message if required
+            // if (Shell.Errors.Any())
+            // {
+            //     string lastError = Shell.Errors.LastOrDefault();
+            //     MessageBox.Show(lastError);
+            // }
         }
 
         void ResetLayout()

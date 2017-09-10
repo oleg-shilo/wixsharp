@@ -463,9 +463,21 @@ namespace WixSharp
                     case InstallMessage.Progress: break;
                     case InstallMessage.Error:
                     case InstallMessage.Warning:
+                    case InstallMessage.User:
                     case InstallMessage.Info:
                     default:
                         {
+                            if (messageType.IsOneOf(InstallMessage.Error, InstallMessage.Warning, InstallMessage.User))
+                            {
+                                MessageBox.Show(
+                                    this.shellView,
+                                    messageRecord.ToString(),
+                                    "[ErrorDlg_Title]".LocalizeWith(MsiRuntime.Localize),
+                                    (MessageBoxButtons)(int)buttons,
+                                    (MessageBoxIcon)(int)icon,
+                                    (MessageBoxDefaultButton)(int)defaultButton);
+                            }
+
                             if (messageType == InstallMessage.Info)
                             {
                                 if (messageRecord.ToString().Contains("User canceled installation")) //there is no other way
