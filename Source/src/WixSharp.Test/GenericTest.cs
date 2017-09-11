@@ -35,7 +35,6 @@ namespace WixSharp.Test
             //string dll = @"WixSharp\src\WixSharp.Samples\Wix# Samples\InstallCom\ATLSimpleServ.dll";
 
             //var wxs = Tasks.EmmitComWxs(dll);
-
         }
 
         [Fact]
@@ -76,7 +75,6 @@ namespace WixSharp.Test
             Assert.Equal("Windows Live Photo Common", name);
             Assert.True(installed); //may fail on some machines
             Assert.True(products.Any());
-
         }
 
         //[Fact]
@@ -87,7 +85,6 @@ namespace WixSharp.Test
             string installDirProperty = "INSTALLDIR";
             string dir = parser.GetDirectoryPath(installDirProperty);
         }
-
 
         [Fact]
         public void FirewallException()
@@ -161,7 +158,6 @@ namespace WixSharp.Test
                     if (currentInstallFeature.State == InstallState.Local)
                     {
                         Debug.WriteLine(string.Format("Migrating feature {0} - marking as Present", currentInstallFeature.FeatureName));
-
                     }
                     else
                     {
@@ -182,7 +178,6 @@ namespace WixSharp.Test
             media.Cabinet = null;
             xml = media.ToXml().ToString().ToSingleQuots();
             Assert.Equal("<Media Id='1' CompressionLevel='high' EmbedCab='yes' />", xml);
-
 
             media.DiskPrompt = "prompt";
             xml = media.ToXml().ToString().ToSingleQuots();
@@ -286,7 +281,6 @@ namespace WixSharp.Test
             Assert.True(empty == null);
             Assert.True(empty != MyVals.First);
 
-
             Assert.True(MyVals.Third == "thirdVal");
             Assert.True("thirdVal" == MyVals.Third);
 
@@ -300,7 +294,7 @@ namespace WixSharp.Test
             Assert.True(new MyVals("test") == new MyVals("test"));
 
             Assert.Equal("thirdVal", MyVals.Third);
-            Assert.Equal("thirdVal", (string) MyVals.Third);
+            Assert.Equal("thirdVal", (string)MyVals.Third);
 
             Assert.True(MyVals.Third.Equals("thirdVal"));
             Assert.False(MyVals.Third.Equals(null));
@@ -310,7 +304,9 @@ namespace WixSharp.Test
 
         class MyVals : StringEnum<MyVals>
         {
-            public MyVals(string value) : base(value) { }
+            public MyVals(string value) : base(value)
+            {
+            }
 
             public static MyVals First = new MyVals("firstVal");
             public static MyVals Second = new MyVals("secondVal");

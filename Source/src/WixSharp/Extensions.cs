@@ -73,6 +73,19 @@ namespace WixSharp
             return result.ToArray();
         }
 
+        public static Version ToRawVersion(this string obj)
+        {
+            try
+            {
+                var version_digits = new string(obj.Where(x => char.IsDigit(x) || x == '.').ToArray());
+                return new Version(version_digits);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         /// Adds the element to a given XML element. It is a Fluent version of <see cref="T:System.Xml.Linq.XElement.Add"/>.
         /// </summary>
