@@ -7,8 +7,6 @@ namespace $safeprojectname$
     {
         static void Main()
         {
-            DON'T FORGET to execute "install-package wixsharp" in the package manager console
-            
             var project = new Project("MyProduct",
                              new Dir(@"%ProgramFiles%\My Company\My Product",
                                  new File("Program.cs")));

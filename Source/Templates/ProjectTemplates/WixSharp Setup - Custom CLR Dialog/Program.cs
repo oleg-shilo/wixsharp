@@ -4,14 +4,12 @@ using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Controls;
 
-namespace WixSharp_Setup
+namespace $safeprojectname$
 {
     public class Program
     {
         static void Main()
         {
-            DON'T FORGET to execute "install-package wixsharp" in the package manager console
-            
             // This project type has been superseded with the EmbeddedUI based "WixSharp Managed Setup - Custom Dialog"
             // project type. Which provides by far better final result and user experience.   
             // However due to the Burn limitations (see this discussion: https://wixsharp.codeplex.com/discussions/645838)

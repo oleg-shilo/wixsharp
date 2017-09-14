@@ -3,14 +3,12 @@ using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Forms;
 
-namespace WixSharpSetup
+namespace $safeprojectname$
 {
     class Program
     {
         static void Main()
         {
-            DON'T FORGET to execute "Install-Package WixSharp" in the Package Manager Console
-            
             var project = new ManagedProject("MyProduct",
                              new Dir(@"%ProgramFiles%\My Company\My Product",
                                  new File("Program.cs")));

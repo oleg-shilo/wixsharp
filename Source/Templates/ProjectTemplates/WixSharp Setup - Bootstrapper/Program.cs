@@ -8,9 +8,7 @@ namespace $safeprojectname$
 {
     static void Main()
     {
-        DON'T FORGET to execute "install-package wixsharp" in the package manager console
-
-            string productMsi = BuildMsi();
+        string productMsi = BuildMsi();
 
         var bootstrapper =
           new Bundle("MyProduct",
