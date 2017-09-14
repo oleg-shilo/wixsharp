@@ -32,6 +32,3 @@ class Script
         project.BuildMsi();
     }
 }
-
-
-

@@ -454,7 +454,7 @@
             <param name="value">The action value.</param>
             <param name="condition">The action condition.</param>
         </member>
-        <member name="M:WixSharp.Controls.WixForm.SetPrperty(System.String,System.String,System.String)">
+        <member name="M:WixSharp.Controls.WixForm.SetProperty(System.String,System.String,System.String)">
             <summary>
             Generates and adds the SetProperty action to the list of the dialog actions, which is to be used at compile time for 
             generating WiX Dialog element actions.

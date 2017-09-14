@@ -73,6 +73,12 @@ namespace WixSharp
             return result.ToArray();
         }
 
+        /// <summary>
+        /// Converts string value of a version into the <see cref="System.Version"/> object.
+        /// <para>This method handles alpha-numeric strings. For example "v1.2.3-HotFix" is converted in "1.2.3" <see cref="System.Version"/> object.</para>
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static Version ToRawVersion(this string obj)
         {
             try

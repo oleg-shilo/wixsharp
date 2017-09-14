@@ -84,7 +84,7 @@ public class Script
         // if (MessageBox.Show("Do you want to inject 'Licence Dialog'?", "Wix#", MessageBoxButtons.YesNo) == DialogResult.Yes)
         //     e.ManagedUIShell.CurrentDialog.Shell.Dialogs.Insert(1, Dialogs.Licence);
 
-        e.ManagedUIShell.OnCurrentDialogChanged += ManagedUIShell_OnCurrentDialogChanged;
+        e.ManagedUI.OnCurrentDialogChanged += ManagedUIShell_OnCurrentDialogChanged;
     }
 
     static void ManagedUIShell_OnCurrentDialogChanged(IManagedDialog obj)

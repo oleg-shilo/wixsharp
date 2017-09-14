@@ -1,4 +1,4 @@
-v1.3.0.0
-* Updated the templates items to reflect the latest WixSharp changes for dialogs (Issues #108,109,111).
+v1.4.0.0
+* Implemented changing the title and description of the ManagedUI.ExitDialog depending on the Install error or cancellation.
 
 
