@@ -1,4 +1,4 @@
 v1.4.0.0
 * Implemented changing the title and description of the ManagedUI.ExitDialog depending on the Install error or cancellation.
-* Added NuGet references directly to the project file (new VS2017 package referencing approach)
+
 

@@ -10,6 +10,8 @@ namespace $safeprojectname$
     {
         static void Main()
         {
+            DON'T FORGET to add NuGet package "WixSharp".
+            
             // This project type has been superseded with the EmbeddedUI based "WixSharp Managed Setup - Custom Dialog"
             // project type. Which provides by far better final result and user experience.   
             // However due to the Burn limitations (see this discussion: https://wixsharp.codeplex.com/discussions/645838)
