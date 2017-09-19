@@ -583,10 +583,10 @@
         </member>
         <member name="T:WixSharp.ManagedUI">
              <summary>
-             Implements as standard dialog-based MSI embedded UI. 
+             Implements as standard dialog-based MSI embedded UI.
              <para>
-             This class allows defining separate sequences of UI dialogs for 'install' 
-             and 'modify' MSI executions. The dialog sequence can contain any mixture 
+             This class allows defining separate sequences of UI dialogs for 'install'
+             and 'modify' MSI executions. The dialog sequence can contain any mixture
              of built-in standard dialogs and/or custom dialogs (Form inherited from <see cref="T:WixSharp.UI.Forms.ManagedForm"/>).
              </para>
              </summary>
@@ -1151,6 +1151,14 @@
             </summary>
             <value>
               <c>true</c> if error was detected; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:WixSharp.UIShell.Errors">
+            <summary>
+            Gets the MSI installation errors.
+            </summary>
+            <value>
+            The errors.
             </value>
         </member>
         <member name="M:WixSharp.UIShell.StartExecute">

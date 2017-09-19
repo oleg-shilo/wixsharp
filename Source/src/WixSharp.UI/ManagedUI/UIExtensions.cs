@@ -131,6 +131,13 @@ namespace WixSharp
             }
         }
 
+        public static void MakeTransparentOn(this Label label, PictureBox pictureBox)
+        {
+            label.Parent = pictureBox;
+            label.Location = new Point(label.Location.X - pictureBox.Location.X, label.Location.Y - pictureBox.Location.Y);
+            label.BackColor = Color.Transparent;
+        }
+
         public static sys.Control ClearChildren(this sys.Control control)
         {
             foreach (sys.Control item in control.Controls)

@@ -1,5 +1,7 @@
 using System;
+using System.Drawing;
 using System.Windows.Forms;
+
 using WixSharp;
 using WixSharp.UI.Forms;
 
@@ -16,6 +18,8 @@ namespace WixSharpSetup.Dialogs
         public InstallDirDialog()
         {
             InitializeComponent();
+            label1.MakeTransparentOn(banner);
+            label2.MakeTransparentOn(banner);
         }
 
         string installDirProperty;
@@ -30,8 +34,8 @@ namespace WixSharpSetup.Dialogs
 
             if (installDirPropertyValue.IsEmpty())
             {
-                //We are executed before any of the MSI actions are invoked so the INSTALLDIR (if set to absolute path)  
-                //is not resolved yet. So we need to do it manually 
+                //We are executed before any of the MSI actions are invoked so the INSTALLDIR (if set to absolute path)
+                //is not resolved yet. So we need to do it manually
                 installDir.Text = MsiRuntime.Session.GetDirectoryPath(installDirProperty);
 
                 if (installDir.Text == "ABSOLUTEPATH")
@@ -48,16 +52,16 @@ namespace WixSharpSetup.Dialogs
 
         void ResetLayout()
         {
-            // The form controls are properly anchored and will be correctly resized on parent form 
-            // resizing. However the initial sizing by WinForm runtime doesn't a do good job with DPI 
-            // other than 96. Thus manual resizing is the only reliable option apart from going WPF.  
-            float ratio = (float) banner.Image.Width / (float) banner.Image.Height;
-            topPanel.Height = (int) (banner.Width / ratio);
+            // The form controls are properly anchored and will be correctly resized on parent form
+            // resizing. However the initial sizing by WinForm runtime doesn't a do good job with DPI
+            // other than 96. Thus manual resizing is the only reliable option apart from going WPF.
+            float ratio = (float)banner.Image.Width / (float)banner.Image.Height;
+            topPanel.Height = (int)(banner.Width / ratio);
             topBorder.Top = topPanel.Height + 1;
 
             middlePanel.Top = topBorder.Bottom + 10;
 
-            var upShift = (int) (next.Height * 2.3) - bottomPanel.Height;
+            var upShift = (int)(next.Height * 2.3) - bottomPanel.Height;
             bottomPanel.Top -= upShift;
             bottomPanel.Height += upShift;
         }
@@ -69,7 +73,7 @@ namespace WixSharpSetup.Dialogs
 
         void next_Click(object sender, EventArgs e)
         {
-            if(!installDirProperty.IsEmpty())
+            if (!installDirProperty.IsEmpty())
                 MsiRuntime.Session[installDirProperty] = installDir.Text;
             Shell.GoNext();
         }
@@ -88,6 +92,10 @@ namespace WixSharpSetup.Dialogs
                     installDir.Text = dialog.SelectedPath;
                 }
             }
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
         }
     }
 }

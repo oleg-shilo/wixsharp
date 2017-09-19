@@ -494,6 +494,15 @@ namespace WixSharp.CommonTasks
             return project;
         }
 
+        /// <summary>
+        /// Localizes the string from the specified localization delegate 'localize'.
+        /// <para>This field is initialized by ManagedUI with the localization routine
+        /// that is specific for the MSI being executed. You can use this delegate to
+        /// do the localization of user content at runtime.</para>
+        /// <code>
+        /// var localized = Tasks.UILocalize("A later version of [ProductName] is already installed. Setup will now exit.");
+        /// </code>
+        /// </summary>
         public static Func<string, string> UILocalize = null;
 
         /// <summary>
@@ -503,67 +512,7 @@ namespace WixSharp.CommonTasks
         /// <param name="installedVersion">The detected installed product version.</param>
         /// <returns></returns>
         public delegate bool DowngradeErrorCheck(Version thisVersion, Version installedVersion);
-
-        /// <summary>
-        /// Schedules the upgrade compatibility check for ManagedUI.
-        /// </summary>
-        /// <example>The following is an example of using MajorUpgrade with ManagedUI.
-        /// <code>
-        /// ...
-        /// project.ManagedUI = ManagedUI.Default;
-        /// ...
-        /// project.ScheduleDowngradeUICheck();
-        /// // or
-        /// project.UIInitialized += (SetupEventArgs e) =>
-        /// {
-        ///     Version installedVersion = e.Session.LookupInstalledVersion();
-        ///     Version thisVersion = e.Session.QueryProductVersion();
-        ///
-        ///     if (thisVersion &lt;= installedVersion)
-        ///     {
-        ///         MessageBox.Show("Later version of the product is already installed : " + installedVersion);
-        ///
-        ///         e.ManagedUI.Shell.ErrorDetected = true;
-        ///         e.Result = ActionResult.UserExit;
-        ///     }
-        /// };
-        ///
-        /// </code>
-        /// </example>
-        /// <param name="project">The project.</param>
-        /// <param name="downgradeErrorMessage">The downgrade error message. The default value is <c>"Later version of the product is already installed: ${installedVersion}"</c></param>
-        /// <param name="downgradeErrorCheck">The check delegate. Should return <c>true</c> if the downgrading is detected.
-        /// The default value is <c>(thisVersion, installedVersion) => thisVersion &lt;= installedVersion"</c>.</param>
-        /// <returns></returns>
-        static public ManagedProject ScheduleDowngradeUICheck(this ManagedProject project, string downgradeErrorMessage = "Later version of the product is already installed: ${installedVersion}", DowngradeErrorCheck downgradeErrorCheck = null)
-        {
-            project.AddProperty(new Property("downgradeErrorMessage", downgradeErrorMessage));
-
-            project.UIInitialized += (SetupEventArgs e) =>
-            {
-                // Debug.Assert(false);
-                Version installedVersion = e.Session.LookupInstalledVersion();
-                Version thisVersion = e.Session.QueryProductVersion();
-
-                if (downgradeErrorCheck == null)
-                    downgradeErrorCheck = (thisVer, foundVer) => thisVer <= foundVer;
-
-                if (downgradeErrorCheck(thisVersion, installedVersion))
-                {
-                    var msg = e.Session.QueryProperty("downgradeErrorMessage").Replace("${installedVersion}", installedVersion.ToString());
-                    if (UILocalize != null)
-                        msg = UILocalize(msg);
-
-                    e.Session.Log("Error: " + msg);
-                    MessageBox.Show(msg);
-
-                    e.ManagedUI.Shell.ErrorDetected = true;
-                    e.Result = ActionResult.UserExit;
-                }
-            };
-            return project;
-        }
-
+        
         /// <summary>
         /// Adds the environment variable.
         /// </summary>
@@ -1156,6 +1105,78 @@ namespace WixSharp.CommonTasks
                 return database.Tables["MsiEmbeddedUI"] != null;
             }
         }
+    }
+
+    /// <summary>
+    /// UAC prompt revealer. This is a work around for the MSI limitation/problem with EmbeddedUI UAC prompt.
+    /// <para> The symptom of the problem is the UAC prompt not being displayed during the elevation but rather
+    /// minimized on the taskbar. It's caused by the fact the all background applications (including MSI runtime)
+    /// supposed to register the main window for UAC prompt. And, MSI does not doe the registration for EmbeddedUI.
+    /// </para>
+    /// <para>Call <c>UACRevealer.Enter</c> just before triggering UAC (staring the actual install). This will
+    /// "steal" the focus from the MSI EmbeddedUI window. This in turn will bring UAC prompt to foreground.</para>
+    /// <para>Call <c>UACRevealer.Exit</c> just after UAC prompt has been closed to dispose UACRevealer.
+    /// </para>
+    /// <para> See "Use the HWND Property to Be Acknowledged as a Foreground Application" section at
+    /// https://msdn.microsoft.com/en-us/library/bb756922.aspx
+    /// </para>
+    /// </summary>
+    public static class UACRevealer
+    {
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool MoveWindow(IntPtr hwnd, int x, int y, int cx, int cy, bool repaint);
+
+        /// <summary>
+        /// Activates UACRevealer
+        /// </summary>
+        public static void Enter()
+        {
+            // https://superuser.com/questions/89008/vista-admin-user-dialog-hidden
+            // https://msdn.microsoft.com/en-us/library/bb756922.aspx
+
+            // #151: UAC prompt appears minimized on TaskBar.
+            // MSI is a background process (service) thus it is responsible for passing its
+            // main window handle to the UAC. It does it correctly for its own UI but not for
+            // the embedded one.
+            // A simple work around allows to fix this behaver without begging MS for fixing MSI.
+            // It seems that just having a foreground process main window (e.g. notepad.exe)
+            // with the focus is enough to trick the UAC into believing that UAC prompt needs to
+            // be displayed. Tested on Win10.
+
+            if (Enabled)
+                try
+                {
+                    var exe = "notepad.exe";
+                    UAC_revealer = System.Diagnostics.Process.Start(exe);
+                    UAC_revealer.WaitForInputIdle(2000);
+                    if (UAC_revealer.MainWindowHandle != IntPtr.Zero)
+                    {
+                        MoveWindow(UAC_revealer.MainWindowHandle, 0, 0, 30, 30, true);
+                    }
+                }
+                catch { }
+        }
+
+        /// <summary>
+        /// Deactivates UACRevealer
+        /// </summary>
+        public static void Exit()
+        {
+            if (UAC_revealer != null)
+            {
+                try { UAC_revealer.Kill(); }
+                catch { }
+                UAC_revealer = null;
+            }
+        }
+
+        /// <summary>
+        /// Enables UACRevealer support. This flag is required for enabling UAC prompt work around for
+        /// the WixSharp built-in EmbeddedUI (ManagedUI).
+        /// </summary>
+        public static bool Enabled = true;
+
+        static System.Diagnostics.Process UAC_revealer;
     }
 }
 

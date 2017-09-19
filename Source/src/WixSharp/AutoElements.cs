@@ -99,6 +99,18 @@ namespace WixSharp
         public static bool DisableAutoKeyPath = false;
 
         /// <summary>
+        /// Enables UAC revealer, which is a work around for the MSI limitation/problem around EmbeddedUI UAC prompt.
+        /// <para> The symptom of the problem is the UAC prompt not being displayed during elevation but rather minimized
+        /// on the taskbar. This is caused by the fact the all background applications (including MSI runtime) supposed to
+        /// register the main window for UAC prompt. And, MSI does not doe the registration for EmbeddedUI.
+        /// </para>
+        /// <para> See "Use the HWND Property to Be Acknowledged as a Foreground Application" section at
+        /// https://msdn.microsoft.com/en-us/library/bb756922.aspx
+        /// </para>
+        /// </summary>
+        public static bool EnableUACRevealer = true;
+
+        /// <summary>
         /// Forces all <see cref="T:WixSharp.Condition"/> values to be always encoded as CDATA.
         /// </summary>
         public static bool ForceCDataForConditions = false;

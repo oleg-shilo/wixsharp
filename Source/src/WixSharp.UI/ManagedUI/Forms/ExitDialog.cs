@@ -1,7 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+
 namespace WixSharp.UI.Forms
 {
     /// <summary>
@@ -20,14 +22,27 @@ namespace WixSharp.UI.Forms
         void ExitDialog_Load(object sender, System.EventArgs e)
         {
             image.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Dialog");
-            if (Shell.UserInterrupted || Shell.ErrorDetected)
+            if (Shell.UserInterrupted)
             {
-                this.description.Text = "[UserExitDescription1]";
-                this.title.Text = "[UserExitTitle]";
+                title.Text = "[UserExitTitle]";
+                description.Text = "[UserExitDescription1]";
+                this.Localize();
+            }
+            else if (Shell.ErrorDetected)
+            {
+                title.Text = "[FatalErrorTitle]";
+                description.Text = "[FatalErrorDescription1]";
                 this.Localize();
             }
 
             ResetLayout();
+
+            // show error message if required
+            // if (Shell.Errors.Any())
+            // {
+            //     string lastError = Shell.Errors.LastOrDefault();
+            //     MessageBox.Show(lastError);
+            // }
         }
 
         void ResetLayout()

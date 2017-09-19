@@ -15,6 +15,7 @@ namespace WixSharp.UI.Forms
         public ProgressDialog()
         {
             InitializeComponent();
+            dialogText.MakeTransparentOn(banner);
         }
 
         void ProgressDialog_Load(object sender, EventArgs e)

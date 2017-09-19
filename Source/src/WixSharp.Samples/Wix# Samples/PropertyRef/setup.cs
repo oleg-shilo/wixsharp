@@ -12,10 +12,18 @@ internal class Script
     static public void Main()
     {
         var project = new Project("Setup",
-                new PropertyRef("NETFRAMEWORK20"),
-                new ManagedAction(CustomActions.MyAction, Return.check, When.After, Step.InstallInitialize, Condition.NOT_BeingRemoved));
+                new PropertyRef("NETFRAMEWORK45"),
+                new ManagedAction(CustomActions.MyAction, Return.check, When.After, Step.InstallInitialize, Condition.NOT_BeingRemoved)
+                );
 
         project.IncludeWixExtension(WixExtension.NetFx);
+
+        {
+            int minimumFrameworkVersion = 47;
+            //WixManagedProject.LaunchConditions.Add(new LaunchCondition($"Installed OR (NETFRAMEWORK45 AND NETFRAMEWORK45 >= \"#460798\")", $"{this.WixManagedProject.Name} requires Microsoft .NET Framework 4.7 or greater to be installed, but you are now using . Please install a supported Microsoft .NET Framework version, such as from https://www.microsoft.com/en-us/download/details.aspx?id=55167."));
+            project.LaunchConditions.Add(new LaunchCondition("NETFRAMEWORK45 >= \"#460798\"", $"This requires Microsoft .NET Framework 4.7 or greater to be installed, but you are now using . Please install a supported Microsoft .NET Framework version, such as from https://www.microsoft.com/en-us/download/details.aspx?id=55167."));
+        }
+
 
         Compiler.BuildMsi(project);
     }
@@ -28,7 +36,7 @@ public class CustomActions
     {
         try
         {
-            MessageBox.Show(session["NETFRAMEWORK20"], "");
+            MessageBox.Show(session["NETFRAMEWORK45"], "");
         }
         catch (Exception e)
         {

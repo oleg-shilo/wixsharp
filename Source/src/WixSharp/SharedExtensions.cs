@@ -23,14 +23,13 @@ namespace WixSharp
             return Directory.Exists(progFiles32);
         }
 
-
         /// <summary>
-        /// 'Interprets' a string as a WiX constant and expands into a proper Fiel System path. For example "DesktopFolder"
-        /// will be expanded into "[SysDrive]:\Users\[user]\Desktop". Tis method is a logical equivalent of C# Environment.GetFolderPath. 
+        /// 'Interprets' a string as a WiX constant and expands into a proper File System path. For example "DesktopFolder"
+        /// will be expanded into "[SysDrive]:\Users\[user]\Desktop". This method is a logical equivalent of C# Environment.GetFolderPath.
         /// Though it handles discrepancies between 'special folders' mapping in .NET and WiX.
-        /// 
+        ///
         /// <remarks>
-        /// The method will always be called from x86 runtime as MSI always loads ManagedUI in x86 host. 
+        /// The method will always be called from x86 runtime as MSI always loads ManagedUI in x86 host.
         /// From the other hand CustomActions are called in the deployment specific CPU type context.
         /// </remarks>
         /// </summary>

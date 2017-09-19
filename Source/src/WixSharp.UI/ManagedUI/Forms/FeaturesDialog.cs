@@ -27,6 +27,8 @@ namespace WixSharp.UI.Forms
         public FeaturesDialog()
         {
             InitializeComponent();
+            label1.MakeTransparentOn(banner);
+            label2.MakeTransparentOn(banner);
         }
 
         void FeaturesDialog_Load(object sender, System.EventArgs e)

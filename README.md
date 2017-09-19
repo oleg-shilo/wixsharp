@@ -1,3 +1,6 @@
+[![NuGet version (WixSharp)](https://img.shields.io/nuget/v/CS-Script.svg?style=flat-square)](https://www.nuget.org/packages/WixSharp/)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](http://www.csscript.net/Donation.html)
+
 <img align="right" src="https://github.com/oleg-shilo/wixsharp/blob/master/Documentation/wiki_images/wixsharp_logo.png" alt="" style="float:right">
 
 # Wix# (WixSharp) - managed interface for WiX

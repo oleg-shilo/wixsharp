@@ -520,6 +520,17 @@
             <param name="items">The items.</param>
             <returns></returns>
         </member>
+        <member name="F:WixSharp.CommonTasks.Tasks.UILocalize">
+            <summary>
+            Localizes the string from the specified localization delegate 'localize'.
+            <para>This field is initialized by ManagedUI with the localization routine
+            that is specific for the MSI being executed. You can use this delegate to
+            do the localization of user content at runtime.</para>
+            <code>
+            var localized = Tasks.UILocalize("A later version of [ProductName] is already installed. Setup will now exit.");
+            </code>
+            </summary>
+        </member>
         <member name="T:WixSharp.CommonTasks.Tasks.DowngradeErrorCheck">
             <summary>
             Delegate for detection of the "downgrade" condition. Should return <c>true</c> if the downgrading is detected.
@@ -527,39 +538,6 @@
             <param name="thisVersion">The version of the product being installed.</param>
             <param name="installedVersion">The detected installed product version.</param>
             <returns></returns>
-        </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.ScheduleDowngradeUICheck(WixSharp.ManagedProject,System.String,WixSharp.CommonTasks.Tasks.DowngradeErrorCheck)">
-             <summary>
-             Schedules the upgrade compatibility check for ManagedUI.
-             </summary>
-             <example>The following is an example of using MajorUpgrade with ManagedUI.
-             <code>
-             ...
-             project.ManagedUI = ManagedUI.Default;
-             ...
-             project.ScheduleDowngradeUICheck();
-             // or
-             project.UIInitialized += (SetupEventArgs e) =>
-             {
-                 Version installedVersion = e.Session.LookupInstalledVersion();
-                 Version thisVersion = e.Session.QueryProductVersion();
-            
-                 if (thisVersion &lt;= installedVersion)
-                 {
-                     MessageBox.Show("Later version of the product is already installed : " + installedVersion);
-            
-                     e.ManagedUI.Shell.ErrorDetected = true;
-                     e.Result = ActionResult.UserExit;
-                 }
-             };
-            
-             </code>
-             </example>
-             <param name="project">The project.</param>
-             <param name="downgradeErrorMessage">The downgrade error message. The default value is <c>"Later version of the product is already installed: ${installedVersion}"</c></param>
-             <param name="downgradeErrorCheck">The check delegate. Should return <c>true</c> if the downgrading is detected.
-             The default value is <c>(thisVersion, installedVersion) => thisVersion &lt;= installedVersion"</c>.</param>
-             <returns></returns>
         </member>
         <member name="M:WixSharp.CommonTasks.Tasks.AddEnvironmentVariable(WixSharp.Project,WixSharp.EnvironmentVariable[])">
             <summary>
@@ -868,6 +846,38 @@
             <param name="msiPath">The path.</param>
             <returns></returns>
         </member>
+        <member name="T:WixSharp.CommonTasks.UACRevealer">
+            <summary>
+            UAC prompt revealer. This is a work around for the MSI limitation/problem with EmbeddedUI UAC prompt.
+            <para> The symptom of the problem is the UAC prompt not being displayed during the elevation but rather
+            minimized on the taskbar. It's caused by the fact the all background applications (including MSI runtime)
+            supposed to register the main window for UAC prompt. And, MSI does not doe the registration for EmbeddedUI.
+            </para>
+            <para>Call <c>UACRevealer.Enter</c> just before triggering UAC (staring the actual install). This will
+            "steal" the focus from the MSI EmbeddedUI window. This in turn will bring UAC prompt to foreground.</para>
+            <para>Call <c>UACRevealer.Exit</c> just after UAC prompt has been closed to dispose UACRevealer.
+            </para>
+            <para> See "Use the HWND Property to Be Acknowledged as a Foreground Application" section at
+            https://msdn.microsoft.com/en-us/library/bb756922.aspx
+            </para>
+            </summary>
+        </member>
+        <member name="M:WixSharp.CommonTasks.UACRevealer.Enter">
+            <summary>
+            Activates UACRevealer
+            </summary>
+        </member>
+        <member name="M:WixSharp.CommonTasks.UACRevealer.Exit">
+            <summary>
+            Deactivates UACRevealer
+            </summary>
+        </member>
+        <member name="F:WixSharp.CommonTasks.UACRevealer.Enabled">
+            <summary>
+            Enables UACRevealer support. This flag is required for enabling UAC prompt work around for
+            the WixSharp built-in EmbeddedUI (ManagedUI).
+            </summary>
+        </member>
         <member name="T:WixSharp.Assembly">
              <summary>
              Defines assembly file to be installed.
@@ -1051,6 +1061,18 @@
             This flag is a lighter alternative of DisableAutoCreateFolder.
             See: http://stackoverflow.com/questions/10358989/wix-using-keypath-on-components-directories-files-registry-etc-etc
             for some background info.
+            </para>
+            </summary>
+        </member>
+        <member name="F:WixSharp.AutoElements.EnableUACRevealer">
+            <summary>
+            Enables UAC revealer, which is a work around for the MSI limitation/problem around EmbeddedUI UAC prompt.
+            <para> The symptom of the problem is the UAC prompt not being displayed during elevation but rather minimized
+            on the taskbar. This is caused by the fact the all background applications (including MSI runtime) supposed to
+            register the main window for UAC prompt. And, MSI does not doe the registration for EmbeddedUI.
+            </para>
+            <para> See "Use the HWND Property to Be Acknowledged as a Foreground Application" section at
+            https://msdn.microsoft.com/en-us/library/bb756922.aspx
             </para>
             </summary>
         </member>
@@ -3201,6 +3223,18 @@
             Simplifies authoring for major upgrades, including support for preventing downgrades.
             </summary>
         </member>
+        <member name="F:WixSharp.MajorUpgrade.Default">
+            <summary>
+            The predefined instance of the <c>MajorUpgrade</c>. It is the equivalent of the code below:
+            <code>
+            project.MajorUpgrade = new MajorUpgrade
+            {
+                Schedule = UpgradeSchedule.afterInstallInitialize,
+                DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
+            };
+            </code>
+            </summary>
+        </member>
         <member name="F:WixSharp.MajorUpgrade.AllowDowngrades">
             <summary>
             When set to "false" (the default), products with lower version numbers are blocked from installing when a product with a higher version
@@ -4029,18 +4063,18 @@
             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.AsWixVarToPath(System.String)">
-            <summary>
-            'Interprets' a string as a WiX constant and expands into a proper Fiel System path. For example "DesktopFolder"
-            will be expanded into "[SysDrive]:\Users\[user]\Desktop". Tis method is a logical equivalent of C# Environment.GetFolderPath. 
-            Though it handles discrepancies between 'special folders' mapping in .NET and WiX.
+             <summary>
+             'Interprets' a string as a WiX constant and expands into a proper File System path. For example "DesktopFolder"
+             will be expanded into "[SysDrive]:\Users\[user]\Desktop". This method is a logical equivalent of C# Environment.GetFolderPath.
+             Though it handles discrepancies between 'special folders' mapping in .NET and WiX.
             
-            <remarks>
-            The method will always be called from x86 runtime as MSI always loads ManagedUI in x86 host. 
-            From the other hand CustomActions are called in the deployment specific CPU type context.
-            </remarks>
-            </summary>
-            <param name="path">The path.</param>
-            <returns></returns>
+             <remarks>
+             The method will always be called from x86 runtime as MSI always loads ManagedUI in x86 host.
+             From the other hand CustomActions are called in the deployment specific CPU type context.
+             </remarks>
+             </summary>
+             <param name="path">The path.</param>
+             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.SetComponentPermanent``1(``0,System.Boolean)">
             <summary>
@@ -4056,6 +4090,14 @@
             Determines whether the current user is administrator.
             </summary>
             <param name="identity">The identity.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.ToRawVersion(System.String)">
+            <summary>
+            Converts string value of a version into the <see cref="T:System.Version"/> object.
+            <para>This method handles alpha-numeric strings. For example "v1.2.3-HotFix" is converted in "1.2.3" <see cref="T:System.Version"/> object.</para>
+            </summary>
+            <param name="obj"></param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.AddElement(System.Xml.Linq.XElement,System.Xml.Linq.XElement)">
@@ -7435,6 +7477,14 @@
               <c>true</c> if it was user interrupted; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="P:WixSharp.IManagedUIShell.Errors">
+            <summary>
+            Gets the MSI installation errors.
+            </summary>
+            <value>
+            The errors.
+            </value>
+        </member>
         <member name="P:WixSharp.IManagedUIShell.ErrorDetected">
             <summary>
             Gets a value indicating whether MSI session ended with error.
@@ -8476,7 +8526,7 @@
              <remarks> Normally <c>Condition</c> is not designed to be parsed by the XML parser thus it should be embedded as CDATA</remarks>
             <code>
             &lt;Condition&gt;&lt;![CDATA[NETFRAMEWORK20="#0"]]&gt;&lt;/Condition&gt;
-            </code> 
+            </code>
             </summary>
             <returns>A CDATA string representing the condition.</returns>
         </member>
@@ -8530,6 +8580,11 @@
             String representation of the <c>REMOVE="ALL"</c> condition of the WiX <c>Condition</c>.
             </summary>
         </member>
+        <member name="F:WixSharp.Condition.UninstallCondition">
+            <summary>
+            Software is being removed and no newer version is being installed.
+            </summary>
+        </member>
         <member name="F:WixSharp.Condition.Net20_Installed">
             <summary>
             The .NET2.0 installed. This condition is to be used in Project.SetNetFxPrerequisite.
@@ -8576,22 +8631,22 @@
             </summary>
         </member>
         <member name="M:WixSharp.Condition.Create(System.String)">
-            <summary>
-            Creates WiX <c>Condition</c> condition from the given string value.
-            </summary>
-            <param name="value">String value of the <c>Condition</c> to be created.</param>
-            <returns>Instance of the <c>Condition</c></returns>
-            <example>The following is an example of initializing the Shortcut.<see cref="F:WixSharp.Shortcut.Condition"/>  
-            with custom value <c>INSTALLDESKTOPSHORTCUT="yes"</c>:
-            <code>
-                new Dir(@"%Desktop%",
-                    new WixSharp.Shortcut("MyApp", "[INSTALL_DIR]MyApp.exe", "")
-                    {
-                       Condition = Condition.Create("INSTALLDESKTOPSHORTCUT=\"yes\"") 
-                    })
-                    
-            </code>
-            </example>
+             <summary>
+             Creates WiX <c>Condition</c> condition from the given string value.
+             </summary>
+             <param name="value">String value of the <c>Condition</c> to be created.</param>
+             <returns>Instance of the <c>Condition</c></returns>
+             <example>The following is an example of initializing the Shortcut.<see cref="F:WixSharp.Shortcut.Condition"/>
+             with custom value <c>INSTALLDESKTOPSHORTCUT="yes"</c>:
+             <code>
+                 new Dir(@"%Desktop%",
+                     new WixSharp.Shortcut("MyApp", "[INSTALL_DIR]MyApp.exe", "")
+                     {
+                        Condition = Condition.Create("INSTALLDESKTOPSHORTCUT=\"yes\"")
+                     })
+            
+             </code>
+             </example>
         </member>
         <member name="T:WixSharp.FeatureCondition">
             <summary>
@@ -8610,7 +8665,7 @@
         </member>
         <member name="P:WixSharp.FeatureCondition.Level">
             <summary>
-            Allows modifying the level of a Feature based on the result of this condition. 
+            Allows modifying the level of a Feature based on the result of this condition.
             </summary>
         </member>
         <member name="P:WixSharp.FeatureCondition.Attributes">

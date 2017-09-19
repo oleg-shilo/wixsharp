@@ -30,6 +30,8 @@ namespace WixSharpSetup.Dialogs
         public FeaturesDialog()
         {
             InitializeComponent();
+            label1.MakeTransparentOn(banner);
+            label2.MakeTransparentOn(banner);
         }
 
         void FeaturesDialog_Load(object sender, System.EventArgs e)
@@ -57,7 +59,7 @@ namespace WixSharpSetup.Dialogs
 
             banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
             BuildFeaturesHierarchy();
-            
+
             ResetLayout();
         }
 
@@ -99,7 +101,9 @@ namespace WixSharpSetup.Dialogs
             features = names.Select(name => new FeatureItem(MsiRuntime.Session, name)).ToArray();
 
             //build the hierarchy tree
-            var rootItems = features.Where(x => x.ParentName.IsEmpty()).ToArray();
+            var rootItems = features.Where(x => x.ParentName.IsEmpty())
+                                    .OrderBy(x => x.RawDisplay)
+                                    .ToArray();
 
             var itemsToProcess = new Queue<FeatureItem>(rootItems); //features to find the children for
 
@@ -137,7 +141,6 @@ namespace WixSharpSetup.Dialogs
 
                 if (item.Display == FeatureDisplay.expand)
                     view.Expand();
-
             }
 
             //add views to the treeView control

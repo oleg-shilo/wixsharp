@@ -191,7 +191,7 @@ namespace WixSharp
 
         public static void ValidateAssemblyCompatibility(Reflection.Assembly assembly)
         {
-            //this validation is no longer crytical as Wix# MAnagedSetup now fully supports .NET4.0
+            //this validation is no longer critical as Wix# MAnagedSetup now fully supports .NET4.0
             //if (!assembly.ImageRuntimeVersion.StartsWith("v2."))
             //    try
             //    {

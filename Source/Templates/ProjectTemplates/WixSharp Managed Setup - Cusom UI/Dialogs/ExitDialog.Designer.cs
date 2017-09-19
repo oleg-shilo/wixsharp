@@ -32,8 +32,9 @@ namespace WixSharpSetup.Dialogs
         private void InitializeComponent()
         {
             this.imgPanel = new System.Windows.Forms.Panel();
+            this.textPanel = new System.Windows.Forms.Panel();
+            this.title = new System.Windows.Forms.Label();
             this.description = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.image = new System.Windows.Forms.PictureBox();
             this.bottomPanel = new System.Windows.Forms.Panel();
             this.viewLog = new System.Windows.Forms.LinkLabel();
@@ -42,12 +43,11 @@ namespace WixSharpSetup.Dialogs
             this.next = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
             this.border1 = new System.Windows.Forms.Panel();
-            this.textPanel = new System.Windows.Forms.Panel();
             this.imgPanel.SuspendLayout();
+            this.textPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.image)).BeginInit();
             this.bottomPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.textPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // imgPanel
@@ -62,27 +62,38 @@ namespace WixSharpSetup.Dialogs
             this.imgPanel.Size = new System.Drawing.Size(494, 312);
             this.imgPanel.TabIndex = 8;
             // 
+            // textPanel
+            // 
+            this.textPanel.Controls.Add(this.title);
+            this.textPanel.Controls.Add(this.description);
+            this.textPanel.Location = new System.Drawing.Point(177, 17);
+            this.textPanel.Name = "textPanel";
+            this.textPanel.Size = new System.Drawing.Size(305, 289);
+            this.textPanel.TabIndex = 8;
+            // 
+            // label1
+            // 
+            this.title.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.title.BackColor = System.Drawing.Color.Transparent;
+            this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.title.Location = new System.Drawing.Point(3, 0);
+            this.title.Name = "label1";
+            this.title.Size = new System.Drawing.Size(299, 61);
+            this.title.TabIndex = 6;
+            this.title.Text = "[ExitDialogTitle]";
+            // 
             // description
             // 
             this.description.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.description.BackColor = System.Drawing.Color.Transparent;
             this.description.Location = new System.Drawing.Point(4, 88);
             this.description.Name = "description";
             this.description.Size = new System.Drawing.Size(298, 201);
             this.description.TabIndex = 7;
             this.description.Text = "[ExitDialogDescription]";
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(299, 61);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "[ExitDialogTitle]";
             // 
             // image
             // 
@@ -112,6 +123,7 @@ namespace WixSharpSetup.Dialogs
             // 
             this.viewLog.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.viewLog.AutoSize = true;
+            this.viewLog.BackColor = System.Drawing.Color.Transparent;
             this.viewLog.Location = new System.Drawing.Point(16, 17);
             this.viewLog.Name = "viewLog";
             this.viewLog.Size = new System.Drawing.Size(54, 13);
@@ -188,15 +200,6 @@ namespace WixSharpSetup.Dialogs
             this.border1.Size = new System.Drawing.Size(494, 1);
             this.border1.TabIndex = 9;
             // 
-            // textPanel
-            // 
-            this.textPanel.Controls.Add(this.label1);
-            this.textPanel.Controls.Add(this.description);
-            this.textPanel.Location = new System.Drawing.Point(177, 17);
-            this.textPanel.Name = "textPanel";
-            this.textPanel.Size = new System.Drawing.Size(305, 289);
-            this.textPanel.TabIndex = 8;
-            // 
             // ExitDialog
             // 
             this.BackColor = System.Drawing.Color.White;
@@ -207,12 +210,12 @@ namespace WixSharpSetup.Dialogs
             this.Text = "[ExitDialog_Title]";
             this.Load += new System.EventHandler(this.ExitDialog_Load);
             this.imgPanel.ResumeLayout(false);
+            this.textPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.image)).EndInit();
             this.bottomPanel.ResumeLayout(false);
             this.bottomPanel.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.textPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -220,7 +223,7 @@ namespace WixSharpSetup.Dialogs
         #endregion
 
         private System.Windows.Forms.Label description;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label title;
         private System.Windows.Forms.Panel bottomPanel;
         private System.Windows.Forms.PictureBox image;
         private System.Windows.Forms.LinkLabel viewLog;

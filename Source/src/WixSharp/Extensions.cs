@@ -74,6 +74,25 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Converts string value of a version into the <see cref="System.Version"/> object.
+        /// <para>This method handles alpha-numeric strings. For example "v1.2.3-HotFix" is converted in "1.2.3" <see cref="System.Version"/> object.</para>
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static Version ToRawVersion(this string obj)
+        {
+            try
+            {
+                var version_digits = new string(obj.Where(x => char.IsDigit(x) || x == '.').ToArray());
+                return new Version(version_digits);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Adds the element to a given XML element. It is a Fluent version of <see cref="T:System.Xml.Linq.XElement.Add"/>.
         /// </summary>
         /// <param name="obj">The instance of the <see cref="T:System.Xml.Linq.XElement"/>.</param>

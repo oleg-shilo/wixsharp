@@ -19,10 +19,12 @@ namespace WixSharp
         }
 
         string assembly;
+
         /// <summary>
         /// Xml namespace declaration prefix for the represented Wix Extension
         /// </summary>
         public readonly string XmlNamespacePrefix;
+
         /// <summary>
         /// Xml namespace value for the represented Wix Extension
         /// </summary>
@@ -53,6 +55,7 @@ namespace WixSharp
         {
             return XmlNamespace;
         }
+
         /// <summary>
         /// Creates XName based on the XNamespace and specified name.
         /// </summary>
@@ -63,12 +66,23 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates XElement based on XName (XNamespace and specified name) and content.
+        /// Creates XElement based on XName (XNamespace and specified name) and specified content.
         /// </summary>
         /// <returns></returns>
         public XElement XElement(string name, object content)
         {
             return new XElement(ToXNamespace() + name, content);
+        }
+
+        /// <summary>
+        /// Creates XElement based on XName (XNamespace and specified name) and specified attributes.
+        /// <param name="name">Name of the element.</param>
+        /// <param name="attributesDefinition">The attributes definition. Rules of the composing the
+        /// definition are the same as for <see cref="WixObject.AttributesDefinition"/>.</param>
+        /// </summary>
+        public XElement XElement(string name, string attributesDefinition)
+        {
+            return new XElement(ToXNamespace() + name).SetAttributes(attributesDefinition);
         }
 
         /// <summary>
@@ -96,7 +110,6 @@ namespace WixSharp
         /// </summary>
         public static WixExtension Difx = new WixExtension("%WixLocation%\\WixDifxAppExtension.dll", "difx", "http://schemas.microsoft.com/wix/DifxAppExtension");
 
-
         /// <summary>
         /// Well-known Wix Extension: Fire (Firewall)
         /// </summary>
@@ -121,6 +134,7 @@ namespace WixSharp
         /// Well-known Wix Extension NetFx
         /// </summary>
         public static WixExtension NetFx = new WixExtension("%WixLocation%\\WiXNetFxExtension.dll", "netfx", "http://schemas.microsoft.com/wix/NetFxExtension");
+
         /// <summary>
         /// Well-known Wix Extension UI
         /// </summary>

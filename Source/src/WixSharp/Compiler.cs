@@ -210,21 +210,43 @@ namespace WixSharp
 
         static string FindWixBinPackage(string projectFile)
         {
-            string probePackages(string packageDir)
+            string probePackages(string packagesRoot, bool isGlobalPackage)
             {
-                if (IO.Directory.Exists(packageDir))
+                if (IO.Directory.Exists(packagesRoot))
                 {
                     //search for the highest version of the WiX SDK version
-                    var packages = IO.Directory.GetDirectories(packageDir, "WixSharp.wix.bin.*")
-                                               .Select(d => new
-                                               {
-                                                   Path = d,
-                                                   Version = new Version(d.PathGetFileName().Replace("WixSharp.wix.bin.", ""))
-                                               })
-                                               .OrderBy(x => x.Version);
-                    if (packages.Any())
+                    string  maxVersionPackage = null;
+                    if(!isGlobalPackage)
                     {
-                        var binDir = IO.Path.Combine(packages.LastOrDefault().Path, @"tools\bin");
+                        var packages = IO.Directory.GetDirectories(packagesRoot, "WixSharp.wix.bin.*")
+                                                   .Select(d => new
+                                                    {
+                                                        Path = d,
+                                                        Version = d.PathGetFileName().Replace("WixSharp.wix.bin.", "").ToRawVersion()
+                                                    })
+                                                   .Where(x => x.Version != null)
+                                                   .OrderBy(x => x.Version);
+
+                        maxVersionPackage = packages.LastOrDefault()?.Path;
+                    }
+                    else
+                    {
+                        var packageDir = packagesRoot.PathCombine("WixSharp.wix.bin");
+                        var packages = IO.Directory.GetDirectories(packageDir)
+                                               .Select(d => new
+                                                {
+                                                    Path = d,
+                                                    Version = d.PathGetFileName().ToRawVersion()
+                                                })
+                                               .Where(x=>x.Version != null)
+                                               .OrderBy(x => x.Version);
+
+                        maxVersionPackage = packages.LastOrDefault()?.Path;
+                    }
+
+                    if (maxVersionPackage.IsNotEmpty())
+                    {
+                        var binDir = maxVersionPackage.PathCombine(@"tools\bin");
                         if (IO.Directory.Exists(binDir))
                             return binDir;
                     }
@@ -237,9 +259,9 @@ namespace WixSharp
             var solutionDir = projectDir.PathGetDirName();
             var globalPackages = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\.nuget\packages");
 
-            return probePackages(projectDir.PathCombine("packages")) ??
-                   probePackages(solutionDir.PathCombine("packages")) ??
-                   probePackages(globalPackages);
+            return probePackages(projectDir.PathCombine("packages"), false) ??
+                   probePackages(solutionDir.PathCombine("packages"), false) ??
+                   probePackages(globalPackages, true);
         }
 
         static void EnsureVSIntegration()

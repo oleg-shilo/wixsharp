@@ -13,6 +13,7 @@ using forms = System.Windows.Forms;
 
 using System.Diagnostics;
 using System.Drawing;
+using System.Collections.Generic;
 
 namespace WixSharp
 {
@@ -100,14 +101,12 @@ namespace WixSharp
         public bool ErrorDetected { get; set; }
 
         /// <summary>
-        /// First detected error message.
+        /// Gets the MSI installation errors.
         /// </summary>
-        public string FirstErrorMessage { get; set; }
-
-        /// <summary>
-        /// Last detected error message.
-        /// </summary>
-        public string LastErrorMessage { get; set; }
+        /// <value>
+        /// The errors.
+        /// </value>
+        public List<string> Errors { get; private set; } = new List<string>();
 
         /// <summary>
         /// Starts the execution of the MSI installation.
@@ -117,7 +116,10 @@ namespace WixSharp
             //Debug.Assert(false);
             started = true;
             if (!IsDemoMode)
+            {
+                UACRevealer.Enter();
                 MsiRuntime.StartExecute();
+        }
         }
 
         InstallProgressCounter progressCounter = new InstallProgressCounter(0.5);
@@ -213,6 +215,8 @@ namespace WixSharp
             UI = ui;
             MsiRuntime = msiRuntime;
             Tasks.UILocalize = text => text.LocalizeWith(msiRuntime.Localize);
+
+            UACRevealer.Enabled = !MsiRuntime.Session.Property("UAC_REVEALER_ENABLED").IsEmpty();
 
             if (MsiRuntime.Session.IsInstalling())
                 Dialogs = ui.InstallDialogs;
@@ -447,6 +451,8 @@ namespace WixSharp
         {
             try
             {
+                UACRevealer.Exit();
+
                 this.progressCounter.ProcessMessage(messageType, messageRecord);
 
                 if (CurrentDialog != null)
@@ -461,9 +467,15 @@ namespace WixSharp
                     case InstallMessage.Info:
                     default:
                         {
-                            if (messageType == InstallMessage.Error || messageType == InstallMessage.Warning || messageType == InstallMessage.User)
+                            if (messageType.IsOneOf(InstallMessage.Error, InstallMessage.Warning, InstallMessage.User))
                             {
-                                MessageBox.Show(this.shellView, messageRecord.ToString(), "Attention", (MessageBoxButtons)(int)buttons, (MessageBoxIcon)(int)icon, (MessageBoxDefaultButton)(int)defaultButton);
+                                MessageBox.Show(
+                                    this.shellView,
+                                    messageRecord.ToString(),
+                                    "[ErrorDlg_Title]".LocalizeWith(MsiRuntime.Localize),
+                                    (MessageBoxButtons)(int)buttons,
+                                    (MessageBoxIcon)(int)icon,
+                                    (MessageBoxDefaultButton)(int)defaultButton);
                             }
 
                             if (messageType == InstallMessage.Info)
@@ -476,13 +488,8 @@ namespace WixSharp
 
                             if (messageType == InstallMessage.Error)
                             {
-                                this.ErrorDetected = true;
-                                string messageText = messageRecord.ToString();
-                                if (string.IsNullOrEmpty(this.FirstErrorMessage))
-                                {
-                                    this.FirstErrorMessage = messageText;
-                                }
-                                this.LastErrorMessage = messageText;
+                                ErrorDetected = true;
+                                Errors.Add(messageRecord.ToString());
                             }
 
                             if (messageType == InstallMessage.InstallEnd)
