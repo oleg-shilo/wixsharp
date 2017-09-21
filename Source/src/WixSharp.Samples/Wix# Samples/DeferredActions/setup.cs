@@ -57,8 +57,8 @@ class Script
             string configFile = IO.Path.Combine(e.InstallDir, "MyApp.exe.config");
 
             //disabled for demo purposes
-            //CustomActions.UpdateWithWixSharp(configFile);
-            //CustomActions.UpdateAsXml(configFile);
+            //CustomActions.UpdateAsAppConfig(configFile);
+            // CustomActions.UpdateAsXml(configFile);
             //CustomActions.UpdateAsText(configFile);
             //CustomActions.UpdateWithWixSharp(configFile);
         }
@@ -83,9 +83,9 @@ public class CustomActions
         return session.HandleErrors(() =>
         {
             string configFile = session.Property("INSTALLDIR") + "MyApp.exe.config";
-            
+
             //alternative ways of extracting 'deferred' properties
-            //configFile = session.Property("APP_FILE") + ".config"; 
+            //configFile = session.Property("APP_FILE") + ".config";
             //configFile = session.Property("CONFIG_FILE");
 
             UpdateAsAppConfig(configFile);
@@ -97,7 +97,6 @@ public class CustomActions
 
             MessageBox.Show(GetContext());
         });
-
     }
 
     static string GetContext()
@@ -119,6 +118,23 @@ public class CustomActions
         section.ConnectionStrings["Server1"].ProviderName = "System.Data.SqlClient";
 
         config.Save();
+    }
+
+    static public void UpdateAsXml2(string configFile, bool installing = true)
+    {
+        var config = XDocument.Load(configFile);
+
+        if (installing)
+            config.Select("configuration")
+                  .AddElement("userSettings")
+                  .AddElement("MyApp.Properties.Settings")
+                  .AddElement("setting", "name=InputPath;serializeAs=String")
+                  .AddElement("value", null, @"C:\Input");
+        else
+            config.Select("configuration/userSettings/MyApp.Properties.Settings")
+                 ?.Parent.Remove();
+
+        config.Save(configFile);
     }
 
     static public void UpdateAsXml(string configFile)
