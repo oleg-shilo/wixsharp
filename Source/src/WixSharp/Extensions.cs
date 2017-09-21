@@ -17,6 +17,7 @@ using System.Security;
 using System.Text.RegularExpressions;
 using static WixSharp.SetupEventArgs;
 using WixSharp.CommonTasks;
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 
 namespace WixSharp
 {
@@ -1045,18 +1046,6 @@ namespace WixSharp
         public static string PathGetFullPath(this string path)
         {
             return IO.Path.GetFullPath(path);
-        }
-
-        /// <summary>
-        /// Formats the specified string.
-        /// </summary>
-        /// <param name="obj">The string to format.</param>
-        /// <param name="args">The formatting arguments.</param>
-        /// <returns>The formatted string.</returns>
-        [Obsolete(message: "This method name is obsolete is FormatWith instead")]
-        public static string FormatInline(this string obj, params object[] args)
-        {
-            return string.Format(obj, args);
         }
 
         /// <summary>

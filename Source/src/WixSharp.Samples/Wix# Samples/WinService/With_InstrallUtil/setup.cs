@@ -29,7 +29,7 @@ class Script
 
             project.BuildMsi();
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }

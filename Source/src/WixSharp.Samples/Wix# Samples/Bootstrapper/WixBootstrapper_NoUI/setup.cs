@@ -37,18 +37,23 @@ public class InstallScript
                     new MsiPackage(productMsi)
                     {
                         Id = "MyProductPackageId",
-                        DisplayInternalUI = true
+                        DisplayInternalUI = true,
+                        Visible = true // show MSI entry in ARP
                     });
 
         bootstrapper.SuppressWixMbaPrereqVars = true; //needed because NetFx40Web also defines WixMbaPrereqVars
         bootstrapper.Version = new Version("1.0.0.0");
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889c");
 
-        //if primary package Id is not defined then the last package will be treated as the primary one
+        // the following two assignments will hide Bundle entry form the Programs and Features (also known as Add/Remove Programs)
+        bootstrapper.DisableModify = "yes";
+        bootstrapper.DisableRemove = true;
+
+        // if primary package Id is not defined then the last package will be treated as the primary one
         bootstrapper.Application = new SilentBootstrapperApplication();
 
-        //use this custom BA to modify its behavior in order to meet your requirements
-        //bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
+        // use this custom BA to modify its behavior in order to meet your requirements
+        // bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
 
         bootstrapper.PreserveTempFiles = true;
         bootstrapper.Build("app_setup");

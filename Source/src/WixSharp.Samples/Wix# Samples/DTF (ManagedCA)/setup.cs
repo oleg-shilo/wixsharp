@@ -20,7 +20,8 @@ public class Script
                 new ManagedAction(CustomActions.MyAction, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed));
 
         //project.Platform = Platform.x64;
-        project.BuildMsi();
+        project.PreserveTempFiles = true;
+        project.BuildMsi(@"E:\Galos\Projects\WixSharp\Source\src\WixSharp.Samples\Wix# Samples\DTF (ManagedCA)\tttt.msi");
     }
 }
 

@@ -236,9 +236,8 @@ namespace WixSharp.Bootstrapper
             root.AddAttributes(this.Attributes);
             root.Add(this.MapToXmlAttributes());
 
-            if (Application is ManagedBootstrapperApplication)
+            if (Application is ManagedBootstrapperApplication app)
             {
-                var app = Application as ManagedBootstrapperApplication;
                 if (app.PrimaryPackageId == null)
                 {
                     var lastPackage = Chain.OfType<WixSharp.Bootstrapper.Package>().LastOrDefault();
@@ -263,6 +262,10 @@ namespace WixSharp.Bootstrapper
             root.Add(Application.ToXml());
 
             string variabes = this.StringVariablesDefinition + ";" + Application.StringVariablesDefinition;
+
+            if (this.Application is IWixSharpManagedBootstrapperApplication wsApp)
+                if (wsApp.DowngradeWarningMessage.IsNotEmpty())
+                    variabes += $";DowngradeWarningMessage={wsApp.DowngradeWarningMessage}";
 
             Compiler.ProcessWixVariables(this, root);
 
@@ -394,6 +397,21 @@ namespace WixSharp.Bootstrapper
                 catch { }
             }
         }
+    }
+
+    /// <summary>
+    /// An interface that needs can be implemented by Silent (no-UI) BA.
+    /// </summary>
+    public interface IWixSharpManagedBootstrapperApplication
+    {
+        /// <summary>
+        /// Gets or sets the downgrade warning message. The message is displayed when bundle
+        /// detects a newer version of primary package is installed and the setup is about to exit.
+        /// </summary>
+        /// <value>
+        /// The downgrade warning message.
+        /// </value>
+        string DowngradeWarningMessage { get; set; }
     }
 
     /*

@@ -39,7 +39,7 @@ namespace WixSharp.Bootstrapper
     /// bootstrapper.Build();
     /// </code>
     /// </example>
-    public class SilentBootstrapperApplication : ManagedBootstrapperApplication
+    public class SilentBootstrapperApplication : ManagedBootstrapperApplication, IWixSharpManagedBootstrapperApplication
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SilentBootstrapperApplication"/> class.
@@ -75,6 +75,18 @@ namespace WixSharp.Bootstrapper
             }
             base.AutoGenerateSources(outDir);
         }
+
+        /// <summary>
+        /// Gets or sets the downgrade warning message. The message is displayed when bundle
+        /// detects a newer version of primary package is installed and the setup is about to exit.
+        /// <para>The default value is  "A later version of the package (PackageId: {0}) is already
+        /// installed. Setup will now exit.".
+        /// </para>
+        /// </summary>
+        /// <value>
+        /// The downgrade warning message.
+        /// </value>
+        public string DowngradeWarningMessage { get; set; }
     }
 
     /// <summary>
@@ -88,17 +100,7 @@ namespace WixSharp.Bootstrapper
 
         string PrimaryPackageId
         {
-            get
-            {
-                try
-                {
-                    return this.Engine.StringVariables[PrimaryPackageIdVariableName];
-                }
-                catch
-                {
-                    return null;
-                }
-            }
+            get => this.Engine.StringVariables.Get(PrimaryPackageIdVariableName);
         }
 
         /// <summary>
@@ -110,7 +112,7 @@ namespace WixSharp.Bootstrapper
 
             if (PrimaryPackageId == null)
             {
-                MessageBox.Show(PrimaryPackageIdVariableName + " variable is not set", "Wix#");
+                MessageBox.Show($"SilentBootstrapperApplication.PrimaryPackageId is not set", this.Engine.StringVariables["WixBundleName"], MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
             {
@@ -145,6 +147,14 @@ namespace WixSharp.Bootstrapper
                 this.Engine.Apply(System.IntPtr.Zero);
         }
 
+        string DowngradeWarningMessage
+        {
+            get => this.Engine
+                       .StringVariables
+                       .Get("DowngradeWarningMessage") ??
+                            "A later version of the package (PackageId: {0}) is already installed. Setup will now exit.";
+        }
+
         /// <summary>
         /// Method that gets invoked when the Bootstrapper DetectPackageComplete event is fired.
         /// Checks the PackageId and sets the installation scenario. The PackageId is the ID
@@ -155,13 +165,21 @@ namespace WixSharp.Bootstrapper
         {
             if (e.PackageId == PrimaryPackageId)
             {
-                if (e.State == PackageState.Absent)
+                switch (e.State)
                 {
-                    this.Engine.Plan(LaunchAction.Install);
-                }
-                else if (e.State == PackageState.Present)
-                {
-                    this.Engine.Plan(LaunchAction.Uninstall);
+                    case PackageState.Obsolete:
+                        this.Engine.Log(LogLevel.Error, string.Format(DowngradeWarningMessage, e.PackageId));
+                        MessageBox.Show(string.Format(DowngradeWarningMessage, e.PackageId), this.Engine.StringVariables["WixBundleName"], MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        Engine.Quit(0);
+                        break;
+
+                    case PackageState.Absent:
+                        this.Engine.Plan(LaunchAction.Install);
+                        break;
+
+                    case PackageState.Present:
+                        this.Engine.Plan(LaunchAction.Uninstall);
+                        break;
                 }
             }
         }

@@ -1,1 +1,1 @@
-setup.exe /uninstall
+app_setup.exe /uninstall

@@ -18,6 +18,7 @@ using System.Windows.Forms;
 using WixSharp.UI.Forms;
 using System.Threading;
 using System.Diagnostics;
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 
 namespace WixSharp
 {
@@ -317,6 +318,14 @@ namespace WixSharp
                     result.Append(text.Substring(lastEnd, text.Length - lastEnd));
             }
             return cleanRegex.Replace(result.ToString(), "");
+        }
+
+        internal static T Get<T>(this Engine.Variables<T> variables, string name)
+        {
+            if (!string.IsNullOrEmpty(name) && variables.Contains(name))
+                return variables[name];
+            else
+                return default(T);
         }
     }
 }

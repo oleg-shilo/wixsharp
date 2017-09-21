@@ -1450,6 +1450,20 @@
             Validates this Bundle project packages.
             </summary>
         </member>
+        <member name="T:WixSharp.Bootstrapper.IWixSharpManagedBootstrapperApplication">
+            <summary>
+            An interface that needs can be implemented by Silent (no-UI) BA.
+            </summary>
+        </member>
+        <member name="P:WixSharp.Bootstrapper.IWixSharpManagedBootstrapperApplication.DowngradeWarningMessage">
+            <summary>
+            Gets or sets the downgrade warning message. The message is displayed when bundle
+            detects a newer version of primary package is installed and the setup is about to exit.
+            </summary>
+            <value>
+            The downgrade warning message.
+            </value>
+        </member>
         <member name="T:WixSharp.Bootstrapper.ManagedBootstrapperApplication">
             <summary>
             Class for defining a Wix# application for WiX standard Burn-based bootstrapper.
@@ -4642,14 +4656,6 @@
             <param name="path">The path.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.FormatInline(System.String,System.Object[])">
-            <summary>
-            Formats the specified string.
-            </summary>
-            <param name="obj">The string to format.</param>
-            <param name="args">The formatting arguments.</param>
-            <returns>The formatted string.</returns>
-        </member>
         <member name="M:WixSharp.Extensions.FormatWith(System.String,System.Object[])">
             <summary>
             Formats the specified string.
@@ -5969,9 +5975,17 @@
         </member>
         <member name="M:WixSharp.WixExtension.XElement(System.String,System.Object)">
             <summary>
-            Creates XElement based on XName (XNamespace and specified name) and content.
+            Creates XElement based on XName (XNamespace and specified name) and specified content.
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:WixSharp.WixExtension.XElement(System.String,System.String)">
+            <summary>
+            Creates XElement based on XName (XNamespace and specified name) and specified attributes.
+            <param name="name">Name of the element.</param>
+            <param name="attributesDefinition">The attributes definition. Rules of the composing the
+            definition are the same as for <see cref="P:WixSharp.WixObject.AttributesDefinition"/>.</param>
+            </summary>
         </member>
         <member name="M:WixSharp.WixExtension.ToNamespaceDeclaration">
             <summary>

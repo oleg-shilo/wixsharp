@@ -931,6 +931,18 @@
             </summary>
             <param name="outDir">The output directory.</param>
         </member>
+        <member name="P:WixSharp.Bootstrapper.SilentBootstrapperApplication.DowngradeWarningMessage">
+            <summary>
+            Gets or sets the downgrade warning message. The message is displayed when bundle
+            detects a newer version of primary package is installed and the setup is about to exit.
+            <para>The default value is  "A later version of the package (PackageId: {0}) is already
+            installed. Setup will now exit.".
+            </para>
+            </summary>
+            <value>
+            The downgrade warning message.
+            </value>
+        </member>
         <member name="T:WixSharp.Bootstrapper.SilentManagedBA">
             <summary>
             Implements canonical WiX managed bootstrapper application without any UI.

@@ -56,11 +56,11 @@ class Script
 
             string configFile = IO.Path.Combine(e.InstallDir, "MyApp.exe.config");
 
-            //disabled for demo purposes
-            //CustomActions.UpdateAsAppConfig(configFile);
+            // disabled for demo purposes
+            // CustomActions.UpdateAsAppConfig(configFile);
             // CustomActions.UpdateAsXml(configFile);
-            //CustomActions.UpdateAsText(configFile);
-            //CustomActions.UpdateWithWixSharp(configFile);
+            // CustomActions.UpdateAsText(configFile);
+            // CustomActions.UpdateWithWixSharp(configFile);
         }
     }
 }
