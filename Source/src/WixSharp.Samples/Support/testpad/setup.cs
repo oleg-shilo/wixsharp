@@ -24,19 +24,15 @@ class Script
 
     static public void Main(string[] args)
     {
-        var doc = XDocument.Load(@"C:\Users\osh\Desktop\machine.config");
+        var doc = new XDocument();
 
-        // var ttt = doc.Select($"configuration/userSettings/MyApp.Properties.Settings/setting");
+        doc.SelectOrCreate("configuration/userSettings/MyApp.Properties.Settings/setting")
+           .SetAttributes("name=InputPath;serializeAs=String")
+           .SetElementValue("value", @"C:\Input");
 
-        var tt0 = new XDocument().SelectOrCreate($"configurationwww/userSettings/MyApp.Properties.Settings/setting");
-
-        var tt1 = doc.SelectOrCreate($"configuration/userSettings/MyApp.Properties.Settings/setting")
-                     .SetAttributes("name=InputPath;serializeAs=String")
-                     .AddOrUpdateElement("value", null, @"C:\Input");
-
-        var tt2 = doc.Root.SelectOrCreate($"userSettings/MyApp.Properties.Settings/setting")
-                          .SetAttributes("name=InputPath;serializeAs=String")
-                          .AddOrUpdateElement("value", null, @"C:\Input");
+        var last_element = doc.SelectOrCreate($"configuration/userSettings/MyApp.Properties.Settings/setting")
+                              .SetAttributes("name=InputPath;serializeAs=String")
+                              .SetElementValue("value", null, @"C:\Input");
 
         // prepare_dirs("dirs"); return;
 

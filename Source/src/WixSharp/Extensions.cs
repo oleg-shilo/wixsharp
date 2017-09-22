@@ -164,7 +164,7 @@ namespace WixSharp
             return result;
         }
 
-        public static XElement AddOrUpdateElement(this XElement obj, string elementName, string attributesDefinition, string value = null)
+        public static XElement SetElementValue(this XElement obj, string elementName, string attributesDefinition, string value)
         {
             var result = obj.Select(elementName);
 
@@ -1657,7 +1657,7 @@ namespace WixSharp
             {
                 if (element is XDocument doc)
                 {
-                    if (doc.Root != null)
+                    if (doc.Root == null)
                         doc.Add(currentElement = new XElement(parts[0]));
                     else
                         throw new Exception("This operation would create an XML document with multiple roots.");
