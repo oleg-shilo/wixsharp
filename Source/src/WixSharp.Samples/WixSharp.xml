@@ -4817,7 +4817,9 @@
             </summary>
             <param name="element">The element to be searched.</param>
             <param name="path">The path.</param>
-            <returns>The element matching the path.</returns>
+            <returns>
+            The element matching the path.
+            </returns>
         </member>
         <member name="M:WixSharp.Extensions.FindDirectory(System.Xml.Linq.XElement,System.String)">
             <summary>
@@ -4913,15 +4915,7 @@
             <param name="newParent">The new parent.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.SelectOrCreate(System.Xml.Linq.XElement,System.String)">
-            <summary>
-            Selects, from the given element, the child element matching the specified path.
-            <para>If the child element is not found, a new element is created matching the path.</para>
-            </summary>
-            <param name="element">The element to be searched.</param>
-            <param name="path">The path.</param>
-            <returns>The element matching the path.</returns>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:WixSharp.Extensions.SelectOrCreate(System.Xml.Linq.XContainer,System.String)" -->
         <member name="M:WixSharp.Extensions.ToWString(Microsoft.Win32.RegistryHive)">
             <summary>
             Gets WiX compatible string representation (e.g. HKCR, HKLM).

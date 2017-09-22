@@ -50,10 +50,10 @@ public class InstallScript
         bootstrapper.DisableRemove = true;
 
         // if primary package Id is not defined then the last package will be treated as the primary one
-        bootstrapper.Application = new SilentBootstrapperApplication();
+        // bootstrapper.Application = new SilentBootstrapperApplication();
 
         // use this custom BA to modify its behavior in order to meet your requirements
-        // bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
+        bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
 
         bootstrapper.PreserveTempFiles = true;
         bootstrapper.Build("app_setup");

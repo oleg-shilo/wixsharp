@@ -164,6 +164,20 @@ namespace WixSharp
             return result;
         }
 
+        public static XElement AddOrUpdateElement(this XElement obj, string elementName, string attributesDefinition, string value = null)
+        {
+            var result = obj.Select(elementName);
+
+            if (result == null)
+                result = obj.AddElement(elementName);
+
+            result.AddAttributes(attributesDefinition);
+
+            if (value != null)
+                result.Value = value;
+            return result;
+        }
+
         /// <summary>
         /// Determines whether the string is an absolute path.
         /// </summary>
@@ -1340,34 +1354,21 @@ namespace WixSharp
             return retval.ToString();
         }
 
-        ///// <summary>
-        ///// Merge two dictionaries. If duplicated key detected its collection1's value will be replaced with the
-        ///// value from the collection2.
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <typeparam name="T1"></typeparam>
-        ///// <param name="collection1"></param>
-        ///// <param name="collection2"></param>
-        ///// <returns>collection1 with merged data</returns>
-        //public static IDictionary<T,T1> MergeReplace<T, T1>(this IDictionary<T, T1> collection1, IDictionary<T, T1> collection2)
-        //{
-        //    foreach (var key in collection2.Keys)
-        //        collection1[key] = collection2[key];
-        //    return collection1;
-        //}
         /// <summary>
         /// Selects from the given element the first child element matching the specified path (e.g. <c>Select("Product/Package")</c>).
         /// </summary>
         /// <param name="element">The element to be searched.</param>
         /// <param name="path">The path.</param>
-        /// <returns>The element matching the path.</returns>
+        /// <returns>
+        /// The element matching the path.
+        /// </returns>
         public static XElement Select(this XContainer element, string path)
         {
             string[] parts = path.Split('/');
 
-            var e = (from el in element.Elements()
-                     where el.Name.LocalName == parts[0]
-                     select el).GetEnumerator();
+            var e = element.Elements()
+                           .Where(el => el.Name.LocalName == parts[0])
+                           .GetEnumerator();
 
             if (!e.MoveNext())
                 return null;
@@ -1637,29 +1638,42 @@ namespace WixSharp
 
         /// <summary>
         /// Selects, from the given element, the child element matching the specified path.
-        /// <para>If the child element is not found, a new element is created matching the path.</para>
+        /// <para>If the child element is not found, a new element is created matching the
+        /// path (e.g. <c>SelectOrCreate("userSettings/MyApp.Properties.Settings/setting")</c>).
         /// </summary>
         /// <param name="element">The element to be searched.</param>
         /// <param name="path">The path.</param>
         /// <returns>The element matching the path.</returns>
-        public static XElement SelectOrCreate(this XElement element, string path)
+        public static XElement SelectOrCreate(this XContainer element, string path)
         {
             string[] parts = path.Split('/');
 
-            var e = (from el in element.Elements()
-                     where el.Name.LocalName == parts[0]
-                     select el).GetEnumerator();
+            var e = element.Elements()
+                           .Where(el => el.Name.LocalName == parts[0])
+                           .GetEnumerator();
 
             XElement currentElement = null;
             if (!e.MoveNext())
-                currentElement = element.AddElement(new XElement(parts[0]));
+            {
+                if (element is XDocument doc)
+                {
+                    if (doc.Root != null)
+                        doc.Add(currentElement = new XElement(parts[0]));
+                    else
+                        throw new Exception("This operation would create an XML document with multiple roots.");
+                }
+                else if (element is XElement el)
+                {
+                    currentElement = el.AddElement(new XElement(parts[0]));
+                }
+            }
             else
                 currentElement = e.Current;
 
             if (parts.Length == 1) //the last link in the chain
                 return currentElement;
             else
-                return currentElement.Select(path.Substring(parts[0].Length + 1)); //be careful RECURSION
+                return currentElement.SelectOrCreate(path.Substring(parts[0].Length + 1)); //be careful RECURSION
         }
 
         /// <summary>
