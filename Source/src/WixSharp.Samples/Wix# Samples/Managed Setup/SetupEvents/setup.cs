@@ -77,7 +77,6 @@ public class Script
     static void project_UIInit(SetupEventArgs e)
     {
         MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - UIInit");
-
         e.Session["TOOLSDIR"] = @"C:\Temp\Doc";
         //set custom installdir
         //This event is fired before Wix# ManagedUI loaded (disabled for demo purposes)

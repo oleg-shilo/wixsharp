@@ -62,7 +62,14 @@ namespace WixSharp
         /// <summary>
         /// Gets name of the product being installed
         /// </summary>
-        public string ProductName { get { return Data["ProductName"]; } }
+        public string ProductName
+        {
+            get
+            {
+                var value = Session?.Property("ProductName") ?? "";
+                return value.IsEmpty() ? Data["ProductName"] : value;
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether Authored UI and wizard dialog boxes suppressed.

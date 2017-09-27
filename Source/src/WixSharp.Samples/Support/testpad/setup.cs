@@ -3,7 +3,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
@@ -24,34 +27,30 @@ class Script
 
     static public void Main(string[] args)
     {
-        var doc = new XDocument();
+        var project = new ManagedProject("MyProduct",
+                            new Dir(@"C:\My Company\My Product",
+                                new File("setup.cs")));
 
-        doc.SelectOrCreate("configuration/userSettings/MyApp.Properties.Settings/setting")
-           .SetAttributes("name=InputPath;serializeAs=String")
-           .SetElementValue("value", @"C:\Input");
+        project.ManagedUI = new ManagedUI();
+        project.ManagedUI.InstallDialogs.Add(Dialogs.Progress)
+                                        .Add(Dialogs.Exit);
 
-        var last_element = doc.SelectOrCreate($"configuration/userSettings/MyApp.Properties.Settings/setting")
-                              .SetAttributes("name=InputPath;serializeAs=String")
-                              .SetElementValue("value", null, @"C:\Input");
+        project.ManagedUI.ModifyDialogs.Add(Dialogs.Progress)
+                                        .Add(Dialogs.Exit);
 
-        // prepare_dirs("dirs"); return;
+        project.UIInitialized += (SetupEventArgs e) =>
+            {
+                if (e.IsInstalling && !e.IsUpgrading)
+                {
+                    e.Session["ALLUSERS"] = "2";
+                    if (MessageBox.Show("Install for All?", e.ProductName, MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        e.Session["MSIINSTALLPERUSER"] = "0";
+                    else
+                        e.Session["MSIINSTALLPERUSER"] = "1";
+                }
+            };
 
-        // var project = new ManagedProject("MyProduct",
-        //                  new Dir(@"C:\MyCompany2", new File("setup.cs")),
-        //                  new Dir(@"C:\MyCompany\MyProduct",
-        //                      new Files(@"dirs\*.*")));
-
-        var dirs = System.IO.Directory.GetFiles("dirs", "*", System.IO.SearchOption.AllDirectories)
-                                      .Select(x => x.PathGetFullPath())
-                                      .Select(x => new Dir(x.PathGetDirName(),
-                                                        new File(x)))
-                                      .ToArray();
-        var project = new ManagedProject("MyProduct", dirs);
-
-        project.UI = WUI.WixUI_ProgressOnly;
-
-        Compiler.PreserveTempFiles = true;
-        Compiler.BuildMsi(project);
+        project.BuildMsi();
     }
 
     static public void Main1(string[] args)
