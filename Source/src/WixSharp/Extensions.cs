@@ -1944,6 +1944,29 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Gets a value indicating whether Authored UI and wizard dialog boxes suppressed.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if UI is suppressed; otherwise, <c>false</c>.
+        /// </value>
+        public static bool IsUISupressed(this Session session)
+        {
+            return session.UILevel() <= 4;
+        }
+
+        /// <summary>
+        /// Gets the UIlevel.
+        /// <para>UILevel > 4 lead to displaying modal dialogs. See https://msdn.microsoft.com/en-us/library/aa369487(v=vs.85).aspx. </para>
+        /// </summary>
+        /// <value>
+        /// The UI level.
+        /// </value>
+        public static int UILevel(this Session session)
+        {
+            return session.Property("UILevel").ToInt(-1);
+        }
+
+        /// <summary>
         /// Gets a value indicating whether the product is being installed.
         /// <para>
         /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
