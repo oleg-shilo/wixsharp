@@ -5053,6 +5053,23 @@
             <param name="session">The session.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.IsUISupressed(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Gets a value indicating whether Authored UI and wizard dialog boxes suppressed.
+            </summary>
+            <value>
+            <c>true</c> if UI is suppressed; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:WixSharp.Extensions.UILevel(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Gets the UIlevel.
+            <para>UILevel > 4 lead to displaying modal dialogs. See https://msdn.microsoft.com/en-us/library/aa369487(v=vs.85).aspx. </para>
+            </summary>
+            <value>
+            The UI level.
+            </value>
+        </member>
         <member name="M:WixSharp.Extensions.IsInstalling(Microsoft.Deployment.WindowsInstaller.Session)">
             <summary>
             Gets a value indicating whether the product is being installed.

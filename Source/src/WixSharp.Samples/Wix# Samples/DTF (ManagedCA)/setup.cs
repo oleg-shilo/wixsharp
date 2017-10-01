@@ -21,7 +21,8 @@ public class Script
 
         //project.Platform = Platform.x64;
         project.PreserveTempFiles = true;
-        project.BuildMsi(@"E:\Galos\Projects\WixSharp\Source\src\WixSharp.Samples\Wix# Samples\DTF (ManagedCA)\tttt.msi");
+        project.OutDir = "bin";
+        project.BuildMsi();
     }
 }
 

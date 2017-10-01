@@ -3183,7 +3183,7 @@ namespace WixSharp
                     referencedAssemblies += "\"" + IO.Path.GetFullPath(refAasmFile) + "\" ";
             }
 
-            var configFile = IO.Path.GetFullPath(embeddedUI ? "EmbeddedUI.config" : "CustomAction.config");
+            var configFile = outDir.PathCombine(embeddedUI ? "EmbeddedUI.config" : "CustomAction.config");
 
             if (configFilePath.IsNotEmpty())
             {
@@ -3192,7 +3192,7 @@ namespace WixSharp
                     IO.File.Copy(configFilePath, configFile, true);
                     Compiler.TempFiles.Add(configFile);
                 }
-            }
+            } 
             else
             {
                 using (var writer = new IO.StreamWriter(configFile))

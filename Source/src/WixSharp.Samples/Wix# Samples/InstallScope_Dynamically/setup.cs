@@ -20,7 +20,6 @@ class Script
         var project = new ManagedProject("MyProduct",
                     new Dir(@"C:\My Company\My Product",
                         new File("readme.txt")));
-
         project.ManagedUI = new ManagedUI();
 
         project.ManagedUI.InstallDialogs.Add(Dialogs.Progress)

@@ -56,13 +56,12 @@ class Script
 
                     new InstalledFileAction("MyApp.exe", ""));
 
-
-            project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b"); // or project.Id = Guid.NewGuid();   
+            project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b"); // or project.Id = Guid.NewGuid();
             project.LicenceFile = @"AppFiles\License.rtf";
             project.UI = WUI.WixUI_Mondo;
             project.SourceBaseDir = Environment.CurrentDirectory;
             project.OutFileName = "MyApp";
-            
+
             //project.PreserveTempFiles = true;
             project.WixSourceGenerated += Compiler_WixSourceGenerated;
             project.BuildMsi();
@@ -77,10 +76,10 @@ class Script
     {
         document.Root.Descendants("Shortcut")
                      .ToList()
-                     .ForEach(x => 
+                     .ForEach(x =>
                       {
-                          if(x.Attribute("Name").Value == "MyApp.lnk")
-                            x.Attribute("Name").Value = "My Product App.lnk";
+                          if (x.Attribute("Name").Value == "MyApp.lnk")
+                              x.Attribute("Name").Value = "My Product App.lnk";
                       });
     }
 }
@@ -95,5 +94,3 @@ public class CustomActions
         return ActionResult.Success;
     }
 }
-
-
