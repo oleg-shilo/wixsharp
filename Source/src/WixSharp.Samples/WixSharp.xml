@@ -255,7 +255,7 @@
              </summary>
              <param name="prerequisiteFile">The prerequisite file.</param>
              <param name="primaryFile">The primary setup file.</param>
-             <param name="outputFile">The output (bootstrapper) file.</param>
+             <param name="outputFile">The output (bootsrtapper) file.</param>
              <param name="prerequisiteRegKeyValue">The prerequisite registry key value.
              <para>This value is used to determine if the <c>PrerequisiteFile</c> should be launched.</para>
              <para>This value must comply with the following pattern: &lt;RegistryHive&gt;:&lt;KeyPath&gt;:&lt;ValueName&gt;.</para>
@@ -289,7 +289,7 @@
              </summary>
              <param name="prerequisiteFile">The prerequisite file.</param>
              <param name="primaryFile">The primary setup file.</param>
-             <param name="outputFile">The output (bootstrapper) file.</param>
+             <param name="outputFile">The output (bootsrtapper) file.</param>
              <param name="prerequisiteRegKeyValue">The prerequisite registry key value.
              <para>This value is used to determine if the <c>PrerequisiteFile</c> should be launched.</para>
              <para>This value must comply with the following pattern: &lt;RegistryHive&gt;:&lt;KeyPath&gt;:&lt;ValueName&gt;.</para>
@@ -321,7 +321,7 @@
             </summary>
             <param name="prerequisiteFile">The prerequisite file.</param>
             <param name="primaryFile">The primary setup file.</param>
-            <param name="outputFile">The output (bootstrapper) file.</param>
+            <param name="outputFile">The output (bootsrtapper) file.</param>
             <param name="prerequisiteRegKeyValue">The prerequisite registry key value.
             <para>This value is used to determine if the <c>PrerequisiteFile</c> should be launched.</para>
             <para>This value must comply with the following pattern: &lt;RegistryHive&gt;:&lt;KeyPath&gt;:&lt;ValueName&gt;.</para>
@@ -394,7 +394,7 @@
              Please use <see cref="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String)"/> for signing both (bootstrapper and bootstrapper engine) instead.
              <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about Bootstrapper engine signing</a>
              </summary>
-             <param name="bootstrapperFileToSign">The bootstrapper file to sign.</param>
+             <param name="bootstrapperFileToSign">The Bootstrapper file to sign.</param>
              <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
              with the <c>password</c> parameter.</param>
              <param name="timeURL">The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
@@ -815,7 +815,7 @@
         </member>
         <member name="M:WixSharp.CommonTasks.Tasks.StartService(System.String,System.Boolean)">
             <summary>
-            Starts the windows service. It uses sc.exe to complete the action. During the action console window is hidden.
+            Starts the windows service. It uses sc.exe to complete the action.  During the action console window is hidden.
             If any error occurred the console output is captured and embedded into the raised Exception object.
             </summary>
             <param name="service">The service.</param>
@@ -824,7 +824,7 @@
         </member>
         <member name="M:WixSharp.CommonTasks.Tasks.StopService(System.String,System.Boolean)">
             <summary>
-            Stops the windows service. It uses sc.exe to complete the action. During the action console window is hidden.
+            Stops the windows service. It uses sc.exe to complete the action.  During the action console window is hidden.
             If any error occurred the console output is captured and embedded into the raised Exception object.
             </summary>
             <param name="service">The service.</param>
@@ -851,7 +851,7 @@
             UAC prompt revealer. This is a work around for the MSI limitation/problem with EmbeddedUI UAC prompt.
             <para> The symptom of the problem is the UAC prompt not being displayed during the elevation but rather
             minimized on the taskbar. It's caused by the fact the all background applications (including MSI runtime)
-            supposed to register the main window for UAC prompt. And, MSI does not do the registration for EmbeddedUI.
+            supposed to register the main window for UAC prompt. And, MSI does not doe the registration for EmbeddedUI.
             </para>
             <para>Call <c>UACRevealer.Enter</c> just before triggering UAC (staring the actual install). This will
             "steal" the focus from the MSI EmbeddedUI window. This in turn will bring UAC prompt to foreground.</para>
@@ -8206,7 +8206,7 @@
         </member>
         <member name="P:WixSharp.NativeBootstrapper.OutputFile">
             <summary>
-            Gets or sets the output file (bootstrapper) name.
+            Gets or sets the output file (bootsrtapper) name.
             </summary>
             <value>The output file name.</value>
         </member>

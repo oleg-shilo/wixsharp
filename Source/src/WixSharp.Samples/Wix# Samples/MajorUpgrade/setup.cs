@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.UI.Forms;
+using WixSharp.UI;
 
 class Script
 {

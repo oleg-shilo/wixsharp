@@ -221,7 +221,7 @@ namespace WixSharp
 
             RemoteAddress.ForEach(address =>
             {
-                retval.Add(WixExtension.Fire.XElement("RemoteAddress", address));
+                retval.Add(WixExtension.Fire.XElement("RemoteAddress", (object)address));
             });
 
             return retval;

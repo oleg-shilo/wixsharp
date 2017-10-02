@@ -49,9 +49,9 @@ public class Script
         //removing all entry dialogs and installdir
         project.ManagedUI.InstallDialogs.Add(Dialogs.Welcome)
                                         //.Add(Dialogs.Licence) // decide if to show (or not) this dialog at runtime
-                                        .Add(Dialogs.Features)
-                                        .Add(Dialogs.SetupType)
-                                        .Add(Dialogs.InstallDir)
+                                        //.Add(Dialogs.Features)
+                                        //.Add(Dialogs.SetupType)
+                                        //.Add(Dialogs.InstallDir)
                                         .Add(Dialogs.Progress)
                                         .Add(Dialogs.Exit);
 

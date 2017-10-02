@@ -132,7 +132,8 @@ public class CustomActions
                   .AddElement("value", null, @"C:\Input");
         else
             config.Select("configuration/userSettings/MyApp.Properties.Settings")
-                 ?.Parent.Remove();
+                  .Parent.Remove();
+               // ?.Parent.Remove(); // in C#7
 
         config.Save(configFile);
     }
