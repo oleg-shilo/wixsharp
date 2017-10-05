@@ -27,6 +27,27 @@ class Script
 
     static public void Main(string[] args)
     {
+        var project = new ManagedProject("IsUninstallTest",
+                      new Dir(@"%ProgramFiles%\UninstallTest\",
+                        new File("setup.cs")));
+
+        project.AfterInstall += Project_AfterInstall;
+
+        project.BuildMsi();
+    }
+
+    private static void Project_AfterInstall(SetupEventArgs e)
+    {
+        System.Windows.Forms.MessageBox.Show("Is Uninstalling: " + e.IsUninstalling);
+        if (e.IsUninstalling)
+        {
+            // e.IsUninstalling is always false if the uninstall is triggered via executing the msi again
+            // and click remove in the maintenance dialog
+        }
+    }
+
+    static public void Main2(string[] args)
+    {
         var project = new ManagedProject("MyProduct",
                             new Dir(@"C:\My Company\My Product",
                                 new File("setup.cs")));

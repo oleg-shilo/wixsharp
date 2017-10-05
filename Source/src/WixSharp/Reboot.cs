@@ -40,10 +40,12 @@ namespace WixSharp
         /// InstallExecuteSequence
         /// </summary>
         InstallExecute,
+
         /// <summary>
         /// InstallUISequence
         /// </summary>
         InstallUI,
+
         /// <summary>
         /// The both InstallExecuteSequence and InstallUISequence
         /// </summary>
@@ -53,10 +55,10 @@ namespace WixSharp
     /// <summary>
     /// Value of the <c>REBOOT</c> property.
     /// The REBOOT property suppresses certain prompts for a restart of the system. An administrator typically uses this
-    /// property with a series of installations to install several products at the same time with only one restart at the 
+    /// property with a series of installations to install several products at the same time with only one restart at the
     /// end. For more information, see System Reboots.
     /// <para>
-    /// The ForceReboot and ScheduleReboot actions inform the installer to prompt the user to restart the system. The 
+    /// The ForceReboot and ScheduleReboot actions inform the installer to prompt the user to restart the system. The
     /// installer can also determine that a restart is necessary whether there are any ForceReboot or ScheduleReboot actions
     /// in the sequence. For example, the installer automatically prompts for a restart if it needs to replace any files in
     /// use during the installation.
@@ -66,30 +68,32 @@ namespace WixSharp
     {
         /// <summary>
         /// Always prompt for a restart at the end of the installation. The UI always prompts the user with an option to
-        /// restart at the end. If there is no user interface, and this is not a multiple-package installation, the system 
-        /// automatically restarts at the end of the installation. If this is a multiple-package installation, there is no 
+        /// restart at the end. If there is no user interface, and this is not a multiple-package installation, the system
+        /// automatically restarts at the end of the installation. If this is a multiple-package installation, there is no
         /// automatic restart of the system and the installer returns ERROR_SUCCESS_REBOOT_REQUIRED.
         /// </summary>
         Force,
+
         /// <summary>
-        /// Suppress prompts for a restart at the end of the installation. The installer still prompts the user with an 
-        /// option to restart during the installation whenever it encounters the ForceReboot action. If there is no user 
-        /// interface, the system automatically restarts at each ForceReboot. Restarts at the end of the installation 
+        /// Suppress prompts for a restart at the end of the installation. The installer still prompts the user with an
+        /// option to restart during the installation whenever it encounters the ForceReboot action. If there is no user
+        /// interface, the system automatically restarts at each ForceReboot. Restarts at the end of the installation
         /// (for example, caused by an attempt to install a file in use) are suppressed.
         /// </summary>
         Suppress,
+
         /// <summary>
-        /// Suppress all restarts and restart prompts initiated by ForceReboot during the installation. Suppress all restarts 
-        /// and restart prompts at the end of the installation. Both the restart prompt and the restart itself are suppressed. 
+        /// Suppress all restarts and restart prompts initiated by ForceReboot during the installation. Suppress all restarts
+        /// and restart prompts at the end of the installation. Both the restart prompt and the restart itself are suppressed.
         /// For example, restarts at the end of the installation, caused by an attempt to install a file in use, are suppressed.
         /// </summary>
         ReallySuppress
     }
 
     /// <summary>
-    /// Prompts the user for a restart of the system during the installation. Special actions don't have a built-in sequence 
-    /// number and thus must appear relative to another action. The suggested way to do this is by using the Before or After 
-    /// attribute. 
+    /// Prompts the user for a restart of the system during the installation. Special actions don't have a built-in sequence
+    /// number and thus must appear relative to another action. The suggested way to do this is by using the Before or After
+    /// attribute.
     /// InstallExecute and InstallExecuteAgain can optionally appear anywhere between InstallInitialize and InstallFinalize.
     /// </summary>
     public partial class ForceReboot : WixObject
@@ -115,7 +119,7 @@ namespace WixSharp
         public Condition Condition;
 
         /// <summary>
-        /// The parent install sequence. The only avalable sequence for this element is <c>InstallExecuteSequence</c>. 
+        /// The parent install sequence. The only available sequence for this element is <c>InstallExecuteSequence</c>.
         /// </summary>
         public const RebootInstallSequence InstallSequence = RebootInstallSequence.InstallExecute;
 
@@ -133,39 +137,36 @@ namespace WixSharp
                                .AddAttributes(this.Attributes);
         }
 
-
-
         //not sure support for SequenceNumber is required; disable it out until it's truly needed
         //private XElement ToXml_FutureImplementation(string prevActionName = null)
         //{
-            //var element = new XElement(this.GetType().Name, Condition.ToXValue())
-            //                      .SetAttribute("Overridable", Overridable)
-            //                      .SetAttribute("Suppress", Suppress)
-            //                      .SetAttribute("Sequence", SequenceNumber);
+        //var element = new XElement(this.GetType().Name, Condition.ToXValue())
+        //                      .SetAttribute("Overridable", Overridable)
+        //                      .SetAttribute("Suppress", Suppress)
+        //                      .SetAttribute("Sequence", SequenceNumber);
 
-            //var step = Step?.ToString(); 
-            //if (Step == Step.PreviousAction)
-            //    step = prevActionName;
-            //if (Step == Step.PreviousActionOrInstallInitialize)
-            //    step = prevActionName ?? Step.InstallInitialize.ToString();
-            //if (step != null)
-            //    element.SetAttribute(When.ToString(), step);
+        //var step = Step?.ToString();
+        //if (Step == Step.PreviousAction)
+        //    step = prevActionName;
+        //if (Step == Step.PreviousActionOrInstallInitialize)
+        //    step = prevActionName ?? Step.InstallInitialize.ToString();
+        //if (step != null)
+        //    element.SetAttribute(When.ToString(), step);
 
-            //return element;
+        //return element;
         //}
-
     }
 
     /// <summary>
-    /// Prompts the user to restart the system at the end of installation. Special actions don't have a built-in 
-    /// sequence number and thus must appear relative to another action. The suggested way to do this is by using 
-    /// the Before or After attribute. InstallExecute and InstallExecuteAgain can optionally appear anywhere between 
+    /// Prompts the user to restart the system at the end of installation. Special actions don't have a built-in
+    /// sequence number and thus must appear relative to another action. The suggested way to do this is by using
+    /// the Before or After attribute. InstallExecute and InstallExecuteAgain can optionally appear anywhere between
     /// InstallInitialize and InstallFinalize.
     /// </summary>
     public partial class ScheduleReboot : ForceReboot
     {
         /// <summary>
-        /// Indicates what install sequence should ScheduleReboot be placed to. 
+        /// Indicates what install sequence should ScheduleReboot be placed to.
         /// </summary>
         public new RebootInstallSequence InstallSequence = RebootInstallSequence.InstallExecute;
     }

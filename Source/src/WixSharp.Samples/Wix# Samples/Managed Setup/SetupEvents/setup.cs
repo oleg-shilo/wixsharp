@@ -129,7 +129,7 @@ public class Script
                         "\npersisted_data = " + e.Data["persisted_data"] +
                         "\nEnvVar('INSTALLDIR') -> " + Environment.ExpandEnvironmentVariables("%INSTALLDIR%My App.exe") +
                         "\nADDLOCAL = " + e.Session.Property("ADDLOCAL"),
-                        caption: "AfterExecute ");
+                        caption: "AfterInstall ");
         try
         {
             System.IO.File.WriteAllText(@"C:\Program Files (x86)\My Company\My Product\Docs\readme.txt", "test");

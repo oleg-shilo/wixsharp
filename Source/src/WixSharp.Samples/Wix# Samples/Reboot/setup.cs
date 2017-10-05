@@ -19,9 +19,9 @@ class Script
                 new ManagedAction("PromptToReboot"));
 
         //You can also control rebooting via dedicated WiX/Wix# project properties
-        //project.ScheduleReboot = new ScheduleReboot { InstallSequence = RebootInstallSequence.Both };
-        //project.ForceReboot = new ForceReboot();
-        //project.RebootSupressing = RebootSupressing.ReallySuppress;
+        // project.ScheduleReboot = new ScheduleReboot { InstallSequence = RebootInstallSequence.Both };
+        // project.ForceReboot = new ForceReboot();
+        // project.RebootSupressing = RebootSupressing.ReallySuppress;
 
         project.UI = WUI.WixUI_ProgressOnly;
         project.PreserveTempFiles = true;
@@ -35,7 +35,6 @@ public class CustonActions
     [CustomAction]
     public static ActionResult PromptToReboot(Session session)
     {
-
         if (DialogResult.Yes == MessageBox.Show("You need to reboot the system.\nDo you want to reboot now?", "ReboolTest", MessageBoxButtons.YesNo))
         {
             Process.Start("shutdown.exe", "-r -t 30 -c \"Reboot has been requested from RebootTest.msi\"");
@@ -44,6 +43,3 @@ public class CustonActions
         return ActionResult.Success;
     }
 }
-
-
-
