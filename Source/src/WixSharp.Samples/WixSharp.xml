@@ -4155,6 +4155,16 @@
             <param name="value">The value of the added element.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.SetElementValue(System.Xml.Linq.XElement,System.String,System.String,System.String)">
+            <summary>
+            Sets the value of the first child element (with 'elementName'). If the element s not found then it is created.
+            </summary>
+            <param name="obj">The object.</param>
+            <param name="elementName">Name of the element.</param>
+            <param name="attributesDefinition">The attributes definition.</param>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.IsAbsolutePath(System.String)">
             <summary>
             Determines whether the string is an absolute path.
@@ -4915,7 +4925,17 @@
             <param name="newParent">The new parent.</param>
             <returns></returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:WixSharp.Extensions.SelectOrCreate(System.Xml.Linq.XContainer,System.String)" -->
+        <member name="M:WixSharp.Extensions.SelectOrCreate(System.Xml.Linq.XContainer,System.String)">
+            <summary>
+            Selects, from the given element, the child element matching the specified path.
+            <para> If the child element is not found, a new element is created matching the
+            path (e.g. <c>SelectOrCreate("userSettings/MyApp.Properties.Settings/setting")</c>).
+            </para>
+            </summary>
+            <param name="element">The element to be searched.</param>
+            <param name="path">The path.</param>
+            <returns>The element matching the path.</returns>
+        </member>
         <member name="M:WixSharp.Extensions.ToWString(Microsoft.Win32.RegistryHive)">
             <summary>
             Gets WiX compatible string representation (e.g. HKCR, HKLM).

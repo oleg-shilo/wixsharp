@@ -164,6 +164,14 @@ namespace WixSharp
             return result;
         }
 
+        /// <summary>
+        /// Sets the value of the first child element (with 'elementName'). If the element s not found then it is created.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="elementName">Name of the element.</param>
+        /// <param name="attributesDefinition">The attributes definition.</param>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         public static XElement SetElementValue(this XElement obj, string elementName, string attributesDefinition, string value)
         {
             var result = obj.Select(elementName);
@@ -1638,8 +1646,9 @@ namespace WixSharp
 
         /// <summary>
         /// Selects, from the given element, the child element matching the specified path.
-        /// <para>If the child element is not found, a new element is created matching the
+        /// <para> If the child element is not found, a new element is created matching the
         /// path (e.g. <c>SelectOrCreate("userSettings/MyApp.Properties.Settings/setting")</c>).
+        /// </para>
         /// </summary>
         /// <param name="element">The element to be searched.</param>
         /// <param name="path">The path.</param>
