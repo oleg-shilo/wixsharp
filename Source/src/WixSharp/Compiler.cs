@@ -52,13 +52,16 @@ namespace WixSharp
     public class AutoGenerationOptions
     {
         /// <summary>
-        /// directories specified indirectly (e.g. by Shortcut working directory)
+        /// The ID of the root directory, which is automatically assigned to the first directory of the project directories.
+        /// <para>
+        /// The default value "INSTALLDIR" has special meaning as apart from being a traditional choice of the id for the root 
+        /// directory it is also used in binding root directory to the textbox of the <c>InstallDirDialog</c>.
+        /// </para>
+        /// <para>
+        /// It is important to have the id as public (upper case). Otherwise WiX doesn't produce correct MSI.
+        /// </para>
+        /// The auto-assignment can be disabled by setting InstallDirDefaultId to null.
         /// </summary>
-        //public bool GenerateImplicitDirs = true;
-        //public bool GenerateSubDirsForComplexPaths = true; //Generate MyCompany and MyProduct directories for new Dir(%ProgramFiles%\My Company\My Product"...
-
-        //it is important to have the ID as public (upper case). Otherwise WiX doesn't produce correct MSI. It is related
-        //to Issue #35: Absolute path as INSTALLDIR doesn't work correctly with Files("*.*")
         public string InstallDirDefaultId = "INSTALLDIR";
 
         /// <summary>
