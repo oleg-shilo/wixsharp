@@ -218,15 +218,15 @@ namespace WixSharp
                 if (IO.Directory.Exists(packagesRoot))
                 {
                     //search for the highest version of the WiX SDK version
-                    string  maxVersionPackage = null;
-                    if(!isGlobalPackage)
+                    string maxVersionPackage = null;
+                    if (!isGlobalPackage)
                     {
                         var packages = IO.Directory.GetDirectories(packagesRoot, "WixSharp.wix.bin.*")
                                                    .Select(d => new
-                                                    {
-                                                        Path = d,
-                                                        Version = d.PathGetFileName().Replace("WixSharp.wix.bin.", "").ToRawVersion()
-                                                    })
+                                                   {
+                                                       Path = d,
+                                                       Version = d.PathGetFileName().Replace("WixSharp.wix.bin.", "").ToRawVersion()
+                                                   })
                                                    .Where(x => x.Version != null)
                                                    .OrderBy(x => x.Version);
 
@@ -237,11 +237,11 @@ namespace WixSharp
                         var packageDir = packagesRoot.PathCombine("WixSharp.wix.bin");
                         var packages = IO.Directory.GetDirectories(packageDir)
                                                .Select(d => new
-                                                {
-                                                    Path = d,
-                                                    Version = d.PathGetFileName().ToRawVersion()
-                                                })
-                                               .Where(x=>x.Version != null)
+                                               {
+                                                   Path = d,
+                                                   Version = d.PathGetFileName().ToRawVersion()
+                                               })
+                                               .Where(x => x.Version != null)
                                                .OrderBy(x => x.Version);
 
                         maxVersionPackage = packages.LastOrDefault()?.Path;
@@ -2684,8 +2684,15 @@ namespace WixSharp
                     if (rvProp.EntryName != "")
                         RegistrySearchElement.SetAttribute("Name", rvProp.EntryName);
 
-                    if (rvProp.Win64.HasValue)
+                    if (rvProp.win64_SetByUser)
                         RegistrySearchElement.SetAttribute("Win64", rvProp.Win64);
+                    else
+                    {
+                        if (wProject.Platform == Platform.x64)
+                            RegistrySearchElement.SetAttribute("Win64", true.ToYesNo());
+                        else
+                            RegistrySearchElement.SetAttribute("Win64", rvProp.Win64);
+                    }
                 }
                 else
                 {
@@ -3195,7 +3202,7 @@ namespace WixSharp
                     IO.File.Copy(configFilePath, configFile, true);
                     Compiler.TempFiles.Add(configFile);
                 }
-            } 
+            }
             else
             {
                 using (var writer = new IO.StreamWriter(configFile))

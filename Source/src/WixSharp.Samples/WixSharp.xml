@@ -8456,7 +8456,15 @@
         </member>
         <member name="F:WixSharp.AutoGenerationOptions.InstallDirDefaultId">
             <summary>
-            directories specified indirectly (e.g. by Shortcut working directory)
+            The ID of the root directory, which is automatically assigned to the first directory of the project directories.
+            <para>
+            The default value "INSTALLDIR" has special meaning as apart from being a traditional choice of the id for the root 
+            directory it is also used in binding root directory to the textbox of the <c>InstallDirDialog</c>.
+            </para>
+            <para>
+            It is important to have the id as public (upper case). Otherwise WiX doesn't produce correct MSI.
+            </para>
+            The auto-assignment can be disabled by setting InstallDirDefaultId to null.
             </summary>
         </member>
         <member name="F:WixSharp.AutoGenerationOptions.Map64InstallDirs">
@@ -10672,9 +10680,9 @@
              <summary>
              Defines WiX custom property assigned by MSI runtime during the installation to the RegistrySearch result.
              <para>
-             <see cref="T:WixSharp.RegValueProperty"/> is used to set a property from the registry value when accessing the registry is inconvenient for 
-             a custom action. 
-             
+             <see cref="T:WixSharp.RegValueProperty"/> is used to set a property from the registry value when accessing the registry is inconvenient for
+             a custom action.
+            
              <para><c>RegistrySearch</c> returns raw data thus data will always contain prefix indicating data type: </para>
              <para><c>DWORD:</c> Starts with '#' optionally followed by '+' or '-'.</para>
              <para><c>REG_BINARY:</c> Starts with '#x' and the installer converts and saves each hexadecimal digit (nibble) as an ASCII character prefixed by '#x'.</para>
@@ -10683,27 +10691,27 @@
              <para><c>REG_SZ:</c> No prefix, but if the first character of the registry value is '#', the installer escapes the character by prefixing it with another '#'.</para>
              </para>
              </summary>
-             <remarks>In Wix# the preferred way of setting a property value is assigning it from <see cref="T:WixSharp.ManagedAction"/>. 
-             However <see cref="T:WixSharp.ManagedAction"/> may not be an available option if the target system does not have .NET installed. 
+             <remarks>In Wix# the preferred way of setting a property value is assigning it from <see cref="T:WixSharp.ManagedAction"/>.
+             However <see cref="T:WixSharp.ManagedAction"/> may not be an available option if the target system does not have .NET installed.
              In such cases <see cref="T:WixSharp.RegValueProperty"/> should be used.</remarks>
             <example>The following is an example of installing <c>DotNET Manual.txt</c> file only if .NET v2.0 is installed.
             <code>
             
-             var project = 
-                     new Project("MyProduct", 
+             var project =
+                     new Project("MyProduct",
                          new Dir(@"%ProgramMenu%\My Company\My Product",
                              new File(@"Files\DotNET Manual.txt")
                                  {
-                                     Condition = new Condition("NETFRAMEWORK20=\"#1\"") 
+                                     Condition = new Condition("NETFRAMEWORK20=\"#1\"")
                                  },
                  ...
-                         new RegValueProperty("NETFRAMEWORK20", 
-                                              RegistryHive.LocalMachine, 
-                                              @"Software\Microsoft\NET Framework Setup\NDP\v2.0.50727", 
-                                              "Install", 
+                         new RegValueProperty("NETFRAMEWORK20",
+                                              RegistryHive.LocalMachine,
+                                              @"Software\Microsoft\NET Framework Setup\NDP\v2.0.50727",
+                                              "Install",
                                               "not_defined"),
-                 
-             
+            
+            
              </code>
              </example>
         </member>
@@ -10751,13 +10759,22 @@
             <para>Default value is <c>String.Empty</c></para>
             </summary>
         </member>
-        <member name="F:WixSharp.RegValueProperty.Win64">
+        <member name="P:WixSharp.RegValueProperty.Win64">
             <summary>
-            Instructs the search to look in the 64-bit registry when the value is 'yes'. 
-            When the value is 'no', the search looks in the 32-bit registry. 
-            The default value is based on the platform set by the -arch switch to candle.exe or the 
-            InstallerPlatform property in a .wixproj MSBuild project: For x86 and ARM, the default 
+            Instructs the search to look in the 64-bit registry when the value is 'yes'.
+            When the value is 'no', the search looks in the 32-bit registry.
+            <para>
+            This is how WiX defines defaults.
+            </para>
+            <para>
+            The default value is based on the platform set by the -arch switch to candle.exe or the
+            InstallerPlatform property in a .wixproj MSBuild project: For x86 and ARM, the default
             value is 'no'. For x64 and IA64, the default value is 'yes'.
+            </para>
+            <para>
+            However this WiX approach creates non-intuitive behaver when the build outcome may depend on the
+            architecture of the build machine.</para>
+            <para>Thus WixSharp always uses consistent default value for this property: <c>false</c>.</para>
             </summary>
         </member>
         <member name="T:WixSharp.RegFile">

@@ -372,13 +372,14 @@ namespace WixSharp
             var is64BitPlatform = doc.Root.Select("Product/Package").HasAttribute("Platform", val => val == "x64");
 
             if (is64BitPlatform)
+            {
                 doc.Descendants("Component")
                    .ForEach(comp =>
                    {
                        //components may already have explicitly set platform attribute (e.g. RegValue.Win64)
-                       //if (!comp.HasAttribute("Win64"))
                        comp.SetAttributeValue("Win64", "yes");
                    });
+            }
         }
 
         static void ExpandCustomAttributes(XDocument doc, Project project)
