@@ -113,7 +113,8 @@ namespace WixSharp
                                   .SetAttribute("ForceInstall", ForceInstall)
                                   .SetAttribute("Legacy", Legacy)
                                   .SetAttribute("PlugAndPlayPrompt", PlugAndPlayPrompt)
-                                  .SetAttribute("Sequence", Sequence);
+                                  .SetAttribute("Sequence", Sequence)
+                                  .AddAttributes(this.Attributes); 
 
             return new[] { element };
         }

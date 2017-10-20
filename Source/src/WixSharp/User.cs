@@ -242,7 +242,8 @@ namespace WixSharp
                                   .SetAttribute("PasswordNeverExpires", PasswordNeverExpires)
                                   .SetAttribute("RemoveOnUninstall", RemoveOnUninstall)
                                   .SetAttribute("UpdateIfExists", UpdateIfExists)
-                                  .SetAttribute("Vital", Vital);
+                                  .SetAttribute("Vital", Vital)
+                                  .AddAttributes(this.Attributes); 
 
             return new[] { userElement };
         }

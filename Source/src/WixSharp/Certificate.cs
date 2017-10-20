@@ -224,7 +224,8 @@ namespace WixSharp
                    .SetAttribute("PFXPassword", PFXPassword)
                    .SetAttribute("Request", Request)
                    .SetAttribute("StoreLocation", Enum.GetName(typeof(StoreLocation), StoreLocation))
-                   .SetAttribute("StoreName", Enum.GetName(typeof(StoreName), StoreName));
+                   .SetAttribute("StoreName", Enum.GetName(typeof(StoreName), StoreName))
+                   .AddAttributes(this.Attributes); 
 
             return new[] { element };
         }
