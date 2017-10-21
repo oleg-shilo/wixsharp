@@ -10081,7 +10081,7 @@
         <member name="F:WixSharp.Project.Encoding">
             <summary>
             The Encoding to be used for MSI UI dialogs. If not specified the
-            <c>System.Text.Encoding.Default</c> will be used.
+            <c>System.Text.Encoding.UTF8</c> will be used.
             </summary>
         </member>
         <member name="F:WixSharp.Project.UI">

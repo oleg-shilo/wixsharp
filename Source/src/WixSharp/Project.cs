@@ -264,9 +264,9 @@ namespace WixSharp
 
         /// <summary>
         /// The Encoding to be used for MSI UI dialogs. If not specified the
-        /// <c>System.Text.Encoding.Default</c> will be used.
+        /// <c>System.Text.Encoding.UTF8</c> will be used.
         /// </summary>
-        public Encoding Encoding = Encoding.Default;
+        public Encoding Encoding = Encoding.UTF8;
 
         /// <summary>
         /// Type of the MSI User Interface. This value is assigned to the <c>UIRef</c> WiX element during the compilation.

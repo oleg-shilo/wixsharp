@@ -27,7 +27,7 @@ public class InstallScript
         var msiOnlinePackage = new MsiPackage(crtMsi) //demo for downloadable msi package
         {
             Vital = true,
-            Compressed = false,
+            Compressed = false, 
             DisplayInternalUI = true,
             DownloadUrl = @"https://dl.dropboxusercontent.com/....../CRT.msi"
         };
