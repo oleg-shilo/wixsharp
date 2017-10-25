@@ -1,0 +1,1 @@
+This sample demonstrates how to change deployment scope (per-user vs. per-machine) at runtime.Execute corresponding .cmd file to build desired msi. Then execute the .msi to start the installation.
