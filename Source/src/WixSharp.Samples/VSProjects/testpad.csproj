@@ -104,9 +104,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\Support\testpad\setup.cs">
       <Link>setup.cs</Link>
     </Compile>

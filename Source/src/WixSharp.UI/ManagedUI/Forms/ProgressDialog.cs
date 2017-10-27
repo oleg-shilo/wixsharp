@@ -7,7 +7,7 @@ namespace WixSharp.UI.Forms
     /// <summary>
     /// The standard Installation Progress dialog
     /// </summary>
-    public partial class ProgressDialog : ManagedForm, IManagedDialog, IProgressDialog
+    public partial class ProgressDialog : ManagedForm, IManagedDialog, IProgressDialog // change ManagedForm->Form if you want to show it in designer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgressDialog"/> class.

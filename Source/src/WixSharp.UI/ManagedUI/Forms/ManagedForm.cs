@@ -74,7 +74,7 @@ namespace WixSharp.UI.Forms
         /// </value>
         public MsiRuntime MsiRuntime
         {
-            get { return (MsiRuntime)Shell.RuntimeContext; }
+            get { return (MsiRuntime)Shell?.RuntimeContext; }
         }
 
         /// <summary>

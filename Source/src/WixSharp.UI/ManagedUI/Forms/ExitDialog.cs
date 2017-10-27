@@ -9,7 +9,7 @@ namespace WixSharp.UI.Forms
     /// <summary>
     /// The standard Exit dialog
     /// </summary>
-    public partial class ExitDialog : ManagedForm, IManagedDialog
+    public partial class ExitDialog : ManagedForm, IManagedDialog // change ManagedForm->Form if you want to show it in designer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ExitDialog"/> class.

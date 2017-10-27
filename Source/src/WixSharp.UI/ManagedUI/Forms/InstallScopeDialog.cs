@@ -9,7 +9,7 @@ namespace WixSharp.UI.Forms
     /// <summary>
     /// The standard Install Scope dialog
     /// </summary>
-    public partial class InstallScopeDialog : ManagedForm, IManagedDialog
+    public partial class InstallScopeDialog : ManagedForm, IManagedDialog // change ManagedForm->Form if you want to show it in designer
     {
         private string installDirProperty;
 

@@ -7,7 +7,7 @@ namespace WixSharp.UI.Forms
     /// <summary>
     /// The standard Welcome dialog
     /// </summary>
-    public partial class WelcomeDialog : ManagedForm, IManagedDialog
+    public partial class WelcomeDialog : ManagedForm, IManagedDialog // change ManagedForm->Form if you want to show it in designer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="WelcomeDialog"/> class.

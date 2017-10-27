@@ -7,7 +7,7 @@ namespace WixSharp.UI.Forms
     /// <summary>
     /// The standard InstallDir dialog
     /// </summary>
-    public partial class InstallDirDialog : ManagedForm, IManagedDialog
+    public partial class InstallDirDialog : ManagedForm, IManagedDialog  // change ManagedForm->Form if you want to show it in designer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="InstallDirDialog"/> class.

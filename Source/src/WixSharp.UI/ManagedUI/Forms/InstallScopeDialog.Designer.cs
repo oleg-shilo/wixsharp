@@ -1,6 +1,6 @@
 ﻿namespace WixSharp.UI.Forms
 {
-    partial class InstallScopeDialog
+    partial class InstallScopeDialog 
     {
         /// <summary>
         /// Required designer variable.
@@ -61,12 +61,12 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(127, 34);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(103, 26);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(126, 30);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             // 
             // topBorder
@@ -98,7 +98,7 @@
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Location = new System.Drawing.Point(18, 31);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(209, 20);
+            this.label2.Size = new System.Drawing.Size(140, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "[InstallScopeDlgDescription]";
             // 
@@ -109,7 +109,7 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(11, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(200, 20);
+            this.label1.Size = new System.Drawing.Size(136, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "[InstallScopeDlg_Title]";
             // 
@@ -225,7 +225,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.machineScopeRadioButton.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.machineScopeRadioButton.Checked = true;
-            this.machineScopeRadioButton.Location = new System.Drawing.Point(3, 117);
+            this.machineScopeRadioButton.Location = new System.Drawing.Point(3, 67);
             this.machineScopeRadioButton.Name = "machineScopeRadioButton";
             this.machineScopeRadioButton.Size = new System.Drawing.Size(444, 60);
             this.machineScopeRadioButton.TabIndex = 18;
@@ -245,16 +245,16 @@
             this.middlePanel.Controls.Add(this.machineScopeRadioButton);
             this.middlePanel.Location = new System.Drawing.Point(22, 69);
             this.middlePanel.Name = "middlePanel";
-            this.middlePanel.Size = new System.Drawing.Size(450, 237);
+            this.middlePanel.Size = new System.Drawing.Size(450, 218);
             this.middlePanel.TabIndex = 19;
             // 
             // change
             // 
             this.change.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.change.AutoSize = true;
-            this.change.Location = new System.Drawing.Point(281, 184);
+            this.change.Location = new System.Drawing.Point(4, 161);
             this.change.Name = "change";
-            this.change.Size = new System.Drawing.Size(169, 30);
+            this.change.Size = new System.Drawing.Size(119, 23);
             this.change.TabIndex = 19;
             this.change.Text = "[InstallDirDlgChange]";
             this.change.UseVisualStyleBackColor = true;
@@ -264,9 +264,9 @@
             // 
             this.installDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.installDir.Location = new System.Drawing.Point(25, 186);
+            this.installDir.Location = new System.Drawing.Point(3, 136);
             this.installDir.Name = "installDir";
-            this.installDir.Size = new System.Drawing.Size(250, 26);
+            this.installDir.Size = new System.Drawing.Size(444, 20);
             this.installDir.TabIndex = 20;
             // 
             // InstallScopeDialog
