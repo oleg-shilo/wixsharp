@@ -31,6 +31,11 @@ namespace WixSharp.Forms
         static public Type InstallDir = typeof(InstallDirDialog);
 
         /// <summary>
+        /// The standard InstallScope dialog
+        /// </summary>
+        static public Type InstallScope = typeof(InstallScopeDialog);
+
+        /// <summary>
         /// The standard Installation Progress dialog
         /// </summary>
         static public Type Progress = typeof(ProgressDialog);

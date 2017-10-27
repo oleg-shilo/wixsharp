@@ -4,6 +4,33 @@
         <name>WixSharp.UI</name>
     </assembly>
     <members>
+        <member name="T:WixSharp.UI.Forms.InstallScopeDialog">
+            <summary>
+            The standard Install Scope dialog
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.InstallScopeDialog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.InstallScopeDialog"/> class.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.InstallScopeDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.Forms.InstallScopeDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:WixSharp.UI.Forms.InstallScopeDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
         <member name="T:WixSharp.UI.Forms.ExitDialog">
             <summary>
             The standard Exit dialog
@@ -997,6 +1024,11 @@
         <member name="F:WixSharp.Forms.Dialogs.InstallDir">
             <summary>
             The standard InstallDir dialog
+            </summary>
+        </member>
+        <member name="F:WixSharp.Forms.Dialogs.InstallScope">
+            <summary>
+            The standard InstallScope dialog
             </summary>
         </member>
         <member name="F:WixSharp.Forms.Dialogs.Progress">

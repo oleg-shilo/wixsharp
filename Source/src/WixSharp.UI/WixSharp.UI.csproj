@@ -67,6 +67,12 @@
     <Compile Include="..\WixSharp\Properties\AssemblyInfo.version.cs">
       <Link>Properties\AssemblyInfo.version.cs</Link>
     </Compile>
+    <Compile Include="ManagedUI\Forms\InstallScopeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\InstallScopeDialog.Designer.cs">
+      <DependentUpon>InstallScopeDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="ManagedUI\Forms\ExitDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -161,6 +167,9 @@
     <None Include="WixSharpStrongName.snk" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ManagedUI\Forms\InstallScopeDialog.resx">
+      <DependentUpon>InstallScopeDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ManagedUI\Forms\ExitDialog.resx">
       <DependentUpon>ExitDialog.cs</DependentUpon>
     </EmbeddedResource>
