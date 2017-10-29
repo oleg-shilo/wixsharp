@@ -9,7 +9,10 @@ namespace WixSharp.UI.Forms
     /// <summary>
     /// The standard Install Scope dialog
     /// </summary>
-    public partial class InstallScopeDialog : ManagedForm, IManagedDialog // change ManagedForm->Form if you want to show it in designer
+    public partial class InstallScopeDialog :
+        ManagedForm,
+        // Form,
+        IManagedDialog // change ManagedForm->Form if you want to show it in designer
     {
         private string installDirProperty;
 
@@ -82,6 +85,8 @@ namespace WixSharp.UI.Forms
             var upShift = (int)(next.Height * 2.3) - bottomPanel.Height;
             bottomPanel.Top -= upShift;
             bottomPanel.Height += upShift;
+
+            change.Top = installDir.Bottom + 5;
         }
 
         void back_Click(object sender, EventArgs e)
