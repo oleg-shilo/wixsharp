@@ -225,7 +225,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.machineScopeRadioButton.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.machineScopeRadioButton.Checked = true;
-            this.machineScopeRadioButton.Location = new System.Drawing.Point(3, 67);
+            this.machineScopeRadioButton.Location = new System.Drawing.Point(3, 78);
             this.machineScopeRadioButton.Name = "machineScopeRadioButton";
             this.machineScopeRadioButton.Size = new System.Drawing.Size(444, 60);
             this.machineScopeRadioButton.TabIndex = 18;
@@ -250,9 +250,8 @@
             // 
             // change
             // 
-            this.change.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.change.AutoSize = true;
-            this.change.Location = new System.Drawing.Point(4, 161);
+            this.change.Location = new System.Drawing.Point(3, 185);
             this.change.Name = "change";
             this.change.Size = new System.Drawing.Size(119, 23);
             this.change.TabIndex = 19;
@@ -264,7 +263,7 @@
             // 
             this.installDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.installDir.Location = new System.Drawing.Point(3, 136);
+            this.installDir.Location = new System.Drawing.Point(3, 150);
             this.installDir.Name = "installDir";
             this.installDir.Size = new System.Drawing.Size(444, 20);
             this.installDir.TabIndex = 20;
@@ -278,7 +277,7 @@
             this.Controls.Add(this.bottomPanel);
             this.Name = "InstallScopeDialog";
             this.Text = "[InstallDirDlg_Title]";
-            this.Load += new System.EventHandler(this.InstallDirDialog_Load);
+            this.Load += new System.EventHandler(this.InstallScopeDialog_Load);
             this.contextMenuStrip1.ResumeLayout(false);
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();

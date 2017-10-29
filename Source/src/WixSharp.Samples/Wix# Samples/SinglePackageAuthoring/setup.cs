@@ -35,15 +35,6 @@ class Script
 
         project.ManagedUI.ModifyDialogs.Add(Dialogs.Progress)
                                        .Add(Dialogs.Exit);
-
-        project.UIInitialized += (SetupEventArgs e) =>
-        {
-            if (e.IsInstalling && !e.IsUpgrading)
-            {
-                e.Session["ALLUSERS"] = "2";
-            }
-        };
-
         project.BuildMsi();
     }
 

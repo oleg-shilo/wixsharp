@@ -23,8 +23,17 @@ namespace WixSharp.UI.Forms
             label2.MakeTransparentOn(banner);
         }
 
-        void InstallDirDialog_Load(object sender, EventArgs e)
+        void InstallScopeDialog_Load(object sender, EventArgs e)
         {
+            // https://msdn.microsoft.com/en-us/library/windows/desktop/aa367559(v=vs.85).aspx
+
+            // The value of the ALLUSERS property, at installation time, determines the installation context.
+            // * An ALLUSERS property value of 1 specifies the per - machine installation context.
+            // * An ALLUSERS property value of an empty string("") specifies the per - user installation context.
+            // * If the value of the ALLUSERS property is set to 2, the Windows Installer always resets the value of the ALLUSERS property to 1 and performs a per-machine installation or it resets the value of the ALLUSERS property to an empty string("") and performs a per-user installation.The value ALLUSERS = 2 enables the system to reset the value of ALLUSERS, and the installation context, dependent upon the user's privileges and the version of Windows
+
+            MsiRuntime.Session["ALLUSERS"] = "2";
+
             this.machineScopeRadioButton.Checked = MsiRuntime.Session["MSIINSTALLPERUSER"] == "0";
             this.userScopeRadioButton.Checked = MsiRuntime.Session["MSIINSTALLPERUSER"] == "1";
 
@@ -87,7 +96,7 @@ namespace WixSharp.UI.Forms
                 if (userScopeRadioButton.Checked)
                 {
                     MsiRuntime.Session["MSIINSTALLPERUSER"] = "1";
-                    MsiRuntime.Session[installDirProperty] = Environment.ExpandEnvironmentVariables($@"%LOCALAPPDATA%\Apps\My Company\My Product");
+                    MsiRuntime.Session[installDirProperty] = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\Apps\" + MsiRuntime.ProductName);
                 }
 
                 if (machineScopeRadioButton.Checked)
