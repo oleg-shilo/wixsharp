@@ -140,8 +140,8 @@ namespace WixSharp.UI.Forms
             var installedPackage = new Microsoft.Deployment.WindowsInstaller.ProductInstallation(productCode);
             if (installedPackage.IsInstalled)
                 return installedPackage.Features
-                .First(x => x.FeatureName == name)
-                .State;
+                                       .First(x => x.FeatureName == name)
+                                       .State;
             else
                 return InstallState.Absent;
         }
