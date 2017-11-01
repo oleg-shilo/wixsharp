@@ -125,7 +125,7 @@ namespace WixSharp.UI.Forms
                 // Scheduling additional "early" rollbacks not required but do a better job in terms
                 // of responsiveness (user impression).
 
-                // Yes it's elegant, but necessary since TreeView doesn't support read-only mode for nodes.
+                // Yes it isn't elegant, but necessary since TreeView doesn't support read-only mode for nodes.
 
                 if (e.Node.IsReadOnly() && e.Node.IsModified())
                 {

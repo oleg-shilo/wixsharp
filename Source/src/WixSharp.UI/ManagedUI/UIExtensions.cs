@@ -115,20 +115,30 @@ namespace WixSharp
 
         public static void ResetCheckedToDefault(this TreeNode node, int delay = -1)
         {
-            if (node is ReadOnlyTreeNode _node && _node.IsReadOnly)
+            try
             {
-                if (delay == -1)
-                    node.Checked = _node.DefaultChecked;
-                else
-                    ThreadPool.QueueUserWorkItem(x =>
-                    {
-                        Thread.Sleep(delay);
-
-                        node.TreeView.BeginInvoke((MethodInvoker)delegate
+                if (node is ReadOnlyTreeNode _node && _node.IsReadOnly)
+                {
+                    if (delay == -1)
+                        node.Checked = _node.DefaultChecked;
+                    else
+                        ThreadPool.QueueUserWorkItem(x =>
                         {
-                            node.Checked = _node.DefaultChecked;
+                            Thread.Sleep(delay);
+
+                            node.TreeView.BeginInvoke((MethodInvoker)delegate
+                            {
+                                node.Checked = _node.DefaultChecked;
+                            });
                         });
-                    });
+                }
+            }
+            catch
+            {
+                // Some collisions can happen since this method is called multiple times in succession.
+                // It supposed to fix the TreeView UX limitations.
+                // Ignoring the exception does not create any problem but only (potentially) will require
+                // user to do an extra mouse-click to ensure checked state of the checkebox.
             }
         }
 
