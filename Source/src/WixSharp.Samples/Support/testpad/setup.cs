@@ -27,6 +27,8 @@ class Script
 
     static public void Main(string[] args)
     {
+        var ttt = System.IO.Path.GetTempPath();
+
         var project = new ManagedProject("IsUninstallTest",
                       new Dir(@"%ProgramFiles%\UninstallTest\",
                         new File("setup.cs")));

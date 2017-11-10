@@ -15,6 +15,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.ToPath(System.Environment.SpecialFolder)">
+            <summary>
+            Returns full path of the <see cref="T:System.Environment.SpecialFolder"/>
+            </summary>
+            <param name="folder"></param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.AsWixVarToPath(System.String)">
              <summary>
              'Interprets' a string as a WiX constant and expands into a proper File System path. For example "DesktopFolder"
@@ -28,6 +35,21 @@
              </summary>
              <param name="path">The path.</param>
              <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.PathJoin(System.String,System.String[])">
+            <summary>
+            Equivalent of <see cref="M:System.IO.Path.Combine(System.String,System.String)"/>.
+            </summary>
+            <param name="path"></param>
+            <param name="items"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.PathGetDirName(System.String)">
+            <summary>
+            Identical to <see cref="M:System.IO.Path.GetDirectoryName(System.String)"/>. It is useful for Wix# consuming code as it allows avoiding
+            "using System.IO;" directive, which interferes with Wix# types.
+            </summary>
+            <param name="path">The path.</param>
         </member>
         <member name="T:WixSharp.UI.MsiParser">
             <summary>

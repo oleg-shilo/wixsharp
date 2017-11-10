@@ -15,12 +15,22 @@ namespace WixSharp
         public static bool Is64OS()
         {
             //cannot use Environment.Is64BitOperatingSystem class as it is v3.5
-            string progFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            string progFiles = Environment.SpecialFolder.ProgramFiles.ToPath();
             string progFiles32 = progFiles;
             if (!progFiles32.EndsWith(" (x86)"))
                 progFiles32 += " (x86)";
 
             return Directory.Exists(progFiles32);
+        }
+
+        /// <summary>
+        /// Returns full path of the <see cref="Environment.SpecialFolder"/>
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <returns></returns>
+        public static string ToPath(this Environment.SpecialFolder folder)
+        {
+            return Environment.GetFolderPath(folder);
         }
 
         /// <summary>
@@ -39,41 +49,65 @@ namespace WixSharp
         {
             switch (path)
             {
-                case "AdminToolsFolder": return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), @"Start Menu\Programs\Administrative Tools");
+                case "AdminToolsFolder": return Environment.SpecialFolder.CommonApplicationData.ToPath().PathJoin(@"Start Menu\Programs\Administrative Tools");
 
-                case "AppDataFolder": return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                case "CommonAppDataFolder": return Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+                case "AppDataFolder": return Environment.SpecialFolder.ApplicationData.ToPath();
+                case "CommonAppDataFolder": return Environment.SpecialFolder.CommonApplicationData.ToPath();
 
-                case "CommonFiles64Folder": return Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles).Replace(" (x86)", "");
-                case "CommonFilesFolder": return Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles);
+                case "CommonFiles64Folder": return Environment.SpecialFolder.CommonProgramFiles.ToPath().Replace(" (x86)", "");
+                case "CommonFilesFolder": return Environment.SpecialFolder.CommonProgramFiles.ToPath();
 
-                case "DesktopFolder": return Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                case "FavoritesFolder": return Environment.GetFolderPath(Environment.SpecialFolder.Favorites);
+                case "DesktopFolder": return Environment.SpecialFolder.Desktop.ToPath();
+                case "FavoritesFolder": return Environment.SpecialFolder.Favorites.ToPath();
 
-                case "ProgramFiles64Folder": return Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles).Replace(" (x86)", "");
-                case "ProgramFilesFolder": return Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+                case "ProgramFiles64Folder": return Environment.SpecialFolder.ProgramFiles.ToPath().Replace(" (x86)", "");
+                case "ProgramFilesFolder": return Environment.SpecialFolder.ProgramFiles.ToPath();
 
-                case "MyPicturesFolder": return Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-                case "SendToFolder": return Environment.GetFolderPath(Environment.SpecialFolder.SendTo);
-                case "LocalAppDataFolder": return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                case "PersonalFolder": return Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                case "MyPicturesFolder": return Environment.SpecialFolder.MyPictures.ToPath();
+                case "SendToFolder": return Environment.SpecialFolder.SendTo.ToPath();
+                case "LocalAppDataFolder": return Environment.SpecialFolder.LocalApplicationData.ToPath();
+                case "PersonalFolder": return Environment.SpecialFolder.Personal.ToPath();
 
-                case "StartMenuFolder": return Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
-                case "StartupFolder": return Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-                case "ProgramMenuFolder": return Environment.GetFolderPath(Environment.SpecialFolder.Programs);
+                case "StartMenuFolder": return Environment.SpecialFolder.StartMenu.ToPath();
+                case "StartupFolder": return Environment.SpecialFolder.Startup.ToPath();
+                case "ProgramMenuFolder": return Environment.SpecialFolder.Programs.ToPath();
 
                 case "System16Folder": return Path.Combine("WindowsFolder".AsWixVarToPath(), "System");
-                case "System64Folder": return Environment.GetFolderPath(Environment.SpecialFolder.System);
-                case "SystemFolder": return Is64OS() ? Path.Combine("WindowsFolder".AsWixVarToPath(), "SysWow64") : Environment.GetFolderPath(Environment.SpecialFolder.System);
+                case "System64Folder": return Environment.SpecialFolder.System.ToPath();
+                case "SystemFolder": return Is64OS() ? Path.Combine("WindowsFolder".AsWixVarToPath(), "SysWow64") : Environment.SpecialFolder.System.ToPath();
 
-                case "TemplateFolder": return Environment.GetFolderPath(Environment.SpecialFolder.Templates);
-                case "WindowsVolume": return Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Programs));
-                case "WindowsFolder": return Path.GetDirectoryName(Environment.GetFolderPath(Environment.SpecialFolder.System));
-                case "FontsFolder": return Path.Combine(Path.GetDirectoryName(Environment.GetFolderPath(Environment.SpecialFolder.System)), "Fonts");
-                case "TempFolder": return Path.Combine(Path.GetDirectoryName(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)), @"Local Settings\Temp");
+                case "TemplateFolder": return Environment.SpecialFolder.Templates.ToPath();
+                case "WindowsVolume": return Path.GetPathRoot(Environment.SpecialFolder.Programs.ToPath());
+                case "WindowsFolder": return Environment.SpecialFolder.System.ToPath().PathGetDirName();
+                case "FontsFolder": return Environment.SpecialFolder.System.ToPath().PathGetDirName().PathJoin("Fonts");
+                case "TempFolder": return Path.GetTempPath();
+                // case "TempFolder": return Path.GetDirectoryName(Environment.SpecialFolder.Desktop.ToPath().Ge, @"Local Settings\Temp");
                 default:
                     return path;
             }
+        }
+
+        /// <summary>
+        /// Equivalent of <see cref="System.IO.Path.Combine"/>.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        public static string PathJoin(this string path, params string[] items)
+        {
+            foreach (var item in items)
+                path = System.IO.Path.Combine(path, item);
+            return path;
+        }
+
+        /// <summary>
+        /// Identical to <see cref="System.IO.Path.GetDirectoryName(string)"/>. It is useful for Wix# consuming code as it allows avoiding
+        /// "using System.IO;" directive, which interferes with Wix# types.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        public static string PathGetDirName(this string path)
+        {
+            return System.IO.Path.GetDirectoryName(path);
         }
     }
 }

@@ -1007,29 +1007,6 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Equivalent of <see cref="System.IO.Path.Combine"/>.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="items"></param>
-        /// <returns></returns>
-        public static string PathJoin(this string path, params string[] items)
-        {
-            foreach (var item in items)
-                path = IO.Path.Combine(path, item);
-            return path;
-        }
-
-        /// <summary>
-        /// Identical to <see cref="System.IO.Path.GetDirectoryName(string)"/>. It is useful for Wix# consuming code as it allows avoiding
-        /// "using System.IO;" directive, which interferes with Wix# types.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        public static string PathGetDirName(this string path)
-        {
-            return IO.Path.GetDirectoryName(path);
-        }
-
-        /// <summary>
         /// Converts string value representing path into an absolute path. If string is null or empty it is treated as the CurrentDirectory equivalent.
         /// </summary>
         /// <param name="path">The path.</param>
