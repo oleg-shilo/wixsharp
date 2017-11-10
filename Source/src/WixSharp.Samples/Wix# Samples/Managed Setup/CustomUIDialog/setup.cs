@@ -1,7 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using WixSharp;
 using WixSharp.CommonTasks;
@@ -15,14 +17,14 @@ internal static class Defaults
 public class Script
 {
     static public void Main(string[] args)
-    { 
+    {
         if (args.Contains("/test")) //for demo only
         {
             UIShell.Play(ManagedUI.Default.InstallDialogs);
             return;
         }
 
-        //Note if the property 'PASSWORD' is not preserved as deferred then it will not be available 
+        //Note if the property 'PASSWORD' is not preserved as deferred then it will not be available
         //from the Project_AfterInstall, which is a deferred custom action.
 
         var project = new ManagedProject("ManagedSetup",
@@ -36,7 +38,6 @@ public class Script
                           },
                           new Property("PASSWORD", "pwd123") { IsDeferred = true });
 
-
         project.SourceBaseDir = @"..\..\";
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         //project.LocalizationFile = "MyProduct.en-us.wxl";
@@ -49,9 +50,14 @@ public class Script
                                         .Add<ProgressDialog>()
                                         .Add<ExitDialog>();
 
-        //it effectively becomes a 'Repair' sequence 
+        //it effectively becomes a 'Repair' sequence
         project.ManagedUI.ModifyDialogs.Add<ProgressDialog>()
                                        .Add<ExitDialog>();
+
+        project.UIInitialized += e =>
+        {
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(project.Language);
+        };
 
         project.UILoaded += msi_UILoaded;
         project.BeforeInstall += msi_BeforeInstall;
@@ -64,8 +70,8 @@ public class Script
 
     static void msi_UILoaded(SetupEventArgs e)
     {
-        //If required you can 
-        // - set the size of the shell view window 
+        //If required you can
+        // - set the size of the shell view window
         // - scale the whole shell window and its content
         // - reposition controls on the current dialog
         // - subscribe to the current dialog changed event
@@ -74,12 +80,12 @@ public class Script
         //e.ManagedUIShell.OnCurrentDialogChanged += ManagedUIShell_OnCurrentDialogChanged;
         //(e.ManagedUIShell.CurrentDialog asForm).Controls....
     }
-     
+
     static void Project_AfterInstall(SetupEventArgs e)
     {
-        //Debug.Assert(false); 
-        MessageBox.Show(e.Data["test"], "test");  
-        if (e.IsInstalling) 
+        //Debug.Assert(false);
+        MessageBox.Show(e.Data["test"], "test");
+        if (e.IsInstalling)
             MessageBox.Show($"User '{Defaults.UserName}' with password '{e.Session.Property("PASSWORD")}' has been created");
     }
 
@@ -88,7 +94,7 @@ public class Script
     //}
 
     static void msi_BeforeInstall(SetupEventArgs e)
-    { 
+    {
         //Note: the property will not be from UserNameDialog if MSI UI is suppressed
         if (e.Session["DOMAIN"] == null)
             e.Session["DOMAIN"] = Environment.MachineName;
