@@ -14,6 +14,7 @@ using forms = System.Windows.Forms;
 using System.Diagnostics;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace WixSharp
 {
@@ -225,6 +226,14 @@ namespace WixSharp
 
             if (Dialogs.Any())
                 shellView = new ShellView { Shell = this };
+
+            try
+            {
+                int cilture = msiRuntime.Session.Property("ProductLanguage").ToInt();
+                if (cilture != 0)
+                    Thread.CurrentThread.CurrentUICulture = new CultureInfo(cilture);
+            }
+            catch { }
 
             ActionResult result = ManagedProject.InvokeClientHandlers(MsiRuntime.Session, "UIInitialized", shellView as IShellView);
             MsiRuntime.Data.MergeReplace(MsiRuntime.Session["WIXSHARP_RUNTIME_DATA"]); //data may be changed in the client handler

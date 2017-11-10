@@ -56,6 +56,7 @@ public class Script
 
         project.UIInitialized += e =>
         {
+            Debug.Assert(false);
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(project.Language);
         };
 
