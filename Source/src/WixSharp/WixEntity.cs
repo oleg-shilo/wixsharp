@@ -270,6 +270,36 @@ namespace WixSharp
         public string Name = "";
 
         /// <summary>
+        /// The custom algorithm for generating WiX elements IDs.
+        /// </summary>
+        ///<example>The following code demonstrates how to generate File IDs based is on the hash
+        ///of the target path of the file being installed.
+        ///<code>
+        ///
+        ///WixEntity.CustomIdAlgorithm =
+        ///       entity =>
+        ///       {
+        ///           if (entity is File file)
+        ///           {
+        ///               var target_path = project.GetTargetPathOf(file);
+        ///               var hash = target_path.GetHashCode32();
+        ///
+        ///               // WiX does not allow '-' char in ID. So need to use `Math.Abs`
+        ///               return $"{target_path.PathGetFileName()}_{Math.Abs(hash)}";
+        ///           }
+        ///
+        ///           return null; // pass to default ID generator
+        ///       };
+        /// </code>
+        /// </example>
+        static public Func<WixEntity, string> CustomIdAlgorithm = null;
+
+        /// <summary>
+        /// The default algorithm
+        /// </summary>
+        static public Func<WixEntity, string> DefaultIdAlgorithm = IncrementalIdFor;
+
+        /// <summary>
         /// Gets or sets the <c>Id</c> value of the <see cref="WixEntity"/>.
         /// <para>This value is used as a <c>Id</c> for the corresponding WiX XML element.</para>
         /// <para>If the <see cref="Id"/> value is not specified explicitly by the user the Wix# compiler
@@ -291,70 +321,7 @@ namespace WixSharp
             {
                 if (id.IsEmpty())
                 {
-                    if (GetType() == typeof(File))
-                    { }
-
-                    if (!idMaps.ContainsKey(GetType()))
-                        idMaps[GetType()] = new Dictionary<string, int>();
-
-                    var rawName = Name.Expand();
-                    if (rawName.IsEmpty())
-                        rawName = GetType().Name;
-
-                    if (IO.Path.IsPathRooted(Name))
-                        rawName = IO.Path.GetFileName(Name).Expand();
-
-                    if (GetType() != typeof(Dir) && GetType().BaseType != typeof(Dir) && Name.IsNotEmpty())
-                        rawName = IO.Path.GetFileName(Name).Expand();
-
-                    //limit 120 chars
-                    //Maximum allowed length for a stream name is 62 characters long; In some cases more but to play it safe keep 62 limit
-                    //
-                    //Note: the total limit 62 needs to include in some cases MSI auto prefix (e.g. table name) ~15 chars
-                    // our hash code (max 10 chars) and our decoration (separators). So 30 seems to be a safe call
-                    //
-                    int maxLength = 30;
-                    if (rawName.Length > maxLength)
-                    {
-                        //some chars are illegal as star if the ID so work around this with '_' prefix
-                        rawName = "_..." + rawName.Substring(rawName.Length - maxLength);
-                    }
-
-                    string rawNameKey = rawName.ToLower();
-
-                    /*
-                     "bin\Release\similarFiles.txt" and "bin\similarfiles.txt" will produce the following IDs
-                     "Component.similarFiles.txt" and "Component.similariles.txt", which will be treated by Wix compiler as duplication
-                     */
-
-                    if (!idMaps[GetType()].ContainsSimilarKey(rawName)) //this Type has not been generated yet
-                    {
-                        idMaps[GetType()][rawNameKey] = 0;
-                        id = rawName;
-                        if (char.IsDigit(id.Last()))
-                            id += "_"; // work around for https://wixsharp.codeplex.com/workitem/142
-                                       // to avoid potential collision between ids that end with digit
-                                       // and auto indexed (e.g. [rawName + "." + index])
-                    }
-                    else
-                    {
-                        //The Id has been already generated for this Type with this rawName
-                        //so just increase the index
-                        var index = idMaps[GetType()][rawNameKey] + 1;
-
-                        id = rawName + "." + index;
-                        idMaps[GetType()][rawNameKey] = index;
-                    }
-
-                    //Trace.WriteLine(">>> " + GetType() + " >>> " + id);
-
-                    if (rawName.IsNotEmpty() && char.IsDigit(rawName[0]))
-                        id = "_" + id;
-
-                    while (alreadyTakenIds.Contains(id)) //last line of defense against duplication
-                        id += "_";
-
-                    alreadyTakenIds.Add(id);
+                    id = CustomIdAlgorithm?.Invoke(this) ?? IncrementalIdFor(this);
                 }
 
                 return id;
@@ -364,6 +331,73 @@ namespace WixSharp
                 id = value;
                 isAutoId = false;
             }
+        }
+
+        public static string IncrementalIdFor(WixEntity entity)
+        {
+            if (!idMaps.ContainsKey(entity.GetType()))
+                idMaps[entity.GetType()] = new Dictionary<string, int>();
+
+            var rawName = entity.Name.Expand();
+            if (rawName.IsEmpty())
+                rawName = entity.GetType().Name;
+
+            if (IO.Path.IsPathRooted(entity.Name))
+                rawName = IO.Path.GetFileName(entity.Name).Expand();
+
+            if (entity.GetType() != typeof(Dir) && entity.GetType().BaseType != typeof(Dir) && entity.Name.IsNotEmpty())
+                rawName = IO.Path.GetFileName(entity.Name).Expand();
+
+            //limit 120 chars
+            //Maximum allowed length for a stream name is 62 characters long; In some cases more but to play it safe keep 62 limit
+            //
+            //Note: the total limit 62 needs to include in some cases MSI auto prefix (e.g. table name) ~15 chars
+            // our hash code (max 10 chars) and our decoration (separators). So 30 seems to be a safe call
+            //
+            int maxLength = 30;
+            if (rawName.Length > maxLength)
+            {
+                //some chars are illegal as star if the ID so work around this with '_' prefix
+                rawName = "_..." + rawName.Substring(rawName.Length - maxLength);
+            }
+
+            string rawNameKey = rawName.ToLower();
+
+            /*
+             "bin\Release\similarFiles.txt" and "bin\similarfiles.txt" will produce the following IDs
+             "Component.similarFiles.txt" and "Component.similariles.txt", which will be treated by Wix compiler as duplication
+             */
+
+            if (!idMaps[entity.GetType()].ContainsSimilarKey(rawName)) //this Type has not been generated yet
+            {
+                idMaps[entity.GetType()][rawNameKey] = 0;
+                entity.id = rawName;
+                if (char.IsDigit(entity.id.Last()))
+                    entity.id += "_"; // work around for https://wixsharp.codeplex.com/workitem/142
+                                      // to avoid potential collision between ids that end with digit
+                                      // and auto indexed (e.g. [rawName + "." + index])
+            }
+            else
+            {
+                //The Id has been already generated for this Type with this rawName
+                //so just increase the index
+                var index = idMaps[entity.GetType()][rawNameKey] + 1;
+
+                entity.id = rawName + "." + index;
+                idMaps[entity.GetType()][rawNameKey] = index;
+            }
+
+            //Trace.WriteLine(">>> " + GetType() + " >>> " + id);
+
+            if (rawName.IsNotEmpty() && char.IsDigit(rawName[0]))
+                entity.id = "_" + entity.id;
+
+            while (alreadyTakenIds.Contains(entity.id)) //last line of defense against duplication
+                entity.id += "_";
+
+            alreadyTakenIds.Add(entity.id);
+
+            return entity.id;
         }
 
         static List<string> alreadyTakenIds = new List<string>();

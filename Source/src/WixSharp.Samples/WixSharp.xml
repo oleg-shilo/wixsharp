@@ -10415,6 +10415,13 @@
             Flattened "view" of all <see cref="T:WixSharp.Dir"/>s of the <see cref="T:WixSharp.Project"/>.
             </summary>
         </member>
+        <member name="M:WixSharp.Project.GetTargetPathOf(WixSharp.File)">
+            <summary>
+            Calculates the target path of the specified file.
+            </summary>
+            <param name="file">The file.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Project.FindDir(System.String)">
             <summary>
             Finds <see cref="T:WixSharp.Dir"/> corresponding to the specified path.
@@ -12761,6 +12768,36 @@
             <summary>
             Name of the <see cref="T:WixSharp.WixEntity"/>.
             <para>This value is used as a <c>Name</c> for the corresponding WiX XML element.</para>
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixEntity.CustomIdAlgorithm">
+             <summary>
+             The custom algorithm for generating WiX elements IDs.
+             </summary>
+            <example>The following code demonstrates how to generate File IDs based is on the hash
+            of the target path of the file being installed.
+            <code>
+            
+            WixEntity.CustomIdAlgorithm =
+                   entity =>
+                   {
+                       if (entity is File file)
+                       {
+                           var target_path = project.GetTargetPathOf(file);
+                           var hash = target_path.GetHashCode32();
+            
+                           // WiX does not allow '-' char in ID. So need to use `Math.Abs`
+                           return $"{target_path.PathGetFileName()}_{Math.Abs(hash)}";
+                       }
+            
+                       return null; // pass to default ID generator
+                   };
+             </code>
+             </example>
+        </member>
+        <member name="F:WixSharp.WixEntity.DefaultIdAlgorithm">
+            <summary>
+            The default algorithm
             </summary>
         </member>
         <member name="P:WixSharp.WixEntity.Id">

@@ -13,7 +13,7 @@ using WixSharp.Forms;
 
 // Truly a throw away project for dev testing
 
-class Script
+static class Script
 {
     static void prepare_dirs(string root)
     {
@@ -27,15 +27,34 @@ class Script
 
     static public void Main(string[] args)
     {
-        var ttt = System.IO.Path.GetTempPath();
+        var project = new Project("IsUninstallTest",
+                          new Dir(@"%ProgramFiles%\UninstallTest\",
+                              new Dir("scripts",
+                                  new File(@"Files\docs\setup.cs")),
+                              // new File("setup.cs"),
+                              new File(@"files\setup.cs")));
 
-        var project = new ManagedProject("IsUninstallTest",
-                      new Dir(@"%ProgramFiles%\UninstallTest\",
-                        new File("setup.cs")));
+        WixEntity.CustomIdAlgorithm =
+            entity =>
+            {
+                if (entity is File file)
+                {
+                    var target_path = project.GetTargetPathOf(file);
+                    var hash = target_path.GetHashCode32();
 
-        project.AfterInstall += Project_AfterInstall;
+            // WiX does not allow '-' char in ID. So need to use `Math.Abs`
+            return $"{target_path.PathGetFileName()}_{Math.Abs(hash)}";
+                }
+                return null; // next two lines produce the same result
+                             // return WixEntity.DefaultIdAlgorithm(entity);
+                             // return WixEntity.IncrementalIdFor(entity);
+    };
 
+        // project.AfterInstall += Project_AfterInstall;
+        project.PreserveTempFiles = true;
         project.BuildMsi();
+
+        // project.BuildWxs();
     }
 
     private static void Project_AfterInstall(SetupEventArgs e)

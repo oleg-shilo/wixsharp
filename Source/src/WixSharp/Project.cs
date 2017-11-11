@@ -711,6 +711,24 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Calculates the target path of the specified file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns></returns>
+        public string GetTargetPathOf(File file)
+        {
+            var dir = this.AllDirs.FirstOrDefault(d => d.Files.Contains(file));
+            var path = new List<string>();
+            path.Add(file.Name);
+            while (dir != null)
+            {
+                path.Insert(0, dir.Name);
+                dir = this.AllDirs.FirstOrDefault(d => d.Dirs.Contains(dir));
+            }
+            return path.Join("\\");
+        }
+
+        /// <summary>
         /// Finds <see cref="T:WixSharp.Dir"/> corresponding to the specified path.
         /// </summary>
         /// <example>
