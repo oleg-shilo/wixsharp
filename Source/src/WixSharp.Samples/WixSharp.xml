@@ -2499,6 +2499,12 @@
             value is ignored and all temporary files are preserved.</para>
             </summary>
         </member>
+        <member name="F:WixSharp.Compiler.PreserveDbgFiles">
+            <summary>
+            Forces <see cref="T:WixSharp.Compiler"/> to preserve all obj/pdb build files (e.g. *.wixobj and *.wixpdb).
+            <para>The default value is <c>false</c>: all temporary files are deleted at the end of the build/compilation.</para>
+            </summary>
+        </member>
         <member name="F:WixSharp.Compiler.EmitRelativePaths">
             <summary>
             Indicates whether compiler should emit relative or absolute paths in the WiX XML source.
@@ -6129,7 +6135,7 @@
         </member>
         <member name="F:WixSharp.WixProject.WxsFiles">
             <summary>
-            Collection of paths to the external wsx files containing Fragment(s). 
+            Collection of paths to the external wsx files containing Fragment(s).
             <para>
             At the compile time files will be pases to candle.exe but the referencing them fragments in the primary wxs (XML)
             needs to be done from WixSourceGenerated event handler.
@@ -6138,20 +6144,20 @@
         </member>
         <member name="F:WixSharp.WixProject.WixVariables">
             <summary>
-            This element exposes advanced WiX functionality. Use this element to declare WiX variables from directly within your 
-            authoring. WiX variables are not resolved until the final msi/msm/pcp file is actually generated. WiX variables do not 
+            This element exposes advanced WiX functionality. Use this element to declare WiX variables from directly within your
+            authoring. WiX variables are not resolved until the final msi/msm/pcp file is actually generated. WiX variables do not
             persist into the msi/msm/pcp file, so they cannot be used when an MSI file is being installed; it's a WiX-only concept.
             </summary>
         </member>
         <member name="F:WixSharp.WixProject.LibFiles">
             <summary>
-            Collection of paths to the external wsxlib files to be passed to the Light linker. 
+            Collection of paths to the external wsxlib files to be passed to the Light linker.
             </summary>
         </member>
         <member name="P:WixSharp.WixProject.Language">
             <summary>
             Installation UI Language. If not specified <c>"en-US"</c> will be used.
-            <para>It is possible to specify multiple languages separated by coma or semicolon. All extra languages will be used 
+            <para>It is possible to specify multiple languages separated by coma or semicolon. All extra languages will be used
             as additional values for 'Package.Languages' attribute and light.exe '-cultures:' command line parameters.</para>
             </summary>
         </member>
@@ -6180,7 +6186,7 @@
         </member>
         <member name="E:WixSharp.WixProject.WixSourceFormated">
             <summary>
-            Occurs when WiX source file is formatted and ready to be saved. Use this event if you need to do any custom formatting 
+            Occurs when WiX source file is formatted and ready to be saved. Use this event if you need to do any custom formatting
             of the XML content before it is saved by the compiler.
             </summary>
         </member>
@@ -6190,6 +6196,12 @@
             <para>The default value is <c>false</c>: all temporary files are deleted at the end of the build/compilation.</para>
             <para>Note: if <see cref="T:WixSharp.Compiler"/> fails to build MSI the <c>PreserveTempFiles</c>
             value is ignored and all temporary files are preserved.</para>
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixProject.PreserveDbgFiles">
+            <summary>
+            Forces <see cref="T:WixSharp.Compiler"/> to preserve all obj/pdb build files (e.g. *.wixobj and *.wixpdb).
+            <para>The default value is <c>false</c>: all temporary files are deleted at the end of the build/compilation.</para>
             </summary>
         </member>
         <member name="M:WixSharp.WixProject.InvokeWixSourceGenerated(System.Xml.Linq.XDocument)">

@@ -240,7 +240,7 @@ namespace WixSharp.Test
             Assert.True(isValid(windowsVolume, @"C:\"));
             Assert.True(isValid(windowsFolder, @"C:\Windows"));
             Assert.True(isValid(fontsFolder, @"C:\Windows\Fonts"));
-            Assert.True(isValid(tempFolder, "Temp"));
+            Assert.True(isValid(tempFolder, System.IO.Path.GetTempPath()));
         }
 
         [Fact]

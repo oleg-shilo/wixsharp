@@ -11,6 +11,7 @@ namespace WixSharp
     public abstract partial class WixProject : WixEntity
     {
         string sourceBaseDir = "";
+
         /// <summary>
         /// Base directory for the relative paths of the bootstrapper items (e.g. <see cref="T:WixSharp.Bootstrapper.MsiPackage"></see>).
         /// </summary>
@@ -19,7 +20,6 @@ namespace WixSharp
             get { return sourceBaseDir.ExpandEnvVars(); }
             set { sourceBaseDir = value; }
         }
-
 
         /// <summary>
         /// The location of the config file for Managed Custom Action.
@@ -84,7 +84,7 @@ namespace WixSharp
         List<string> wixExtensions = new List<string>();
 
         /// <summary>
-        /// Collection of paths to the external wsx files containing Fragment(s). 
+        /// Collection of paths to the external wsx files containing Fragment(s).
         /// <para>
         /// At the compile time files will be pases to candle.exe but the referencing them fragments in the primary wxs (XML)
         /// needs to be done from WixSourceGenerated event handler.
@@ -93,23 +93,22 @@ namespace WixSharp
         public List<string> WxsFiles = new List<string>();
 
         /// <summary>
-        /// This element exposes advanced WiX functionality. Use this element to declare WiX variables from directly within your 
-        /// authoring. WiX variables are not resolved until the final msi/msm/pcp file is actually generated. WiX variables do not 
+        /// This element exposes advanced WiX functionality. Use this element to declare WiX variables from directly within your
+        /// authoring. WiX variables are not resolved until the final msi/msm/pcp file is actually generated. WiX variables do not
         /// persist into the msi/msm/pcp file, so they cannot be used when an MSI file is being installed; it's a WiX-only concept.
         /// </summary>
         public Dictionary<string, string> WixVariables = new Dictionary<string, string>();
 
-
         /// <summary>
-        /// Collection of paths to the external wsxlib files to be passed to the Light linker. 
+        /// Collection of paths to the external wsxlib files to be passed to the Light linker.
         /// </summary>
         public List<string> LibFiles = new List<string>();
 
         string language = "en-US";
-        
+
         /// <summary>
         /// Installation UI Language. If not specified <c>"en-US"</c> will be used.
-        /// <para>It is possible to specify multiple languages separated by coma or semicolon. All extra languages will be used 
+        /// <para>It is possible to specify multiple languages separated by coma or semicolon. All extra languages will be used
         /// as additional values for 'Package.Languages' attribute and light.exe '-cultures:' command line parameters.</para>
         /// </summary>
         public string Language
@@ -144,7 +143,7 @@ namespace WixSharp
         public event XDocumentSavedDlgt WixSourceSaved;
 
         /// <summary>
-        /// Occurs when WiX source file is formatted and ready to be saved. Use this event if you need to do any custom formatting 
+        /// Occurs when WiX source file is formatted and ready to be saved. Use this event if you need to do any custom formatting
         /// of the XML content before it is saved by the compiler.
         /// </summary>
         public event XDocumentFormatedDlgt WixSourceFormated;
@@ -156,6 +155,12 @@ namespace WixSharp
         /// value is ignored and all temporary files are preserved.</para>
         /// </summary>
         public bool PreserveTempFiles = false;
+
+        /// <summary>
+        /// Forces <see cref="Compiler"/> to preserve all obj/pdb build files (e.g. *.wixobj and *.wixpdb).
+        /// <para>The default value is <c>false</c>: all temporary files are deleted at the end of the build/compilation.</para>
+        /// </summary>
+        public bool PreserveDbgFiles = false;
 
         /// <summary>
         /// Invokes the WixSourceGenerated event handlers.

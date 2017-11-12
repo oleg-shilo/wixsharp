@@ -433,6 +433,12 @@ namespace WixSharp
         static public bool PreserveTempFiles = false;
 
         /// <summary>
+        /// Forces <see cref="Compiler"/> to preserve all obj/pdb build files (e.g. *.wixobj and *.wixpdb).
+        /// <para>The default value is <c>false</c>: all temporary files are deleted at the end of the build/compilation.</para>
+        /// </summary>
+        static public bool PreserveDbgFiles = false;
+
+        /// <summary>
         /// Indicates whether compiler should emit relative or absolute paths in the WiX XML source.
         /// </summary>
         static public bool EmitRelativePaths = true;
@@ -857,11 +863,14 @@ namespace WixSharp
                                 Compiler.OutputWriteLine("   " + Compiler.AutoGeneration.InstallDirDefaultId + "=" + project.AutoAssignedInstallDirPath);
                             }
 
-                            IO.Directory.GetFiles(outDir, "*.wixobj")
-                                        .ForEach(file => file.DeleteIfExists());
+                            if (!PreserveDbgFiles && !project.PreserveDbgFiles)
+                            {
+                                IO.Directory.GetFiles(outDir, "*.wixobj")
+                                            .ForEach(file => file.DeleteIfExists());
 
-                            IO.Path.ChangeExtension(wxsFile, ".wixpdb").DeleteIfExists();
-                            IO.Path.ChangeExtension(path, ".wixpdb").DeleteIfExists();
+                                IO.Path.ChangeExtension(wxsFile, ".wixpdb").DeleteIfExists();
+                                IO.Path.ChangeExtension(path, ".wixpdb").DeleteIfExists();
+                            }
 
                             project.DigitalSignature?.Apply(outFile);
                         }

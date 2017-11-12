@@ -20,14 +20,14 @@ public class InstallScript
     static public void Main(string[] args)
     {
         string productMsi = BuildMainMsi();
-
         string crtMsi = BuildCrtMsi();
+
         //---------------------------------------------------------
 
         var msiOnlinePackage = new MsiPackage(crtMsi) //demo for downloadable msi package
         {
             Vital = true,
-            Compressed = false, 
+            Compressed = false,
             DisplayInternalUI = true,
             DownloadUrl = @"https://dl.dropboxusercontent.com/....../CRT.msi"
         };
@@ -113,6 +113,8 @@ public class InstallScript
             Schedule = UpgradeSchedule.afterInstallInitialize,
             DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
         };
+
+        productProj.PreserveTempFiles = true;
 
         return productProj.BuildMsi();
     }

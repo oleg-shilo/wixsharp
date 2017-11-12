@@ -8,8 +8,8 @@
     <ProjectGuid>{D727402B-A591-4378-8469-3B78132077CC}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InstallFiles</RootNamespace>
-    <AssemblyName>InstallFiles</AssemblyName>
+    <RootNamespace>SinglePackageAuthoring</RootNamespace>
+    <AssemblyName>SinglePackageAuthoring</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -37,7 +37,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Install Files\</OutputPath>
+    <OutputPath>bin\SinglePackageAuthoring\</OutputPath>
     <IntermediateOutputPath>bin\SinglePackageAuthoring\obj\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>

@@ -28,11 +28,14 @@ static class Script
     static public void Main(string[] args)
     {
         var project = new Project("IsUninstallTest",
-                          new Dir(@"%ProgramFiles%\UninstallTest\",
-                              new Dir("scripts",
-                                  new File(@"Files\docs\setup.cs")),
-                              // new File("setup.cs"),
-                              new File(@"files\setup.cs")));
+                            new Dir(@"%ProgramFiles%\UninstallTest",
+                                // new Dir("scripts",
+                                //     new File(@"Files\docs\setup.cs")),
+                                new File(@"files\aaa\Index.cshtml"),
+                                new File(@"files\bbb\Index.cshtml")
+                                // new File(@"files\setup.cs")
+
+                                ));
 
         WixEntity.CustomIdAlgorithm =
             entity =>
@@ -42,19 +45,19 @@ static class Script
                     var target_path = project.GetTargetPathOf(file);
                     var hash = target_path.GetHashCode32();
 
-            // WiX does not allow '-' char in ID. So need to use `Math.Abs`
-            return $"{target_path.PathGetFileName()}_{Math.Abs(hash)}";
+                    // WiX does not allow '-' char in ID. So need to use `Math.Abs`
+                    return $"{target_path.PathGetFileName()}_{Math.Abs(hash)}";
                 }
                 return null; // next two lines produce the same result
                              // return WixEntity.DefaultIdAlgorithm(entity);
                              // return WixEntity.IncrementalIdFor(entity);
-    };
+            };
 
         // project.AfterInstall += Project_AfterInstall;
-        project.PreserveTempFiles = true;
-        project.BuildMsi();
+        // project.PreserveTempFiles = true;
+        // project.BuildMsi();
 
-        // project.BuildWxs();
+        project.BuildWxs();
     }
 
     private static void Project_AfterInstall(SetupEventArgs e)
