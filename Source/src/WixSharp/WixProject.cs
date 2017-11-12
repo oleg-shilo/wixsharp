@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Xml.Linq;
 using System.Collections.Generic;
+using System.Threading;
+using System.Globalization;
 
 namespace WixSharp
 {
@@ -114,7 +116,16 @@ namespace WixSharp
         public string Language
         {
             get { return language; }
-            set { language = value.DeflateWhitespaces(); }
+            set
+            {
+                language = value.DeflateWhitespaces();
+                try
+                {
+                    if (language.IsNotEmpty())
+                        Thread.CurrentThread.CurrentUICulture = new CultureInfo(language);
+                }
+                catch { }
+            }
         }
 
         /// <summary>
