@@ -333,6 +333,16 @@ namespace WixSharp
             }
         }
 
+        /// <summary>
+        /// Index based ID generation algorithm.
+        /// <para>It is the default algorithm, which generates the most human readable IDs. Thus if the p
+        /// project has two `index.html` files one will be assigned ID `index.html` and another one
+        /// `index.html.1`.</para>
+        /// <para> Limitations: If two files have the same name it is non-deterministic which one gets
+        /// clear ID and which one the indexed one.</para>
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
         public static string IncrementalIdFor(WixEntity entity)
         {
             if (!idMaps.ContainsKey(entity.GetType()))

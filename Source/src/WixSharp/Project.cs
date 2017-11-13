@@ -729,6 +729,26 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// For future use
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        private string HashedIdAlgorithm(WixEntity entity)
+        {
+            if (entity is File file)
+            {
+                var target_path = this.GetTargetPathOf(file);
+                var hash = target_path.GetHashCode32();
+
+                // WiX does not allow '-' char in ID. So need to use `Math.Abs`
+                return $"{target_path.PathGetFileName()}_{Math.Abs(hash)}";
+            }
+            return null; // next two lines produce the same result
+                         // return WixEntity.DefaultIdAlgorithm(entity);
+                         // return WixEntity.IncrementalIdFor(entity);
+        }
+
+        /// <summary>
         /// Finds <see cref="T:WixSharp.Dir"/> corresponding to the specified path.
         /// </summary>
         /// <example>
