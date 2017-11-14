@@ -1840,7 +1840,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Adds/combines given <see cref="T:System.Array"/> object with the specified items.
+        /// Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
         /// </summary>
         /// <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
         /// <typeparam name="T2">The type of the elements of the items being added.</typeparam>
