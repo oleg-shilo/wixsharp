@@ -35,7 +35,7 @@ class Script
             project.GUID = new Guid("6fe30b47-2577-43ad-9195-1861ba25889b");
             project.AfterInstall += Project_AfterInstall;
 
-            Compiler.PreserveTempFiles = true;
+            // Compiler.PreserveTempFiles = true;
             Compiler.BuildMsi(project);
         }
         catch (System.Exception ex)
@@ -133,7 +133,7 @@ public class CustomActions
         else
             config.Select("configuration/userSettings/MyApp.Properties.Settings")
                   .Parent.Remove();
-               // ?.Parent.Remove(); // in C#7
+        // ?.Parent.Remove(); // in C#7
 
         config.Save(configFile);
     }
