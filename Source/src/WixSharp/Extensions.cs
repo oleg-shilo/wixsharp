@@ -1790,31 +1790,6 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Combines given <see cref="T:System.Array"/> items with items of another <see cref="T:System.Array"/>.
-        /// </summary>
-        /// <typeparam name="T">The type of the elements of <c>obj</c>.</typeparam>
-        /// <param name="obj">A <see cref="T:System.Array"/> whose elements to combine.</param>
-        /// <param name="items">Another instance of <see cref="T:System.Array"/> whose elements to combine with <c>obj</c>.</param>
-        /// <returns>A combined <see cref="T:System.Array"/>.</returns>
-        public static T[] Combine<T>(this Array obj, Array items)
-        {
-            if (items != null && items.Length != 0)
-            {
-                var info = items.GetType();
-                var retval = new ArrayList();
-
-                foreach (var item in obj)
-                    retval.Add(item);
-
-                foreach (var item in items)
-                    retval.Add(item);
-
-                return (T[])retval.ToArray(typeof(T));
-            }
-            return (T[])obj;
-        }
-
-        /// <summary>
         /// Adds/combines given <see cref="T:System.Array"/> object with the specified item.
         /// </summary>
         /// <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
@@ -1847,7 +1822,35 @@ namespace WixSharp
         /// <param name="obj">The instance of the <see cref="T:System.Array"/>.</param>
         /// <param name="items">The items to be added.</param>
         /// <returns>Combined <see cref="T:System.Array"/> object.</returns>
+        [Obsolete(message: "This method name is obsolete use `Combine` instead", error: true)]
         public static T1[] AddRange<T1, T2>(this T1[] obj, IEnumerable<T2> items)
+        {
+            if (items != null)
+            {
+                var retval = new ArrayList();
+
+                if (obj != null)
+                    foreach (var i in obj)
+                        retval.Add(i);
+
+                if (items != null)
+                    foreach (var i in items)
+                        retval.Add(i);
+
+                return (T1[])retval.ToArray(typeof(T1));
+            }
+            return (T1[])obj;
+        }
+
+        /// <summary>
+        /// Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
+        /// </summary>
+        /// <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
+        /// <typeparam name="T2">The type of the elements of the items being added.</typeparam>
+        /// <param name="obj">The instance of the <see cref="T:System.Array"/>.</param>
+        /// <param name="items">The items to be added.</param>
+        /// <returns>Combined <see cref="T:System.Array"/> object.</returns>
+        public static T1[] Combine<T1, T2>(this T1[] obj, IEnumerable<T2> items)
         {
             if (items != null)
             {
@@ -2522,7 +2525,7 @@ namespace WixSharp
                            .Cast<MemberInfo>()
                            .ToArray();
 
-            var items = fields.Combine<MemberInfo>(props)
+            var items = fields.Concat(props)
                               .Select(x =>
                               {
                                   var xmlAttr = (XmlAttribute)x.GetCustomAttributes(typeof(XmlAttribute), false)

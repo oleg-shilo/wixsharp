@@ -131,7 +131,7 @@ namespace WixSharp.Test
             project.Actions = new Action[] { new ManagedAction() };
             //should not throw
             project.Actions = project.Actions.Add(new InstalledFileAction("", ""));
-            project.Actions = project.Actions.AddRange(project.Actions);
+            project.Actions = project.Actions.Combine(project.Actions);
         }
 
         [Fact]

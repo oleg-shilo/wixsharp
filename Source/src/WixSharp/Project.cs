@@ -628,7 +628,7 @@ namespace WixSharp
                     dirList.Add(dir);
 
                 foreach (DirFiles coll in dirList[iterator].DirFileCollections)
-                    dirList[iterator].Files = dirList[iterator].Files.Combine<File>(coll.GetFiles(SourceBaseDir));
+                    dirList[iterator].Files = dirList[iterator].Files.Combine(coll.GetFiles(SourceBaseDir));
 
                 //clear resolved collections
                 dirList[iterator].FileCollections = new Files[0];

@@ -33,7 +33,7 @@ namespace WixSharp.Bootstrapper
         {
             AppAssembly = appAssembly;
             Payloads = Payloads.Add(AppAssembly.ToPayload())
-                               .AddRange(dependencies);
+                               .Combine(dependencies);
         }
 
         /// <summary>

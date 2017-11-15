@@ -8,7 +8,7 @@ namespace WixSharp
     //https://msdn.microsoft.com/en-us/library/aa368032.aspx
 
     /// <summary>
-    /// Defines product properties as they appear in 'Add/Remove Programs' of Control Panel. 
+    /// Defines product properties as they appear in 'Add/Remove Programs' of Control Panel.
     /// <example>
     /// <code>
     ///  var project = new Project("MyProduct",
@@ -23,12 +23,12 @@ namespace WixSharp
     /// project.ControlPanelInfo.ProductIcon = "app_icon.ico";
     /// project.ControlPanelInfo.Contact = "Product owner";
     /// project.ControlPanelInfo.Manufacturer = "My Company";
-    /// project.ControlPanelInfo.InstallLocation = "[INSTALLDIR]";        
+    /// project.ControlPanelInfo.InstallLocation = "[INSTALLDIR]";
     /// project.ControlPanelInfo.NoModify = true;
     /// project.ControlPanelInfo.NoRepair = true,
     /// project.ControlPanelInfo.NoRemove = true,
     /// project.ControlPanelInfo.SystemComponent = true, //if set will not be shown in Control Panel
-    /// 
+    ///
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
@@ -36,71 +36,84 @@ namespace WixSharp
     public partial class ProductInfo : WixEntity
     {
         /// <summary>
-        /// Provides Comments for the Add/Remove Programs in the Control Panel. 
+        /// Provides Comments for the Add/Remove Programs in the Control Panel.
         /// </summary>
         [ArpPropertyAttribute("ARPCOMMENTS")]
-        public string Comments { get; set; } 
+        public string Comments { get; set; }
+
         /// <summary>
-        /// Provides the Contact for Add/Remove Programs in the Control Panel. 
+        /// Provides the Contact for Add/Remove Programs in the Control Panel.
         /// </summary>
         [ArpPropertyAttribute("ARPCONTACT")]
         public string Contact { get; set; }
+
         /// <summary>
         /// Product manufacturer name
         /// </summary>
         public string Manufacturer = Environment.UserName;
+
         /// <summary>
-        /// Fully qualified path to the application's primary folder. 
+        /// Fully qualified path to the application's primary folder.
         /// </summary>
         [ArpPropertyAttribute("ARPINSTALLLOCATION", SetAsAction = true)]
         public string InstallLocation { get; set; }
+
         /// <summary>
-        /// Internet address, or URL, for technical support. 
+        /// Internet address, or URL, for technical support.
         /// </summary>
         [ArpPropertyAttribute("ARPHELPLINK")]
         public string HelpLink { get; set; }
+
         /// <summary>
-        /// Technical support phone numbers. 
+        /// Technical support phone numbers.
         /// </summary>
         [ArpPropertyAttribute("ARPHELPTELEPHONE")]
         public string HelpTelephone { get; set; }
+
         /// <summary>
         /// Prevents display of a Change button for the product in Add/Remove Programs in the Control Panel. Note  This only affects the display in the ARP. The Windows Installer is still capable of repairing, installing-on-demand, and uninstalling applications through a command line or the programming interface.
         /// </summary>
         [ArpPropertyAttribute("ARPNOMODIFY", SetAsAction = true)]
         public bool? NoModify { get; set; }
+
         /// <summary>
         /// Prevents display of a Remove button for the product in the Add/Remove Programs in the Control Panel. The product can still be removed by selecting the Change button if the installation package has been authored with a user interface that provides product removal as an option. Note  This only affects the display in the ARP. The Windows Installer is still capable of repairing, installing-on-demand, and uninstalling applications through a command line or the programming interface.
         /// </summary>
         [ArpPropertyAttribute("ARPNOREMOVE")]
         public bool? NoRemove { get; set; }
+
         /// <summary>
-        /// Disables the Repair button in the Add/Remove Programs in the Control Panel. Note  This only affects the display in the ARP. The Windows Installer is still capable of repairing, installing-on-demand, and uninstalling applications through a command line or the programming interface. 
+        /// Disables the Repair button in the Add/Remove Programs in the Control Panel. Note  This only affects the display in the ARP. The Windows Installer is still capable of repairing, installing-on-demand, and uninstalling applications through a command line or the programming interface.
         /// </summary>
         [ArpPropertyAttribute("ARPNOREPAIR")]
         public bool? NoRepair { get; set; }
+
         /// <summary>
         /// Identifies the icon displayed in Add/Remove Programs. If this property is not defined, Add/Remove Programs specifies the display icon.
         /// </summary>
         [ArpPropertyAttribute("ARPPRODUCTICON")]
-        public string ProductIcon { get; set; }  
+        public string ProductIcon { get; set; }
+
         /// <summary>
-        /// Provides the ReadMe for Add/Remove Programs in Control Panel. 
+        /// Provides the ReadMe for Add/Remove Programs in Control Panel.
         /// </summary>
         [ArpPropertyAttribute("ARPREADME")]
         public string Readme { get; set; }
+
         /// <summary>
         /// Prevents display of the application in the Programs List of the Add/Remove Programs in the Control Panel. Note  This only affects the display in the ARP. The Windows Installer is still capable of repairing, installing-on-demand, and uninstalling applications through a command line or the programming interface.
         /// </summary>
         [ArpPropertyAttribute("ARPSYSTEMCOMPONENT")]
         public bool? SystemComponent { get; set; }
+
         /// <summary>
-        /// URL for application's home page. 
+        /// URL for application's home page.
         /// </summary>
         [ArpPropertyAttribute("ARPURLINFOABOUT")]
         public string UrlInfoAbout { get; set; }
+
         /// <summary>
-        /// URL for application update information. 
+        /// URL for application update information.
         /// </summary>
         [ArpPropertyAttribute("ARPURLUPDATEINFO")]
         public string UrlUpdateInfo { get; set; }
@@ -141,18 +154,18 @@ namespace WixSharp
                             }
                         }
                     }
-
                 }
             }
 
-            project.Properties = project.Properties.AddRange(properties);
-            project.Actions = project.Actions.AddRange(actions);
+            project.Properties = project.Properties.Combine(properties);
+            project.Actions = project.Actions.Combine(actions);
         }
 
         class ArpPropertyAttribute : Attribute
         {
             public bool SetAsAction = false;
             public string Name;
+
             public ArpPropertyAttribute(string name)
             {
                 this.Name = name;

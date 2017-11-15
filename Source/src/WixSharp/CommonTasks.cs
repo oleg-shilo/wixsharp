@@ -442,7 +442,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Project AddProperty(this Project project, params Property[] items)
         {
-            project.Properties = project.Properties.AddRange(items).Distinct().ToArray();
+            project.Properties = project.Properties.Combine(items).Distinct().ToArray();
             return project;
         }
 
@@ -454,7 +454,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Project AddAction(this Project project, params Action[] items)
         {
-            project.Actions = project.Actions.AddRange(items).Distinct().ToArray();
+            project.Actions = project.Actions.Combine(items).Distinct().ToArray();
             return project;
         }
 
@@ -466,7 +466,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Project AddDir(this Project project, params Dir[] items)
         {
-            project.Dirs = project.Dirs.AddRange(items).Distinct().ToArray();
+            project.Dirs = project.Dirs.Combine(items).Distinct().ToArray();
             return project;
         }
 
@@ -478,7 +478,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Project AddRegValue(this Project project, params RegValue[] items)
         {
-            project.RegValues = project.RegValues.AddRange(items).Distinct().ToArray();
+            project.RegValues = project.RegValues.Combine(items).Distinct().ToArray();
             return project;
         }
 
@@ -490,7 +490,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Project AddBinary(this Project project, params Binary[] items)
         {
-            project.Binaries = project.Binaries.AddRange(items).Distinct().ToArray();
+            project.Binaries = project.Binaries.Combine(items).Distinct().ToArray();
             return project;
         }
 
@@ -512,7 +512,7 @@ namespace WixSharp.CommonTasks
         /// <param name="installedVersion">The detected installed product version.</param>
         /// <returns></returns>
         public delegate bool DowngradeErrorCheck(Version thisVersion, Version installedVersion);
-        
+
         /// <summary>
         /// Adds the environment variable.
         /// </summary>
@@ -521,7 +521,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Project AddEnvironmentVariable(this Project project, params EnvironmentVariable[] items)
         {
-            project.EnvironmentVariables = project.EnvironmentVariables.AddRange(items).Distinct().ToArray();
+            project.EnvironmentVariables = project.EnvironmentVariables.Combine(items).Distinct().ToArray();
             return project;
         }
 
@@ -533,7 +533,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public ManagedAction AddRefAssembly(this ManagedAction action, params string[] files)
         {
-            action.RefAssemblies = action.RefAssemblies.AddRange(files).Distinct().ToArray();
+            action.RefAssemblies = action.RefAssemblies.Combine(files).Distinct().ToArray();
             return action;
         }
 
@@ -547,7 +547,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public File AddAssociation(this File file, params FileAssociation[] items)
         {
-            file.Associations = file.Associations.AddRange(items).Distinct().ToArray();
+            file.Associations = file.Associations.Combine(items).Distinct().ToArray();
             return file;
         }
 
@@ -559,7 +559,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public File AddShortcut(this File file, params FileShortcut[] items)
         {
-            file.Shortcuts = file.Shortcuts.AddRange(items).Distinct().ToArray();
+            file.Shortcuts = file.Shortcuts.Combine(items).Distinct().ToArray();
             return file;
         }
 
@@ -572,7 +572,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Dir AddDir(this Dir dir, params Dir[] items)
         {
-            dir.Dirs = dir.Dirs.AddRange(items).Distinct().ToArray();
+            dir.Dirs = dir.Dirs.Combine(items).Distinct().ToArray();
             return dir;
         }
 
@@ -584,7 +584,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Dir AddFile(this Dir dir, params File[] items)
         {
-            dir.Files = dir.Files.AddRange(items).Distinct().ToArray();
+            dir.Files = dir.Files.Combine(items).Distinct().ToArray();
             return dir;
         }
 
@@ -596,7 +596,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Dir AddShortcut(this Dir dir, params ExeFileShortcut[] items)
         {
-            dir.Shortcuts = dir.Shortcuts.AddRange(items).Distinct().ToArray();
+            dir.Shortcuts = dir.Shortcuts.Combine(items).Distinct().ToArray();
             return dir;
         }
 
@@ -609,7 +609,7 @@ namespace WixSharp.CommonTasks
         [Obsolete(message: "This method name is obsolete use `AddFeature` instead")]
         static public Dir AddFeatures(this Dir dir, params Feature[] items)
         {
-            dir.Features = dir.Features.AddRange(items).Distinct().ToArray();
+            dir.Features = dir.Features.Combine(items).Distinct().ToArray();
             return dir;
         }
 
@@ -621,7 +621,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Dir AddFeature(this Dir dir, params Feature[] items)
         {
-            dir.Features = dir.Features.AddRange(items).Distinct().ToArray();
+            dir.Features = dir.Features.Combine(items).Distinct().ToArray();
             return dir;
         }
 
@@ -633,7 +633,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Dir AddMergeModule(this Dir dir, params Merge[] items)
         {
-            dir.MergeModules = dir.MergeModules.AddRange(items).Distinct().ToArray();
+            dir.MergeModules = dir.MergeModules.Combine(items).Distinct().ToArray();
             return dir;
         }
 
@@ -645,7 +645,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Dir AddFileCollection(this Dir dir, params Files[] items)
         {
-            dir.FileCollections = dir.FileCollections.AddRange(items).Distinct().ToArray();
+            dir.FileCollections = dir.FileCollections.Combine(items).Distinct().ToArray();
             return dir;
         }
 
@@ -657,7 +657,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Dir AddDirFileCollection(this Dir dir, params DirFiles[] items)
         {
-            dir.DirFileCollections = dir.DirFileCollections.AddRange(items).Distinct().ToArray();
+            dir.DirFileCollections = dir.DirFileCollections.Combine(items).Distinct().ToArray();
             return dir;
         }
 

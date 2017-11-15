@@ -5021,15 +5021,6 @@
             <param name="ver">The instance of the <see cref="T:System.Version"/>.</param>
             <returns><see cref="T:System.String"/></returns>
         </member>
-        <member name="M:WixSharp.Extensions.Combine``1(System.Array,System.Array)">
-            <summary>
-            Combines given <see cref="T:System.Array"/> items with items of another <see cref="T:System.Array"/>.
-            </summary>
-            <typeparam name="T">The type of the elements of <c>obj</c>.</typeparam>
-            <param name="obj">A <see cref="T:System.Array"/> whose elements to combine.</param>
-            <param name="items">Another instance of <see cref="T:System.Array"/> whose elements to combine with <c>obj</c>.</param>
-            <returns>A combined <see cref="T:System.Array"/>.</returns>
-        </member>
         <member name="M:WixSharp.Extensions.Add``2(``0[],``1)">
             <summary>
             Adds/combines given <see cref="T:System.Array"/> object with the specified item.
@@ -5042,7 +5033,17 @@
         </member>
         <member name="M:WixSharp.Extensions.AddRange``2(``0[],System.Collections.Generic.IEnumerable{``1})">
             <summary>
-            Adds/combines given <see cref="T:System.Array"/> object with the specified items.
+            Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
+            </summary>
+            <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
+            <typeparam name="T2">The type of the elements of the items being added.</typeparam>
+            <param name="obj">The instance of the <see cref="T:System.Array"/>.</param>
+            <param name="items">The items to be added.</param>
+            <returns>Combined <see cref="T:System.Array"/> object.</returns>
+        </member>
+        <member name="M:WixSharp.Extensions.Combine``2(``0[],System.Collections.Generic.IEnumerable{``1})">
+            <summary>
+            Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
             </summary>
             <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
             <typeparam name="T2">The type of the elements of the items being added.</typeparam>
@@ -8272,41 +8273,41 @@
             <returns>Path to the built bootstrapper file. Returns <c>null</c> if bootstrapper cannot be built.</returns>
         </member>
         <member name="T:WixSharp.ProductInfo">
-            <summary>
-            Defines product properties as they appear in 'Add/Remove Programs' of Control Panel. 
-            <example>
-            <code>
-             var project = new Project("MyProduct",
-                               new Dir(@"%ProgramFiles%\My Company\My Product",
-                               ...
-            project.ControlPanelInfo.Comments = "Simple test msi";
-            project.ControlPanelInfo.Readme = "https://wixsharp.codeplex.com/manual";
-            project.ControlPanelInfo.HelpLink = "https://wixsharp.codeplex.com/support";
-            project.ControlPanelInfo.HelpTelephone = "111-222-333-444";
-            project.ControlPanelInfo.UrlInfoAbout = "https://wixsharp.codeplex.com/About";
-            project.ControlPanelInfo.UrlUpdateInfo = "https://wixsharp.codeplex.com/update";
-            project.ControlPanelInfo.ProductIcon = "app_icon.ico";
-            project.ControlPanelInfo.Contact = "Product owner";
-            project.ControlPanelInfo.Manufacturer = "My Company";
-            project.ControlPanelInfo.InstallLocation = "[INSTALLDIR]";        
-            project.ControlPanelInfo.NoModify = true;
-            project.ControlPanelInfo.NoRepair = true,
-            project.ControlPanelInfo.NoRemove = true,
-            project.ControlPanelInfo.SystemComponent = true, //if set will not be shown in Control Panel
+             <summary>
+             Defines product properties as they appear in 'Add/Remove Programs' of Control Panel.
+             <example>
+             <code>
+              var project = new Project("MyProduct",
+                                new Dir(@"%ProgramFiles%\My Company\My Product",
+                                ...
+             project.ControlPanelInfo.Comments = "Simple test msi";
+             project.ControlPanelInfo.Readme = "https://wixsharp.codeplex.com/manual";
+             project.ControlPanelInfo.HelpLink = "https://wixsharp.codeplex.com/support";
+             project.ControlPanelInfo.HelpTelephone = "111-222-333-444";
+             project.ControlPanelInfo.UrlInfoAbout = "https://wixsharp.codeplex.com/About";
+             project.ControlPanelInfo.UrlUpdateInfo = "https://wixsharp.codeplex.com/update";
+             project.ControlPanelInfo.ProductIcon = "app_icon.ico";
+             project.ControlPanelInfo.Contact = "Product owner";
+             project.ControlPanelInfo.Manufacturer = "My Company";
+             project.ControlPanelInfo.InstallLocation = "[INSTALLDIR]";
+             project.ControlPanelInfo.NoModify = true;
+             project.ControlPanelInfo.NoRepair = true,
+             project.ControlPanelInfo.NoRemove = true,
+             project.ControlPanelInfo.SystemComponent = true, //if set will not be shown in Control Panel
             
-            Compiler.BuildMsi(project);
-            </code>
-            </example>
-            </summary>
+             Compiler.BuildMsi(project);
+             </code>
+             </example>
+             </summary>
         </member>
         <member name="P:WixSharp.ProductInfo.Comments">
             <summary>
-            Provides Comments for the Add/Remove Programs in the Control Panel. 
+            Provides Comments for the Add/Remove Programs in the Control Panel.
             </summary>
         </member>
         <member name="P:WixSharp.ProductInfo.Contact">
             <summary>
-            Provides the Contact for Add/Remove Programs in the Control Panel. 
+            Provides the Contact for Add/Remove Programs in the Control Panel.
             </summary>
         </member>
         <member name="F:WixSharp.ProductInfo.Manufacturer">
@@ -8316,17 +8317,17 @@
         </member>
         <member name="P:WixSharp.ProductInfo.InstallLocation">
             <summary>
-            Fully qualified path to the application's primary folder. 
+            Fully qualified path to the application's primary folder.
             </summary>
         </member>
         <member name="P:WixSharp.ProductInfo.HelpLink">
             <summary>
-            Internet address, or URL, for technical support. 
+            Internet address, or URL, for technical support.
             </summary>
         </member>
         <member name="P:WixSharp.ProductInfo.HelpTelephone">
             <summary>
-            Technical support phone numbers. 
+            Technical support phone numbers.
             </summary>
         </member>
         <member name="P:WixSharp.ProductInfo.NoModify">
@@ -8341,7 +8342,7 @@
         </member>
         <member name="P:WixSharp.ProductInfo.NoRepair">
             <summary>
-            Disables the Repair button in the Add/Remove Programs in the Control Panel. Note  This only affects the display in the ARP. The Windows Installer is still capable of repairing, installing-on-demand, and uninstalling applications through a command line or the programming interface. 
+            Disables the Repair button in the Add/Remove Programs in the Control Panel. Note  This only affects the display in the ARP. The Windows Installer is still capable of repairing, installing-on-demand, and uninstalling applications through a command line or the programming interface.
             </summary>
         </member>
         <member name="P:WixSharp.ProductInfo.ProductIcon">
@@ -8351,7 +8352,7 @@
         </member>
         <member name="P:WixSharp.ProductInfo.Readme">
             <summary>
-            Provides the ReadMe for Add/Remove Programs in Control Panel. 
+            Provides the ReadMe for Add/Remove Programs in Control Panel.
             </summary>
         </member>
         <member name="P:WixSharp.ProductInfo.SystemComponent">
@@ -8361,12 +8362,12 @@
         </member>
         <member name="P:WixSharp.ProductInfo.UrlInfoAbout">
             <summary>
-            URL for application's home page. 
+            URL for application's home page.
             </summary>
         </member>
         <member name="P:WixSharp.ProductInfo.UrlUpdateInfo">
             <summary>
-            URL for application update information. 
+            URL for application update information.
             </summary>
         </member>
         <member name="T:WixSharp.Binary">
