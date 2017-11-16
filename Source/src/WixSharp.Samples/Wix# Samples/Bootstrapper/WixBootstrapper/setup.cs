@@ -60,6 +60,8 @@ public class InstallScript
         //bootstrapper.Application.LicensePath = "http://opensource.org/licenses/MIT"; //HyperlinkLicense app with online license file
         //bootstrapper.Application.LicensePath = null; //HyperlinkLicense app with no license
 
+        bootstrapper.Application.AttributesDefinition = "ShowVersion=yes; ShowFilesInUse=yes";
+
         bootstrapper.IncludeWixExtension(WixExtension.Util);
 
         // The code below sets WiX variables 'Netfx4FullVersion' and 'AdobeInstalled'. Note it has no affect on
@@ -87,10 +89,13 @@ public class InstallScript
         //                                                .AddElement("MspPackage",
         //                                                            "SourceFile=Patch.msp; Slipstream=no");
 
+        // bootstrapper.WixSourceGenerated += doc => doc.FindSingle("WixStandardBootstrapperApplication")
+        //                                              .AddAttributes("ShowVersion=yes; ShowFilesInUse=no");
+
         //in real life scenarios suppression may need to be enabled (see SuppressWixMbaPrereqVars documentation)
         //bootstrapper.SuppressWixMbaPrereqVars = true;
         var setup = bootstrapper.Build("app_setup");
-
+        Console.WriteLine(setup);
         //---------------------------------------------------------
 
         if (io.File.Exists(productMsi)) io.File.Delete(productMsi);

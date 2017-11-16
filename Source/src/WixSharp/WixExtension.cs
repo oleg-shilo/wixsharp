@@ -121,6 +121,11 @@ namespace WixSharp
         public static WixExtension Util = new WixExtension("%WixLocation%\\WixUtilExtension.dll", "util", "http://schemas.microsoft.com/wix/UtilExtension");
 
         /// <summary>
+        /// Well-known Wix Extension: Bal
+        /// </summary>
+        public static WixExtension Bal = new WixExtension("%WixLocation%\\WixBalExtension.dll", "bal", "http://schemas.microsoft.com/wix/BalExtension");
+
+        /// <summary>
         /// Well-known Wix Extension IIs
         /// </summary>
         public static WixExtension IIs = new WixExtension("%WixLocation%\\WixIIsExtension.dll", "iis", "http://schemas.microsoft.com/wix/IIsExtension");
