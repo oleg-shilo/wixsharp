@@ -762,7 +762,7 @@ namespace WixSharp
         /// In the sample above the call <c>FindDir(@"%ProgramFiles%\My Company\My Product")</c> returns the last declared <see cref="T:WixSharp.Dir"/>.
         /// </example>
         /// <param name="path">The path string.</param>
-        /// <returns><see cref="T:WixSharp.Dir"/> instance if the search was succesfull, otherwise return <c>null</c></returns>
+        /// <returns><see cref="T:WixSharp.Dir"/> instance if the search was successful, otherwise return <c>null</c></returns>
         public Dir FindDir(string path)
         {
             int iterator = 0;
@@ -927,6 +927,20 @@ namespace WixSharp
                 return Compiler.BuildMsmCmd(this);
             else
                 return Compiler.BuildMsmCmd(this, path);
+        }
+
+        public string HashedTargetPathIdAlgorithm(WixEntity entity)
+        {
+            if (entity is File file)
+            {
+                var target_path = this.GetTargetPathOf(file);
+                var hash = target_path.GetHashCode32();
+
+                // WiX does not allow '-' char in ID. So need to use `Math.Abs`
+                return $"{target_path.PathGetFileName()}_{Math.Abs(hash)}";
+            }
+
+            return null; // pass to default ID generator
         }
     }
 }

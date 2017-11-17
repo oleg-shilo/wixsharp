@@ -32,6 +32,9 @@ static class Script
                                 new File(@"files\setup.cs")));
 
         project.AfterInstall += Project_AfterInstall;
+
+        WixEntity.CustomIdAlgorithm = project.HashedTargetPathIdAlgorithm;
+
         project.BuildMsi();
     }
 
