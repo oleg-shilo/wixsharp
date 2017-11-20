@@ -129,7 +129,8 @@ namespace WixSharp.Bootstrapper
         //public ChainItem DependencyPackage { get; set; }
     }
 
-#pragma warning disable: 169
+#pragma warning disable 169
+
     /// <summary>
     /// Container class for common members of the Bootstrapper standard applications.
     /// </summary>
@@ -157,7 +158,6 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         [Xml]
         public string LaunchWorkingFolder;
-
 
         /// <summary>
         /// If set to "true", WixStdBA will launch the application specified by the LaunchTarget attribute with the SW_HIDE flag. This attribute is ignored when the LaunchTargetElevatedId attribute is specified.

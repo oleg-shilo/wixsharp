@@ -270,36 +270,6 @@ namespace WixSharp
         public string Name = "";
 
         /// <summary>
-        /// The custom algorithm for generating WiX elements IDs.
-        /// </summary>
-        ///<example>The following code demonstrates how to generate File IDs based is on the hash
-        ///of the target path of the file being installed.
-        ///<code>
-        ///
-        ///WixEntity.CustomIdAlgorithm =
-        ///       entity =>
-        ///       {
-        ///           if (entity is File file)
-        ///           {
-        ///               var target_path = project.GetTargetPathOf(file);
-        ///               var hash = target_path.GetHashCode32();
-        ///
-        ///               // WiX does not allow '-' char in ID. So need to use `Math.Abs`
-        ///               return $"{target_path.PathGetFileName()}_{Math.Abs(hash)}";
-        ///           }
-        ///
-        ///           return null; // pass to default ID generator
-        ///       };
-        /// </code>
-        /// </example>
-        static public Func<WixEntity, string> CustomIdAlgorithm = null;
-
-        /// <summary>
-        /// The default algorithm
-        /// </summary>
-        static public Func<WixEntity, string> DefaultIdAlgorithm = IncrementalIdFor;
-
-        /// <summary>
         /// Gets or sets the <c>Id</c> value of the <see cref="WixEntity"/>.
         /// <para>This value is used as a <c>Id</c> for the corresponding WiX XML element.</para>
         /// <para>If the <see cref="Id"/> value is not specified explicitly by the user the Wix# compiler
@@ -321,7 +291,7 @@ namespace WixSharp
             {
                 if (id.IsEmpty())
                 {
-                    id = CustomIdAlgorithm?.Invoke(this) ?? IncrementalIdFor(this);
+                    id = Compiler.AutoGeneration.CustomIdAlgorithm?.Invoke(this) ?? IncrementalIdFor(this);
                 }
 
                 return id;
@@ -334,12 +304,12 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Index based ID generation algorithm.
-        /// <para>It is the default algorithm, which generates the most human readable IDs. Thus if the p
-        /// project has two `index.html` files one will be assigned ID `index.html` and another one
+        /// Index based Id generation algorithm.
+        /// <para>It is the default algorithm, which generates the most human readable Id. Thus if the
+        /// project has two `index.html` files one will be assigned Id `index.html` and another one
         /// `index.html.1`.</para>
         /// <para> Limitations: If two files have the same name it is non-deterministic which one gets
-        /// clear ID and which one the indexed one.</para>
+        /// clear Id and which one the indexed one.</para>
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>

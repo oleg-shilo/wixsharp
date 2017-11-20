@@ -32,15 +32,14 @@ static class Script
                                 new File(@"files\setup.cs")));
 
         project.AfterInstall += Project_AfterInstall;
+        project.PreserveTempFiles = true;
 
-        WixEntity.CustomIdAlgorithm = project.HashedTargetPathIdAlgorithm;
-
-        project.BuildMsi();
+        project.BuildWxs();
     }
 
     private static void Project_AfterInstall(SetupEventArgs e)
     {
-        System.Windows.Forms.MessageBox.Show("Is Uninstalling: " + e.IsUninstalling);
+        MessageBox.Show("Is Uninstalling: " + e.IsUninstalling);
         if (e.IsUninstalling)
         {
             // e.IsUninstalling is always false if the uninstall is triggered via executing the msi again

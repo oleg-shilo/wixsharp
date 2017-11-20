@@ -234,5 +234,32 @@ namespace WixSharp
             if (WixSourceFormated != null)
                 WixSourceFormated(ref content);
         }
+
+        /// <summary>
+        /// The custom algorithm for generating WiX elements Id(s).
+        /// <para>If the custom algorithm is used to concurrently build multiple projects and access
+        /// resources, then you may consider built-in synchronization available with
+        /// <see cref="T:WixSharp.Compiler.IsWxsGenerationThreadSafe"/>.</para>
+        /// </summary>
+        ///<example>The following code demonstrates how to generate File Id(s) based is on the hash
+        /// of the target path of the file being installed.
+        ///<code>
+        /// WixEntity.CustomIdAlgorithm =
+        ///       entity =>
+        ///       {
+        ///           if (entity is File file)
+        ///           {
+        ///               var target_path = project.GetTargetPathOf(file);
+        ///               var hash = target_path.GetHashCode32();
+        ///
+        ///               // WiX does not allow '-' char in Id. So need to use `Math.Abs`
+        ///               return $"{target_path.PathGetFileName()}_{Math.Abs(hash)}";
+        ///           }
+        ///
+        ///           return null; // pass to default ID generator
+        ///       };
+        /// </code>
+        /// </example>
+        public Func<WixEntity, string> CustomIdAlgorithm = null;
     }
 }

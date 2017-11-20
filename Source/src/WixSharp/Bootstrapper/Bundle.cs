@@ -39,6 +39,11 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         public Bundle()
         {
+            if (!Compiler.AutoGeneration.LegacyDefaultIdAlgorithm)
+            {
+                // in case of Bundle project just do nothing
+            }
+
             WixExtensions.Add("WiXNetFxExtension");
             WixExtensions.Add("WiXBalExtension");
         }
@@ -50,6 +55,11 @@ namespace WixSharp.Bootstrapper
         /// <param name="items">The project installable items (e.g. directories, files, registry keys, Custom Actions).</param>
         public Bundle(string name, params ChainItem[] items)
         {
+            if (!Compiler.AutoGeneration.LegacyDefaultIdAlgorithm)
+            {
+                // in case of Bundle project just do nothing
+            }
+
             WixExtensions.Add("WiXNetFxExtension");
             WixExtensions.Add("WiXBalExtension");
             Name = name;
@@ -312,6 +322,11 @@ namespace WixSharp.Bootstrapper
         /// <returns></returns>
         public string Build(string path = null)
         {
+            if (!Compiler.AutoGeneration.LegacyDefaultIdAlgorithm)
+            {
+                // in case of Bundle project just do nothing
+            }
+
             var output = new StringBuilder();
             Action<string> collect = line => output.AppendLine(line);
 

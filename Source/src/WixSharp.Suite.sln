@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixSharp", "WixSharp\WixSharp.csproj", "{8860B29B-749F-4925-86C8-F9C4B93C9DA5}"
 EndProject
@@ -63,7 +63,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTF_ExternalAssembly", "Wix
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Empty Directories", "WixSharp.Samples\VSProjects\Empty Directories.csproj", "{8E822D99-D1B5-45F0-BFBC-7A8067194B07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explicit IDs", "WixSharp.Samples\VSProjects\Explicit IDs.csproj", "{AA7C07A9-C3FF-48D8-8A08-21AADA24D97E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Custom_IDs", "WixSharp.Samples\VSProjects\Custom_IDs.csproj", "{AA7C07A9-C3FF-48D8-8A08-21AADA24D97E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAC", "WixSharp.Samples\VSProjects\GAC.csproj", "{A52CEA2F-E484-4993-B48E-C8ED104D6E1B}"
 EndProject

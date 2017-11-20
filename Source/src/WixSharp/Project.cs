@@ -68,7 +68,11 @@ namespace WixSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class.
         /// </summary>
-        public Project() { }
+        public Project()
+        {
+            if (!Compiler.AutoGeneration.LegacyDefaultIdAlgorithm)
+                this.CustomIdAlgorithm = this.HashedTargetPathIdAlgorithm;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class.
@@ -77,6 +81,9 @@ namespace WixSharp
         /// <param name="items">The project installable items (e.g. directories, files, registry keys, Custom Actions).</param>
         public Project(string name, params WixObject[] items)
         {
+            if (!Compiler.AutoGeneration.LegacyDefaultIdAlgorithm)
+                this.CustomIdAlgorithm = this.HashedTargetPathIdAlgorithm;
+
             Name = name;
             OutFileName = name;
 
@@ -929,6 +936,13 @@ namespace WixSharp
                 return Compiler.BuildMsmCmd(this, path);
         }
 
+        /// <summary>
+        /// Algorithm for generating deterministic <see cref="T:WixSharp.File"/>Id(s) based on the hash of the target path.
+        /// <para>This algorithm addresses the limitation of the incremental-Id legacy algorithm, which it quite reliable but
+        /// non deterministic.</para>
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
         public string HashedTargetPathIdAlgorithm(WixEntity entity)
         {
             if (entity is File file)
@@ -936,11 +950,11 @@ namespace WixSharp
                 var target_path = this.GetTargetPathOf(file);
                 var hash = target_path.GetHashCode32();
 
-                // WiX does not allow '-' char in ID. So need to use `Math.Abs`
+                // WiX does not allow '-' char in Id. So need to use `Math.Abs`
                 return $"{target_path.PathGetFileName()}_{Math.Abs(hash)}";
             }
 
-            return null; // pass to default ID generator
+            return null; // pass to default Id generator
         }
     }
 }

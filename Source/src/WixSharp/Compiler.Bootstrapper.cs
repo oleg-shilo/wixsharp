@@ -239,60 +239,73 @@ namespace WixSharp
 
                 project.Validate();
 
-                WixEntity.ResetIdGenerator(false);
-                string file = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, project.OutFileName) + ".wxs");
+                lock (Compiler.AutoGeneration.WxsGenerationSynchObject)
+                {
+                    var oldAlgorithm = AutoGeneration.CustomIdAlgorithm;
+                    try
+                    {
+                        WixEntity.ResetIdGenerator(false);
+                        AutoGeneration.CustomIdAlgorithm = project.CustomIdAlgorithm ?? AutoGeneration.CustomIdAlgorithm;
 
-                if (IO.File.Exists(file))
-                    IO.File.Delete(file);
+                        string file = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, project.OutFileName) + ".wxs");
 
-                string extraNamespaces = project.WixNamespaces.Distinct()
-                                                          .Select(x => x.StartsWith("xmlns:") ? x : "xmlns:" + x)
-                                                          .ConcatItems(" ");
+                        if (IO.File.Exists(file))
+                            IO.File.Delete(file);
 
-                var wix3Namespace = "http://schemas.microsoft.com/wix/2006/wi";
-                //var wix4Namespace = "http://wixtoolset.org/schemas/v4/wxs";
+                        string extraNamespaces = project.WixNamespaces.Distinct()
+                                                                      .Select(x => x.StartsWith("xmlns:") ? x : "xmlns:" + x)
+                                                                      .ConcatItems(" ");
 
-                var doc = XDocument.Parse(
-                       @"<?xml version=""1.0"" encoding=""utf-8""?>
+                        var wix3Namespace = "http://schemas.microsoft.com/wix/2006/wi";
+                        //var wix4Namespace = "http://wixtoolset.org/schemas/v4/wxs";
+
+                        var doc = XDocument.Parse(
+                               @"<?xml version=""1.0"" encoding=""utf-8""?>
                              " + $"<Wix xmlns=\"{wix3Namespace}\" {extraNamespaces} " + @" >
                         </Wix>");
 
-                doc.Root.Add(project.ToXml());
+                        doc.Root.Add(project.ToXml());
 
-                AutoElements.NormalizeFilePaths(doc, project.SourceBaseDir, EmitRelativePaths);
+                        AutoElements.NormalizeFilePaths(doc, project.SourceBaseDir, EmitRelativePaths);
 
-                project.InvokeWixSourceGenerated(doc);
-                if (WixSourceGenerated != null)
-                    WixSourceGenerated(doc);
+                        project.InvokeWixSourceGenerated(doc);
+                        if (WixSourceGenerated != null)
+                            WixSourceGenerated(doc);
 
-                string xml = "";
-                using (IO.StringWriter sw = new StringWriterWithEncoding(Encoding.Default))
-                {
-                    doc.Save(sw, SaveOptions.None);
-                    xml = sw.ToString();
+                        string xml = "";
+                        using (IO.StringWriter sw = new StringWriterWithEncoding(Encoding.Default))
+                        {
+                            doc.Save(sw, SaveOptions.None);
+                            xml = sw.ToString();
+                        }
+
+                        //of course you can use XmlTextWriter.WriteRaw but this is just a temporary quick'n'dirty solution
+                        //http://forums.microsoft.com/MSDN/ShowPost.aspx?PostID=2657663&SiteID=1
+                        xml = xml.Replace("xmlns=\"\"", "");
+
+                        DefaultWixSourceFormatedHandler(ref xml);
+
+                        project.InvokeWixSourceFormated(ref xml);
+                        if (WixSourceFormated != null)
+                            WixSourceFormated(ref xml);
+
+                        using (var sw = new IO.StreamWriter(file, false, Encoding.Default))
+                            sw.WriteLine(xml);
+
+                        Compiler.OutputWriteLine("\n----------------------------------------------------------\n");
+                        Compiler.OutputWriteLine("Wix project file has been built: " + file + "\n");
+
+                        project.InvokeWixSourceSaved(file);
+                        if (WixSourceSaved != null)
+                            WixSourceSaved(file);
+
+                        return file;
+                    }
+                    finally
+                    {
+                        AutoGeneration.CustomIdAlgorithm = oldAlgorithm;
+                    }
                 }
-
-                //of course you can use XmlTextWriter.WriteRaw but this is just a temporary quick'n'dirty solution
-                //http://forums.microsoft.com/MSDN/ShowPost.aspx?PostID=2657663&SiteID=1
-                xml = xml.Replace("xmlns=\"\"", "");
-
-                DefaultWixSourceFormatedHandler(ref xml);
-
-                project.InvokeWixSourceFormated(ref xml);
-                if (WixSourceFormated != null)
-                    WixSourceFormated(ref xml);
-
-                using (var sw = new IO.StreamWriter(file, false, Encoding.Default))
-                    sw.WriteLine(xml);
-
-                Compiler.OutputWriteLine("\n----------------------------------------------------------\n");
-                Compiler.OutputWriteLine("Wix project file has been built: " + file + "\n");
-
-                project.InvokeWixSourceSaved(file);
-                if (WixSourceSaved != null)
-                    WixSourceSaved(file);
-
-                return file;
             }
         }
 
