@@ -1797,6 +1797,7 @@ namespace WixSharp
         /// <param name="obj">The instance of the <see cref="T:System.Array"/>.</param>
         /// <param name="item">The item to be added.</param>
         /// <returns>Combined <see cref="T:System.Array"/> object.</returns>
+        [Obsolete(message: "This method name is obsolete use `Combine` instead", error: true)]
         public static T1[] Add<T1, T2>(this T1[] obj, T2 item) where T2 : T1
         {
             if (item != null)
@@ -1840,6 +1841,19 @@ namespace WixSharp
                 return (T1[])retval.ToArray(typeof(T1));
             }
             return (T1[])obj;
+        }
+
+        /// <summary>
+        /// Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
+        /// </summary>
+        /// <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
+        /// <typeparam name="T2">The type of the elements of the items being added.</typeparam>
+        /// <param name="obj">The instance of the <see cref="T:System.Array"/>.</param>
+        /// <param name="items">The items to be added.</param>
+        /// <returns>Combined <see cref="T:System.Array"/> object.</returns>
+        public static T1[] Combine<T1, T2>(this T1[] obj, params T2[] items)
+        {
+            return obj.Combine((IEnumerable<T2>)items);
         }
 
         /// <summary>

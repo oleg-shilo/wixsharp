@@ -435,36 +435,69 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Adds the property.
+        /// Adds the property items to the project.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public Project AddProperty(this Project project, params Property[] items)
+        static public Project AddProperties(this Project project, params Property[] items)
         {
             project.Properties = project.Properties.Combine(items).Distinct().ToArray();
             return project;
         }
 
         /// <summary>
-        /// Adds the action.
+        /// Adds the property to the project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Project AddProperty(this Project project, Property item)
+        {
+            return project.AddProperties(item);
+        }
+
+        /// <summary>
+        /// Adds the action items to the project.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public Project AddAction(this Project project, params Action[] items)
+        static public Project AddActions(this Project project, params Action[] items)
         {
             project.Actions = project.Actions.Combine(items).Distinct().ToArray();
             return project;
         }
 
         /// <summary>
-        /// Adds the dir.
+        /// Adds the action to the project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Project AddAction(this Project project, Action item)
+        {
+            return project.AddActions(item);
+        }
+
+        /// <summary>
+        /// Adds the dir to the project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Project AddDir(this Project project, Dir item)
+        {
+            return project.AddDirs(item);
+        }
+
+        /// <summary>
+        /// Adds the dir items to the project.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public Project AddDir(this Project project, params Dir[] items)
+        static public Project AddDirs(this Project project, params Dir[] items)
         {
             project.Dirs = project.Dirs.Combine(items).Distinct().ToArray();
             return project;
@@ -540,40 +573,73 @@ namespace WixSharp.CommonTasks
         //////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Adds the file association.
+        /// Adds the file association items to the project.
         /// </summary>
         /// <param name="file">The file.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public File AddAssociation(this File file, params FileAssociation[] items)
+        static public File AddAssociations(this File file, params FileAssociation[] items)
         {
             file.Associations = file.Associations.Combine(items).Distinct().ToArray();
             return file;
         }
 
         /// <summary>
-        /// Adds the shortcut.
+        /// Adds the file association to the file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public File AddAssociation(this File file, FileAssociation item)
+        {
+            return file.AddAssociations(item);
+        }
+
+        /// <summary>
+        /// Adds the shortcut items to the File.
         /// </summary>
         /// <param name="file">The file.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public File AddShortcut(this File file, params FileShortcut[] items)
+        static public File AddShortcuts(this File file, params FileShortcut[] items)
         {
             file.Shortcuts = file.Shortcuts.Combine(items).Distinct().ToArray();
             return file;
         }
 
+        /// <summary>
+        /// Adds the shortcut to the File.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public File AddShortcut(this File file, FileShortcut item)
+        {
+            return file.AddShortcuts(item);
+        }
+
         //////////////////////////////////////////////////////////////////
         /// <summary>
-        /// Adds the dir.
+        /// Adds the directory items to the Dir.
         /// </summary>
         /// <param name="dir">The dir.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public Dir AddDir(this Dir dir, params Dir[] items)
+        static public Dir AddDirs(this Dir dir, params Dir[] items)
         {
             dir.Dirs = dir.Dirs.Combine(items).Distinct().ToArray();
             return dir;
+        }
+
+        /// <summary>
+        /// Adds the directory to the Dir.
+        /// </summary>
+        /// <param name="dir">The dir.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Dir AddDir(this Dir dir, Dir item)
+        {
+            return dir.AddDirs(item);
         }
 
         /// <summary>
