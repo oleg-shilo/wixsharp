@@ -1845,6 +1845,8 @@ namespace WixSharp
 
         /// <summary>
         /// Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
+        /// <para>If you are adding items to the <c>Project</c> or <c>Dir</c> then you can use the dedicated 
+        /// methods for that (e.g. `dir.AffFiles(drivers)`).</para>
         /// </summary>
         /// <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
         /// <typeparam name="T2">The type of the elements of the items being added.</typeparam>

@@ -458,7 +458,7 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Adds the action items to the project.
+        /// Adds the action items to the Project.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="items">The items.</param>
@@ -470,7 +470,7 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Adds the action to the project.
+        /// Adds the action to the Project.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="item">The item.</param>
@@ -481,7 +481,7 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Adds the dir to the project.
+        /// Adds the directory to the Project.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="item">The item.</param>
@@ -492,7 +492,7 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Adds the dir items to the project.
+        /// Adds the directory items to the Project.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="items">The items.</param>
@@ -504,27 +504,49 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Adds the registry value.
+        /// Adds the registry value to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Project AddRegValue(this Project project, RegValue item)
+        {
+            return project.AddRegValues(item);
+        }
+
+        /// <summary>
+        /// Adds the registry values to the Project.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public Project AddRegValue(this Project project, params RegValue[] items)
+        static public Project AddRegValues(this Project project, params RegValue[] items)
         {
             project.RegValues = project.RegValues.Combine(items).Distinct().ToArray();
             return project;
         }
 
         /// <summary>
-        /// Adds the binary.
+        /// Adds the binary items to the Project.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public Project AddBinary(this Project project, params Binary[] items)
+        static public Project AddBinaries(this Project project, params Binary[] items)
         {
             project.Binaries = project.Binaries.Combine(items).Distinct().ToArray();
             return project;
+        }
+
+        /// <summary>
+        /// Adds the binary to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Project AddBinary(this Project project, Binary item)
+        {
+            return project.AddBinaries(item);
         }
 
         /// <summary>
@@ -547,24 +569,46 @@ namespace WixSharp.CommonTasks
         public delegate bool DowngradeErrorCheck(Version thisVersion, Version installedVersion);
 
         /// <summary>
-        /// Adds the environment variable.
+        /// Adds the environment variable to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Project AddEnvironmentVariable(this Project project, EnvironmentVariable item)
+        {
+            return project.AddEnvironmentVariables(item);
+        }
+
+        /// <summary>
+        /// Adds the environment variable items to the Project.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public Project AddEnvironmentVariable(this Project project, params EnvironmentVariable[] items)
+        static public Project AddEnvironmentVariables(this Project project, params EnvironmentVariable[] items)
         {
             project.EnvironmentVariables = project.EnvironmentVariables.Combine(items).Distinct().ToArray();
             return project;
         }
 
         /// <summary>
-        /// Adds the assembly reference.
+        /// Adds the assembly reference to the ManagedAction.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <param name="file">The file.</param>
+        /// <returns></returns>
+        static public ManagedAction AddRefAssembly(this ManagedAction action, string file)
+        {
+            return action.AddRefAssemblies(file);
+        }
+
+        /// <summary>
+        /// Adds the assembly references to the ManagedAction.
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="files">The files.</param>
         /// <returns></returns>
-        static public ManagedAction AddRefAssembly(this ManagedAction action, params string[] files)
+        static public ManagedAction AddRefAssemblies(this ManagedAction action, params string[] files)
         {
             action.RefAssemblies = action.RefAssemblies.Combine(files).Distinct().ToArray();
             return action;
@@ -573,7 +617,7 @@ namespace WixSharp.CommonTasks
         //////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Adds the file association items to the project.
+        /// Adds the file association items to the File.
         /// </summary>
         /// <param name="file">The file.</param>
         /// <param name="items">The items.</param>
@@ -585,7 +629,7 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Adds the file association to the file.
+        /// Adds the file association to the File.
         /// </summary>
         /// <param name="file">The file.</param>
         /// <param name="item">The item.</param>
@@ -648,31 +692,52 @@ namespace WixSharp.CommonTasks
         /// <param name="dir">The dir.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public Dir AddFile(this Dir dir, params File[] items)
+        static public Dir AddFiles(this Dir dir, params File[] items)
         {
             dir.Files = dir.Files.Combine(items).Distinct().ToArray();
             return dir;
         }
 
         /// <summary>
-        /// Adds the shortcut.
+        /// Adds the file to the Dir.
+        /// </summary>
+        /// <param name="dir">The dir.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Dir AddFile(this Dir dir, File item)
+        {
+            return dir.AddFiles(item);
+        }
+
+        /// <summary>
+        /// Adds the exe shortcut to the Dir.
         /// </summary>
         /// <param name="dir">The dir.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public Dir AddShortcut(this Dir dir, params ExeFileShortcut[] items)
+        static public Dir AddExeShortcuts(this Dir dir, params ExeFileShortcut[] items)
         {
             dir.Shortcuts = dir.Shortcuts.Combine(items).Distinct().ToArray();
             return dir;
         }
 
         /// <summary>
-        /// Adds the features.
+        /// Adds the exe shortcut to the Dir.
+        /// </summary>
+        /// <param name="dir">The dir.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Dir AddExeShortcut(this Dir dir, ExeFileShortcut item)
+        {
+            return dir.AddExeShortcuts(item);
+        }
+
+        /// <summary>
+        /// Adds the features to the Dir.
         /// </summary>
         /// <param name="dir">The dir.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        [Obsolete(message: "This method name is obsolete use `AddFeature` instead")]
         static public Dir AddFeatures(this Dir dir, params Feature[] items)
         {
             dir.Features = dir.Features.Combine(items).Distinct().ToArray();
@@ -680,48 +745,80 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Adds the feature(s).
+        /// Adds the feature to the Dir.
         /// </summary>
         /// <param name="dir">The dir.</param>
-        /// <param name="items">The items.</param>
+        /// <param name="item">The item.</param>
         /// <returns></returns>
-        static public Dir AddFeature(this Dir dir, params Feature[] items)
+        static public Dir AddFeature(this Dir dir, Feature item)
         {
-            dir.Features = dir.Features.Combine(items).Distinct().ToArray();
-            return dir;
+            return dir.AddFeatures(item);
         }
 
         /// <summary>
-        /// Adds the merge module.
+        /// Adds the merge modules to the Dir.
         /// </summary>
         /// <param name="dir">The dir.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public Dir AddMergeModule(this Dir dir, params Merge[] items)
+        static public Dir AddMergeModules(this Dir dir, params Merge[] items)
         {
             dir.MergeModules = dir.MergeModules.Combine(items).Distinct().ToArray();
             return dir;
         }
 
         /// <summary>
-        /// Adds the file collection.
+        /// Adds the merge module to the Dir.
+        /// </summary>
+        /// <param name="dir">The dir.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Dir AddMergeModule(this Dir dir, Merge item)
+        {
+            return dir.AddMergeModules(item);
+        }
+
+        /// <summary>
+        /// Adds the file collection to teh Dir.
         /// </summary>
         /// <param name="dir">The dir.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public Dir AddFileCollection(this Dir dir, params Files[] items)
+        static public Dir AddFileCollections(this Dir dir, params Files[] items)
         {
             dir.FileCollections = dir.FileCollections.Combine(items).Distinct().ToArray();
             return dir;
         }
 
         /// <summary>
-        /// Adds the dir file collection.
+        /// Adds the file collections to the Dir.
+        /// </summary>
+        /// <param name="dir">The dir.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Dir AddFileCollection(this Dir dir, Files item)
+        {
+            return dir.AddFileCollections(item);
+        }
+
+        /// <summary>
+        /// Adds the directory file collection to the Dir.
+        /// </summary>
+        /// <param name="dir">The dir.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Dir AddDirFileCollection(this Dir dir, DirFiles item)
+        {
+            return dir.AddDirFileCollections(item);
+        }
+
+        /// <summary>
+        /// Adds the directory file collections to the Dir.
         /// </summary>
         /// <param name="dir">The dir.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public Dir AddDirFileCollection(this Dir dir, params DirFiles[] items)
+        static public Dir AddDirFileCollections(this Dir dir, params DirFiles[] items)
         {
             dir.DirFileCollections = dir.DirFileCollections.Combine(items).Distinct().ToArray();
             return dir;
