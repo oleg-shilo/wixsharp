@@ -1010,7 +1010,7 @@ namespace WixSharp.CommonTasks
                 throw new ApplicationException("Project.CustomUI is already initialized. Ensure InjectClrDialog is invoked before any adjustments made to CustomUI.");
 
             project.CustomUI = new CommomDialogsUI();
-            project.Actions = project.Actions.Add(showClrDialog);
+            project.AddAction(showClrDialog);
 
             //disconnect prev and next dialogs
             project.CustomUI.UISequence.ForEach(x =>
@@ -1053,7 +1053,7 @@ namespace WixSharp.CommonTasks
                 throw new ApplicationException("Project.CustomUI is already initialized. Ensure InjectClrDialog is invoked before any adjustments made to CustomUI.");
 
             project.CustomUI = new DialogSequence();
-            project.Actions = project.Actions.Add(showClrDialog);
+            project.AddAction(showClrDialog);
 
             //disconnect prev and next dialogs
             project.CustomUI.UISequence.RemoveAll(x => (x.Dialog == prevDialog && x.Control == Buttons.Next) ||
@@ -1108,7 +1108,7 @@ namespace WixSharp.CommonTasks
             project.LaunchConditions.Add(new LaunchCondition(condition, message));
 
             foreach (var prop in condition.GetDistinctProperties())
-                project.Properties = project.Properties.Add(new PropertyRef(prop));
+                project.AddProperty(new PropertyRef(prop));
 
             project.IncludeWixExtension(WixExtension.NetFx);
 

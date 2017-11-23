@@ -480,44 +480,84 @@
              </code>
              </example>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddProperty(WixSharp.Project,WixSharp.Property[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddProperties(WixSharp.Project,WixSharp.Property[])">
             <summary>
-            Adds the property.
+            Adds the property items to the project.
             </summary>
             <param name="project">The project.</param>
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddAction(WixSharp.Project,WixSharp.Action[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddProperty(WixSharp.Project,WixSharp.Property)">
             <summary>
-            Adds the action.
+            Adds the property to the project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddActions(WixSharp.Project,WixSharp.Action[])">
+            <summary>
+            Adds the action items to the Project.
             </summary>
             <param name="project">The project.</param>
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddDir(WixSharp.Project,WixSharp.Dir[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddAction(WixSharp.Project,WixSharp.Action)">
             <summary>
-            Adds the dir.
+            Adds the action to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddDir(WixSharp.Project,WixSharp.Dir)">
+            <summary>
+            Adds the directory to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddDirs(WixSharp.Project,WixSharp.Dir[])">
+            <summary>
+            Adds the directory items to the Project.
             </summary>
             <param name="project">The project.</param>
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddRegValue(WixSharp.Project,WixSharp.RegValue[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddRegValue(WixSharp.Project,WixSharp.RegValue)">
             <summary>
-            Adds the registry value.
+            Adds the registry value to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddRegValues(WixSharp.Project,WixSharp.RegValue[])">
+            <summary>
+            Adds the registry values to the Project.
             </summary>
             <param name="project">The project.</param>
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddBinary(WixSharp.Project,WixSharp.Binary[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddBinaries(WixSharp.Project,WixSharp.Binary[])">
             <summary>
-            Adds the binary.
+            Adds the binary items to the Project.
             </summary>
             <param name="project">The project.</param>
             <param name="items">The items.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddBinary(WixSharp.Project,WixSharp.Binary)">
+            <summary>
+            Adds the binary to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="item">The item.</param>
             <returns></returns>
         </member>
         <member name="F:WixSharp.CommonTasks.Tasks.UILocalize">
@@ -539,47 +579,87 @@
             <param name="installedVersion">The detected installed product version.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddEnvironmentVariable(WixSharp.Project,WixSharp.EnvironmentVariable[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddEnvironmentVariable(WixSharp.Project,WixSharp.EnvironmentVariable)">
             <summary>
-            Adds the environment variable.
+            Adds the environment variable to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddEnvironmentVariables(WixSharp.Project,WixSharp.EnvironmentVariable[])">
+            <summary>
+            Adds the environment variable items to the Project.
             </summary>
             <param name="project">The project.</param>
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddRefAssembly(WixSharp.ManagedAction,System.String[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddRefAssembly(WixSharp.ManagedAction,System.String)">
             <summary>
-            Adds the assembly reference.
+            Adds the assembly reference to the ManagedAction.
+            </summary>
+            <param name="action">The action.</param>
+            <param name="file">The file.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddRefAssemblies(WixSharp.ManagedAction,System.String[])">
+            <summary>
+            Adds the assembly references to the ManagedAction.
             </summary>
             <param name="action">The action.</param>
             <param name="files">The files.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddAssociation(WixSharp.File,WixSharp.FileAssociation[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddAssociations(WixSharp.File,WixSharp.FileAssociation[])">
             <summary>
-            Adds the file association.
+            Adds the file association items to the File.
             </summary>
             <param name="file">The file.</param>
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddShortcut(WixSharp.File,WixSharp.FileShortcut[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddAssociation(WixSharp.File,WixSharp.FileAssociation)">
             <summary>
-            Adds the shortcut.
+            Adds the file association to the File.
+            </summary>
+            <param name="file">The file.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddShortcuts(WixSharp.File,WixSharp.FileShortcut[])">
+            <summary>
+            Adds the shortcut items to the File.
             </summary>
             <param name="file">The file.</param>
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddDir(WixSharp.Dir,WixSharp.Dir[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddShortcut(WixSharp.File,WixSharp.FileShortcut)">
             <summary>
-            Adds the dir.
+            Adds the shortcut to the File.
+            </summary>
+            <param name="file">The file.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddDirs(WixSharp.Dir,WixSharp.Dir[])">
+            <summary>
+            Adds the directory items to the Dir.
             </summary>
             <param name="dir">The dir.</param>
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddFile(WixSharp.Dir,WixSharp.File[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddDir(WixSharp.Dir,WixSharp.Dir)">
+            <summary>
+            Adds the directory to the Dir.
+            </summary>
+            <param name="dir">The dir.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddFiles(WixSharp.Dir,WixSharp.File[])">
             <summary>
             Adds the file.
             </summary>
@@ -587,49 +667,89 @@
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddShortcut(WixSharp.Dir,WixSharp.ExeFileShortcut[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddFile(WixSharp.Dir,WixSharp.File)">
             <summary>
-            Adds the shortcut.
+            Adds the file to the Dir.
+            </summary>
+            <param name="dir">The dir.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddExeShortcuts(WixSharp.Dir,WixSharp.ExeFileShortcut[])">
+            <summary>
+            Adds the exe shortcut to the Dir.
             </summary>
             <param name="dir">The dir.</param>
             <param name="items">The items.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddExeShortcut(WixSharp.Dir,WixSharp.ExeFileShortcut)">
+            <summary>
+            Adds the exe shortcut to the Dir.
+            </summary>
+            <param name="dir">The dir.</param>
+            <param name="item">The item.</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.CommonTasks.Tasks.AddFeatures(WixSharp.Dir,WixSharp.Feature[])">
             <summary>
-            Adds the features.
+            Adds the features to the Dir.
             </summary>
             <param name="dir">The dir.</param>
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddFeature(WixSharp.Dir,WixSharp.Feature[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddFeature(WixSharp.Dir,WixSharp.Feature)">
             <summary>
-            Adds the feature(s).
+            Adds the feature to the Dir.
+            </summary>
+            <param name="dir">The dir.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddMergeModules(WixSharp.Dir,WixSharp.Merge[])">
+            <summary>
+            Adds the merge modules to the Dir.
             </summary>
             <param name="dir">The dir.</param>
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddMergeModule(WixSharp.Dir,WixSharp.Merge[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddMergeModule(WixSharp.Dir,WixSharp.Merge)">
             <summary>
-            Adds the merge module.
+            Adds the merge module to the Dir.
+            </summary>
+            <param name="dir">The dir.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddFileCollections(WixSharp.Dir,WixSharp.Files[])">
+            <summary>
+            Adds the file collection to teh Dir.
             </summary>
             <param name="dir">The dir.</param>
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddFileCollection(WixSharp.Dir,WixSharp.Files[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddFileCollection(WixSharp.Dir,WixSharp.Files)">
             <summary>
-            Adds the file collection.
+            Adds the file collections to the Dir.
             </summary>
             <param name="dir">The dir.</param>
-            <param name="items">The items.</param>
+            <param name="item">The item.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddDirFileCollection(WixSharp.Dir,WixSharp.DirFiles[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddDirFileCollection(WixSharp.Dir,WixSharp.DirFiles)">
             <summary>
-            Adds the dir file collection.
+            Adds the directory file collection to the Dir.
+            </summary>
+            <param name="dir">The dir.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddDirFileCollections(WixSharp.Dir,WixSharp.DirFiles[])">
+            <summary>
+            Adds the directory file collections to the Dir.
             </summary>
             <param name="dir">The dir.</param>
             <param name="items">The items.</param>
@@ -5094,6 +5214,18 @@
         <member name="M:WixSharp.Extensions.AddRange``2(``0[],System.Collections.Generic.IEnumerable{``1})">
             <summary>
             Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
+            </summary>
+            <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
+            <typeparam name="T2">The type of the elements of the items being added.</typeparam>
+            <param name="obj">The instance of the <see cref="T:System.Array"/>.</param>
+            <param name="items">The items to be added.</param>
+            <returns>Combined <see cref="T:System.Array"/> object.</returns>
+        </member>
+        <member name="M:WixSharp.Extensions.Combine``2(``0[],``1[])">
+            <summary>
+            Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
+            <para>If you are adding items to the <c>Project</c> or <c>Dir</c> then you can use the dedicated 
+            methods for that (e.g. `dir.AffFiles(drivers)`).</para>
             </summary>
             <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
             <typeparam name="T2">The type of the elements of the items being added.</typeparam>

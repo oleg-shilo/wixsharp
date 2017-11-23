@@ -1356,7 +1356,7 @@ namespace WixSharp
                     bynaryPath = asmBin.Name.PathChangeDirectory(project.OutDir.PathGetFullPath())
                                             .PathChangeExtension(".CA.dll");
 
-                    var refAsms = asmBin.RefAssemblies.Add(typeof(Session).Assembly.Location)
+                    var refAsms = asmBin.RefAssemblies.Combine(typeof(Session).Assembly.Location)
                                                       .Concat(project.DefaultRefAssemblies)
                                                       .Distinct()
                                                       .ToArray();

@@ -184,7 +184,7 @@ namespace WixSharp
                     var abortOnErrorName = "WIXSHARP_ABORT_ON_ERROR";
 
                     if (!Properties.Any(p => p.Name == abortOnErrorName))
-                        this.Properties = Properties.Add(new Property(abortOnErrorName, this.AbortSetupOnUnhandledExceptions.Value.ToString()));
+                        this.AddProperty(new Property(abortOnErrorName, this.AbortSetupOnUnhandledExceptions.Value.ToString()));
                 }
 
                 //foreach (string handlerAsm in handler.GetInvocationList().Select(x => x.Method.DeclaringType.Assembly.Location))
@@ -210,13 +210,13 @@ namespace WixSharp
                         this.DefaultRefAssemblies.Add(location);
                 }
 
-                this.Properties = this.Properties.Add(new Property("WixSharp_{0}_Handlers".FormatWith(name), GetHandlersInfo(handler as MulticastDelegate)));
+                this.AddProperty(new Property("WixSharp_{0}_Handlers".FormatWith(name), GetHandlersInfo(handler as MulticastDelegate)));
 
                 string dllEntry = "WixSharp_{0}_Action".FormatWith(name);
                 if (step != null)
                 {
                     if (elevated)
-                        this.Actions = this.Actions.Add(new ElevatedManagedAction(dllEntry)
+                        this.AddAction(new ElevatedManagedAction(dllEntry)
                         {
                             Id = new Id(dllEntry),
                             ActionAssembly = thisAsm,
@@ -227,7 +227,7 @@ namespace WixSharp
                             UsesProperties = "WixSharp_{0}_Handlers,{1},{2}".FormatWith(name, wixSharpProperties, DefaultDeferredProperties),
                         });
                     else
-                        this.Actions = this.Actions.Add(new ManagedAction(dllEntry) { Id = new Id(dllEntry), ActionAssembly = thisAsm, Return = Return.check, When = when, Step = step, Condition = Condition.Create("1") });
+                        this.AddAction(new ManagedAction(dllEntry) { Id = new Id(dllEntry), ActionAssembly = thisAsm, Return = Return.check, When = when, Step = step, Condition = Condition.Create("1") });
                 }
             }
         }
@@ -235,7 +235,7 @@ namespace WixSharp
         void AddCancelFromUIIHandler()
         {
             string dllEntry = "CancelRequestHandler";
-            this.Actions = this.Actions.Add(new ElevatedManagedAction(dllEntry)
+            this.AddAction(new ElevatedManagedAction(dllEntry)
             {
                 Id = new Id(dllEntry),
                 ActionAssembly = thisAsm,

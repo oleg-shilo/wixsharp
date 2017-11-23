@@ -627,9 +627,9 @@ namespace WixSharp
 
                     foreach (WixEntity item in dirItems.GetAllItems(SourceBaseDir, dirList[iterator]))
                         if (item is DirFiles)
-                            dirList[iterator].DirFileCollections = dirList[iterator].DirFileCollections.Add(item as DirFiles);
+                            dirList[iterator].AddDirFileCollection(item as DirFiles);
                         else if (item is Dir discoveredDir && !dirList[iterator].Dirs.Contains(item))
-                            dirList[iterator].Dirs = dirList[iterator].Dirs.Add(discoveredDir);
+                            dirList[iterator].AddDir(discoveredDir);
 
                 foreach (Dir dir in dirList[iterator].Dirs)
                     dirList.Add(dir);

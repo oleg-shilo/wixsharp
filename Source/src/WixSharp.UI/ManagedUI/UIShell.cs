@@ -363,10 +363,10 @@ namespace WixSharp
                 string bitmap = ManagedUI.Default.DialogBitmapFileFor(project);
                 string banner = ManagedUI.Default.DialogBannerFileFor(project);
 
-                project.AddBinary(new Binary(new Id("WixSharp_UIText"), localization),
-                                  new Binary(new Id("WixSharp_LicenceFile"), licence),
-                                  new Binary(new Id("WixUI_Bmp_Dialog"), bitmap),
-                                  new Binary(new Id("WixUI_Bmp_Banner"), banner));
+                project.AddBinaries(new Binary(new Id("WixSharp_UIText"), localization),
+                                    new Binary(new Id("WixSharp_LicenceFile"), licence),
+                                    new Binary(new Id("WixUI_Bmp_Dialog"), bitmap),
+                                    new Binary(new Id("WixUI_Bmp_Banner"), banner));
 
                 project.UI = WUI.WixUI_ProgressOnly;
                 return project.BuildMsi();

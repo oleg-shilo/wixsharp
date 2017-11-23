@@ -1,5 +1,6 @@
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
+using WixSharp.CommonTasks;
 using WixSharp.Controls;
 
 public static class ProductActivationDialogSetup
@@ -10,7 +11,7 @@ public static class ProductActivationDialogSetup
 
         InjectProductActivationDialog(project);
 
-        Compiler.PreserveTempFiles = true; 
+        Compiler.PreserveTempFiles = true;
         Compiler.BuildMsi(project);
     }
 
@@ -30,7 +31,7 @@ public static class ProductActivationDialogSetup
 
         ManagedAction customDialog = new ShowClrDialogAction("ShowProductActivationDialog");
 
-        project.Actions = project.Actions.Add(customDialog);
+        project.AddAction(customDialog);
 
         project.UI = WUI.WixUI_Common;
 

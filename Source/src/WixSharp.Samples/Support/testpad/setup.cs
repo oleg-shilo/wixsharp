@@ -33,7 +33,6 @@ static class Script
 
         project.AfterInstall += Project_AfterInstall;
         project.PreserveTempFiles = true;
-
         project.BuildWxs();
     }
 

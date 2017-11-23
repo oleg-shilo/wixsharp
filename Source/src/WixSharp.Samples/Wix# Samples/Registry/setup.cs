@@ -22,6 +22,10 @@ class Script
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(fullSetup, @"readme.txt")),
                 new RegFile(fullSetup, "MyProduct.reg"), //RegFile does the same Tasks.ImportRegFile
+                new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "LICENSE_KEY", "01020304")
+                {
+                    AttributesDefinition = "Type=binary"
+                },
                 new RegValue(fullSetup, RegistryHive.LocalMachine, "Software\\My Company\\My Product", "Message", "Hello"),
                 new RegValue(fullSetup, RegistryHive.LocalMachine, "Software\\My Company\\My Product", "Count", 777),
                 new RegValue(fullSetup, RegistryHive.ClassesRoot, "test\\shell\\open\\command", "", "\"[INSTALLDIR]test.exe\" \"%1\""));

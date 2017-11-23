@@ -176,7 +176,7 @@ namespace WixSharp
                         parentDir.AddDir(subDir);
                     }
 
-                    subDir.AddFeature(this.ActualFeatures);
+                    subDir.AddFeatures(this.ActualFeatures);
                     subDir.AddDirFileCollection(
                                         new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
                                         {
@@ -218,7 +218,7 @@ namespace WixSharp
                     items.Add(subDir);
                 }
 
-                subDir.AddFeature(this.ActualFeatures);
+                subDir.AddFeatures(this.ActualFeatures);
                 subDir.AddDirFileCollection(
                                     new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
                                     {

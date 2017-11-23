@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
@@ -157,8 +158,8 @@ namespace WixSharp
                 }
             }
 
-            project.Properties = project.Properties.Combine(properties);
-            project.Actions = project.Actions.Combine(actions);
+            project.AddProperties(properties.ToArray());
+            project.AddActions(actions.ToArray());
         }
 
         class ArpPropertyAttribute : Attribute

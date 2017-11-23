@@ -32,7 +32,7 @@ namespace WixSharp.Bootstrapper
         public ManagedBootstrapperApplication(string appAssembly, params string[] dependencies)
         {
             AppAssembly = appAssembly;
-            Payloads = Payloads.Add(AppAssembly.ToPayload())
+            Payloads = Payloads.Combine(AppAssembly.ToPayload())
                                .Combine(dependencies);
         }
 
