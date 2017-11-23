@@ -948,10 +948,11 @@ namespace WixSharp
             if (entity is File file)
             {
                 var target_path = this.GetTargetPathOf(file);
-                var hash = target_path.GetHashCode32();
 
-                // WiX does not allow '-' char in Id. So need to use `Math.Abs`
-                return $"{target_path.PathGetFileName()}_{Math.Abs(hash)}";
+                var dir_hash = Math.Abs(target_path.PathGetDirName().GetHashCode32());
+                var file_name = target_path.PathGetFileName();
+
+                return $"{file_name}.{dir_hash}";
             }
 
             return null; // pass to default Id generator

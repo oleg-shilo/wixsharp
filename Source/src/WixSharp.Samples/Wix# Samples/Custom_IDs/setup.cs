@@ -10,7 +10,9 @@ class Script
 {
     static public void Main()
     {
+        // AutoId_TargetPathHash_Custom();
         AutoId_TargetPathHash_BuiltIn();
+        // AutoId_Incremental_BuiltIn();
     }
 
     static public void ExplicitId()
@@ -45,6 +47,7 @@ class Script
         // We need to set the Id to the 'My Product'
         project.AllDirs.Single(d => d.Name == "My Product").Id = "PRODUCT_INSTALLDIR";
 
+        project.PreserveTempFiles = true;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         Compiler.BuildWxs(project);
@@ -68,6 +71,7 @@ class Script
         // for project only via delegate
         project.CustomIdAlgorithm = WixEntity.IncrementalIdFor;
 
+        project.PreserveTempFiles = true;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         Compiler.BuildWxs(project);
@@ -99,6 +103,7 @@ class Script
         // for project only via delegate
         project.CustomIdAlgorithm = project.HashedTargetPathIdAlgorithm;
 
+        project.PreserveTempFiles = true;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         Compiler.BuildWxs(project);
@@ -115,18 +120,24 @@ class Script
 
         project.CustomIdAlgorithm = (WixEntity entity) =>
         {
-            if (entity is File file)
+            // if (entity is File file) // C#7
+            if (entity is File)
             {
-                var target_path = project.GetTargetPathOf(file);
-                var hash = target_path.GetHashCode32();
+                var target_path = project.GetTargetPathOf(entity as File);
 
                 // WiX does not allow '-' char in ID. So need to use `Math.Abs`
-                return $"{target_path.PathGetFileName()}_{Math.Abs(hash)}";
+
+                var dir_hash = Math.Abs(target_path.PathGetDirName().GetHashCode32());
+                var file_name = target_path.PathGetFileName();
+
+                // return $"{file_name}.{dir_hash}"; // C#7
+                return "{0}.{1}".FormatWith(file_name, dir_hash);
             }
 
             return null; // pass to default ID generator
         };
 
+        project.PreserveTempFiles = true;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         Compiler.BuildWxs(project);
