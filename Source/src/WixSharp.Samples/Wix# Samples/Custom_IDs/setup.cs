@@ -10,8 +10,8 @@ class Script
 {
     static public void Main()
     {
-        // AutoId_TargetPathHash_Custom();
-        AutoId_TargetPathHash_BuiltIn();
+        AutoId_TargetPathHash_Custom();
+        // AutoId_TargetPathHash_BuiltIn();
         // AutoId_Incremental_BuiltIn();
     }
 
@@ -120,7 +120,6 @@ class Script
 
         project.CustomIdAlgorithm = (WixEntity entity) =>
         {
-            // if (entity is File file) // C#7
             if (entity is File)
             {
                 var target_path = project.GetTargetPathOf(entity as File);
@@ -130,8 +129,8 @@ class Script
                 var dir_hash = Math.Abs(target_path.PathGetDirName().GetHashCode32());
                 var file_name = target_path.PathGetFileName();
 
-                // return $"{file_name}.{dir_hash}"; // C#7
-                return "{0}.{1}".FormatWith(file_name, dir_hash);
+                return "File.{0}.{1}".FormatWith(dir_hash, file_name);
+                // return $"{file_name}.{dir_hash}"; // the equivalent of the built-in algorithm
             }
 
             return null; // pass to default ID generator
@@ -140,6 +139,6 @@ class Script
         project.PreserveTempFiles = true;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
-        Compiler.BuildWxs(project);
+        Compiler.BuildMsi(project);
     }
 }
