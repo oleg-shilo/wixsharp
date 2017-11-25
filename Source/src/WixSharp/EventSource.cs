@@ -26,7 +26,7 @@ namespace WixSharp
     ///var project =
     /// new Project("MyProduct",
     ///     new Dir(@"%ProgramFiles64Folder%\My Company\My Product",
-    ///         new EventSourceEx
+    ///         new EventSource
     ///         {
     ///             Name = "ROOT Builder",
     ///             Log = "Application",
@@ -59,7 +59,7 @@ namespace WixSharp
         ///var project =
         /// new Project("MyProduct",
         ///     new Dir(@"%ProgramFiles64Folder%\My Company\My Product",
-        ///         new EventSourceEx
+        ///         new EventSource
         ///         {
         ///             Name = "ROOT Builder",
         ///             Log = "Application",
