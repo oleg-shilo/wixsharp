@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2016 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,27 +24,28 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
 
 using IO = System.IO;
 
 namespace WixSharp
 {
     /// <summary>
-    /// Defines WiX <c>QtExecCmdLineAction</c> CustomAction. 
+    /// Defines WiX <c>QtExecCmdLineAction</c> CustomAction.
     /// <para>
-    /// This class is loseley mapped to the <c>WixQuietExec</c> WiX element. WixQuietExec superseeds older CAQuietExec as well as fixes a few 
+    /// This class is loseley mapped to the <c>WixQuietExec</c> WiX element. WixQuietExec superseeds older CAQuietExec as well as fixes a few
     /// runtime artefacts WiX CAQuietExec was associated with.
     /// </para>
     /// <para><see cref="WixQuietExecAction"/> executes specified application with optional arguments.
     /// You do not have to specify full path to the application to be executed as long as its directory
     /// is well-known (e.g. listed in system environment variable <c>PATH</c>) on the target system.</para>
     /// <remarks>
-    /// <see cref="WixQuietExecAction"/> often needs to be executed with the elevated privileges. Thus after instantiation it will have 
+    /// <see cref="WixQuietExecAction"/> often needs to be executed with the elevated privileges. Thus after instantiation it will have
     /// <see cref="Action.Impersonate"/> set to <c>false</c> and <see cref="Action.Execute"/> set to <c>Execute.deferred</c> to allow elevating.
     /// </remarks>
     /// </summary>
-    /// 
+    ///
     /// <example>The following is a complete setup script defining <see cref="WixQuietExecAction"/> for
     /// opening <c>bool.ini</c> file in <c>Notepad.exe</c>:
     /// <code>
@@ -55,7 +57,7 @@ namespace WixSharp
     ///        Name = "CustomActionTest",
     ///        Actions = new[] { new WixQuietExecAction("notepad.exe", @"C:\boot.ini") },
     ///     };
-    ///     
+    ///
     ///     Compiler.BuildMsi(project);
     /// }
     /// </code>
@@ -79,9 +81,10 @@ namespace WixSharp
         {
             AppPath = appPath;
             Args = args;
-            Name = "Action" + (++count) + "_WixQuietExec_" + IO.Path.GetFileName(appPath);
+            Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
             Return = Return.check;
         }
+
         /// <summary>
         /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -96,6 +99,7 @@ namespace WixSharp
             Name = "Action" + (++count) + "_WixQuietExec_" + IO.Path.GetFileName(appPath);
             Return = Return.check;
         }
+
         /// <summary>
         /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -112,6 +116,7 @@ namespace WixSharp
             Args = args;
             Name = "Action" + (++count) + "_WixQuietExec_" + IO.Path.GetFileName(appPath);
         }
+
         /// <summary>
         /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -129,6 +134,7 @@ namespace WixSharp
             Args = args;
             Name = "Action" + (++count) + "_WixQuietExec_" + IO.Path.GetFileName(appPath);
         }
+
         /// <summary>
         /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -146,6 +152,7 @@ namespace WixSharp
             Args = args;
             Name = "Action" + (++count) + "_WixQuietExec_" + IO.Path.GetFileName(appPath);
         }
+
         /// <summary>
         /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -169,6 +176,7 @@ namespace WixSharp
         /// Path to the application to be executed. This can be a file name only if the location of the application is well-known.
         /// </summary>
         public string AppPath = "";
+
         /// <summary>
         /// The arguments to be passed to the application during the execution.
         /// </summary>
@@ -178,8 +186,9 @@ namespace WixSharp
         /// WixQuietExecCmdLine or QtExecCmdLine
         /// </summary>
         public string CommandLineProperty = "WixQuietExecCmdLine";
+
         /// <summary>
-        /// WixQuietExec or CAQuietExec 
+        /// WixQuietExec or CAQuietExec
         /// </summary>
         public string ActionName = "WixQuietExec";
     }

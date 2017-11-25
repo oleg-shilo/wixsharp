@@ -328,7 +328,6 @@ namespace WixSharp
             if (entity.GetType() != typeof(Dir) && entity.GetType().BaseType != typeof(Dir) && entity.Name.IsNotEmpty())
                 rawName = IO.Path.GetFileName(entity.Name).Expand();
 
-            //limit 120 chars
             //Maximum allowed length for a stream name is 62 characters long; In some cases more but to play it safe keep 62 limit
             //
             //Note: the total limit 62 needs to include in some cases MSI auto prefix (e.g. table name) ~15 chars

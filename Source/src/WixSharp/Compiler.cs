@@ -2990,7 +2990,7 @@ namespace WixSharp
                 else if (wAction is WixQuietExecAction)
                 {
                     var quietExecAction = (WixQuietExecAction)wAction;
-                    var cmdLineActionId = wAction.Name.Expand();
+                    var cmdLineActionId = wAction.Id;
                     var setCmdLineActionId = "Set_" + cmdLineActionId;
 
                     product.AddElement(

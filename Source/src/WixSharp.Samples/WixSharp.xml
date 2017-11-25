@@ -3047,7 +3047,7 @@
             var project =
              new Project("MyProduct",
                  new Dir(@"%ProgramFiles64Folder%\My Company\My Product",
-                     new EventSourceEx
+                     new EventSource
                      {
                          Name = "ROOT Builder",
                          Log = "Application",
@@ -3078,7 +3078,7 @@
             var project =
              new Project("MyProduct",
                  new Dir(@"%ProgramFiles64Folder%\My Company\My Product",
-                     new EventSourceEx
+                     new EventSource
                      {
                          Name = "ROOT Builder",
                          Log = "Application",
@@ -13763,20 +13763,20 @@
         </member>
         <member name="T:WixSharp.WixQuietExecAction">
              <summary>
-             Defines WiX <c>QtExecCmdLineAction</c> CustomAction. 
+             Defines WiX <c>QtExecCmdLineAction</c> CustomAction.
              <para>
-             This class is loseley mapped to the <c>WixQuietExec</c> WiX element. WixQuietExec superseeds older CAQuietExec as well as fixes a few 
+             This class is loseley mapped to the <c>WixQuietExec</c> WiX element. WixQuietExec superseeds older CAQuietExec as well as fixes a few
              runtime artefacts WiX CAQuietExec was associated with.
              </para>
              <para><see cref="T:WixSharp.WixQuietExecAction"/> executes specified application with optional arguments.
              You do not have to specify full path to the application to be executed as long as its directory
              is well-known (e.g. listed in system environment variable <c>PATH</c>) on the target system.</para>
              <remarks>
-             <see cref="T:WixSharp.WixQuietExecAction"/> often needs to be executed with the elevated privileges. Thus after instantiation it will have 
+             <see cref="T:WixSharp.WixQuietExecAction"/> often needs to be executed with the elevated privileges. Thus after instantiation it will have
              <see cref="F:WixSharp.Action.Impersonate"/> set to <c>false</c> and <see cref="F:WixSharp.Action.Execute"/> set to <c>Execute.deferred</c> to allow elevating.
              </remarks>
              </summary>
-             
+            
              <example>The following is a complete setup script defining <see cref="T:WixSharp.WixQuietExecAction"/> for
              opening <c>bool.ini</c> file in <c>Notepad.exe</c>:
              <code>
@@ -13788,7 +13788,7 @@
                     Name = "CustomActionTest",
                     Actions = new[] { new WixQuietExecAction("notepad.exe", @"C:\boot.ini") },
                  };
-                 
+            
                  Compiler.BuildMsi(project);
              }
              </code>
@@ -13879,7 +13879,7 @@
         </member>
         <member name="F:WixSharp.WixQuietExecAction.ActionName">
             <summary>
-            WixQuietExec or CAQuietExec 
+            WixQuietExec or CAQuietExec
             </summary>
         </member>
         <member name="T:ExternalTool">
