@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,42 +24,43 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
 
 namespace WixSharp
 {
     /// <summary>
-    /// Defines WiX InstalledFileAction for executing installed file. 
+    /// Defines WiX InstalledFileAction for executing installed file.
     /// </summary>
-    /// 
+    ///
     /// <example>The following is an example of using <c>InstalledFileAction</c> to run
-    /// installed executable <c>Registrator.exe</c> with different arguments depending 
+    /// installed executable <c>Registrator.exe</c> with different arguments depending
     /// in installation type (install/uninstall):
     /// <code>
-    /// var project = 
+    /// var project =
     ///     new Project("My Product",
-    ///     
+    ///
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
-    ///         
+    ///
     ///             new File(binaries, @"AppFiles\MyApp.exe",
     ///                 new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
     ///                 new WixSharp.Shortcut("MyApp", @"%Desktop%")),
-    ///                 
+    ///
     ///             new File(binaries, @"AppFiles\Registrator.exe"),
-    ///             
-    ///         new InstalledFileAction("Registrator.exe", "", 
-    ///                                 Return.check, 
-    ///                                 When.After, 
-    ///                                 Step.InstallFinalize, 
+    ///
+    ///         new InstalledFileAction("Registrator.exe", "",
+    ///                                 Return.check,
+    ///                                 When.After,
+    ///                                 Step.InstallFinalize,
     ///                                 Condition.NOT_Installed),
-    ///                                 
-    ///         new InstalledFileAction("Registrator.exe", "/u", 
-    ///                                 Return.check, 
-    ///                                 When.Before, 
-    ///                                 Step.InstallFinalize, 
-    ///                                 Condition.Installed), 
+    ///
+    ///         new InstalledFileAction("Registrator.exe", "/u",
+    ///                                 Return.check,
+    ///                                 When.Before,
+    ///                                 Step.InstallFinalize,
+    ///                                 Condition.Installed),
     ///         ...
-    ///         
+    ///
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
@@ -74,9 +76,10 @@ namespace WixSharp
         {
             Key = key;
             Args = args;
-            Name = "Action" + (++count) + "_" + key;
+            Name = key;
             Step = Step.InstallExecute;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -86,11 +89,12 @@ namespace WixSharp
         public InstalledFileAction(Id id, string key, string args)
             : base(id)
         {
-            Key = key; 
+            Key = key;
             Args = args;
-            Name = "Action" + (++count) + "_" + key;
-            Step = Step.InstallExecute; 
+            Name = key;
+            Step = Step.InstallExecute;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -103,10 +107,11 @@ namespace WixSharp
         public InstalledFileAction(string key, string args, Return returnType, When when, Step step, Condition condition)
             : base(returnType, when, step, condition)
         {
-            Key = key; 
+            Key = key;
             Args = args;
-            Name = "Action" + (++count) + "_" + key;
+            Name = key;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -122,8 +127,9 @@ namespace WixSharp
         {
             Key = key;
             Args = args;
-            Name = "Action" + (++count) + "_" + key;
+            Name = key;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -139,8 +145,9 @@ namespace WixSharp
         {
             Key = key;
             Args = args;
-            Name = "Action" + (++count) + "_" + key;
+            Name = key;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -157,13 +164,14 @@ namespace WixSharp
         {
             Key = key;
             Args = args;
-            Name = "Action" + (++count) + "_" + key;
+            Name = key;
         }
 
         /// <summary>
         /// The key (file name) of the installed file to be executed.
         /// </summary>
         public string Key = "";
+
         /// <summary>
         /// The arguments to be passed to the file during the execution.
         /// </summary>

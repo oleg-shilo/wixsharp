@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,31 +24,33 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
+
 namespace WixSharp
 {
     /// <summary>
-    /// Defines WiX CustomAction for executing embedded VBScript. 
+    /// Defines WiX CustomAction for executing embedded VBScript.
     /// </summary>
-    /// 
+    ///
     /// <example>The following is an example of using <c>ScriptAction</c> to run
     /// VBScript code:
     /// <code>
-    /// var project = 
+    /// var project =
     ///     new Project("My Product",
-    ///     
+    ///
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
     ///             new File(binaries, @"AppFiles\MyApp.exe",
     ///                 new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
     ///                 new WixSharp.Shortcut("MyApp", @"%Desktop%")),
-    ///                 
-    ///         new ScriptAction(@"MsgBox ""Executing VBScript code...""", 
-    ///                          Return.ignore, 
-    ///                          When.After, 
-    ///                          Step.InstallFinalize, 
+    ///
+    ///         new ScriptAction(@"MsgBox ""Executing VBScript code...""",
+    ///                          Return.ignore,
+    ///                          When.After,
+    ///                          Step.InstallFinalize,
     ///                          Condition.NOT_Installed),
     ///         ...
-    ///         
+    ///
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
@@ -61,8 +64,9 @@ namespace WixSharp
             : base()
         {
             Code = code;
-            Name = "Action" + (++count) + "_VBScript";
+            Name = "VBScript";
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -72,8 +76,9 @@ namespace WixSharp
             : base(id)
         {
             Code = code; ;
-            Name = "Action" + (++count) + "_VBScript";
+            Name = "VBScript";
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -86,8 +91,9 @@ namespace WixSharp
             : base(returnType, when, step, condition)
         {
             Code = code;
-            Name = "Action" + (++count) + "_VBScript";
+            Name = "VBScript";
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -101,8 +107,9 @@ namespace WixSharp
             : base(id, returnType, when, step, condition)
         {
             Code = code;
-            Name = "Action" + (++count) + "_VBScript";
+            Name = "VBScript";
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -116,8 +123,9 @@ namespace WixSharp
             : base(returnType, when, step, condition, sequence)
         {
             Code = code;
-            Name = "Action" + (++count) + "_VBScript";
+            Name = "VBScript";
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -132,7 +140,7 @@ namespace WixSharp
             : base(id, returnType, when, step, condition, sequence)
         {
             Code = code;
-            Name = "Action" + (++count) + "_VBScript";
+            Name = "VBScript";
         }
 
         /// <summary>

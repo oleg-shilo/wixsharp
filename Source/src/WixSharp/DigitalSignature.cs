@@ -25,8 +25,8 @@ namespace WixSharp
         /// </summary>
         public string Password
         {
-            get { return _password.ToInsecureString(); }
-            set { _password = value.ToSecureString(); }
+            get { return _password?.ToInsecureString(); }
+            set { _password = value?.ToSecureString(); }
         }
 
         /// <summary>
@@ -53,7 +53,6 @@ namespace WixSharp
         /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.
         /// </summary>
         public bool UseCertificateStore { get; set; }
-
 
         /// <summary>
         /// Applies digital signature to a file

@@ -5,44 +5,42 @@ using System.Text;
 
 namespace WixSharp
 {
-
     /// <summary>
-    /// Defines WiX BinaryFileAction for executing binary (not installed) file. 
+    /// Defines WiX BinaryFileAction for executing binary (not installed) file.
     /// </summary>
-    /// 
+    ///
     /// <example>The following is an example of using <c>BinaryFileAction</c> to run
-    /// executable <c>Echo.exe</c> with different arguments depending 
+    /// executable <c>Echo.exe</c> with different arguments depending
     /// in installation type (install/uninstall):
     /// <code>
-    /// var project = 
+    /// var project =
     ///     new Project("My Product",
-    ///         new Binary(new Id("EchoBin"), @"Files\Echo.exe"), 
+    ///         new Binary(new Id("EchoBin"), @"Files\Echo.exe"),
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
-    ///         
+    ///
     ///             new File(binaries, @"AppFiles\MyApp.exe",
     ///                 new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
     ///                 new WixSharp.Shortcut("MyApp", @"%Desktop%")),
-    ///                 
-    ///             
-    ///         new BinaryFileAction("EchoBin", "/i", 
-    ///                                 Return.check, 
-    ///                                 When.After, 
-    ///                                 Step.InstallFinalize, 
+    ///
+    ///
+    ///         new BinaryFileAction("EchoBin", "/i",
+    ///                                 Return.check,
+    ///                                 When.After,
+    ///                                 Step.InstallFinalize,
     ///                                 Condition.NOT_Installed),
-    ///                                 
-    ///         BinaryFileAction("EchoBin", "/u", 
-    ///                                 Return.check, 
-    ///                                 When.Before, 
-    ///                                 Step.InstallFinalize, 
-    ///                                 Condition.Installed), 
+    ///
+    ///         BinaryFileAction("EchoBin", "/u",
+    ///                                 Return.check,
+    ///                                 When.Before,
+    ///                                 Step.InstallFinalize,
+    ///                                 Condition.Installed),
     ///         ...
-    ///         
+    ///
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
     public class BinaryFileAction : Action
     {
-       
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -52,7 +50,7 @@ namespace WixSharp
         {
             Key = key;
             Args = args;
-            Name = "Action" + (++count) + "_" + key;
+            Name = key;
             Step = Step.InstallExecute;
         }
 
@@ -65,12 +63,12 @@ namespace WixSharp
         public BinaryFileAction(Id id, string key, string args)
             : base(id)
         {
-            Key = key; 
+            Key = key;
             Args = args;
-            Name = "Action" + (++count) + "_" + key;
-            Step = Step.InstallExecute; 
+            Name = key;
+            Step = Step.InstallExecute;
         }
-   
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -83,11 +81,11 @@ namespace WixSharp
         public BinaryFileAction(string key, string args, Return returnType, When when, Step step, Condition condition)
             : base(returnType, when, step, condition)
         {
-            Key = key; 
+            Key = key;
             Args = args;
-            Name = "Action" + (++count) + "_" + key;
+            Name = key;
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -103,9 +101,9 @@ namespace WixSharp
         {
             Key = key;
             Args = args;
-            Name = "Action" + (++count) + "_" + key;
+            Name = key;
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -121,9 +119,9 @@ namespace WixSharp
         {
             Key = key;
             Args = args;
-            Name = "Action" + (++count) + "_" + key;
+            Name = key;
         }
-  
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -140,14 +138,14 @@ namespace WixSharp
         {
             Key = key;
             Args = args;
-            Name = "Action" + (++count) + "_" + key;
+            Name = key;
         }
 
         /// <summary>
         /// The key (file name) of the installed file to be executed.
         /// </summary>
         public string Key = "";
-        
+
         /// <summary>
         /// The arguments to be passed to the file during the execution.
         /// </summary>

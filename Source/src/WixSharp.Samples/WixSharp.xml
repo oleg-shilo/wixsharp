@@ -6,9 +6,9 @@
     <members>
         <member name="T:WixSharp.Action">
             <summary>
-            Defines generic WiX CustomAction. 
+            Defines generic WiX CustomAction.
             <para>
-            This class does not contain any public constructor and is only to be used 
+            This class does not contain any public constructor and is only to be used
             as a base class for deriving specialized CustomActions (e.g. <see cref="T:WixSharp.ManagedAction"></see>)
             or for declaring heterogeneous collections.
             </para>
@@ -18,20 +18,14 @@
             <code>
             var project = new Project()
                           {
-                            Actions = new WixSharp.Action[] 
-                            { 
+                            Actions = new WixSharp.Action[]
+                            {
                                 new ManagedAction(@"FindSQLServerInstance"),
                                 new QtCmdLineAction("notepad.exe", @"C:\boot.ini"))
                              },
                              ...
             </code>
             </example>
-        </member>
-        <member name="F:WixSharp.Action.count">
-            <summary>
-            Global counter which is used as suffix for the automatically generated action name. This counter is used by
-            Wix# engine to avoid naming collision and indicate <c>CustomActions</c> declaration order.
-            </summary>
         </member>
         <member name="M:WixSharp.Action.#ctor">
             <summary>
@@ -92,7 +86,7 @@
         <member name="F:WixSharp.Action.Impersonate">
             <summary>
             This attribute specifies whether the Windows Installer, which executes as LocalSystem, should impersonate the user context of the
-            installing user when executing this custom action. Typically the value should be <c>true</c>, except when the custom action needs 
+            installing user when executing this custom action. Typically the value should be <c>true</c>, except when the custom action needs
             elevated privileges to apply changes to the machine.
             </summary>
         </member>
@@ -118,7 +112,7 @@
         </member>
         <member name="F:WixSharp.Action.Condition">
             <summary>
-            Defines the launch <see cref="F:WixSharp.Action.Condition"/>, which is to be checked during the installation to 
+            Defines the launch <see cref="F:WixSharp.Action.Condition"/>, which is to be checked during the installation to
             determine if the actions should be executed.
             </summary>
         </member>
@@ -2269,40 +2263,40 @@
             <returns></returns>
         </member>
         <member name="T:WixSharp.BinaryFileAction">
-            <summary>
-            Defines WiX BinaryFileAction for executing binary (not installed) file. 
-            </summary>
+             <summary>
+             Defines WiX BinaryFileAction for executing binary (not installed) file.
+             </summary>
             
-            <example>The following is an example of using <c>BinaryFileAction</c> to run
-            executable <c>Echo.exe</c> with different arguments depending 
-            in installation type (install/uninstall):
-            <code>
-            var project = 
-                new Project("My Product",
-                    new Binary(new Id("EchoBin"), @"Files\Echo.exe"), 
-                    new Dir(@"%ProgramFiles%\My Company\My Product",
-                    
-                        new File(binaries, @"AppFiles\MyApp.exe",
-                            new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
-                            new WixSharp.Shortcut("MyApp", @"%Desktop%")),
-                            
-                        
-                    new BinaryFileAction("EchoBin", "/i", 
-                                            Return.check, 
-                                            When.After, 
-                                            Step.InstallFinalize, 
-                                            Condition.NOT_Installed),
-                                            
-                    BinaryFileAction("EchoBin", "/u", 
-                                            Return.check, 
-                                            When.Before, 
-                                            Step.InstallFinalize, 
-                                            Condition.Installed), 
-                    ...
-                    
-            Compiler.BuildMsi(project);
-            </code>
-            </example>
+             <example>The following is an example of using <c>BinaryFileAction</c> to run
+             executable <c>Echo.exe</c> with different arguments depending
+             in installation type (install/uninstall):
+             <code>
+             var project =
+                 new Project("My Product",
+                     new Binary(new Id("EchoBin"), @"Files\Echo.exe"),
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+            
+                         new File(binaries, @"AppFiles\MyApp.exe",
+                             new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
+                             new WixSharp.Shortcut("MyApp", @"%Desktop%")),
+            
+            
+                     new BinaryFileAction("EchoBin", "/i",
+                                             Return.check,
+                                             When.After,
+                                             Step.InstallFinalize,
+                                             Condition.NOT_Installed),
+            
+                     BinaryFileAction("EchoBin", "/u",
+                                             Return.check,
+                                             When.Before,
+                                             Step.InstallFinalize,
+                                             Condition.Installed),
+                     ...
+            
+             Compiler.BuildMsi(project);
+             </code>
+             </example>
         </member>
         <member name="M:WixSharp.BinaryFileAction.#ctor(System.String,System.String)">
             <summary>
@@ -9776,41 +9770,41 @@
             <returns>Array of <see cref="T:WixSharp.File"/>s.</returns>
         </member>
         <member name="T:WixSharp.InstalledFileAction">
-            <summary>
-            Defines WiX InstalledFileAction for executing installed file. 
-            </summary>
+             <summary>
+             Defines WiX InstalledFileAction for executing installed file.
+             </summary>
             
-            <example>The following is an example of using <c>InstalledFileAction</c> to run
-            installed executable <c>Registrator.exe</c> with different arguments depending 
-            in installation type (install/uninstall):
-            <code>
-            var project = 
-                new Project("My Product",
-                
-                    new Dir(@"%ProgramFiles%\My Company\My Product",
-                    
-                        new File(binaries, @"AppFiles\MyApp.exe",
-                            new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
-                            new WixSharp.Shortcut("MyApp", @"%Desktop%")),
-                            
-                        new File(binaries, @"AppFiles\Registrator.exe"),
-                        
-                    new InstalledFileAction("Registrator.exe", "", 
-                                            Return.check, 
-                                            When.After, 
-                                            Step.InstallFinalize, 
-                                            Condition.NOT_Installed),
-                                            
-                    new InstalledFileAction("Registrator.exe", "/u", 
-                                            Return.check, 
-                                            When.Before, 
-                                            Step.InstallFinalize, 
-                                            Condition.Installed), 
-                    ...
-                    
-            Compiler.BuildMsi(project);
-            </code>
-            </example>
+             <example>The following is an example of using <c>InstalledFileAction</c> to run
+             installed executable <c>Registrator.exe</c> with different arguments depending
+             in installation type (install/uninstall):
+             <code>
+             var project =
+                 new Project("My Product",
+            
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+            
+                         new File(binaries, @"AppFiles\MyApp.exe",
+                             new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
+                             new WixSharp.Shortcut("MyApp", @"%Desktop%")),
+            
+                         new File(binaries, @"AppFiles\Registrator.exe"),
+            
+                     new InstalledFileAction("Registrator.exe", "",
+                                             Return.check,
+                                             When.After,
+                                             Step.InstallFinalize,
+                                             Condition.NOT_Installed),
+            
+                     new InstalledFileAction("Registrator.exe", "/u",
+                                             Return.check,
+                                             When.Before,
+                                             Step.InstallFinalize,
+                                             Condition.Installed),
+                     ...
+            
+             Compiler.BuildMsi(project);
+             </code>
+             </example>
         </member>
         <member name="M:WixSharp.InstalledFileAction.#ctor(System.String,System.String)">
             <summary>
@@ -9891,60 +9885,60 @@
             </summary>
         </member>
         <member name="T:WixSharp.ManagedAction">
-            <summary>
-            Defines WiX Managed CustomAction. 
-            <para>
-            Managed CustomAction can be defined either in the Wix# script or in the external assembly or C# file.
-            The only requirements for any C# method to be qualified for being Managed CustomAcyion is to 
-            have DTF Action signature <c>public static ActionResult MyManagedAction(Session session)</c>, and be
-            marked with <c>[CustomAction]</c> attribute.
-            </para>
-            <para>
-            If Managed CustomAction depends on any assembly, which will not be registered with GAC on the 
-            target system such assembly needs to be listed in the <see cref="F:WixSharp.ManagedAction.RefAssemblies"/>.
-            </para>
-            <remarks>
-            <see cref="T:WixSharp.ManagedAction"/> often needs to be executed with the elevated privileges. Thus after instantiation it will have 
-            <see cref="F:WixSharp.Action.Impersonate"/> set to <c>false</c> and <see cref="F:WixSharp.Action.Execute"/> set to <c>Execute.deferred</c> to allow elevating.
-            </remarks>
-            </summary>
-            <example>The following is an example of using <c>MyManagedAction</c> method of the class 
-            <c>CustomActions</c> as a Managed CustomAction.
-            <code>
-            class Script
-            {
-                static public void Main(string[] args)
-                {
-                    var project = 
-                        new Project("My Product",
-                
-                            new Dir(@"%ProgramFiles%\My Company\My Product",
-                    
-                                new File(@"AppFiles\MyApp.exe",
-                                    new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
-                                    new WixSharp.Shortcut("MyApp", @"%Desktop%")),
-                            
-                                new File(@"AppFiles\Readme.txt"),
-                        
-                            new ManagedAction(CustomActions.MyManagedAction),
-                    
-                            ...
-                    
-                    Compiler.BuildMsi(project);
-                }
-            }
+             <summary>
+             Defines WiX Managed CustomAction.
+             <para>
+             Managed CustomAction can be defined either in the Wix# script or in the external assembly or C# file.
+             The only requirements for any C# method to be qualified for being Managed CustomAcyion is to
+             have DTF Action signature <c>public static ActionResult MyManagedAction(Session session)</c>, and be
+             marked with <c>[CustomAction]</c> attribute.
+             </para>
+             <para>
+             If Managed CustomAction depends on any assembly, which will not be registered with GAC on the
+             target system such assembly needs to be listed in the <see cref="F:WixSharp.ManagedAction.RefAssemblies"/>.
+             </para>
+             <remarks>
+             <see cref="T:WixSharp.ManagedAction"/> often needs to be executed with the elevated privileges. Thus after instantiation it will have
+             <see cref="F:WixSharp.Action.Impersonate"/> set to <c>false</c> and <see cref="F:WixSharp.Action.Execute"/> set to <c>Execute.deferred</c> to allow elevating.
+             </remarks>
+             </summary>
+             <example>The following is an example of using <c>MyManagedAction</c> method of the class
+             <c>CustomActions</c> as a Managed CustomAction.
+             <code>
+             class Script
+             {
+                 static public void Main(string[] args)
+                 {
+                     var project =
+                         new Project("My Product",
             
-            public class CustomActions
-            {
-                [CustomAction]
-                public static ActionResult MyManagedAction(Session session)
-                {
-                    MessageBox.Show("Hello World!", "Managed CA");
-                    return ActionResult.Success;
-                }
-            }
-            </code>
-            </example>
+                             new Dir(@"%ProgramFiles%\My Company\My Product",
+            
+                                 new File(@"AppFiles\MyApp.exe",
+                                     new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
+                                     new WixSharp.Shortcut("MyApp", @"%Desktop%")),
+            
+                                 new File(@"AppFiles\Readme.txt"),
+            
+                             new ManagedAction(CustomActions.MyManagedAction),
+            
+                             ...
+            
+                     Compiler.BuildMsi(project);
+                 }
+             }
+            
+             public class CustomActions
+             {
+                 [CustomAction]
+                 public static ActionResult MyManagedAction(Session session)
+                 {
+                     MessageBox.Show("Hello World!", "Managed CA");
+                     return ActionResult.Success;
+                 }
+             }
+             </code>
+             </example>
         </member>
         <member name="M:WixSharp.ManagedAction.#ctor">
             <summary>
@@ -9975,7 +9969,7 @@
             Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
             </summary>
             <param name="action">The full name of static CustomAction method.</param>
-            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly 
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
             is in the Wix# script.</param>
         </member>
         <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,System.String)">
@@ -9984,7 +9978,7 @@
             </summary>
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ManagedAction"/> instance.</param>
             <param name="action">The full name of static CustomAction method.</param>
-            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly 
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
             is in the Wix# script.</param>
         </member>
         <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
@@ -10002,7 +9996,7 @@
             Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
             </summary>
             <param name="action">The full name of static CustomAction method.</param>
-            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly 
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
             is in the Wix# script.</param>
             <param name="returnType">The return type of the action.</param>
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
@@ -10026,7 +10020,7 @@
             </summary>
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ManagedAction"/> instance.</param>
             <param name="action">The full name of static CustomAction method.</param>
-            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly 
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
             is in the Wix# script.</param>
             <param name="returnType">The return type of the action.</param>
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
@@ -10049,7 +10043,7 @@
             Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
             </summary>
             <param name="action">The full name of static CustomAction method.</param>
-            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly 
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
             is in the Wix# script.</param>
             <param name="returnType">The return type of the action.</param>
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
@@ -10075,7 +10069,7 @@
             </summary>
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ManagedAction"/> instance.</param>
             <param name="action">The full name of static CustomAction method.</param>
-            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly 
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
             is in the Wix# script.</param>
             <param name="returnType">The return type of the action.</param>
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
@@ -10085,14 +10079,14 @@
         </member>
         <member name="F:WixSharp.ManagedAction.RefAssemblies">
             <summary>
-            Collection of path strings for dependency assemblies to be included in MSI. <c>RefAssemblies</c> should be used if the Managed CustomAction 
+            Collection of path strings for dependency assemblies to be included in MSI. <c>RefAssemblies</c> should be used if the Managed CustomAction
             depends on any assembly, which will not be registered with GAC on the target system.
             </summary>
         </member>
         <member name="F:WixSharp.ManagedAction.ActionAssembly">
             <summary>
-            Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly 
-            is in the Wix# script. 
+            Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.
             <para>Default value is <c>%this%</c>.</para>
             </summary>
         </member>
@@ -10102,44 +10096,44 @@
             </summary>
         </member>
         <member name="F:WixSharp.ManagedAction.UsesProperties">
-            <summary>
-            Comma separated list of properties which the custom action is intended to use. Set this property if you are implementing the 'deferred' (as well as 'rollback'  and 'commit')  action. 
-            <remarks>
-            <para>Deferred custom actions cannot access any session property as the session is terminated at the time of the action execution (limitation of MSI).
-            The standard way of overcoming this limitation is to create a new custom action for setting the property, set the property name to the name of the deferred action,
-            set the property value to the specially formatted map, schedule the execution of the custom action and access the mapped properties only via <see cref="T:Microsoft.Deployment.WindowsInstaller.Session.CustomActionData"/>. 
-            </para>
-            <para> All this can be done in a single hit with Wix# as it fully automates creation of the all mapping infrastructure. 
-            </para>   
-            </remarks>    
-            </summary>
-            <example>The following is the example of passing the location of the MyApp.exe file in the deferred managed action.
-            <code>
-            var project =
-                new Project("My Product",
-                    new Dir(@"%ProgramFiles%\My Company\My Product",
-                        new File(@"Files\MyApp.exe"),
-                        new File(@"Files\MyApp.exe.config")),
-                    new ElevatedManagedAction("ConfigureProduct", Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed)
-                    {
-                        UsesProperties = "INSTALLDIR"
-                    });
+             <summary>
+             Comma separated list of properties which the custom action is intended to use. Set this property if you are implementing the 'deferred' (as well as 'rollback'  and 'commit')  action.
+             <remarks>
+             <para>Deferred custom actions cannot access any session property as the session is terminated at the time of the action execution (limitation of MSI).
+             The standard way of overcoming this limitation is to create a new custom action for setting the property, set the property name to the name of the deferred action,
+             set the property value to the specially formatted map, schedule the execution of the custom action and access the mapped properties only via <see cref="T:Microsoft.Deployment.WindowsInstaller.Session.CustomActionData"/>.
+             </para>
+             <para> All this can be done in a single hit with Wix# as it fully automates creation of the all mapping infrastructure.
+             </para>
+             </remarks>
+             </summary>
+             <example>The following is the example of passing the location of the MyApp.exe file in the deferred managed action.
+             <code>
+             var project =
+                 new Project("My Product",
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+                         new File(@"Files\MyApp.exe"),
+                         new File(@"Files\MyApp.exe.config")),
+                     new ElevatedManagedAction("ConfigureProduct", Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed)
+                     {
+                         UsesProperties = "INSTALLDIR"
+                     });
             
-            ...
+             ...
             
-            [CustomAction]
-            public static ActionResult ConfigureProduct(Session session)
-            {
-                string configFile = session.Property("INSTALLDIR") + "MyApp.exe.config";
-                ...
-            </code>
-            </example>
-            <remarks> 
-            <para>Note that you don't even have to specify <c>UsesProperties = "INSTALLDIR"</c> as by default Wix# always maps INSTALLDIR and 
-            UILevel for all deferred managed actions. The default mapping is controlled by <see cref="F:WixSharp.ManagedAction.DefaultUsesProperties"/>.</para>
-            <para>It is also possible to map the 'deferred' properties in the typical WiX way: </para>
-            <code>UsesProperties = "CONFIG_FILE=[INSTALLDIR]MyApp.exe.config, APP_FILE=[INSTALLDIR]MyApp.exe"</code>
-            </remarks>
+             [CustomAction]
+             public static ActionResult ConfigureProduct(Session session)
+             {
+                 string configFile = session.Property("INSTALLDIR") + "MyApp.exe.config";
+                 ...
+             </code>
+             </example>
+             <remarks>
+             <para>Note that you don't even have to specify <c>UsesProperties = "INSTALLDIR"</c> as by default Wix# always maps INSTALLDIR and
+             UILevel for all deferred managed actions. The default mapping is controlled by <see cref="F:WixSharp.ManagedAction.DefaultUsesProperties"/>.</para>
+             <para>It is also possible to map the 'deferred' properties in the typical WiX way: </para>
+             <code>UsesProperties = "CONFIG_FILE=[INSTALLDIR]MyApp.exe.config, APP_FILE=[INSTALLDIR]MyApp.exe"</code>
+             </remarks>
         </member>
         <member name="F:WixSharp.ManagedAction.DefaultUsesProperties">
             <summary>
@@ -10148,35 +10142,35 @@
             </summary>
         </member>
         <member name="T:WixSharp.PathFileAction">
-            <summary>
-            Defines WiX CustomAction for executing file specified by the path on the target system. 
-            </summary>
-            <example>The following is an example of using <c>PathFileAction</c> to run
-            executable present on the target system (<c>Notepad.exe</c>):
-            <code>
-            var project = 
-                new Project("My Product",
-                
-                    new Dir(@"%ProgramFiles%\My Company\My Product",
-                    
-                        new File(@"AppFiles\MyApp.exe",
-                            new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
-                            new WixSharp.Shortcut("MyApp", @"%Desktop%")),
-                            
-                        new File(@"AppFiles\Readme.txt"),
-                        
-                   new PathFileAction(@"%WindowsFolder%\notepad.exe", 
-                                       "Readme.txt", 
-                                       @"%ProgramFiles%\My Company\My Product", 
-                                       Return.asyncNoWait, 
-                                       When.After, 
-                                       Step.InstallFinalize, 
-                                       Condition.NOT_Installed), 
-                    ...
-                    
-            Compiler.BuildMsi(project);
-            </code>
-            </example>
+             <summary>
+             Defines WiX CustomAction for executing file specified by the path on the target system.
+             </summary>
+             <example>The following is an example of using <c>PathFileAction</c> to run
+             executable present on the target system (<c>Notepad.exe</c>):
+             <code>
+             var project =
+                 new Project("My Product",
+            
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+            
+                         new File(@"AppFiles\MyApp.exe",
+                             new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
+                             new WixSharp.Shortcut("MyApp", @"%Desktop%")),
+            
+                         new File(@"AppFiles\Readme.txt"),
+            
+                    new PathFileAction(@"%WindowsFolder%\notepad.exe",
+                                        "Readme.txt",
+                                        @"%ProgramFiles%\My Company\My Product",
+                                        Return.asyncNoWait,
+                                        When.After,
+                                        Step.InstallFinalize,
+                                        Condition.NOT_Installed),
+                     ...
+            
+             Compiler.BuildMsi(project);
+             </code>
+             </example>
         </member>
         <member name="M:WixSharp.PathFileAction.#ctor(System.String,System.String,System.String)">
             <summary>
@@ -11267,31 +11261,31 @@
             </value>
         </member>
         <member name="T:WixSharp.ScriptAction">
-            <summary>
-            Defines WiX CustomAction for executing embedded VBScript. 
-            </summary>
+             <summary>
+             Defines WiX CustomAction for executing embedded VBScript.
+             </summary>
             
-            <example>The following is an example of using <c>ScriptAction</c> to run
-            VBScript code:
-            <code>
-            var project = 
-                new Project("My Product",
-                
-                    new Dir(@"%ProgramFiles%\My Company\My Product",
-                        new File(binaries, @"AppFiles\MyApp.exe",
-                            new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
-                            new WixSharp.Shortcut("MyApp", @"%Desktop%")),
-                            
-                    new ScriptAction(@"MsgBox ""Executing VBScript code...""", 
-                                     Return.ignore, 
-                                     When.After, 
-                                     Step.InstallFinalize, 
-                                     Condition.NOT_Installed),
-                    ...
-                    
-            Compiler.BuildMsi(project);
-            </code>
-            </example>
+             <example>The following is an example of using <c>ScriptAction</c> to run
+             VBScript code:
+             <code>
+             var project =
+                 new Project("My Product",
+            
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+                         new File(binaries, @"AppFiles\MyApp.exe",
+                             new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
+                             new WixSharp.Shortcut("MyApp", @"%Desktop%")),
+            
+                     new ScriptAction(@"MsgBox ""Executing VBScript code...""",
+                                      Return.ignore,
+                                      When.After,
+                                      Step.InstallFinalize,
+                                      Condition.NOT_Installed),
+                     ...
+            
+             Compiler.BuildMsi(project);
+             </code>
+             </example>
         </member>
         <member name="M:WixSharp.ScriptAction.#ctor(System.String)">
             <summary>
@@ -11356,31 +11350,31 @@
             </summary>
         </member>
         <member name="T:WixSharp.ScriptFileAction">
-            <summary>
-            Defines WiX CustomAction for executing embedded VBScript file. 
-            </summary>
+             <summary>
+             Defines WiX CustomAction for executing embedded VBScript file.
+             </summary>
             
-            <example>The following is an example of using <c>ScriptFileAction</c> to run
-            embedded VBScript file (from <c>CustomActions\Sample.vbs</c>):
-            <code>
-            var project = 
-                new Project("My Product",
-                
-                    new Dir(@"%ProgramFiles%\My Company\My Product",
-                        new File(binaries, @"AppFiles\MyApp.exe",
-                            new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
-                            new WixSharp.Shortcut("MyApp", @"%Desktop%")),
-                            
-                    new ScriptAction(@"CustomActions\Sample.vbs", "Execute", 
-                                     Return.ignore, 
-                                     When.After, 
-                                     Step.InstallFinalize, 
-                                     Condition.NOT_Installed),
-                    ...
-                    
-            Compiler.BuildMsi(project);
-            </code>
-            </example>
+             <example>The following is an example of using <c>ScriptFileAction</c> to run
+             embedded VBScript file (from <c>CustomActions\Sample.vbs</c>):
+             <code>
+             var project =
+                 new Project("My Product",
+            
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+                         new File(binaries, @"AppFiles\MyApp.exe",
+                             new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
+                             new WixSharp.Shortcut("MyApp", @"%Desktop%")),
+            
+                     new ScriptAction(@"CustomActions\Sample.vbs", "Execute",
+                                      Return.ignore,
+                                      When.After,
+                                      Step.InstallFinalize,
+                                      Condition.NOT_Installed),
+                     ...
+            
+             Compiler.BuildMsi(project);
+             </code>
+             </example>
         </member>
         <member name="M:WixSharp.ScriptFileAction.#ctor(System.String,System.String)">
             <summary>
@@ -11754,23 +11748,23 @@
             </summary>
         </member>
         <member name="T:WixSharp.SetPropertyAction">
-            <summary>
-            Defines WiX CustomAction for setting MSI property. 
-            </summary>
+             <summary>
+             Defines WiX CustomAction for setting MSI property.
+             </summary>
             
-            <example>The following is an example of using <c>SetPropertyAction</c> for assigning
-            string value <c>"Hello World!"</c> to property <c>Gritting</c>:
-            <code>
-            var project = 
-                new Project("My Product",
-                
-                    new Property("Gritting", "empty"),        
-                    new SetPropertyAction("Gritting", "Hello World!"),
-                    ...
-                    
-            Compiler.BuildMsi(project);
-            </code>
-            </example>
+             <example>The following is an example of using <c>SetPropertyAction</c> for assigning
+             string value <c>"Hello World!"</c> to property <c>Gritting</c>:
+             <code>
+             var project =
+                 new Project("My Product",
+            
+                     new Property("Gritting", "empty"),
+                     new SetPropertyAction("Gritting", "Hello World!"),
+                     ...
+            
+             Compiler.BuildMsi(project);
+             </code>
+             </example>
         </member>
         <member name="M:WixSharp.SetPropertyAction.#ctor">
             <summary>

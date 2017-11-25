@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,24 +24,25 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
 
 namespace WixSharp
 {
     /// <summary>
-    /// Defines WiX CustomAction for setting MSI property. 
+    /// Defines WiX CustomAction for setting MSI property.
     /// </summary>
-    /// 
+    ///
     /// <example>The following is an example of using <c>SetPropertyAction</c> for assigning
     /// string value <c>"Hello World!"</c> to property <c>Gritting</c>:
     /// <code>
-    /// var project = 
+    /// var project =
     ///     new Project("My Product",
-    ///     
-    ///         new Property("Gritting", "empty"),        
+    ///
+    ///         new Property("Gritting", "empty"),
     ///         new SetPropertyAction("Gritting", "Hello World!"),
     ///         ...
-    ///         
+    ///
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
@@ -53,6 +55,7 @@ namespace WixSharp
         {
             Return = Return.check;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SetPropertyAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -63,8 +66,9 @@ namespace WixSharp
             PropName = name;
             Value = value;
             Return = Return.check;
-            Name = "Action" + (++count) + "SetProp_" + name;
+            Name = "SetProp_" + name;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SetPropertyAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -77,8 +81,9 @@ namespace WixSharp
             PropName = name;
             Value = value;
             Return = Return.check;
-            Name = "Action" + (++count) + "SetProp_" + name;
+            Name = "SetProp_" + name;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SetPropertyAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -90,8 +95,9 @@ namespace WixSharp
             PropName = name;
             Value = value;
             Return = returnType;
-            Name = "Action" + (++count) + "SetProp_" + name;
+            Name = "SetProp_" + name;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SetPropertyAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -105,8 +111,9 @@ namespace WixSharp
             PropName = name;
             Value = value;
             Return = returnType;
-            Name = "Action" + (++count) + "SetProp_" + name;
+            Name = "SetProp_" + name;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SetPropertyAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -121,8 +128,9 @@ namespace WixSharp
         {
             PropName = name;
             Value = value;
-            Name = "Action" + (++count) + "SetProp_" + name;
+            Name = "SetProp_" + name;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SetPropertyAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -138,8 +146,9 @@ namespace WixSharp
         {
             PropName = name;
             Value = value;
-            Name = "Action" + (++count) + "SetProp_" + name;
+            Name = "SetProp_" + name;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SetPropertyAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -156,13 +165,14 @@ namespace WixSharp
         {
             PropName = name;
             Value = value;
-            Name = "Action" + (++count) + "SetProp_" + name;
+            Name = "SetProp_" + name;
         }
 
         /// <summary>
         /// Value to set the property to.
         /// </summary>
         public string Value = "";
+
         /// <summary>
         /// Name of the property to be set.
         /// </summary>

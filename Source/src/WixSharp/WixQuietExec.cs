@@ -96,7 +96,7 @@ namespace WixSharp
         {
             AppPath = appPath;
             Args = args;
-            Name = "Action" + (++count) + "_WixQuietExec_" + IO.Path.GetFileName(appPath);
+            Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
             Return = Return.check;
         }
 
@@ -114,7 +114,7 @@ namespace WixSharp
         {
             AppPath = appPath;
             Args = args;
-            Name = "Action" + (++count) + "_WixQuietExec_" + IO.Path.GetFileName(appPath);
+            Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace WixSharp
         {
             AppPath = appPath;
             Args = args;
-            Name = "Action" + (++count) + "_WixQuietExec_" + IO.Path.GetFileName(appPath);
+            Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace WixSharp
         {
             AppPath = appPath;
             Args = args;
-            Name = "Action" + (++count) + "_WixQuietExec_" + IO.Path.GetFileName(appPath);
+            Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace WixSharp
         {
             AppPath = appPath;
             Args = args;
-            Name = "Action" + (++count) + "_WixQuietExec_" + IO.Path.GetFileName(appPath);
+            Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
         }
 
         /// <summary>

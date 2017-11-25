@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,31 +24,33 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
+
 namespace WixSharp
 {
     /// <summary>
-    /// Defines WiX CustomAction for executing embedded VBScript file. 
+    /// Defines WiX CustomAction for executing embedded VBScript file.
     /// </summary>
-    /// 
+    ///
     /// <example>The following is an example of using <c>ScriptFileAction</c> to run
     /// embedded VBScript file (from <c>CustomActions\Sample.vbs</c>):
     /// <code>
-    /// var project = 
+    /// var project =
     ///     new Project("My Product",
-    ///     
+    ///
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
     ///             new File(binaries, @"AppFiles\MyApp.exe",
     ///                 new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
     ///                 new WixSharp.Shortcut("MyApp", @"%Desktop%")),
-    ///                 
-    ///         new ScriptAction(@"CustomActions\Sample.vbs", "Execute", 
-    ///                          Return.ignore, 
-    ///                          When.After, 
-    ///                          Step.InstallFinalize, 
+    ///
+    ///         new ScriptAction(@"CustomActions\Sample.vbs", "Execute",
+    ///                          Return.ignore,
+    ///                          When.After,
+    ///                          Step.InstallFinalize,
     ///                          Condition.NOT_Installed),
     ///         ...
-    ///         
+    ///
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
@@ -63,8 +66,9 @@ namespace WixSharp
         {
             ScriptFile = file;
             Procedure = procedure;
-            Name = "Action" + (++count) + "_VBScriptFile";
+            Name = "VBScriptFile";
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -76,8 +80,9 @@ namespace WixSharp
         {
             ScriptFile = file;
             Procedure = procedure;
-            Name = "Action" + (++count) + "_VBScriptFile";
+            Name = "VBScriptFile";
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -92,8 +97,9 @@ namespace WixSharp
         {
             ScriptFile = file;
             Procedure = procedure;
-            Name = "Action" + (++count) + "_VBScriptFile";
+            Name = "VBScriptFile";
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -109,8 +115,9 @@ namespace WixSharp
         {
             ScriptFile = file;
             Procedure = procedure;
-            Name = "Action" + (++count) + "_VBScriptFile";
+            Name = "VBScriptFile";
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -126,8 +133,9 @@ namespace WixSharp
         {
             ScriptFile = file;
             Procedure = procedure;
-            Name = "Action" + (++count) + "_VBScriptFile";
+            Name = "_VBScriptFile";
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -144,13 +152,14 @@ namespace WixSharp
         {
             ScriptFile = file;
             Procedure = procedure;
-            Name = "Action" + (++count) + "_VBScriptFile";
+            Name = "VBScriptFile";
         }
 
         /// <summary>
         /// VBScript file to be executed.
         /// </summary>
         public string ScriptFile = "";
+
         /// <summary>
         /// Name of the procedure (from the <see cref="ScriptFileAction.ScriptFile"/>) to be executed.
         /// </summary>

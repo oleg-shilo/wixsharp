@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,38 +24,39 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
 
 using IO = System.IO;
 
 namespace WixSharp
 {
     /// <summary>
-    /// Defines WiX CustomAction for executing file specified by the path on the target system. 
+    /// Defines WiX CustomAction for executing file specified by the path on the target system.
     /// </summary>
     /// <example>The following is an example of using <c>PathFileAction</c> to run
     /// executable present on the target system (<c>Notepad.exe</c>):
     /// <code>
-    /// var project = 
+    /// var project =
     ///     new Project("My Product",
-    ///     
+    ///
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
-    ///         
+    ///
     ///             new File(@"AppFiles\MyApp.exe",
     ///                 new WixSharp.Shortcut("MyApp", @"%ProgramMenu%\My Company\My Product"),
     ///                 new WixSharp.Shortcut("MyApp", @"%Desktop%")),
-    ///                 
+    ///
     ///             new File(@"AppFiles\Readme.txt"),
-    ///             
-    ///        new PathFileAction(@"%WindowsFolder%\notepad.exe", 
-    ///                            "Readme.txt", 
-    ///                            @"%ProgramFiles%\My Company\My Product", 
-    ///                            Return.asyncNoWait, 
-    ///                            When.After, 
-    ///                            Step.InstallFinalize, 
-    ///                            Condition.NOT_Installed), 
+    ///
+    ///        new PathFileAction(@"%WindowsFolder%\notepad.exe",
+    ///                            "Readme.txt",
+    ///                            @"%ProgramFiles%\My Company\My Product",
+    ///                            Return.asyncNoWait,
+    ///                            When.After,
+    ///                            Step.InstallFinalize,
+    ///                            Condition.NOT_Installed),
     ///         ...
-    ///         
+    ///
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
@@ -72,8 +74,9 @@ namespace WixSharp
             AppPath = appPath;
             Args = args;
             WorkingDir = workingDir;
-            Name = "Action" + (++count) + "_" + IO.Path.GetFileName(appPath);
+            Name = IO.Path.GetFileName(appPath);
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PathFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -87,8 +90,9 @@ namespace WixSharp
             AppPath = appPath;
             Args = args;
             WorkingDir = workingDir;
-            Name = "Action" + (++count) + "_" + IO.Path.GetFileName(appPath);
+            Name = IO.Path.GetFileName(appPath);
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PathFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -105,8 +109,9 @@ namespace WixSharp
             AppPath = appPath;
             Args = args;
             WorkingDir = workingDir;
-            Name = "Action" + (++count) + "_" + IO.Path.GetFileName(appPath);
+            Name = IO.Path.GetFileName(appPath);
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PathFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -124,8 +129,9 @@ namespace WixSharp
             AppPath = appPath;
             Args = args;
             WorkingDir = workingDir;
-            Name = "Action" + (++count) + "_" + IO.Path.GetFileName(appPath);
+            Name = IO.Path.GetFileName(appPath);
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PathFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -143,8 +149,9 @@ namespace WixSharp
             AppPath = appPath;
             Args = args;
             WorkingDir = workingDir;
-            Name = "Action" + (++count) + "_" + IO.Path.GetFileName(appPath);
+            Name = IO.Path.GetFileName(appPath);
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PathFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -163,16 +170,19 @@ namespace WixSharp
             AppPath = appPath;
             Args = args;
             WorkingDir = workingDir;
-            Name = "Action" + (++count) + "_" + IO.Path.GetFileName(appPath);
+            Name = IO.Path.GetFileName(appPath);
         }
+
         /// <summary>
         /// Working directory for the file execution.
         /// </summary>
         public string WorkingDir = "";
+
         /// <summary>
         /// Path to the file to be executed on the target system.
         /// </summary>
         public string AppPath = "";
+
         /// <summary>
         /// The arguments to be passed to the file during the execution.
         /// </summary>
