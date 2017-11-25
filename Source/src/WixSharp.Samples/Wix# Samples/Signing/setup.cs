@@ -16,15 +16,10 @@ class Script
             {
                 DigitalSignature = new DigitalSignature
                 {
-                    // PfxFilePath = "wixsharp.pfx",
-                    // Password = "my_password",
-                    // Description = "MyProduct",
-                    // TimeUrl = new Uri("http://timestamp.verisign.com/scripts/timstamp.dll")
-                    UseCertificateStore = true,
-                    TimeUrl = new Uri("http://timestamp.verisign.com/scripts/timstamp.dll"),
-                    PfxFilePath = "Cert_Name", // Certificate name from Cert Store
-                    OptionalArguments = "/fd SHA256",
-                    WellKnownLocations = @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin"
+                    PfxFilePath = "wixsharp.pfx",
+                    Password = "my_password",
+                    Description = "MyProduct",
+                    TimeUrl = new Uri("http://timestamp.verisign.com/scripts/timstamp.dll")
                 }
             };
 
