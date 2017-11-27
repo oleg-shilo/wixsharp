@@ -143,7 +143,7 @@ namespace WixSharp
         /// </summary>
         public bool? Vital;
 
-	    public UrlReservation UrlReservation;
+	    public UrlReservation[] UrlReservations;
 
         /// <summary>
         /// Renders ServiceInstaller properties to appropriate WiX elements
@@ -216,10 +216,13 @@ namespace WixSharp
 
                 serviceInstall.Add(serviceConfig);
 
-	            if (UrlReservation != null)
+	            if (UrlReservations != null)
 	            {
-		            serviceInstall.Add(UrlReservation.ToXml());
-	            }
+		            foreach (UrlReservation urlReservation in UrlReservations)
+		            {
+						serviceInstall.Add(urlReservation.ToXml());
+					}
+				}
             }
 
             if (IsFailureActionSet

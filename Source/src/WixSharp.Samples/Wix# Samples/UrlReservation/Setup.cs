@@ -37,10 +37,18 @@ namespace FutoRollbackGeneration
 			                        PreShutdownDelay = 1000 * 60 * 3,
 			                        RebootMessage = "Failure actions do not specify reboot",
 
-									UrlReservation = new UrlReservation(new Id("SeervicesUrl"), "http://+:4131/url/device_service/", "*S-1-1-0", UrlReservationRights.all)
+									UrlReservations = new[] 
 									{
-										HandleExisting = UrlReservationHandleExisting.fail,
-									},
+										new UrlReservation(new Id("SeervicesUrl"), "http://+:4131/url/device_service/", "*S-1-1-0", UrlReservationRights.all)
+										{
+											HandleExisting = UrlReservationHandleExisting.fail,
+										},
+
+										new UrlReservation(new Id("SeervicesUrl1"), "http://+:4191/url/device_service/", "*S-1-1-0")
+										{
+											HandleExisting = UrlReservationHandleExisting.ignore,
+										},
+									}
 								}
 	                        }),
 						new UrlReservation(new Id("Url"), "http://+:2131/url/device_service/", "*S-1-1-0", UrlReservationRights.register));

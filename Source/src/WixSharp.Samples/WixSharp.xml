@@ -6148,6 +6148,14 @@
             <param name="securityPrincipal"></param>
             <param name="rights"></param>
         </member>
+        <member name="M:WixSharp.UrlReservation.#ctor(WixSharp.Id,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="url"></param>
+            <param name="sddl"></param>
+        </member>
         <member name="M:WixSharp.UrlReservation.ToXml">
             <summary>
             Emits WiX XML for UrlReservation.

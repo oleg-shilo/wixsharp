@@ -102,11 +102,24 @@ namespace WixSharp
             Rights = rights;
         }
 
-        /// <summary>
-        /// Emits WiX XML for UrlReservation.
-        /// </summary>
-        /// <returns></returns>
-        public XElement ToXml()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UrlReservation" /> class.
+		/// </summary>
+		/// <param name="id">The id.</param>
+		/// <param name="url"></param>
+		/// <param name="sddl"></param>
+		public UrlReservation(Id id, string url, string sddl)
+	    {
+		    Id = id;
+		    Url = url;
+		    Sddl = sddl;
+	    }
+
+		/// <summary>
+		/// Emits WiX XML for UrlReservation.
+		/// </summary>
+		/// <returns></returns>
+		public XElement ToXml()
         {
             var retval = this.ToXElement(WixExtension.Http.ToXName("UrlReservation"))
                 .SetAttribute("Id", this.Id)
@@ -114,10 +127,13 @@ namespace WixSharp
                 .SetAttribute("Sddl", this.Sddl)
                 .SetAttribute("HandleExisting", this.HandleExisting);
 
-            retval.AddElement(WixExtension.Http.ToXName("UrlAce"))
-                .SetAttribute("Id", this.Id)
-                .SetAttribute("Rights", this.Rights)
-                .SetAttribute("SecurityPrincipal", this.SecurityPrincipal);
+	        if (Sddl.IsEmpty())
+	        {
+				retval.AddElement(WixExtension.Http.ToXName("UrlAce"))
+					.SetAttribute("Id", this.Id)
+					.SetAttribute("Rights", this.Rights)
+					.SetAttribute("SecurityPrincipal", this.SecurityPrincipal);
+			}
 
             return retval;
         }
