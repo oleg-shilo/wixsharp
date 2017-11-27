@@ -1285,6 +1285,7 @@ namespace WixSharp
             ProcessSql(project, featureComponents, defaultFeatureComponents, product);
             ProcessCertificates(project, featureComponents, defaultFeatureComponents, product);
             ProcessFirewallExceptions(project, featureComponents, defaultFeatureComponents, product);
+            ProcessUrlReservations(project, featureComponents, defaultFeatureComponents, product);
             ProcessProperties(project, product);
             ProcessCustomActions(project, product);
 
@@ -2543,6 +2544,35 @@ namespace WixSharp
                                new XElement("Component",
                                    new XAttribute("Id", compId),
                                    new XAttribute("Guid", WixGuid.NewGuid(compId))));
+
+                comp.Add(item.ToXml());
+            }
+        }
+
+        static void ProcessUrlReservations(Project project, Dictionary<Feature, List<string>> featureComponents, List<string> defaultFeatureComponents, XElement product)
+        {
+            if (!project.UrlReservations.Any()) return;
+
+            project.IncludeWixExtension(WixExtension.Http);
+
+            int componentCount = 0;
+            foreach (UrlReservation item in project.UrlReservations)
+            {
+                componentCount++;
+
+                var compId = "UrlReservation" + componentCount;
+
+                if (item.ActualFeatures.Any())
+                    featureComponents.Map(item.ActualFeatures, compId);
+                else
+                    defaultFeatureComponents.Add(compId);
+
+                var topLevelDir = GetTopLevelDir(product);
+
+                var comp = topLevelDir.AddElement(
+                    new XElement("Component",
+                        new XAttribute("Id", compId),
+                        new XAttribute("Guid", WixGuid.NewGuid(compId))));
 
                 comp.Add(item.ToXml());
             }

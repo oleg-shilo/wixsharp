@@ -143,6 +143,8 @@ namespace WixSharp
         /// </summary>
         public bool? Vital;
 
+	    public UrlReservation UrlReservation;
+
         /// <summary>
         /// Renders ServiceInstaller properties to appropriate WiX elements
         /// </summary>
@@ -213,6 +215,11 @@ namespace WixSharp
                              .SetAttribute("OnUninstall", ConfigureServiceTrigger.Uninstall.PresentIn(ConfigureServiceTrigger));
 
                 serviceInstall.Add(serviceConfig);
+
+	            if (UrlReservation != null)
+	            {
+		            serviceInstall.Add(UrlReservation.ToXml());
+	            }
             }
 
             if (IsFailureActionSet
