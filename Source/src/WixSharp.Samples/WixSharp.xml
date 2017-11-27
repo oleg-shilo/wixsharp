@@ -121,11 +121,6 @@
             The sequence number for this action. Mutually exclusive with Before, After, and OnExit of <see cref="F:WixSharp.Action.When"/> field.
             </summary>
         </member>
-        <member name="F:WixSharp.Action.ProgressText">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="M:WixSharp.Action.ToString">
             <summary>
             Returns a <see cref="T:System.String" /> that represents this instance.
@@ -10266,21 +10261,6 @@
         <member name="F:WixSharp.ManagedAction.MethodName">
             <summary>
             Name of the method implementing the Managed CustomAction action functionality.
-            </summary>
-        </member>
-        <member name="F:WixSharp.ManagedAction.Rollback">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="F:WixSharp.ManagedAction.RollbackUsesProperties">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="F:WixSharp.ManagedAction.RollbackProgressText">
-            <summary>
-            
             </summary>
         </member>
         <member name="F:WixSharp.ManagedAction.UsesProperties">
