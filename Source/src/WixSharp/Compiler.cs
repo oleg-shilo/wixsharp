@@ -1285,6 +1285,7 @@ namespace WixSharp
             ProcessSql(project, featureComponents, defaultFeatureComponents, product);
             ProcessCertificates(project, featureComponents, defaultFeatureComponents, product);
             ProcessFirewallExceptions(project, featureComponents, defaultFeatureComponents, product);
+            ProcessIniFiles(project, featureComponents, defaultFeatureComponents, product);
             ProcessProperties(project, product);
             ProcessCustomActions(project, product);
 
@@ -1962,7 +1963,7 @@ namespace WixSharp
                 }
             }
         }
-
+        
         static void ProcessFilePermissions(Project wProject, File wFile, XElement file)
         {
             if (wFile.Permissions.Any())
@@ -2543,6 +2544,33 @@ namespace WixSharp
                                new XElement("Component",
                                    new XAttribute("Id", compId),
                                    new XAttribute("Guid", WixGuid.NewGuid(compId))));
+
+                comp.Add(item.ToXml());
+            }
+        }
+
+        static void ProcessIniFiles(Project project, Dictionary<Feature, List<string>> featureComponents, List<string> defaultFeatureComponents, XElement product)
+        {
+            if (!project.IniFiles.Any()) return;
+            
+            int componentCount = 0;
+            foreach (IniFile item in project.IniFiles)
+            {
+                componentCount++;
+
+                var compId = "IniFile" + componentCount;
+
+                if (item.ActualFeatures.Any())
+                    featureComponents.Map(item.ActualFeatures, compId);
+                else
+                    defaultFeatureComponents.Add(compId);
+
+                var topLevelDir = GetTopLevelDir(product);
+
+                var comp = topLevelDir.AddElement(
+                    new XElement("Component",
+                        new XAttribute("Id", compId),
+                        new XAttribute("Guid", WixGuid.NewGuid(compId))));
 
                 comp.Add(item.ToXml());
             }

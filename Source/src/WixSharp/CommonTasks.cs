@@ -504,6 +504,29 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Adds the IniFile to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Project AddIniFile(this Project project, Dir item)
+        {
+            return project.AddIniFiles(item);
+        }
+
+        /// <summary>
+        /// Adds the IniFile items to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="items">The items.</param>
+        /// <returns></returns>
+        static public Project AddIniFiles(this Project project, params Dir[] items)
+        {
+            project.IniFiles = project.IniFiles.Combine(items).Distinct().ToArray();
+            return project;
+        }
+
+        /// <summary>
         /// Adds the registry value to the Project.
         /// </summary>
         /// <param name="project">The project.</param>
