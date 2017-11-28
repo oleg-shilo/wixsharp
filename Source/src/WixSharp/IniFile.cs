@@ -43,19 +43,22 @@ namespace WixSharp
         /// <summary>
         /// The type of modification to be made.
         /// </summary>
-        public IniFileAction Action;
+        [Xml]
+        public IniFileAction? Action;
 
         /// <summary>
         /// Name of a property, the value of which is the full path of the folder containing the .ini file.
         /// <remarks>
         /// Can be name of a directory in the Directory table, a property set by the AppSearch table, or any other property representing a full path.
-        /// </remarks> 
+        /// </remarks>
         /// </summary>
+        [Xml]
         public string Directory;
 
         /// <summary>
         /// The localizable .ini file key within the section.
         /// </summary>
+        [Xml]
         public string Key;
 
         /// <summary>
@@ -66,33 +69,38 @@ namespace WixSharp
         /// Also, if this value is a long name, the ShortName attribute may be omitted to allow WiX to attempt to generate a unique short name.
         /// However, if this name collides with another file or you wish to manually specify the short name, then the ShortName attribute may be specified.
         /// </summary>
+        [Xml]
         public new string Name;
 
         /// <summary>
         /// This attribute has been deprecated; please use the Name attribute instead.
         /// </summary>
         [Obsolete(message: "This method name is obsolete use `Name` instead")]
+        [Xml]
         public string LongName;
 
         /// <summary>
         /// The short name of the in 8.3 format.
         /// <remarks>
         /// This attribute should only be set if there is a conflict between generated short names or the user wants to manually specify the short name.
-        /// </remarks> 
+        /// </remarks>
         /// </summary>
+        [Xml]
         public string ShortName;
 
         /// <summary>
         /// The localizable .ini file section.
         /// </summary>
+        [Xml]
         public string Section;
 
         /// <summary>
         /// The localizable value to be written or deleted.
         /// <remarks>
         /// This attribute must be set if the Action attribute's value is "addLine", "addTag", or "createLine".
-        /// </remarks> 
+        /// </remarks>
         /// </summary>
+        [Xml]
         public string Value;
 
         /// <summary>
@@ -506,15 +514,7 @@ namespace WixSharp
         public XElement ToXml()
         {
             var retval = this.ToXElement("IniFile")
-                .SetAttribute("Id", this.Id)
-                .SetAttribute("Directory", this.Directory)
-                .SetAttribute("Action", this.Action)
-                .SetAttribute("LongName", this.LongName)
-                .SetAttribute("Name", this.Name)
-                .SetAttribute("ShortName", this.ShortName)
-                .SetAttribute("Section", this.Section)
-                .SetAttribute("Key", this.Key)
-                .SetAttribute("Value", this.Value);
+                             .SetAttribute("Id", this.Id);
 
             return retval;
         }

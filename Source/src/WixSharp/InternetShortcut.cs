@@ -32,22 +32,23 @@ namespace WixSharp
     ///            Target = "https://github.com/oleg-shilo/wixsharp"
     ///        },
     ///         ...
-    ///         
+    ///
     /// project.BuildMsi();
     /// </code>
     /// </example>
     public class InternetShortcut : WixEntity, IGenericEntity
     {
         /// <summary>
-        /// Type of shortcut should be created. 
+        /// Type of shortcut should be created.
         /// </summary>
-        /// 
+        ///
         public enum ShortcutType
         {
             /// <summary>
             /// Creates .lnk files using IShellLinkW (default).
             /// </summary>
             link,
+
             /// <summary>
             /// Creates .url files using IUniformResourceLocatorW
             /// </summary>
@@ -87,7 +88,7 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            this.Id = base.Id; //unsure the auto-generated Id is pushed to the XML attribute
+            this.Id = this.Id ?? base.Id; // ensure the auto-generated Id is pushed to the XML attribute
             context.Project.IncludeWixExtension(WixExtension.Util);
 
             context.XParent

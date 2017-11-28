@@ -11,7 +11,7 @@ class Script
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File(@"Files\Bin\MyApp.exe")),
+                    new File(@"..\Install Files\Files\Bin\MyApp.exe")),
                 new Property("IP_ADRESS", "127.0.0.1"),
                 new IniFile("config.ini", "INSTALLDIR", IniFileAction.createLine, "discovery", "enabled", "false"),
                 new IniFile("config.ini", "INSTALLDIR", IniFileAction.createLine, "info", "enabled_server", "[IP_ADRESS]"));

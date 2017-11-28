@@ -221,6 +221,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallScope_Dynamically", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SinglePackageAuthoring", "WixSharp.Samples\VSProjects\SinglePackageAuthoring.csproj", "{D727402B-A591-4378-8469-3B78132077CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IniFile", "WixSharp.Samples\VSProjects\IniFile.csproj", "{505A71A3-39A8-424C-8D9A-6E9F7A2C860C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1191,6 +1193,18 @@ Global
 		{D727402B-A591-4378-8469-3B78132077CC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D727402B-A591-4378-8469-3B78132077CC}.Release|x86.ActiveCfg = Release|Any CPU
 		{D727402B-A591-4378-8469-3B78132077CC}.Release|x86.Build.0 = Release|Any CPU
+		{505A71A3-39A8-424C-8D9A-6E9F7A2C860C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{505A71A3-39A8-424C-8D9A-6E9F7A2C860C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{505A71A3-39A8-424C-8D9A-6E9F7A2C860C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{505A71A3-39A8-424C-8D9A-6E9F7A2C860C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{505A71A3-39A8-424C-8D9A-6E9F7A2C860C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{505A71A3-39A8-424C-8D9A-6E9F7A2C860C}.Debug|x86.Build.0 = Debug|Any CPU
+		{505A71A3-39A8-424C-8D9A-6E9F7A2C860C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{505A71A3-39A8-424C-8D9A-6E9F7A2C860C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{505A71A3-39A8-424C-8D9A-6E9F7A2C860C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{505A71A3-39A8-424C-8D9A-6E9F7A2C860C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{505A71A3-39A8-424C-8D9A-6E9F7A2C860C}.Release|x86.ActiveCfg = Release|Any CPU
+		{505A71A3-39A8-424C-8D9A-6E9F7A2C860C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1288,6 +1302,7 @@ Global
 		{9CA23A5E-D9F0-4D4F-906D-4E59DD086BC2} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
 		{6EF89B33-A766-457E-8229-C87CCEC125A6} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
 		{D727402B-A591-4378-8469-3B78132077CC} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
+		{505A71A3-39A8-424C-8D9A-6E9F7A2C860C} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {559711D5-4429-4577-BBC9-F0D973972079}

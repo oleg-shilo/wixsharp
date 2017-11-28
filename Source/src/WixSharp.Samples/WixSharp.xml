@@ -522,6 +522,22 @@
             <param name="items">The items.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddIniFile(WixSharp.Project,WixSharp.Dir)">
+            <summary>
+            Adds the IniFile to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddIniFiles(WixSharp.Project,WixSharp.Dir[])">
+            <summary>
+            Adds the IniFile items to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="items">The items.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.CommonTasks.Tasks.AddRegValue(WixSharp.Project,WixSharp.RegValue)">
             <summary>
             Adds the registry value to the Project.
@@ -2941,6 +2957,348 @@
             </summary>
             <param name="pattern">The wildcard pattern to convert.</param>
             <returns>A regex equivalent of the given wildcard.</returns>
+        </member>
+        <member name="T:WixSharp.IniFileAction">
+            <summary>
+            The type of modification to be made.
+            This attribute's value must be one of the following:
+            </summary>
+        </member>
+        <member name="F:WixSharp.IniFileAction.addLine">
+            <summary>
+            Creates or updates an .ini entry.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IniFileAction.addTag">
+            <summary>
+            Creates a new entry or appends a new comma-separated value to an existing entry.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IniFileAction.createLine">
+            <summary>
+            Creates an .ini entry only if the entry does no already exist.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IniFileAction.removeLine">
+            <summary>
+            Removes an .ini entry.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IniFileAction.removeTag">
+            <summary>
+            Removes a tag from an .ini entry.
+            </summary>
+        </member>
+        <member name="T:WixSharp.IniFile">
+            <summary>
+            Adds or removes .ini file entries.
+            </summary>
+        </member>
+        <member name="P:WixSharp.IniFile.id">
+            <summary>
+            Unique identifier in your installation package for this Internet shortcut.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IniFile.Action">
+            <summary>
+            The type of modification to be made.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IniFile.Directory">
+            <summary>
+            Name of a property, the value of which is the full path of the folder containing the .ini file.
+            <remarks>
+            Can be name of a directory in the Directory table, a property set by the AppSearch table, or any other property representing a full path.
+            </remarks>
+            </summary>
+        </member>
+        <member name="F:WixSharp.IniFile.Key">
+            <summary>
+            The localizable .ini file key within the section.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IniFile.Name">
+            <summary>
+            In prior versions of the WiX toolset, this attribute specified the short name.
+            This attribute's value may now be either a short or long name.
+            If a short name is specified, the ShortName attribute may not be specified.
+            If a long name is specified, the LongName attribute may not be specified.
+            Also, if this value is a long name, the ShortName attribute may be omitted to allow WiX to attempt to generate a unique short name.
+            However, if this name collides with another file or you wish to manually specify the short name, then the ShortName attribute may be specified.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IniFile.LongName">
+            <summary>
+            This attribute has been deprecated; please use the Name attribute instead.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IniFile.ShortName">
+            <summary>
+            The short name of the in 8.3 format.
+            <remarks>
+            This attribute should only be set if there is a conflict between generated short names or the user wants to manually specify the short name.
+            </remarks>
+            </summary>
+        </member>
+        <member name="F:WixSharp.IniFile.Section">
+            <summary>
+            The localizable .ini file section.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IniFile.Value">
+            <summary>
+            The localizable value to be written or deleted.
+            <remarks>
+            This attribute must be set if the Action attribute's value is "addLine", "addTag", or "createLine".
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="name">The name.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Feature,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="feature">The feature.</param>
+            <param name="name">The name.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Feature,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="feature">The feature.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(System.String,System.String,WixSharp.IniFileAction)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Feature,System.String,System.String,WixSharp.IniFileAction)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="feature">The feature.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(System.String,System.String,WixSharp.IniFileAction,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+            <param name="section">The section.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Feature,System.String,System.String,WixSharp.IniFileAction,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="feature">The feature.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+            <param name="section">The section.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(System.String,System.String,WixSharp.IniFileAction,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+            <param name="section">The section.</param>
+            <param name="key">The key.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Feature,System.String,System.String,WixSharp.IniFileAction,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="feature">The feature.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+            <param name="section">The section.</param>
+            <param name="key">The key.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(System.String,System.String,WixSharp.IniFileAction,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+            <param name="section">The section.</param>
+            <param name="key">The key.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Feature,System.String,System.String,WixSharp.IniFileAction,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="feature">The feature.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+            <param name="section">The section.</param>
+            <param name="key">The key.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Id)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="id">The id.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Id,WixSharp.Feature)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="feature">The feature.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Id,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="name">The name.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Id,WixSharp.Feature,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="feature">The feature.</param>
+            <param name="name">The name.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Id,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="feature">The feature.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Id,System.String,System.String,WixSharp.IniFileAction)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.String,WixSharp.IniFileAction)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="feature">The feature.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Id,System.String,System.String,WixSharp.IniFileAction,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+            <param name="section">The section.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.String,WixSharp.IniFileAction,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="feature">The feature.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+            <param name="section">The section.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Id,System.String,System.String,WixSharp.IniFileAction,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+            <param name="section">The section.</param>
+            <param name="key">The key.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.String,WixSharp.IniFileAction,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="feature">The feature.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+            <param name="section">The section.</param>
+            <param name="key">The key.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Id,System.String,System.String,WixSharp.IniFileAction,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+            <param name="section">The section.</param>
+            <param name="key">The key.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.String,WixSharp.IniFileAction,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IniFile" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="feature">The feature.</param>
+            <param name="name">The name.</param>
+            <param name="directory">The directory.</param>
+            <param name="action">The action.</param>
+            <param name="section">The section.</param>
+            <param name="key">The key.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:WixSharp.IniFile.ToXml">
+            <summary>
+            Emits WiX XML for IniFile.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:WixSharp.NativeImage">
             <summary>
@@ -10566,6 +10924,11 @@
         <member name="F:WixSharp.Project.FirewallExceptions">
             <summary>
             Collection of <see cref="T:WixSharp.FirewallException"/> to be installed.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Project.IniFiles">
+            <summary>
+            Collection of <see cref="T:WixSharp.IniFile"/> to be installed.
             </summary>
         </member>
         <member name="F:WixSharp.Project.GenericItems">

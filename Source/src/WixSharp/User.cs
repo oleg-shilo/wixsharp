@@ -243,7 +243,7 @@ namespace WixSharp
                                   .SetAttribute("RemoveOnUninstall", RemoveOnUninstall)
                                   .SetAttribute("UpdateIfExists", UpdateIfExists)
                                   .SetAttribute("Vital", Vital)
-                                  .AddAttributes(this.Attributes); 
+                                  .AddAttributes(this.Attributes);
 
             return new[] { userElement };
         }
