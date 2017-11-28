@@ -2865,10 +2865,19 @@ namespace WixSharp
                         sequences.Add(product.SelectOrCreate(item));
                 }
 
+                List<XElement> uis = new List<XElement>();
+                uis.Add(product.SelectOrCreate("UI"));
 
                 XAttribute sequenceNumberAttr = wAction.SequenceNumber.HasValue ?
                                                     new XAttribute("Sequence", wAction.SequenceNumber.Value) :
                                                     new XAttribute(wAction.When.ToString(), step);
+
+                if (wAction.ProgressText.IsNotEmpty())
+                {
+                    uis.ForEach(ui =>
+                        ui.Add(new XElement("ProgressText", wAction.ProgressText,
+                            new XAttribute("Action", wAction.Id))));
+                }
 
                 if (wAction is SetPropertyAction)
                 {
