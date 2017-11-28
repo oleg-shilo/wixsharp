@@ -19,7 +19,6 @@ class Script
         project.UI = WUI.WixUI_InstallDir;
         project.GUID = new Guid("1ADF5503-75F1-4EBC-ADC5-8260C1808A5B");
         project.PreserveTempFiles = true;
-
         project.BuildMsi();
     }
 }

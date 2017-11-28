@@ -2994,9 +2994,9 @@
             Adds or removes .ini file entries.
             </summary>
         </member>
-        <member name="P:WixSharp.IniFile.id">
+        <member name="P:WixSharp.IniFile.Id">
             <summary>
-            Unique identifier in your installation package for this Internet shortcut.
+            Identifier for ini file.
             </summary>
         </member>
         <member name="F:WixSharp.IniFile.Action">
@@ -3720,15 +3720,15 @@
                         Target = "https://github.com/oleg-shilo/wixsharp"
                     },
                      ...
-                     
+            
              project.BuildMsi();
              </code>
              </example>
         </member>
         <member name="T:WixSharp.InternetShortcut.ShortcutType">
-            <summary>
-            Type of shortcut should be created. 
-            </summary>
+             <summary>
+             Type of shortcut should be created.
+             </summary>
             
         </member>
         <member name="F:WixSharp.InternetShortcut.ShortcutType.link">
@@ -5576,7 +5576,7 @@
         <member name="M:WixSharp.Extensions.Combine``2(``0[],``1[])">
             <summary>
             Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
-            <para>If you are adding items to the <c>Project</c> or <c>Dir</c> then you can use the dedicated 
+            <para>If you are adding items to the <c>Project</c> or <c>Dir</c> then you can use the dedicated
             methods for that (e.g. `dir.AffFiles(drivers)`).</para>
             </summary>
             <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>

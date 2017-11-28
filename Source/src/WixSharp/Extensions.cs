@@ -1845,7 +1845,7 @@ namespace WixSharp
 
         /// <summary>
         /// Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
-        /// <para>If you are adding items to the <c>Project</c> or <c>Dir</c> then you can use the dedicated 
+        /// <para>If you are adding items to the <c>Project</c> or <c>Dir</c> then you can use the dedicated
         /// methods for that (e.g. `dir.AffFiles(drivers)`).</para>
         /// </summary>
         /// <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
@@ -2541,27 +2541,27 @@ namespace WixSharp
                            .Cast<MemberInfo>()
                            .ToArray();
 
-            var items = fields.Concat(props)
-                              .Select(x =>
-                              {
-                                  var xmlAttr = (XmlAttribute)x.GetCustomAttributes(typeof(XmlAttribute), false)
-                                                                .FirstOrDefault();
-                                  string name = null;
-                                  if (xmlAttr != null)
-                                      name = xmlAttr.Name ?? x.Name;
+            var items = props.Concat(fields)
+                             .Select(x =>
+                             {
+                                 var xmlAttr = (XmlAttribute)x.GetCustomAttributes(typeof(XmlAttribute), false)
+                                                               .FirstOrDefault();
+                                 string name = null;
+                                 if (xmlAttr != null)
+                                     name = xmlAttr.Name ?? x.Name;
 
-                                  object value = null;
-                                  if (x is FieldInfo)
-                                      value = (x as FieldInfo).GetValue(obj);
-                                  else if (x is PropertyInfo)
-                                      value = (x as PropertyInfo).GetValue(obj, emptyArgs);
+                                 object value = null;
+                                 if (x is FieldInfo)
+                                     value = (x as FieldInfo).GetValue(obj);
+                                 else if (x is PropertyInfo)
+                                     value = (x as PropertyInfo).GetValue(obj, emptyArgs);
 
-                                  return new
-                                  {
-                                      Name = name,
-                                      Value = value
-                                  };
-                              })
+                                 return new
+                                 {
+                                     Name = name,
+                                     Value = value
+                                 };
+                             })
                             .Where(x => x.Name != null && x.Value != null)
                             .ToArray();
 
@@ -2636,5 +2636,7 @@ namespace WixSharp
         /// </summary>
         /// <value>The name.</value>
         public string Name { get; set; }
+
+        public string Value { get; set; }
     }
 }

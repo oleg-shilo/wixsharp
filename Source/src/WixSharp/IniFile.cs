@@ -41,6 +41,12 @@ namespace WixSharp
     public class IniFile : WixEntity
     {
         /// <summary>
+        /// Identifier for ini file.
+        /// </summary>
+        [Xml]
+        public string Id { get => base.Id; set => base.Id = value; }
+
+        /// <summary>
         /// The type of modification to be made.
         /// </summary>
         [Xml]
@@ -513,8 +519,7 @@ namespace WixSharp
         /// <returns></returns>
         public XElement ToXml()
         {
-            var retval = this.ToXElement("IniFile")
-                             .SetAttribute("Id", this.Id);
+            var retval = this.ToXElement("IniFile");
 
             return retval;
         }
