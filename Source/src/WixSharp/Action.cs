@@ -180,9 +180,24 @@ namespace WixSharp
         public int? SequenceNumber;
 
 		/// <summary>
+		/// The action that should be performed in the event of a rollback.
+		/// </summary>
+		public string Rollback;
+
+		/// <summary>
+		/// Rollback arguments
+		/// </summary>
+		public string RollbackArg;
+
+		/// <summary>
+		/// ProgressText when doing a rollback
+		/// </summary>
+		public string RollbackProgressText;
+
 		/// Format ActionData messages from action processing
 		/// </summary>
 		public string ProgressText;
+
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
