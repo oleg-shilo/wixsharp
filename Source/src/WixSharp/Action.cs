@@ -194,6 +194,11 @@ namespace WixSharp
 		/// </summary>
 		public string RollbackProgressText;
 
+		/// Format ActionData messages from action processing
+		/// </summary>
+		public string ProgressText;
+
+
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>

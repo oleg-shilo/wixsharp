@@ -134,6 +134,26 @@ namespace WixSharp.Test
             project.AddActions(project.Actions);
         }
 
+        class TestEntity : WixEntity
+        {
+            [Xml]
+            public string Id { get => base.Id; set => base.Id = value; }
+
+            [Xml]
+            public string FieldA;
+        }
+
+        [Fact]
+        public void MapToXmlAttributes()
+        {
+            var entity = new TestEntity
+            {
+                FieldA = "test_value"
+            };
+
+            var xml = entity.ToXElement("Test");
+        }
+
         [Fact]
         public void Test()
         {
