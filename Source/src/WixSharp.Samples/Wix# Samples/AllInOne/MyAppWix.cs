@@ -61,8 +61,9 @@ class Script
             project.UI = WUI.WixUI_Mondo;
             project.SourceBaseDir = Environment.CurrentDirectory;
             project.OutFileName = "MyApp";
+            project.InstallPrivileges = InstallPrivileges.elevated;
 
-            //project.PreserveTempFiles = true;
+            // project.PreserveTempFiles = true;
             project.WixSourceGenerated += Compiler_WixSourceGenerated;
             project.BuildMsi();
         }

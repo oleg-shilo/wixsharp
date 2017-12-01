@@ -394,6 +394,11 @@ namespace WixSharp
         public InstallScope? InstallScope;
 
         /// <summary>
+        /// Use this attribute to specify the privileges required to install the package on Windows Vista and above.
+        /// </summary>
+        public InstallPrivileges? InstallPrivileges;
+
+        /// <summary>
         /// Version of the product to be installed.
         /// </summary>
         public Version Version = new Version("1.0.0.0");

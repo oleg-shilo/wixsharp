@@ -2202,10 +2202,11 @@
             This will cause the entire contents of the Fragment containing the referenced CustomAction to be included in the installer database.
             </summary>
         </member>
-        <member name="M:WixSharp.CustomActionRef.#ctor(WixSharp.When,WixSharp.Step)">
+        <member name="M:WixSharp.CustomActionRef.#ctor(System.String,WixSharp.When,WixSharp.Step)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.CustomActionRef" /> class.
             </summary>
+            <param name="id">The id.</param>
             <param name="when">The When.</param>
             <param name="step">The Step.</param>
         </member>
@@ -2217,7 +2218,7 @@
             <param name="when">The When.</param>
             <param name="step">The Step.</param>
         </member>
-        <member name="M:WixSharp.CustomActionRef.#ctor(WixSharp.When,WixSharp.Step,WixSharp.Condition)">
+        <member name="M:WixSharp.CustomActionRef.#ctor(System.String,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.CustomActionRef" /> class.
             </summary>
@@ -11065,6 +11066,11 @@
             Use this attribute if you need to specify the installation scope of this package: per-machine or per-user.
             </summary>
         </member>
+        <member name="F:WixSharp.Project.InstallPrivileges">
+            <summary>
+            Use this attribute to specify the privileges required to install the package on Windows Vista and above.
+            </summary>
+        </member>
         <member name="F:WixSharp.Project.Version">
             <summary>
             Version of the product to be installed.
@@ -14002,10 +14008,19 @@
             Execute before order controlling action.
             </summary>
         </member>
-        <member name="T:WixSharp.InstallScope">
+        <member name="T:WixSharp.InstallPrivileges">
             <summary>
-            Use this enum to specify the installation scope of this package: per-machine or per-user.
-            The enum values are mapped to the WiX InstallScope attribute of the Package element.
+            Use this attribute to specify the privileges required to install the package on Windows Vista and above.
+            </summary>
+        </member>
+        <member name="F:WixSharp.InstallPrivileges.limited">
+            <summary>
+            Set this value to declare that the package does not require elevated privileges to install.
+            </summary>
+        </member>
+        <member name="F:WixSharp.InstallPrivileges.elevated">
+            <summary>
+            Set this value to declare that the package requires elevated privileges to install. This is the default value.
             </summary>
         </member>
         <member name="F:WixSharp.InstallScope.perMachine">

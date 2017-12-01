@@ -1256,6 +1256,7 @@ namespace WixSharp
                    .SetAttribute("Platform", project.Platform)
                    .SetAttribute("SummaryCodepage", project.Codepage)
                    .SetAttribute("Languages", project.Language.ToLcidList())
+                   .SetAttribute("InstallPrivileges", project.InstallPrivileges)
                    .SetAttribute("InstallScope", project.InstallScope);
 
             if (project.EmitConsistentPackageId)

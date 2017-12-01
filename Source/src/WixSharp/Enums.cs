@@ -261,9 +261,21 @@ namespace WixSharp
     }
 
     /// <summary>
-    /// Use this enum to specify the installation scope of this package: per-machine or per-user.
-    /// The enum values are mapped to the WiX InstallScope attribute of the Package element.
+    /// Use this attribute to specify the privileges required to install the package on Windows Vista and above.
     /// </summary>
+    public enum InstallPrivileges
+    {
+        /// <summary>
+        /// Set this value to declare that the package does not require elevated privileges to install.
+        /// </summary>
+        limited,
+
+        /// <summary>
+        /// Set this value to declare that the package requires elevated privileges to install. This is the default value.
+        /// </summary>
+        elevated
+    }
+
     public enum InstallScope
     {
         /// <summary>
