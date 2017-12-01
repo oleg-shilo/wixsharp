@@ -82,14 +82,6 @@ namespace WixSharp
         /// Initializes a new instance of the <see cref="UrlReservation" /> class.
         /// </summary>
         /// <param name="id">The id.</param>
-        public UrlReservation()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UrlReservation" /> class.
-        /// </summary>
-        /// <param name="id">The id.</param>
         public UrlReservation(Id id)
         {
             Id = id;
@@ -113,37 +105,12 @@ namespace WixSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="UrlReservation" /> class.
         /// </summary>
-        /// <param name="url"></param>
-        /// <param name="securityPrincipal"></param>
-        /// <param name="rights"></param>
-        public UrlReservation(string url, string securityPrincipal, UrlReservationRights rights)
-        {
-            Id = id;
-            Url = url;
-            SecurityPrincipal = securityPrincipal;
-            Rights = rights;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UrlReservation" /> class.
-        /// </summary>
         /// <param name="id">The id.</param>
         /// <param name="url"></param>
         /// <param name="sddl"></param>
         public UrlReservation(Id id, string url, string sddl)
         {
             Id = id;
-            Url = url;
-            Sddl = sddl;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UrlReservation" /> class.
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="sddl"></param>
-        public UrlReservation(string url, string sddl)
-        {
             Url = url;
             Sddl = sddl;
         }

@@ -549,105 +549,105 @@ namespace WixSharp.CommonTasks
             return project;
         }
 
-		/// <summary>
-		/// Adds the UrlReservation to the Project.
-		/// </summary>
-		/// <param name="project">The project.</param>
-		/// <param name="item">The item.</param>
-		/// <returns></returns>
-		static public Project AddUrlReservation(this Project project, UrlReservation item)
-	    {
-		    return project.AddUrlReservations(item);
-	    }
+        /// <summary>
+        /// Adds the UrlReservation to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Project AddUrlReservation(this Project project, UrlReservation item)
+        {
+            return project.AddUrlReservations(item);
+        }
 
-		/// <summary>
-		/// Adds the UrlReservations to the Project.
-		/// </summary>
-		/// <param name="project">The project.</param>
-		/// <param name="items">The items.</param>
-		/// <returns></returns>
-		static public Project AddUrlReservations(this Project project, params UrlReservation[] items)
-	    {
-		    project.UrlReservations = project.UrlReservations.Combine(items).Distinct().ToArray();
-		    return project;
-	    }
+        /// <summary>
+        /// Adds the UrlReservations to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="items">The items.</param>
+        /// <returns></returns>
+        static public Project AddUrlReservations(this Project project, params UrlReservation[] items)
+        {
+            project.UrlReservations = project.UrlReservations.Combine(items).Distinct().ToArray();
+            return project;
+        }
 
-		/// <summary>
-		/// Adds the User to the Project.
-		/// </summary>
-		/// <param name="project">The project.</param>
-		/// <param name="item">The item.</param>
-		/// <returns></returns>
-		static public Project AddUser(this Project project, User item)
-	    {
-		    return project.AddUsers(item);
-	    }
+        /// <summary>
+        /// Adds the User to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Project AddUser(this Project project, User item)
+        {
+            return project.AddUsers(item);
+        }
 
-		/// <summary>
-		/// Adds the Users to the Project.
-		/// </summary>
-		/// <param name="project">The project.</param>
-		/// <param name="items">The items.</param>
-		/// <returns></returns>
-		static public Project AddUsers(this Project project, params User[] items)
-	    {
-		    project.Users = project.Users.Combine(items).Distinct().ToArray();
-		    return project;
-	    }
+        /// <summary>
+        /// Adds the Users to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="items">The items.</param>
+        /// <returns></returns>
+        static public Project AddUsers(this Project project, params User[] items)
+        {
+            project.Users = project.Users.Combine(items).Distinct().ToArray();
+            return project;
+        }
 
-		/// <summary>
-		/// Adds the SqlDatabase to the Project.
-		/// </summary>
-		/// <param name="project">The project.</param>
-		/// <param name="item">The item.</param>
-		/// <returns></returns>
-		static public Project AddSqlDatabase(this Project project, SqlDatabase item)
-	    {
-		    return project.AddSqlDatabases(item);
-	    }
+        /// <summary>
+        /// Adds the SqlDatabase to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Project AddSqlDatabase(this Project project, SqlDatabase item)
+        {
+            return project.AddSqlDatabases(item);
+        }
 
-		/// <summary>
-		/// Adds the SqlDatabases to the Project.
-		/// </summary>
-		/// <param name="project">The project.</param>
-		/// <param name="items">The items.</param>
-		/// <returns></returns>
-		static public Project AddSqlDatabases(this Project project, params SqlDatabase[] items)
-	    {
-		    project.SqlDatabases = project.SqlDatabases.Combine(items).Distinct().ToArray();
-		    return project;
-	    }
+        /// <summary>
+        /// Adds the SqlDatabases to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="items">The items.</param>
+        /// <returns></returns>
+        static public Project AddSqlDatabases(this Project project, params SqlDatabase[] items)
+        {
+            project.SqlDatabases = project.SqlDatabases.Combine(items).Distinct().ToArray();
+            return project;
+        }
 
-	    /// <summary>
-	    /// Adds the SqlDatabase to the Project.
-	    /// </summary>
-	    /// <param name="project">The project.</param>
-	    /// <param name="item">The item.</param>
-	    /// <returns></returns>
-	    static public Project AddFirewallException(this Project project, FirewallException item)
-	    {
-		    return project.AddFirewallExceptions(item);
-	    }
+        /// <summary>
+        /// Adds the SqlDatabase to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public Project AddFirewallException(this Project project, FirewallException item)
+        {
+            return project.AddFirewallExceptions(item);
+        }
 
-	    /// <summary>
-	    /// Adds the SqlDatabases to the Project.
-	    /// </summary>
-	    /// <param name="project">The project.</param>
-	    /// <param name="items">The items.</param>
-	    /// <returns></returns>
-	    static public Project AddFirewallExceptions(this Project project, params FirewallException[] items)
-	    {
-		    project.FirewallExceptions = project.FirewallExceptions.Combine(items).Distinct().ToArray();
-		    return project;
-	    }
+        /// <summary>
+        /// Adds the SqlDatabases to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="items">The items.</param>
+        /// <returns></returns>
+        static public Project AddFirewallExceptions(this Project project, params FirewallException[] items)
+        {
+            project.FirewallExceptions = project.FirewallExceptions.Combine(items).Distinct().ToArray();
+            return project;
+        }
 
-		/// <summary>
-		/// Adds the binary items to the Project.
-		/// </summary>
-		/// <param name="project">The project.</param>
-		/// <param name="items">The items.</param>
-		/// <returns></returns>
-		static public Project AddBinaries(this Project project, params Binary[] items)
+        /// <summary>
+        /// Adds the binary items to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="items">The items.</param>
+        /// <returns></returns>
+        static public Project AddBinaries(this Project project, params Binary[] items)
         {
             project.Binaries = project.Binaries.Combine(items).Distinct().ToArray();
             return project;

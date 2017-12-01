@@ -6491,12 +6491,6 @@
             </example>
             </summary>
         </member>
-        <member name="M:WixSharp.UrlReservation.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
-            </summary>
-            <param name="id">The id.</param>
-        </member>
         <member name="M:WixSharp.UrlReservation.#ctor(WixSharp.Id)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
@@ -6512,26 +6506,11 @@
             <param name="securityPrincipal"></param>
             <param name="rights"></param>
         </member>
-        <member name="M:WixSharp.UrlReservation.#ctor(System.String,System.String,WixSharp.UrlReservationRights)">
-            <summary>
-            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
-            </summary>
-            <param name="url"></param>
-            <param name="securityPrincipal"></param>
-            <param name="rights"></param>
-        </member>
         <member name="M:WixSharp.UrlReservation.#ctor(WixSharp.Id,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
             </summary>
             <param name="id">The id.</param>
-            <param name="url"></param>
-            <param name="sddl"></param>
-        </member>
-        <member name="M:WixSharp.UrlReservation.#ctor(System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
-            </summary>
             <param name="url"></param>
             <param name="sddl"></param>
         </member>
