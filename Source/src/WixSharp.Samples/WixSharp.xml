@@ -2202,11 +2202,10 @@
             This will cause the entire contents of the Fragment containing the referenced CustomAction to be included in the installer database.
             </summary>
         </member>
-        <member name="M:WixSharp.CustomActionRef.#ctor(System.String,WixSharp.When,WixSharp.Step)">
+        <member name="M:WixSharp.CustomActionRef.#ctor(WixSharp.When,WixSharp.Step)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.CustomActionRef" /> class.
             </summary>
-            <param name="id">The id.</param>
             <param name="when">The When.</param>
             <param name="step">The Step.</param>
         </member>
@@ -2218,7 +2217,7 @@
             <param name="when">The When.</param>
             <param name="step">The Step.</param>
         </member>
-        <member name="M:WixSharp.CustomActionRef.#ctor(System.String,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
+        <member name="M:WixSharp.CustomActionRef.#ctor(WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.CustomActionRef" /> class.
             </summary>
