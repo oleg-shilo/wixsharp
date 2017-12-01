@@ -3055,9 +3055,20 @@ namespace WixSharp
                                     .SetAttribute("Execute", wAction.Execute)
                                     .AddAttributes(wAction.Attributes));
                 }
+                else if (wAction is CustomActionRef)
+                {
+                    var wCustomActionRef = (CustomActionRef) wAction;
+                    sequences.ForEach(sequence =>
+                        sequence.Add(new XElement("Custom", wCustomActionRef.Condition.ToXValue(),
+                            new XAttribute("Action", wCustomActionRef.Id),
+                            new XAttribute("Before", wCustomActionRef.Step))));
+
+                    product.Add(new XElement("CustomActionRef",
+                        new XAttribute("Id", wCustomActionRef.Id)));
+                }
                 else if (wAction is WixQuietExecAction)
                 {
-                    var quietExecAction = (WixQuietExecAction)wAction;
+                    var quietExecAction = (WixQuietExecAction) wAction;
                     var cmdLineActionId = wAction.Id;
                     var setCmdLineActionId = "Set_" + cmdLineActionId;
 
@@ -3094,7 +3105,7 @@ namespace WixSharp
                 }
                 else if (wAction is InstalledFileAction)
                 {
-                    var fileAction = (InstalledFileAction)wAction;
+                    var fileAction = (InstalledFileAction) wAction;
 
                     sequences.ForEach(sequence =>
                         sequence.Add(
@@ -3104,8 +3115,8 @@ namespace WixSharp
 
                     var actionElement = product.AddElement(
                         new XElement("CustomAction",
-                            new XAttribute("Id", wAction.Id),
-                            new XAttribute("ExeCommand", fileAction.Args.ExpandCommandPath()))
+                                new XAttribute("Id", wAction.Id),
+                                new XAttribute("ExeCommand", fileAction.Args.ExpandCommandPath()))
                             .SetAttribute("Return", wAction.Return)
                             .SetAttribute("Impersonate", wAction.Impersonate)
                             .SetAttribute("Execute", wAction.Execute)
@@ -3115,7 +3126,7 @@ namespace WixSharp
                 }
                 else if (wAction is BinaryFileAction)
                 {
-                    var binaryAction = (BinaryFileAction)wAction;
+                    var binaryAction = (BinaryFileAction) wAction;
 
                     sequences.ForEach(sequence =>
                         sequence.Add(
@@ -3125,8 +3136,8 @@ namespace WixSharp
 
                     var actionElement = product.AddElement(
                         new XElement("CustomAction",
-                            new XAttribute("Id", wAction.Id),
-                            new XAttribute("ExeCommand", binaryAction.Args.ExpandCommandPath()))
+                                new XAttribute("Id", wAction.Id),
+                                new XAttribute("ExeCommand", binaryAction.Args.ExpandCommandPath()))
                             .SetAttribute("Return", wAction.Return)
                             .SetAttribute("Impersonate", wAction.Impersonate)
                             .SetAttribute("Execute", wAction.Execute)
@@ -3136,7 +3147,7 @@ namespace WixSharp
                 }
                 else if (wAction is PathFileAction)
                 {
-                    var fileAction = (PathFileAction)wAction;
+                    var fileAction = (PathFileAction) wAction;
 
                     sequences.ForEach(sequence =>
                         sequence.Add(
@@ -3146,8 +3157,8 @@ namespace WixSharp
 
                     var actionElement = product.AddElement(
                         new XElement("CustomAction",
-                            new XAttribute("Id", wAction.Id),
-                            new XAttribute("ExeCommand", "\"" + fileAction.AppPath.ExpandCommandPath() + "\" " + fileAction.Args.ExpandCommandPath()))
+                                new XAttribute("Id", wAction.Id),
+                                new XAttribute("ExeCommand", "\"" + fileAction.AppPath.ExpandCommandPath() + "\" " + fileAction.Args.ExpandCommandPath()))
                             .SetAttribute("Return", wAction.Return)
                             .SetAttribute("Impersonate", wAction.Impersonate)
                             .SetAttribute("Execute", wAction.Execute)

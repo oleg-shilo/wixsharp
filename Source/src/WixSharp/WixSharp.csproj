@@ -113,6 +113,7 @@
     <Compile Include="AutoElements.cs" />
     <Compile Include="Bootstrapper\UtilFileSearch.cs" />
     <Compile Include="Bootstrapper\UtilRegistrySearch.cs" />
+    <Compile Include="CustomActionRef.cs" />
     <Compile Include="DigitalSignature.cs" />
     <Compile Include="DigitalSignatureBootstrapper.cs" />
     <Compile Include="DriverInstaller.cs" />
