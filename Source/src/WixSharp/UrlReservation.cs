@@ -28,8 +28,19 @@ namespace WixSharp
     /// </summary>
     public enum UrlReservationRights
     {
+        /// <summary>
+        /// The 'register' rights value of the child UrlAce element
+        /// </summary>
         register,
+
+        /// <summary>
+        /// The 'delete' rights value of the child UrlAce element
+        /// </summary>
         @delegate,
+
+        /// <summary>
+        /// The 'all' rights value of the child UrlAce element
+        /// </summary>
         all,
     }
 
@@ -81,6 +92,13 @@ namespace WixSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="UrlReservation" /> class.
         /// </summary>
+        public UrlReservation()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UrlReservation" /> class.
+        /// </summary>
         /// <param name="id">The id.</param>
         public UrlReservation(Id id)
         {
@@ -105,10 +123,35 @@ namespace WixSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="UrlReservation" /> class.
         /// </summary>
+        /// <param name="url"></param>
+        /// <param name="securityPrincipal"></param>
+        /// <param name="rights"></param>
+        public UrlReservation(string url, string securityPrincipal, UrlReservationRights rights)
+        {
+            Url = url;
+            SecurityPrincipal = securityPrincipal;
+            Rights = rights;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UrlReservation" /> class.
+        /// </summary>
         /// <param name="id">The id.</param>
         /// <param name="url"></param>
         /// <param name="sddl"></param>
         public UrlReservation(Id id, string url, string sddl)
+        {
+            Id = id;
+            Url = url;
+            Sddl = sddl;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UrlReservation" /> class.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="sddl"></param>
+        public UrlReservation(string url, string sddl)
         {
             Id = id;
             Url = url;

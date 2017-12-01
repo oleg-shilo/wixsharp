@@ -44,7 +44,7 @@ namespace WixSharp
         /// Identifier for ini file.
         /// </summary>
         [Xml]
-        public string Id { get => base.Id; set => base.Id = value; }
+        public new string Id { get => base.Id; set => base.Id = value; }
 
         /// <summary>
         /// The type of modification to be made.

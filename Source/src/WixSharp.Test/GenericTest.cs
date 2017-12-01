@@ -137,7 +137,7 @@ namespace WixSharp.Test
         class TestEntity : WixEntity
         {
             [Xml]
-            public string Id { get => base.Id; set => base.Id = value; }
+            public new string Id { get => base.Id; set => base.Id = value; }
 
             [Xml]
             public string FieldA;

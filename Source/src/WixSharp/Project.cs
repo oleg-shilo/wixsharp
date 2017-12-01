@@ -518,6 +518,7 @@ namespace WixSharp
         /// </summary>
         public UrlReservation[] UrlReservations = new UrlReservation[0];
 
+        /// <summary>
         /// Collection of <see cref="IniFile"/> to be installed.
         /// </summary>
         public IniFile[] IniFiles = new IniFile[0];

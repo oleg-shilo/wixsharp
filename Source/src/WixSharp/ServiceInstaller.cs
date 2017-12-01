@@ -75,24 +75,26 @@ namespace WixSharp
 
         /// <summary>
         /// Associates 'start service' action with the specific service installation event.
-        /// The default value is <c>SvcEvent.Install</c>. Meaning "start the service when it is installed". 
+        /// The default value is <c>SvcEvent.Install</c>. Meaning "start the service when it is installed".
         /// <para>
         /// Set this member to <c>null</c> if you don't want to start the service at any stage of the installation.
         /// </para>
         /// </summary>
         public SvcEvent StartOn = SvcEvent.Install;
+
         /// <summary>
         /// Associates 'stop service' action with the specific service installation event.
-        /// The default value is <c>SvcEvent.InstallUninstall_Wait</c>. Meaning "stop the  
-        /// service when it is being installed and uninstalled and wait for the action completion". 
+        /// The default value is <c>SvcEvent.InstallUninstall_Wait</c>. Meaning "stop the
+        /// service when it is being installed and uninstalled and wait for the action completion".
         /// <para>
         /// Set this member to <c>null</c> if you don't want to stop the service at any stage of the installation.
         /// </para>
         /// </summary>
         public SvcEvent StopOn = SvcEvent.InstallUninstall_Wait;
+
         /// <summary>
         /// Associates 'remove service' action with the specific service installation event.
-        /// The default value is <c>SvcEvent.Uninstall</c>. Meaning "remove the service when it is uninstalled". 
+        /// The default value is <c>SvcEvent.Uninstall</c>. Meaning "remove the service when it is uninstalled".
         /// <para>
         /// Set this member to <c>null</c> if you don't want to remove the service at any stage of the installation.
         /// </para>
@@ -100,14 +102,14 @@ namespace WixSharp
         public SvcEvent RemoveOn = SvcEvent.Uninstall;
 
         /// <summary>
-        /// Semicolon separated list of the names of the external service the service being installed depends on. 
+        /// Semicolon separated list of the names of the external service the service being installed depends on.
         /// It supposed to be names (not the display names) of a previously installed services.
         /// <para>For example: DependsOn = "Dnscache;Dhcp"</para>
         /// </summary>
         public string DependsOn = "";
 
         /// <summary>
-        /// Fully qualified names must be used even for local accounts, 
+        /// Fully qualified names must be used even for local accounts,
         /// e.g.: ".\LOCAL_ACCOUNT". Valid only when ServiceType is ownProcess.
         /// </summary>
         public string Account;
@@ -118,7 +120,7 @@ namespace WixSharp
         public string Arguments;
 
         /// <summary>
-        /// Determines whether the existing service description will be ignored. If 'yes', the service description will be null, 
+        /// Determines whether the existing service description will be ignored. If 'yes', the service description will be null,
         /// even if the Description attribute is set.
         /// </summary>
         public bool? EraseDescription;
@@ -143,7 +145,10 @@ namespace WixSharp
         /// </summary>
         public bool? Vital;
 
-	    public UrlReservation[] UrlReservations;
+        /// <summary>
+        /// The URL reservations associated with the service
+        /// </summary>
+        public UrlReservation[] UrlReservations;
 
         /// <summary>
         /// Renders ServiceInstaller properties to appropriate WiX elements
@@ -216,13 +221,13 @@ namespace WixSharp
 
                 serviceInstall.Add(serviceConfig);
 
-	            if (UrlReservations != null)
-	            {
-		            foreach (UrlReservation urlReservation in UrlReservations)
-		            {
-						serviceInstall.Add(urlReservation.ToXml());
-					}
-				}
+                if (UrlReservations != null)
+                {
+                    foreach (UrlReservation urlReservation in UrlReservations)
+                    {
+                        serviceInstall.Add(urlReservation.ToXml());
+                    }
+                }
             }
 
             if (IsFailureActionSet
@@ -253,9 +258,9 @@ namespace WixSharp
         {
             get
             {
-                return FirstFailureActionType != FailureActionType.none 
+                return FirstFailureActionType != FailureActionType.none
                        || SecondFailureActionType != FailureActionType.none
-                       || ThirdFailureActionType!= FailureActionType.none;
+                       || ThirdFailureActionType != FailureActionType.none;
             }
         }
 
@@ -279,7 +284,7 @@ namespace WixSharp
         //public object FailureActionsWhen { get; set; } //note implementing util:serviceconfig instead
 
         /// <summary>
-        /// Specifies time in milliseconds that the Service Control Manager (SCM) waits after notifying 
+        /// Specifies time in milliseconds that the Service Control Manager (SCM) waits after notifying
         /// the service of a system shutdown. If this attribute is not present the default value, 3 minutes, is used.
         /// </summary>
         public int? PreShutdownDelay;
@@ -293,12 +298,12 @@ namespace WixSharp
         /// Specifies whether to configure the service when the parent Component is installed, reinstalled, or uninstalled
         /// </summary>
         /// <remarks>
-        /// Defaults to ConfigureServiceTrigger.Install. 
+        /// Defaults to ConfigureServiceTrigger.Install.
         /// Strictly applies to the configuration of properties: DelayedAutoStart, PreShutdownDelay, ServiceSid.
         /// </remarks>
         public ConfigureServiceTrigger ConfigureServiceTrigger = ConfigureServiceTrigger.Install;
 
-        #endregion
+        #endregion ServiceConfig attributes
 
         #region Util:ServiceConfig attributes
 
@@ -308,13 +313,13 @@ namespace WixSharp
         public FailureActionType FirstFailureActionType = FailureActionType.none;
 
         /// <summary>
-        /// If any of the three *ActionType attributes is "runCommand", 
+        /// If any of the three *ActionType attributes is "runCommand",
         /// this specifies the command to run when doing so.
         /// </summary>
         public string ProgramCommandLine;
 
         /// <summary>
-        /// If any of the three *ActionType attributes is "reboot", 
+        /// If any of the three *ActionType attributes is "reboot",
         /// this specifies the message to broadcast to server users before doing so.
         /// </summary>
         public string RebootMessage;
@@ -325,7 +330,7 @@ namespace WixSharp
         public int? ResetPeriodInDays;
 
         /// <summary>
-        /// If any of the three *ActionType attributes is "restart", 
+        /// If any of the three *ActionType attributes is "restart",
         /// this specifies the number of seconds to wait before doing so.
         /// </summary>
         public int? RestartServiceDelayInSeconds;
@@ -340,27 +345,27 @@ namespace WixSharp
         /// </summary>
         public FailureActionType ThirdFailureActionType = FailureActionType.none;
 
-        #endregion
-
+        #endregion Util:ServiceConfig attributes
     }
 
     /// <summary>
-    /// 
+    ///
     /// Flags for indicating when the service should be configured.
     /// </summary>
     [Flags]
     public enum ConfigureServiceTrigger
     {
 #pragma warning disable 1591
+
         /// <summary>
         /// Not a valid value for ServiceConfig.On(Install, Reinstall, Uninstall)
         /// </summary>
         None = 0,
+
         Install = 1,
         Reinstall = 2,
         Uninstall = 4
 #pragma warning restore 1591
-
     }
 
     /// <summary>
@@ -372,6 +377,7 @@ namespace WixSharp
         /// Specifies when the service action occur. It can be one of the <see cref="SvcEventType"/> values.
         /// </summary>
         public SvcEventType Type;
+
         /// <summary>
         /// The flag indicating if after triggering the service action the setup should wait until te action is completed.
         /// </summary>
@@ -379,48 +385,52 @@ namespace WixSharp
 
         /// <summary>
         /// Predefined instance of <see cref="SvcEvent"/> with <c>Type</c> set to <see cref="SvcEventType.install"/>
-        /// and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without 
+        /// and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without
         /// waiting for the completion.
         /// </summary>
         static public SvcEvent Install = new SvcEvent { Type = SvcEventType.install, Wait = false };
 
         /// <summary>
         /// Predefined instance of <see cref="SvcEvent"/> with <c>Type</c> set to <see cref="SvcEventType.install"/>
-        /// and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with 
+        /// and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
         /// waiting for the completion.
         /// </summary>
         static public SvcEvent Install_Wait = new SvcEvent { Type = SvcEventType.install, Wait = true };
+
         /// <summary>
         /// Predefined instance of <see cref="SvcEvent"/> with <c>Type</c> set to <see cref="SvcEventType.uninstall"/>
-        /// and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation 
+        /// and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation
         /// without waiting for the completion.
         /// </summary>
         static public SvcEvent Uninstall = new SvcEvent { Type = SvcEventType.uninstall, Wait = false };
+
         /// <summary>
         /// Predefined instance of <see cref="SvcEvent"/> with <c>Type</c> set to <see cref="SvcEventType.uninstall"/>
-        /// and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with 
+        /// and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
         /// waiting for the completion.
         /// </summary>
         static public SvcEvent Uninstall_Wait = new SvcEvent { Type = SvcEventType.uninstall, Wait = true };
+
         /// <summary>
         /// Predefined instance of <see cref="SvcEvent"/> with <c>Type</c> set to <see cref="SvcEventType.both"/>
-        /// and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without 
+        /// and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without
         /// waiting for the completion.
         /// </summary>
         static public SvcEvent InstallUninstall = new SvcEvent { Type = SvcEventType.both, Wait = false };
+
         /// <summary>
         /// Predefined instance of <see cref="SvcEvent"/> with <c>Type</c> set to <see cref="SvcEventType.both"/>
-        /// and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with 
+        /// and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
         /// waiting for the completion.
         /// </summary>
         static public SvcEvent InstallUninstall_Wait = new SvcEvent { Type = SvcEventType.both, Wait = true };
     }
 
     /// <summary>
-    /// Specifies the service SID to apply to the service. 
-    /// Valid values are "none", "restricted", "unrestricted" or a 
-    /// Formatted property that resolves to "0" (for "none"), 
-    /// "3" (for "restricted") or "1" (for "unrestricted"). 
+    /// Specifies the service SID to apply to the service.
+    /// Valid values are "none", "restricted", "unrestricted" or a
+    /// Formatted property that resolves to "0" (for "none"),
+    /// "3" (for "restricted") or "1" (for "unrestricted").
     /// </summary>
     public class ServiceSid : StringEnum<ServiceSid>
     {
@@ -429,13 +439,13 @@ namespace WixSharp
         /// </summary>
         /// <param name="value">The value.</param>
         public ServiceSid(string value) : base(value) { }
+
 #pragma warning disable 1591
         public static ServiceSid none = new ServiceSid("none");
         public static ServiceSid restricted = new ServiceSid("restricted");
         public static ServiceSid unrestricted = new ServiceSid("unrestricted");
 #pragma warning restore 1591
     }
-
 
     /// <summary>
     /// Possible values for ServiceInstall.(First|Second|Third)FailureActionType
@@ -449,5 +459,4 @@ namespace WixSharp
         runCommand
 #pragma warning restore 1591
     }
-
 }

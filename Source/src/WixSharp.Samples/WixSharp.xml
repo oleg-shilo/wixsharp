@@ -2197,6 +2197,45 @@
             Returns the value formatted as Windows Installer would. For example, a REG_DWORD value of '1' is returned as '#1', not '1'.
             </summary>
         </member>
+        <member name="T:WixSharp.CustomActionRef">
+            <summary>
+            This will cause the entire contents of the Fragment containing the referenced CustomAction to be included in the installer database.
+            </summary>
+        </member>
+        <member name="M:WixSharp.CustomActionRef.#ctor(System.String,WixSharp.When,WixSharp.Step)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.CustomActionRef" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="when">The When.</param>
+            <param name="step">The Step.</param>
+        </member>
+        <member name="M:WixSharp.CustomActionRef.#ctor(WixSharp.Id,WixSharp.When,WixSharp.Step)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.CustomActionRef" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="when">The When.</param>
+            <param name="step">The Step.</param>
+        </member>
+        <member name="M:WixSharp.CustomActionRef.#ctor(System.String,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.CustomActionRef" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="when">The When.</param>
+            <param name="step">The Step.</param>
+            <param name="condition">The Condition.</param>
+        </member>
+        <member name="M:WixSharp.CustomActionRef.#ctor(WixSharp.Id,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.CustomActionRef" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="when">The When.</param>
+            <param name="step">The Step.</param>
+            <param name="condition">The Condition.</param>
+        </member>
         <member name="T:WixSharp.DigitalSignature">
             <summary>
             Container with the parameters of the digital signature
@@ -6446,6 +6485,21 @@
             Rights for this ACE.
             </summary>
         </member>
+        <member name="F:WixSharp.UrlReservationRights.register">
+            <summary>
+            The 'register' rights value of the child UrlAce element
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservationRights.delegate">
+            <summary>
+            The 'delete' rights value of the child UrlAce element
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservationRights.all">
+            <summary>
+            The 'all' rights value of the child UrlAce element
+            </summary>
+        </member>
         <member name="T:WixSharp.UrlReservation">
             <summary>
             Makes a reservation record for the HTTP Server API configuration store on Windows XP SP2, Windows Server 2003, and later.
@@ -6491,6 +6545,11 @@
             </example>
             </summary>
         </member>
+        <member name="M:WixSharp.UrlReservation.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
+            </summary>
+        </member>
         <member name="M:WixSharp.UrlReservation.#ctor(WixSharp.Id)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
@@ -6506,11 +6565,26 @@
             <param name="securityPrincipal"></param>
             <param name="rights"></param>
         </member>
+        <member name="M:WixSharp.UrlReservation.#ctor(System.String,System.String,WixSharp.UrlReservationRights)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
+            </summary>
+            <param name="url"></param>
+            <param name="securityPrincipal"></param>
+            <param name="rights"></param>
+        </member>
         <member name="M:WixSharp.UrlReservation.#ctor(WixSharp.Id,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
             </summary>
             <param name="id">The id.</param>
+            <param name="url"></param>
+            <param name="sddl"></param>
+        </member>
+        <member name="M:WixSharp.UrlReservation.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
+            </summary>
             <param name="url"></param>
             <param name="sddl"></param>
         </member>
@@ -11104,7 +11178,11 @@
             Collection of <see cref="T:WixSharp.UrlReservation"/> to be installed.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "F:WixSharp.Project.IniFiles" -->
+        <member name="F:WixSharp.Project.IniFiles">
+            <summary>
+            Collection of <see cref="T:WixSharp.IniFile"/> to be installed.
+            </summary>
+        </member>
         <member name="F:WixSharp.Project.GenericItems">
             <summary>
             Collection of the user defined <see cref="T:WixSharp.IGenericEntity"/> items.
@@ -12052,7 +12130,7 @@
         <member name="F:WixSharp.ServiceInstaller.StartOn">
             <summary>
             Associates 'start service' action with the specific service installation event.
-            The default value is <c>SvcEvent.Install</c>. Meaning "start the service when it is installed". 
+            The default value is <c>SvcEvent.Install</c>. Meaning "start the service when it is installed".
             <para>
             Set this member to <c>null</c> if you don't want to start the service at any stage of the installation.
             </para>
@@ -12061,8 +12139,8 @@
         <member name="F:WixSharp.ServiceInstaller.StopOn">
             <summary>
             Associates 'stop service' action with the specific service installation event.
-            The default value is <c>SvcEvent.InstallUninstall_Wait</c>. Meaning "stop the  
-            service when it is being installed and uninstalled and wait for the action completion". 
+            The default value is <c>SvcEvent.InstallUninstall_Wait</c>. Meaning "stop the
+            service when it is being installed and uninstalled and wait for the action completion".
             <para>
             Set this member to <c>null</c> if you don't want to stop the service at any stage of the installation.
             </para>
@@ -12071,7 +12149,7 @@
         <member name="F:WixSharp.ServiceInstaller.RemoveOn">
             <summary>
             Associates 'remove service' action with the specific service installation event.
-            The default value is <c>SvcEvent.Uninstall</c>. Meaning "remove the service when it is uninstalled". 
+            The default value is <c>SvcEvent.Uninstall</c>. Meaning "remove the service when it is uninstalled".
             <para>
             Set this member to <c>null</c> if you don't want to remove the service at any stage of the installation.
             </para>
@@ -12079,14 +12157,14 @@
         </member>
         <member name="F:WixSharp.ServiceInstaller.DependsOn">
             <summary>
-            Semicolon separated list of the names of the external service the service being installed depends on. 
+            Semicolon separated list of the names of the external service the service being installed depends on.
             It supposed to be names (not the display names) of a previously installed services.
             <para>For example: DependsOn = "Dnscache;Dhcp"</para>
             </summary>
         </member>
         <member name="F:WixSharp.ServiceInstaller.Account">
             <summary>
-            Fully qualified names must be used even for local accounts, 
+            Fully qualified names must be used even for local accounts,
             e.g.: ".\LOCAL_ACCOUNT". Valid only when ServiceType is ownProcess.
             </summary>
         </member>
@@ -12097,7 +12175,7 @@
         </member>
         <member name="F:WixSharp.ServiceInstaller.EraseDescription">
             <summary>
-            Determines whether the existing service description will be ignored. If 'yes', the service description will be null, 
+            Determines whether the existing service description will be ignored. If 'yes', the service description will be null,
             even if the Description attribute is set.
             </summary>
         </member>
@@ -12121,6 +12199,11 @@
             The overall install should fail if this service fails to install.
             </summary>
         </member>
+        <member name="F:WixSharp.ServiceInstaller.UrlReservations">
+            <summary>
+            The URL reservations associated with the service
+            </summary>
+        </member>
         <member name="M:WixSharp.ServiceInstaller.ToXml(WixSharp.Project)">
             <summary>
             Renders ServiceInstaller properties to appropriate WiX elements
@@ -12141,7 +12224,7 @@
         </member>
         <member name="F:WixSharp.ServiceInstaller.PreShutdownDelay">
             <summary>
-            Specifies time in milliseconds that the Service Control Manager (SCM) waits after notifying 
+            Specifies time in milliseconds that the Service Control Manager (SCM) waits after notifying
             the service of a system shutdown. If this attribute is not present the default value, 3 minutes, is used.
             </summary>
         </member>
@@ -12155,7 +12238,7 @@
             Specifies whether to configure the service when the parent Component is installed, reinstalled, or uninstalled
             </summary>
             <remarks>
-            Defaults to ConfigureServiceTrigger.Install. 
+            Defaults to ConfigureServiceTrigger.Install.
             Strictly applies to the configuration of properties: DelayedAutoStart, PreShutdownDelay, ServiceSid.
             </remarks>
         </member>
@@ -12166,13 +12249,13 @@
         </member>
         <member name="F:WixSharp.ServiceInstaller.ProgramCommandLine">
             <summary>
-            If any of the three *ActionType attributes is "runCommand", 
+            If any of the three *ActionType attributes is "runCommand",
             this specifies the command to run when doing so.
             </summary>
         </member>
         <member name="F:WixSharp.ServiceInstaller.RebootMessage">
             <summary>
-            If any of the three *ActionType attributes is "reboot", 
+            If any of the three *ActionType attributes is "reboot",
             this specifies the message to broadcast to server users before doing so.
             </summary>
         </member>
@@ -12183,7 +12266,7 @@
         </member>
         <member name="F:WixSharp.ServiceInstaller.RestartServiceDelayInSeconds">
             <summary>
-            If any of the three *ActionType attributes is "restart", 
+            If any of the three *ActionType attributes is "restart",
             this specifies the number of seconds to wait before doing so.
             </summary>
         </member>
@@ -12198,10 +12281,10 @@
             </summary>
         </member>
         <member name="T:WixSharp.ConfigureServiceTrigger">
-            <summary>
+             <summary>
             
-            Flags for indicating when the service should be configured.
-            </summary>
+             Flags for indicating when the service should be configured.
+             </summary>
         </member>
         <member name="F:WixSharp.ConfigureServiceTrigger.None">
             <summary>
@@ -12226,51 +12309,51 @@
         <member name="F:WixSharp.SvcEvent.Install">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.install"/>
-            and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without 
+            and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without
             waiting for the completion.
             </summary>
         </member>
         <member name="F:WixSharp.SvcEvent.Install_Wait">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.install"/>
-            and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with 
+            and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
             waiting for the completion.
             </summary>
         </member>
         <member name="F:WixSharp.SvcEvent.Uninstall">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.uninstall"/>
-            and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation 
+            and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation
             without waiting for the completion.
             </summary>
         </member>
         <member name="F:WixSharp.SvcEvent.Uninstall_Wait">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.uninstall"/>
-            and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with 
+            and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
             waiting for the completion.
             </summary>
         </member>
         <member name="F:WixSharp.SvcEvent.InstallUninstall">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.both"/>
-            and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without 
+            and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without
             waiting for the completion.
             </summary>
         </member>
         <member name="F:WixSharp.SvcEvent.InstallUninstall_Wait">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.both"/>
-            and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with 
+            and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
             waiting for the completion.
             </summary>
         </member>
         <member name="T:WixSharp.ServiceSid">
             <summary>
-            Specifies the service SID to apply to the service. 
-            Valid values are "none", "restricted", "unrestricted" or a 
-            Formatted property that resolves to "0" (for "none"), 
-            "3" (for "restricted") or "1" (for "unrestricted"). 
+            Specifies the service SID to apply to the service.
+            Valid values are "none", "restricted", "unrestricted" or a
+            Formatted property that resolves to "0" (for "none"),
+            "3" (for "restricted") or "1" (for "unrestricted").
             </summary>
         </member>
         <member name="M:WixSharp.ServiceSid.#ctor(System.String)">
