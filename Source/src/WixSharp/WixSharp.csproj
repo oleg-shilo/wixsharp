@@ -139,6 +139,7 @@
     <Compile Include="SharedExtensions.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="StringEnum.cs" />
+    <Compile Include="UrlReservation.cs" />
     <Compile Include="User.cs" />
     <Compile Include="WixExtension.cs" />
     <Compile Include="WixProject.cs" />

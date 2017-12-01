@@ -98,6 +98,7 @@ namespace WixSharp
             var certs = new List<Certificate>();
             var genericItems = new List<IGenericEntity>();
             var fwexceptions = new List<FirewallException>();
+            var urlreservation = new List<UrlReservation>();
             var inifiles = new List<IniFile>();
 
             if (items.OfType<Media>().Any())
@@ -125,6 +126,8 @@ namespace WixSharp
                         envvars.Add(item as EnvironmentVariable);
                     else if (item is FirewallException)
                         fwexceptions.Add(item as FirewallException);
+                    else if (item is UrlReservation)
+                        urlreservation.Add(item as UrlReservation);
                     else if (item is IniFile)
                         inifiles.Add(item as IniFile);
                     else if (item is RegFile)
@@ -170,6 +173,7 @@ namespace WixSharp
             SqlDatabases = sqls.ToArray();
             Certificates = certs.ToArray();
             FirewallExceptions = fwexceptions.ToArray();
+            UrlReservations = urlreservation.ToArray();
             IniFiles = inifiles.ToArray();
             GenericItems = genericItems.ToArray();
         }
@@ -510,6 +514,10 @@ namespace WixSharp
         public FirewallException[] FirewallExceptions = new FirewallException[0];
 
         /// <summary>
+        /// Collection of <see cref="UrlReservation"/> to be installed.
+        /// </summary>
+        public UrlReservation[] UrlReservations = new UrlReservation[0];
+
         /// Collection of <see cref="IniFile"/> to be installed.
         /// </summary>
         public IniFile[] IniFiles = new IniFile[0];

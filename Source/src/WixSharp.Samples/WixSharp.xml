@@ -121,6 +121,11 @@
             The sequence number for this action. Mutually exclusive with Before, After, and OnExit of <see cref="F:WixSharp.Action.When"/> field.
             </summary>
         </member>
+        <member name="F:WixSharp.Action.ProgressText">
+            <summary>
+            Format ActionData messages from action processing
+            </summary>
+        </member>
         <member name="M:WixSharp.Action.ToString">
             <summary>
             Returns a <see cref="T:System.String" /> that represents this instance.
@@ -549,6 +554,70 @@
         <member name="M:WixSharp.CommonTasks.Tasks.AddRegValues(WixSharp.Project,WixSharp.RegValue[])">
             <summary>
             Adds the registry values to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="items">The items.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddUrlReservation(WixSharp.Project,WixSharp.UrlReservation)">
+            <summary>
+            Adds the UrlReservation to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddUrlReservations(WixSharp.Project,WixSharp.UrlReservation[])">
+            <summary>
+            Adds the UrlReservations to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="items">The items.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddUser(WixSharp.Project,WixSharp.User)">
+            <summary>
+            Adds the User to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddUsers(WixSharp.Project,WixSharp.User[])">
+            <summary>
+            Adds the Users to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="items">The items.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddSqlDatabase(WixSharp.Project,WixSharp.SqlDatabase)">
+            <summary>
+            Adds the SqlDatabase to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddSqlDatabases(WixSharp.Project,WixSharp.SqlDatabase[])">
+            <summary>
+            Adds the SqlDatabases to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="items">The items.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddFirewallException(WixSharp.Project,WixSharp.FirewallException)">
+            <summary>
+            Adds the SqlDatabase to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="item">The item.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddFirewallExceptions(WixSharp.Project,WixSharp.FirewallException[])">
+            <summary>
+            Adds the SqlDatabases to the Project.
             </summary>
             <param name="project">The project.</param>
             <param name="items">The items.</param>
@@ -6352,6 +6421,126 @@
             A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
             </returns>
         </member>
+        <member name="T:WixSharp.UrlReservationHandleExisting">
+            <summary>
+            Specifies the behavior when trying to install a URL reservation and it already exists.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservationHandleExisting.replace">
+            <summary>
+            Replaces the existing URL reservation (the default).
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservationHandleExisting.ignore">
+            <summary>
+            Keeps the existing URL reservation.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservationHandleExisting.fail">
+            <summary>
+            The installation fails.
+            </summary>
+        </member>
+        <member name="T:WixSharp.UrlReservationRights">
+            <summary>
+            Rights for this ACE.
+            </summary>
+        </member>
+        <member name="T:WixSharp.UrlReservation">
+            <summary>
+            Makes a reservation record for the HTTP Server API configuration store on Windows XP SP2, Windows Server 2003, and later.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservation.HandleExisting">
+            <summary>
+            Specifies the behavior when trying to install a URL reservation and it already exists. This attribute's value must be one of the following:
+            <list type="bullet">
+            <item><description>replace</description></item>
+            <item><description>ignore</description></item>
+            <item><description>fail</description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservation.Sddl">
+            <summary>
+            Security descriptor to apply to the URL reservation. Can't be specified when using children UrlAce elements.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservation.Url">
+            <summary>
+            The UrlPrefix string that defines the portion of the URL namespace to which this reservation pertains.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservation.Rights">
+            <summary>
+            Rights for this ACE. Default is "all". This attribute's value must be one of the following:
+            <list type="bullet">
+            <item><description>register</description></item>
+            <item><description>delegate</description></item>
+            <item><description>all</description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservation.SecurityPrincipal">
+            <summary>
+            The security principal for this ACE.
+             When the UrlReservation is under a ServiceInstall element, this defaults to "NT SERVICE\ServiceInstallName".
+             This may be either a SID or an account name in a format that LookupAccountName supports. When using a SID, an asterisk must be prepended.
+            <example>
+            "*S-1-5-18"
+            </example>
+            </summary>
+        </member>
+        <member name="M:WixSharp.UrlReservation.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
+            </summary>
+            <param name="id">The id.</param>
+        </member>
+        <member name="M:WixSharp.UrlReservation.#ctor(WixSharp.Id)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
+            </summary>
+            <param name="id">The id.</param>
+        </member>
+        <member name="M:WixSharp.UrlReservation.#ctor(WixSharp.Id,System.String,System.String,WixSharp.UrlReservationRights)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="url"></param>
+            <param name="securityPrincipal"></param>
+            <param name="rights"></param>
+        </member>
+        <member name="M:WixSharp.UrlReservation.#ctor(System.String,System.String,WixSharp.UrlReservationRights)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
+            </summary>
+            <param name="url"></param>
+            <param name="securityPrincipal"></param>
+            <param name="rights"></param>
+        </member>
+        <member name="M:WixSharp.UrlReservation.#ctor(WixSharp.Id,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="url"></param>
+            <param name="sddl"></param>
+        </member>
+        <member name="M:WixSharp.UrlReservation.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
+            </summary>
+            <param name="url"></param>
+            <param name="sddl"></param>
+        </member>
+        <member name="M:WixSharp.UrlReservation.ToXml">
+            <summary>
+            Emits WiX XML for UrlReservation.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:WixSharp.User">
             <summary>
             Represents a WixUtilExtension User
@@ -6623,6 +6812,11 @@
         <member name="F:WixSharp.WixExtension.NetFx">
             <summary>
             Well-known Wix Extension NetFx
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixExtension.Http">
+            <summary>
+            Well-known Wix Extension Http
             </summary>
         </member>
         <member name="F:WixSharp.WixExtension.UI">
@@ -10926,11 +11120,12 @@
             Collection of <see cref="T:WixSharp.FirewallException"/> to be installed.
             </summary>
         </member>
-        <member name="F:WixSharp.Project.IniFiles">
+        <member name="F:WixSharp.Project.UrlReservations">
             <summary>
-            Collection of <see cref="T:WixSharp.IniFile"/> to be installed.
+            Collection of <see cref="T:WixSharp.UrlReservation"/> to be installed.
             </summary>
         </member>
+        <!-- Badly formed XML comment ignored for member "F:WixSharp.Project.IniFiles" -->
         <member name="F:WixSharp.Project.GenericItems">
             <summary>
             Collection of the user defined <see cref="T:WixSharp.IGenericEntity"/> items.

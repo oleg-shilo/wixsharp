@@ -141,6 +141,11 @@ namespace WixSharp
         public static WixExtension NetFx = new WixExtension("%WixLocation%\\WiXNetFxExtension.dll", "netfx", "http://schemas.microsoft.com/wix/NetFxExtension");
 
         /// <summary>
+        /// Well-known Wix Extension Http
+        /// </summary>
+        public static WixExtension Http = new WixExtension("%WixLocation%\\WiXHttpExtension.dll", "http", "http://schemas.microsoft.com/wix/HttpExtension");
+
+        /// <summary>
         /// Well-known Wix Extension UI
         /// </summary>
         public static WixExtension UI = new WixExtension("%WixLocation%\\WixUIExtension.dll", null, null);
