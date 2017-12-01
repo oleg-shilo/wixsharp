@@ -8,17 +8,6 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomActionRef" /> class.
         /// </summary>
-        /// <param name="when">The When.</param>
-        /// <param name="step">The Step.</param>
-        public CustomActionRef(When when, Step step)
-        {
-            When = when;
-            Step = step;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CustomActionRef" /> class.
-        /// </summary>
         /// <param name="id">The id.</param>
         /// <param name="when">The When.</param>
         /// <param name="step">The Step.</param>
@@ -40,19 +29,6 @@
         {
             When = when;
             Step = step;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CustomActionRef" /> class.
-        /// </summary>
-        /// <param name="when">The When.</param>
-        /// <param name="step">The Step.</param>
-        /// <param name="condition">The Condition.</param>
-        public CustomActionRef(When when, Step step, Condition condition)
-        {
-            When = when;
-            Step = step;
-            Condition = condition;
         }
 
         /// <summary>
