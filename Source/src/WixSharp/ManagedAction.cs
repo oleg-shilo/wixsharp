@@ -112,6 +112,20 @@ namespace WixSharp
             Return = Return.check;
         }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
+		/// </summary>
+		/// <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
+		/// <param name="rollback">Name of the Rollback CustomAction. The name should match the method implementing the custom action functionality</param>
+		public ManagedAction(string name, string rollback)
+		    : base()
+	    {
+		    Name = name;
+		    MethodName = name;
+		    Rollback = rollback;
+		    Return = Return.check;
+	    }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -124,6 +138,21 @@ namespace WixSharp
             MethodName = name;
             Return = Return.check;
         }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
+		/// </summary>
+		/// <param name="action">The full name of static CustomAction method.</param>
+		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
+		public ManagedAction(CustomActionMethod action, CustomActionMethod rollback)
+		    : base()
+	    {
+		    string name = action.Method.Name;
+		    Name = name;
+		    MethodName = name;
+		    Rollback = rollback.Method.Name;
+			Return = Return.check;
+	    }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -138,6 +167,22 @@ namespace WixSharp
             MethodName = name;
             Return = Return.check;
         }
+
+		/// <summary>
+	    /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
+	    /// </summary>
+	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ManagedAction"/> instance.</param>
+	    /// <param name="action">The full name of static CustomAction method.</param>
+		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
+	    public ManagedAction(Id id, CustomActionMethod action, CustomActionMethod rollback)
+			: base(id)
+	    {
+		    string name = action.Method.Name;
+		    Name = name;
+		    MethodName = name;
+		    Rollback = rollback.Method.Name;
+		    Return = Return.check;
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -154,6 +199,24 @@ namespace WixSharp
             ActionAssembly = actionAssembly;
             base.Return = Return.check;
         }
+
+		/// <summary>
+	    /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
+	    /// </summary>
+	    /// <param name="action">The full name of static CustomAction method.</param>
+	    /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+	    /// is in the Wix# script.</param>
+		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
+	    public ManagedAction(CustomActionMethod action, string actionAssembly, CustomActionMethod rollback)
+			: base()
+	    {
+		    string name = action.Method.Name;
+		    Name = name;
+		    MethodName = name;
+		    Rollback = rollback.Method.Name;
+		    ActionAssembly = actionAssembly;
+			base.Return = Return.check;
+	    }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -172,6 +235,25 @@ namespace WixSharp
             base.Return = Return.check;
         }
 
+		/// <summary>
+	    /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
+	    /// </summary>
+	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ManagedAction"/> instance.</param>
+	    /// <param name="action">The full name of static CustomAction method.</param>
+	    /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+	    /// is in the Wix# script.</param>
+		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
+	    public ManagedAction(Id id, CustomActionMethod action, string actionAssembly, CustomActionMethod rollback)
+			: base(id)
+	    {
+		    string name = action.Method.Name;
+		    Name = name;
+		    MethodName = name;
+		    Rollback = rollback.Method.Name;
+		    ActionAssembly = actionAssembly;
+			base.Return = Return.check;
+	    }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -187,6 +269,24 @@ namespace WixSharp
             Name = name;
             MethodName = name;
         }
+
+		/// <summary>
+	    /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
+	    /// </summary>
+	    /// <param name="action">The full name of static CustomAction method.</param>
+	    /// <param name="returnType">The return type of the action.</param>
+	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
+	    public ManagedAction(CustomActionMethod action, Return returnType, When when, Step step, Condition condition, CustomActionMethod rollback)
+			: base(returnType, when, step, condition)
+	    {
+		    string name = action.Method.Name;
+		    Name = name;
+		    MethodName = name;
+		    Rollback = rollback.Method.Name;
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -207,6 +307,27 @@ namespace WixSharp
             ActionAssembly = actionAssembly;
         }
 
+		/// <summary>
+	    /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
+	    /// </summary>
+	    /// <param name="action">The full name of static CustomAction method.</param>
+	    /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+	    /// is in the Wix# script.</param>
+	    /// <param name="returnType">The return type of the action.</param>
+	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
+	    public ManagedAction(CustomActionMethod action, string actionAssembly, Return returnType, When when, Step step, Condition condition, CustomActionMethod rollback)
+			: base(returnType, when, step, condition)
+	    {
+		    string name = action.Method.Name;
+		    Name = name;
+		    MethodName = name;
+		    Rollback = rollback.Method.Name;
+		    ActionAssembly = actionAssembly;
+		}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -223,6 +344,25 @@ namespace WixSharp
             Name = name;
             MethodName = name;
         }
+
+		/// <summary>
+	    /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
+	    /// </summary>
+	    /// <param name="action">The full name of static CustomAction method.</param>
+	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ManagedAction"/> instance.</param>
+	    /// <param name="returnType">The return type of the action.</param>
+	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
+	    public ManagedAction(Id id, CustomActionMethod action, Return returnType, When when, Step step, Condition condition, CustomActionMethod rollback)
+			: base(id, returnType, when, step, condition)
+	    {
+		    string name = action.Method.Name;
+		    Name = name;
+		    MethodName = name;
+		    Rollback = rollback.Method.Name;
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -244,6 +384,28 @@ namespace WixSharp
             ActionAssembly = actionAssembly;
         }
 
+		/// <summary>
+	    /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
+	    /// </summary>
+	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ManagedAction"/> instance.</param>
+	    /// <param name="action">The full name of static CustomAction method.</param>
+	    /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+	    /// is in the Wix# script.</param>
+	    /// <param name="returnType">The return type of the action.</param>
+	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
+	    public ManagedAction(Id id, CustomActionMethod action, string actionAssembly, Return returnType, When when, Step step, Condition condition, CustomActionMethod rollback)
+			: base(id, returnType, when, step, condition)
+	    {
+		    string name = action.Method.Name;
+		    Name = name;
+		    MethodName = name;
+		    Rollback = rollback.Method.Name;
+		    ActionAssembly = actionAssembly;
+		}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -260,6 +422,25 @@ namespace WixSharp
             Name = name;
             MethodName = name;
         }
+
+		/// <summary>
+	    /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
+	    /// </summary>
+	    /// <param name="action">The full name of static CustomAction method.</param>
+	    /// <param name="returnType">The return type of the action.</param>
+	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+	    /// <param name="sequence">The MSI sequence the action belongs to.</param>
+		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
+	    public ManagedAction(CustomActionMethod action, Return returnType, When when, Step step, Condition condition, Sequence sequence, CustomActionMethod rollback)
+			: base(returnType, when, step, condition, sequence)
+	    {
+		    string name = action.Method.Name;
+		    Name = name;
+		    MethodName = name;
+		    Rollback = rollback.Method.Name;
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -281,6 +462,28 @@ namespace WixSharp
             ActionAssembly = actionAssembly;
         }
 
+		/// <summary>
+	    /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
+	    /// </summary>
+	    /// <param name="action">The full name of static CustomAction method.</param>
+	    /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+	    /// is in the Wix# script.</param>
+	    /// <param name="returnType">The return type of the action.</param>
+	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+	    /// <param name="sequence">The MSI sequence the action belongs to.</param>
+		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
+	    public ManagedAction(CustomActionMethod action, string actionAssembly, Return returnType, When when, Step step, Condition condition, Sequence sequence, CustomActionMethod rollback)
+			: base(returnType, when, step, condition, sequence)
+	    {
+		    string name = action.Method.Name;
+		    Name = name;
+		    MethodName = name;
+		    Rollback = rollback.Method.Name;
+		    ActionAssembly = actionAssembly;
+		}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -298,6 +501,26 @@ namespace WixSharp
             Name = name;
             MethodName = name;
         }
+
+		/// <summary>
+	    /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
+	    /// </summary>
+	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ManagedAction"/> instance.</param>
+	    /// <param name="action">The full name of static CustomAction method.</param>
+	    /// <param name="returnType">The return type of the action.</param>
+	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+	    /// <param name="sequence">The MSI sequence the action belongs to.</param>
+		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
+	    public ManagedAction(Id id, CustomActionMethod action, Return returnType, When when, Step step, Condition condition, Sequence sequence, CustomActionMethod rollback)
+			: base(id, returnType, when, step, condition, sequence)
+	    {
+		    string name = action.Method.Name;
+		    Name = name;
+		    MethodName = name;
+		    Rollback = rollback.Method.Name;
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -319,6 +542,29 @@ namespace WixSharp
             MethodName = name;
             ActionAssembly = actionAssembly;
         }
+
+		/// <summary>
+	    /// Initializes a new instance of the <see cref="ManagedAction"/> class with properties/fields initialized with specified parameters.
+	    /// </summary>
+	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ManagedAction"/> instance.</param>
+	    /// <param name="action">The full name of static CustomAction method.</param>
+	    /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+	    /// is in the Wix# script.</param>
+	    /// <param name="returnType">The return type of the action.</param>
+	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+	    /// <param name="sequence">The MSI sequence the action belongs to.</param>
+		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
+	    public ManagedAction(Id id, CustomActionMethod action, string actionAssembly, Return returnType, When when, Step step, Condition condition, Sequence sequence, CustomActionMethod rollback)
+			: base(id, returnType, when, step, condition, sequence)
+	    {
+		    string name = action.Method.Name;
+		    Name = name;
+		    MethodName = name;
+		    Rollback = rollback.Method.Name;
+		    ActionAssembly = actionAssembly;
+		}
 
         /// <summary>
         /// Collection of path strings for dependency assemblies to be included in MSI. <c>RefAssemblies</c> should be used if the Managed CustomAction
@@ -392,6 +638,21 @@ namespace WixSharp
         /// <para>The default value is "INSTALLDIR,UILevel"</para>
         /// </summary>
         public static string DefaultUsesProperties = "INSTALLDIR,UILevel,ProductCode";
+
+		internal string RollbackExpandAllUsedProperties()
+	    {
+		    var allProps = (RollbackArg + "," + DefaultUsesProperties);
+		    var result = string.Join(";", allProps.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+			    .Select(x =>
+			    {
+				    if (x.Contains('=')) //e.g. INSTALLDIR=[INSTALLDIR]
+					    return x.Trim();
+				    else
+					    return string.Format("{0}=[{0}]", x.Trim());
+			    })
+			    .ToArray());
+		    return result;
+	    }
 
         internal string ExpandAllUsedProperties()
         {
