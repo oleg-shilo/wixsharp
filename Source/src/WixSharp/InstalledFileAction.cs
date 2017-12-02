@@ -80,6 +80,24 @@ namespace WixSharp
             Step = Step.InstallExecute;
         }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
+		/// </summary>
+		/// <param name="key">The key (file name) of the installed file to be executed.</param>
+		/// <param name="args">The arguments to be passed to the file during the execution.</param>
+		/// <param name="rollback">The key (file name) of the installed file that must be executed on rollback.</param>
+		/// <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
+		public InstalledFileAction(string key, string args, string rollback, string rollbackArg)
+            : base()
+        {
+            Key = key;
+            Args = args;
+            Name = key;
+	        Rollback = rollback;
+	        RollbackArg = rollbackArg;
+			Step = Step.InstallExecute;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -93,6 +111,25 @@ namespace WixSharp
             Args = args;
             Name = key;
             Step = Step.InstallExecute;
+        }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
+		/// </summary>
+		/// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="InstalledFileAction"/> instance.</param>
+		/// <param name="key">The key (file name) of the installed file to be executed.</param>
+		/// <param name="args">The arguments to be passed to the file during the execution.</param>
+		/// <param name="rollback">The key (file name) of the installed file that must be executed on rollback.</param>
+		/// <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
+		public InstalledFileAction(Id id, string key, string args, string rollback, string rollbackArg)
+            : base(id)
+        {
+            Key = key;
+            Args = args;
+            Name = key;
+	        Rollback = rollback;
+	        RollbackArg = rollbackArg;
+			Step = Step.InstallExecute;
         }
 
         /// <summary>
@@ -112,6 +149,27 @@ namespace WixSharp
             Name = key;
         }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
+		/// </summary>
+		/// <param name="key">The key (file name) of the installed file to be executed.</param>
+		/// <param name="args">The arguments to be passed to the file during the execution.</param>
+		/// <param name="returnType">The return type of the action.</param>
+		/// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+		/// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+		/// <param name="condition">The launch condition for the <see cref="InstalledFileAction"/>.</param>
+		/// <param name="rollback">The key (file name) of the installed file that must be executed on rollback.</param>
+		/// <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
+		public InstalledFileAction(string key, string args, Return returnType, When when, Step step, Condition condition, string rollback, string rollbackArg)
+		    : base(returnType, when, step, condition)
+	    {
+		    Key = key;
+		    Args = args;
+			Name = key;
+		    Rollback = rollback;
+			RollbackArg = rollbackArg;
+	    }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -129,6 +187,28 @@ namespace WixSharp
             Args = args;
             Name = key;
         }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
+		/// </summary>
+		/// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="InstalledFileAction"/> instance.</param>
+		/// <param name="key">The key (file name) of the installed file to be executed.</param>
+		/// <param name="args">The arguments to be passed to the file during the execution.</param>
+		/// <param name="returnType">The return type of the action.</param>
+		/// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+		/// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+		/// <param name="condition">The launch condition for the <see cref="InstalledFileAction"/>.</param>
+		/// <param name="rollback">The key (file name) of the installed file that must be executed on rollback.</param>
+		/// <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
+		public InstalledFileAction(Id id, string key, string args, Return returnType, When when, Step step, Condition condition, string rollback, string rollbackArg)
+		    : base(id, returnType, when, step, condition)
+	    {
+		    Key = key;
+		    Args = args;
+		    Name = key;
+		    Rollback = rollback;
+		    RollbackArg = rollbackArg;
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
@@ -148,6 +228,28 @@ namespace WixSharp
             Name = key;
         }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
+		/// </summary>
+		/// <param name="key">The key (file name) of the installed file to be executed.</param>
+		/// <param name="args">The arguments to be passed to the file during the execution.</param>
+		/// <param name="returnType">The return type of the action.</param>
+		/// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+		/// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+		/// <param name="condition">The launch condition for the <see cref="InstalledFileAction"/>.</param>
+		/// <param name="sequence">The MSI sequence the action belongs to.</param>
+		/// <param name="rollback">The key (file name) of the installed file that must be executed on rollback.</param>
+		/// <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
+		public InstalledFileAction(string key, string args, Return returnType, When when, Step step, Condition condition, Sequence sequence, string rollback, string rollbackArg)
+		    : base(returnType, when, step, condition, sequence)
+	    {
+		    Key = key;
+		    Args = args;
+		    Name = key;
+		    Rollback = rollback;
+		    RollbackArg = rollbackArg;
+		}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -166,6 +268,29 @@ namespace WixSharp
             Args = args;
             Name = key;
         }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
+		/// </summary>
+		/// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="InstalledFileAction"/> instance.</param>
+		/// <param name="key">The key (file name) of the installed file to be executed.</param>
+		/// <param name="args">The arguments to be passed to the file during the execution.</param>
+		/// <param name="returnType">The return type of the action.</param>
+		/// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+		/// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+		/// <param name="condition">The launch condition for the <see cref="InstalledFileAction"/>.</param>
+		/// <param name="sequence">The MSI sequence the action belongs to.</param>
+		/// <param name="rollback">The key (file name) of the installed file that must be executed on rollback.</param>
+		/// <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
+		public InstalledFileAction(Id id, string key, string args, Return returnType, When when, Step step, Condition condition, Sequence sequence, string rollback, string rollbackArg)
+		    : base(id, returnType, when, step, condition, sequence)
+	    {
+		    Key = key;
+		    Args = args;
+		    Name = key;
+		    Rollback = rollback;
+		    RollbackArg = rollbackArg;
+		}
 
         /// <summary>
         /// The key (file name) of the installed file to be executed.
