@@ -975,7 +975,13 @@ namespace WixSharp
                 var dir_hash = Math.Abs(target_path.PathGetDirName().GetHashCode32());
                 var file_name = target_path.PathGetFileName();
 
-                return $"{file_name}.{dir_hash}";
+                if (Compiler.AutoGeneration.HashedTargetPathIdAlgorithm_FileIdMask != null)
+                    return Compiler.AutoGeneration.HashedTargetPathIdAlgorithm_FileIdMask
+                                                  .Replace("{file_name}", file_name)
+                                                  .Replace("{dir_hash}", dir_hash.ToString())
+                                                  .FormatWith(file_name, dir_hash);
+                else
+                    return $"{file_name}.{dir_hash}";
             }
 
             return null; // pass to default Id generator

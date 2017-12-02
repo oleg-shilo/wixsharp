@@ -115,6 +115,14 @@ namespace WixSharp
         /// The legacy default identifier algorithm
         /// </summary>
         public bool LegacyDefaultIdAlgorithm = true;
+
+        /// <summary>
+        /// The template for <see cref="WixSharp.Project.HashedTargetPathIdAlgorithm"/> auto-generated File id.
+        /// <para>
+        /// The default value is "{file_name}_{dir_hash}".
+        /// </para>
+        /// </summary>
+        public string HashedTargetPathIdAlgorithm_FileIdMask = "{file_name}_{dir_hash}";
     }
 
     /// <summary>

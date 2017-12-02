@@ -92,7 +92,9 @@ namespace WixSharp
         /// <para>Can also be managed by disabling ICE validation via Light.exe command line arguments.</para>
         /// <para>
         /// This flag is a lighter alternative of DisableAutoCreateFolder.
+        /// <para>
         /// See: http://stackoverflow.com/questions/10358989/wix-using-keypath-on-components-directories-files-registry-etc-etc
+        /// </para>
         /// for some background info.
         /// </para>
         /// </summary>

@@ -10,7 +10,8 @@ class Script
 {
     static public void Main()
     {
-        AutoId_TargetPathHash_Custom();
+        AutoId_TargetPathHash_BuiltIn();
+        // AutoId_TargetPathHash_Custom();
         // AutoId_TargetPathHash_BuiltIn();
         // AutoId_Incremental_BuiltIn();
     }
@@ -99,6 +100,11 @@ class Script
 
         // globally via configuration
         Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = false;
+
+        // if you want to modify the string template for HashedTargetPathIdAlgorithm you can do it
+        // via `AutoGeneration` property.
+        Compiler.AutoGeneration.HashedTargetPathIdAlgorithm_FileIdMask = "File.{0}.{1}";
+        Compiler.AutoGeneration.HashedTargetPathIdAlgorithm_FileIdMask = "File_{file_name}_{dir_hash}";
 
         // for project only via delegate
         project.CustomIdAlgorithm = project.HashedTargetPathIdAlgorithm;
