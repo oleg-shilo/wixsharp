@@ -27,8 +27,8 @@ class Script
 
                 new ElevatedManagedAction(CustomActions.Install, Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed, CustomActions.Rollback)
                 {
-                    UsesProperties = "Prop=Install;", // need to tunnel properties since ElevatedManagedAction s a deferred action
-                    RollbackArg = "Prop=Rollback;"
+                    UsesProperties = "Prop=Install", // need to tunnel properties since ElevatedManagedAction s a deferred action
+                    RollbackArg = "Prop=Rollback"
                 },
 
                 new CustomActionRef("WixFailWhenDeferred", When.Before, Step.InstallFinalize, "1"),

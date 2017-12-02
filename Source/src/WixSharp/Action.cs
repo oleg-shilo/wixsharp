@@ -190,7 +190,8 @@ namespace WixSharp
         public string Rollback;
 
         /// <summary>
-        ///  Rollback arguments
+        ///  Rollback arguments. It's a comma separated list of properties,
+        ///  which the rollback custom action is intended to use,
         ///  </summary>
         public string RollbackArg;
 
