@@ -126,6 +126,21 @@
             Format ActionData messages from action processing
             </summary>
         </member>
+        <member name="F:WixSharp.Action.Rollback">
+            <summary>
+             The action that should be performed in the event of a rollback.
+             </summary>
+        </member>
+        <member name="F:WixSharp.Action.RollbackArg">
+            <summary>
+             Rollback arguments
+             </summary>
+        </member>
+        <member name="F:WixSharp.Action.RollbackProgressText">
+            <summary>
+             ProgressText when doing a rollback
+             </summary>
+        </member>
         <member name="M:WixSharp.Action.ToString">
             <summary>
             Returns a <see cref="T:System.String" /> that represents this instance.
@@ -1258,7 +1273,9 @@
             <para>Can also be managed by disabling ICE validation via Light.exe command line arguments.</para>
             <para>
             This flag is a lighter alternative of DisableAutoCreateFolder.
+            <para>
             See: http://stackoverflow.com/questions/10358989/wix-using-keypath-on-components-directories-files-registry-etc-etc
+            </para>
             for some background info.
             </para>
             </summary>
@@ -2429,6 +2446,15 @@
             <param name="key">The key (file name) of the installed file to be executed.</param>
             <param name="args">The arguments to be passed to the file during the execution.</param>
         </member>
+        <member name="M:WixSharp.BinaryFileAction.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.BinaryFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="key">The key (file name) of the installed file to be executed.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="rollback">The key (file name) of the installed file to be executed on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
+        </member>
         <member name="M:WixSharp.BinaryFileAction.#ctor(WixSharp.Id,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.BinaryFileAction"/> class with properties/fields initialized with specified parameters.
@@ -2436,6 +2462,16 @@
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.BinaryFileAction"/> instance.</param>
             <param name="key">The key (file name) of the installed file to be executed.</param>
             <param name="args">The arguments to be passed to the file during the execution.</param>
+        </member>
+        <member name="M:WixSharp.BinaryFileAction.#ctor(WixSharp.Id,System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.BinaryFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.BinaryFileAction"/> instance.</param>
+            <param name="key">The key (file name) of the installed file to be executed.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="rollback">The key (file name) of the installed file to be executed on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
         </member>
         <member name="M:WixSharp.BinaryFileAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -2447,6 +2483,19 @@
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.BinaryFileAction"/>.</param>
+        </member>
+        <member name="M:WixSharp.BinaryFileAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.BinaryFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="key">The key (file name) of the installed file to be executed.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.BinaryFileAction"/>.</param>
+            <param name="rollback">The key (file name) of the installed file to be executed on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
         </member>
         <member name="M:WixSharp.BinaryFileAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -2460,6 +2509,20 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.BinaryFileAction"/>.</param>
         </member>
+        <member name="M:WixSharp.BinaryFileAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.BinaryFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.BinaryFileAction"/> instance.</param>
+            <param name="key">The key (file name) of the installed file to be executed.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.BinaryFileAction"/>.</param>
+            <param name="rollback">The key (file name) of the installed file to be executed on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
+        </member>
         <member name="M:WixSharp.BinaryFileAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.BinaryFileAction"/> class with properties/fields initialized with specified parameters.
@@ -2471,6 +2534,20 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.BinaryFileAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.BinaryFileAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.BinaryFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="key">The key (file name) of the installed file to be executed.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.BinaryFileAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">The key (file name) of the installed file to be executed on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
         </member>
         <member name="M:WixSharp.BinaryFileAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
@@ -2484,6 +2561,21 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.BinaryFileAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.BinaryFileAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.BinaryFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.BinaryFileAction"/> instance.</param>
+            <param name="key">The key (file name) of the installed file to be executed.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.BinaryFileAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">The key (file name) of the installed file to be executed on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
         </member>
         <member name="F:WixSharp.BinaryFileAction.Key">
             <summary>
@@ -7706,11 +7798,25 @@
             </summary>
             <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
         </member>
+        <member name="M:WixSharp.ElevatedManagedAction.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
+            <param name="rollback">Name of the Rollback CustomAction. The name should match the method implementing the custom action functionality</param>
+        </member>
         <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.CustomActionMethod)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
             </summary>
             <param name="action">The full name of static CustomAction method.</param>
+        </member>
+        <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.CustomActionMethod,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.Id,System.String)">
             <summary>
@@ -7719,12 +7825,28 @@
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ElevatedManagedAction"/> instance.</param>
             <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
         </member>
+        <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.Id,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ElevatedManagedAction"/> instance.</param>
+            <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
+            <param name="rollback">Name of the Rollback CustomAction. The name should match the method implementing the custom action functionality</param>
+        </member>
         <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
             </summary>
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ElevatedManagedAction"/> instance.</param>
             <param name="action">The full name of static CustomAction method.</param>
+        </member>
+        <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ElevatedManagedAction"/> instance.</param>
+            <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
+            <param name="rollback">Name of the Rollback CustomAction. The name should match the method implementing the custom action functionality</param>
         </member>
         <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.CustomActionMethod,System.String)">
             <summary>
@@ -7733,6 +7855,15 @@
             <param name="action">The full name of static CustomAction method.</param>
             <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
             is in the Wix# script.</param>
+        </member>
+        <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.CustomActionMethod,System.String,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,System.String)">
             <summary>
@@ -7743,6 +7874,16 @@
             <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
             is in the Wix# script.</param>
         </member>
+        <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,System.String,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ElevatedManagedAction"/> instance.</param>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
+        </member>
         <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -7752,6 +7893,17 @@
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+        </member>
+        <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -7765,6 +7917,19 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
         </member>
+        <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
+        </member>
         <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -7775,6 +7940,18 @@
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+        </member>
+        <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ElevatedManagedAction"/> instance.</param>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -7789,6 +7966,20 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
         </member>
+        <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ElevatedManagedAction"/> instance.</param>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
+        </member>
         <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -7799,6 +7990,18 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
@@ -7813,6 +8016,20 @@
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
         </member>
+        <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
+        </member>
         <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -7824,6 +8041,19 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ElevatedManagedAction"/> instance.</param>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
@@ -7838,6 +8068,21 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ElevatedManagedAction"/> instance.</param>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="T:WixSharp.ExeFileShortcut">
             <summary>
@@ -9355,6 +9600,14 @@
             The legacy default identifier algorithm
             </summary>
         </member>
+        <member name="F:WixSharp.AutoGenerationOptions.HashedTargetPathIdAlgorithm_FileIdMask">
+            <summary>
+            The template for <see cref="M:WixSharp.Project.HashedTargetPathIdAlgorithm(WixSharp.WixEntity)"/> auto-generated File id.
+            <para>
+            The default value is "{file_name}_{dir_hash}".
+            </para>
+            </summary>
+        </member>
         <member name="T:WixSharp.MSBuild">
             <summary>
             Settings class for controlling MSBuild integration.
@@ -10418,6 +10671,15 @@
             <param name="key">The key (file name) of the installed file to be executed.</param>
             <param name="args">The arguments to be passed to the file during the execution.</param>
         </member>
+        <member name="M:WixSharp.InstalledFileAction.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.InstalledFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="key">The key (file name) of the installed file to be executed.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="rollback">The key (file name) of the installed file that must be executed on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
+        </member>
         <member name="M:WixSharp.InstalledFileAction.#ctor(WixSharp.Id,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.InstalledFileAction"/> class with properties/fields initialized with specified parameters.
@@ -10425,6 +10687,16 @@
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.InstalledFileAction"/> instance.</param>
             <param name="key">The key (file name) of the installed file to be executed.</param>
             <param name="args">The arguments to be passed to the file during the execution.</param>
+        </member>
+        <member name="M:WixSharp.InstalledFileAction.#ctor(WixSharp.Id,System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.InstalledFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.InstalledFileAction"/> instance.</param>
+            <param name="key">The key (file name) of the installed file to be executed.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="rollback">The key (file name) of the installed file that must be executed on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
         </member>
         <member name="M:WixSharp.InstalledFileAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -10436,6 +10708,19 @@
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.InstalledFileAction"/>.</param>
+        </member>
+        <member name="M:WixSharp.InstalledFileAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.InstalledFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="key">The key (file name) of the installed file to be executed.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.InstalledFileAction"/>.</param>
+            <param name="rollback">The key (file name) of the installed file that must be executed on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
         </member>
         <member name="M:WixSharp.InstalledFileAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -10449,6 +10734,20 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.InstalledFileAction"/>.</param>
         </member>
+        <member name="M:WixSharp.InstalledFileAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.InstalledFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.InstalledFileAction"/> instance.</param>
+            <param name="key">The key (file name) of the installed file to be executed.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.InstalledFileAction"/>.</param>
+            <param name="rollback">The key (file name) of the installed file that must be executed on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
+        </member>
         <member name="M:WixSharp.InstalledFileAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.InstalledFileAction"/> class with properties/fields initialized with specified parameters.
@@ -10460,6 +10759,20 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.InstalledFileAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.InstalledFileAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.InstalledFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="key">The key (file name) of the installed file to be executed.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.InstalledFileAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">The key (file name) of the installed file that must be executed on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
         </member>
         <member name="M:WixSharp.InstalledFileAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
@@ -10473,6 +10786,21 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.InstalledFileAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.InstalledFileAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.InstalledFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.InstalledFileAction"/> instance.</param>
+            <param name="key">The key (file name) of the installed file to be executed.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.InstalledFileAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">The key (file name) of the installed file that must be executed on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
         </member>
         <member name="F:WixSharp.InstalledFileAction.Key">
             <summary>
@@ -10556,11 +10884,25 @@
             </summary>
             <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
         </member>
+        <member name="M:WixSharp.ManagedAction.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
+            <param name="rollback">Name of the Rollback CustomAction. The name should match the method implementing the custom action functionality</param>
+        </member>
         <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.CustomActionMethod)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
             </summary>
             <param name="action">The full name of static CustomAction method.</param>
+        </member>
+        <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.CustomActionMethod,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod)">
             <summary>
@@ -10569,6 +10911,14 @@
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ManagedAction"/> instance.</param>
             <param name="action">The full name of static CustomAction method.</param>
         </member>
+        <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ManagedAction"/> instance.</param>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
+        </member>
         <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.CustomActionMethod,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -10576,6 +10926,15 @@
             <param name="action">The full name of static CustomAction method.</param>
             <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
             is in the Wix# script.</param>
+        </member>
+        <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.CustomActionMethod,System.String,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,System.String)">
             <summary>
@@ -10586,6 +10945,16 @@
             <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
             is in the Wix# script.</param>
         </member>
+        <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,System.String,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ManagedAction"/> instance.</param>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
+        </member>
         <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -10595,6 +10964,17 @@
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+        </member>
+        <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -10608,6 +10988,19 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
         </member>
+        <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
+        </member>
         <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -10618,6 +11011,18 @@
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+        </member>
+        <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ManagedAction"/> instance.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -10632,6 +11037,20 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
         </member>
+        <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ManagedAction"/> instance.</param>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
+        </member>
         <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -10642,6 +11061,18 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
@@ -10656,6 +11087,20 @@
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
         </member>
+        <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
+        </member>
         <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -10667,6 +11112,19 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ManagedAction"/> instance.</param>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
@@ -10681,6 +11139,21 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.ManagedAction.#ctor(WixSharp.Id,WixSharp.CustomActionMethod,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,WixSharp.CustomActionMethod)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ManagedAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ManagedAction"/> instance.</param>
+            <param name="action">The full name of static CustomAction method.</param>
+            <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+            is in the Wix# script.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ManagedAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="F:WixSharp.ManagedAction.RefAssemblies">
             <summary>
@@ -10785,6 +11258,16 @@
             <param name="args">The arguments to be passed to the file during the execution.</param>
             <param name="workingDir">Working directory for the file execution.</param>
         </member>
+        <member name="M:WixSharp.PathFileAction.#ctor(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.PathFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="appPath">Path to the file to be executed on the target system.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="workingDir">Working directory for the file execution.</param>
+            <param name="rollback">Path to the file to be executed on the target system on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
+        </member>
         <member name="M:WixSharp.PathFileAction.#ctor(WixSharp.Id,System.String,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.PathFileAction"/> class with properties/fields initialized with specified parameters.
@@ -10793,6 +11276,17 @@
             <param name="appPath">Path to the file to be executed on the target system.</param>
             <param name="args">The arguments to be passed to the file during the execution.</param>
             <param name="workingDir">Working directory for the file execution.</param>
+        </member>
+        <member name="M:WixSharp.PathFileAction.#ctor(WixSharp.Id,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.PathFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.PathFileAction"/> instance.</param>
+            <param name="appPath">Path to the file to be executed on the target system.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="workingDir">Working directory for the file execution.</param>
+            <param name="rollback">Path to the file to be executed on the target system on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
         </member>
         <member name="M:WixSharp.PathFileAction.#ctor(System.String,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -10805,6 +11299,20 @@
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.PathFileAction"/>.</param>
+        </member>
+        <member name="M:WixSharp.PathFileAction.#ctor(System.String,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.PathFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="appPath">Path to the file to be executed on the target system.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="workingDir">Working directory for the file execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.PathFileAction"/>.</param>
+            <param name="rollback">Path to the file to be executed on the target system on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
         </member>
         <member name="M:WixSharp.PathFileAction.#ctor(WixSharp.Id,System.String,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -10819,6 +11327,21 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.PathFileAction"/>.</param>
         </member>
+        <member name="M:WixSharp.PathFileAction.#ctor(WixSharp.Id,System.String,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.PathFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.PathFileAction"/> instance.</param>
+            <param name="appPath">Path to the file to be executed on the target system.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="workingDir">Working directory for the file execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.PathFileAction"/>.</param>
+            <param name="rollback">Path to the file to be executed on the target system on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
+        </member>
         <member name="M:WixSharp.PathFileAction.#ctor(System.String,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.PathFileAction"/> class with properties/fields initialized with specified parameters.
@@ -10831,6 +11354,21 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.PathFileAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.PathFileAction.#ctor(System.String,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.PathFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="appPath">Path to the file to be executed on the target system.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="workingDir">Working directory for the file execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.PathFileAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">Path to the file to be executed on the target system on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
         </member>
         <member name="M:WixSharp.PathFileAction.#ctor(WixSharp.Id,System.String,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
@@ -10845,6 +11383,22 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.PathFileAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.PathFileAction.#ctor(WixSharp.Id,System.String,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.PathFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.PathFileAction"/> instance.</param>
+            <param name="appPath">Path to the file to be executed on the target system.</param>
+            <param name="args">The arguments to be passed to the file during the execution.</param>
+            <param name="workingDir">Working directory for the file execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.PathFileAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">Path to the file to be executed on the target system on rollback.</param>
+            <param name="rollbackArg">The arguments to be passed to the file during the execution on rollback.</param>
         </member>
         <member name="F:WixSharp.PathFileAction.WorkingDir">
             <summary>
@@ -11913,12 +12467,27 @@
             </summary>
             <param name="code">VBScript code to be executed.</param>
         </member>
+        <member name="M:WixSharp.ScriptAction.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ScriptAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="code">VBScript code to be executed.</param>
+            <param name="rollbackArg">VBScript code to be executed on rollback.</param>
+        </member>
         <member name="M:WixSharp.ScriptAction.#ctor(WixSharp.Id,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ScriptAction"/> class with properties/fields initialized with specified parameters.
             </summary>
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ScriptAction"/> instance.</param>
             <param name="code">VBScript code to be executed.</param>
+        </member>
+        <member name="M:WixSharp.ScriptAction.#ctor(WixSharp.Id,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ScriptAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ScriptAction"/> instance.</param>
+            <param name="code">VBScript code to be executed.</param>
+            <param name="rollbackArg">VBScript code to be executed on rollback.</param>
         </member>
         <member name="M:WixSharp.ScriptAction.#ctor(System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -11929,6 +12498,17 @@
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptAction"/>.</param>
+        </member>
+        <member name="M:WixSharp.ScriptAction.#ctor(System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ScriptAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="code">VBScript code to be executed.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptAction"/>.</param>
+            <param name="rollbackArg">VBScript code to be executed on rollback.</param>
         </member>
         <member name="M:WixSharp.ScriptAction.#ctor(WixSharp.Id,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -11941,6 +12521,18 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptAction"/>.</param>
         </member>
+        <member name="M:WixSharp.ScriptAction.#ctor(WixSharp.Id,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ScriptAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ScriptAction"/> instance.</param>
+            <param name="code">VBScript code to be executed.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptAction"/>.</param>
+            <param name="rollbackArg">VBScript code to be executed on rollback.</param>
+        </member>
         <member name="M:WixSharp.ScriptAction.#ctor(System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ScriptAction"/> class with properties/fields initialized with specified parameters.
@@ -11951,6 +12543,18 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.ScriptAction.#ctor(System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ScriptAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="code">VBScript code to be executed.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollbackArg">VBScript code to be executed on rollback.</param>
         </member>
         <member name="M:WixSharp.ScriptAction.#ctor(WixSharp.Id,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
@@ -11963,6 +12567,19 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.ScriptAction.#ctor(WixSharp.Id,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ScriptAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ScriptAction"/> instance.</param>
+            <param name="code">VBScript code to be executed.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollbackArg">VBScript code to be executed on rollback.</param>
         </member>
         <member name="F:WixSharp.ScriptAction.Code">
             <summary>
@@ -12003,6 +12620,14 @@
             <param name="file">VBScript file to be executed.</param>
             <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
         </member>
+        <member name="M:WixSharp.ScriptFileAction.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ScriptFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="file">VBScript file to be executed.</param>
+            <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
+            <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
+        </member>
         <member name="M:WixSharp.ScriptFileAction.#ctor(WixSharp.Id,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ScriptFileAction"/> class with properties/fields initialized with specified parameters.
@@ -12010,6 +12635,15 @@
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ScriptFileAction"/> instance.</param>
             <param name="file">VBScript file to be executed.</param>
             <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
+        </member>
+        <member name="M:WixSharp.ScriptFileAction.#ctor(WixSharp.Id,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ScriptFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ScriptFileAction"/> instance.</param>
+            <param name="file">VBScript file to be executed.</param>
+            <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
+            <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
         </member>
         <member name="M:WixSharp.ScriptFileAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -12021,6 +12655,18 @@
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptFileAction"/>.</param>
+        </member>
+        <member name="M:WixSharp.ScriptFileAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ScriptFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="file">VBScript file to be executed.</param>
+            <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptFileAction"/>.</param>
+            <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
         </member>
         <member name="M:WixSharp.ScriptFileAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -12034,6 +12680,19 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptFileAction"/>.</param>
         </member>
+        <member name="M:WixSharp.ScriptFileAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ScriptFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ScriptFileAction"/> instance.</param>
+            <param name="file">VBScript file to be executed.</param>
+            <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptFileAction"/>.</param>
+            <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
+        </member>
         <member name="M:WixSharp.ScriptFileAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.ScriptFileAction"/> class with properties/fields initialized with specified parameters.
@@ -12045,6 +12704,19 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptFileAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.ScriptFileAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ScriptFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="file">VBScript file to be executed.</param>
+            <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptFileAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
         </member>
         <member name="M:WixSharp.ScriptFileAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
@@ -12058,6 +12730,20 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptFileAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.ScriptFileAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ScriptFileAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ScriptFileAction"/> instance.</param>
+            <param name="file">VBScript file to be executed.</param>
+            <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.ScriptFileAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
         </member>
         <member name="F:WixSharp.ScriptFileAction.ScriptFile">
             <summary>
@@ -14434,6 +15120,15 @@
             <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
             <param name="args">The arguments to be passed to the application during the execution.</param>
         </member>
+        <member name="M:WixSharp.WixQuietExecAction.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Executes a new instance of the <see cref="T:WixSharp.WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
+            <param name="args">The arguments to be passed to the application during the execution.</param>
+            <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
+            <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
+        </member>
         <member name="M:WixSharp.WixQuietExecAction.#ctor(WixSharp.Id,System.String,System.String)">
             <summary>
             Executes a new instance of the <see cref="T:WixSharp.WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
@@ -14441,6 +15136,16 @@
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.WixQuietExecAction"/> instance.</param>
             <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
             <param name="args">The arguments to be passed to the application during the execution.</param>
+        </member>
+        <member name="M:WixSharp.WixQuietExecAction.#ctor(WixSharp.Id,System.String,System.String,System.String,System.String)">
+            <summary>
+            Executes a new instance of the <see cref="T:WixSharp.WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.WixQuietExecAction"/> instance.</param>
+            <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
+            <param name="args">The arguments to be passed to the application during the execution.</param>
+            <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
+            <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
         </member>
         <member name="M:WixSharp.WixQuietExecAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -14452,6 +15157,19 @@
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.WixQuietExecAction"/>.</param>
+        </member>
+        <member name="M:WixSharp.WixQuietExecAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,System.String,System.String)">
+            <summary>
+            Executes a new instance of the <see cref="T:WixSharp.WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
+            <param name="args">The arguments to be passed to the application during the execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.WixQuietExecAction"/>.</param>
+            <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
+            <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
         </member>
         <member name="M:WixSharp.WixQuietExecAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition)">
             <summary>
@@ -14465,6 +15183,20 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.WixQuietExecAction"/>.</param>
         </member>
+        <member name="M:WixSharp.WixQuietExecAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,System.String,System.String)">
+            <summary>
+            Executes a new instance of the <see cref="T:WixSharp.WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.WixQuietExecAction"/> instance.</param>
+            <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
+            <param name="args">The arguments to be passed to the application during the execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.WixQuietExecAction"/>.</param>
+            <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
+            <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
+        </member>
         <member name="M:WixSharp.WixQuietExecAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
             Executes a new instance of the <see cref="T:WixSharp.WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
@@ -14476,6 +15208,20 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.WixQuietExecAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.WixQuietExecAction.#ctor(System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,System.String,System.String)">
+            <summary>
+            Executes a new instance of the <see cref="T:WixSharp.WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
+            <param name="args">The arguments to be passed to the application during the execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.WixQuietExecAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
+            <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
         </member>
         <member name="M:WixSharp.WixQuietExecAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence)">
             <summary>
@@ -14489,6 +15235,21 @@
             <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
             <param name="condition">The launch condition for the <see cref="T:WixSharp.WixQuietExecAction"/>.</param>
             <param name="sequence">The MSI sequence the action belongs to.</param>
+        </member>
+        <member name="M:WixSharp.WixQuietExecAction.#ctor(WixSharp.Id,System.String,System.String,WixSharp.Return,WixSharp.When,WixSharp.Step,WixSharp.Condition,WixSharp.Sequence,System.String,System.String)">
+            <summary>
+            Executes a new instance of the <see cref="T:WixSharp.WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.WixQuietExecAction"/> instance.</param>
+            <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
+            <param name="args">The arguments to be passed to the application during the execution.</param>
+            <param name="returnType">The return type of the action.</param>
+            <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+            <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+            <param name="condition">The launch condition for the <see cref="T:WixSharp.WixQuietExecAction"/>.</param>
+            <param name="sequence">The MSI sequence the action belongs to.</param>
+            <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
+            <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
         </member>
         <member name="F:WixSharp.WixQuietExecAction.AppPath">
             <summary>

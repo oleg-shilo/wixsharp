@@ -85,23 +85,23 @@ namespace WixSharp
             Return = Return.check;
         }
 
-		/// <summary>
-		/// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
-		/// </summary>
-		/// <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
-		/// <param name="args">The arguments to be passed to the application during the execution.</param>
-		/// <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
-		/// <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
-		public WixQuietExecAction(string appPath, string args, string rollback, string rollbackArg)
-		    : base()
-	    {
-		    AppPath = appPath;
-		    Args = args;
-		    Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
-		    Rollback = rollback;
-		    RollbackArg = rollbackArg;
-		    Return = Return.check;
-	    }
+        /// <summary>
+        /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
+        /// <param name="args">The arguments to be passed to the application during the execution.</param>
+        /// <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
+        /// <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
+        public WixQuietExecAction(string appPath, string args, string rollback, string rollbackArg)
+            : base()
+        {
+            AppPath = appPath;
+            Args = args;
+            Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
+            Rollback = rollback;
+            RollbackArg = rollbackArg;
+            Return = Return.check;
+        }
 
         /// <summary>
         /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
@@ -118,24 +118,24 @@ namespace WixSharp
             Return = Return.check;
         }
 
-		/// <summary>
-		/// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
-		/// </summary>
-		/// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="WixQuietExecAction"/> instance.</param>
-		/// <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
-		/// <param name="args">The arguments to be passed to the application during the execution.</param>
-		/// <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
-		/// <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
-		public WixQuietExecAction(Id id, string appPath, string args, string rollback, string rollbackArg)
-		    : base(id)
-	    {
-		    AppPath = appPath;
-		    Args = args;
-		    Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
-		    Rollback = rollback;
-		    RollbackArg = rollbackArg;
-			Return = Return.check;
-	    }
+        /// <summary>
+        /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="WixQuietExecAction"/> instance.</param>
+        /// <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
+        /// <param name="args">The arguments to be passed to the application during the execution.</param>
+        /// <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
+        /// <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
+        public WixQuietExecAction(Id id, string appPath, string args, string rollback, string rollbackArg)
+            : base(id)
+        {
+            AppPath = appPath;
+            Args = args;
+            Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
+            Rollback = rollback;
+            RollbackArg = rollbackArg;
+            Return = Return.check;
+        }
 
         /// <summary>
         /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
@@ -154,26 +154,26 @@ namespace WixSharp
             Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
         }
 
-		/// <summary>
-		/// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
-		/// </summary>
-		/// <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
-		/// <param name="args">The arguments to be passed to the application during the execution.</param>
-		/// <param name="returnType">The return type of the action.</param>
-		/// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-		/// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-		/// <param name="condition">The launch condition for the <see cref="WixQuietExecAction"/>.</param>
-		/// <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
-		/// <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
-		public WixQuietExecAction(string appPath, string args, Return returnType, When when, Step step, Condition condition, string rollback, string rollbackArg)
-		    : base(returnType, when, step, condition)
-	    {
-		    AppPath = appPath;
-		    Args = args;
-		    Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
-		    Rollback = rollback;
-		    RollbackArg = rollbackArg;
-		}
+        /// <summary>
+        /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
+        /// <param name="args">The arguments to be passed to the application during the execution.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="WixQuietExecAction"/>.</param>
+        /// <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
+        /// <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
+        public WixQuietExecAction(string appPath, string args, Return returnType, When when, Step step, Condition condition, string rollback, string rollbackArg)
+            : base(returnType, when, step, condition)
+        {
+            AppPath = appPath;
+            Args = args;
+            Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
+            Rollback = rollback;
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
@@ -193,27 +193,27 @@ namespace WixSharp
             Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
         }
 
-		/// <summary>
-		/// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
-		/// </summary>
-		/// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="WixQuietExecAction"/> instance.</param>
-		/// <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
-		/// <param name="args">The arguments to be passed to the application during the execution.</param>
-		/// <param name="returnType">The return type of the action.</param>
-		/// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-		/// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-		/// <param name="condition">The launch condition for the <see cref="WixQuietExecAction"/>.</param>
-		/// <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
-		/// <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
-		public WixQuietExecAction(Id id, string appPath, string args, Return returnType, When when, Step step, Condition condition, string rollback, string rollbackArg)
-		    : base(id, returnType, when, step, condition)
-	    {
-		    AppPath = appPath;
-		    Args = args;
-		    Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
-		    Rollback = rollback;
-		    RollbackArg = rollbackArg;
-		}
+        /// <summary>
+        /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="WixQuietExecAction"/> instance.</param>
+        /// <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
+        /// <param name="args">The arguments to be passed to the application during the execution.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="WixQuietExecAction"/>.</param>
+        /// <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
+        /// <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
+        public WixQuietExecAction(Id id, string appPath, string args, Return returnType, When when, Step step, Condition condition, string rollback, string rollbackArg)
+            : base(id, returnType, when, step, condition)
+        {
+            AppPath = appPath;
+            Args = args;
+            Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
+            Rollback = rollback;
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
@@ -233,27 +233,27 @@ namespace WixSharp
             Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
         }
 
-		/// <summary>
-		/// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
-		/// </summary>
-		/// <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
-		/// <param name="args">The arguments to be passed to the application during the execution.</param>
-		/// <param name="returnType">The return type of the action.</param>
-		/// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-		/// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-		/// <param name="condition">The launch condition for the <see cref="WixQuietExecAction"/>.</param>
-		/// <param name="sequence">The MSI sequence the action belongs to.</param>
-		/// <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
-		/// <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
-		public WixQuietExecAction(string appPath, string args, Return returnType, When when, Step step, Condition condition, Sequence sequence, string rollback, string rollbackArg)
-		    : base(returnType, when, step, condition, sequence)
-	    {
-		    AppPath = appPath;
-		    Args = args;
-		    Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
-		    Rollback = rollback;
-		    RollbackArg = rollbackArg;
-		}
+        /// <summary>
+        /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
+        /// <param name="args">The arguments to be passed to the application during the execution.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="WixQuietExecAction"/>.</param>
+        /// <param name="sequence">The MSI sequence the action belongs to.</param>
+        /// <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
+        /// <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
+        public WixQuietExecAction(string appPath, string args, Return returnType, When when, Step step, Condition condition, Sequence sequence, string rollback, string rollbackArg)
+            : base(returnType, when, step, condition, sequence)
+        {
+            AppPath = appPath;
+            Args = args;
+            Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
+            Rollback = rollback;
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
@@ -274,28 +274,28 @@ namespace WixSharp
             Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
         }
 
-		/// <summary>
-		/// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
-		/// </summary>
-		/// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="WixQuietExecAction"/> instance.</param>
-		/// <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
-		/// <param name="args">The arguments to be passed to the application during the execution.</param>
-		/// <param name="returnType">The return type of the action.</param>
-		/// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-		/// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-		/// <param name="condition">The launch condition for the <see cref="WixQuietExecAction"/>.</param>
-		/// <param name="sequence">The MSI sequence the action belongs to.</param>
-		/// <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
-		/// <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
-		public WixQuietExecAction(Id id, string appPath, string args, Return returnType, When when, Step step, Condition condition, Sequence sequence, string rollback, string rollbackArg)
-		    : base(id, returnType, when, step, condition, sequence)
-	    {
-		    AppPath = appPath;
-		    Args = args;
-		    Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
-		    Rollback = rollback;
-		    RollbackArg = rollbackArg;
-		}
+        /// <summary>
+        /// Executes a new instance of the <see cref="WixQuietExecAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="WixQuietExecAction"/> instance.</param>
+        /// <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
+        /// <param name="args">The arguments to be passed to the application during the execution.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="WixQuietExecAction"/>.</param>
+        /// <param name="sequence">The MSI sequence the action belongs to.</param>
+        /// <param name="rollback">Path to the application to be executed on rollback. This can be a file name only if the location of the application is well-known.</param>
+        /// <param name="rollbackArg">The arguments to be passed to the application during the execution on rollback.</param>
+        public WixQuietExecAction(Id id, string appPath, string args, Return returnType, When when, Step step, Condition condition, Sequence sequence, string rollback, string rollbackArg)
+            : base(id, returnType, when, step, condition, sequence)
+        {
+            AppPath = appPath;
+            Args = args;
+            Name = "WixQuietExec_" + IO.Path.GetFileName(appPath);
+            Rollback = rollback;
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// Path to the application to be executed. This can be a file name only if the location of the application is well-known.

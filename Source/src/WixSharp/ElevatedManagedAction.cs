@@ -70,18 +70,18 @@ namespace WixSharp
             UsesProperties = "INSTALLDIR";
         }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
-		/// </summary>
-		/// <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
-		/// <param name="rollback">Name of the Rollback CustomAction. The name should match the method implementing the custom action functionality</param>
-		public ElevatedManagedAction(string name, string rollback)
-			: base(name, rollback)
-	    {
-		    Impersonate = false;
-		    Execute = Execute.deferred;
-		    UsesProperties = "INSTALLDIR";
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
+        /// <param name="rollback">Name of the Rollback CustomAction. The name should match the method implementing the custom action functionality</param>
+        public ElevatedManagedAction(string name, string rollback)
+            : base(name, rollback)
+        {
+            Impersonate = false;
+            Execute = Execute.deferred;
+            UsesProperties = "INSTALLDIR";
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -95,18 +95,18 @@ namespace WixSharp
             UsesProperties = "INSTALLDIR";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="action">The full name of static CustomAction method.</param>
-		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
-	    public ElevatedManagedAction(CustomActionMethod action, CustomActionMethod rollback)
-			: base(action, rollback)
-	    {
-		    Impersonate = false;
-		    Execute = Execute.deferred;
-		    UsesProperties = "INSTALLDIR";
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="action">The full name of static CustomAction method.</param>
+        /// <param name="rollback">The full name of static CustomAction rollback method.</param>
+        public ElevatedManagedAction(CustomActionMethod action, CustomActionMethod rollback)
+            : base(action, rollback)
+        {
+            Impersonate = false;
+            Execute = Execute.deferred;
+            UsesProperties = "INSTALLDIR";
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -122,20 +122,20 @@ namespace WixSharp
             UsesProperties = "INSTALLDIR";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
-	    /// <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
-		/// <param name="rollback">Name of the Rollback CustomAction. The name should match the method implementing the custom action functionality</param>
-	    public ElevatedManagedAction(Id id, string name, string rollback)
-			: base(name, rollback)
-	    {
-		    Id = id;
-		    Impersonate = false;
-		    Execute = Execute.deferred;
-		    UsesProperties = "INSTALLDIR";
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
+        /// <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
+        /// <param name="rollback">Name of the Rollback CustomAction. The name should match the method implementing the custom action functionality</param>
+        public ElevatedManagedAction(Id id, string name, string rollback)
+            : base(name, rollback)
+        {
+            Id = id;
+            Impersonate = false;
+            Execute = Execute.deferred;
+            UsesProperties = "INSTALLDIR";
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -151,20 +151,20 @@ namespace WixSharp
             UsesProperties = "INSTALLDIR";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
-	    /// <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
-		/// <param name="rollback">Name of the Rollback CustomAction. The name should match the method implementing the custom action functionality</param>
-	    public ElevatedManagedAction(Id id, CustomActionMethod action, CustomActionMethod rollback)
-			: base(action, rollback)
-	    {
-		    Id = id;
-		    Impersonate = false;
-		    Execute = Execute.deferred;
-		    UsesProperties = "INSTALLDIR";
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
+        /// <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
+        /// <param name="rollback">Name of the Rollback CustomAction. The name should match the method implementing the custom action functionality</param>
+        public ElevatedManagedAction(Id id, CustomActionMethod action, CustomActionMethod rollback)
+            : base(action, rollback)
+        {
+            Id = id;
+            Impersonate = false;
+            Execute = Execute.deferred;
+            UsesProperties = "INSTALLDIR";
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -179,19 +179,19 @@ namespace WixSharp
             Execute = Execute.deferred;
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="action">The full name of static CustomAction method.</param>
-	    /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
-	    /// is in the Wix# script.</param>
-		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
-	    public ElevatedManagedAction(CustomActionMethod action, string actionAssembly, CustomActionMethod rollback)
-			: base(action, actionAssembly, rollback)
-	    {
-		    Impersonate = false;
-		    Execute = Execute.deferred;
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="action">The full name of static CustomAction method.</param>
+        /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+        /// is in the Wix# script.</param>
+        /// <param name="rollback">The full name of static CustomAction rollback method.</param>
+        public ElevatedManagedAction(CustomActionMethod action, string actionAssembly, CustomActionMethod rollback)
+            : base(action, actionAssembly, rollback)
+        {
+            Impersonate = false;
+            Execute = Execute.deferred;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -208,21 +208,21 @@ namespace WixSharp
             UsesProperties = "INSTALLDIR";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
-	    /// <param name="action">The full name of static CustomAction method.</param>
-	    /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
-	    /// is in the Wix# script.</param>
-		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
-	    public ElevatedManagedAction(Id id, CustomActionMethod action, string actionAssembly, CustomActionMethod rollback)
-			: base(id, action, actionAssembly, rollback)
-	    {
-		    Impersonate = false;
-		    Execute = Execute.deferred;
-		    UsesProperties = "INSTALLDIR";
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
+        /// <param name="action">The full name of static CustomAction method.</param>
+        /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+        /// is in the Wix# script.</param>
+        /// <param name="rollback">The full name of static CustomAction rollback method.</param>
+        public ElevatedManagedAction(Id id, CustomActionMethod action, string actionAssembly, CustomActionMethod rollback)
+            : base(id, action, actionAssembly, rollback)
+        {
+            Impersonate = false;
+            Execute = Execute.deferred;
+            UsesProperties = "INSTALLDIR";
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -240,22 +240,22 @@ namespace WixSharp
             UsesProperties = "INSTALLDIR";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="action">The full name of static CustomAction method.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
-		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
-	    public ElevatedManagedAction(CustomActionMethod action, Return returnType, When when, Step step, Condition condition, CustomActionMethod rollback)
-			: base(action, returnType, when, step, condition, rollback)
-	    {
-		    Impersonate = false;
-		    Execute = Execute.deferred;
-		    UsesProperties = "INSTALLDIR";
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="action">The full name of static CustomAction method.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+        /// <param name="rollback">The full name of static CustomAction rollback method.</param>
+        public ElevatedManagedAction(CustomActionMethod action, Return returnType, When when, Step step, Condition condition, CustomActionMethod rollback)
+            : base(action, returnType, when, step, condition, rollback)
+        {
+            Impersonate = false;
+            Execute = Execute.deferred;
+            UsesProperties = "INSTALLDIR";
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -275,25 +275,25 @@ namespace WixSharp
             UsesProperties = "INSTALLDIR";
         }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
-		/// </summary>
-		/// <param name="action">The full name of static CustomAction method.</param>
-		/// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
-		/// is in the Wix# script.</param>
-		/// <param name="returnType">The return type of the action.</param>
-		/// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-		/// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-		/// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
-		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
-		public ElevatedManagedAction(CustomActionMethod action, string actionAssembly, Return returnType, When when, Step step, Condition condition, CustomActionMethod rollback)
-			: base(action, actionAssembly, returnType, when, step, condition, rollback)
-		{
-			Impersonate = false;
-			Execute = Execute.deferred;
-			UsesProperties = "INSTALLDIR";
-		}
-        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="action">The full name of static CustomAction method.</param>
+        /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+        /// is in the Wix# script.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+        /// <param name="rollback">The full name of static CustomAction rollback method.</param>
+        public ElevatedManagedAction(CustomActionMethod action, string actionAssembly, Return returnType, When when, Step step, Condition condition, CustomActionMethod rollback)
+            : base(action, actionAssembly, returnType, when, step, condition, rollback)
+        {
+            Impersonate = false;
+            Execute = Execute.deferred;
+            UsesProperties = "INSTALLDIR";
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -310,23 +310,23 @@ namespace WixSharp
             UsesProperties = "INSTALLDIR";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
-	    /// <param name="action">The full name of static CustomAction method.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
-		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
-	    public ElevatedManagedAction(Id id, CustomActionMethod action, Return returnType, When when, Step step, Condition condition, CustomActionMethod rollback)
-			: base(id, action, returnType, when, step, condition, rollback)
-	    {
-		    Execute = Execute.deferred;
-		    UsesProperties = "INSTALLDIR";
-	    }
-       
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
+        /// <param name="action">The full name of static CustomAction method.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+        /// <param name="rollback">The full name of static CustomAction rollback method.</param>
+        public ElevatedManagedAction(Id id, CustomActionMethod action, Return returnType, When when, Step step, Condition condition, CustomActionMethod rollback)
+            : base(id, action, returnType, when, step, condition, rollback)
+        {
+            Execute = Execute.deferred;
+            UsesProperties = "INSTALLDIR";
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -346,25 +346,25 @@ namespace WixSharp
             UsesProperties = "INSTALLDIR";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
-	    /// <param name="action">The full name of static CustomAction method.</param>
-	    /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
-	    /// is in the Wix# script.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
-		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
-	    public ElevatedManagedAction(Id id, CustomActionMethod action, string actionAssembly, Return returnType, When when, Step step, Condition condition, CustomActionMethod rollback)
-			: base(id, action, actionAssembly, returnType, when, step, condition, rollback)
-	    {
-		    Impersonate = false;
-		    Execute = Execute.deferred;
-		    UsesProperties = "INSTALLDIR";
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
+        /// <param name="action">The full name of static CustomAction method.</param>
+        /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+        /// is in the Wix# script.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+        /// <param name="rollback">The full name of static CustomAction rollback method.</param>
+        public ElevatedManagedAction(Id id, CustomActionMethod action, string actionAssembly, Return returnType, When when, Step step, Condition condition, CustomActionMethod rollback)
+            : base(id, action, actionAssembly, returnType, when, step, condition, rollback)
+        {
+            Impersonate = false;
+            Execute = Execute.deferred;
+            UsesProperties = "INSTALLDIR";
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -383,23 +383,23 @@ namespace WixSharp
             UsesProperties = "INSTALLDIR";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="action">The full name of static CustomAction method.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
-	    /// <param name="sequence">The MSI sequence the action belongs to.</param>
-		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
-	    public ElevatedManagedAction(CustomActionMethod action, Return returnType, When when, Step step, Condition condition, Sequence sequence, CustomActionMethod rollback)
-			: base(action, returnType, when, step, condition, sequence, rollback)
-	    {
-		    Impersonate = false;
-		    Execute = Execute.deferred;
-		    UsesProperties = "INSTALLDIR";
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="action">The full name of static CustomAction method.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+        /// <param name="sequence">The MSI sequence the action belongs to.</param>
+        /// <param name="rollback">The full name of static CustomAction rollback method.</param>
+        public ElevatedManagedAction(CustomActionMethod action, Return returnType, When when, Step step, Condition condition, Sequence sequence, CustomActionMethod rollback)
+            : base(action, returnType, when, step, condition, sequence, rollback)
+        {
+            Impersonate = false;
+            Execute = Execute.deferred;
+            UsesProperties = "INSTALLDIR";
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -420,27 +420,27 @@ namespace WixSharp
             UsesProperties = "INSTALLDIR";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="action">The full name of static CustomAction method.</param>
-	    /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
-	    /// is in the Wix# script.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
-	    /// <param name="sequence">The MSI sequence the action belongs to.</param>
-		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
-	    public ElevatedManagedAction(CustomActionMethod action, string actionAssembly, Return returnType, When when, Step step, Condition condition, Sequence sequence, CustomActionMethod rollback)
-			: base(action, actionAssembly, returnType, when, step, condition, sequence, rollback)
-	    {
-		    Impersonate = false;
-		    Execute = Execute.deferred;
-		    UsesProperties = "INSTALLDIR";
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="action">The full name of static CustomAction method.</param>
+        /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+        /// is in the Wix# script.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+        /// <param name="sequence">The MSI sequence the action belongs to.</param>
+        /// <param name="rollback">The full name of static CustomAction rollback method.</param>
+        public ElevatedManagedAction(CustomActionMethod action, string actionAssembly, Return returnType, When when, Step step, Condition condition, Sequence sequence, CustomActionMethod rollback)
+            : base(action, actionAssembly, returnType, when, step, condition, sequence, rollback)
+        {
+            Impersonate = false;
+            Execute = Execute.deferred;
+            UsesProperties = "INSTALLDIR";
+        }
 
-         /// <summary>
+        /// <summary>
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
         /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
@@ -458,24 +458,24 @@ namespace WixSharp
             UsesProperties = "INSTALLDIR";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
-	    /// <param name="action">The full name of static CustomAction method.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
-	    /// <param name="sequence">The MSI sequence the action belongs to.</param>
-		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
-	    public ElevatedManagedAction(Id id, CustomActionMethod action, Return returnType, When when, Step step, Condition condition, Sequence sequence, CustomActionMethod rollback)
-			: base(id, action, returnType, when, step, condition, sequence, rollback)
-	    {
-		    Impersonate = false;
-		    Execute = Execute.deferred;
-		    UsesProperties = "INSTALLDIR";
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
+        /// <param name="action">The full name of static CustomAction method.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+        /// <param name="sequence">The MSI sequence the action belongs to.</param>
+        /// <param name="rollback">The full name of static CustomAction rollback method.</param>
+        public ElevatedManagedAction(Id id, CustomActionMethod action, Return returnType, When when, Step step, Condition condition, Sequence sequence, CustomActionMethod rollback)
+            : base(id, action, returnType, when, step, condition, sequence, rollback)
+        {
+            Impersonate = false;
+            Execute = Execute.deferred;
+            UsesProperties = "INSTALLDIR";
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
@@ -497,25 +497,25 @@ namespace WixSharp
             UsesProperties = "INSTALLDIR";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
-	    /// <param name="action">The full name of static CustomAction method.</param>
-	    /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
-	    /// is in the Wix# script.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
-	    /// <param name="sequence">The MSI sequence the action belongs to.</param>
-		/// <param name="rollback">The full name of static CustomAction rollback method.</param>
-	    public ElevatedManagedAction(Id id, CustomActionMethod action, string actionAssembly, Return returnType, When when, Step step, Condition condition, Sequence sequence, CustomActionMethod rollback)
-		    : base(id, action, actionAssembly, returnType, when, step, condition, sequence, rollback)
-	    {
-		    Impersonate = false;
-		    Execute = Execute.deferred;
-		    UsesProperties = "INSTALLDIR";
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
+        /// <param name="action">The full name of static CustomAction method.</param>
+        /// <param name="actionAssembly">Path to the assembly containing the CustomAction implementation. Specify <c>"%this%"</c> if the assembly
+        /// is in the Wix# script.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ManagedAction"/>.</param>
+        /// <param name="sequence">The MSI sequence the action belongs to.</param>
+        /// <param name="rollback">The full name of static CustomAction rollback method.</param>
+        public ElevatedManagedAction(Id id, CustomActionMethod action, string actionAssembly, Return returnType, When when, Step step, Condition condition, Sequence sequence, CustomActionMethod rollback)
+            : base(id, action, actionAssembly, returnType, when, step, condition, sequence, rollback)
+        {
+            Impersonate = false;
+            Execute = Execute.deferred;
+            UsesProperties = "INSTALLDIR";
+        }
     }
 }

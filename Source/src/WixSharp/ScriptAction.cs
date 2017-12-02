@@ -67,19 +67,19 @@ namespace WixSharp
             Name = "VBScript";
         }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
-		/// </summary>
-		/// <param name="code">VBScript code to be executed.</param>
-		/// <param name="rollbackArg">VBScript code to be executed on rollback.</param>
-		public ScriptAction(string code, string rollbackArg)
-		    : base()
-	    {
-		    Code = code;
-		    Name = "VBScript";
-		    Rollback = "VBScript";
-		    RollbackArg = rollbackArg;
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="code">VBScript code to be executed.</param>
+        /// <param name="rollbackArg">VBScript code to be executed on rollback.</param>
+        public ScriptAction(string code, string rollbackArg)
+            : base()
+        {
+            Code = code;
+            Name = "VBScript";
+            Rollback = "VBScript";
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
@@ -93,20 +93,20 @@ namespace WixSharp
             Name = "VBScript";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ScriptAction"/> instance.</param>
-	    /// <param name="code">VBScript code to be executed.</param>
-		/// <param name="rollbackArg">VBScript code to be executed on rollback.</param>
-	    public ScriptAction(Id id, string code, string rollbackArg)
-			: base(id)
-	    {
-		    Code = code; ;
-		    Name = "VBScript";
-		    Rollback = "VBScript";
-		    RollbackArg = rollbackArg;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ScriptAction"/> instance.</param>
+        /// <param name="code">VBScript code to be executed.</param>
+        /// <param name="rollbackArg">VBScript code to be executed on rollback.</param>
+        public ScriptAction(Id id, string code, string rollbackArg)
+            : base(id)
+        {
+            Code = code; ;
+            Name = "VBScript";
+            Rollback = "VBScript";
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
@@ -123,23 +123,23 @@ namespace WixSharp
             Name = "VBScript";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="code">VBScript code to be executed.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ScriptAction"/>.</param>
-		/// <param name="rollbackArg">VBScript code to be executed on rollback.</param>
-	    public ScriptAction(string code, Return returnType, When when, Step step, Condition condition, string rollbackArg)
-			: base(returnType, when, step, condition)
-	    {
-		    Code = code;
-		    Name = "VBScript";
-		    Rollback = "VBScript";
-		    RollbackArg = rollbackArg;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="code">VBScript code to be executed.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ScriptAction"/>.</param>
+        /// <param name="rollbackArg">VBScript code to be executed on rollback.</param>
+        public ScriptAction(string code, Return returnType, When when, Step step, Condition condition, string rollbackArg)
+            : base(returnType, when, step, condition)
+        {
+            Code = code;
+            Name = "VBScript";
+            Rollback = "VBScript";
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
@@ -157,24 +157,24 @@ namespace WixSharp
             Name = "VBScript";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ScriptAction"/> instance.</param>
-	    /// <param name="code">VBScript code to be executed.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ScriptAction"/>.</param>
-		/// <param name="rollbackArg">VBScript code to be executed on rollback.</param>
-	    public ScriptAction(Id id, string code, Return returnType, When when, Step step, Condition condition, string rollbackArg)
-			: base(id, returnType, when, step, condition)
-	    {
-		    Code = code;
-		    Name = "VBScript";
-		    Rollback = "VBScript";
-		    RollbackArg = rollbackArg;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ScriptAction"/> instance.</param>
+        /// <param name="code">VBScript code to be executed.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ScriptAction"/>.</param>
+        /// <param name="rollbackArg">VBScript code to be executed on rollback.</param>
+        public ScriptAction(Id id, string code, Return returnType, When when, Step step, Condition condition, string rollbackArg)
+            : base(id, returnType, when, step, condition)
+        {
+            Code = code;
+            Name = "VBScript";
+            Rollback = "VBScript";
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
@@ -192,24 +192,24 @@ namespace WixSharp
             Name = "VBScript";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="code">VBScript code to be executed.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ScriptAction"/>.</param>
-	    /// <param name="sequence">The MSI sequence the action belongs to.</param>
-		/// <param name="rollbackArg">VBScript code to be executed on rollback.</param>
-	    public ScriptAction(string code, Return returnType, When when, Step step, Condition condition, Sequence sequence, string rollbackArg)
-			: base(returnType, when, step, condition, sequence)
-	    {
-		    Code = code;
-		    Name = "VBScript";
-		    Rollback = "VBScript";
-		    RollbackArg = rollbackArg;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="code">VBScript code to be executed.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ScriptAction"/>.</param>
+        /// <param name="sequence">The MSI sequence the action belongs to.</param>
+        /// <param name="rollbackArg">VBScript code to be executed on rollback.</param>
+        public ScriptAction(string code, Return returnType, When when, Step step, Condition condition, Sequence sequence, string rollbackArg)
+            : base(returnType, when, step, condition, sequence)
+        {
+            Code = code;
+            Name = "VBScript";
+            Rollback = "VBScript";
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
@@ -228,25 +228,25 @@ namespace WixSharp
             Name = "VBScript";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ScriptAction"/> instance.</param>
-	    /// <param name="code">VBScript code to be executed.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ScriptAction"/>.</param>
-	    /// <param name="sequence">The MSI sequence the action belongs to.</param>
-		/// <param name="rollbackArg">VBScript code to be executed on rollback.</param>
-	    public ScriptAction(Id id, string code, Return returnType, When when, Step step, Condition condition, Sequence sequence, string rollbackArg)
-			: base(id, returnType, when, step, condition, sequence)
-	    {
-		    Code = code;
-		    Name = "VBScript";
-		    Rollback = "VBScript";
-		    RollbackArg = rollbackArg;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ScriptAction"/> instance.</param>
+        /// <param name="code">VBScript code to be executed.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ScriptAction"/>.</param>
+        /// <param name="sequence">The MSI sequence the action belongs to.</param>
+        /// <param name="rollbackArg">VBScript code to be executed on rollback.</param>
+        public ScriptAction(Id id, string code, Return returnType, When when, Step step, Condition condition, Sequence sequence, string rollbackArg)
+            : base(id, returnType, when, step, condition, sequence)
+        {
+            Code = code;
+            Name = "VBScript";
+            Rollback = "VBScript";
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// VBScript code to be executed.

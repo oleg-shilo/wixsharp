@@ -69,20 +69,20 @@ namespace WixSharp
             Name = "VBScriptFile";
         }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
-		/// </summary>
-		/// <param name="file">VBScript file to be executed.</param>
-		/// <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
-		/// <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
-		public ScriptFileAction(string file, string procedure, string rollbackArg)
-		    : base()
-	    {
-		    ScriptFile = file;
-		    Procedure = procedure;
-		    Name = "VBScriptFile";
-		    RollbackArg = rollbackArg;
-	    }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="file">VBScript file to be executed.</param>
+        /// <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
+        /// <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
+        public ScriptFileAction(string file, string procedure, string rollbackArg)
+            : base()
+        {
+            ScriptFile = file;
+            Procedure = procedure;
+            Name = "VBScriptFile";
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
@@ -98,21 +98,21 @@ namespace WixSharp
             Name = "VBScriptFile";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ScriptFileAction"/> instance.</param>
-	    /// <param name="file">VBScript file to be executed.</param>
-	    /// <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
-		/// <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
-	    public ScriptFileAction(Id id, string file, string procedure, string rollbackArg)
-			: base(id)
-	    {
-		    ScriptFile = file;
-		    Procedure = procedure;
-		    Name = "VBScriptFile";
-		    RollbackArg = rollbackArg;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ScriptFileAction"/> instance.</param>
+        /// <param name="file">VBScript file to be executed.</param>
+        /// <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
+        /// <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
+        public ScriptFileAction(Id id, string file, string procedure, string rollbackArg)
+            : base(id)
+        {
+            ScriptFile = file;
+            Procedure = procedure;
+            Name = "VBScriptFile";
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
@@ -131,24 +131,24 @@ namespace WixSharp
             Name = "VBScriptFile";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="file">VBScript file to be executed.</param>
-	    /// <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ScriptFileAction"/>.</param>
-		/// <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
-	    public ScriptFileAction(string file, string procedure, Return returnType, When when, Step step, Condition condition, string rollbackArg)
-			: base(returnType, when, step, condition)
-	    {
-		    ScriptFile = file;
-		    Procedure = procedure;
-		    Name = "VBScriptFile";
-		    RollbackArg = rollbackArg;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="file">VBScript file to be executed.</param>
+        /// <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ScriptFileAction"/>.</param>
+        /// <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
+        public ScriptFileAction(string file, string procedure, Return returnType, When when, Step step, Condition condition, string rollbackArg)
+            : base(returnType, when, step, condition)
+        {
+            ScriptFile = file;
+            Procedure = procedure;
+            Name = "VBScriptFile";
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
@@ -168,25 +168,25 @@ namespace WixSharp
             Name = "VBScriptFile";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ScriptFileAction"/> instance.</param>
-	    /// <param name="file">VBScript file to be executed.</param>
-	    /// <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ScriptFileAction"/>.</param>
-		/// <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
-	    public ScriptFileAction(Id id, string file, string procedure, Return returnType, When when, Step step, Condition condition, string rollbackArg)
-			: base(id, returnType, when, step, condition)
-	    {
-		    ScriptFile = file;
-		    Procedure = procedure;
-		    Name = "VBScriptFile";
-		    RollbackArg = rollbackArg;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ScriptFileAction"/> instance.</param>
+        /// <param name="file">VBScript file to be executed.</param>
+        /// <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ScriptFileAction"/>.</param>
+        /// <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
+        public ScriptFileAction(Id id, string file, string procedure, Return returnType, When when, Step step, Condition condition, string rollbackArg)
+            : base(id, returnType, when, step, condition)
+        {
+            ScriptFile = file;
+            Procedure = procedure;
+            Name = "VBScriptFile";
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
@@ -206,25 +206,25 @@ namespace WixSharp
             Name = "_VBScriptFile";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="file">VBScript file to be executed.</param>
-	    /// <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ScriptFileAction"/>.</param>
-	    /// <param name="sequence">The MSI sequence the action belongs to.</param>
-		/// <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
-	    public ScriptFileAction(string file, string procedure, Return returnType, When when, Step step, Condition condition, Sequence sequence, string rollbackArg)
-			: base(returnType, when, step, condition, sequence)
-	    {
-		    ScriptFile = file;
-		    Procedure = procedure;
-		    Name = "_VBScriptFile";
-		    RollbackArg = rollbackArg;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="file">VBScript file to be executed.</param>
+        /// <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ScriptFileAction"/>.</param>
+        /// <param name="sequence">The MSI sequence the action belongs to.</param>
+        /// <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
+        public ScriptFileAction(string file, string procedure, Return returnType, When when, Step step, Condition condition, Sequence sequence, string rollbackArg)
+            : base(returnType, when, step, condition, sequence)
+        {
+            ScriptFile = file;
+            Procedure = procedure;
+            Name = "_VBScriptFile";
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
@@ -245,26 +245,26 @@ namespace WixSharp
             Name = "VBScriptFile";
         }
 
-		/// <summary>
-	    /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
-	    /// </summary>
-	    /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ScriptFileAction"/> instance.</param>
-	    /// <param name="file">VBScript file to be executed.</param>
-	    /// <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
-	    /// <param name="returnType">The return type of the action.</param>
-	    /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
-	    /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
-	    /// <param name="condition">The launch condition for the <see cref="ScriptFileAction"/>.</param>
-	    /// <param name="sequence">The MSI sequence the action belongs to.</param>
-		/// <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
-	    public ScriptFileAction(Id id, string file, string procedure, Return returnType, When when, Step step, Condition condition, Sequence sequence, string rollbackArg)
-			: base(id, returnType, when, step, condition, sequence)
-	    {
-		    ScriptFile = file;
-		    Procedure = procedure;
-		    Name = "VBScriptFile";
-		    RollbackArg = rollbackArg;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptFileAction"/> class with properties/fields initialized with specified parameters.
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ScriptFileAction"/> instance.</param>
+        /// <param name="file">VBScript file to be executed.</param>
+        /// <param name="procedure">Name of the procedure (from the <paramref name="file"/>) to be executed.</param>
+        /// <param name="returnType">The return type of the action.</param>
+        /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
+        /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
+        /// <param name="condition">The launch condition for the <see cref="ScriptFileAction"/>.</param>
+        /// <param name="sequence">The MSI sequence the action belongs to.</param>
+        /// <param name="rollbackArg">Name of the procedure (from the <paramref name="file"/>) to be executed on rollback.</param>
+        public ScriptFileAction(Id id, string file, string procedure, Return returnType, When when, Step step, Condition condition, Sequence sequence, string rollbackArg)
+            : base(id, returnType, when, step, condition, sequence)
+        {
+            ScriptFile = file;
+            Procedure = procedure;
+            Name = "VBScriptFile";
+            RollbackArg = rollbackArg;
+        }
 
         /// <summary>
         /// VBScript file to be executed.
