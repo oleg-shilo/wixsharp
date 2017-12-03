@@ -33,7 +33,8 @@ build:
 
 build_script:
     - cd "%APPVEYOR_BUILD_FOLDER%"\src
-    - if "%PlatformToolset%"=="v141" msbuild WixSharp.Suite.sln  /p:configuration="%configuration%" /p:platform="%platform_input%" /p:PlatformToolset="%PlatformToolset%" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+    # - if "%PlatformToolset%"=="v141" msbuild WixSharp.Suite.sln  /p:configuration="%configuration%" /p:platform="%platform_input%" /p:PlatformToolset="%PlatformToolset%" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+    - msbuild WixSharp.Suite.sln  /p:configuration="%configuration%" /p:platform="%platform_input%" /p:PlatformToolset="%PlatformToolset%" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 
 after_build:
     # - cd "%APPVEYOR_BUILD_FOLDER%"\src\CSScriptNpp
