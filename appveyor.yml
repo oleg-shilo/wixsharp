@@ -59,8 +59,8 @@ after_build:
         # }
 
 artifacts:
-  # - path: CSScriptNpp_*.zip
-    # name: releases
+  - path: Source\src\WixSharp.Samples\WixSharp.*
+    name: binaries
 
 deploy:
     provider: GitHub
