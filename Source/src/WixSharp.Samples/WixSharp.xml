@@ -133,7 +133,8 @@
         </member>
         <member name="F:WixSharp.Action.RollbackArg">
             <summary>
-             Rollback arguments
+             Rollback arguments. It's a comma separated list of properties,
+             which the rollback custom action is intended to use,
              </summary>
         </member>
         <member name="F:WixSharp.Action.RollbackProgressText">
@@ -7845,7 +7846,7 @@
             Initializes a new instance of the <see cref="T:WixSharp.ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
             </summary>
             <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.ElevatedManagedAction"/> instance.</param>
-            <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
+            <param name="action">The full name of static CustomAction method.</param>
             <param name="rollback">Name of the Rollback CustomAction. The name should match the method implementing the custom action functionality</param>
         </member>
         <member name="M:WixSharp.ElevatedManagedAction.#ctor(WixSharp.CustomActionMethod,System.String)">
@@ -14707,6 +14708,11 @@
         <member name="F:WixSharp.InstallPrivileges.elevated">
             <summary>
             Set this value to declare that the package requires elevated privileges to install. This is the default value.
+            </summary>
+        </member>
+        <member name="T:WixSharp.InstallScope">
+            <summary>
+            Use this attribute to specify the priviliges required to install the package on Windows Vista and above. 
             </summary>
         </member>
         <member name="F:WixSharp.InstallScope.perMachine">

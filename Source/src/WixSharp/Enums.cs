@@ -276,6 +276,9 @@ namespace WixSharp
         elevated
     }
 
+    /// <summary>
+    /// Use this attribute to specify the priviliges required to install the package on Windows Vista and above. 
+    /// </summary>
     public enum InstallScope
     {
         /// <summary>

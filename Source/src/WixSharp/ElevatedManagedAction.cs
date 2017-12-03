@@ -155,7 +155,7 @@ namespace WixSharp
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
         /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ElevatedManagedAction"/> instance.</param>
-        /// <param name="name">Name of the CustomAction. The name should match the method implementing the custom action functionality.</param>
+        /// <param name="action">The full name of static CustomAction method.</param>
         /// <param name="rollback">Name of the Rollback CustomAction. The name should match the method implementing the custom action functionality</param>
         public ElevatedManagedAction(Id id, CustomActionMethod action, CustomActionMethod rollback)
             : base(action, rollback)
