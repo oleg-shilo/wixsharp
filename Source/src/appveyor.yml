@@ -1,0 +1,76 @@
+version: 1.7.6.{build}
+image: Visual Studio 2017
+
+
+environment:
+  matrix:
+    - PlatformToolset: v141
+
+platform:
+    - Any CPU
+
+configuration:
+    - Release
+
+install:
+    - if "%platform%"=="x64" set archi=amd64
+    - if "%platform%"=="x64" set platform_input=x64
+
+    - if "%platform%"=="Any CPU" set archi=x86
+    - if "%platform%"=="Any CPU" set platform_input=Any CPU
+
+    - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %archi%
+    - nuget restore "%APPVEYOR_BUILD_FOLDER%"\src\WixSharp.Test\packages.config -PackagesDirectory "%APPVEYOR_BUILD_FOLDER%"\src\packages
+
+
+init:
+    - git config --global core.autocrlf true
+
+
+build:
+    parallel: true                  # enable MSBuild parallel builds
+    verbosity: minimal
+
+build_script:
+    - cd "%APPVEYOR_BUILD_FOLDER%"\src
+    - if "%PlatformToolset%"=="v140" msbuild WixSharp.Suite.sln  /p:configuration="%configuration%" /p:platform="%platform_input%" /p:PlatformToolset="%PlatformToolset%" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+
+after_build:
+    # - cd "%APPVEYOR_BUILD_FOLDER%"\src\CSScriptNpp
+    # - ps: >-
+
+        # if ($env:PLATFORM -eq "x64" -and $env:CONFIGURATION -eq "Release") {
+            # #Push-AppveyorArtifact "bin\$env:PLATFORM\$env:CONFIGURATION\" -FileName CSScriptNpp.dll
+        # }
+
+        # if ($env:PLATFORM -eq "Any CPU" -and $env:CONFIGURATION -eq "Release") {
+            # Push-AppveyorArtifact "bin\$env:PLATFORM\$env:CONFIGURATION\CSScriptNpp.dll" -FileName CSScriptNpp.dll
+        # }
+
+        # if ($($env:APPVEYOR_REPO_TAG) -eq "true" -and $env:CONFIGURATION -eq "Release" -and $env:PLATFORMTOOLSET -eq "v141") {
+            # if($env:PLATFORM -eq "x64"){
+            # $ZipFileName = "CSScriptNpp_$($env:APPVEYOR_REPO_TAG_NAME)_x64.zip"
+            # 7z a $ZipFileName bin\$env:PLATFORM\$env:CONFIGURATION\CSScriptNpp.dll
+            # }
+            # if($env:PLATFORM -eq "Any CPU"){
+            # $ZipFileName = "CSScriptNpp_$($env:APPVEYOR_REPO_TAG_NAME)_x86.zip"
+            # 7z a $ZipFileName bin\$env:PLATFORM\$env:CONFIGURATION\CSScriptNpp.dll
+            # }
+        # }
+
+artifacts:
+  # - path: CSScriptNpp_*.zip
+    # name: releases
+
+deploy:
+    provider: GitHub
+    auth_token:
+        secure: !!TODO, see https://www.appveyor.com/docs/deployment/github/#provider-settings!!
+    artifact: releases
+    draft: false
+    prerelease: false
+    force_update: true
+    on:
+        appveyor_repo_tag: true
+        PlatformToolset: v141
+        configuration: Release
