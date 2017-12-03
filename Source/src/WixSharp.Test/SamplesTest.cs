@@ -23,9 +23,9 @@ namespace WixSharp.Test
         [Fact]
         public void CanBuildAllSamples()
         {
-            // #if ! DEBUG
-            //             return;
-            // #endif
+            if (Environment.GetEnvironmentVariable("APPVEYOR") != null)
+                return;
+
             //need to exclude some samples; for example the two samples from the same dir will interfere with each other;
             string[] exclude = new string[] { };
 
@@ -61,8 +61,6 @@ namespace WixSharp.Test
 
                 foreach (string batchFile in sampleFiles)
                 {
-                    if (batchFile.Contains("UIBackgroundImage"))
-                        continue; // It is failing on AppVeyor for some reason
                     BuildSample(batchFile, group.Index, failedSamples);
                 }
             });
