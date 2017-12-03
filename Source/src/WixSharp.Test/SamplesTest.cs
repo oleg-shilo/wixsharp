@@ -23,9 +23,9 @@ namespace WixSharp.Test
         [Fact]
         public void CanBuildAllSamples()
         {
-#if ! DEBUG
-            return;
-#endif
+            // #if ! DEBUG
+            //             return;
+            // #endif
             //need to exclude some samples; for example the two samples from the same dir will interfere with each other;
             string[] exclude = new string[] { };
 
