@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+
 using IO = System.IO;
 
 namespace WixSharp.Test
@@ -22,7 +23,10 @@ namespace WixSharp.Test
         [Fact]
         public void CanBuildAllSamples()
         {
-            //need to exclude some samples; for example the two samples from the same dir will interfere with each other; 
+#if ! DEBUG
+            return;
+#endif
+            //need to exclude some samples; for example the two samples from the same dir will interfere with each other;
             string[] exclude = new string[] { };
 
             var failedSamples = new List<string>();
@@ -90,7 +94,6 @@ namespace WixSharp.Test
 
                 string output = Run(batchFile);
 
-
                 if (output.Contains(" : error") || output.Contains("Error: ") || (nonMsi && !HasAnyMsis(dir)))
                 {
                     if (batchFile.EndsWith(@"Signing\Build.cmd") && output.Contains("The signer's certificate is not valid for signing."))
@@ -121,7 +124,6 @@ namespace WixSharp.Test
                 RestorePause(batchFile);
             }
         }
-
 
         void Log(int currentStep, List<string> failedSamples)
         {
