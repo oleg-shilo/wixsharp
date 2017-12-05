@@ -54,12 +54,6 @@ public class Script
         project.ManagedUI.ModifyDialogs.Add<ProgressDialog>()
                                        .Add<ExitDialog>();
 
-        project.UIInitialized += e =>
-        {
-            Debug.Assert(false);
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo(project.Language);
-        };
-
         project.UILoaded += msi_UILoaded;
         project.BeforeInstall += msi_BeforeInstall;
         project.AfterInstall += Project_AfterInstall;
@@ -82,6 +76,10 @@ public class Script
         //(e.ManagedUIShell.CurrentDialog asForm).Controls....
     }
 
+    //private static void ManagedUIShell_OnCurrentDialogChanged(IManagedDialog dialog)
+    //{
+    //}
+
     static void Project_AfterInstall(SetupEventArgs e)
     {
         //Debug.Assert(false);
@@ -89,10 +87,6 @@ public class Script
         if (e.IsInstalling)
             MessageBox.Show($"User '{Defaults.UserName}' with password '{e.Session.Property("PASSWORD")}' has been created");
     }
-
-    //private static void ManagedUIShell_OnCurrentDialogChanged(IManagedDialog dialog)
-    //{
-    //}
 
     static void msi_BeforeInstall(SetupEventArgs e)
     {

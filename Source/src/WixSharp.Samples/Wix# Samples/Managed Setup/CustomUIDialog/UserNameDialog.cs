@@ -44,26 +44,11 @@ namespace MyProduct
 
         void back_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Debug 1"); // Shows.
-            var outputFolder = new OpenFileDialog
-            {
-                CheckFileExists = false,
-                CheckPathExists = true
-            };
-            outputFolder.ShowDialog();
-            MessageBox.Show("Debug"); // Shows.
             Shell.GoPrev();
         }
 
         void next_Click(object sender, EventArgs e)
         {
-            var outputFolder = new OpenFileDialog
-            {
-                CheckFileExists = false,
-                CheckPathExists = true
-            };
-            outputFolder.ShowDialog();
-
             MsiRuntime.Session["PASSWORD"] = password.Text;
             MsiRuntime.Session["DOMAIN"] = domain.Text;
             MsiRuntime.Data["test"] = "test value";
