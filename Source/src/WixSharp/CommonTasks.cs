@@ -509,7 +509,7 @@ namespace WixSharp.CommonTasks
         /// <param name="project">The project.</param>
         /// <param name="item">The item.</param>
         /// <returns></returns>
-        static public Project AddIniFile(this Project project, Dir item)
+        static public Project AddIniFile(this Project project, IniFile item)
         {
             return project.AddIniFiles(item);
         }
@@ -520,7 +520,7 @@ namespace WixSharp.CommonTasks
         /// <param name="project">The project.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        static public Project AddIniFiles(this Project project, params Dir[] items)
+        static public Project AddIniFiles(this Project project, params IniFile[] items)
         {
             project.IniFiles = project.IniFiles.Combine(items).Distinct().ToArray();
             return project;
@@ -811,6 +811,42 @@ namespace WixSharp.CommonTasks
         {
             dir.Files = dir.Files.Combine(items).Distinct().ToArray();
             return dir;
+        }
+
+        /// <summary>
+        /// Adds the specified <see cref="WixSharp.IGenericEntity"/> items.
+        /// </summary>
+        /// <param name="dir">The dir.</param>
+        /// <param name="items">The items.</param>
+        /// <returns></returns>
+        static public Dir Add(this Dir dir, params IGenericEntity[] items)
+        {
+            dir.GenericItems = dir.GenericItems.Combine(items).Distinct().ToArray();
+            return dir;
+        }
+
+        /// <summary>
+        /// Adds the specified <see cref="WixSharp.IGenericEntity"/> items.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="items">The items.</param>
+        /// <returns></returns>
+        static public Project Add(this Project project, params IGenericEntity[] items)
+        {
+            project.GenericItems = project.GenericItems.Combine(items).Distinct().ToArray();
+            return project;
+        }
+
+        /// <summary>
+        /// Adds the specified <see cref="WixSharp.IGenericEntity"/> items.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="items">The items.</param>
+        /// <returns></returns>
+        static public File Add(this File file, params IGenericEntity[] items)
+        {
+            file.GenericItems = file.GenericItems.Combine(items).Distinct().ToArray();
+            return file;
         }
 
         /// <summary>
