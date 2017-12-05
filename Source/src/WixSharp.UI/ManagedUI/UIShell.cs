@@ -229,9 +229,9 @@ namespace WixSharp
 
             try
             {
-                int cilture = msiRuntime.Session.Property("ProductLanguage").ToInt();
-                if (cilture != 0)
-                    Thread.CurrentThread.CurrentUICulture = new CultureInfo(cilture);
+                int culture = msiRuntime.Session.Property("ProductLanguage").ToInt();
+                if (culture != 0)
+                    Thread.CurrentThread.CurrentUICulture = new CultureInfo(culture);
             }
             catch { }
 

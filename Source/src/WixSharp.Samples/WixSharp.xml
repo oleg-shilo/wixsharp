@@ -543,7 +543,7 @@
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddIniFile(WixSharp.Project,WixSharp.Dir)">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddIniFile(WixSharp.Project,WixSharp.IniFile)">
             <summary>
             Adds the IniFile to the Project.
             </summary>
@@ -551,7 +551,7 @@
             <param name="item">The item.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddIniFiles(WixSharp.Project,WixSharp.Dir[])">
+        <member name="M:WixSharp.CommonTasks.Tasks.AddIniFiles(WixSharp.Project,WixSharp.IniFile[])">
             <summary>
             Adds the IniFile items to the Project.
             </summary>
@@ -759,6 +759,30 @@
             Adds the file.
             </summary>
             <param name="dir">The dir.</param>
+            <param name="items">The items.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.Add(WixSharp.Dir,WixSharp.IGenericEntity[])">
+            <summary>
+            Adds the specified <see cref="T:WixSharp.IGenericEntity"/> items.
+            </summary>
+            <param name="dir">The dir.</param>
+            <param name="items">The items.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.Add(WixSharp.Project,WixSharp.IGenericEntity[])">
+            <summary>
+            Adds the specified <see cref="T:WixSharp.IGenericEntity"/> items.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="items">The items.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.Add(WixSharp.File,WixSharp.IGenericEntity[])">
+            <summary>
+            Adds the specified <see cref="T:WixSharp.IGenericEntity"/> items.
+            </summary>
+            <param name="file">The file.</param>
             <param name="items">The items.</param>
             <returns></returns>
         </member>
