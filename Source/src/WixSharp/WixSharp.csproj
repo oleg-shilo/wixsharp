@@ -137,6 +137,7 @@
     <Compile Include="Permissions.cs" />
     <Compile Include="Properties\AssemblyInfo.version.cs" />
     <Compile Include="Reboot.cs" />
+    <Compile Include="RemoveRegistryValue.cs" />
     <Compile Include="SharedExtensions.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="StringEnum.cs" />

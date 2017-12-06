@@ -28,7 +28,8 @@ class Script
                 },
                 new RegValue(fullSetup, RegistryHive.LocalMachine, "Software\\My Company\\My Product", "Message", "Hello"),
                 new RegValue(fullSetup, RegistryHive.LocalMachine, "Software\\My Company\\My Product", "Count", 777),
-                new RegValue(fullSetup, RegistryHive.ClassesRoot, "test\\shell\\open\\command", "", "\"[INSTALLDIR]test.exe\" \"%1\""));
+                new RegValue(fullSetup, RegistryHive.ClassesRoot, "test\\shell\\open\\command", "", "\"[INSTALLDIR]test.exe\" \"%1\""),
+				new RemoveRegistryValue("Software\\My Company\\My Product"));
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.UI = WUI.WixUI_ProgressOnly;
