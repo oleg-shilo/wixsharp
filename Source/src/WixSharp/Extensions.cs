@@ -1216,7 +1216,12 @@ namespace WixSharp
                 return Environment.ExpandEnvironmentVariables(path);
         }
 
-        internal static string EscapeIllegalCharacters(this string data)
+        /// <summary>
+        /// Escapes the illegal characters in the WiX Id value.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <returns></returns>
+        public static string EscapeIllegalCharacters(this string data)
         {
             string retval = data;
             List<char> legalChars = new List<char>();
