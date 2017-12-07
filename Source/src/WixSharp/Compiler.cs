@@ -3137,10 +3137,11 @@ namespace WixSharp
                 else if (wAction is CustomActionRef)
                 {
                     var wCustomActionRef = (CustomActionRef) wAction;
+                    var whenstr = wCustomActionRef.When == When.After ? "After" : "Before";
                     sequences.ForEach(sequence =>
                         sequence.Add(new XElement("Custom", wCustomActionRef.Condition.ToXValue(),
                             new XAttribute("Action", wCustomActionRef.Id),
-                            new XAttribute("Before", wCustomActionRef.Step))));
+                            new XAttribute(whenstr, wCustomActionRef.Step))));
 
                     product.Add(new XElement("CustomActionRef",
                         new XAttribute("Id", wCustomActionRef.Id)));
