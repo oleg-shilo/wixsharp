@@ -3140,7 +3140,7 @@ namespace WixSharp
                     sequences.ForEach(sequence =>
                         sequence.Add(new XElement("Custom", wCustomActionRef.Condition.ToXValue(),
                             new XAttribute("Action", wCustomActionRef.Id),
-                            new XAttribute("Before", wCustomActionRef.Step))));
+                            new XAttribute(wCustomActionRef.When.ToString(), wCustomActionRef.Step))));
 
                     product.Add(new XElement("CustomActionRef",
                         new XAttribute("Id", wCustomActionRef.Id)));
