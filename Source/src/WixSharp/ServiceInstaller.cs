@@ -160,7 +160,7 @@ namespace WixSharp
         /// <returns>
         /// Collection of XML entities to be added to the project XML result
         /// </returns>
-        internal object[] ToXml(Project project)
+        public object[] ToXml(Project project)
         {
             var result = new List<XElement>();
 
@@ -236,7 +236,7 @@ namespace WixSharp
                 || ResetPeriodInDays.HasValue
                 || RestartServiceDelayInSeconds.HasValue)
             {
-                project.IncludeWixExtension(WixExtension.Util);
+                project?.IncludeWixExtension(WixExtension.Util);
 
                 var serviceConfig = new XElement(WixExtension.Util.ToXNamespace() + "ServiceConfig");
 

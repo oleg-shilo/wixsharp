@@ -5543,6 +5543,13 @@
             <param name="path">The path.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.EscapeIllegalCharacters(System.String)">
+            <summary>
+            Escapes the illegal characters in the WiX Id value.
+            </summary>
+            <param name="data">The data.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.PresentIn``1(``0,``0)">
             <summary>
             Reverse equivalent of Enum.HasFlag of .NET v4.5

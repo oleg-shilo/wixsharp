@@ -1323,6 +1323,12 @@ namespace WixSharp.CommonTasks
             return config;
         }
 
+        static public XElement CreateParentComponent(this WixEntity entity)
+        {
+            return new XElement("Component").AddAttributes($@"Id={entity.Id};
+Guid={WixGuid.NewGuid(entity.Id)}");
+        }
+
         /// <summary>
         /// Installs the windows service. It uses InstallUtil.exe to complete the actual installation/uninstallation.
         /// During the run for the InstallUtil.exe console window is hidden.
