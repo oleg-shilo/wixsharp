@@ -18,7 +18,7 @@ class Script
                           new Dir(@"%ProgramFiles%\CustomActionTest",
                               new File("readme.txt"))
                           {
-                              IsInstallDir = true //optional, as Wix# recognizes the top level dir as the installation directory 
+                              IsInstallDir = true //optional, as Wix# recognizes the top level dir as the installation directory
                           },
 
                           new ManagedAction(CustomActions.MyAction));
@@ -46,4 +46,3 @@ public class CustomActions
         return ActionResult.Success;
     }
 }
-

@@ -1323,10 +1323,14 @@ namespace WixSharp.CommonTasks
             return config;
         }
 
+        /// <summary>
+        /// Creates the parent component for a given <see cref="WixSharp.WixEntity"/>.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
         static public XElement CreateParentComponent(this WixEntity entity)
         {
-            return new XElement("Component").AddAttributes($@"Id={entity.Id};
-Guid={WixGuid.NewGuid(entity.Id)}");
+            return new XElement("Component").AddAttributes($@"Id={entity.Id}; Guid={WixGuid.NewGuid(entity.Id)}");
         }
 
         /// <summary>
