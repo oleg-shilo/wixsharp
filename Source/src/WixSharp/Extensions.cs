@@ -2081,6 +2081,28 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Builds an MSI condition expression for the given <see cref="WixSharp.Feature"/>, which evaluates
+        /// as <c>true</c> if the feature is being installed.
+        /// </summary>
+        /// <param name="feature">The feature.</param>
+        /// <returns></returns>
+        public static Condition BeingInstall(this Feature feature)
+        {
+            return new Condition($"((!{feature.Id} = 2) AND (&{feature.Id} = 3))");
+        }
+
+        /// <summary>
+        /// Builds an MSI condition expression for the given <see cref="WixSharp.Feature"/>, which evaluates
+        /// as <c>true</c> if the feature is being uninstalled.
+        /// </summary>
+        /// <param name="feature">The feature.</param>
+        /// <returns></returns>
+        public static Condition BeingUninstall(this Feature feature)
+        {
+            return new Condition($"((&{feature.Id} = 2) AND (!{feature.Id} = 3))");
+        }
+
+        /// <summary>
         /// Determines whether this is basic UI level.
         /// </summary>
         /// <param name="level">The level.</param>
