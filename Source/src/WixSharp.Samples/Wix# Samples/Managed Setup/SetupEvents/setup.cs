@@ -56,6 +56,17 @@ public class Script
         project.AfterInstall += project_AfterInstall;
         project.DefaultDeferredProperties += ",ADDLOCAL";
 
+        project.BeforeInstall += session =>
+        {
+            if (!session.IsUninstalling)
+                Tasks.StopService("some_service", throwOnError: false);
+        };
+        project.AfterInstall += session =>
+        {
+            if (!session.IsUninstalling)
+                Tasks.StartService("some_service", throwOnError: false);
+        };
+
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         // project.PreserveTempFiles = true;
 

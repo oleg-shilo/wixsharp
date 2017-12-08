@@ -973,7 +973,7 @@ namespace WixSharp
                 var target_path = this.GetTargetPathOf(file);
 
                 var dir_hash = Math.Abs(target_path.PathGetDirName().GetHashCode32());
-                var file_name = target_path.PathGetFileName();
+                var file_name = target_path.PathGetFileName().EscapeIllegalCharacters();
 
                 if (Compiler.AutoGeneration.HashedTargetPathIdAlgorithm_FileIdMask != null)
                     return Compiler.AutoGeneration.HashedTargetPathIdAlgorithm_FileIdMask

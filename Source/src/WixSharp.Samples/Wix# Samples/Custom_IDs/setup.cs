@@ -90,7 +90,7 @@ class Script
                  new Dir(@"%ProgramFiles%\My Company\My Product",
                      new File(@"Files\Bin\MyApp.exe"),
                      new Dir(@"Docs\Manual",
-                         new File(@"Files\Docs\Manual.txt"))));
+                         new File(@"Files\Docs\User Manual.txt"))));
 
         // globally via delegate
         Compiler.AutoGeneration.CustomIdAlgorithm = project.HashedTargetPathIdAlgorithm;
@@ -133,7 +133,7 @@ class Script
                 // WiX does not allow '-' char in ID. So need to use `Math.Abs`
 
                 var dir_hash = Math.Abs(target_path.PathGetDirName().GetHashCode32());
-                var file_name = target_path.PathGetFileName();
+                var file_name = target_path.PathGetFileName().EscapeIllegalCharacters();
 
                 return "File.{0}.{1}".FormatWith(dir_hash, file_name);
                 // return $"{file_name}.{dir_hash}"; // the equivalent of the built-in algorithm
