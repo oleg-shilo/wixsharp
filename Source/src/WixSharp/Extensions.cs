@@ -2557,14 +2557,15 @@ namespace WixSharp
 
             var result = new List<XAttribute>();
 
+            // BindingFlags.NonPublic is needed to cover "internal" but not necessarily "private"
             var fields = obj.GetType()
-                            .GetFields()
+                            .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                             .Cast<MemberInfo>()
                             .ToArray();
 
             var props = obj.GetType()
-                           .GetProperties()
-                           .Where(x => x.CanRead && x.CanWrite)
+                           .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                           .Where(x => x.CanRead)
                            .Cast<MemberInfo>()
                            .ToArray();
 

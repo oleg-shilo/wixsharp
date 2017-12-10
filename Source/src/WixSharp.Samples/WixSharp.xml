@@ -3323,6 +3323,93 @@
             <param name="pattern">The wildcard pattern to convert.</param>
             <returns>A regex equivalent of the given wildcard.</returns>
         </member>
+        <member name="T:WixSharp.FileSearch">
+            <summary>
+            Searches for file and assigns to fullpath value of parent Property
+            </summary>
+            <example>The following sample demonstrates how to use FileSearch in canonical WiX RegisterySearch and FileSearch use-case.
+            the reg file:
+            <code>
+            var project =
+                new Project("MyProduct",
+                    new Dir(@"%ProgramFiles%\My Company\My Product",
+                    new Property("SQL_BROWSER_LOCATION",
+                        new RegistrySearch(RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\services\SQLBrowser", "ImagePath", RegistrySearchType.file,
+                            new FileSearch("sqlbrowser.exe"))),
+                    ...
+            Compiler.BuildMsi(project);
+            </code>
+            </example>
+        </member>
+        <member name="P:WixSharp.FileSearch.Id">
+            <summary>
+            Unique identifier for the file search and external key into the Signature table.
+            </summary>
+            <value>
+            The identifier.
+            </value>
+        </member>
+        <member name="F:WixSharp.FileSearch.Languages">
+            <summary>
+            The languages supported by the file.
+            </summary>
+        </member>
+        <member name="F:WixSharp.FileSearch.DateTime">
+            <summary>
+            The maximum modification date and time of the file. Formatted as YYYY-MM-DDTHH:mm:ss,
+            where YYYY is the year, MM is month, DD is day, 'T' is literal, HH is hour, mm is
+            minute and ss is second.
+            </summary>
+        </member>
+        <member name="F:WixSharp.FileSearch.MaxSize">
+            <summary>
+            The maximum size of the file.
+            </summary>
+        </member>
+        <member name="F:WixSharp.FileSearch.MaxVersion">
+            <summary>
+            The minimum version of the file
+            </summary>
+        </member>
+        <member name="F:WixSharp.FileSearch.Name">
+            <summary>
+            In prior versions of the WiX toolset, this attribute specified the short file name.
+            This attribute's value may now be either a short or long file name. If a short file name
+            is specified, the ShortName attribute may not be specified. If a long file name is specified,
+            the LongName attribute may not be specified. If you wish to manually specify the short file name,
+            then the ShortName attribute may be specified.
+            </summary>
+        </member>
+        <member name="F:WixSharp.FileSearch.ShortName">
+            <summary>
+            The short file name of the file in 8.3 format. There is a Windows Installer bug which prevents the
+            FileSearch functionality from working if both a short and long file name are specified. Since the
+            Name attribute allows either a short or long name to be specified, it is the only attribute related
+            to file names which should be specified.
+            </summary>
+        </member>
+        <member name="M:WixSharp.FileSearch.#ctor(WixSharp.Id,System.String,WixSharp.IGenericEntity[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.FileSearch"/> class.
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="name">The name.</param>
+            <param name="children">The children.</param>
+        </member>
+        <member name="M:WixSharp.FileSearch.#ctor(System.String,WixSharp.IGenericEntity[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.FileSearch"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="children">The children.</param>
+        </member>
+        <member name="M:WixSharp.FileSearch.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project" />.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
         <member name="T:WixSharp.IniFileAction">
             <summary>
             The type of modification to be made.
@@ -4051,10 +4138,16 @@
             <summary>
             Map of features and their associated components. The map contains pairs of Features and their component IDs.
             <para>
-            If <see cref="T:WixSharp.IGenericEntity"/> needs to create a component it can immediately 
+            If <see cref="T:WixSharp.IGenericEntity"/> needs to create a component it can immediately
             associate this component with either existing feature in the map or add a new map entry.
             </para>
             </summary>
+        </member>
+        <member name="M:WixSharp.ProcessingContext.Clone">
+            <summary>
+            Clones this instance.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:WixSharp.IGenericEntity">
             <summary>
@@ -4067,6 +4160,39 @@
             See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
             </summary>
             <param name="context">The context.</param>
+        </member>
+        <member name="T:WixSharp.GenericNestedEntity">
+            <summary>
+            Base class for implementing WixEntities that follow simple XML nesting paradigm so common in WiX.
+            </summary>
+        </member>
+        <member name="P:WixSharp.GenericNestedEntity.Id">
+            <summary>
+            Gets or sets the <c>Id</c> value of the <see cref="T:WixSharp.WixEntity" />.
+            <para>This value is used as a <c>Id</c> for the corresponding WiX XML element.</para><para>If the <see cref="P:WixSharp.WixEntity.Id" /> value is not specified explicitly by the user the Wix# compiler
+            generates it automatically insuring its uniqueness.</para><remarks>
+            Note: The ID auto-generation is triggered on the first access (evaluation) and in order to make the id
+            allocation deterministic the compiler resets ID generator just before the build starts. However if you
+            accessing any auto-id before the Build*() is called you can it interferes with the ID auto generation and eventually
+            lead to the WiX ID duplications. To prevent this from happening either:"
+            <para> - Avoid evaluating the auto-generated IDs values before the call to Build*()</para><para> - Set the IDs (to be evaluated) explicitly</para><para> - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";</para></remarks>
+            </summary>
+            <value>
+            The id.
+            </value>
+        </member>
+        <member name="F:WixSharp.GenericNestedEntity.Children">
+            <summary>
+            The nested WixEntities that are to be converted int0 nested XML nodes at compile time.
+            </summary>
+        </member>
+        <member name="M:WixSharp.GenericNestedEntity.Process(WixSharp.ProcessingContext,System.String)">
+            <summary>
+            Adds itself as an XML content (element of the specified name) into the WiX source being generated from the <see cref="T:WixSharp.Project" />.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
+            <param name="elementName">Name of the element.</param>
         </member>
         <member name="T:WixSharp.InternetShortcut">
              <summary>
@@ -4964,6 +5090,120 @@
             <summary>
             Indicates what install sequence should ScheduleReboot be placed to.
             </summary>
+        </member>
+        <member name="T:WixSharp.RegistrySearchType">
+            <summary>
+            The value must be 'file' if the child is a FileSearch element, and must be 'directory' if child is a DirectorySearch element. This attribute's value must be one of the following:
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegistrySearchType.directory">
+            <summary>
+            The registry value contains the path to a directory.
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegistrySearchType.file">
+             <summary>
+            The registry value contains the path to a file. To return the full file path you must add a FileSearch element as a child of this element; otherwise, the parent directory of the file path is returned.
+             </summary>
+        </member>
+        <member name="F:WixSharp.RegistrySearchType.raw">
+            <summary>
+            <para> Sets the raw value from the registry value. Please note that this value will contain a prefix as follows:</para>
+            <para></para>
+            <para> DWORD: Starts with '#' optionally followed by '+' or '-'.</para>
+            <para> REG_BINARY: Starts with '#x' and the installer converts and saves each hexadecimal digit (nibble) as an ASCII character prefixed by '#x'.</para>
+            <para> REG_EXPAND_SZ: Starts with '#%'.</para>
+            <para> REG_MULTI_SZ: Starts with '[~]' and ends with '[~]'.</para>
+            <para> REG_SZ: No prefix, but if the first character of the registry value is '#', the installer escapes the character by prefixing it with another '#'.</para>
+            </summary>
+        </member>
+        <member name="T:WixSharp.RegistrySearch">
+             <summary>
+             Searches for file, directory or registry key and assigns to value of parent Property.
+             </summary>
+             <example>The following sample demonstrates how to use RegisterySearch in canonical WiX RegisterySearch and FileSearch use-case.
+             the reg file:
+             <code>
+             var project =
+                 new Project("MyProduct",
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+                     new Property("SQL_BROWSER_LOCATION",
+                         new RegistrySearch(RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\services\SQLBrowser", "ImagePath", RegistrySearchType.file,
+                             new FileSearch("sqlbrowser.exe"))),
+                     ...
+            
+             Compiler.BuildMsi(project);
+             </code>
+             </example>
+        </member>
+        <member name="P:WixSharp.RegistrySearch.Id">
+            <summary>
+            Signature to be used for the file, directory or registry key being searched for.
+            </summary>
+            <value>
+            The identifier.
+            </value>
+        </member>
+        <member name="F:WixSharp.RegistrySearch.Name">
+            <summary>
+            Registry value name. If this value is null, then the value from the key's unnamed or default value, if any, is retrieved.
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegistrySearch.Root">
+            <summary>
+            Root key for the registry value.This attribute's value must be one of the following:
+            <para>- ClassesRoot</para>
+            <para>- CurrentUser</para>
+            <para>- LocalMachine</para>
+            <para>- Users</para>
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegistrySearch.Key">
+            <summary>
+            Key for the registry value.
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegistrySearch.Type">
+            <summary>
+            The value must be 'file' if the child is a FileSearch element, and must be 'directory' if child is a DirectorySearch element.
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegistrySearch.Win64">
+            <summary>
+            Instructs the search to look in the 64-bit registry when the value is 'true'.
+            When the value is 'false', the search looks in the 32-bit registry.
+            The default value is based on the platform set by the -arch switch to candle.exe or
+            the InstallerPlatform property in a .wixproj MSBuild project: For x86 and ARM,
+            the default value is 'false'. For x64 and IA64, the default value is 'true'.
+            </summary>
+        </member>
+        <member name="M:WixSharp.RegistrySearch.#ctor(WixSharp.Id,Microsoft.Win32.RegistryHive,System.String,System.String,WixSharp.RegistrySearchType,WixSharp.IGenericEntity[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.RegistrySearch"/> class.
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="root">The root.</param>
+            <param name="key">The key.</param>
+            <param name="name">The name.</param>
+            <param name="type">The type.</param>
+            <param name="children">The children.</param>
+        </member>
+        <member name="M:WixSharp.RegistrySearch.#ctor(Microsoft.Win32.RegistryHive,System.String,System.String,WixSharp.RegistrySearchType,WixSharp.IGenericEntity[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.RegistrySearch"/> class.
+            </summary>
+            <param name="root">The root.</param>
+            <param name="key">The key.</param>
+            <param name="name">The name.</param>
+            <param name="type">The type.</param>
+            <param name="children">The children.</param>
+        </member>
+        <member name="M:WixSharp.RegistrySearch.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project" />.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.RemoveRegistryValue">
             <summary>
@@ -12436,16 +12676,17 @@
              </code>
              </example>
         </member>
-        <member name="M:WixSharp.Property.#ctor">
+        <member name="M:WixSharp.Property.#ctor(WixSharp.IGenericEntity[])">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.Property"/> class.
             </summary>
         </member>
-        <member name="M:WixSharp.Property.#ctor(System.String)">
+        <member name="M:WixSharp.Property.#ctor(System.String,WixSharp.IGenericEntity[])">
             <summary>
-            Initializes a new instance of the <see cref="T:WixSharp.Property"/> class with properties/fields initialized with specified parameters.
+            Initializes a new instance of the <see cref="T:WixSharp.Property" /> class with properties/fields initialized with specified parameters.
             </summary>
             <param name="name">The name of the property.</param>
+            <param name="children">The children.</param>
         </member>
         <member name="M:WixSharp.Property.#ctor(System.String,System.String)">
             <summary>
@@ -12465,6 +12706,11 @@
         <member name="F:WixSharp.Property.Value">
             <summary>
             The initial value of the property.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Property.GenericItems">
+            <summary>
+            Collection of the nested user defined <see cref="T:WixSharp.IGenericEntity"/> items.
             </summary>
         </member>
         <member name="F:WixSharp.Property.IsDeferred">

@@ -80,7 +80,7 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            context.Project.IncludeWixExtension(WixExtension.Util);
+            // context.Project.IncludeWixExtension(WixExtension.Util);
 
             context.XParent
                    .FindFirst("Component")

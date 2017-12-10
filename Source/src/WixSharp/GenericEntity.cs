@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace WixSharp
@@ -26,11 +27,25 @@ namespace WixSharp
         /// <summary>
         /// Map of features and their associated components. The map contains pairs of Features and their component IDs.
         /// <para>
-        /// If <see cref="WixSharp.IGenericEntity"/> needs to create a component it can immediately 
+        /// If <see cref="WixSharp.IGenericEntity"/> needs to create a component it can immediately
         /// associate this component with either existing feature in the map or add a new map entry.
         /// </para>
         /// </summary>
         public Dictionary<Feature, List<string>> FeatureComponents;
+
+        /// <summary>
+        /// Clones this instance.
+        /// </summary>
+        /// <returns></returns>
+        public ProcessingContext Clone()
+        {
+            return new ProcessingContext
+            {
+                FeatureComponents = this.FeatureComponents,
+                XParent = this.XParent,
+                Parent = this.Parent
+            };
+        }
     }
 
     /// <summary>
@@ -44,5 +59,58 @@ namespace WixSharp
         /// </summary>
         /// <param name="context">The context.</param>
         void Process(ProcessingContext context);
+    }
+
+    /// <summary>
+    /// Base class for implementing WixEntities that follow simple XML nesting paradigm so common in WiX.
+    /// </summary>
+    public abstract class GenericNestedEntity : WixEntity
+    {
+        /// <summary>
+        /// Gets or sets the <c>Id</c> value of the <see cref="T:WixSharp.WixEntity" />.
+        /// <para>This value is used as a <c>Id</c> for the corresponding WiX XML element.</para><para>If the <see cref="P:WixSharp.WixEntity.Id" /> value is not specified explicitly by the user the Wix# compiler
+        /// generates it automatically insuring its uniqueness.</para><remarks>
+        /// Note: The ID auto-generation is triggered on the first access (evaluation) and in order to make the id
+        /// allocation deterministic the compiler resets ID generator just before the build starts. However if you
+        /// accessing any auto-id before the Build*() is called you can it interferes with the ID auto generation and eventually
+        /// lead to the WiX ID duplications. To prevent this from happening either:"
+        /// <para> - Avoid evaluating the auto-generated IDs values before the call to Build*()</para><para> - Set the IDs (to be evaluated) explicitly</para><para> - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";</para></remarks>
+        /// </summary>
+        /// <value>
+        /// The id.
+        /// </value>
+        [Xml]
+        new public string Id
+        {
+            get => base.Id;
+            set => Id = value;
+        }
+
+        /// <summary>
+        /// The nested WixEntities that are to be converted int0 nested XML nodes at compile time.
+        /// </summary>
+        public IGenericEntity[] Children = new IGenericEntity[0];
+
+        /// <summary>
+        /// Adds itself as an XML content (element of the specified name) into the WiX source being generated from the <see cref="T:WixSharp.Project" />.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="elementName">Name of the element.</param>
+        virtual public void Process(ProcessingContext context, string elementName)
+        {
+            // serialize itself and add to the parent component
+            var thisElement = context.XParent
+                                     .AddElement(this.ToXElement(elementName));
+
+            if (Children != null && Children.Any())
+            {
+                var newContext = context.Clone();
+                newContext.Parent = this;
+                newContext.XParent = thisElement;
+
+                Children.ForEach(x => x.Process(newContext));
+            }
+        }
     }
 }

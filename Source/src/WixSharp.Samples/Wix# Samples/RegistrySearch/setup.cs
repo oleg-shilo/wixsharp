@@ -3,6 +3,7 @@
 //css_ref System.Core.dll;
 
 using Microsoft.Win32;
+using System.Linq;
 using WixSharp;
 
 class Script
@@ -24,18 +25,13 @@ class Script
                                  RegistryHive.LocalMachine, @"Software\Microsoft\NET Framework Setup\NDP\v3.0", "Install", "0"),
 
             new RegValueProperty("NETFRAMEWORK35",
-                                 RegistryHive.LocalMachine, @"Software\Microsoft\NET Framework Setup\NDP\v3.5", "Install", "0"));
+                                 RegistryHive.LocalMachine, @"Software\Microsoft\NET Framework Setup\NDP\v3.5", "Install", "0"),
+
+            new Property("SQL_BROWSER_LOCATION",
+                new RegistrySearch(RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\services\SQLBrowser", "ImagePath", RegistrySearchType.file,
+                    new FileSearch("sqlbrowser.exe"))));
 
         project.PreserveTempFiles = true;
         project.BuildMsi();
     }
 }
-
-
-
-
-
-
-
-
-

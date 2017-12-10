@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,7 +24,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
 
 namespace WixSharp
 {
@@ -131,18 +133,22 @@ namespace WixSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="Property"/> class.
         /// </summary>
-        public Property()
+        public Property(params IGenericEntity[] children)
         {
+            GenericItems = children;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Property"/> class with properties/fields initialized with specified parameters.
+        /// Initializes a new instance of the <see cref="Property" /> class with properties/fields initialized with specified parameters.
         /// </summary>
         /// <param name="name">The name of the property.</param>
-        public Property(string name)
+        /// <param name="children">The children.</param>
+        public Property(string name, params IGenericEntity[] children)
         {
             Name = name;
+            GenericItems = children;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Property"/> class with properties/fields initialized with specified parameters.
         /// </summary>
@@ -172,6 +178,10 @@ namespace WixSharp
         /// </summary>
         public string Value = "";
 
+        /// <summary>
+        /// Collection of the nested user defined <see cref="IGenericEntity"/> items.
+        /// </summary>
+        public IGenericEntity[] GenericItems = new IGenericEntity[0];
 
         /// <summary>
         /// The flag indicating if the property needs to be 'preserved' for use with the deferred custom actions.

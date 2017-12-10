@@ -1296,7 +1296,7 @@ namespace WixSharp
             ProcessFirewallExceptions(project, featureComponents, defaultFeatureComponents, product);
             ProcessUrlReservations(project, featureComponents, defaultFeatureComponents, product);
             ProcessIniFiles(project, featureComponents, defaultFeatureComponents, product);
-            ProcessProperties(project, product);
+            ProcessProperties(project, product, featureComponents);
             ProcessCustomActions(project, product);
 
             //it is important to call ProcessBinaries after all other Process* (except ProcessFeatures)
@@ -1973,7 +1973,7 @@ namespace WixSharp
                 }
             }
         }
-        
+
         static void ProcessFilePermissions(Project wProject, File wFile, XElement file)
         {
             if (wFile.Permissions.Any())
@@ -2592,7 +2592,7 @@ namespace WixSharp
         static void ProcessIniFiles(Project project, Dictionary<Feature, List<string>> featureComponents, List<string> defaultFeatureComponents, XElement product)
         {
             if (!project.IniFiles.Any()) return;
-            
+
             int componentCount = 0;
             foreach (IniFile item in project.IniFiles)
             {
@@ -2779,7 +2779,7 @@ namespace WixSharp
             }
         }
 
-        static void ProcessProperties(Project wProject, XElement product)
+        static void ProcessProperties(Project wProject, XElement product, Dictionary<Feature, List<string>> featureComponents)
         {
             var properties = wProject.Properties.ToList();
 
@@ -2834,10 +2834,24 @@ namespace WixSharp
                 }
                 else
                 {
-                    product.Add(new XElement("Property")
-                                    .SetAttribute("Id", prop.Name)
-                                    .SetAttribute("Value", prop.Value)
-                                    .AddAttributes(prop.Attributes));
+                    var parentElement = product.AddElement(new XElement("Property")
+                                               .SetAttribute("Id", prop.Name)
+                                               .SetAttribute("Value", prop.Value)
+                                               .AddAttributes(prop.Attributes));
+
+                    if (prop.GenericItems.Any())
+                    {
+                        var context = new ProcessingContext
+                        {
+                            Project = wProject,
+                            Parent = prop,
+                            XParent = parentElement,
+                            FeatureComponents = featureComponents
+                        };
+
+                        foreach (IGenericEntity item in prop.GenericItems)
+                            item.Process(context);
+                    }
                 }
             }
         }
@@ -3117,7 +3131,7 @@ namespace WixSharp
                                 new XAttribute("Sequence", "execute"),
                                 new XAttribute("Value", mapping)));
                         }
-                        
+
                         sequences.ForEach(sequence =>
                             sequence.Add(new XElement("Custom", wAction.Condition.ToXValue(),
                                 new XAttribute("Action", roollbackActionId),
@@ -3136,7 +3150,7 @@ namespace WixSharp
                 }
                 else if (wAction is CustomActionRef)
                 {
-                    var wCustomActionRef = (CustomActionRef) wAction;
+                    var wCustomActionRef = (CustomActionRef)wAction;
                     sequences.ForEach(sequence =>
                         sequence.Add(new XElement("Custom", wCustomActionRef.Condition.ToXValue(),
                             new XAttribute("Action", wCustomActionRef.Id),
@@ -3147,7 +3161,7 @@ namespace WixSharp
                 }
                 else if (wAction is WixQuietExecAction)
                 {
-                    var quietExecAction = (WixQuietExecAction) wAction;
+                    var quietExecAction = (WixQuietExecAction)wAction;
                     var cmdLineActionId = wAction.Id;
                     var setCmdLineActionId = "Set_" + cmdLineActionId;
 
@@ -3208,7 +3222,7 @@ namespace WixSharp
                 }
                 else if (wAction is InstalledFileAction)
                 {
-                    var fileAction = (InstalledFileAction) wAction;
+                    var fileAction = (InstalledFileAction)wAction;
 
                     sequences.ForEach(sequence =>
                         sequence.Add(
@@ -3248,7 +3262,7 @@ namespace WixSharp
                 }
                 else if (wAction is BinaryFileAction)
                 {
-                    var binaryAction = (BinaryFileAction) wAction;
+                    var binaryAction = (BinaryFileAction)wAction;
 
                     sequences.ForEach(sequence =>
                         sequence.Add(
@@ -3288,7 +3302,7 @@ namespace WixSharp
                 }
                 else if (wAction is PathFileAction)
                 {
-                    var fileAction = (PathFileAction) wAction;
+                    var fileAction = (PathFileAction)wAction;
 
                     sequences.ForEach(sequence =>
                         sequence.Add(

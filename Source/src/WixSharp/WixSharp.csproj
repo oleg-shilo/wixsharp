@@ -125,6 +125,7 @@
     <Compile Include="Certificate.cs" />
     <Compile Include="CommonTasks.cs" />
     <Compile Include="Compiler.Bootstrapper.cs" />
+    <Compile Include="FileSearch.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="NativeImage.cs" />
     <Compile Include="EventSource.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Permissions.cs" />
     <Compile Include="Properties\AssemblyInfo.version.cs" />
     <Compile Include="Reboot.cs" />
+    <Compile Include="RegistrySearch.cs" />
     <Compile Include="RemoveRegistryValue.cs" />
     <Compile Include="RemoveRegistryKey.cs" />
     <Compile Include="SharedExtensions.cs" />
