@@ -1798,10 +1798,6 @@ namespace WixSharp
                              new XAttribute("ProcessorArchitecture", ((Assembly)wFile).ProcessorArchitecture.ToString()));
                 }
 
-
-                wFile.DriverInstaller.Compile(wProject, comp);
-
-
                 //insert file associations
                 foreach (FileAssociation wFileAssociation in wFile.Associations)
                 {

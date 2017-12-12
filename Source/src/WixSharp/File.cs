@@ -137,7 +137,6 @@ namespace WixSharp
             Associations = items.OfType<FileAssociation>().ToArray();
             IISVirtualDirs = items.OfType<IISVirtualDir>().ToArray();
             ServiceInstaller = items.OfType<ServiceInstaller>().FirstOrDefault();
-            DriverInstaller = items.OfType<DriverInstaller>().FirstOrDefault();
             Permissions = items.OfType<FilePermission>().ToArray();
             GenericItems = items.OfType<IGenericEntity>().ToArray();
 
@@ -161,7 +160,6 @@ namespace WixSharp
                                                 typeof(FileAssociation),
                                                 typeof(ServiceInstaller),
                                                 typeof(FilePermission),
-                                                typeof(DriverInstaller),
                                                 typeof(FirewallException),
                                                 typeof(IGenericEntity)));
         }
