@@ -149,7 +149,6 @@ namespace WixSharp
                                            .Except(FirewallExceptions)
                                            .Except(GenericItems.Cast<WixEntity>())
                                            .Where(x => x != ServiceInstaller)
-                                           .Where(x => x != DriverInstaller)
                                            .ToArray();
 
             if (firstUnExpectedItem.Any())
