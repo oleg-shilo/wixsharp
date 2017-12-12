@@ -93,7 +93,6 @@ namespace WixSharp
             var envvars = new List<EnvironmentVariable>();
             var props = new List<Property>();
             var bins = new List<Binary>();
-            var users = new List<User>();
             var sqls = new List<SqlDatabase>();
             var certs = new List<Certificate>();
             var genericItems = new List<IGenericEntity>();
@@ -150,8 +149,6 @@ namespace WixSharp
                         GUID = (item as WixGuid).Value;
                     else if (item is Media)
                         Media.Add(item as Media);
-                    else if (item is User)
-                        users.Add(item as User);
                     else if (item is SqlDatabase)
                         sqls.Add(item as SqlDatabase);
                     else if (item is Certificate)
@@ -169,7 +166,6 @@ namespace WixSharp
             Properties = props.ToArray();
             Binaries = bins.ToArray();
             EnvironmentVariables = envvars.ToArray();
-            Users = users.ToArray();
             SqlDatabases = sqls.ToArray();
             Certificates = certs.ToArray();
             FirewallExceptions = fwexceptions.ToArray();
@@ -575,12 +571,7 @@ namespace WixSharp
         /// Collection of the <see cref="T:WixSharp.LaunchCondition"/>s associated with the setup.
         /// </summary>
         public List<LaunchCondition> LaunchConditions = new List<LaunchCondition>();
-
-        /// <summary>
-        /// Collection of Wix:UtilExtension User objects representings users 'for all kinds of things'
-        /// </summary>
-        public User[] Users = new User[0];
-
+		
         /// <summary>
         /// Collection of WiX:SqlExtension SqlDatabase objects representing databases to be created,
         /// modifed, or interacted with during MSI execution.
