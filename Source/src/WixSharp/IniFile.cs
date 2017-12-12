@@ -516,23 +516,23 @@ namespace WixSharp
             Value = value;
         }
 
-		/// <summary>
-		/// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
-		/// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Process(ProcessingContext context)
-		{
-			XElement component = this.CreateParentComponent();
-			component.Add(this.ToXElement("IniFile"));
-			context.XParent.FindFirst("Component").Parent?.Add(component);
+        /// <summary>
+        /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        public void Process(ProcessingContext context)
+        {
+            XElement component = this.CreateParentComponent();
+            component.Add(this.ToXElement("IniFile"));
+            context.XParent.FindFirst("Component").Parent?.Add(component);
 
-			if (ActualFeatures.Any())
-				context.FeatureComponents.Map(ActualFeatures, Id);
-			else if (context.FeatureComponents.ContainsKey(context.Project.DefaultFeature))
-				context.FeatureComponents[context.Project.DefaultFeature].Add(Id);
-			else
-				context.FeatureComponents[context.Project.DefaultFeature] = new List<string> { Id };
-		}
-	}
+            if (ActualFeatures.Any())
+                context.FeatureComponents.Map(ActualFeatures, Id);
+            else if (context.FeatureComponents.ContainsKey(context.Project.DefaultFeature))
+                context.FeatureComponents[context.Project.DefaultFeature].Add(Id);
+            else
+                context.FeatureComponents[context.Project.DefaultFeature] = new List<string> {Id};
+        }
+    }
 }
