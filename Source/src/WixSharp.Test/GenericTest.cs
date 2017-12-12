@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
 using Xunit;
 using WixSharp;
@@ -101,7 +102,7 @@ namespace WixSharp.Test
                 Scope = FirewallExceptionScope.localSubnet,
             };
 
-            var xml = obj.ToXml();
+            XElement xml = obj.ToXElement("FirewallException");
 
             Assert.Equal("descr", xml.Attribute("Description").Value);
             Assert.Equal("fff", xml.Attribute("File").Value);
