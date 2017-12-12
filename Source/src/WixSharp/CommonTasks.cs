@@ -601,29 +601,6 @@ namespace WixSharp.CommonTasks
         /// <param name="project">The project.</param>
         /// <param name="item">The item.</param>
         /// <returns></returns>
-        static public Project AddSqlDatabase(this Project project, SqlDatabase item)
-        {
-            return project.AddSqlDatabases(item);
-        }
-
-        /// <summary>
-        /// Adds the SqlDatabases to the Project.
-        /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="items">The items.</param>
-        /// <returns></returns>
-        static public Project AddSqlDatabases(this Project project, params SqlDatabase[] items)
-        {
-            project.SqlDatabases = project.SqlDatabases.Combine(items).Distinct().ToArray();
-            return project;
-        }
-
-        /// <summary>
-        /// Adds the SqlDatabase to the Project.
-        /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="item">The item.</param>
-        /// <returns></returns>
         static public Project AddFirewallException(this Project project, FirewallException item)
         {
             return project.AddFirewallExceptions(item);

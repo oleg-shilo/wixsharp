@@ -94,7 +94,6 @@ namespace WixSharp
             var props = new List<Property>();
             var bins = new List<Binary>();
             var users = new List<User>();
-            var sqls = new List<SqlDatabase>();
             var certs = new List<Certificate>();
             var genericItems = new List<IGenericEntity>();
             var fwexceptions = new List<FirewallException>();
@@ -152,8 +151,6 @@ namespace WixSharp
                         Media.Add(item as Media);
                     else if (item is User)
                         users.Add(item as User);
-                    else if (item is SqlDatabase)
-                        sqls.Add(item as SqlDatabase);
                     else if (item is Certificate)
                         certs.Add(item as Certificate);
                     else if (item is IGenericEntity)
@@ -170,7 +167,6 @@ namespace WixSharp
             Binaries = bins.ToArray();
             EnvironmentVariables = envvars.ToArray();
             Users = users.ToArray();
-            SqlDatabases = sqls.ToArray();
             Certificates = certs.ToArray();
             FirewallExceptions = fwexceptions.ToArray();
             UrlReservations = urlreservation.ToArray();
@@ -580,13 +576,7 @@ namespace WixSharp
         /// Collection of Wix:UtilExtension User objects representings users 'for all kinds of things'
         /// </summary>
         public User[] Users = new User[0];
-
-        /// <summary>
-        /// Collection of WiX:SqlExtension SqlDatabase objects representing databases to be created,
-        /// modifed, or interacted with during MSI execution.
-        /// </summary>
-        public SqlDatabase[] SqlDatabases = new SqlDatabase[0];
-
+        
         /// <summary>
         /// Path to the file containing the image (e.g. bmp) setup dialogs banner. If not specified default image will be used.
         /// </summary>

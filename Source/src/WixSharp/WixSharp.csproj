@@ -143,7 +143,9 @@
     <Compile Include="RemoveRegistryValue.cs" />
     <Compile Include="RemoveRegistryKey.cs" />
     <Compile Include="SharedExtensions.cs" />
-    <Compile Include="Sql.cs" />
+    <Compile Include="SqlDatabase.cs" />
+    <Compile Include="SqlScript.cs" />
+    <Compile Include="SqlString.cs" />
     <Compile Include="StringEnum.cs" />
     <Compile Include="UrlReservation.cs" />
     <Compile Include="User.cs" />
