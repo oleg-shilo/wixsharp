@@ -1471,7 +1471,15 @@ namespace WixSharp
             return element.Name.LocalName.SameAs(elementName, ignoreCase);
         }
 
-        internal static void Map(this Dictionary<Feature, List<string>> featureComponents, IEnumerable<Feature> features, string componentId)
+        /// <summary>
+        /// Iterates through the all already prepared/processed components grouped by features and either
+        /// add the new component to the existing group or to the freshly created one.
+        /// <para>featureComponents[feature].Add(componentId);</para>
+        /// </summary>
+        /// <param name="featureComponents">The feature components.</param>
+        /// <param name="features">The features.</param>
+        /// <param name="componentId">The component identifier.</param>
+        public static void Map(this Dictionary<Feature, List<string>> featureComponents, IEnumerable<Feature> features, string componentId)
         {
             foreach (var item in features)
                 featureComponents.MapOld(item, componentId);
