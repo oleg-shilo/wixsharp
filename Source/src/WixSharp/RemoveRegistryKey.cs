@@ -1,4 +1,6 @@
-﻿using System.Xml.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 using Microsoft.Win32;
 using WixSharp.CommonTasks;
 
@@ -47,6 +49,9 @@ namespace WixSharp
         /// </summary>
         public RegistryHive Root = RegistryHive.LocalMachine;
 
+		[Xml(Name = "Root")]
+		private string root {get { return Root.ToWString(); }}
+
         /// <summary>
         /// This is the action that will be taken for this registry value.
         /// </summary>
@@ -62,6 +67,17 @@ namespace WixSharp
             Key = key;
         }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
+		/// </summary>
+		/// <param name="feature">The Feature.</param>
+		/// <param name="key">The Key.</param>
+		public RemoveRegistryKey(Feature feature, string key)
+        {
+			Feature = feature;
+            Key = key;
+		}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
         /// </summary>
@@ -72,6 +88,43 @@ namespace WixSharp
             Root = root;
             Key = key;
         }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
+		/// </summary>
+		/// <param name="feature">The Feature.</param>
+		/// <param name="root">The Root.</param>
+		/// <param name="key">The Key.</param>
+		public RemoveRegistryKey(Feature feature, RegistryHive root, string key)
+        {
+			Feature = feature;
+            Root = root;
+			Key = key;
+        }
+
+		/// <summary>
+	    /// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
+	    /// </summary>
+	    /// <param name="key">The Key.</param>
+	    /// <param name="action">The Action.</param>
+	    public RemoveRegistryKey(string key, RemoveRegistryKeyAction action)
+	    {
+		    Key = key;
+		    Action = action;
+	    }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
+		/// </summary>
+		/// <param name="feature">The Feature.</param>
+		/// <param name="key">The Key.</param>
+		/// <param name="action">The Action.</param>
+		public RemoveRegistryKey(Feature feature, string key, RemoveRegistryKeyAction action)
+	    {
+			Feature = feature;
+		    Key = key;
+			Action = action;
+	    }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
@@ -86,6 +139,21 @@ namespace WixSharp
             Action = action;
         }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
+		/// </summary>
+		/// <param name="feature">The Feature.</param>
+		/// <param name="root">The Root.</param>
+		/// <param name="key">The Key.</param>
+		/// <param name="action">The Action.</param>
+		public RemoveRegistryKey(Feature feature, RegistryHive root, string key, RemoveRegistryKeyAction action)
+        {
+			Feature = feature;
+            Root = root;
+			Key = key;
+            Action = action;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
         /// </summary>
@@ -96,6 +164,19 @@ namespace WixSharp
             Id = id;
             Key = key;
         }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
+		/// </summary>
+		/// <param name="id">The Id.</param>
+		/// <param name="feature">The Feature.</param>
+		/// <param name="key">The Key.</param>
+		public RemoveRegistryKey(Id id, Feature feature, string key)
+        {
+            Id = id;
+			Feature = feature;
+            Key = key;
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
@@ -109,6 +190,49 @@ namespace WixSharp
             Root = root;
             Key = key;
         }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
+		/// </summary>
+		/// <param name="id">The Id.</param>
+		/// <param name="feature">The Feature.</param>
+		/// <param name="root">The Root.</param>
+		/// <param name="key">The Key.</param>
+		public RemoveRegistryKey(Id id, Feature feature, RegistryHive root, string key)
+        {
+            Id = id;
+			Feature = feature;
+            Root = root;
+			Key = key;
+        }
+
+		/// <summary>
+	    /// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
+	    /// </summary>
+	    /// <param name="id">The Id.</param>
+	    /// <param name="key">The Key.</param>
+	    /// <param name="action">The Action.</param>
+	    public RemoveRegistryKey(Id id, string key, RemoveRegistryKeyAction action)
+	    {
+		    Id = id;
+		    Key = key;
+		    Action = action;
+	    }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
+		/// </summary>
+		/// <param name="id">The Id.</param>
+		/// <param name="feature">The Feature.</param>
+		/// <param name="key">The Key.</param>
+		/// <param name="action">The Action.</param>
+		public RemoveRegistryKey(Id id, Feature feature, string key, RemoveRegistryKeyAction action)
+	    {
+		    Id = id;
+			Feature = feature;
+		    Key = key;
+			Action = action;
+	    }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
@@ -124,6 +248,23 @@ namespace WixSharp
             Key = key;
             Action = action;
         }
+		
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemoveRegistryKey" /> class.
+		/// </summary>
+		/// <param name="id">The Id.</param>
+		/// <param name="feature">The Feature.</param>
+		/// <param name="root">The Root.</param>
+		/// <param name="key">The Key.</param>
+		/// <param name="action">The Action.</param>
+		public RemoveRegistryKey(Id id, Feature feature, RegistryHive root, string key, RemoveRegistryKeyAction action)
+        {
+            Id = id;
+			Feature = feature;
+            Root = root;
+			Key = key;
+            Action = action;
+        }
 
         /// <summary>
         /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
@@ -132,10 +273,17 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            context.XParent
-                .FindFirst("Component")
-                .Add(this.ToXElement("RemoveRegistryKey")
-                .AddAttributes("Root={0}".FormatWith(Root.ToWString())));
-        }
-    }
+	        XElement component = this.CreateParentComponent();
+	        component.Add(this.ToXElement("RemoveRegistryKey"));
+	        context.XParent.FindFirst("Component").Parent?.Add(component);
+
+	        if (ActualFeatures.Any())
+		        context.FeatureComponents.Map(ActualFeatures, Id);
+	        else
+		        if (context.FeatureComponents.ContainsKey(context.Project.DefaultFeature))
+			        context.FeatureComponents[context.Project.DefaultFeature].Add(Id);
+		        else
+			        context.FeatureComponents[context.Project.DefaultFeature] = new List<string> { Id };
+		}
+	}
 }
