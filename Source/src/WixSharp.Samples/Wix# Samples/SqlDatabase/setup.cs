@@ -14,17 +14,15 @@ class Script
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(@"Files\Bin\MyApp.exe")),
                 //define users
-                new User(new Id("MyOtherUser"), "James") { CreateUser = true, Password = "Password1"},
+                new User(new Id("MyOtherUser"), "James") {CreateUser = true, Password = "Password1"},
+                new User("James") {Password = "Password1"},
                 //define sql
                 new SqlDatabase("MyDatabase0", ".\\SqlExpress", SqlDbOption.CreateOnInstall));
                     //new SqlString("alter login Bryce with password = 'Password1'", ExecuteSql.OnInstall)));
-                
+
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         project.PreserveTempFiles = true;
         project.BuildMsi();
     }
 }
-
-
-

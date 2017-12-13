@@ -550,29 +550,6 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Adds the User to the Project.
-        /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="item">The item.</param>
-        /// <returns></returns>
-        static public Project AddUser(this Project project, User item)
-        {
-            return project.AddUsers(item);
-        }
-
-        /// <summary>
-        /// Adds the Users to the Project.
-        /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="items">The items.</param>
-        /// <returns></returns>
-        static public Project AddUsers(this Project project, params User[] items)
-        {
-            project.Users = project.Users.Combine(items).Distinct().ToArray();
-            return project;
-        }
-
-        /// <summary>
         /// Adds the SqlDatabase to the Project.
         /// </summary>
         /// <param name="project">The project.</param>
