@@ -636,30 +636,7 @@ namespace WixSharp.CommonTasks
         /// <param name="installedVersion">The detected installed product version.</param>
         /// <returns></returns>
         public delegate bool DowngradeErrorCheck(Version thisVersion, Version installedVersion);
-
-        /// <summary>
-        /// Adds the environment variable to the Project.
-        /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="item">The item.</param>
-        /// <returns></returns>
-        static public Project AddEnvironmentVariable(this Project project, EnvironmentVariable item)
-        {
-            return project.AddEnvironmentVariables(item);
-        }
-
-        /// <summary>
-        /// Adds the environment variable items to the Project.
-        /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="items">The items.</param>
-        /// <returns></returns>
-        static public Project AddEnvironmentVariables(this Project project, params EnvironmentVariable[] items)
-        {
-            project.EnvironmentVariables = project.EnvironmentVariables.Combine(items).Distinct().ToArray();
-            return project;
-        }
-
+        
         /// <summary>
         /// Adds the assembly reference to the ManagedAction.
         /// </summary>

@@ -90,7 +90,6 @@ namespace WixSharp
             var dirs = new List<Dir>();
             var actions = new List<Action>();
             var regs = new List<RegValue>();
-            var envvars = new List<EnvironmentVariable>();
             var props = new List<Property>();
             var bins = new List<Binary>();
             var sqls = new List<SqlDatabase>();
@@ -120,8 +119,6 @@ namespace WixSharp
                         actions.Add(item as Action);
                     else if (item is RegValue)
                         regs.Add(item as RegValue);
-                    else if (item is EnvironmentVariable)
-                        envvars.Add(item as EnvironmentVariable);
                     else if (item is FirewallException)
                         fwexceptions.Add(item as FirewallException);
                     else if (item is UrlReservation)
@@ -162,7 +159,6 @@ namespace WixSharp
             RegValues = regs.ToArray();
             Properties = props.ToArray();
             Binaries = bins.ToArray();
-            EnvironmentVariables = envvars.ToArray();
             SqlDatabases = sqls.ToArray();
             Certificates = certs.ToArray();
             FirewallExceptions = fwexceptions.ToArray();
@@ -494,11 +490,6 @@ namespace WixSharp
         /// Collection of <see cref="RegValue"/>s to be set during the installation.
         /// </summary>
         public RegValue[] RegValues = new RegValue[0];
-
-        /// <summary>
-        /// Collection of <see cref="EnvironmentVariable"/>s to be set during the installation.
-        /// </summary>
-        public EnvironmentVariable[] EnvironmentVariables = new EnvironmentVariable[0];
 
         /// <summary>
         /// Collection of <see cref="Certificate"/> to be installed.
