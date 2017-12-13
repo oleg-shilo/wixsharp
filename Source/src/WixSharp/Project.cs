@@ -95,7 +95,6 @@ namespace WixSharp
             var sqls = new List<SqlDatabase>();
             var certs = new List<Certificate>();
             var genericItems = new List<IGenericEntity>();
-            var fwexceptions = new List<FirewallException>();
             var urlreservation = new List<UrlReservation>();
 
             if (items.OfType<Media>().Any())
@@ -119,8 +118,6 @@ namespace WixSharp
                         actions.Add(item as Action);
                     else if (item is RegValue)
                         regs.Add(item as RegValue);
-                    else if (item is FirewallException)
-                        fwexceptions.Add(item as FirewallException);
                     else if (item is UrlReservation)
                         urlreservation.Add(item as UrlReservation);
                     else if (item is RegFile)
@@ -161,7 +158,6 @@ namespace WixSharp
             Binaries = bins.ToArray();
             SqlDatabases = sqls.ToArray();
             Certificates = certs.ToArray();
-            FirewallExceptions = fwexceptions.ToArray();
             UrlReservations = urlreservation.ToArray();
             GenericItems = genericItems.ToArray();
         }
@@ -495,12 +491,7 @@ namespace WixSharp
         /// Collection of <see cref="Certificate"/> to be installed.
         /// </summary>
         public Certificate[] Certificates = new Certificate[0];
-
-        /// <summary>
-        /// Collection of <see cref="FirewallException"/> to be installed.
-        /// </summary>
-        public FirewallException[] FirewallExceptions = new FirewallException[0];
-
+        
         /// <summary>
         /// Collection of <see cref="UrlReservation"/> to be installed.
         /// </summary>

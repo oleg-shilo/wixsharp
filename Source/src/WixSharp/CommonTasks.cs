@@ -573,29 +573,6 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Adds the SqlDatabase to the Project.
-        /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="item">The item.</param>
-        /// <returns></returns>
-        static public Project AddFirewallException(this Project project, FirewallException item)
-        {
-            return project.AddFirewallExceptions(item);
-        }
-
-        /// <summary>
-        /// Adds the SqlDatabases to the Project.
-        /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="items">The items.</param>
-        /// <returns></returns>
-        static public Project AddFirewallExceptions(this Project project, params FirewallException[] items)
-        {
-            project.FirewallExceptions = project.FirewallExceptions.Combine(items).Distinct().ToArray();
-            return project;
-        }
-
-        /// <summary>
         /// Adds the binary items to the Project.
         /// </summary>
         /// <param name="project">The project.</param>

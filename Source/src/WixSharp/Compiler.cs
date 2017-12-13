@@ -1291,7 +1291,6 @@ namespace WixSharp
             ProcessRegKeys(project, featureComponents, defaultFeatureComponents, product);
             ProcessSql(project, featureComponents, defaultFeatureComponents, product);
             ProcessCertificates(project, featureComponents, defaultFeatureComponents, product);
-            ProcessFirewallExceptions(project, featureComponents, defaultFeatureComponents, product);
             ProcessUrlReservations(project, featureComponents, defaultFeatureComponents, product);
             ProcessProperties(project, product, featureComponents);
             ProcessCustomActions(project, product);
@@ -1873,10 +1872,7 @@ namespace WixSharp
 
                 // insert file owned permissions
                 ProcessFilePermissions(wProject, wFile, file);
-
-                // insert file owned Firewall exception
-                ProcessFileFirewallException(wProject, wFile, file);
-
+                
                 // Expand/serialize file owned generic items and insert the in to the `File` element
                 ProcessGenericItems(wFile, wProject, featureComponents, defaultFeatureComponents, file);
             }
@@ -1949,24 +1945,6 @@ namespace WixSharp
                         new XElement("Property",
                                     new XAttribute("Id", prop.Name),
                                     new XAttribute("Value", prop.Value)));
-                }
-            }
-        }
-
-        static void ProcessFileFirewallException(Project wProject, File wFile, XElement file)
-        {
-            if (wFile.FirewallExceptions.Any())
-            {
-                wProject.IncludeWixExtension(WixExtension.Fire);
-
-                foreach (var item in wFile.FirewallExceptions)
-                {
-                    XElement xml = item.ToXml();
-
-                    if (item.Program.IsEmpty() && item.File.IsEmpty()) //assume parent file
-                        xml.SetAttribute("File=" + file.Attribute("Id").Value);
-
-                    file.Parent("Component").Add(xml);
                 }
             }
         }
@@ -2454,35 +2432,6 @@ namespace WixSharp
                 sqlString.EmitAttributes(sqlStringElement);
 
                 sqlStringComponent.Add(sqlStringElement);
-            }
-        }
-
-        static void ProcessFirewallExceptions(Project project, Dictionary<Feature, List<string>> featureComponents, List<string> defaultFeatureComponents, XElement product)
-        {
-            if (!project.FirewallExceptions.Any()) return;
-
-            project.IncludeWixExtension(WixExtension.Fire);
-
-            int componentCount = 0;
-            foreach (FirewallException item in project.FirewallExceptions)
-            {
-                componentCount++;
-
-                var compId = "FirewallException" + componentCount;
-
-                if (item.ActualFeatures.Any())
-                    featureComponents.Map(item.ActualFeatures, compId);
-                else
-                    defaultFeatureComponents.Add(compId);
-
-                var topLevelDir = GetTopLevelDir(product);
-
-                var comp = topLevelDir.AddElement(
-                               new XElement("Component",
-                                   new XAttribute("Id", compId),
-                                   new XAttribute("Guid", WixGuid.NewGuid(compId))));
-
-                comp.Add(item.ToXml());
             }
         }
 
