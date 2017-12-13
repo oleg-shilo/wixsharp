@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
@@ -38,7 +41,7 @@ namespace WixSharp
     /// <summary>
     /// Adds or removes .ini file entries.
     /// </summary>
-    public class IniFile : WixEntity
+    public class IniFile : WixEntity, IGenericEntity
     {
         /// <summary>
         /// Identifier for ini file.
@@ -76,7 +79,7 @@ namespace WixSharp
         /// However, if this name collides with another file or you wish to manually specify the short name, then the ShortName attribute may be specified.
         /// </summary>
         [Xml]
-        public new string Name;
+        public new string Name { get => base.Name; set => base.Name = value; }
 
         /// <summary>
         /// This attribute has been deprecated; please use the Name attribute instead.
@@ -514,14 +517,22 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Emits WiX XML for IniFile.
+        /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
         /// </summary>
-        /// <returns></returns>
-        public XElement ToXml()
+        /// <param name="context">The context.</param>
+        public void Process(ProcessingContext context)
         {
-            var retval = this.ToXElement("IniFile");
+            XElement component = this.CreateParentComponent();
+            component.Add(this.ToXElement("IniFile"));
+            context.XParent.FindFirst("Component").Parent?.Add(component);
 
-            return retval;
+            if (ActualFeatures.Any())
+                context.FeatureComponents.Map(ActualFeatures, Id);
+            else if (context.FeatureComponents.ContainsKey(context.Project.DefaultFeature))
+                context.FeatureComponents[context.Project.DefaultFeature].Add(Id);
+            else
+                context.FeatureComponents[context.Project.DefaultFeature] = new List<string> {Id};
         }
     }
 }
