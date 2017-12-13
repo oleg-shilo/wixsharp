@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
     /// <summary>
     /// Represents a WixUtilExtension User
     /// </summary>
-    public class User : WixEntity
+    public class User : WixEntity, IGenericEntity
     {
         #region Constructors
 
@@ -133,68 +136,93 @@ namespace WixSharp
         #region Wix User attributes
 
         /// <summary>
+        /// Primary key used to identify this particular entry.
+        /// </summary>
+        [Xml]
+        public new string Id { get { return base.Id; } set { base.Id = value; } }
+
+        /// <summary>
         /// Maps to the CanNotChangePassword property of User
         /// </summary>
+        [Xml]
         public bool? CanNotChangePassword; //only allowed under a component
 
         /// <summary>
         /// Maps to the CreateUser property of User
         /// </summary>
+        [Xml]
         public bool? CreateUser; //only allowed under a component
 
         /// <summary>
         /// Maps to the Disabled property of User
         /// </summary>
+        [Xml]
         public bool? Disabled; //only allowed under a component
 
         /// <summary>
         /// Maps to the Domain property of User
         /// </summary>
+        [Xml]
         public string Domain;
 
         /// <summary>
         /// Maps to the FailIfExists property of User
         /// </summary>
+        [Xml]
         public bool? FailIfExists; //only allowed under a component
 
         /// <summary>
         /// Maps to the LogOnAsBatchJob property of User
         /// </summary>
+        [Xml]
         public bool? LogonAsBatchJob; //only allowed under a component
 
         /// <summary>
         /// Maps to the LogOnAsService property of User
         /// </summary>
+        [Xml]
         public bool? LogonAsService; //only allowed under a component
+
+        /// <summary>
+        /// A Formatted string that contains the name of the user account.
+        /// </summary>
+        [Xml]
+        public new string Name { get => base.Name; set => base.Name = value; }
 
         /// <summary>
         /// Maps to the Password property of User
         /// </summary>
+        [Xml]
         public string Password;
 
         /// <summary>
         /// Maps to the PasswordExpired property of User
         /// </summary>
+        [Xml]
         public bool? PasswordExpired; //only allowed under a component
 
         /// <summary>
         /// Maps to the PasswordNeverExpires property of User
         /// </summary>
+        [Xml]
         public bool? PasswordNeverExpires; //only allowed under a component
 
         /// <summary>
         /// Maps to the RemoveOnUninstall property of User
         /// </summary>
+        [Xml]
         public bool? RemoveOnUninstall; //only allowed under a component
 
         /// <summary>
         /// Maps to the UpdateIfExists property of User
         /// </summary>
+        [Xml]
         public bool? UpdateIfExists; //only allowed under a component
 
         /// <summary>
         /// Maps to the Vital property of User
         /// </summary>
+        [Xml]
         public bool? Vital; //only allowed under a component
 
         #endregion Wix User attributes
@@ -222,30 +250,34 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Emits WiX XML.
+        /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
         /// </summary>
-        /// <returns></returns>
-        public XContainer[] ToXml()
+        /// <param name="context">The context.</param>
+        public void Process(ProcessingContext context)
         {
-            var userElement = new XElement(WixExtension.Util.ToXNamespace() + "User")
-                                  .SetAttribute("Id", Id)
-                                  .SetAttribute("Name", Name)
-                                  .SetAttribute("CanNotChangePassword", CanNotChangePassword)
-                                  .SetAttribute("CreateUser", CreateUser)
-                                  .SetAttribute("Disabled", Disabled)
-                                  .SetAttribute("Domain", Domain)
-                                  .SetAttribute("FailIfExists", FailIfExists)
-                                  .SetAttribute("LogonAsBatchJob", LogonAsBatchJob)
-                                  .SetAttribute("LogonAsService", LogonAsService)
-                                  .SetAttribute("Password", Password)
-                                  .SetAttribute("PasswordExpired", PasswordExpired)
-                                  .SetAttribute("PasswordNeverExpires", PasswordNeverExpires)
-                                  .SetAttribute("RemoveOnUninstall", RemoveOnUninstall)
-                                  .SetAttribute("UpdateIfExists", UpdateIfExists)
-                                  .SetAttribute("Vital", Vital)
-                                  .AddAttributes(this.Attributes);
+            if (MustDescendFromComponent)
+            {
+                context.Project.IncludeWixExtension(WixExtension.Util);
 
-            return new[] { userElement };
+                XElement component = this.CreateParentComponent();
+                component.Add(this.ToXElement(WixExtension.Util, "User"));
+                context.XParent.FindFirst("Component").Parent?.Add(component);
+
+                if (ActualFeatures.Any())
+                    context.FeatureComponents.Map(ActualFeatures, Id);
+                else if (context.FeatureComponents.ContainsKey(context.Project.DefaultFeature))
+                    context.FeatureComponents[context.Project.DefaultFeature].Add(Id);
+                else
+                    context.FeatureComponents[context.Project.DefaultFeature] = new List<string> {Id};
+            }
+            else
+            {
+                context.Project.IncludeWixExtension(WixExtension.Util);
+
+                context.XParent.Add(this.ToXElement(WixExtension.Util, "User"));
+            }
+
         }
     }
 }
