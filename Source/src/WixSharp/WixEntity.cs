@@ -215,10 +215,10 @@ namespace WixSharp
         /// <summary>
         /// Maps the component to features. If no features specified then the component is added to the default ("Complete") feature.
         /// </summary>
-        /// <param name="context">The context.</param>
         /// <param name="componentId">The component identifier.</param>
         /// <param name="features">The features.</param>
-        public void MapComponentToFeatures(ProcessingContext context, string componentId, Feature[] features)
+        /// <param name="context">The context.</param>
+        public void MapComponentToFeatures(string componentId, Feature[] features, ProcessingContext context)
         {
             if (features.Any())
                 context.FeatureComponents.Map(features, componentId);

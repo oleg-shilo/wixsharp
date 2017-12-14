@@ -591,22 +591,6 @@
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddFirewallException(WixSharp.Project,WixSharp.FirewallException)">
-            <summary>
-            Adds the SqlDatabase to the Project.
-            </summary>
-            <param name="project">The project.</param>
-            <param name="item">The item.</param>
-            <returns></returns>
-        </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddFirewallExceptions(WixSharp.Project,WixSharp.FirewallException[])">
-            <summary>
-            Adds the SqlDatabases to the Project.
-            </summary>
-            <param name="project">The project.</param>
-            <param name="items">The items.</param>
-            <returns></returns>
-        </member>
         <member name="M:WixSharp.CommonTasks.Tasks.AddBinaries(WixSharp.Project,WixSharp.Binary[])">
             <summary>
             Adds the binary items to the Project.
@@ -640,22 +624,6 @@
             </summary>
             <param name="thisVersion">The version of the product being installed.</param>
             <param name="installedVersion">The detected installed product version.</param>
-            <returns></returns>
-        </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddEnvironmentVariable(WixSharp.Project,WixSharp.EnvironmentVariable)">
-            <summary>
-            Adds the environment variable to the Project.
-            </summary>
-            <param name="project">The project.</param>
-            <param name="item">The item.</param>
-            <returns></returns>
-        </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddEnvironmentVariables(WixSharp.Project,WixSharp.EnvironmentVariable[])">
-            <summary>
-            Adds the environment variable items to the Project.
-            </summary>
-            <param name="project">The project.</param>
-            <param name="items">The items.</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.CommonTasks.Tasks.AddRefAssembly(WixSharp.ManagedAction,System.String)">
@@ -3892,6 +3860,11 @@
             </code>
             </example>
         </member>
+        <member name="P:WixSharp.FirewallException.Id">
+            <summary>
+            Primary key used to identify this particular entry.
+            </summary>
+        </member>
         <member name="F:WixSharp.FirewallException.Description">
             <summary>
             Description for this firewall rule displayed in Windows Firewall manager in Windows Vista and later.
@@ -4000,11 +3973,12 @@
             <param name="id">The id.</param>
             <param name="name">The name.</param>
         </member>
-        <member name="M:WixSharp.FirewallException.ToXml">
+        <member name="M:WixSharp.FirewallException.Process(WixSharp.ProcessingContext)">
             <summary>
-            Emits WiX XML for FirewallException.
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
             </summary>
-            <returns></returns>
+            <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.FontFile">
              <summary>
@@ -8952,7 +8926,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.EnvironmentVariable"/> class.
             </summary>
-            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.EnvironmentVariable"/> instance.</param>
+            <param name="id">The explicit <see cref="P:WixSharp.EnvironmentVariable.Id"></see> to be associated with <see cref="T:WixSharp.EnvironmentVariable"/> instance.</param>
             <param name="name">The name of the environment variable.</param>
             <param name="value">The value of the environment variable.</param>
         </member>
@@ -8968,10 +8942,20 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.EnvironmentVariable"/> class.
             </summary>
-            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.EnvironmentVariable"/> instance.</param>
+            <param name="id">The explicit <see cref="P:WixSharp.EnvironmentVariable.Id"></see> to be associated with <see cref="T:WixSharp.EnvironmentVariable"/> instance.</param>
             <param name="feature"><see cref="T:WixSharp.Feature"></see> the environment variable should be included in.</param>
             <param name="name">The name.</param>
             <param name="value">The value.</param>
+        </member>
+        <member name="P:WixSharp.EnvironmentVariable.Id">
+            <summary>
+            Primary key used to identify this particular entry.
+            </summary>
+        </member>
+        <member name="P:WixSharp.EnvironmentVariable.Name">
+            <summary>
+            This is the localizable name of the environment variable
+            </summary>
         </member>
         <member name="F:WixSharp.EnvironmentVariable.System">
             <summary>
@@ -9006,10 +8990,12 @@
             determine if the registry value should be created on the target system.
             </summary>
         </member>
-        <member name="M:WixSharp.EnvironmentVariable.ToXml">
+        <member name="M:WixSharp.EnvironmentVariable.Process(WixSharp.ProcessingContext)">
             <summary>
-            Emits the XML.
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
             </summary>
+            <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.FileAssociation">
              <summary>
@@ -12476,19 +12462,9 @@
             Collection of <see cref="T:WixSharp.RegValue"/>s to be set during the installation.
             </summary>
         </member>
-        <member name="F:WixSharp.Project.EnvironmentVariables">
-            <summary>
-            Collection of <see cref="T:WixSharp.EnvironmentVariable"/>s to be set during the installation.
-            </summary>
-        </member>
         <member name="F:WixSharp.Project.Certificates">
             <summary>
             Collection of <see cref="T:WixSharp.Certificate"/> to be installed.
-            </summary>
-        </member>
-        <member name="F:WixSharp.Project.FirewallExceptions">
-            <summary>
-            Collection of <see cref="T:WixSharp.FirewallException"/> to be installed.
             </summary>
         </member>
         <member name="F:WixSharp.Project.UrlReservations">
