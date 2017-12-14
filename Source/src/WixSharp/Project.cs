@@ -90,13 +90,11 @@ namespace WixSharp
             var dirs = new List<Dir>();
             var actions = new List<Action>();
             var regs = new List<RegValue>();
-            var envvars = new List<EnvironmentVariable>();
             var props = new List<Property>();
             var bins = new List<Binary>();
             var sqls = new List<SqlDatabase>();
             var certs = new List<Certificate>();
             var genericItems = new List<IGenericEntity>();
-            var fwexceptions = new List<FirewallException>();
             var urlreservation = new List<UrlReservation>();
 
             if (items.OfType<Media>().Any())
@@ -120,10 +118,6 @@ namespace WixSharp
                         actions.Add(item as Action);
                     else if (item is RegValue)
                         regs.Add(item as RegValue);
-                    else if (item is EnvironmentVariable)
-                        envvars.Add(item as EnvironmentVariable);
-                    else if (item is FirewallException)
-                        fwexceptions.Add(item as FirewallException);
                     else if (item is UrlReservation)
                         urlreservation.Add(item as UrlReservation);
                     else if (item is RegFile)
@@ -162,10 +156,8 @@ namespace WixSharp
             RegValues = regs.ToArray();
             Properties = props.ToArray();
             Binaries = bins.ToArray();
-            EnvironmentVariables = envvars.ToArray();
             SqlDatabases = sqls.ToArray();
             Certificates = certs.ToArray();
-            FirewallExceptions = fwexceptions.ToArray();
             UrlReservations = urlreservation.ToArray();
             GenericItems = genericItems.ToArray();
         }
@@ -496,20 +488,10 @@ namespace WixSharp
         public RegValue[] RegValues = new RegValue[0];
 
         /// <summary>
-        /// Collection of <see cref="EnvironmentVariable"/>s to be set during the installation.
-        /// </summary>
-        public EnvironmentVariable[] EnvironmentVariables = new EnvironmentVariable[0];
-
-        /// <summary>
         /// Collection of <see cref="Certificate"/> to be installed.
         /// </summary>
         public Certificate[] Certificates = new Certificate[0];
-
-        /// <summary>
-        /// Collection of <see cref="FirewallException"/> to be installed.
-        /// </summary>
-        public FirewallException[] FirewallExceptions = new FirewallException[0];
-
+        
         /// <summary>
         /// Collection of <see cref="UrlReservation"/> to be installed.
         /// </summary>

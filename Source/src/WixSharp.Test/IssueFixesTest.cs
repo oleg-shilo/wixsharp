@@ -112,7 +112,7 @@ namespace WixSharp.Test
                     new Dir(@"%ProgramFiles%\MyCompany",
                         new Dir("MyWebApp", new File("Default.aspx"))));
 
-            project.AddEnvironmentVariable(new EnvironmentVariable("someVar", "Some value") { AttributesDefinition = "DiskId=2" });
+            project.Add(new EnvironmentVariable("someVar", "Some value") { AttributesDefinition = "DiskId=2" });
 
             string wxs = project.BuildWxs();
 

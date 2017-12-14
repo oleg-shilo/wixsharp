@@ -27,9 +27,10 @@ THE SOFTWARE.
 
 #endregion Licence...
 
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
@@ -77,8 +78,14 @@ namespace WixSharp
     ///                 ...
     /// </code>
     /// </example>
-    public class FirewallException : WixEntity
+    public class FirewallException : WixEntity, IGenericEntity
     {
+        /// <summary>
+        /// Primary key used to identify this particular entry.
+        /// </summary>
+        [Xml]
+        public new string Id { get { return base.Id; } set { base.Id = value; } }
+
         /// <summary>
         /// Description for this firewall rule displayed in Windows Firewall manager in Windows Vista and later.
         /// </summary>
@@ -209,22 +216,40 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Emits WiX XML for FirewallException.
+        /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
         /// </summary>
-        /// <returns></returns>
-        public XElement ToXml()
+        /// <param name="context">The context.</param>
+        public void Process(ProcessingContext context)
         {
-            var retval = this.ToXElement(WixExtension.Fire.ToXName("FirewallException"))
-                             .SetAttribute("Id", this.Id)
-                             .SetAttribute("Name", this.Name)
-                             .AddAttributes(this.Attributes);
+            context.Project.IncludeWixExtension(WixExtension.Fire);
+
+            var firewallElement = this.ToXElement(WixExtension.Fire, "FirewallException");
 
             RemoteAddress.ForEach(address =>
             {
-                retval.Add(WixExtension.Fire.XElement("RemoteAddress", (object)address));
+                firewallElement.Add(WixExtension.Fire.XElement("RemoteAddress", (object)address.Trim()));
             });
+            
+            var findComponent = context.XParent.FindFirst("Component");
 
-            return retval;
+            if (findComponent != null)
+            {
+                XElement newComponent = this.CreateParentComponent();
+                newComponent.Add(firewallElement);
+                findComponent.Parent?.Add(newComponent);
+
+                if (ActualFeatures.Any())
+                    context.FeatureComponents.Map(ActualFeatures, Id);
+                else if (context.FeatureComponents.ContainsKey(context.Project.DefaultFeature))
+                    context.FeatureComponents[context.Project.DefaultFeature].Add(Id);
+                else
+                    context.FeatureComponents[context.Project.DefaultFeature] = new List<string> { Id };
+            }
+            else
+            {
+                context.XParent.Add(firewallElement);
+            }
         }
     }
 }
