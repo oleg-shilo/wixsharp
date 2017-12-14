@@ -137,7 +137,6 @@ namespace WixSharp
             Associations = items.OfType<FileAssociation>().ToArray();
             IISVirtualDirs = items.OfType<IISVirtualDir>().ToArray();
             ServiceInstaller = items.OfType<ServiceInstaller>().FirstOrDefault();
-            DriverInstaller = items.OfType<DriverInstaller>().FirstOrDefault();
             Permissions = items.OfType<FilePermission>().ToArray();
             GenericItems = items.OfType<IGenericEntity>().ToArray();
 
@@ -150,18 +149,16 @@ namespace WixSharp
                                            .Except(FirewallExceptions)
                                            .Except(GenericItems.Cast<WixEntity>())
                                            .Where(x => x != ServiceInstaller)
-                                           .Where(x => x != DriverInstaller)
                                            .ToArray();
 
             if (firstUnExpectedItem.Any())
-                throw new ApplicationException("{0} is unexpected. Only {2}, {3}, {4}, {5}, {6}, {7} and {8} items can be added to {1}".FormatWith(
+                throw new ApplicationException("{0} is unexpected. Only {2}, {3}, {4}, {5}, {6} and {7} items can be added to {1}".FormatWith(
                                                 firstUnExpectedItem.First().GetType(),
                                                 this.GetType(),
                                                 typeof(FileShortcut),
                                                 typeof(FileAssociation),
                                                 typeof(ServiceInstaller),
                                                 typeof(FilePermission),
-                                                typeof(DriverInstaller),
                                                 typeof(FirewallException),
                                                 typeof(IGenericEntity)));
         }
@@ -176,13 +173,7 @@ namespace WixSharp
         ///  Set this field to the properly initialized instance of <see cref="ServiceInstaller"/> if the file is a windows service module.
         /// </summary>
         public ServiceInstaller ServiceInstaller = null;
-
-        /// <summary>
-        /// The driver installer associated with the file. Set this field to the properly initialized
-        /// instance of <see cref="DriverInstaller"/> if the file is a windows driver.
-        /// </summary>
-        public DriverInstaller DriverInstaller = null;
-
+        
         /// <summary>
         /// Collection of the contained <see cref="IISVirtualDir"/>s.
         /// </summary>

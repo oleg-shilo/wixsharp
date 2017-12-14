@@ -49,11 +49,12 @@ namespace WixSharp
     ///project.BuildMsi();
     /// </code>
     /// </example>
-    public partial class DriverInstaller : WixEntity
+    public partial class DriverInstaller : WixEntity, IGenericEntity
     {
         /// <summary>
         /// Specifies that the DIFxApp CustomActions should add an entry in the Add/Remove Programs Control Panel applet. The default is 'true'.
         /// </summary>
+        [Xml]
         public bool? AddRemovePrograms;
 
         /// <summary>
@@ -63,6 +64,7 @@ namespace WixSharp
         /// MsiDriverPackages custom table. Setting DeleteFiles to "true" sets the corresponding bit in the Flags entry value. Setting DeleteFiles 
         /// to "false" clears the corresponding bit in the Flags entry value. If this attribute is not present, DIFxApp uses a default value of "false".
         /// </summary>
+        [Xml]
         public bool? DeleteFiles;
 
         /// <summary>
@@ -73,6 +75,7 @@ namespace WixSharp
         /// bit in the Flags entry value. Setting Legacy to "false" clears the bit in the Flags entry value that configures DIFxApp to install unsigned 
         /// driver packages. If this attribute is not present, DIFxApp uses a default value of "false".
         /// </summary>
+        [Xml]
         public bool? ForceInstall;
 
         /// <summary>
@@ -83,11 +86,13 @@ namespace WixSharp
         /// corresponding bit in the Flags entry value. Setting Legacy to "false" clears the bit in the Flags entry value that configures DIFxApp to 
         /// install unsigned driver packages. If this attribute is not present, DIFxApp uses a default value of "false"
         /// </summary>
+        [Xml]
         public bool? Legacy;
 
         /// <summary>
         /// Specifies that the DIFxApp CustomActions should prompt the user to connect the Plug and Play device if it is not connected. The default is 'true'.
         /// </summary>
+        [Xml]
         public bool? PlugAndPlayPrompt;
 
         /// <summary>
@@ -95,42 +100,25 @@ namespace WixSharp
         /// of increasing sequence numbers. The same sequence number can be used for more than one driver; however, the order in which packages with the 
         /// same sequence number are actually installed cannot be determined.
         /// </summary>
+        [Xml]
         public int? Sequence;
+
         /// <summary>
         /// The architecture of the driver to be installed. Default value is 'x86'
         /// </summary>
         public DriverArchitecture Architecture = DriverArchitecture.x86;
-
+        
         /// <summary>
-        /// Emits WiX XML.
+        /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
         /// </summary>
-        /// <returns></returns>
-        public XContainer[] ToXml()
+        /// <param name="context">The context.</param>
+        public void Process(ProcessingContext context)
         {
-            var element = new XElement(WixExtension.Difx.ToXNamespace() + "Driver")
-                                  .SetAttribute("AddRemovePrograms", AddRemovePrograms)
-                                  .SetAttribute("DeleteFiles", DeleteFiles)
-                                  .SetAttribute("ForceInstall", ForceInstall)
-                                  .SetAttribute("Legacy", Legacy)
-                                  .SetAttribute("PlugAndPlayPrompt", PlugAndPlayPrompt)
-                                  .SetAttribute("Sequence", Sequence)
-                                  .AddAttributes(this.Attributes); 
-
-            return new[] { element };
-        }
-    }
-
-    internal static class DriverInstallerCompiling
-    {
-        public static DriverInstaller Compile(this DriverInstaller driver, Project project, XElement component)
-        {
-            if (driver != null)
-            {
-                component.Add(driver.ToXml());
-                project.IncludeWixExtension(WixExtension.Difx);
-                project.LibFiles.Add(System.IO.Path.Combine(Compiler.WixLocation, "difxapp_{0}.wixlib".FormatWith(driver.Architecture)));
-            }
-            return driver;
+            context.Project.IncludeWixExtension(WixExtension.Difx);
+            context.Project.LibFiles.Add(System.IO.Path.Combine(Compiler.WixLocation, "difxapp_{0}.wixlib".FormatWith(Architecture)));
+            
+            context.XParent.Parent.Add(this.ToXElement(WixExtension.Difx, "Driver"));
         }
     }
 }
