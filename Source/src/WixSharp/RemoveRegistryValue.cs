@@ -265,7 +265,7 @@ namespace WixSharp
             component.Add(this.ToXElement("RemoveRegistryValue"));
             context.XParent.FindFirst("Component").Parent?.Add(component);
 
-            base.MapComponentToFeatures(context, component.Attribute("Id").Value, ActualFeatures);
+            base.MapComponentToFeatures(component.Attribute("Id").Value, ActualFeatures, context);
         }
     }
 }

@@ -15061,13 +15061,13 @@
             The actual features.
             </value>
         </member>
-        <member name="M:WixSharp.WixObject.MapComponentToFeatures(WixSharp.ProcessingContext,System.String,WixSharp.Feature[])">
+        <member name="M:WixSharp.WixObject.MapComponentToFeatures(System.String,WixSharp.Feature[],WixSharp.ProcessingContext)">
             <summary>
             Maps the component to features. If no features specified then the component is added to the default ("Complete") feature.
             </summary>
-            <param name="context">The context.</param>
             <param name="componentId">The component identifier.</param>
             <param name="features">The features.</param>
+            <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.Attributes">
             <summary>
