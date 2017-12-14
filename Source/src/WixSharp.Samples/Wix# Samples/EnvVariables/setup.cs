@@ -2,8 +2,6 @@
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
-using System.Linq;
-using System.Globalization;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Controls;
@@ -26,7 +24,7 @@ class Script
                         new File(@"%docs%\Manual.txt"))),
 
                 new EnvironmentVariable("MYPRODUCT_DIR", "[INSTALLDIR]"),
-                new EnvironmentVariable("PATH", "[INSTALLDIR]") { Part = EnvVarPart.last });
+                new EnvironmentVariable("PATH", "[INSTALLDIR]") { Part = EnvVarPart.last, Condition = Condition.Installed});
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.UI = WUI.WixUI_InstallDir;

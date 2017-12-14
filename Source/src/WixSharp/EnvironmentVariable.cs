@@ -27,9 +27,10 @@ THE SOFTWARE.
 
 #endregion Licence...
 
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
@@ -51,7 +52,7 @@ namespace WixSharp
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
-    public partial class EnvironmentVariable : WixEntity
+    public partial class EnvironmentVariable : WixEntity, IGenericEntity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EnvironmentVariable"/> class.
@@ -106,30 +107,47 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Primary key used to identify this particular entry.
+        /// </summary>
+        [Xml]
+        public new string Id { get => base.Id; set => base.Id = value; }
+
+        /// <summary>
+        /// This is the localizable name of the environment variable
+        /// </summary>
+        [Xml]
+        public new string Name { get => base.Name; set => base.Name = value; }
+        
+        /// <summary>
         /// Specifies that the environment variable should be added to the system environment space. The default is 'no' which
         /// indicates the environment variable is added to the user environment space.
         /// </summary>
+        [Xml]
         public bool? System;
 
         /// <summary>
         /// Specifies that the environment variable should not be removed on uninstall.
         /// </summary>
+        [Xml]
         public bool? Permanent;
 
         /// <summary>
         /// The value to set into the environment variable. If this attribute is not set, the environment variable is removed
         /// during installation if it exists on the machine.
         /// </summary>
-        public string Value = null;
+        [Xml]
+        public string Value;
 
         /// <summary>
         /// Specifies whether the environmental variable should be created, set or removed when the parent component is installed. <see cref="T:WixSharp.EnvironmentVariable.Action"/>.
         /// </summary>
+        [Xml]
         public EnvVarAction Action = EnvVarAction.set;
 
         /// <summary>
         /// Indicates how value should be set.
         /// </summary>
+        [Xml]
         public EnvVarPart? Part;
 
         /// <summary>
@@ -139,30 +157,29 @@ namespace WixSharp
         public Condition Condition;
 
         /// <summary>
-        /// Emits the XML.
+        /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
         /// </summary>
-        public XContainer ToXml()
+        /// <param name="context">The context.</param>
+        public void Process(ProcessingContext context)
         {
-            var element = new XElement("Environment",
-                              new XAttribute("Id", Id),
-                              new XAttribute("Name", Name),
-                              new XAttribute("Action", Action));
+            XElement component = this.CreateParentComponent();
+            component.Add(this.ToXElement("Environment"));
 
-            if (Part.HasValue)
-                element.Add(new XAttribute("Part", Part.Value));
+            if (Condition != null)
+            {
+                component.AddElement(new XElement("Condition", Condition.ToXValue())
+                    .AddAttributes(Condition.Attributes));
+            }
 
-            if (Value != null)
-                element.Add(new XAttribute("Value", Value));
+            context.XParent.FindFirst("Component").Parent?.Add(component);
 
-            if (System.HasValue)
-                element.Add(new XAttribute("System", System.Value.ToYesNo()));
-
-            if (Permanent.HasValue)
-                element.Add(new XAttribute("Permanent", Permanent.Value.ToYesNo()));
-
-            element.AddAttributes(Attributes);
-
-            return element;
+            if (ActualFeatures.Any())
+                context.FeatureComponents.Map(ActualFeatures, Id);
+            else if (context.FeatureComponents.ContainsKey(context.Project.DefaultFeature))
+                context.FeatureComponents[context.Project.DefaultFeature].Add(Id);
+            else
+                context.FeatureComponents[context.Project.DefaultFeature] = new List<string> {Id};
         }
     }
 }

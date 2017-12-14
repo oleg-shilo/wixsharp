@@ -90,15 +90,11 @@ namespace WixSharp
             var dirs = new List<Dir>();
             var actions = new List<Action>();
             var regs = new List<RegValue>();
-            var envvars = new List<EnvironmentVariable>();
             var props = new List<Property>();
             var bins = new List<Binary>();
-            var users = new List<User>();
             var certs = new List<Certificate>();
             var genericItems = new List<IGenericEntity>();
-            var fwexceptions = new List<FirewallException>();
             var urlreservation = new List<UrlReservation>();
-            var inifiles = new List<IniFile>();
 
             if (items.OfType<Media>().Any())
                 this.Media.Clear();
@@ -121,14 +117,8 @@ namespace WixSharp
                         actions.Add(item as Action);
                     else if (item is RegValue)
                         regs.Add(item as RegValue);
-                    else if (item is EnvironmentVariable)
-                        envvars.Add(item as EnvironmentVariable);
-                    else if (item is FirewallException)
-                        fwexceptions.Add(item as FirewallException);
                     else if (item is UrlReservation)
                         urlreservation.Add(item as UrlReservation);
-                    else if (item is IniFile)
-                        inifiles.Add(item as IniFile);
                     else if (item is RegFile)
                     {
                         var file = item as RegFile;
@@ -149,8 +139,6 @@ namespace WixSharp
                         GUID = (item as WixGuid).Value;
                     else if (item is Media)
                         Media.Add(item as Media);
-                    else if (item is User)
-                        users.Add(item as User);
                     else if (item is Certificate)
                         certs.Add(item as Certificate);
                     else if (item is IGenericEntity)
@@ -165,12 +153,8 @@ namespace WixSharp
             RegValues = regs.ToArray();
             Properties = props.ToArray();
             Binaries = bins.ToArray();
-            EnvironmentVariables = envvars.ToArray();
-            Users = users.ToArray();
             Certificates = certs.ToArray();
-            FirewallExceptions = fwexceptions.ToArray();
             UrlReservations = urlreservation.ToArray();
-            IniFiles = inifiles.ToArray();
             GenericItems = genericItems.ToArray();
         }
 
@@ -500,30 +484,15 @@ namespace WixSharp
         public RegValue[] RegValues = new RegValue[0];
 
         /// <summary>
-        /// Collection of <see cref="EnvironmentVariable"/>s to be set during the installation.
-        /// </summary>
-        public EnvironmentVariable[] EnvironmentVariables = new EnvironmentVariable[0];
-
-        /// <summary>
         /// Collection of <see cref="Certificate"/> to be installed.
         /// </summary>
         public Certificate[] Certificates = new Certificate[0];
-
-        /// <summary>
-        /// Collection of <see cref="FirewallException"/> to be installed.
-        /// </summary>
-        public FirewallException[] FirewallExceptions = new FirewallException[0];
-
+        
         /// <summary>
         /// Collection of <see cref="UrlReservation"/> to be installed.
         /// </summary>
         public UrlReservation[] UrlReservations = new UrlReservation[0];
-
-        /// <summary>
-        /// Collection of <see cref="IniFile"/> to be installed.
-        /// </summary>
-        public IniFile[] IniFiles = new IniFile[0];
-
+		
         /// <summary>
         /// Collection of the user defined <see cref="IGenericEntity"/> items.
         /// </summary>
@@ -572,11 +541,6 @@ namespace WixSharp
         /// </summary>
         public List<LaunchCondition> LaunchConditions = new List<LaunchCondition>();
 
-        /// <summary>
-        /// Collection of Wix:UtilExtension User objects representings users 'for all kinds of things'
-        /// </summary>
-        public User[] Users = new User[0];
-        
         /// <summary>
         /// Path to the file containing the image (e.g. bmp) setup dialogs banner. If not specified default image will be used.
         /// </summary>
