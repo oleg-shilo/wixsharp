@@ -211,6 +211,22 @@ namespace WixSharp
                                .ToArray();
             }
         }
+
+        /// <summary>
+        /// Maps the component to features. If no features specified then the component is added to the default ("Complete") feature.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="componentId">The component identifier.</param>
+        /// <param name="features">The features.</param>
+        public void MapComponentToFeatures(ProcessingContext context, string componentId, Feature[] features)
+        {
+            if (features.Any())
+                context.FeatureComponents.Map(features, componentId);
+            else if (context.FeatureComponents.ContainsKey(context.Project.DefaultFeature))
+                context.FeatureComponents[context.Project.DefaultFeature].Add(componentId);
+            else
+                context.FeatureComponents[context.Project.DefaultFeature] = new List<string> { componentId };
+        }
     }
 
     /// <summary>

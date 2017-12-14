@@ -43,7 +43,8 @@ namespace WixSharp
             {
                 FeatureComponents = this.FeatureComponents,
                 XParent = this.XParent,
-                Parent = this.Parent
+                Parent = this.Parent,
+                Project = this.Project
             };
         }
     }
