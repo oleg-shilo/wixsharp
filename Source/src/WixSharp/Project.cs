@@ -92,7 +92,6 @@ namespace WixSharp
             var regs = new List<RegValue>();
             var props = new List<Property>();
             var bins = new List<Binary>();
-            var sqls = new List<SqlDatabase>();
             var certs = new List<Certificate>();
             var genericItems = new List<IGenericEntity>();
             var urlreservation = new List<UrlReservation>();
@@ -140,8 +139,6 @@ namespace WixSharp
                         GUID = (item as WixGuid).Value;
                     else if (item is Media)
                         Media.Add(item as Media);
-                    else if (item is SqlDatabase)
-                        sqls.Add(item as SqlDatabase);
                     else if (item is Certificate)
                         certs.Add(item as Certificate);
                     else if (item is IGenericEntity)
@@ -156,7 +153,6 @@ namespace WixSharp
             RegValues = regs.ToArray();
             Properties = props.ToArray();
             Binaries = bins.ToArray();
-            SqlDatabases = sqls.ToArray();
             Certificates = certs.ToArray();
             UrlReservations = urlreservation.ToArray();
             GenericItems = genericItems.ToArray();
@@ -545,12 +541,6 @@ namespace WixSharp
         /// </summary>
         public List<LaunchCondition> LaunchConditions = new List<LaunchCondition>();
 		
-        /// <summary>
-        /// Collection of WiX:SqlExtension SqlDatabase objects representing databases to be created,
-        /// modifed, or interacted with during MSI execution.
-        /// </summary>
-        public SqlDatabase[] SqlDatabases = new SqlDatabase[0];
-
         /// <summary>
         /// Path to the file containing the image (e.g. bmp) setup dialogs banner. If not specified default image will be used.
         /// </summary>
