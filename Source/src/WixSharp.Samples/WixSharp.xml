@@ -575,22 +575,6 @@
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddSqlDatabase(WixSharp.Project,WixSharp.SqlDatabase)">
-            <summary>
-            Adds the SqlDatabase to the Project.
-            </summary>
-            <param name="project">The project.</param>
-            <param name="item">The item.</param>
-            <returns></returns>
-        </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.AddSqlDatabases(WixSharp.Project,WixSharp.SqlDatabase[])">
-            <summary>
-            Adds the SqlDatabases to the Project.
-            </summary>
-            <param name="project">The project.</param>
-            <param name="items">The items.</param>
-            <returns></returns>
-        </member>
         <member name="M:WixSharp.CommonTasks.Tasks.AddBinaries(WixSharp.Project,WixSharp.Binary[])">
             <summary>
             Adds the binary items to the Project.
@@ -2498,11 +2482,12 @@
             The architecture of the driver to be installed. Default value is 'x86'
             </summary>
         </member>
-        <member name="M:WixSharp.DriverInstaller.ToXml">
+        <member name="M:WixSharp.DriverInstaller.Process(WixSharp.ProcessingContext)">
             <summary>
-            Emits WiX XML.
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
             </summary>
-            <returns></returns>
+            <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.BinaryFileAction">
              <summary>
@@ -6762,12 +6747,6 @@
             <param name="items">The items.</param>
             <returns></returns>
         </member>
-        <member name="T:WixSharp.SqlDbOption">
-            <summary>
-            Attributes represented by this enum will be rendered as having the value 'yes'.
-            If a value of 'no' is required, set the property directly after construction.
-            </summary>
-        </member>
         <member name="T:WixSharp.SqlDatabase">
             <summary>
             Represents WixSqlExtension SqlDatabase element. The resulting XML representation may be rendered
@@ -6780,38 +6759,38 @@
             Creates an instance of the <see cref="T:WixSharp.SqlDatabase"/> representing the database//>
             </summary>
         </member>
-        <member name="M:WixSharp.SqlDatabase.#ctor(System.String,System.String,WixSharp.WixEntity[])">
+        <member name="M:WixSharp.SqlDatabase.#ctor(System.String,System.String,WixSharp.IGenericEntity[])">
             <summary>
             Creates an instance of the <see cref="T:WixSharp.SqlDatabase" /> representing the database <paramref name="database" />@<paramref name="server" />
             </summary>
             <param name="database">The database.</param>
             <param name="server">The server.</param>
-            <param name="items">The items.</param>
+            <param name="children">The items.</param>
             <exception cref="T:System.ArgumentNullException">
             database;database is a null reference or empty
             or
             server;server is a null reference or empty
             </exception>
         </member>
-        <member name="M:WixSharp.SqlDatabase.#ctor(WixSharp.Id,System.String,System.String,WixSharp.WixEntity[])">
+        <member name="M:WixSharp.SqlDatabase.#ctor(WixSharp.Id,System.String,System.String,WixSharp.IGenericEntity[])">
             <summary>
             Creates an instance of the <see cref="T:WixSharp.SqlDatabase" /> representing the database <paramref name="database" />@<paramref name="server" />
             </summary>
             <param name="id">The identifier.</param>
             <param name="database">The database.</param>
             <param name="server">The server.</param>
-            <param name="items">The items.</param>
+            <param name="children">The items.</param>
         </member>
-        <member name="M:WixSharp.SqlDatabase.#ctor(WixSharp.Feature,System.String,System.String,WixSharp.WixEntity[])">
+        <member name="M:WixSharp.SqlDatabase.#ctor(WixSharp.Feature,System.String,System.String,WixSharp.IGenericEntity[])">
             <summary>
             Creates an instance of the <see cref="T:WixSharp.SqlDatabase" /> representing the database <paramref name="database" />@<paramref name="server" />
             </summary>
             <param name="feature">The feature.</param>
             <param name="database">The database.</param>
             <param name="server">The server.</param>
-            <param name="items">The items.</param>
+            <param name="children">The items.</param>
         </member>
-        <member name="M:WixSharp.SqlDatabase.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.String,WixSharp.WixEntity[])">
+        <member name="M:WixSharp.SqlDatabase.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.String,WixSharp.IGenericEntity[])">
             <summary>
             Creates an instance of the <see cref="T:WixSharp.SqlDatabase"/> representing the database <paramref name="database"/>@<paramref name="server"/>
             </summary>
@@ -6819,18 +6798,18 @@
             <param name="feature">The feature.</param>
             <param name="database">The database.</param>
             <param name="server">The server.</param>
-            <param name="items">The items.</param>
+            <param name="children">The items.</param>
         </member>
-        <member name="M:WixSharp.SqlDatabase.#ctor(System.String,System.String,WixSharp.SqlDbOption,WixSharp.WixEntity[])">
+        <member name="M:WixSharp.SqlDatabase.#ctor(System.String,System.String,WixSharp.SqlDbOption,WixSharp.IGenericEntity[])">
             <summary>
             Creates an instance of SqlDatbase representing the database <paramref name="database" />@<paramref name="server" />
             </summary>
             <param name="database">The database.</param>
             <param name="server">The server.</param>
             <param name="dbOptions">The database options.</param>
-            <param name="items">The items.</param>
+            <param name="children">The items.</param>
         </member>
-        <member name="M:WixSharp.SqlDatabase.#ctor(WixSharp.Id,System.String,System.String,WixSharp.SqlDbOption,WixSharp.WixEntity[])">
+        <member name="M:WixSharp.SqlDatabase.#ctor(WixSharp.Id,System.String,System.String,WixSharp.SqlDbOption,WixSharp.IGenericEntity[])">
             <summary>
             Creates an instance of SqlDatbase representing the database <paramref name="database" />@<paramref name="server" />
             </summary>
@@ -6838,9 +6817,9 @@
             <param name="database">The database.</param>
             <param name="server">The server.</param>
             <param name="dbOptions">The database options.</param>
-            <param name="items">The items.</param>
+            <param name="children">The items.</param>
         </member>
-        <member name="M:WixSharp.SqlDatabase.#ctor(WixSharp.Feature,System.String,System.String,WixSharp.SqlDbOption,WixSharp.WixEntity[])">
+        <member name="M:WixSharp.SqlDatabase.#ctor(WixSharp.Feature,System.String,System.String,WixSharp.SqlDbOption,WixSharp.IGenericEntity[])">
             <summary>
             Creates an instance of SqlDatbase representing the database <paramref name="database" />@<paramref name="server" />
             </summary>
@@ -6848,9 +6827,9 @@
             <param name="database">The database.</param>
             <param name="server">The server.</param>
             <param name="dbOptions">The database options.</param>
-            <param name="items">The items.</param>
+            <param name="children">The items.</param>
         </member>
-        <member name="M:WixSharp.SqlDatabase.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.String,WixSharp.SqlDbOption,WixSharp.WixEntity[])">
+        <member name="M:WixSharp.SqlDatabase.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.String,WixSharp.SqlDbOption,WixSharp.IGenericEntity[])">
             <summary>
             Creates an instance of SqlDatbase representing the database <paramref name="database" />@<paramref name="server" />
             </summary>
@@ -6859,77 +6838,84 @@
             <param name="database">The database.</param>
             <param name="server">The server.</param>
             <param name="dbOptions">The database options.</param>
-            <param name="items">The items.</param>
+            <param name="children">The items.</param>
         </member>
-        <member name="F:WixSharp.SqlDatabase.SqlScripts">
+        <member name="F:WixSharp.SqlDatabase.GenericItems">
             <summary>
-            The SQL scripts
+            Collection of the nested user defined <see cref="T:WixSharp.IGenericEntity"/> items.
             </summary>
         </member>
-        <member name="F:WixSharp.SqlDatabase.SqlStrings">
+        <member name="P:WixSharp.SqlDatabase.Id">
             <summary>
-            The SQL strings
+            Primary key used to identify this particular entry.
             </summary>
         </member>
-        <member name="P:WixSharp.SqlDatabase.ConfirmOverwrite">
+        <member name="F:WixSharp.SqlDatabase.ConfirmOverwrite">
             <summary>
             Maps to the ConfirmOverwrite property of SqlDatabase
             </summary>
         </member>
-        <member name="P:WixSharp.SqlDatabase.ContinueOnError">
+        <member name="F:WixSharp.SqlDatabase.ContinueOnError">
             <summary>
             Maps to the ContinueOnError property of SqlDatabase
             </summary>
         </member>
-        <member name="P:WixSharp.SqlDatabase.CreateOnInstall">
+        <member name="F:WixSharp.SqlDatabase.CreateOnInstall">
             <summary>
             Maps to the CreateOnInstall property of SqlDatabase
             </summary>
         </member>
-        <member name="P:WixSharp.SqlDatabase.CreateOnReinstall">
+        <member name="F:WixSharp.SqlDatabase.CreateOnReinstall">
             <summary>
             Maps to the CreateOnReinstall property of SqlDatabase
             </summary>
         </member>
-        <member name="P:WixSharp.SqlDatabase.CreateOnUninstall">
+        <member name="F:WixSharp.SqlDatabase.CreateOnUninstall">
             <summary>
             Maps to the CreateOnUninstall property of SqlDatabase
             </summary>
         </member>
-        <member name="P:WixSharp.SqlDatabase.Database">
+        <member name="F:WixSharp.SqlDatabase.Database">
             <summary>
             Maps to the Database property of SqlDatabase
             </summary>
         </member>
-        <member name="P:WixSharp.SqlDatabase.DropOnInstall">
+        <member name="F:WixSharp.SqlDatabase.DropOnInstall">
             <summary>
             Maps to the DropOnInstall property of SqlDatabase
             </summary>
         </member>
-        <member name="P:WixSharp.SqlDatabase.DropOnReinstall">
+        <member name="F:WixSharp.SqlDatabase.DropOnReinstall">
             <summary>
             Maps to the DropOnReinstall property of SqlDatabase
             </summary>
         </member>
-        <member name="P:WixSharp.SqlDatabase.DropOnUninstall">
+        <member name="F:WixSharp.SqlDatabase.DropOnUninstall">
             <summary>
             Maps to the DropOnUninstall property of SqlDatabase
             </summary>
         </member>
-        <member name="P:WixSharp.SqlDatabase.Instance">
+        <member name="F:WixSharp.SqlDatabase.Instance">
             <summary>
             Maps to the Instance property of SqlDatabase
             </summary>
         </member>
-        <member name="P:WixSharp.SqlDatabase.Server">
+        <member name="F:WixSharp.SqlDatabase.Server">
             <summary>
             Maps to the Server property of SqlDatabase
             </summary>
         </member>
-        <member name="P:WixSharp.SqlDatabase.User">
+        <member name="F:WixSharp.SqlDatabase.User">
             <summary>
             Maps to the User property of SqlDatabase
             </summary>
+        </member>
+        <member name="M:WixSharp.SqlDatabase.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.ExecuteSql">
             <summary>
@@ -6949,133 +6935,10 @@
             If a value of 'no' is required, set the property directly after construction.
             </remarks>
         </member>
-        <member name="T:WixSharp.SqlString">
+        <member name="T:WixSharp.SqlDbOption">
             <summary>
-            Represents WixSqlExtension element SqlString
-            </summary>
-        </member>
-        <member name="M:WixSharp.SqlString.#ctor">
-            <summary>
-            Creates an instance of SqlString
-            </summary>
-        </member>
-        <member name="M:WixSharp.SqlString.#ctor(System.String,WixSharp.ExecuteSql)">
-            <summary>
-            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
-            </summary>
-            <param name="sql"></param>
-            <param name="executeOptions"></param>
-        </member>
-        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,System.String,WixSharp.ExecuteSql)">
-            <summary>
-            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
-            </summary>
-            <param name="id"></param>
-            <param name="sql"></param>
-            <param name="executeOptions"></param>
-        </member>
-        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
-            <summary>
-            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
-            </summary>
-            <param name="feature"></param>
-            <param name="sql"></param>
-            <param name="executeOptions"></param>
-        </member>
-        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
-            <summary>
-            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
-            </summary>
-            <param name="id"></param>
-            <param name="feature"></param>
-            <param name="sql"></param>
-            <param name="executeOptions"></param>
-        </member>
-        <member name="M:WixSharp.SqlString.#ctor(System.String,WixSharp.RollbackSql)">
-            <summary>
-            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
-            </summary>
-            <param name="sql"></param>
-            <param name="rollbackOptions"></param>
-        </member>
-        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,System.String,WixSharp.RollbackSql)">
-            <summary>
-            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
-            </summary>
-            <param name="id"></param>
-            <param name="sql"></param>
-            <param name="rollbackOptions"></param>
-        </member>
-        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Feature,System.String,WixSharp.RollbackSql)">
-            <summary>
-            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
-            </summary>
-            <param name="feature"></param>
-            <param name="sql"></param>
-            <param name="rollbackOptions"></param>
-        </member>
-        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,WixSharp.Feature,System.String,WixSharp.RollbackSql)">
-            <summary>
-            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
-            </summary>
-            <param name="id"></param>
-            <param name="feature"></param>
-            <param name="sql"></param>
-            <param name="rollbackOptions"></param>
-        </member>
-        <member name="P:WixSharp.SqlString.ContinueOnError">
-            <summary>
-            Maps to the ContinueOnError property of SqlString
-            </summary>
-        </member>
-        <member name="P:WixSharp.SqlString.ExecuteOnInstall">
-            <summary>
-            Maps to the ExecuteOnInstall property of SqlString
-            </summary>
-        </member>
-        <member name="P:WixSharp.SqlString.ExecuteOnReinstall">
-            <summary>
-            Maps to the ExecuteOnReinstall property of SqlString
-            </summary>
-        </member>
-        <member name="P:WixSharp.SqlString.ExecuteOnUninstall">
-            <summary>
-            Maps to the ExecuteOnUninstall property of SqlString
-            </summary>
-        </member>
-        <member name="P:WixSharp.SqlString.RollbackOnInstall">
-            <summary>
-            Maps to the RollbackOnInstall property of SqlString
-            </summary>
-        </member>
-        <member name="P:WixSharp.SqlString.RollbackOnReinstall">
-            <summary>
-            Maps to the RollbackOnReinstall property of SqlString
-            </summary>
-        </member>
-        <member name="P:WixSharp.SqlString.RollbackOnUninstall">
-            <summary>
-            Maps to the RollbackOnUninstall property of SqlString
-            </summary>
-        </member>
-        <member name="P:WixSharp.SqlString.Sequence">
-            <summary>
-            Maps to the Sequence property of SqlString
-            </summary>
-        </member>
-        <member name="P:WixSharp.SqlString.Sql">
-            <summary>
-            Maps to the Sql property of SqlString
-            </summary>
-        </member>
-        <member name="P:WixSharp.SqlString.SqlDb">
-            <summary>
-            Maps to the SqlDb property of SqlString. This property is to be inferred from the containing SqlDatabase element.
-            </summary>
-        </member>
-        <member name="P:WixSharp.SqlString.User">
-            <summary>
-            Maps to the User property of SqlString
+            Attributes represented by this enum will be rendered as having the value 'yes'.
+            If a value of 'no' is required, set the property directly after construction.
             </summary>
         </member>
         <member name="T:WixSharp.SqlScript">
@@ -7152,60 +7015,203 @@
             <param name="binaryKey"></param>
             <param name="rollbackOptions"></param>
         </member>
-        <member name="P:WixSharp.SqlScript.BinaryKey">
+        <member name="F:WixSharp.SqlScript.BinaryKey">
             <summary>
             Maps to the BinaryKey property of SqlScript
             </summary>
         </member>
-        <member name="P:WixSharp.SqlScript.ContinueOnError">
+        <member name="F:WixSharp.SqlScript.ContinueOnError">
             <summary>
             Maps to the ContinueOnError property of SqlScript
             </summary>
         </member>
-        <member name="P:WixSharp.SqlScript.ExecuteOnInstall">
+        <member name="F:WixSharp.SqlScript.ExecuteOnInstall">
             <summary>
             Maps to the ExecuteOnInstall property of SqlScript
             </summary>
         </member>
-        <member name="P:WixSharp.SqlScript.ExecuteOnReinstall">
+        <member name="F:WixSharp.SqlScript.ExecuteOnReinstall">
             <summary>
             Maps to the ExecuteOnReinstall property of SqlScript
             </summary>
         </member>
-        <member name="P:WixSharp.SqlScript.ExecuteOnUninstall">
+        <member name="F:WixSharp.SqlScript.ExecuteOnUninstall">
             <summary>
             Maps to the ExecuteOnUninstall property of SqlScript
             </summary>
         </member>
-        <member name="P:WixSharp.SqlScript.RollbackOnInstall">
+        <member name="F:WixSharp.SqlScript.RollbackOnInstall">
             <summary>
             Maps to the RollbackOnInstall property of SqlScript
             </summary>
         </member>
-        <member name="P:WixSharp.SqlScript.RollbackOnReinstall">
+        <member name="F:WixSharp.SqlScript.RollbackOnReinstall">
             <summary>
             Maps to the RollbackOnReinstall property of SqlScript
             </summary>
         </member>
-        <member name="P:WixSharp.SqlScript.RollbackOnUninstall">
+        <member name="F:WixSharp.SqlScript.RollbackOnUninstall">
             <summary>
             Maps to the RollbackOnUninstall property of SqlScript
             </summary>
         </member>
-        <member name="P:WixSharp.SqlScript.Sequence">
+        <member name="F:WixSharp.SqlScript.Sequence">
             <summary>
             Maps to the Sequence property of SqlScript
             </summary>
         </member>
-        <member name="P:WixSharp.SqlScript.SqlDb">
+        <member name="F:WixSharp.SqlScript.SqlDb">
             <summary>
             Maps to the SqlDb property of SqlScript. This property is to be inferred from the containing SqlDatabase element.
             </summary>
         </member>
-        <member name="P:WixSharp.SqlScript.User">
+        <member name="F:WixSharp.SqlScript.User">
             <summary>
             Maps to the User property of SqlScript
             </summary>
+        </member>
+        <member name="M:WixSharp.SqlScript.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project" />.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
+        <member name="T:WixSharp.SqlString">
+            <summary>
+            Represents WixSqlExtension element SqlString
+            </summary>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor">
+            <summary>
+            Creates an instance of SqlString
+            </summary>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="sql"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sql"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="feature"></param>
+            <param name="sql"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="feature"></param>
+            <param name="sql"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="sql"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sql"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Feature,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="feature"></param>
+            <param name="sql"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,WixSharp.Feature,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="feature"></param>
+            <param name="sql"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="F:WixSharp.SqlString.ContinueOnError">
+            <summary>
+            Maps to the ContinueOnError property of SqlString
+            </summary>
+        </member>
+        <member name="F:WixSharp.SqlString.ExecuteOnInstall">
+            <summary>
+            Maps to the ExecuteOnInstall property of SqlString
+            </summary>
+        </member>
+        <member name="F:WixSharp.SqlString.ExecuteOnReinstall">
+            <summary>
+            Maps to the ExecuteOnReinstall property of SqlString
+            </summary>
+        </member>
+        <member name="F:WixSharp.SqlString.ExecuteOnUninstall">
+            <summary>
+            Maps to the ExecuteOnUninstall property of SqlString
+            </summary>
+        </member>
+        <member name="F:WixSharp.SqlString.RollbackOnInstall">
+            <summary>
+            Maps to the RollbackOnInstall property of SqlString
+            </summary>
+        </member>
+        <member name="F:WixSharp.SqlString.RollbackOnReinstall">
+            <summary>
+            Maps to the RollbackOnReinstall property of SqlString
+            </summary>
+        </member>
+        <member name="F:WixSharp.SqlString.RollbackOnUninstall">
+            <summary>
+            Maps to the RollbackOnUninstall property of SqlString
+            </summary>
+        </member>
+        <member name="F:WixSharp.SqlString.Sequence">
+            <summary>
+            Maps to the Sequence property of SqlString
+            </summary>
+        </member>
+        <member name="F:WixSharp.SqlString.SQL">
+            <summary>
+            Maps to the Sql property of SqlString
+            </summary>
+        </member>
+        <member name="F:WixSharp.SqlString.SqlDb">
+            <summary>
+            Maps to the SqlDb property of SqlString. This property is to be inferred from the containing SqlDatabase element.
+            </summary>
+        </member>
+        <member name="F:WixSharp.SqlString.User">
+            <summary>
+            Maps to the User property of SqlString
+            </summary>
+        </member>
+        <member name="M:WixSharp.SqlString.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project" />.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.StringEnum`1">
             <summary>
@@ -11238,12 +11244,6 @@
              Set this field to the properly initialized instance of <see cref="F:WixSharp.File.ServiceInstaller"/> if the file is a windows service module.
             </summary>
         </member>
-        <member name="F:WixSharp.File.DriverInstaller">
-            <summary>
-            The driver installer associated with the file. Set this field to the properly initialized
-            instance of <see cref="F:WixSharp.File.DriverInstaller"/> if the file is a windows driver.
-            </summary>
-        </member>
         <member name="F:WixSharp.File.IISVirtualDirs">
             <summary>
             Collection of the contained <see cref="T:WixSharp.IISVirtualDir"/>s.
@@ -12518,12 +12518,6 @@
         <member name="F:WixSharp.Project.LaunchConditions">
             <summary>
             Collection of the <see cref="T:WixSharp.LaunchCondition"/>s associated with the setup.
-            </summary>
-        </member>
-        <member name="F:WixSharp.Project.SqlDatabases">
-            <summary>
-            Collection of WiX:SqlExtension SqlDatabase objects representing databases to be created,
-            modifed, or interacted with during MSI execution.
             </summary>
         </member>
         <member name="F:WixSharp.Project.BannerImage">
