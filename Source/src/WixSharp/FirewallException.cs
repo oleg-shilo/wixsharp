@@ -239,12 +239,7 @@ namespace WixSharp
                 newComponent.Add(firewallElement);
                 findComponent.Parent?.Add(newComponent);
 
-                if (ActualFeatures.Any())
-                    context.FeatureComponents.Map(ActualFeatures, Id);
-                else if (context.FeatureComponents.ContainsKey(context.Project.DefaultFeature))
-                    context.FeatureComponents[context.Project.DefaultFeature].Add(Id);
-                else
-                    context.FeatureComponents[context.Project.DefaultFeature] = new List<string> { Id };
+                MapComponentToFeatures(newComponent.Attr("Id"), ActualFeatures, context);
             }
             else
             {

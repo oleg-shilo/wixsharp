@@ -284,7 +284,7 @@ namespace WixSharp
                 }
 
                 context.XParent.FindFirst("Component").Parent?.Add(component);
-                MapComponentToFeatures(Id, ActualFeatures, context);
+                MapComponentToFeatures(component.Attr("Id"), ActualFeatures, context);
             }
             else
             {
