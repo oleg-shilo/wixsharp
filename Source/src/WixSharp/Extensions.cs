@@ -541,6 +541,14 @@ namespace WixSharp
                 return null;
         }
 
+        internal static string Attr(this XElement e, string attributeName)
+        {
+            if (e.Attribute(attributeName) != null)
+                return e.Attribute(attributeName).Value;
+            else
+                return null;
+        }
+
         /// <summary>
         /// Selects distinct items from the collection.
         /// </summary>
