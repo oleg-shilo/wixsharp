@@ -218,7 +218,7 @@ namespace WixSharp
         /// <param name="componentId">The component identifier.</param>
         /// <param name="features">The features.</param>
         /// <param name="context">The context.</param>
-        public void MapComponentToFeatures(string componentId, Feature[] features, ProcessingContext context)
+        public static void MapComponentToFeatures(string componentId, Feature[] features, ProcessingContext context)
         {
             if (features.Any())
                 context.FeatureComponents.Map(features, componentId);
