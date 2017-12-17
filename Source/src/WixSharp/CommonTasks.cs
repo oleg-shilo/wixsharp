@@ -1223,17 +1223,36 @@ namespace WixSharp.CommonTasks
         /// During the run for the InstallUtil.exe console window is hidden.
         /// If any error occurred the console output is captured and embedded into the raised Exception object.
         /// </summary>
+        /// <remarks>In order for username/password to be accepted, the ServiceProcessInstaller.Account in the target
+        /// service must be set to ServiceAccount.User</remarks>
+        /// <param name="serviceFile">The service file.</param>
+        /// <param name="isInstalling">if set to <c>true</c> [is installing].</param>
+        /// <param name="username">The required service username.</param>
+        /// <param name="password">The required service password.</param>
+        /// <exception cref="T:System.Exception"></exception>
+        /// <returns>console output</returns>
+        static public string InstallService(string serviceFile, bool isInstalling, string username, string password)
+        {
+            return InstallService(serviceFile, isInstalling,
+                String.Format("/username={0} /password={1} /unattended", username, password));
+        }
+
+        /// <summary>
+        /// Installs the windows service. It uses InstallUtil.exe to complete the actual installation/uninstallation.
+        /// During the run for the InstallUtil.exe console window is hidden.
+        /// If any error occurred the console output is captured and embedded into the raised Exception object.
+        /// </summary>
         /// <param name="serviceFile">The service file.</param>
         /// <param name="isInstalling">if set to <c>true</c> [is installing].</param>
         /// <param name="args">The additional InstallUtil.exe arguments.</param>
         /// <exception cref="T:System.Exception"></exception>
-        /// <returns></returns>
+        /// <returns>console output</returns>
         static public string InstallService(string serviceFile, bool isInstalling, string args = null)
         {
             var util = new ExternalTool
             {
                 ExePath = IO.Path.Combine(CurrentFrameworkDirectory, "InstallUtil.exe"),
-                Arguments = string.Format("{1} \"{0}\" ", serviceFile, isInstalling ? "" : "/u") + args ?? ""
+                Arguments = string.Format("{0} {1} \"{2}\"", isInstalling ? "" : "/u", args ?? "", serviceFile)
             };
 
             var buf = new StringBuilder();
