@@ -264,6 +264,38 @@ namespace WixSharp
         /// </example>
         public static Condition Create(string value) { return new Condition(value); }
 
+        /// <summary>
+        /// Returns a new <see cref="Condition"/> performing an AND between two conditions.
+        /// </summary>
+        /// <param name="a">The first <see cref="Condition"/></param>
+        /// <param name="b">The second <see cref="Condition"/></param>
+        /// <returns>The new AND'ed condition.</returns>
+        public static Condition operator &(Condition a, Condition b)
+        {
+            return new Condition("(" + a + " AND " + b + ")");
+        }
+
+        /// <summary>
+        /// Returns a new <see cref="Condition"/> performing an OR between two conditions.
+        /// </summary>
+        /// <param name="a">The first <see cref="Condition"/></param>
+        /// <param name="b">The second <see cref="Condition"/></param>
+        /// <returns>The new OR'ed condition.</returns>
+        public static Condition operator |(Condition a, Condition b)
+        {
+            return new Condition("(" + a + " OR " + b + ")");
+        }
+
+        /// <summary>
+        /// Returns a new <see cref="Condition"/> adding a logical NOT before the condition.
+        /// </summary>
+        /// <param name="x">The first <see cref="Condition"/> or text</param>
+        /// <returns>The new NOT'ed condition.</returns>
+        public static Condition NOT(string x)
+        {
+            return new Condition("(NOT " + x + ")");
+        }
+
         //public Condition And(Condition condition)
         //{
         //    return Create("(" + this.ToString() + " AND " + condition.ToString() + ")");
