@@ -14,9 +14,8 @@ namespace WixSharp
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         public override int Apply(string bootstrapperFileToSign)
         {
-            var retValue = CommonTasks.Tasks.DigitalySignBootstrapper(bootstrapperFileToSign, PfxFilePath, TimeUrl?.AbsoluteUri, Password,
-                PrepareOptionalArguments(), WellKnownLocations);
-
+            var retValue = CommonTasks.Tasks.DigitalySignBootstrapper(bootstrapperFileToSign, PfxFilePath, TimeUrl.AbsoluteUri, Password,
+                PrepareOptionalArguments(), WellKnownLocations, UseCertificateStore);
             Console.WriteLine(retValue != 0
                 ? $"Could not sign the {bootstrapperFileToSign} Bootstrapper file."
                 : $"The Bootstrapper file {bootstrapperFileToSign} was signed successfully.");
