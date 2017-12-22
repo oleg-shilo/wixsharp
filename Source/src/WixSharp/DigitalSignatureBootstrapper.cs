@@ -15,7 +15,7 @@ namespace WixSharp
         public override int Apply(string bootstrapperFileToSign)
         {
             var retValue = CommonTasks.Tasks.DigitalySignBootstrapper(bootstrapperFileToSign, PfxFilePath, TimeUrl.AbsoluteUri, Password,
-                PrepareOptionalArguments(), WellKnownLocations);
+                PrepareOptionalArguments(), WellKnownLocations, UseCertificateStore);
 
             Console.WriteLine(retValue != 0
                 ? $"Could not sign the {bootstrapperFileToSign} Bootstrapper file."
