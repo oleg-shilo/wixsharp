@@ -26,6 +26,7 @@ class Script
                 {
                     AttributesDefinition = "Type=binary"
                 },
+                // HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\My Company\My Product
                 new RegValue(fullSetup, RegistryHive.LocalMachine, "Software\\My Company\\My Product", "Message", "Hello"),
                 new RegValue(fullSetup, RegistryHive.LocalMachine, "Software\\My Company\\My Product", "Count", 777),
                 new RegValue(fullSetup, RegistryHive.ClassesRoot, "test\\shell\\open\\command", "", "\"[INSTALLDIR]test.exe\" \"%1\""),
