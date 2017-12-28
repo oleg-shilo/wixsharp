@@ -264,12 +264,7 @@ namespace WixSharp
                 component.Add(this.ToXElement(WixExtension.Util, "User"));
                 context.XParent.FindFirst("Component").Parent?.Add(component);
 
-                if (ActualFeatures.Any())
-                    context.FeatureComponents.Map(ActualFeatures, Id);
-                else if (context.FeatureComponents.ContainsKey(context.Project.DefaultFeature))
-                    context.FeatureComponents[context.Project.DefaultFeature].Add(Id);
-                else
-                    context.FeatureComponents[context.Project.DefaultFeature] = new List<string> {Id};
+                MapComponentToFeatures(component.Attr("Id"), ActualFeatures, context);
             }
             else
             {

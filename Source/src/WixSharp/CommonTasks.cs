@@ -223,6 +223,8 @@ namespace WixSharp.CommonTasks
         /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
         /// <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
         /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
+        /// <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
+        /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
         /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file.
@@ -236,13 +238,13 @@ namespace WixSharp.CommonTasks
         /// </code>
         /// </example>
         static public int DigitalySignBootstrapper(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
-            string optionalArguments = null, string wellKnownLocations = null)
+            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false)
         {
-            var retval = DigitalySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations);
+            var retval = DigitalySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore);
             if (retval != 0)
                 return retval;
 
-            return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations);
+            return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore);
         }
 
         /// <summary>
@@ -260,6 +262,8 @@ namespace WixSharp.CommonTasks
         /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
         /// <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
         /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
+        /// <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
+        /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
         /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file engine.
@@ -273,7 +277,7 @@ namespace WixSharp.CommonTasks
         /// </code>
         /// </example>
         static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
-            string optionalArguments = null, string wellKnownLocations = null)
+            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false)
         {
             var insigniaPath = IO.Path.Combine(Compiler.WixLocation, "insignia.exe");
             string enginePath = IO.Path.GetTempFileName();
@@ -290,7 +294,7 @@ namespace WixSharp.CommonTasks
                 if (retval != 0)
                     return retval;
 
-                retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations);
+                retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore);
                 if (retval != 0)
                     return retval;
 
@@ -1223,17 +1227,36 @@ namespace WixSharp.CommonTasks
         /// During the run for the InstallUtil.exe console window is hidden.
         /// If any error occurred the console output is captured and embedded into the raised Exception object.
         /// </summary>
+        /// <remarks>In order for username/password to be accepted, the ServiceProcessInstaller.Account in the target
+        /// service must be set to ServiceAccount.User</remarks>
+        /// <param name="serviceFile">The service file.</param>
+        /// <param name="isInstalling">if set to <c>true</c> [is installing].</param>
+        /// <param name="username">The required service username.</param>
+        /// <param name="password">The required service password.</param>
+        /// <exception cref="T:System.Exception"></exception>
+        /// <returns>console output</returns>
+        static public string InstallService(string serviceFile, bool isInstalling, string username, string password)
+        {
+            return InstallService(serviceFile, isInstalling,
+                String.Format("/username={0} /password={1} /unattended", username, password));
+        }
+
+        /// <summary>
+        /// Installs the windows service. It uses InstallUtil.exe to complete the actual installation/uninstallation.
+        /// During the run for the InstallUtil.exe console window is hidden.
+        /// If any error occurred the console output is captured and embedded into the raised Exception object.
+        /// </summary>
         /// <param name="serviceFile">The service file.</param>
         /// <param name="isInstalling">if set to <c>true</c> [is installing].</param>
         /// <param name="args">The additional InstallUtil.exe arguments.</param>
         /// <exception cref="T:System.Exception"></exception>
-        /// <returns></returns>
+        /// <returns>console output</returns>
         static public string InstallService(string serviceFile, bool isInstalling, string args = null)
         {
             var util = new ExternalTool
             {
                 ExePath = IO.Path.Combine(CurrentFrameworkDirectory, "InstallUtil.exe"),
-                Arguments = string.Format("{1} \"{0}\" ", serviceFile, isInstalling ? "" : "/u") + args ?? ""
+                Arguments = string.Format("{0} {1} \"{2}\"", isInstalling ? "" : "/u", args ?? "", serviceFile)
             };
 
             var buf = new StringBuilder();

@@ -635,7 +635,7 @@ namespace WixSharp
 
         /// <summary>
         /// The default properties mapped for use with the 'deferred' (as well as 'rollback'  and 'commit') custom actions. See <see cref="ManagedAction.UsesProperties"/> for the details.
-        /// <para>The default value is "INSTALLDIR,UILevel"</para>
+        /// <para>The default value is "INSTALLDIR,UILevel,ProductCode"</para>
         /// </summary>
         public static string DefaultUsesProperties = "INSTALLDIR,UILevel,ProductCode";
 
@@ -643,13 +643,7 @@ namespace WixSharp
         {
             var allProps = (RollbackArg + "," + DefaultUsesProperties);
             var result = string.Join(";", allProps.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x =>
-                {
-                    if (x.Contains('=')) //e.g. INSTALLDIR=[INSTALLDIR]
-                        return x.Trim();
-                    else
-                        return string.Format("{0}=[{0}]", x.Trim());
-                })
+                .Select(x => PrepProperty(x))
                 .ToArray());
             return result;
         }
@@ -658,15 +652,27 @@ namespace WixSharp
         {
             var allProps = (UsesProperties + "," + DefaultUsesProperties);
             var result = string.Join(";", allProps.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
-                                                  .Select(x =>
-                                                      {
-                                                          if (x.Contains('=')) //e.g. INSTALLDIR=[INSTALLDIR]
-                                                              return x.Trim();
-                                                          else
-                                                              return string.Format("{0}=[{0}]", x.Trim());
-                                                      })
-                                                  .ToArray());
+                .Select(x => PrepProperty(x))
+                .ToArray());
             return result;
+        }
+
+        private string PrepProperty(string x)
+        {
+            if (x.Contains('=')) //e.g. INSTALLDIR=[INSTALLDIR]
+            {
+                string[] split = x.Split('=');
+                if (split.Length == 2)
+                {
+                    return string.Format("{0}={1}", split[0].Trim(), split[1].Trim());
+                }
+                else
+                {
+                    return x.Trim();
+                }
+            }
+            else
+                return string.Format("{0}=[{0}]", x.Trim());
         }
     }
 }

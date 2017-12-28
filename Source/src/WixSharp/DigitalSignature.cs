@@ -61,7 +61,7 @@ namespace WixSharp
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         public virtual int Apply(string fileToSign)
         {
-            var retValue = CommonTasks.Tasks.DigitalySign(fileToSign, PfxFilePath, TimeUrl.AbsoluteUri, Password,
+            var retValue = CommonTasks.Tasks.DigitalySign(fileToSign, PfxFilePath, TimeUrl?.AbsoluteUri, Password,
                 PrepareOptionalArguments(), WellKnownLocations, UseCertificateStore);
 
             Console.WriteLine(retValue != 0
