@@ -1,5 +1,6 @@
 using System;
 using System.Xml.Linq;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
@@ -8,7 +9,7 @@ namespace WixSharp
     /// <summary>
     /// This class defines website certificate attributes. It is a close equivalent of Certificate WiX element.
     /// </summary>
-    public class Certificate : WixEntity
+    public class Certificate : WixEntity, IGenericEntity
     {
         #region constructors
 
@@ -167,67 +168,69 @@ namespace WixSharp
         /// <summary>
         /// The Id of a Binary instance that is the certificate to be installed
         /// </summary>
+        [Xml]
         public string BinaryKey;
 
         /// <summary>
         /// If the Request attribute is <c>false</c> then this attribute is the path to the certificate file outside of the package.
         /// If the Request attribute is <c>true</c> then this attribute is the certificate authority to request the certificate from.
         /// </summary>
+        [Xml]
         public string CertificatePath;
 
         /// <summary>
         /// The name of the certificate being installed
         /// </summary>
+        [Xml]
         public new string Name;
 
         /// <summary>
         /// Flag to indicate if the certificate should be overwritten.
         /// </summary>
+        [Xml]
         public bool? Overwrite;
 
         /// <summary>
         /// This attribute controls whether the CertificatePath attribute is a path to a certificate file (Request=<c>false</c>) or
         /// the certificate authority to request the certificate from (Request=<c>true</c>).
         /// </summary>
+        [Xml]
         public bool? Request;
 
         /// <summary>
         /// If the Binary stream or path to the file outside of the package is a password protected PFX file, the password for that PFX must be specified here.
         /// </summary>
+        [Xml]
         public string PFXPassword;
 
         /// <summary>
         /// Sets the certificate StoreLocation.
         /// </summary>
-        public StoreLocation StoreLocation;
+        [Xml]
+        public StoreLocation? StoreLocation;
 
         /// <summary>
         /// Sets the certificate StoreName.
         /// </summary>
-        public StoreName StoreName;
+        [Xml]
+        public StoreName? StoreName;
 
         #endregion attributes
 
         /// <summary>
-        /// Emits WiX XML.
+        /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
         /// </summary>
-        /// <returns></returns>
-        public XContainer[] ToXml()
+        /// <param name="context">The context.</param>
+        public void Process(ProcessingContext context)
         {
-            var element = new XElement(WixExtension.IIs.ToXNamespace() + "Certificate");
+            context.Project.IncludeWixExtension(WixExtension.IIs);
 
-            element.SetAttribute("Id", Id)
-                   .SetAttribute("BinaryKey", BinaryKey)
-                   .SetAttribute("CertificatePath", CertificatePath)
-                   .SetAttribute("Name", Name)
-                   .SetAttribute("Overwrite", Overwrite)
-                   .SetAttribute("PFXPassword", PFXPassword)
-                   .SetAttribute("Request", Request)
-                   .SetAttribute("StoreLocation", Enum.GetName(typeof(StoreLocation), StoreLocation))
-                   .SetAttribute("StoreName", Enum.GetName(typeof(StoreName), StoreName))
-                   .AddAttributes(this.Attributes); 
+            XElement component = this.CreateParentComponent();
+            component.Add(this.ToXElement(WixExtension.IIs, "Certificate"));
+            context.XParent.FindFirst("Component").Parent?.Add(component);
 
-            return new[] { element };
+            MapComponentToFeatures(component.Attribute("Id")?.Value, ActualFeatures, context);
         }
     }
 }
