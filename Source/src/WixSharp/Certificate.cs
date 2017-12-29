@@ -166,6 +166,12 @@ namespace WixSharp
         #region attributes
 
         /// <summary>
+        /// Primary key used to identify this particular entry.
+        /// </summary>
+        [Xml]
+        public new string Id { get { return base.Id; } set { base.Id = value; } }
+
+        /// <summary>
         /// The Id of a Binary instance that is the certificate to be installed
         /// </summary>
         [Xml]
