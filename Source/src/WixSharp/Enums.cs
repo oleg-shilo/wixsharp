@@ -419,7 +419,17 @@ namespace WixSharp
         /// <summary>
         /// Contains the certificates of those that the user normally sends enveloped messages to or receives signed messages from. See MSDN documentation for more information.
         /// </summary>
-        otherPeople
+        otherPeople,
+
+        /// <summary>
+        /// Contains the certificates of those directly trusted people and resources.
+        /// </summary>
+        trustedPeople,
+
+        /// <summary>
+        /// Contains the certificates of those publishers who are trusted.
+        /// </summary>
+        trustedPublisher,
     }
 
     /// <summary>

@@ -92,7 +92,6 @@ namespace WixSharp
             var regs = new List<RegValue>();
             var props = new List<Property>();
             var bins = new List<Binary>();
-            var certs = new List<Certificate>();
             var genericItems = new List<IGenericEntity>();
             var urlreservation = new List<UrlReservation>();
 
@@ -139,8 +138,6 @@ namespace WixSharp
                         GUID = (item as WixGuid).Value;
                     else if (item is Media)
                         Media.Add(item as Media);
-                    else if (item is Certificate)
-                        certs.Add(item as Certificate);
                     else if (item is IGenericEntity)
                         genericItems.Add(item as IGenericEntity);
                     else
@@ -153,7 +150,6 @@ namespace WixSharp
             RegValues = regs.ToArray();
             Properties = props.ToArray();
             Binaries = bins.ToArray();
-            Certificates = certs.ToArray();
             UrlReservations = urlreservation.ToArray();
             GenericItems = genericItems.ToArray();
         }
@@ -482,11 +478,6 @@ namespace WixSharp
         /// Collection of <see cref="RegValue"/>s to be set during the installation.
         /// </summary>
         public RegValue[] RegValues = new RegValue[0];
-
-        /// <summary>
-        /// Collection of <see cref="Certificate"/> to be installed.
-        /// </summary>
-        public Certificate[] Certificates = new Certificate[0];
         
         /// <summary>
         /// Collection of <see cref="UrlReservation"/> to be installed.
