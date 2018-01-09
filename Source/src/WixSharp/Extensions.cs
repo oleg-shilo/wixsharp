@@ -1629,6 +1629,12 @@ namespace WixSharp
             return element.Descendants().Where(x => x.Name.LocalName == elementName).FirstOrDefault();
         }
 
+        public static XElement FindLastDirectory(this XContainer element)
+        {
+            return context.XParent.Descendants("Directory")
+                                             .FirstOrDefault(x => x.Element("Directory") == null);
+        }
+
         /// <summary>
         /// Removes the element from its current parent and inserts it into another element.
         /// </summary>

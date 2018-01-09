@@ -25,10 +25,10 @@ class Script
         var project =
                 new Project("MyMergeModuleSetup",
                     new Dir(@"%ProgramFiles%\My Company",
-                        //new File(featureA, @"Files\MainFile.txt"),
+                        // new File(featureA, @"Files\MainFile.txt"),
                         new Merge(featureB, @"Files\MyMergeModule.msm"),
-                        new Merge(featureB, @"Files\MyMergeModule1.msm"))
-                        , new EnvironmentVariable("foo", "bar"));
+                        new Merge(featureB, @"Files\MyMergeModule1.msm")),
+                    new EnvironmentVariable("foo", "bar"));
 
         project.DefaultFeature = complete;
         project.UI = WUI.WixUI_FeatureTree;

@@ -117,7 +117,7 @@ namespace WixSharp
         /// </summary>
         [Xml]
         public new string Name { get => base.Name; set => base.Name = value; }
-        
+
         /// <summary>
         /// Specifies that the environment variable should be added to the system environment space. The default is 'no' which
         /// indicates the environment variable is added to the user environment space.
@@ -169,17 +169,15 @@ namespace WixSharp
             if (Condition != null)
             {
                 component.AddElement(new XElement("Condition", Condition.ToXValue())
-                    .AddAttributes(Condition.Attributes));
+                         .AddAttributes(Condition.Attributes));
             }
 
-            context.XParent.FindFirst("Component").Parent?.Add(component);
+            var parent = context.XParent.FindFirstComponentParent() ??
+                         context.XParent.FindLastDirectory();
 
-            if (ActualFeatures.Any())
-                context.FeatureComponents.Map(ActualFeatures, Id);
-            else if (context.FeatureComponents.ContainsKey(context.Project.DefaultFeature))
-                context.FeatureComponents[context.Project.DefaultFeature].Add(Id);
-            else
-                context.FeatureComponents[context.Project.DefaultFeature] = new List<string> {Id};
+            parent?.Add(component);
+
+            MapComponentToFeatures(component.Attr("Id"), ActualFeatures, context);
         }
     }
 }
