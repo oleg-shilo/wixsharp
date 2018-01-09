@@ -1629,10 +1629,15 @@ namespace WixSharp
             return element.Descendants().Where(x => x.Name.LocalName == elementName).FirstOrDefault();
         }
 
+        public static XElement FindFirstComponentParent(this XContainer element)
+        {
+            return element.FindFirst("Component")?.Parent;
+        }
+
         public static XElement FindLastDirectory(this XContainer element)
         {
-            return context.XParent.Descendants("Directory")
-                                             .FirstOrDefault(x => x.Element("Directory") == null);
+            return element.Descendants("Directory")
+                          .FirstOrDefault(x => x.Element("Directory") == null);
         }
 
         /// <summary>
