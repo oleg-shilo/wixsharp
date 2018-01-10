@@ -52,6 +52,18 @@ namespace WixSharp
         /// <summary>
         /// Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
         /// </summary>
+        /// <param name="sqlDb"></param>
+        /// <param name="sql"></param>
+        /// <param name="executeOptions"></param>
+        public SqlString(SqlDatabase sqlDb, string sql, ExecuteSql executeOptions)
+            : this(sql, executeOptions)
+        {
+            SqlDb = sqlDb.Id;
+        }
+
+        /// <summary>
+        /// Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+        /// </summary>
         /// <param name="id"></param>
         /// <param name="sql"></param>
         /// <param name="executeOptions"></param>
@@ -78,6 +90,20 @@ namespace WixSharp
         /// <summary>
         /// Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
         /// </summary>
+        /// <param name="id"></param>
+        /// <param name="sqlDb"></param>
+        /// <param name="sql"></param>
+        /// <param name="executeOptions"></param>
+        public SqlString(Id id, SqlDatabase sqlDb, string sql, ExecuteSql executeOptions)
+            : this(sql, executeOptions)
+        {
+            Id = id;
+            SqlDb = sqlDb.Id;
+        }
+
+        /// <summary>
+        /// Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+        /// </summary>
         /// <param name="feature"></param>
         /// <param name="sql"></param>
         /// <param name="executeOptions"></param>
@@ -98,6 +124,20 @@ namespace WixSharp
             : this(sql, executeOptions)
         {
             SqlDb = sqlDb;
+            Feature = feature;
+        }
+
+        /// <summary>
+        /// Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+        /// </summary>
+        /// <param name="sqlDb"></param>
+        /// <param name="feature"></param>
+        /// <param name="sql"></param>
+        /// <param name="executeOptions"></param>
+        public SqlString(SqlDatabase sqlDb, Feature feature, string sql, ExecuteSql executeOptions)
+            : this(sql, executeOptions)
+        {
+            SqlDb = sqlDb.Id;
             Feature = feature;
         }
 
@@ -132,6 +172,22 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="sqlDb"></param>
+        /// <param name="feature"></param>
+        /// <param name="sql"></param>
+        /// <param name="executeOptions"></param>
+        public SqlString(Id id, SqlDatabase sqlDb, Feature feature, string sql, ExecuteSql executeOptions)
+            : this(sql, executeOptions)
+        {
+            Id = id;
+            SqlDb = sqlDb.Id;
+            Feature = feature;
+        }
+
+        /// <summary>
         /// Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
         /// </summary>
         /// <param name="sql"></param>
@@ -152,6 +208,18 @@ namespace WixSharp
             : this(sql, rollbackOptions)
         {
             SqlDb = sqlDb;
+        }
+
+        /// <summary>
+        /// Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// </summary>
+        /// <param name="sqlDb"></param>
+        /// <param name="sql"></param>
+        /// <param name="rollbackOptions"></param>
+        public SqlString(SqlDatabase sqlDb, string sql, RollbackSql rollbackOptions)
+            : this(sql, rollbackOptions)
+        {
+            SqlDb = sqlDb.Id;
         }
 
         /// <summary>
@@ -183,6 +251,20 @@ namespace WixSharp
         /// <summary>
         /// Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
         /// </summary>
+        /// <param name="id"></param>
+        /// <param name="sqlDb"></param>
+        /// <param name="sql"></param>
+        /// <param name="rollbackOptions"></param>
+        public SqlString(Id id, SqlDatabase sqlDb, string sql, RollbackSql rollbackOptions)
+            : this(sql, rollbackOptions)
+        {
+            Id = id;
+            SqlDb = sqlDb.Id;
+        }
+
+        /// <summary>
+        /// Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// </summary>
         /// <param name="feature"></param>
         /// <param name="sql"></param>
         /// <param name="rollbackOptions"></param>
@@ -203,6 +285,20 @@ namespace WixSharp
             : this(sql, rollbackOptions)
         {
             SqlDb = sqlDb;
+            Feature = feature;
+        }
+
+        /// <summary>
+        /// Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// </summary>
+        /// <param name="sqlDb"></param>
+        /// <param name="feature"></param>
+        /// <param name="sql"></param>
+        /// <param name="rollbackOptions"></param>
+        public SqlString(SqlDatabase sqlDb, Feature feature, string sql, RollbackSql rollbackOptions)
+            : this(sql, rollbackOptions)
+        {
+            SqlDb = sqlDb.Id;
             Feature = feature;
         }
 
@@ -233,6 +329,22 @@ namespace WixSharp
         {
             Id = id;
             SqlDb = sqlDb;
+            Feature = feature;
+        }
+
+        /// <summary>
+        /// Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="sqlDb"></param>
+        /// <param name="feature"></param>
+        /// <param name="sql"></param>
+        /// <param name="rollbackOptions"></param>
+        public SqlString(Id id, SqlDatabase sqlDb, Feature feature, string sql, RollbackSql rollbackOptions)
+            : this(sql, rollbackOptions)
+        {
+            Id = id;
+            SqlDb = sqlDb.Id;
             Feature = feature;
         }
 
