@@ -2794,6 +2794,11 @@
             <param name="certificatePath">The certificate path.</param>
             <param name="request">if set to <c>true</c> [request].</param>
         </member>
+        <member name="P:WixSharp.Certificate.Id">
+            <summary>
+            Primary key used to identify this particular entry.
+            </summary>
+        </member>
         <member name="F:WixSharp.Certificate.BinaryKey">
             <summary>
             The Id of a Binary instance that is the certificate to be installed
@@ -2836,11 +2841,12 @@
             Sets the certificate StoreName.
             </summary>
         </member>
-        <member name="M:WixSharp.Certificate.ToXml">
+        <member name="M:WixSharp.Certificate.Process(WixSharp.ProcessingContext)">
             <summary>
-            Emits WiX XML.
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
             </summary>
-            <returns></returns>
+            <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.Compiler">
              <summary>
@@ -6089,6 +6095,13 @@
             </summary>
             <param name="path">The path.</param>
         </member>
+        <member name="M:WixSharp.Extensions.PathGetExtension(System.String)">
+            <summary>
+            Identical to <see cref="M:System.IO.Path.GetExtension(System.String)"/>. It is useful for Wix# consuming code as it allows avoiding
+            "using System.IO;" directive, which interferes with Wix# types.
+            </summary>
+            <param name="path">The file extension.</param>
+        </member>
         <member name="M:WixSharp.Extensions.PathChangeExtension(System.String,System.String)">
             <summary>
             Change extension of the file path.
@@ -6371,6 +6384,20 @@
             <param name="element">The element to be searched.</param>
             <param name="elementName">The element local name.</param>
             <returns>The element matching the name.</returns>
+        </member>
+        <member name="M:WixSharp.Extensions.FindFirstComponentParent(System.Xml.Linq.XContainer)">
+            <summary>
+            Selects the first descendant "Component" element and returns its parent XElement.
+            </summary>
+            <param name="element">The element to be searched.</param>
+            <returns>Parent XElement of the first component.</returns>
+        </member>
+        <member name="M:WixSharp.Extensions.FindLastDirectory(System.Xml.Linq.XContainer)">
+            <summary>
+            Selects the first descendant "Directory" element that has no other sub-directories (child "Directory" XElements).
+            </summary>
+            <param name="element">The element to be searched.</param>
+            <returns>Directory XElement.</returns>
         </member>
         <member name="M:WixSharp.Extensions.MoveTo(System.Xml.Linq.XElement,System.Xml.Linq.XElement)">
             <summary>
@@ -6977,6 +7004,45 @@
             <param name="binaryKey"></param>
             <param name="executeOptions"></param>
         </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Binary,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="binary"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(System.String,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="binaryKey"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(System.String,WixSharp.Binary,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="binary"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.SqlDatabase,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="binaryKey"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.SqlDatabase,WixSharp.Binary,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="binary"></param>
+            <param name="executeOptions"></param>
+        </member>
         <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,System.String,WixSharp.ExecuteSql)">
             <summary>
             Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
@@ -6985,12 +7051,100 @@
             <param name="binaryKey"></param>
             <param name="executeOptions"></param>
         </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,WixSharp.Binary,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="binary"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,System.String,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="binaryKey"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,System.String,WixSharp.Binary,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="binary"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,WixSharp.SqlDatabase,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="binaryKey"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,WixSharp.SqlDatabase,WixSharp.Binary,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="binary"></param>
+            <param name="executeOptions"></param>
+        </member>
         <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
             <summary>
             Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
             </summary>
             <param name="feature"></param>
             <param name="binaryKey"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Feature,WixSharp.Binary,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="feature"></param>
+            <param name="binary"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(System.String,WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binaryKey"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(System.String,WixSharp.Feature,WixSharp.Binary,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binary"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.SqlDatabase,WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binaryKey"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.SqlDatabase,WixSharp.Feature,WixSharp.Binary,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binary"></param>
             <param name="executeOptions"></param>
         </member>
         <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
@@ -7002,11 +7156,99 @@
             <param name="binaryKey"></param>
             <param name="executeOptions"></param>
         </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,WixSharp.Feature,WixSharp.Binary,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="feature"></param>
+            <param name="binary"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,System.String,WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binaryKey"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,System.String,WixSharp.Feature,WixSharp.Binary,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binary"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,WixSharp.SqlDatabase,WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binaryKey"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,WixSharp.SqlDatabase,WixSharp.Feature,WixSharp.Binary,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binary"></param>
+            <param name="executeOptions"></param>
+        </member>
         <member name="M:WixSharp.SqlScript.#ctor(System.String,WixSharp.RollbackSql)">
             <summary>
             Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
             </summary>
             <param name="binaryKey"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Binary,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="binary"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(System.String,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="binaryKey"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(System.String,WixSharp.Binary,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="binary"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.SqlDatabase,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="binaryKey"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.SqlDatabase,WixSharp.Binary,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="binary"></param>
             <param name="rollbackOptions"></param>
         </member>
         <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,System.String,WixSharp.RollbackSql)">
@@ -7017,12 +7259,100 @@
             <param name="binaryKey"></param>
             <param name="rollbackOptions"></param>
         </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,WixSharp.Binary,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="binary"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,System.String,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="binaryKey"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,System.String,WixSharp.Binary,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="binary"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,WixSharp.SqlDatabase,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="binaryKey"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,WixSharp.SqlDatabase,WixSharp.Binary,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="binary"></param>
+            <param name="rollbackOptions"></param>
+        </member>
         <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Feature,System.String,WixSharp.RollbackSql)">
             <summary>
             Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
             </summary>
             <param name="feature"></param>
             <param name="binaryKey"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Feature,WixSharp.Binary,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="feature"></param>
+            <param name="binary"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(System.String,WixSharp.Feature,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binaryKey"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(System.String,WixSharp.Feature,WixSharp.Binary,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binary"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.SqlDatabase,WixSharp.Feature,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binaryKey"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.SqlDatabase,WixSharp.Feature,WixSharp.Binary,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binary"></param>
             <param name="rollbackOptions"></param>
         </member>
         <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,WixSharp.Feature,System.String,WixSharp.RollbackSql)">
@@ -7032,6 +7362,55 @@
             <param name="id"></param>
             <param name="feature"></param>
             <param name="binaryKey"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,WixSharp.Feature,WixSharp.Binary,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="feature"></param>
+            <param name="binary"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,System.String,WixSharp.Feature,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binaryKey"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,System.String,WixSharp.Feature,WixSharp.Binary,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binary"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,WixSharp.SqlDatabase,WixSharp.Feature,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binaryKey"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlScript.#ctor(WixSharp.Id,WixSharp.SqlDatabase,WixSharp.Feature,WixSharp.Binary,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlScript for <paramref name="binary"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="binary"></param>
             <param name="rollbackOptions"></param>
         </member>
         <member name="F:WixSharp.SqlScript.BinaryKey">
@@ -7113,6 +7492,22 @@
             <param name="sql"></param>
             <param name="executeOptions"></param>
         </member>
+        <member name="M:WixSharp.SqlString.#ctor(System.String,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="sql"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.SqlDatabase,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="sql"></param>
+            <param name="executeOptions"></param>
+        </member>
         <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,System.String,WixSharp.ExecuteSql)">
             <summary>
             Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
@@ -7121,10 +7516,46 @@
             <param name="sql"></param>
             <param name="executeOptions"></param>
         </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,System.String,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="sql"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,WixSharp.SqlDatabase,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="sql"></param>
+            <param name="executeOptions"></param>
+        </member>
         <member name="M:WixSharp.SqlString.#ctor(WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
             <summary>
             Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
             </summary>
+            <param name="feature"></param>
+            <param name="sql"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(System.String,WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="sql"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.SqlDatabase,WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
             <param name="feature"></param>
             <param name="sql"></param>
             <param name="executeOptions"></param>
@@ -7138,10 +7569,46 @@
             <param name="sql"></param>
             <param name="executeOptions"></param>
         </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,System.String,WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="sql"></param>
+            <param name="executeOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,WixSharp.SqlDatabase,WixSharp.Feature,System.String,WixSharp.ExecuteSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be execute according to <paramref name="executeOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="sql"></param>
+            <param name="executeOptions"></param>
+        </member>
         <member name="M:WixSharp.SqlString.#ctor(System.String,WixSharp.RollbackSql)">
             <summary>
             Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
             </summary>
+            <param name="sql"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(System.String,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="sql"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.SqlDatabase,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
             <param name="sql"></param>
             <param name="rollbackOptions"></param>
         </member>
@@ -7153,10 +7620,46 @@
             <param name="sql"></param>
             <param name="rollbackOptions"></param>
         </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,System.String,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="sql"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,WixSharp.SqlDatabase,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="sql"></param>
+            <param name="rollbackOptions"></param>
+        </member>
         <member name="M:WixSharp.SqlString.#ctor(WixSharp.Feature,System.String,WixSharp.RollbackSql)">
             <summary>
             Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
             </summary>
+            <param name="feature"></param>
+            <param name="sql"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(System.String,WixSharp.Feature,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="sql"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.SqlDatabase,WixSharp.Feature,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="sqlDb"></param>
             <param name="feature"></param>
             <param name="sql"></param>
             <param name="rollbackOptions"></param>
@@ -7166,6 +7669,26 @@
             Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
             </summary>
             <param name="id"></param>
+            <param name="feature"></param>
+            <param name="sql"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,System.String,WixSharp.Feature,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
+            <param name="feature"></param>
+            <param name="sql"></param>
+            <param name="rollbackOptions"></param>
+        </member>
+        <member name="M:WixSharp.SqlString.#ctor(WixSharp.Id,WixSharp.SqlDatabase,WixSharp.Feature,System.String,WixSharp.RollbackSql)">
+            <summary>
+            Creates an instance of SqlString from <paramref name="sql"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+            </summary>
+            <param name="id"></param>
+            <param name="sqlDb"></param>
             <param name="feature"></param>
             <param name="sql"></param>
             <param name="rollbackOptions"></param>
@@ -11980,7 +12503,7 @@
         <member name="F:WixSharp.ManagedAction.DefaultUsesProperties">
             <summary>
             The default properties mapped for use with the 'deferred' (as well as 'rollback'  and 'commit') custom actions. See <see cref="F:WixSharp.ManagedAction.UsesProperties"/> for the details.
-            <para>The default value is "INSTALLDIR,UILevel"</para>
+            <para>The default value is "INSTALLDIR,UILevel,ProductCode"</para>
             </summary>
         </member>
         <member name="T:WixSharp.PathFileAction">
@@ -12479,11 +13002,6 @@
         <member name="F:WixSharp.Project.RegValues">
             <summary>
             Collection of <see cref="T:WixSharp.RegValue"/>s to be set during the installation.
-            </summary>
-        </member>
-        <member name="F:WixSharp.Project.Certificates">
-            <summary>
-            Collection of <see cref="T:WixSharp.Certificate"/> to be installed.
             </summary>
         </member>
         <member name="F:WixSharp.Project.UrlReservations">
@@ -15586,6 +16104,16 @@
         <member name="F:WixSharp.StoreName.otherPeople">
             <summary>
             Contains the certificates of those that the user normally sends enveloped messages to or receives signed messages from. See MSDN documentation for more information.
+            </summary>
+        </member>
+        <member name="F:WixSharp.StoreName.trustedPeople">
+            <summary>
+            Contains the certificates of those directly trusted people and resources.
+            </summary>
+        </member>
+        <member name="F:WixSharp.StoreName.trustedPublisher">
+            <summary>
+            Contains the certificates of those publishers who are trusted.
             </summary>
         </member>
         <member name="T:WixSharp.Isolation">
