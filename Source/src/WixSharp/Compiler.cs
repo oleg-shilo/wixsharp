@@ -839,6 +839,12 @@ namespace WixSharp
         static void Build(Project project, string path, OutputType type)
         {
             path = path.ExpandEnvVars();
+            if (path.IsNotEmpty())
+            {
+                var ext = path.PathGetExtension();
+                if (ext.IsEmpty())
+                    path += "." + type.ToString().ToLower();
+            }
 
             string oldCurrDir = Environment.CurrentDirectory;
 

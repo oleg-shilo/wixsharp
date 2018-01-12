@@ -14,7 +14,6 @@ class Script
 {
     static public void Main(string[] args)
     {
-        System.Diagnostics.Debug.Assert(false);
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
@@ -33,9 +32,13 @@ class Script
         project.SetVersionFrom("MyApp_file");
         project.Language = "en-US";
 
+        project.PreserveTempFiles =
+        project.PreserveDbgFiles = false;
+
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
-        project.BuildMsi();
+        project.BuildMsi("ttt");
+        // project.BuildMsi();
     }
 
     static void Compiler_WixSourceGenerated(XDocument document)

@@ -1035,6 +1035,16 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Identical to <see cref="System.IO.Path.GetExtension(string)"/>. It is useful for Wix# consuming code as it allows avoiding
+        /// "using System.IO;" directive, which interferes with Wix# types.
+        /// </summary>
+        /// <param name="path">The file extension.</param>
+        public static string PathGetExtension(this string path)
+        {
+            return IO.Path.GetExtension(path);
+        }
+
+        /// <summary>
         /// Change extension of the file path.
         /// </summary>
         /// <param name="path">The path.</param>
