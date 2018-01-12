@@ -9,6 +9,9 @@ class Script
 {
     static public void Main(string[] args)
     {
+        Feature featureA = new Feature("Install") {Condition = new FeatureCondition(Condition.NOT_Installed, 1)};
+        Feature featureB = new Feature("Update") {Condition = new FeatureCondition(Condition.Installed, 1)};
+
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
@@ -21,7 +24,9 @@ class Script
                 new SqlDatabase("MyDatabase0", ".\\SqlExpress", SqlDbOption.CreateOnInstall,
                     new SqlScript("script", ExecuteSql.OnInstall),
                     new SqlString("alter login Bryce with password = 'Password1'", ExecuteSql.OnInstall)),
-                new SqlDatabase("MyDatabase0", ".\\SqlExpress"));
+                new SqlDatabase(new Id("MyDatabase"), "MyDatabase0", ".\\SqlExpress"),
+                new SqlScript("MyDatabase", featureA, "script", ExecuteSql.OnInstall),
+                new SqlString("MyDatabase", featureB, "alter login Bryce with password = 'Password1'", ExecuteSql.OnInstall));
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
