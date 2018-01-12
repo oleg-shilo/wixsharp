@@ -1639,11 +1639,21 @@ namespace WixSharp
             return element.Descendants().Where(x => x.Name.LocalName == elementName).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Selects the first descendant "Component" element and returns its parent XElement.
+        /// </summary>
+        /// <param name="element">The element to be searched.</param>
+        /// <returns>Parent XElement of the first component.</returns>
         public static XElement FindFirstComponentParent(this XContainer element)
         {
             return element.FindFirst("Component")?.Parent;
         }
 
+        /// <summary>
+        /// Selects the first descendant "Directory" element that has no other sub-directories (child "Directory" XElements).
+        /// </summary>
+        /// <param name="element">The element to be searched.</param>
+        /// <returns>Directory XElement.</returns>
         public static XElement FindLastDirectory(this XContainer element)
         {
             return element.Descendants("Directory")

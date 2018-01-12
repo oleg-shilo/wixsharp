@@ -32,13 +32,9 @@ class Script
         project.SetVersionFrom("MyApp_file");
         project.Language = "en-US";
 
-        project.PreserveTempFiles =
-        project.PreserveDbgFiles = false;
-
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
-        project.BuildMsi("ttt");
-        // project.BuildMsi();
+        project.BuildMsi();
     }
 
     static void Compiler_WixSourceGenerated(XDocument document)
