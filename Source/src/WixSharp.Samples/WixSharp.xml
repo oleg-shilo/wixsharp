@@ -11106,6 +11106,11 @@
             The .NET4.6.2 installed. This condition is to be used in Project.SetNetFxPrerequisite.
             </summary>
         </member>
+        <member name="F:WixSharp.Condition.Net47_Installed">
+            <summary>
+            The .NET4.7 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+            </summary>
+        </member>
         <member name="F:WixSharp.Condition.Net30_SP_Installed">
             <summary>
             The .NET3.0 SP installed. This condition is to be used in Project.SetNetFxPrerequisite.
@@ -11128,6 +11133,29 @@
             
              </code>
              </example>
+        </member>
+        <member name="M:WixSharp.Condition.op_BitwiseAnd(WixSharp.Condition,WixSharp.Condition)">
+            <summary>
+            Returns a new <see cref="T:WixSharp.Condition"/> performing an AND between two conditions.
+            </summary>
+            <param name="a">The first <see cref="T:WixSharp.Condition"/></param>
+            <param name="b">The second <see cref="T:WixSharp.Condition"/></param>
+            <returns>The new AND'ed condition.</returns>
+        </member>
+        <member name="M:WixSharp.Condition.op_BitwiseOr(WixSharp.Condition,WixSharp.Condition)">
+            <summary>
+            Returns a new <see cref="T:WixSharp.Condition"/> performing an OR between two conditions.
+            </summary>
+            <param name="a">The first <see cref="T:WixSharp.Condition"/></param>
+            <param name="b">The second <see cref="T:WixSharp.Condition"/></param>
+            <returns>The new OR'ed condition.</returns>
+        </member>
+        <member name="M:WixSharp.Condition.NOT(System.String)">
+            <summary>
+            Returns a new <see cref="T:WixSharp.Condition"/> adding a logical NOT before the condition.
+            </summary>
+            <param name="x">The first <see cref="T:WixSharp.Condition"/> or text</param>
+            <returns>The new NOT'ed condition.</returns>
         </member>
         <member name="T:WixSharp.FeatureCondition">
             <summary>

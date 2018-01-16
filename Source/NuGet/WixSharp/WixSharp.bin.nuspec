@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>WixSharp.bin</id>
+    <version>1.6.1.0</version>
+    <title>Wix# (WixSharp) - Binaries</title>
+    <authors>Oleg Shilo</authors>
+    <owners>Oleg Shilo</owners>
+    <licenseUrl>https://wixsharp.codeplex.com/license</licenseUrl>
+    <projectUrl>https://wixsharp.codeplex.com/</projectUrl>
+    <iconUrl>https://download-codeplex.sec.s-msft.com/Download?ProjectName=wixsharp&amp;DownloadId=872632&amp;Build=20941</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
+The package contains Wix# binaries only.  
+
+In order to use this package you need have WiX Toolset installed.
+The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
+    <summary>Wix# (WixSharp) - Binaries</summary>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright (C) 2004-2017 Oleg Shilo</copyright>
+    <language>en-AU</language>
+    <tags>C# scripting msi install setup wix</tags>
+  </metadata>
+  <files>
+    <file src="lib\BootstrapperCore.dll" target="lib\BootstrapperCore.dll" />
+    <file src="lib\BootstrapperCore.xml" target="lib\BootstrapperCore.xml" />
+    <file src="lib\Microsoft.Deployment.WindowsInstaller.dll" target="lib\Microsoft.Deployment.WindowsInstaller.dll" />
+    <file src="lib\Microsoft.Deployment.WindowsInstaller.xml" target="lib\Microsoft.Deployment.WindowsInstaller.xml" />
+    <file src="lib\WixSharp.dll" target="lib\WixSharp.dll" />
+    <file src="lib\WixSharp.xml" target="lib\WixSharp.xml" />
+    <file src="lib\WixSharp.UI.dll" target="lib\WixSharp.UI.dll" />
+    <file src="lib\WixSharp.UI.xml" target="lib\WixSharp.UI.xml" />
+    <file src="lib\WixSharp.Msi.dll" target="lib\WixSharp.Msi.dll" />
+    <file src="lib\WixSharp.Msi.xml" target="lib\WixSharp.Msi.xml" />
+  </files>
+</package>
