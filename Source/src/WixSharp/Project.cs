@@ -478,12 +478,12 @@ namespace WixSharp
         /// Collection of <see cref="RegValue"/>s to be set during the installation.
         /// </summary>
         public RegValue[] RegValues = new RegValue[0];
-        
+
         /// <summary>
         /// Collection of <see cref="UrlReservation"/> to be installed.
         /// </summary>
         public UrlReservation[] UrlReservations = new UrlReservation[0];
-		
+
         /// <summary>
         /// Collection of the user defined <see cref="IGenericEntity"/> items.
         /// </summary>
@@ -531,7 +531,7 @@ namespace WixSharp
         /// Collection of the <see cref="T:WixSharp.LaunchCondition"/>s associated with the setup.
         /// </summary>
         public List<LaunchCondition> LaunchConditions = new List<LaunchCondition>();
-		
+
         /// <summary>
         /// Path to the file containing the image (e.g. bmp) setup dialogs banner. If not specified default image will be used.
         /// </summary>

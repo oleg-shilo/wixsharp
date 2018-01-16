@@ -98,7 +98,7 @@ class Script
         // You need to adjust IsWxsGenerationThreadSafe only if you do concurrent MSI builds
         // Compiler.AutoGeneration.IsWxsGenerationThreadSafe = true;
 
-        // globally via configuration
+        // globally via configuration (by default it is already false)
         Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = false;
 
         // if you want to modify the string template for HashedTargetPathIdAlgorithm you can do it
