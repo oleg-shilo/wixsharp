@@ -4,6 +4,7 @@
 //css_ref System.Xml.dll;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -19,7 +20,6 @@ class Script
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File("1_readme.txt"),
                     new File(new Id("MyApp_file"), @"Files\Bin\MyApp.exe")),
                             new Dir(@"Docs\Manual",
                                 new File(@"Files\Docs\Manual.txt")
@@ -28,17 +28,21 @@ class Script
                                 }),
                         new Property("PropName", "<your value>"));
 
+        // project.SetVersionFrom("MyApp_file");
+        project.SetVersionFromFileId("MyApp_file");
+        // project.SetVersionFromFile(@"Files\Bin\MyApp.exe");
+
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.EmitConsistentPackageId = true;
         project.PreserveTempFiles = true;
         project.PreserveDbgFiles = true;
-        project.SetVersionFrom("MyApp_file");
+
         project.Language = "en-US";
 
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
-        //project.BuildWxs();
-        project.BuildMsi();
+        project.BuildWxs();
+        // project.BuildMsi();
     }
 
     static void Compiler_WixSourceGenerated(XDocument document)

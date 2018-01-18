@@ -34,7 +34,7 @@ public class Script
 
         project.ManagedUI = ManagedUI.Default;
         project.UIInitialized += Project_UIInitialized;
-        // project.Load += msi_Load;
+        project.Load += msi_Load;
         project.AfterInstall += msi_AfterInstall;
 
         project.BuildMsi();
@@ -74,7 +74,7 @@ public class Script
             string readme = io.Path.Combine(e.InstallDir, @"Docs\readme.txt");
 
             if (io.File.Exists(readme))
-                Process.Start(readme);
+                Process.Start("notepad.exe", readme);
             else
                 MessageBox.Show("Readme.txt is not present. You may want to download it from the product website.", e.ProductName);
         }
