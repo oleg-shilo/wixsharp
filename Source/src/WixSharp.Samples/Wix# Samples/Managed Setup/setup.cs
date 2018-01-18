@@ -34,7 +34,7 @@ public class Script
 
         project.ManagedUI = ManagedUI.Default;
         project.UIInitialized += Project_UIInitialized;
-        project.Load += msi_Load;
+        // project.Load += msi_Load;
         project.AfterInstall += msi_AfterInstall;
 
         project.BuildMsi();
@@ -69,7 +69,7 @@ public class Script
 
     static void msi_AfterInstall(SetupEventArgs e)
     {
-        if (!e.IsUninstalling && e.UILevel > 2)
+        if (!e.IsUninstalling && e.UILevel >= 2)
         {
             string readme = io.Path.Combine(e.InstallDir, @"Docs\readme.txt");
 
