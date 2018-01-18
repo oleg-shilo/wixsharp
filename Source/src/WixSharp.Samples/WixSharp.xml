@@ -5633,6 +5633,15 @@
               <c>true</c> if it is an absolute path; otherwise, <c>false</c>.
             </returns>
         </member>
+        <member name="M:WixSharp.Extensions.IsDigit(System.Char)">
+            <summary>
+            Determines whether the character is a digit.
+            </summary>
+            <param name="c">The c.</param>
+            <returns>
+              <c>true</c> if the specified c is digit; otherwise, <c>false</c>.
+            </returns>
+        </member>
         <member name="M:WixSharp.Extensions.FindIndex``1(System.Collections.Generic.IEnumerable{``0},``0)">
             <summary>
             Gets the index of an item from the collection.

@@ -199,6 +199,18 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Determines whether the character is a digit.
+        /// </summary>
+        /// <param name="c">The c.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified c is digit; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsDigit(this char c)
+        {
+            return char.IsDigit(c);
+        }
+
+        /// <summary>
         /// Gets the index of an item from the collection.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -1252,7 +1264,10 @@ namespace WixSharp
                 if (!legalChars.Contains(retval[i]))
                     retval = retval.Replace(data[i], '_');
             }
-            return retval;
+            if (retval.IsNotEmpty() && retval[0].IsDigit())
+                return "_" + retval;
+            else
+                return retval;
         }
 
         internal static string ExpandCommandPath(this string path)

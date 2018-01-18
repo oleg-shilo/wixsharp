@@ -14,9 +14,12 @@ class Script
 {
     static public void Main(string[] args)
     {
+        Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = false;
+
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
+                    new File("1_readme.txt"),
                     new File(new Id("MyApp_file"), @"Files\Bin\MyApp.exe")),
                             new Dir(@"Docs\Manual",
                                 new File(@"Files\Docs\Manual.txt")
@@ -34,6 +37,7 @@ class Script
 
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
+        //project.BuildWxs();
         project.BuildMsi();
     }
 

@@ -56,15 +56,15 @@ class Script
 
     static public void AutoId_Incremental_BuiltIn()
     {
+        // globally via configuration
+        Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = true;
+
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                      new File(@"Files\Bin\MyApp.exe"),
                      new Dir(@"Docs\Manual",
                          new File(@"Files\Docs\Manual.txt"))));
-
-        // globally via configuration
-        Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = true;
 
         // globally via delegate
         Compiler.AutoGeneration.CustomIdAlgorithm = WixEntity.IncrementalIdFor;
@@ -85,6 +85,9 @@ class Script
         // Thus the code below generates the following XML:
         // <File Id="Manual.txt_90490314" Source="Files\Docs\Manual.txt" />
 
+        // globally via configuration (by default it is already false)
+        Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = false;
+
         var project =
              new Project("MyProduct",
                  new Dir(@"%ProgramFiles%\My Company\My Product",
@@ -97,9 +100,6 @@ class Script
 
         // You need to adjust IsWxsGenerationThreadSafe only if you do concurrent MSI builds
         // Compiler.AutoGeneration.IsWxsGenerationThreadSafe = true;
-
-        // globally via configuration (by default it is already false)
-        Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = false;
 
         // if you want to modify the string template for HashedTargetPathIdAlgorithm you can do it
         // via `AutoGeneration` property.
