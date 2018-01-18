@@ -1,8 +1,9 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 Copyright (c) 2015 Oleg Shilo
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -19,7 +20,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
+
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -39,7 +42,7 @@ namespace WixSharp
 
             string content = System.IO.File.ReadAllText(regFile);
 
-            content  = Regex.Replace(content, @"\r\n|\n\r|\n|\r", "\r\n");
+            content = Regex.Replace(content, @"\r\n|\n\r|\n|\r", "\r\n");
 
             var parser = new RegParser();
 
@@ -78,9 +81,10 @@ namespace WixSharp
          hex(a): REG_RESOURCE_REQUIREMENTS_LIST
          hex(b): REG_QWORD
          */
+
         public static object Deserialize(string text, Encoding encoding)
         {
-            //Note all string are encoded as Encoding.Unicode (UTF16LE) 
+            //Note all string are encoded as Encoding.Unicode (UTF16LE)
             //http://en.wikipedia.org/wiki/Windows_Registry
             string rawValue = "";
 
@@ -126,7 +130,7 @@ namespace WixSharp
 
             if (isPreffix("\""))
             {
-                var strValue = rawValue.Substring(0, rawValue.Length-1); //trim a single " char
+                var strValue = rawValue.Substring(0, rawValue.Length - 1); //trim a single " char
                 return Regex.Unescape(strValue).EscapeEnvars();
             }
 
@@ -139,7 +143,7 @@ namespace WixSharp
         public static byte[] DecodeFromRegHex(this string obj)
         {
             var data = new List<byte>();
-            for (int i = 0; !string.IsNullOrEmpty(obj) && i < obj.Length; )
+            for (int i = 0; !string.IsNullOrEmpty(obj) && i < obj.Length;)
             {
                 if (obj[i] == ',')
                 {
@@ -155,7 +159,7 @@ namespace WixSharp
 
         static string Unescape(this string text)
         {
-            //Strip  'continue' char and merge string 
+            //Strip  'continue' char and merge string
             return Regex.Replace(text, "\\\\\r\n[ ]*", string.Empty);
         }
 
@@ -197,7 +201,7 @@ namespace WixSharp
         /// <returns>A Dictionary with reg keys as Dictionary keys and a Dictionary of (valuename, valuedata)</returns>
         public Dictionary<string, Dictionary<string, string>> Parse(string content)
         {
-            Encoding = Encoding.GetEncoding(this.GetEncoding(content));
+            Encoding = this.GetEncoding(content);
 
             var retValue = new Dictionary<string, Dictionary<string, string>>();
 
@@ -299,12 +303,12 @@ namespace WixSharp
         /// Retrieves the encoding of the reg file, checking the word "REGEDIT4"
         /// </summary>
         /// <returns></returns>
-        string GetEncoding(string content)
+        Encoding GetEncoding(string content)
         {
             if (Regex.IsMatch(content, "([ ]*(\r\n)*)REGEDIT4", RegexOptions.IgnoreCase | RegexOptions.Singleline))
-                return "ANSI";
+                return Encoding.Default;
             else
-                return "Unicode"; //The original code had a mistake. It is not UTF8 but UTF16LE (Encoding.Unicode) 
+                return Encoding.Unicode; //The original code had a mistake. It is not UTF8 but UTF16LE (Encoding.Unicode)
         }
     }
 }
