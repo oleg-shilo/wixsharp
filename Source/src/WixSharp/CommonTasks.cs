@@ -552,7 +552,7 @@ namespace WixSharp.CommonTasks
             project.UrlReservations = project.UrlReservations.Combine(items).Distinct().ToArray();
             return project;
         }
-        
+
         /// <summary>
         /// Adds the binary items to the Project.
         /// </summary>
@@ -594,7 +594,7 @@ namespace WixSharp.CommonTasks
         /// <param name="installedVersion">The detected installed product version.</param>
         /// <returns></returns>
         public delegate bool DowngradeErrorCheck(Version thisVersion, Version installedVersion);
-        
+
         /// <summary>
         /// Adds the assembly reference to the ManagedAction.
         /// </summary>
@@ -896,7 +896,8 @@ namespace WixSharp.CommonTasks
         /// "!(bind.FileVersion.&lt;file ID&gt;" into the XML Product's Version attribute.</para>
         /// <remarks>
         /// If <c>SetVersionFrom</c> is used then Wix# is no longer responsible for setting the product version.
-        /// This task is delegated to WiX so the whole value `project.Version` becomes completely irrelevant. </remarks>
+        /// This task is delegated to WiX so the whole value `project.Version` becomes completely irrelevant. Thus
+        /// <c>SetVersionFromFile/SetVersionFromFileId</c> are the much better alternative.</remarks>
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="fileId">The file identifier.</param>
@@ -944,6 +945,24 @@ namespace WixSharp.CommonTasks
         static public Project SetVersionFromFile(this Project project, string filePath)
         {
             project.Version = GetVersionFromFile(filePath);
+            return project;
+        }
+
+        /// <summary>
+        /// Sets the version of the project to the version value retrieved from the file being a part of the installation.
+        /// <para>If the file is an assembly then the assembly version is returned.</para>
+        /// <para>If the file is a native binary then file version is returned.</para>
+        /// </summary>
+        /// <remarks>
+        /// Attempt to extract the assembly version may fail because the dll/exe file may not be an assembly
+        /// or because it can be in the wrong assembly format (x64 vs x86). In any case the method will fall back to
+        /// the file version.</remarks>
+        /// <param name="project">The project.</param>
+        /// <param name="fileId">The file path.</param>
+        /// <returns></returns>
+        static public Project SetVersionFromFileId(this Project project, string fileId)
+        {
+            project.Version = project.ExtractVersionFrom(fileId).ToRawVersion();
             return project;
         }
 
@@ -1358,6 +1377,9 @@ namespace WixSharp.CommonTasks
         [DllImport("user32.dll", SetLastError = true)]
         static extern bool MoveWindow(IntPtr hwnd, int x, int y, int cx, int cy, bool repaint);
 
+        [DllImport("User32.dll")]
+        static extern int SetForegroundWindow(IntPtr hwnd);
+
         /// <summary>
         /// Activates UACRevealer
         /// </summary>
@@ -1374,6 +1396,8 @@ namespace WixSharp.CommonTasks
             // It seems that just having a foreground process main window (e.g. notepad.exe)
             // with the focus is enough to trick the UAC into believing that UAC prompt needs to
             // be displayed. Tested on Win10.
+            //
+            // Though the trick is not 100% reliable and may not work on all OS versions.
 
             if (Enabled)
                 try
@@ -1384,6 +1408,7 @@ namespace WixSharp.CommonTasks
                     if (UAC_revealer.MainWindowHandle != IntPtr.Zero)
                     {
                         MoveWindow(UAC_revealer.MainWindowHandle, 0, 0, 30, 30, true);
+                        // SetForegroundWindow(UAC_revealer.MainWindowHandle);
                     }
                 }
                 catch { }
