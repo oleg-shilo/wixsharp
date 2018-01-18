@@ -146,7 +146,10 @@ namespace WixSharp
                             if (attr.SetAsAction)
                             {
                                 if (!actionExists)
-                                    actions.Add(new SetPropertyAction(new Id("Set_" + attr.Name), attr.Name, value.ToString()));
+                                    actions.Add(new SetPropertyAction(new Id("Set_" + attr.Name), attr.Name, value.ToString())
+                                    {
+                                        Step = Step.CostFinalize
+                                    });
                             }
                             else
                             {
