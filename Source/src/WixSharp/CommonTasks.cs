@@ -893,21 +893,34 @@ namespace WixSharp.CommonTasks
         /// <summary>
         /// Sets the Project version from the file version of the file specified by it's ID.
         /// <para>This method sets project WixSourceGenerated event handler and injects
-        /// "!(bind.FileVersion.&lt;file ID&gt;" into the XML Product's Version attribute.</para>
-        /// <remarks>
+        /// "!(bind.FileVersion.&lt;file ID&gt;" into the XML Product's Version attribute.</para><remarks>
         /// If <c>SetVersionFrom</c> is used then Wix# is no longer responsible for setting the product version.
         /// This task is delegated to WiX so the whole value `project.Version` becomes completely irrelevant. Thus
         /// <c>SetVersionFromFile/SetVersionFromFileId</c> are the much better alternative.</remarks>
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="fileId">The file identifier.</param>
+        /// <param name="setProjectVersionAsWell">if set to <c>true</c> set `Project.Version` as well.</param>
         /// <returns></returns>
-        static public Project SetVersionFrom(this Project project, string fileId)
+        static public Project SetVersionFrom(this Project project, string fileId, bool setProjectVersionAsWell = true)
         {
             project.SetVersionFromIdValue = fileId;
             project.WixSourceGenerated += document =>
                 document.FindSingle("Product")
                         .AddAttributes("Version=!(bind.FileVersion." + fileId + ")");
+
+            if (setProjectVersionAsWell)
+            {
+                var file = project.AllFiles.FirstOrDefault(x => x.Id == fileId);
+                if (file != null)
+                {
+                    var file_path = Utils.PathCombine(project.SourceBaseDir, file.Name);
+                    if (IO.File.Exists(file_path))
+                        project.Version = new Version(FileVersionInfo.GetVersionInfo(file_path).FileVersion);
+                }
+                else
+                    Console.WriteLine("Warning: ");
+            }
             return project;
         }
 

@@ -816,17 +816,18 @@
             </code>
             </example>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.SetVersionFrom(WixSharp.Project,System.String)">
+        <member name="M:WixSharp.CommonTasks.Tasks.SetVersionFrom(WixSharp.Project,System.String,System.Boolean)">
             <summary>
             Sets the Project version from the file version of the file specified by it's ID.
             <para>This method sets project WixSourceGenerated event handler and injects
-            "!(bind.FileVersion.&lt;file ID&gt;" into the XML Product's Version attribute.</para>
-            <remarks>
+            "!(bind.FileVersion.&lt;file ID&gt;" into the XML Product's Version attribute.</para><remarks>
             If <c>SetVersionFrom</c> is used then Wix# is no longer responsible for setting the product version.
-            This task is delegated to WiX so the whole value `project.Version` becomes completely irrelevant. </remarks>
+            This task is delegated to WiX so the whole value `project.Version` becomes completely irrelevant. Thus
+            <c>SetVersionFromFile/SetVersionFromFileId</c> are the much better alternative.</remarks>
             </summary>
             <param name="project">The project.</param>
             <param name="fileId">The file identifier.</param>
+            <param name="setProjectVersionAsWell">if set to <c>true</c> [set project version as well].</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.CommonTasks.Tasks.ExtractVersionFrom(WixSharp.Project,System.String)">
@@ -850,6 +851,20 @@
             the file version.</remarks>
             <param name="project">The project.</param>
             <param name="filePath">The file path.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.SetVersionFromFileId(WixSharp.Project,System.String)">
+            <summary>
+            Sets the version of the project to the version value retrieved from the file being a part of the installation.
+            <para>If the file is an assembly then the assembly version is returned.</para>
+            <para>If the file is a native binary then file version is returned.</para>
+            </summary>
+            <remarks>
+            Attempt to extract the assembly version may fail because the dll/exe file may not be an assembly
+            or because it can be in the wrong assembly format (x64 vs x86). In any case the method will fall back to
+            the file version.</remarks>
+            <param name="project">The project.</param>
+            <param name="fileId">The file path.</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.CommonTasks.Tasks.GetVersionFromFile(System.String)">

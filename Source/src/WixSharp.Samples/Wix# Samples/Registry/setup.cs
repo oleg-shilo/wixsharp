@@ -21,7 +21,7 @@ class Script
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(fullSetup, @"readme.txt")),
-                new RegFile(fullSetup, "MyProduct.reg"), //RegFile does the same Tasks.ImportRegFile
+                new RegFile(fullSetup, "_MyProduct.reg"), //RegFile does the same Tasks.ImportRegFile
                 new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "LICENSE_KEY", "01020304")
                 {
                     AttributesDefinition = "Type=binary"
