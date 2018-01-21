@@ -38,6 +38,7 @@ class Script
         CopyFiles(root + @"\bin\WixSharp\Wix_bin\SDK", "Microsoft.Deployment.WindowsInstaller.dll", "lib");
         CopyFiles(root + @"\bin\WixSharp\Wix_bin\SDK", "Microsoft.Deployment.WindowsInstaller.xml", "lib");
         CopyFiles(root + @"\NuGet\MSBuild_SetEnvVar", "SetEnvVar.dll", "build");
+        CopyFiles(root + @"\src\WixSharp.Samples", "nbsbuilder.exe", "lib");
 
         Console.WriteLine("Done!");
     }

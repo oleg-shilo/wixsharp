@@ -32,5 +32,6 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
     <file src="lib\WixSharp.UI.xml" target="lib\WixSharp.UI.xml" />
     <file src="lib\WixSharp.Msi.dll" target="lib\WixSharp.Msi.dll" />
     <file src="lib\WixSharp.Msi.xml" target="lib\WixSharp.Msi.xml" />
+    <file src="lib\nbsbuilder.exe" target="lib\nbsbuilder.exe" />
   </files>
 </package>

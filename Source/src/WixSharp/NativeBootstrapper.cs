@@ -123,7 +123,7 @@ namespace WixSharp
                                         IO.Path.GetFullPath(PrerequisiteFile),
                                         IO.Path.GetFullPath(PrimaryFile),
                                         PrerequisiteRegKeyValue,
-                                        DoNotPostVerifyPrerequisite ? "/verify:yes" : "/verify:no",
+                                        DoNotPostVerifyPrerequisite ? "/verify:no" : "/verify:yes",
                                         OptionalArguments ?? ""));
 
             var retval = IO.Path.GetFullPath(OutputFile);
