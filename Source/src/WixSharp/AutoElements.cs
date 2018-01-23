@@ -305,7 +305,8 @@ namespace WixSharp
                         "LocalAppDataFolder",
                         "TempFolder",
                         "PersonalFolder",
-                        "DesktopFolder"
+                        "DesktopFolder",
+                        "StartupFolder"
                     };
         }
 
