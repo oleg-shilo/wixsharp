@@ -908,6 +908,10 @@ namespace WixSharp
         /// Algorithm for generating deterministic <see cref="T:WixSharp.File"/>Id(s) based on the hash of the target path.
         /// <para>This algorithm addresses the limitation of the incremental-Id legacy algorithm, which it quite reliable but
         /// non deterministic.</para>
+        /// <remarks>
+        /// As any hash, the hash of the target path is not 100% reliable thus if you are packaging very high number
+        /// files you may occasionally get duplication. Use alternative custom ID-allocation algorithm (e.g. random GUIDs).
+        /// </remarks>
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
@@ -917,7 +921,7 @@ namespace WixSharp
             {
                 var target_path = this.GetTargetPathOf(file);
 
-                var dir_hash = Math.Abs(target_path.PathGetDirName().GetHashCode32());
+                var dir_hash = Math.Abs(target_path.GetHashCode32());
                 var file_name = target_path.PathGetFileName().EscapeIllegalCharacters();
 
                 if (Compiler.AutoGeneration.HashedTargetPathIdAlgorithm_FileIdMask != null)

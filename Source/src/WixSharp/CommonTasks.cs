@@ -893,14 +893,22 @@ namespace WixSharp.CommonTasks
         /// <summary>
         /// Sets the Project version from the file version of the file specified by it's ID.
         /// <para>This method sets project WixSourceGenerated event handler and injects
-        /// "!(bind.FileVersion.&lt;file ID&gt;" into the XML Product's Version attribute.</para><remarks>
-        /// If <c>SetVersionFrom</c> is used then Wix# is no longer responsible for setting the product version.
-        /// This task is delegated to WiX so the whole value `project.Version` becomes completely irrelevant. Thus
-        /// <c>SetVersionFromFile/SetVersionFromFileId</c> are the much better alternative.</remarks>
+        /// "!(bind.FileVersion.&lt;file ID&gt;" into the XML Product's Version attribute.</para>
+        ///
+        /// <remarks>
+        /// If <c>SetVersionFrom</c> is used then Wix# is no longer responsible for setting the final product version.
+        /// This task is delegated to WiX so the whole value `project.Version` be replaced with the binding
+        /// expression just before passing XML to the WiX compiler.
+        /// <para>Note, this methods still sets `Project.Version` as it is needed in order to
+        /// maintain auto-generating project/product identities.
+        /// </para>
+        /// You can also consider using <c>SetVersionFromFile/SetVersionFromFileId</c> as an alternative approach.
+        /// </remarks>
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="fileId">The file identifier.</param>
-        /// <param name="setProjectVersionAsWell">if set to <c>true</c> set `Project.Version` as well.</param>
+        /// <param name="setProjectVersionAsWell">if set to <c>true</c> set `Project.Version` as well. Needed to
+        /// maintain auto-generating project/product identities.</param>
         /// <returns></returns>
         static public Project SetVersionFrom(this Project project, string fileId, bool setProjectVersionAsWell = true)
         {
