@@ -1854,9 +1854,14 @@ namespace WixSharp
                     string workingDir = wShortcut.WorkingDirectory.IsNotEmpty() ?
                                             wShortcut.WorkingDirectory :
                                             dirItem.Attribute("Id").Value;
+
+                    var shortcutId = wShortcut.Id;
+                    if(wShortcut.isAutoId)
+                        shortcutId = "Shortcut." + wFile.Id + "." + shortcutId; // to show the file parent
+
                     var shortcutElement =
                         new XElement("Shortcut",
-                            new XAttribute("Id", "Shortcut." + wFile.Id + "." + wShortcut.Id),
+                            new XAttribute("Id", shortcutId),
                             new XAttribute("WorkingDirectory", workingDir),
                             new XAttribute("Arguments", wShortcut.Arguments),
                             new XAttribute("Directory", locationDirId),
@@ -1900,6 +1905,10 @@ namespace WixSharp
                             .AddAttributes(wShortcut.Condition.Attributes));
 
                 string workingDir = wShortcut.WorkingDirectory.IsNotEmpty() ? wShortcut.WorkingDirectory : GetShortcutWorkingDirectopry(wShortcut.Target);
+
+                var shortcutId = wShortcut.Id;
+                if (wShortcut.isAutoId)
+                    shortcutId = wDir.Id + "." + shortcutId;
 
                 XElement sc = comp.AddElement(
                    new XElement("Shortcut",
