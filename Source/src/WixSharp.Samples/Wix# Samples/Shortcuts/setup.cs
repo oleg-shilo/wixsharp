@@ -16,6 +16,7 @@ class Script
     {
         try
         {
+            Dir d;
             var project =
                 new Project("My Product",
                     new Dir(@"%ProgramFiles%\My Company\My Product",
