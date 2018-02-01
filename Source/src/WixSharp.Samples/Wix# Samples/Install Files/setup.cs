@@ -15,7 +15,6 @@ class Script
 {
     static public void Main(string[] args)
     {
-        Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = false;
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
@@ -25,8 +24,8 @@ class Script
                         new File(@"Files\Docs\Manual.txt")
                         {
                             NeverOverwrite = true
-                        })),
-                    new Property("PropName", "<your value>")));
+                        }))),
+                    new Property("PropName", "<your value>"));
 
         project.SetVersionFrom("MyApp_file");
         // project.SetVersionFromFileId("MyApp_file");
