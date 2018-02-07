@@ -70,11 +70,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>shlwpi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) $(SolutionDir)..\WixSharp.Samples\$(TargetFileName)
-copy $(TargetPath) $(SolutionDir)..\..\Output\$(TargetFileName)
+      <Command>copy $(TargetPath) $(SolutionDir)..\..\WixSharp.Samples\$(TargetFileName)
+
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -95,16 +95,14 @@ copy $(TargetPath) $(SolutionDir)..\..\Output\$(TargetFileName)
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>shlwpi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) $(SolutionDir)..\WixSharp.Samples\$(TargetFileName)
-copy $(TargetPath) $(SolutionDir)..\..\Output\$(TargetFileName)
-</Command>
+      <Command>copy $(TargetPath) $(SolutionDir)..\..\WixSharp.Samples\$(TargetFileName)
+copy $(TargetPath) $(SolutionDir)Output\$(TargetFileName)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Output\chicon.cpp" />
     <ClCompile Include="nbsbuilder.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
