@@ -24,7 +24,7 @@ public:
 
         WaitForSingleObject(sei.hProcess, INFINITE);
     }
-    
+
     static void RunApp(wstring app)
     {
         SHELLEXECUTEINFOW sei = { sizeof(sei) };
@@ -46,7 +46,7 @@ public:
 
 class Utils
 {
-public: 
+public:
     static bool StartWith(wstring data, wstring pattern)
     {
         for(UINT i = 0; i < pattern.length(); i++)
@@ -94,9 +94,9 @@ public:
     static wstring DataToString(string str)
     {
         wstring retval;
-        retval.resize(str.length()*sizeof(WCHAR));
+        retval.resize((str.length() + sizeof(WCHAR) - 1)/sizeof(WCHAR));
         memcpy((void*)retval.data(), str.data(), str.length());
-        return retval; 
+        return retval;
     }
 
     static string StringToData(wstring data)
@@ -104,7 +104,7 @@ public:
         string retval;
         retval.resize(data.length()*sizeof(WCHAR));
         memcpy((void*)retval.data(), data.data(), retval.length());
-        return retval; 
+        return retval;
     }
 };
 
@@ -119,7 +119,7 @@ public:
     {
         delete file;
     }
-    
+
     InputStream(wstring name)
     {
         this->name = name;
@@ -144,7 +144,7 @@ public:
         file->read((char*)&retval, (streamsize)sizeof(retval));
         return retval;
     }
-    
+
     string ReadData(long size)
     {
         string buffer;
@@ -172,7 +172,7 @@ public:
         buffer.resize(fileSize);
         file.seekg(0)
             .read((char*)buffer.data(), (streamsize)buffer.size());
-        
+
         return buffer;
     }
 };
@@ -187,7 +187,7 @@ public:
     {
         delete file;
     }
-    
+
     OutputStream(wstring name)
     {
         this->name = name;
@@ -253,7 +253,7 @@ public:
         buffer.resize(resSize);
         memcpy((char*)buffer.data(), pData, resSize);
 
-        UnlockResource(resHandle);	
+        UnlockResource(resHandle);
 
         return buffer;
     }
@@ -274,7 +274,7 @@ public:
         {
             return false;
         }
-        BOOL r = ::EndUpdateResource(h, FALSE); // write changes 
+        BOOL r = ::EndUpdateResource(h, FALSE); // write changes
         DWORD err = GetLastError();
         return true;
     }
@@ -285,7 +285,7 @@ public:
         {
             return false;
         }
-        BOOL r = ::EndUpdateResource(h, FALSE); // write changes 
+        BOOL r = ::EndUpdateResource(h, FALSE); // write changes
         DWORD err = GetLastError();
         return true;
     }
@@ -298,12 +298,12 @@ public:
     {
         WCHAR buf[MAX_PATH*2];
         GetCurrentDirectoryW(MAX_PATH*2, buf);
-            
+
         PathCombine(buf, path1.c_str(), path2.c_str());
-        
+
         return wstring(buf);
     }
-    
+
     static wstring GetFullPath(wstring path)
     {
         if (PathIsRelativeW(path.c_str()))
@@ -324,8 +324,8 @@ public:
     static wstring CurrentDirectory()
     {
         WCHAR dir[MAX_PATH*2];
-        GetCurrentDirectoryW(MAX_PATH*2, dir); 
-        
+        GetCurrentDirectoryW(MAX_PATH*2, dir);
+
         return wstring(dir);
     }
 
@@ -338,7 +338,7 @@ public:
     {
         return FileExists(path);
     }
-    
+
     static void CreateDirectory(wstring directory)
     {
         ::CreateDirectoryW(directory.c_str(), NULL);
@@ -348,7 +348,7 @@ public:
     {
         WCHAR buf[MAX_PATH*2];
         GetTempPathW(MAX_PATH*2, buf);
-        
+
         return wstring(buf);
     }
 };
@@ -361,7 +361,7 @@ public:
         vector<wstring> tokens = Utils::Split(path, L':');
         return ValueExists(tokens[0], tokens[1], tokens[2]);
     }
-    
+
     static bool ValueExists(wstring key, wstring path, wstring value)
     {
         HKEY hOpenedKey;
@@ -388,62 +388,62 @@ public:
     }
 
 private:
-    static bool QueryKeyValue(HKEY hKey, wstring valueName) 
-    { 
-        WCHAR    achClass[MAX_PATH] = L"";  // buffer for class name 
-        DWORD    cchClassName = MAX_PATH;  // size of class string 
-        DWORD    cSubKeys=0;               // number of subkeys 
-        DWORD    cbMaxSubKey;              // longest subkey size 
-        DWORD    cchMaxClass;              // longest class string 
-        DWORD    cValues;              // number of values for key 
-        DWORD    cchMaxValue;          // longest value name 
-        DWORD    cbMaxValueData;       // longest value data 
-        DWORD    cbSecurityDescriptor; // size of security descriptor 
-        FILETIME ftLastWriteTime;      // last write time 
-     
-        DWORD i, retCode; 
-     
-        TCHAR  achValue[MAX_VALUE_NAME]; 
-        DWORD cchValue = MAX_VALUE_NAME; 
-     
-        // Get the class name and the value count. 
+    static bool QueryKeyValue(HKEY hKey, wstring valueName)
+    {
+        WCHAR    achClass[MAX_PATH] = L"";  // buffer for class name
+        DWORD    cchClassName = MAX_PATH;  // size of class string
+        DWORD    cSubKeys=0;               // number of subkeys
+        DWORD    cbMaxSubKey;              // longest subkey size
+        DWORD    cchMaxClass;              // longest class string
+        DWORD    cValues;              // number of values for key
+        DWORD    cchMaxValue;          // longest value name
+        DWORD    cbMaxValueData;       // longest value data
+        DWORD    cbSecurityDescriptor; // size of security descriptor
+        FILETIME ftLastWriteTime;      // last write time
+
+        DWORD i, retCode;
+
+        TCHAR  achValue[MAX_VALUE_NAME];
+        DWORD cchValue = MAX_VALUE_NAME;
+
+        // Get the class name and the value count.
         retCode = RegQueryInfoKeyW(
-            hKey,                    // key handle 
-            achClass,                // buffer for class name 
-            &cchClassName,           // size of class string 
-            NULL,                    // reserved 
-            &cSubKeys,               // number of subkeys 
-            &cbMaxSubKey,            // longest subkey size 
-            &cchMaxClass,            // longest class string 
-            &cValues,                // number of values for this key 
-            &cchMaxValue,            // longest value name 
-            &cbMaxValueData,         // longest value data 
-            &cbSecurityDescriptor,   // security descriptor 
-            &ftLastWriteTime);       // last write time 
-     
-          // Enumerate the key values. 
+            hKey,                    // key handle
+            achClass,                // buffer for class name
+            &cchClassName,           // size of class string
+            NULL,                    // reserved
+            &cSubKeys,               // number of subkeys
+            &cbMaxSubKey,            // longest subkey size
+            &cchMaxClass,            // longest class string
+            &cValues,                // number of values for this key
+            &cchMaxValue,            // longest value name
+            &cbMaxValueData,         // longest value data
+            &cbSecurityDescriptor,   // security descriptor
+            &ftLastWriteTime);       // last write time
+
+          // Enumerate the key values.
 
             printf( "\nNumber of values: %d\n", cValues);
 
-            for (i=0, retCode=ERROR_SUCCESS; i<cValues; i++) 
-            { 
-                cchValue = MAX_VALUE_NAME; 
-                achValue[0] = '\0'; 
-                retCode = RegEnumValueW(hKey, i, 
-                    achValue, 
-                    &cchValue, 
-                    NULL, 
+            for (i=0, retCode=ERROR_SUCCESS; i<cValues; i++)
+            {
+                cchValue = MAX_VALUE_NAME;
+                achValue[0] = '\0';
+                retCode = RegEnumValueW(hKey, i,
+                    achValue,
+                    &cchValue,
+                    NULL,
                     NULL,
                     NULL,
                     NULL);
-     
-                if (retCode == ERROR_SUCCESS ) 
-                { 
+
+                if (retCode == ERROR_SUCCESS )
+                {
                     if (_wcsicmp(valueName.c_str(), achValue) == 0)
                     //if (valueName == achValue)
                         return true;
-                    //_tprintf(TEXT("(%d) %s\n"), i+1, achValue); 
-                } 
+                    //_tprintf(TEXT("(%d) %s\n"), i+1, achValue);
+                }
             }
 
             return false;
@@ -500,7 +500,7 @@ public:
                     wstring arg;
                     arg.resize(i - currToken);
                     memcpy((void*)arg.data(), data.c_str() + currToken, arg.size()*sizeof(WCHAR));
-                    currToken = -1;	
+                    currToken = -1;
                     argsList.push_back(arg);
                 }
             }
@@ -510,7 +510,7 @@ public:
                 wstring arg;
                 arg.resize(i - currToken + 1);
                 memcpy((void*)arg.data(), data.c_str() + currToken, arg.size()*sizeof(WCHAR));
-                currToken = -1;	
+                currToken = -1;
                 argsList.push_back(arg);
             }
         }
@@ -522,7 +522,7 @@ public:
     }
 
     /*
-    
+
     WCHAR* test = L"aaa";
     ATLTRACE(">[%S]\n", test);
     vector<wstring> args = Application::ParseCommandLine(test);

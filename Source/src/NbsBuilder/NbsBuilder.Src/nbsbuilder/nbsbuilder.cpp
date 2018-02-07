@@ -25,7 +25,7 @@ void EmbeddWinResources(wstring outFile, wstring msiFile1, wstring msiFile2, wst
 //void InjectMainIcon(WCHAR *Where, WCHAR *What);
 int _tmain(int argc, _TCHAR* argv[])
 {
-    _AtlBaseModule
+    _AtlBaseModule;
 
      //InjectMainIcon(L"E:\\Galos\\Projects\\WixSharp\\Main\\NbsBuilder\\Output\\nbs.exe", L"E:\\Galos\\Projects\\WixSharp\\Main\\NbsBuilder\\Output\\nbs1.ico");
     //string data = InputStream::ReadToEnd(L"E:\\Galos\\Projects\\WixSharp\\Main\\NbsBuilder\\Output\\nbs1.ico");
