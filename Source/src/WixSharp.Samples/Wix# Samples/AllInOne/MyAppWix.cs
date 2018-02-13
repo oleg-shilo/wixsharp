@@ -25,10 +25,10 @@ class Script
 
                     //Files and Shortcuts
                     new Dir(@"%ProgramFiles%\My Company\My Product",
-                        new File(binaries, @"AppFiles\MyApp.exe",
+                        new File(new Id("myapp_exe"), binaries, @"AppFiles\MyApp.exe",
                             new FileShortcut(binaries, "MyApp", @"%ProgramMenu%\My Company\My Product"),
                             new FileShortcut(binaries, "MyApp", @"%Desktop%")),
-                        new File(binaries, @"AppFiles\Registrator.exe"),
+                        new File(new Id("registrator_exe"), binaries, @"AppFiles\Registrator.exe"),
                         new File(docs, @"AppFiles\Readme.txt"),
                         new File(binaries, @"AppFiles\MyApp.ico"),
                         new ExeFileShortcut(binaries, "Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")),
@@ -43,8 +43,8 @@ class Script
                     new RegValue(binaries, RegistryHive.LocalMachine, @"Software\My Product", "ExePath", @"[INSTALLDIR]MyApp.exe"),
 
                     //Custom Actions
-                    new InstalledFileAction("Registrator.exe", "", Return.check, When.After, Step.InstallExecute, Condition.NOT_Installed),
-                    new InstalledFileAction("Registrator.exe", "/u", Return.check, When.Before, Step.InstallExecute, Condition.Installed),
+                    new InstalledFileAction("registrator_exe", "", Return.check, When.After, Step.InstallExecute, Condition.NOT_Installed),
+                    new InstalledFileAction("registrator_exe", "/u", Return.check, When.Before, Step.InstallExecute, Condition.Installed),
 
                     new ScriptAction(@"MsgBox ""Executing VBScript code...""", Return.ignore, When.After, Step.InstallFinalize, Condition.NOT_Installed),
 
@@ -54,7 +54,7 @@ class Script
 
                     new ManagedAction(CustomActions.MyManagedAction, "%this%"),
 
-                    new InstalledFileAction("MyApp.exe", ""));
+                    new InstalledFileAction("myapp_exe", ""));
 
             project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b"); // or project.Id = Guid.NewGuid();
             project.LicenceFile = @"AppFiles\License.rtf";
@@ -66,6 +66,7 @@ class Script
             // project.PreserveTempFiles = true;
             project.WixSourceGenerated += Compiler_WixSourceGenerated;
             project.BuildMsi();
+            // project.BuildMsiCmd();
         }
         catch (System.Exception ex)
         {
