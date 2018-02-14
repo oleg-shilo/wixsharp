@@ -176,8 +176,17 @@ namespace WixSharp.Bootstrapper
         }
     }
 
+    /// <summary>
+    /// Extension method class for working with <see cref="Variable"/>.
+    /// </summary>
     public static class Variables
     {
+        /// <summary>
+        /// Converts key/value map into array of <see cref="Variable"/>. The map entry format
+        /// is as follows: &lt;key&gt;=&lt;value&gt;[;&lt;key&gt;=&lt;value&gt;].
+        /// </summary>
+        /// <param name="variablesDefinition">The variables definition.</param>
+        /// <returns></returns>
         public static Variable[] ToStringVariables(this string variablesDefinition)
         {
             return variablesDefinition.ToDictionary()
