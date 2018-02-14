@@ -80,10 +80,12 @@ public class InstallScript
                                          Result = SearchResult.exists,
                                          Variable = "AdobeInstalled"
                                      });
-        bootstrapper.StringVariablesDefinition = new []
-        {
-            new Variable("BundleVariable","333"), 
-        };
+
+        bootstrapper.Variables = new[] { new Variable("BundleVariable", "333"), };
+        // or
+        // bootstrapper.Variables = "BundleVariable=333".ToStringVariables();
+        // bootstrapper.Variables = Variables.ToStringVariables("BundleVariable=333");
+
         bootstrapper.PreserveTempFiles = true;
 
         // Add MspPackage manually (demo only).

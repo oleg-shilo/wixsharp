@@ -25,10 +25,10 @@ class Script
 
                     //Files and Shortcuts
                     new Dir(@"%ProgramFiles%\My Company\My Product",
-                        new File(new Id("myapp_exe"), binaries, @"AppFiles\MyApp.exe",
-                            new FileShortcut(binaries, "MyApp", @"%ProgramMenu%\My Company\My Product"),
-                            new FileShortcut(binaries, "MyApp", @"%Desktop%")),
-                        new File(new Id("registrator_exe"), binaries, @"AppFiles\Registrator.exe"),
+                    new File(new Id("myapp_exe"), binaries, @"AppFiles\MyApp.exe",
+                        new FileShortcut(binaries, "MyApp", @"%ProgramMenu%\My Company\My Product"),
+                        new FileShortcut(binaries, "MyApp", @"%Desktop%")),
+                    new File(new Id("registrator_exe"), binaries, @"AppFiles\Registrator.exe"),
                         new File(docs, @"AppFiles\Readme.txt"),
                         new File(binaries, @"AppFiles\MyApp.ico"),
                         new ExeFileShortcut(binaries, "Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")),

@@ -255,11 +255,11 @@ namespace WixSharp.Bootstrapper
         /// <code>
         /// new ManagedBootstrapperApplication("ManagedBA.dll")
         /// {
-        ///     StringVariablesDefinition = "FullInstall=Yes; Silent=No"
+        ///     Variables = "FullInstall=Yes; Silent=No".ToStringVariables()
         /// }
         /// </code>
         /// </example>
-        public Variable[] StringVariablesDefinition = new Variable[0];
+        public Variable[] Variables = new Variable[0];
     }
 
     /// <summary>

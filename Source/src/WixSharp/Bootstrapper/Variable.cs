@@ -1,4 +1,6 @@
-﻿namespace WixSharp.Bootstrapper
+﻿using System.Linq;
+
+namespace WixSharp.Bootstrapper
 {
     /// <summary>
     /// Describes a burn engine variable to define.
@@ -35,17 +37,32 @@
         [Xml]
         public VariableType? Type;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Variable"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
         public Variable(string name)
         {
             Name = name;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Variable"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="hidden">if set to <c>true</c> [hidden].</param>
         public Variable(string name, bool hidden)
         {
             Name = name;
             Hidden = hidden;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Variable"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="hidden">if set to <c>true</c> [hidden].</param>
+        /// <param name="persisted">if set to <c>true</c> [persisted].</param>
         public Variable(string name, bool hidden, bool persisted)
         {
             Name = name;
@@ -53,6 +70,13 @@
             Persisted = persisted;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Variable"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="hidden">if set to <c>true</c> [hidden].</param>
+        /// <param name="persisted">if set to <c>true</c> [persisted].</param>
+        /// <param name="type">The type.</param>
         public Variable(string name, bool hidden, bool persisted, VariableType type)
         {
             Name = name;
@@ -61,18 +85,34 @@
             Type = type;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Variable"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="type">The type.</param>
         public Variable(string name, VariableType type)
         {
             Name = name;
             Type = type;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Variable"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
         public Variable(string name, string value)
         {
             Name = name;
             Value = value;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Variable"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="hidden">if set to <c>true</c> [hidden].</param>
         public Variable(string name, string value, bool hidden)
         {
             Name = name;
@@ -80,6 +120,13 @@
             Hidden = hidden;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Variable"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="hidden">if set to <c>true</c> [hidden].</param>
+        /// <param name="persisted">if set to <c>true</c> [persisted].</param>
         public Variable(string name, string value, bool hidden, bool persisted)
         {
             Name = name;
@@ -88,6 +135,14 @@
             Persisted = persisted;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Variable"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="hidden">if set to <c>true</c> [hidden].</param>
+        /// <param name="persisted">if set to <c>true</c> [persisted].</param>
+        /// <param name="type">The type.</param>
         public Variable(string name, string value, bool hidden, bool persisted, VariableType type)
         {
             Name = name;
@@ -97,6 +152,12 @@
             Type = type;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Variable"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="type">The type.</param>
         public Variable(string name, string value, VariableType type)
         {
             Name = name;
@@ -112,6 +173,16 @@
         public void Process(ProcessingContext context)
         {
             context.XParent.Add(this.ToXElement("Variable"));
+        }
+    }
+
+    public static class Variables
+    {
+        public static Variable[] ToStringVariables(this string variablesDefinition)
+        {
+            return variablesDefinition.ToDictionary()
+                                      .Select(entry => new Variable(entry.Key, entry.Value))
+                                      .ToArray();
         }
     }
 }

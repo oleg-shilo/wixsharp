@@ -135,7 +135,7 @@ namespace WixSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.
         /// </summary>
-        /// <param name="key">The key (file name) of the installed file to be executed.</param>
+        /// <param name="key">The key (file ID) of the installed file to be executed.</param>
         /// <param name="args">The arguments to be passed to the file during the execution.</param>
         /// <param name="returnType">The return type of the action.</param>
         /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>

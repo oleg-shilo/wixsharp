@@ -1431,6 +1431,122 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:WixSharp.Bootstrapper.Variable">
+            <summary>
+            Describes a burn engine variable to define.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.Variable.Name">
+            <summary>
+            The name for the variable.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.Variable.Value">
+            <summary>
+            Starting value for the variable.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.Variable.Hidden">
+            <summary>
+            Whether the value of the variable should be hidden.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.Variable.Persisted">
+            <summary>
+            Whether the variable should be persisted.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.Variable.Type">
+            <summary>
+            Type of the variable, inferred from the value if not specified.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.Variable.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.Variable"/> class.
+            </summary>
+            <param name="name">The name.</param>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.Variable.#ctor(System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.Variable"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="hidden">if set to <c>true</c> [hidden].</param>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.Variable.#ctor(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.Variable"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="hidden">if set to <c>true</c> [hidden].</param>
+            <param name="persisted">if set to <c>true</c> [persisted].</param>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.Variable.#ctor(System.String,System.Boolean,System.Boolean,WixSharp.VariableType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.Variable"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="hidden">if set to <c>true</c> [hidden].</param>
+            <param name="persisted">if set to <c>true</c> [persisted].</param>
+            <param name="type">The type.</param>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.Variable.#ctor(System.String,WixSharp.VariableType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.Variable"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="type">The type.</param>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.Variable.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.Variable"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.Variable.#ctor(System.String,System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.Variable"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="value">The value.</param>
+            <param name="hidden">if set to <c>true</c> [hidden].</param>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.Variable.#ctor(System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.Variable"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="value">The value.</param>
+            <param name="hidden">if set to <c>true</c> [hidden].</param>
+            <param name="persisted">if set to <c>true</c> [persisted].</param>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.Variable.#ctor(System.String,System.String,System.Boolean,System.Boolean,WixSharp.VariableType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.Variable"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="value">The value.</param>
+            <param name="hidden">if set to <c>true</c> [hidden].</param>
+            <param name="persisted">if set to <c>true</c> [persisted].</param>
+            <param name="type">The type.</param>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.Variable.#ctor(System.String,System.String,WixSharp.VariableType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.Variable"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="value">The value.</param>
+            <param name="type">The type.</param>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.Variable.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
         <member name="T:WixSharp.Bootstrapper.Bundle">
              <summary>
              Class for defining a WiX standard Burn-based bootstrapper. By default the bootstrapper is using WiX default WiX bootstrapper UI.
@@ -1621,7 +1737,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="F:WixSharp.Bootstrapper.Bundle.StringVariablesDefinition">
+        <member name="F:WixSharp.Bootstrapper.Bundle.Variables">
             <summary>
             The Bundle string variables.
             </summary>
@@ -1817,7 +1933,7 @@
             Collection of paths to the package dependencies.
             </summary>
         </member>
-        <member name="F:WixSharp.Bootstrapper.WixStandardBootstrapperApplication.StringVariablesDefinition">
+        <member name="F:WixSharp.Bootstrapper.WixStandardBootstrapperApplication.Variables">
             <summary>
             The Bundle string variables associated with the Bootstrapper application.
             <para>The variables are defined as a named values map.</para>
@@ -12053,7 +12169,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.InstalledFileAction"/> class with properties/fields initialized with specified parameters.
             </summary>
-            <param name="key">The key (file name) of the installed file to be executed.</param>
+            <param name="key">The key (file ID) of the installed file to be executed.</param>
             <param name="args">The arguments to be passed to the file during the execution.</param>
             <param name="returnType">The return type of the action.</param>
             <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>

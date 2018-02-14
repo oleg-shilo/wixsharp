@@ -70,8 +70,8 @@ namespace WixSharp.Bootstrapper
             if (PrimaryPackageId != null)
             {
                 Variable newDef = new Variable(SilentManagedBA.PrimaryPackageIdVariableName, PrimaryPackageId);
-                if (!Array.Exists(StringVariablesDefinition, variable => variable == newDef))
-                    StringVariablesDefinition = StringVariablesDefinition.Combine(newDef);
+                if (!Array.Exists(Variables, variable => variable == newDef))
+                    Variables = Variables.Combine(newDef);
             }
             base.AutoGenerateSources(outDir);
         }
