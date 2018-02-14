@@ -259,7 +259,7 @@ namespace WixSharp.Bootstrapper
         /// }
         /// </code>
         /// </example>
-        public string StringVariablesDefinition = "";
+        public Variable[] StringVariablesDefinition = new Variable[0];
     }
 
     /// <summary>
