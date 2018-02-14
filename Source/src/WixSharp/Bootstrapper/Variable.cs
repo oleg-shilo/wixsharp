@@ -27,7 +27,7 @@
         /// Whether the variable should be persisted.
         /// </summary>
         [Xml]
-        public bool? Persisted;
+        public bool Persisted = true;
 
         /// <summary>
         /// Type of the variable, inferred from the value if not specified.
