@@ -686,4 +686,11 @@ namespace WixSharp
         /// </summary>
         hidden
     }
+
+    public enum VariableType
+    {
+        @string,
+        numeric,
+        version
+    }
 }

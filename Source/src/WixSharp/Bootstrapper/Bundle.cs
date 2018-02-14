@@ -271,18 +271,21 @@ namespace WixSharp.Bootstrapper
 
             root.Add(Application.ToXml());
 
-            string variabes = this.StringVariablesDefinition + ";" + Application.StringVariablesDefinition;
+            Variable[] variabes = StringVariablesDefinition.Union(Application.StringVariablesDefinition).ToArray();
 
-            if (this.Application is IWixSharpManagedBootstrapperApplication wsApp)
+            if (Application is IWixSharpManagedBootstrapperApplication wsApp)
                 if (wsApp.DowngradeWarningMessage.IsNotEmpty())
-                    variabes += $";DowngradeWarningMessage={wsApp.DowngradeWarningMessage}";
+                    variabes = variabes.Combine(new Variable("DowngradeWarningMessage",wsApp.DowngradeWarningMessage));
 
             Compiler.ProcessWixVariables(this, root);
-
-            foreach (var entry in variabes.ToDictionary())
+            
+            var context = new ProcessingContext
             {
-                root.AddElement("Variable", "Name=" + entry.Key + ";Value=" + entry.Value + ";Persisted=yes;Type=string");
-            }
+                Parent = this,
+                XParent = root,
+            };
+            foreach (IGenericEntity item in variabes)
+                item.Process(context);
 
             var xChain = root.AddElement("Chain");
             foreach (var item in this.Chain)
@@ -313,7 +316,7 @@ namespace WixSharp.Bootstrapper
         /// new MsiPackage(msiFile) { MsiProperties = "FULL=[FullInstall]" },
         /// </code>
         /// </example>
-        public string StringVariablesDefinition = "";
+        public Variable[] StringVariablesDefinition = new Variable[0];
 
         /// <summary>
         /// Builds WiX Bootstrapper application from the specified <see cref="Bundle" /> project instance.
