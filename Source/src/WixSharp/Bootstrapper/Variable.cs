@@ -33,7 +33,39 @@
         /// Type of the variable, inferred from the value if not specified.
         /// </summary>
         [Xml]
-        public VariableType Type = VariableType.@string;
+        public VariableType? Type;
+
+        public Variable(string name)
+        {
+            Name = name;
+        }
+
+        public Variable(string name, bool hidden)
+        {
+            Name = name;
+            Hidden = hidden;
+        }
+
+        public Variable(string name, bool hidden, bool persisted)
+        {
+            Name = name;
+            Hidden = hidden;
+            Persisted = persisted;
+        }
+
+        public Variable(string name, bool hidden, bool persisted, VariableType type)
+        {
+            Name = name;
+            Hidden = hidden;
+            Persisted = persisted;
+            Type = type;
+        }
+
+        public Variable(string name, VariableType type)
+        {
+            Name = name;
+            Type = type;
+        }
 
         public Variable(string name, string value)
         {
