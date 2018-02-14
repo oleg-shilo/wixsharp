@@ -65,6 +65,13 @@
             Type = type;
         }
 
+        public Variable(string name, string value, VariableType type)
+        {
+            Name = name;
+            Value = value;
+            Type = type;
+        }
+
         /// <summary>
         /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
         /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
