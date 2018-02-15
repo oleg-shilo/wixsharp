@@ -18,12 +18,12 @@ class Script
             Dirs = new[]
             {
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File(@"Files\Registrator.exe"))
+                    new File("registrator_exe".ToId(), @"Files\Registrator.exe"))
             },
             Actions = new WixSharp.Action[]
             {
-                new InstalledFileAction("Registrator.exe", "", Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed, "Registrator.exe", "/u") {Execute = Execute.deferred},
-                new InstalledFileAction("Registrator.exe", "/u", Return.check, When.Before, Step.RemoveFiles, Condition.Installed, "Registrator.exe", "") {Execute = Execute.deferred},
+                new InstalledFileAction("registrator_exe", "", Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed, "registrator_exe", "/u") {Execute = Execute.deferred},
+                new InstalledFileAction("registrator_exe", "/u", Return.check, When.Before, Step.RemoveFiles, Condition.Installed, "registrator_exe", "") {Execute = Execute.deferred},
 
                 new ElevatedManagedAction(CustomActions.Install, Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed, CustomActions.Rollback)
                 {

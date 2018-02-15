@@ -16,7 +16,7 @@ class Script
             Dirs = new[]
             {
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File(@"Files\Registrator.exe"))
+                    new File(new Id("registrator_exe"), @"Files\Registrator.exe"))
             },
 
             Binaries = new[]
@@ -27,8 +27,8 @@ class Script
             Actions = new WixSharp.Action[]
             {
                 // execute installed application
-                new InstalledFileAction("Registrator.exe", "/u", Return.check, When.Before, Step.InstallFinalize, Condition.Installed),
-                new InstalledFileAction("Registrator.exe", "", Return.check, When.After, Step.InstallFinalize, Condition.NOT_Installed),
+                new InstalledFileAction("registrator_exe", "/u", Return.check, When.Before, Step.InstallFinalize, Condition.Installed),
+                new InstalledFileAction("registrator_exe", "", Return.check, When.After, Step.InstallFinalize, Condition.NOT_Installed),
                 // {AttributesDefinition="Custom:Sequence=1"}, //just a demo of how you can add an attribute to the 'Custom' element associated with the 'CustomAction'
 
                 // execute existing application

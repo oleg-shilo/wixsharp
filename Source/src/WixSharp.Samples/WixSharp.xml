@@ -1547,6 +1547,19 @@
             </summary>
             <param name="context">The context.</param>
         </member>
+        <member name="T:WixSharp.Bootstrapper.Variables">
+            <summary>
+            Extension method class for working with <see cref="T:WixSharp.Bootstrapper.Variable"/>.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.Variables.ToStringVariables(System.String)">
+            <summary>
+            Converts key/value map into array of <see cref="T:WixSharp.Bootstrapper.Variable"/>. The map entry format
+            is as follows: &lt;key&gt;=&lt;value&gt;[;&lt;key&gt;=&lt;value&gt;].
+            </summary>
+            <param name="variablesDefinition">The variables definition.</param>
+            <returns></returns>
+        </member>
         <member name="T:WixSharp.Bootstrapper.Bundle">
              <summary>
              Class for defining a WiX standard Burn-based bootstrapper. By default the bootstrapper is using WiX default WiX bootstrapper UI.
@@ -1749,7 +1762,7 @@
             <code>
             new ManagedBootstrapperApplication("ManagedBA.dll")
             {
-                StringVariablesDefinition = "FullInstall=Yes; Silent=No"
+                Variables = "FullInstall=Yes; Silent=No".ToStringVariables()
             }
             ...
             new MsiPackage(msiFile) { MsiProperties = "FULL=[FullInstall]" },
@@ -1942,7 +1955,7 @@
             <code>
             new ManagedBootstrapperApplication("ManagedBA.dll")
             {
-                StringVariablesDefinition = "FullInstall=Yes; Silent=No"
+                Variables = "FullInstall=Yes; Silent=No".ToStringVariables()
             }
             </code>
             </example>

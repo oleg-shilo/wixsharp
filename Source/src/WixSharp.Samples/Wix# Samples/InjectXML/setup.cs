@@ -20,7 +20,7 @@ class Script
                         Log = "Application",
                         EventMessageFile = @"%SystemRoot%\Microsoft.NET\Framework\v2.0.50727\EventLogMessages.dll"
                     },
-                    new File(@"Files\Bin\MyApp.exe"),
+                    new File("myapp_exe".ToId(), @"Files\Bin\MyApp.exe"),
                     new Dir(@"Docs\Manual",
                         new File(@"Files\Docs\Manual.txt"))));
 
@@ -37,7 +37,7 @@ class Script
 
         project.AddWixFragment("Wix/Product", XElement.Parse(@"
                         <Feature Id=""BinaryOnlyFeature"" Title=""Sample Product Feature"" Level=""1"">
-                            <ComponentRef Id=""Component.MyApp.exe"" />
+                            <ComponentRef Id=""Component.myapp_exe"" />
                         </Feature>"));
 
         // project specific build event
