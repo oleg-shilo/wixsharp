@@ -16178,7 +16178,7 @@
         </member>
         <member name="T:WixSharp.InstallScope">
             <summary>
-            Use this attribute to specify the priviliges required to install the package on Windows Vista and above. 
+            Use this attribute to specify the priviliges required to install the package on Windows Vista and above.
             </summary>
         </member>
         <member name="F:WixSharp.InstallScope.perMachine">
@@ -16555,6 +16555,26 @@
         <member name="F:WixSharp.FeatureDisplay.hidden">
             <summary>
              Prevents the feature from displaying in the user interface.
+            </summary>
+        </member>
+        <member name="T:WixSharp.VariableType">
+            <summary>
+            Bootstrapper variable (<see cref="T:WixSharp.Bootstrapper.Variable"/>) type.
+            </summary>
+        </member>
+        <member name="F:WixSharp.VariableType.string">
+            <summary>
+            The string type
+            </summary>
+        </member>
+        <member name="F:WixSharp.VariableType.numeric">
+            <summary>
+            The numeric type
+            </summary>
+        </member>
+        <member name="F:WixSharp.VariableType.version">
+            <summary>
+            The version type
             </summary>
         </member>
         <member name="T:WixSharp.WixQuietExecAction">

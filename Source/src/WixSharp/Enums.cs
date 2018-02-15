@@ -277,7 +277,7 @@ namespace WixSharp
     }
 
     /// <summary>
-    /// Use this attribute to specify the priviliges required to install the package on Windows Vista and above. 
+    /// Use this attribute to specify the priviliges required to install the package on Windows Vista and above.
     /// </summary>
     public enum InstallScope
     {
@@ -687,10 +687,24 @@ namespace WixSharp
         hidden
     }
 
+    /// <summary>
+    /// Bootstrapper variable (<see cref="WixSharp.Bootstrapper.Variable"/>) type.
+    /// </summary>
     public enum VariableType
     {
+        /// <summary>
+        /// The string type
+        /// </summary>
         @string,
+
+        /// <summary>
+        /// The numeric type
+        /// </summary>
         numeric,
+
+        /// <summary>
+        /// The version type
+        /// </summary>
         version
     }
 }

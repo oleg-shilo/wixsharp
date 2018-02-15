@@ -27,6 +27,37 @@ static class Script
 
     static public void Main(string[] args)
     {
+        Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = true;
+
+        var serverFeature = new Feature("Server");
+        var completeFeature = new Feature("Complete Deployment");
+        completeFeature.Add(serverFeature);
+
+        Dir logDir;
+        Project project = new Project("TaxPacc",
+                new LaunchCondition("CUSTOM_UI=\"true\" OR REMOVE=\"ALL\"", "Please run setup.exe instead."),
+                new Dir(@"%ProgramFiles%\TaxPacc",
+                    new File(completeFeature, "setup.cs")),
+
+                // logDir = new Dir(@"%CommonAppDataFolder%\TaxPacc\Server",
+                //     new DirPermission("serviceaccountusername", "serviceaccountdomain", GenericPermission.All)));
+
+                logDir = new Dir(@"%CommonAppDataFolder%\TaxPacc\Server",
+                    new DirPermission("serviceaccountusername", "serviceaccountdomain", GenericPermission.All)
+                    {
+                        // Features = new[] { completeFeature, serverFeature }
+                    }
+                ));
+
+        logDir.AddFeatures(completeFeature, serverFeature);
+        logDir.Permissions.ForEach(p => p.Features = logDir.Features);
+
+        project.PreserveTempFiles = true;
+        project.BuildMsi();
+    }
+
+    static public void Main1(string[] args)
+    {
         var project = new ManagedProject("IsUninstallTest",
                             new Dir(@"%ProgramFiles%\UninstallTest",
                                 new File(@"files\setup.cs")));
@@ -74,7 +105,7 @@ static class Script
         project.BuildMsi();
     }
 
-    static public void Main1(string[] args)
+    static public void Main3(string[] args)
     {
         var application = new Feature("Application") { Name = "Application", Description = "Application" };
         var drivers = new Feature("Drivers") { Name = "Drivers", Description = "Drivers", AttributesDefinition = $"Display = {FeatureDisplay.expand}" };
