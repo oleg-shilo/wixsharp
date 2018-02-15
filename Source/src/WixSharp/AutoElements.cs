@@ -379,8 +379,8 @@ namespace WixSharp
                 doc.Descendants("Component")
                    .ForEach(comp =>
                    {
-                       //components may already have explicitly set platform attribute (e.g. RegValue.Win64)
-                       comp.SetAttributeValue("Win64", "yes");
+                       if (!comp.HasAttribute("Win64"))
+                           comp.SetAttributeValue("Win64", "yes");
                    });
             }
         }
