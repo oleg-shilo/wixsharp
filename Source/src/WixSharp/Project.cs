@@ -122,7 +122,7 @@ namespace WixSharp
                     {
                         var file = item as RegFile;
                         var values = Tasks.ImportRegFile(file.Path);
-                        if (file.Feature != null)
+                        if (file.ActualFeatures.Any())
                             values.ForEach(x =>
                             {
                                 x.Feature = file.Feature;

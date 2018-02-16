@@ -3,6 +3,15 @@ using System.Xml.Linq;
 
 namespace WixSharp
 {
+    public partial class FeatureSet : Feature
+    {
+        public static FeatureSet Of(params Feature[] features) => new FeatureSet(features);
+
+        public FeatureSet(params Feature[] features) => Items = features;
+
+        public Feature[] Items;
+    }
+
     /// <summary>
     /// Defines WiX Feature.
     /// <para>

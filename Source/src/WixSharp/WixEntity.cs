@@ -180,7 +180,13 @@ namespace WixSharp
         /// then you need to use <see cref="WixSharp.WixObject.Features"/>.
         /// </remarks>
         /// </summary>
-        public Feature Feature;
+        public Feature Feature
+        {
+            set { feature = value; }
+            internal get { return feature; }
+        }
+
+        public Feature feature;
 
         /// <summary>
         /// The collection of <see cref="Feature"></see>s the Wix object belongs to. This member is processed only for the
@@ -205,7 +211,7 @@ namespace WixSharp
         {
             get
             {
-                return Features.Concat(new[] { Feature })
+                return Features.Concat(this.feature.ToItems())
                                .Where(x => x != null)
                                .Distinct()
                                .ToArray();

@@ -42,18 +42,16 @@ static class Script
                 // logDir = new Dir(@"%CommonAppDataFolder%\TaxPacc\Server",
                 //     new DirPermission("serviceaccountusername", "serviceaccountdomain", GenericPermission.All)));
 
-                logDir = new Dir(@"%CommonAppDataFolder%\TaxPacc\Server",
-                    new DirPermission("serviceaccountusername", "serviceaccountdomain", GenericPermission.All)
-                    {
-                        // Features = new[] { completeFeature, serverFeature }
-                    }
-                ));
-
-        logDir.AddFeatures(completeFeature, serverFeature);
-        logDir.Permissions.ForEach(p => p.Features = logDir.Features);
+                new Dir(@"%CommonAppDataFolder%\TaxPacc",
+                    logDir = new Dir(new FeatureSet(completeFeature, serverFeature), "Server",
+                        new DirPermission("serviceaccountusername", "serviceaccountdomain", GenericPermission.All)
+                        {
+                            Feature = new FeatureSet(completeFeature, serverFeature)
+                        }
+                )));
 
         project.PreserveTempFiles = true;
-        project.BuildMsi();
+        project.BuildWxs();
     }
 
     static public void Main1(string[] args)

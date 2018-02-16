@@ -15753,9 +15753,9 @@
             </code>
             </example>
         </member>
-        <member name="F:WixSharp.WixObject.Feature">
+        <member name="P:WixSharp.WixObject.Feature">
             <summary>
-            <see cref="F:WixSharp.WixObject.Feature"></see> the Wix object belongs to. This member is processed only for the
+            <see cref="P:WixSharp.WixObject.Feature"></see> the Wix object belongs to. This member is processed only for the
             WiX objects/elements that can be associated with the features (e.g. WebSite, FirewallException, ODBCDataSource, User,
             EnvironmentVariable, Merge, Dir, RegFile, RegValue, Shortcut, SqlDatabase, SqlScript).
             <remarks>
@@ -15770,12 +15770,12 @@
         </member>
         <member name="F:WixSharp.WixObject.Features">
             <summary>
-            The collection of <see cref="F:WixSharp.WixObject.Feature"></see>s the Wix object belongs to. This member is processed only for the
+            The collection of <see cref="P:WixSharp.WixObject.Feature"></see>s the Wix object belongs to. This member is processed only for the
             WiX objects/elements that can be associated with the features (e.g. WebSite, FirewallException, ODBCDataSource, User,
             EnvironmentVariable, Merge, Dir, RegFile, RegValue, Shortcut, SqlDatabase).
             <remarks>
             Note, this member is convenient for scenarios where the same component is to be included into multiple features.
-            However, if the component is to be associated only with a single feature then <see cref="F:WixSharp.WixObject.Feature"/>
+            However, if the component is to be associated only with a single feature then <see cref="P:WixSharp.WixObject.Feature"/>
             is a more convenient choice as it can be initialized either via constructors or object initializers.eature.
             </remarks>
             </summary>
@@ -15783,7 +15783,7 @@
         <member name="P:WixSharp.WixObject.ActualFeatures">
             <summary>
             Gets the actual list of features associated with the Wix object/element. It is a combined
-            collection of <see cref="F:WixSharp.WixObject.Features"/> and <see cref="F:WixSharp.WixObject.Feature"/>.  union of the
+            collection of <see cref="F:WixSharp.WixObject.Features"/> and <see cref="P:WixSharp.WixObject.Feature"/>.  union of the
             </summary>
             <value>
             The actual features.

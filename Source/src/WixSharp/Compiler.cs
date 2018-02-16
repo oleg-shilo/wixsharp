@@ -1984,18 +1984,11 @@ namespace WixSharp
                 foreach (var permission in wDir.Permissions)
                 {
                     string compId = "Component" + permission.Id;
-                    var feature = wDir.Feature;
-                    if (feature != null)
-                    {
-                        if (!featureComponents.ContainsKey(feature))
-                            featureComponents[feature] = new List<string>();
 
-                        featureComponents[feature].Add(compId);
-                    }
+                    if (permission.ActualFeatures.Any())
+                        featureComponents.Map(wDir.ActualFeatures, compId);
                     else
-                    {
                         defaultFeatureComponents.Add(compId);
-                    }
 
                     var permissionElement = new XElement(utilExtension.ToXNamespace() + "PermissionEx");
                     permission.EmitAttributes(permissionElement);
@@ -2097,8 +2090,9 @@ namespace WixSharp
                 //Not elegant at all but works.
                 //In the future it can be improved by allowing MergeRef to be added in the global collection featureMergeModules/DefaultfeatureComponents.
                 //Then PostProcessMsm will not be needed.
-                if (msm.Feature != null && !featureComponents.ContainsKey(msm.Feature))
-                    featureComponents[msm.Feature] = new List<string>();
+                foreach (Feature feature in msm.ActualFeatures)
+                    if (!featureComponents.ContainsKey(feature))
+                        featureComponents[feature] = new List<string>();
             }
         }
 
@@ -2108,7 +2102,7 @@ namespace WixSharp
                           from msm in dir.MergeModules
                           select new
                           {
-                              Feature = msm.Feature,
+                              Features = msm.ActualFeatures,
                               MsmId = msm.Id
                           };
 
@@ -2117,9 +2111,9 @@ namespace WixSharp
 
             foreach (var item in modules)
             {
-                XElement xFeature;
+                XElement xFeature = null;
 
-                if (item.Feature == null)
+                if (!item.Features.Any())
                 {
                     if (features.ContainsKey("Complete"))
                         xFeature = features["Complete"];
@@ -2128,18 +2122,19 @@ namespace WixSharp
                 }
                 else
                 {
-                    if (features.ContainsKey(item.Feature.Id))
-                    {
-                        xFeature = features[item.Feature.Id];
-                    }
-                    else
-                    {
-                        xFeature = product.AddElement(item.Feature.ToXml());
-                        features.Add(item.Feature.Id, xFeature);
-                    }
+                    foreach (Feature itemFeature in item.Features)
+                        if (features.ContainsKey(itemFeature.Id))
+                        {
+                            xFeature = features[itemFeature.Id];
+                        }
+                        else
+                        {
+                            xFeature = product.AddElement(itemFeature.ToXml());
+                            features.Add(itemFeature.Id, xFeature);
+                        }
                 }
 
-                xFeature.Add(new XElement("MergeRef",
+                xFeature?.Add(new XElement("MergeRef",
                                  new XAttribute("Id", item.MsmId)));
             }
         }

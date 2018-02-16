@@ -2153,6 +2153,17 @@ namespace WixSharp
             return new Condition($"((!{feature.Id} = 2) AND (&{feature.Id} = 3))");
         }
 
+        public static Feature[] ToItems(this Feature feature)
+        {
+            if (feature == null)
+                return new Feature[0];
+
+            if (feature is FeatureSet feature_set)
+                return feature_set.Items;
+            else
+                return new Feature[] { feature };
+        }
+
         /// <summary>
         /// Builds an MSI condition expression for the given <see cref="WixSharp.Feature"/>, which evaluates
         /// as <c>true</c> if the feature is being uninstalled.
