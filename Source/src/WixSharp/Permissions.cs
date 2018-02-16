@@ -13,18 +13,22 @@ namespace WixSharp
         /// None does not map to a valid WiX representation
         /// </summary>
         None = 0,
+
         /// <summary>
         /// Maps to GenericExecute='yes' of PermissionEx
         /// </summary>
         Execute = 0x001,
+
         /// <summary>
         /// Maps to GenericWrite='yes' of PermissionEx
         /// </summary>
         Write = 0x010,
+
         /// <summary>
         /// Maps to GenericRead='yes' of PermissionEx
         /// </summary>
         Read = 0x100,
+
         /// <summary>
         /// Maps to GenericAll='yes' of PermissionEx
         /// </summary>
@@ -39,9 +43,10 @@ namespace WixSharp
     /// </remarks>
     public class DirPermission : WixEntity
     {
-
         /// <summary>
-        /// Creates a FilePermission instance for <paramref name="user"/>
+        /// Creates a FilePermission instance for <paramref name="user"/>.
+        /// <para>Note that <see cref="DirPermission"/> inherits its parent <see cref="Dir"/> features unless
+        /// it has it own features specified.</para>
         /// </summary>
         /// <param name="user"></param>
         public DirPermission(string user)
@@ -53,6 +58,8 @@ namespace WixSharp
 
         /// <summary>
         /// Creates a FilePermission instance for <paramref name="user"/>@<paramref name="domain"/>
+        /// <para>Note that <see cref="DirPermission"/> inherits its parent <see cref="Dir"/> features unless
+        /// it has it own features specified.</para>
         /// </summary>
         /// <param name="user"></param>
         /// <param name="domain"></param>
@@ -67,6 +74,8 @@ namespace WixSharp
 
         /// <summary>
         /// Creates a FilePermission instance for <paramref name="user"/> with generic permissions described by <paramref name="permission"/>
+        /// <para>Note that <see cref="DirPermission"/> inherits its parent <see cref="Dir"/> features unless
+        /// it has it own features specified.</para>
         /// </summary>
         /// <param name="user"></param>
         /// <param name="permission"></param>
@@ -82,6 +91,8 @@ namespace WixSharp
 
         /// <summary>
         /// Creates a FilePermission instance for <paramref name="user"/>@<paramref name="domain"/> with generic permissions described by <paramref name="permission"/>
+        /// <para>Note that <see cref="DirPermission"/> inherits its parent <see cref="Dir"/> features unless
+        /// it has it own features specified.</para>
         /// </summary>
         /// <param name="user"></param>
         /// <param name="domain"></param>
@@ -119,7 +130,7 @@ namespace WixSharp
         /// Maps to the User property of PermissionEx
         /// </summary>
         public string User { get; set; }
-        
+
         /// <summary>
         /// Maps to the Domain property of PermissionEx
         /// </summary>
@@ -139,7 +150,7 @@ namespace WixSharp
         /// Maps to the CreateChild property of PermissionEx
         /// </summary>
         public bool? CreateChild { get; set; }
-        
+
         /// <summary>
         /// Maps to the CreateFile property of PermissionEx
         /// </summary>
@@ -259,7 +270,6 @@ namespace WixSharp
     /// </remarks>
     public class FilePermission : WixEntity
     {
-
         /// <summary>
         /// Creates a FilePermission instance for <paramref name="user"/>
         /// </summary>
@@ -339,6 +349,7 @@ namespace WixSharp
         /// Maps to the User property of PermissionEx
         /// </summary>
         public string User { get; set; }
+
         /// <summary>
         /// Maps to the Domain property of PermissionEx
         /// </summary>
@@ -448,12 +459,10 @@ namespace WixSharp
         /// Maps to the WriteExtendedAttributes property of PermissionEx
         /// </summary>
         public bool? WriteExtendedAttributes { get; set; }
-
     }
 
     internal static class PermissionExt
     {
-
         static void Do<T>(this T? nullable, Action<T> action) where T : struct
         {
             if (!nullable.HasValue) return;
@@ -536,5 +545,4 @@ namespace WixSharp
             filePermission.WriteExtendedAttributes.Do(b => permissionElement.SetAttributeValue("WriteExtendedAttributes", b.ToYesNo()));
         }
     }
-
 }

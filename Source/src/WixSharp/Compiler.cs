@@ -1986,9 +1986,18 @@ namespace WixSharp
                     string compId = "Component" + permission.Id;
 
                     if (permission.ActualFeatures.Any())
+                    {
                         featureComponents.Map(wDir.ActualFeatures, compId);
+                    }
                     else
-                        defaultFeatureComponents.Add(compId);
+                    {
+                        // since permissions belong to the directory 
+                        // it makes sense to use the parent features if the has not its own features set
+                        if (wDir.ActualFeatures.Any())
+                            featureComponents.Map(wDir.ActualFeatures, compId);
+                        else
+                            defaultFeatureComponents.Add(compId);
+                    }
 
                     var permissionElement = new XElement(utilExtension.ToXNamespace() + "PermissionEx");
                     permission.EmitAttributes(permissionElement);
@@ -3378,11 +3387,7 @@ namespace WixSharp
 
             string id = "";
 
-            if (wDir.IsIdSet())
-            {
-                id = wDir.Id;
-            }
-            else
+            if (!wDir.IsIdSet())
             {
                 //Special folder defined either directly or by Wix# environment constant
                 //e.g. %ProgramFiles%, [ProgramFilesFolder] -> ProgramFilesFolder
@@ -3390,16 +3395,16 @@ namespace WixSharp
                     Compiler.EnvironmentConstantsMapping.ContainsValue(wDir.Name) ||                            // ProgramFilesFolder
                     Compiler.EnvironmentConstantsMapping.ContainsValue(wDir.Name.TrimStart('[').TrimEnd(']')))  // [ProgramFilesFolder]
                 {
-                    id = wDir.Name.Expand();
+                    wDir.Id = wDir.Name.Expand();
                 }
                 else
                 {
-                    id = parent.Attribute("Id").Value + "." + wDir.Name.Expand();
+                    wDir.Id = parent.Attribute("Id").Value + "." + wDir.Name.Expand();
                 }
             }
 
             var newSubDir = new XElement("Directory",
-                                         new XAttribute("Id", id),
+                                         new XAttribute("Id", wDir.Id),
                                          new XAttribute("Name", name));
 
             if (!wDir.IsAutoParent())

@@ -27,31 +27,23 @@ static class Script
 
     static public void Main(string[] args)
     {
-        Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = true;
+        // Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = true;
 
         var serverFeature = new Feature("Server");
-        var completeFeature = new Feature("Complete Deployment");
-        completeFeature.Add(serverFeature);
+        // var completeFeature = new Feature("Complete");
+        // completeFeature.Add(serverFeature);
 
-        Dir logDir;
         Project project = new Project("TaxPacc",
-                new LaunchCondition("CUSTOM_UI=\"true\" OR REMOVE=\"ALL\"", "Please run setup.exe instead."),
+                // new LaunchCondition("CUSTOM_UI=\"true\" OR REMOVE=\"ALL\"", "Please run setup.exe instead."),
                 new Dir(@"%ProgramFiles%\TaxPacc",
-                    new File(completeFeature, "setup.cs")),
+                    new File("setup.cs")),
 
-                // logDir = new Dir(@"%CommonAppDataFolder%\TaxPacc\Server",
-                //     new DirPermission("serviceaccountusername", "serviceaccountdomain", GenericPermission.All)));
-
-                new Dir(@"%CommonAppDataFolder%\TaxPacc",
-                    logDir = new Dir(new FeatureSet(completeFeature, serverFeature), "Server",
+                    new Dir(serverFeature, @"%CommonAppDataFolder%\TaxPacc\Server",
                         new DirPermission("serviceaccountusername", "serviceaccountdomain", GenericPermission.All)
-                        {
-                            Feature = new FeatureSet(completeFeature, serverFeature)
-                        }
-                )));
-
+                ));
+        project.UI = WUI.WixUI_FeatureTree;
         project.PreserveTempFiles = true;
-        project.BuildWxs();
+        project.BuildMsi();
     }
 
     static public void Main1(string[] args)

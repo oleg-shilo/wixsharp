@@ -313,6 +313,10 @@ namespace WixSharp
             {
                 if (id.IsEmpty())
                 {
+                    if (this is Feature)
+                    {
+                        // break point parking spot
+                    }
                     id = Compiler.AutoGeneration.CustomIdAlgorithm?.Invoke(this) ?? IncrementalIdFor(this);
                 }
 
