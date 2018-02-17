@@ -115,10 +115,10 @@ namespace WixSharp
         public void StartExecute()
         {
             //Debug.Assert(false);
+            UACRevealer.Enter();
             started = true;
             if (!IsDemoMode)
             {
-                UACRevealer.Enter();
                 MsiRuntime.StartExecute();
             }
         }

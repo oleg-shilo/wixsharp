@@ -38,12 +38,13 @@ static class Script
                 new Dir(@"%ProgramFiles%\TaxPacc",
                     new File("setup.cs")),
 
-                    new Dir(serverFeature, @"%CommonAppDataFolder%\TaxPacc\Server",
+                    new Dir(serverFeature,
+                    @"%CommonAppDataFolder%\TaxPacc\Server",
                         new DirPermission("serviceaccountusername", "serviceaccountdomain", GenericPermission.All)
                 ));
         project.UI = WUI.WixUI_FeatureTree;
         project.PreserveTempFiles = true;
-        project.BuildMsi();
+        project.BuildMsiCmd();
     }
 
     static public void Main1(string[] args)

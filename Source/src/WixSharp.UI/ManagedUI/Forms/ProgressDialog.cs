@@ -1,6 +1,10 @@
 using System;
 using Microsoft.Deployment.WindowsInstaller;
 using System.Diagnostics;
+using System.Threading;
+using System.Drawing;
+using System.Windows.Forms;
+using WixSharp.CommonTasks;
 
 namespace WixSharp.UI.Forms
 {
@@ -38,6 +42,10 @@ namespace WixSharp.UI.Forms
             var upShift = (int)(next.Height * 2.3) - bottomPanel.Height;
             bottomPanel.Top -= upShift;
             bottomPanel.Height += upShift;
+
+            var fontSize = waitPrompt.Font.Size;
+            float scaling = 1;
+            waitPrompt.Font = new Font(waitPrompt.Font.Name, fontSize * scaling, FontStyle.Italic);
         }
 
         /// <summary>
@@ -81,6 +89,13 @@ namespace WixSharp.UI.Forms
         {
             switch (messageType)
             {
+                case InstallMessage.InstallStart:
+                case InstallMessage.InstallEnd:
+                    {
+                        waitPrompt.Visible = false;
+                    }
+                    break;
+
                 case InstallMessage.ActionStart:
                     {
                         try
@@ -130,6 +145,11 @@ namespace WixSharp.UI.Forms
         public override void OnProgress(int progressPercentage)
         {
             progress.Value = progressPercentage;
+
+            if (progressPercentage > 0)
+            {
+                waitPrompt.Visible = false;
+            }
         }
 
         /// <summary>

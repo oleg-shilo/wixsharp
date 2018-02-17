@@ -1401,6 +1401,135 @@ namespace WixSharp.CommonTasks
         [DllImport("User32.dll")]
         static extern int SetForegroundWindow(IntPtr hwnd);
 
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern IntPtr FindWindow(string className, string windowName);
+
+        [DllImport("user32")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool EnumChildWindows(IntPtr window, EnumWindowProc callback, IntPtr i);
+
+        static string GetWindowClass(IntPtr hWnd)
+        {
+            var class_name = new StringBuilder(1024);
+            var t = GetClassName(hWnd, class_name, class_name.Capacity);
+
+            return class_name.ToString();
+        }
+
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        static extern long GetClassName(IntPtr hwnd, StringBuilder lpClassName, long nMaxCount);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern IntPtr SetActiveWindow(IntPtr hWnd);
+
+        delegate bool EnumWindowProc(IntPtr hWnd, IntPtr parameter);
+
+        static IntPtr GetTaskbarWindow()
+        {
+            var hwndTrayWnd = FindWindow("Shell_TrayWnd", null);
+            IntPtr taskbar = IntPtr.Zero;
+
+            EnumChildWindows(hwndTrayWnd, delegate (IntPtr hWnd, IntPtr param)
+            {
+                var name = GetWindowClass(hWnd);
+                // Debug.WriteLine(name);
+                if (name == "MSTaskListWClass")
+                {
+                    taskbar = hWnd;
+                    return false;
+                }
+                return true;
+            }, IntPtr.Zero);
+
+            return taskbar;
+        }
+
+        static void SetFocusOnTaskbar()
+        {
+            var taskbar = GetTaskbarWindow();
+
+            RECT rect;
+            GetWindowRect(taskbar, out rect);
+
+            POINT pos = GetCursorPos();
+
+            if (rect.IsHorizontal())
+                FireMouseClick(rect.Right - 10, rect.Top + 10);
+            else
+                FireMouseClick(rect.Left + 10, rect.Bottom - 10);
+
+            SetCursorPos(pos);
+        }
+
+        [Flags]
+        enum MouseEventFlags
+        {
+            LEFTDOWN = 0x00000002,
+            LEFTUP = 0x00000004,
+            MIDDLEDOWN = 0x00000020,
+            MIDDLEUP = 0x00000040,
+            MOVE = 0x00000001,
+            ABSOLUTE = 0x00008000,
+            RIGHTDOWN = 0x00000008,
+            RIGHTUP = 0x00000010
+        }
+
+        [DllImport("user32.dll")]
+        static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, int dwExtraInfo);
+
+        static void FireMouseClick(int x, int y)
+        {
+            SetCursorPos(x, y);
+            mouse_event((uint)MouseEventFlags.LEFTDOWN, 0, 0, 0, 0);
+            mouse_event((uint)MouseEventFlags.LEFTUP, 0, 0, 0, 0);
+        }
+
+        [DllImport("user32.dll")]
+        static extern bool SetCursorPos(int X, int Y);
+
+        static void SetCursorPos(POINT p)
+        {
+            SetCursorPos(p.x, p.y);
+        }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetCursorPos(out POINT lpPoint);
+
+        static POINT GetCursorPos()
+        {
+            POINT p;
+            GetCursorPos(out p);
+            return p;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct POINT
+        {
+            public int x;
+            public int y;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        struct RECT
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
+
+        static bool IsHorizontal(this RECT r)
+        {
+            return (r.Bottom - r.Top) < (r.Right - r.Left);
+        }
+
+        [DllImport("user32.dll")]
+        static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern IntPtr SetFocus(IntPtr hWnd);
+
         /// <summary>
         /// Activates UACRevealer
         /// </summary>
@@ -1409,7 +1538,7 @@ namespace WixSharp.CommonTasks
             // https://superuser.com/questions/89008/vista-admin-user-dialog-hidden
             // https://msdn.microsoft.com/en-us/library/bb756922.aspx
 
-            // #151: UAC prompt appears minimized on TaskBar.
+            // Issue #151: UAC prompt appears minimized on TaskBar.
             // MSI is a background process (service) thus it is responsible for passing its
             // main window handle to the UAC. It does it correctly for its own UI but not for
             // the embedded one.
@@ -1420,17 +1549,43 @@ namespace WixSharp.CommonTasks
             //
             // Though the trick is not 100% reliable and may not work on all OS versions.
 
+            // Issue #301: Managed UI: UAC prompt is always in background
+            // Feb 2018 the trick stopped working on Win10 (presumably after win update)
+            // Change of tactics. now instead of notepad instance let's set focus to task bar.
+            // It works perfect with SetForegroundWindow(taskbar) but it also triggers taksbar item
+            // preview. Thus the approach is to simulate mouse click at the end of the taskbar rect
+            //
+            // Win32.StartMonitoringTaskbarForUAC(); works quite OK too but it's too hacky
+
             if (Enabled)
                 try
                 {
-                    var exe = "notepad.exe";
-                    UAC_revealer = System.Diagnostics.Process.Start(exe);
-                    UAC_revealer.WaitForInputIdle(2000);
-                    if (UAC_revealer.MainWindowHandle != IntPtr.Zero)
+                    void approach_1()   // doesn't longer work
                     {
-                        MoveWindow(UAC_revealer.MainWindowHandle, 0, 0, 30, 30, true);
-                        // SetForegroundWindow(UAC_revealer.MainWindowHandle);
+                        var exe = "notepad.exe";
+                        UAC_revealer = System.Diagnostics.Process.Start(exe);
+                        UAC_revealer.WaitForInputIdle(2000);
+                        if (UAC_revealer.MainWindowHandle != IntPtr.Zero)
+                        {
+                            MoveWindow(UAC_revealer.MainWindowHandle, 0, 0, 30, 30, true);
+                        }
                     }
+
+                    void approach_2()
+                    {
+                        SetFocusOnTaskbar();
+
+                        ThreadPool.QueueUserWorkItem(x =>
+                        {
+                            for (int i = 0; i < 3; i++)
+                            {
+                                Thread.Sleep(1000);
+                                SetFocusOnTaskbar();
+                            }
+                        });
+                    }
+
+                    approach_2();
                 }
                 catch { }
         }

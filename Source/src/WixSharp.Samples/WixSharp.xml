@@ -4762,13 +4762,17 @@
         </member>
         <member name="M:WixSharp.DirPermission.#ctor(System.String)">
             <summary>
-            Creates a FilePermission instance for <paramref name="user"/>
+            Creates a FilePermission instance for <paramref name="user"/>.
+            <para>Note that <see cref="T:WixSharp.DirPermission"/> inherits its parent <see cref="T:WixSharp.Dir"/> features unless
+            it has it own features specified.</para>
             </summary>
             <param name="user"></param>
         </member>
         <member name="M:WixSharp.DirPermission.#ctor(System.String,System.String)">
             <summary>
             Creates a FilePermission instance for <paramref name="user"/>@<paramref name="domain"/>
+            <para>Note that <see cref="T:WixSharp.DirPermission"/> inherits its parent <see cref="T:WixSharp.Dir"/> features unless
+            it has it own features specified.</para>
             </summary>
             <param name="user"></param>
             <param name="domain"></param>
@@ -4776,6 +4780,8 @@
         <member name="M:WixSharp.DirPermission.#ctor(System.String,WixSharp.GenericPermission)">
             <summary>
             Creates a FilePermission instance for <paramref name="user"/> with generic permissions described by <paramref name="permission"/>
+            <para>Note that <see cref="T:WixSharp.DirPermission"/> inherits its parent <see cref="T:WixSharp.Dir"/> features unless
+            it has it own features specified.</para>
             </summary>
             <param name="user"></param>
             <param name="permission"></param>
@@ -4783,6 +4789,8 @@
         <member name="M:WixSharp.DirPermission.#ctor(System.String,System.String,WixSharp.GenericPermission)">
             <summary>
             Creates a FilePermission instance for <paramref name="user"/>@<paramref name="domain"/> with generic permissions described by <paramref name="permission"/>
+            <para>Note that <see cref="T:WixSharp.DirPermission"/> inherits its parent <see cref="T:WixSharp.Dir"/> features unless
+            it has it own features specified.</para>
             </summary>
             <param name="user"></param>
             <param name="domain"></param>

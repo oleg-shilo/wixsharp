@@ -9,15 +9,15 @@ using System.Windows.Forms;
 namespace WixSharp
 {
 #pragma warning disable 1591
+
     /// <summary>
     /// Set of Win32 API wrappers
     /// </summary>
-    public static class Win32
+    public static partial class Win32
     {
         public const int SW_HIDE = 0;
         public const int SW_SHOW = 1;
         public const int SW_RESTORE = 9;
-
 
         [DllImport("user32", EntryPoint = "SendMessage")]
         public extern static int SendMessage(IntPtr hwnd, uint msg, uint wParam, uint lParam);
@@ -68,7 +68,6 @@ namespace WixSharp
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr FindWindow(string className, string windowName);
 
-
         public static Rectangle GetRectangle(this IntPtr hWnd)
         {
             var rect = new RECT();
@@ -93,6 +92,9 @@ namespace WixSharp
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
 
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr SetActiveWindow(IntPtr hWnd);
+
         [DllImport("User32.dll")]
         public static extern int SetForegroundWindow(IntPtr hwnd);
 
@@ -114,5 +116,6 @@ namespace WixSharp
             public int Bottom;
         }
     }
+
 #pragma warning restore 1591
 }

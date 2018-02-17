@@ -152,6 +152,7 @@
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Win32.Taskbar.cs" />
     <Compile Include="Win32.cs" />
     <Compile Include="WixCLRDialog.cs">
       <SubType>Form</SubType>
