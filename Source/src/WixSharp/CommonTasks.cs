@@ -1560,6 +1560,7 @@ namespace WixSharp.CommonTasks
             if (Enabled)
                 try
                 {
+#pragma warning disable 8321
                     void approach_1()   // doesn't longer work
                     {
                         var exe = "notepad.exe";

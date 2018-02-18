@@ -3385,8 +3385,6 @@ namespace WixSharp
                 //Issue #45 Can't install dll to windows/system32 
                 name = wDir.Name.ExpandWixEnvConsts();
 
-            string id = "";
-
             if (!wDir.IsIdSet())
             {
                 //Special folder defined either directly or by Wix# environment constant

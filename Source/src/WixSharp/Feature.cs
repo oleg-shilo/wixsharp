@@ -3,12 +3,28 @@ using System.Xml.Linq;
 
 namespace WixSharp
 {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <seealso cref="WixSharp.Feature" />
     public partial class FeatureSet : Feature
     {
+        /// <summary>
+        /// Creates <see cref="FeatureSet"/> from the specified <see cref="Feature"/> items.
+        /// </summary>
+        /// <param name="features">The features.</param>
+        /// <returns></returns>
         public static FeatureSet Of(params Feature[] features) => new FeatureSet(features);
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FeatureSet"/> class.
+        /// </summary>
+        /// <param name="features">The features.</param>
         public FeatureSet(params Feature[] features) => Items = features;
 
+        /// <summary>
+        /// The embedded <see cref="Feature"/> items.
+        /// </summary>
         public Feature[] Items;
     }
 

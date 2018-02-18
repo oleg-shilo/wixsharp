@@ -186,7 +186,7 @@ namespace WixSharp
             internal get { return feature; }
         }
 
-        public Feature feature;
+        Feature feature;
 
         /// <summary>
         /// The collection of <see cref="Feature"></see>s the Wix object belongs to. This member is processed only for the

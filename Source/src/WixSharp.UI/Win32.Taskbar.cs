@@ -27,14 +27,14 @@ namespace WixSharp
         // [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         // internal static extern int GetWindowTextLength(IntPtr hWnd);
 
-        public delegate bool EnumWindowProc(IntPtr hWnd, IntPtr parameter);
+        delegate bool EnumWindowProc(IntPtr hWnd, IntPtr parameter);
 
         [DllImport("user32")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool EnumChildWindows(IntPtr window, EnumWindowProc callback, IntPtr i);
+        static extern bool EnumChildWindows(IntPtr window, EnumWindowProc callback, IntPtr i);
 
         [Flags]
-        public enum MouseEventFlags
+        enum MouseEventFlags
         {
             LEFTDOWN = 0x00000002,
             LEFTUP = 0x00000004,
@@ -77,14 +77,14 @@ namespace WixSharp
         //     public int Bottom;
         // }
 
-        public static void FireMouseClick(int x, int y)
+        static void FireMouseClick(int x, int y)
         {
             SetCursorPos(x, y);
             mouse_event((uint)MouseEventFlags.LEFTDOWN, 0, 0, 0, 0);
             mouse_event((uint)MouseEventFlags.LEFTUP, 0, 0, 0, 0);
         }
 
-        public static RECT GetTaskbarRect()
+        static RECT GetTaskbarRect()
         {
             IntPtr taskbar = GetTaskbarWindow();
             RECT r;
@@ -92,7 +92,7 @@ namespace WixSharp
             return r;
         }
 
-        public static int ContentHEnd(this Bitmap image)
+        static int ContentHEnd(this Bitmap image)
         {
             int half_hight = image.Height / 2;
 
@@ -109,7 +109,7 @@ namespace WixSharp
             return test_point;
         }
 
-        public static Bitmap HCrop(this Bitmap image, int left, int right)
+        static Bitmap HCrop(this Bitmap image, int left, int right)
         {
             var section_rect = new Rectangle(left,
                                              0,
@@ -119,7 +119,7 @@ namespace WixSharp
             return image.Clone(section_rect, image.PixelFormat);
         }
 
-        public static Bitmap GetHSquareSection(this Bitmap image, int index, int? sectionWidth = null)
+        static Bitmap GetHSquareSection(this Bitmap image, int index, int? sectionWidth = null)
         {
             var section_rect = new Rectangle(sectionWidth ?? image.Height * index,
                                              0,
@@ -129,7 +129,7 @@ namespace WixSharp
             return image.Clone(section_rect, image.PixelFormat);
         }
 
-        public static IntPtr GetTaskbarWindow()
+        static IntPtr GetTaskbarWindow()
         {
             var hwndTrayWnd = FindWindow("Shell_TrayWnd", null);
             IntPtr taskbar = IntPtr.Zero;
@@ -159,7 +159,7 @@ namespace WixSharp
         [DllImport("user32.dll")]
         static extern int GetWindowRgn(IntPtr hWnd, IntPtr hRgn);
 
-        public static Bitmap GetWindowBitmap(IntPtr hwnd)
+        static Bitmap GetWindowBitmap(IntPtr hwnd)
         {
             RECT rc;
             GetWindowRect(hwnd, out rc);
@@ -193,10 +193,10 @@ namespace WixSharp
             return bmp;
         }
 
-        public static void StartMonitoringTaskbarForUAC()
+        static void StartMonitoringTaskbarForUAC()
         {
             Win32.RECT? taskbarLastItemRectangle = null;
-
+#pragma warning disable 8321
             bool ChechForUACTaskbarItem()
             {
                 Bitmap image = Win32.GetWindowBitmap(Win32.GetTaskbarWindow());
@@ -248,7 +248,7 @@ namespace WixSharp
 
         static int count = 0;
 
-        public static void KeepTaskbarFocused()
+        static void KeepTaskbarFocused()
         {
             ThreadPool.QueueUserWorkItem(x =>
             {

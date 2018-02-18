@@ -6831,6 +6831,13 @@
             <param name="feature">The feature.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.ToItems(WixSharp.Feature)">
+            <summary>
+            Agregate all <see cref="T:WixSharp.Feature"/> items.
+            </summary>
+            <param name="feature">The feature.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.BeingUninstall(WixSharp.Feature)">
             <summary>
             Builds an MSI condition expression for the given <see cref="T:WixSharp.Feature"/>, which evaluates
@@ -11708,6 +11715,30 @@
             Gets or sets the name of the mapped XML element.
             </summary>
             <value>The name.</value>
+        </member>
+        <member name="T:WixSharp.FeatureSet">
+             <summary>
+            
+             </summary>
+             <seealso cref="T:WixSharp.Feature" />
+        </member>
+        <member name="M:WixSharp.FeatureSet.Of(WixSharp.Feature[])">
+            <summary>
+            Creates <see cref="T:WixSharp.FeatureSet"/> from the specified <see cref="T:WixSharp.Feature"/> items.
+            </summary>
+            <param name="features">The features.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.FeatureSet.#ctor(WixSharp.Feature[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.FeatureSet"/> class.
+            </summary>
+            <param name="features">The features.</param>
+        </member>
+        <member name="F:WixSharp.FeatureSet.Items">
+            <summary>
+            The embedded <see cref="T:WixSharp.Feature"/> items.
+            </summary>
         </member>
         <member name="T:WixSharp.Feature">
              <summary>

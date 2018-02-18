@@ -2153,6 +2153,11 @@ namespace WixSharp
             return new Condition($"((!{feature.Id} = 2) AND (&{feature.Id} = 3))");
         }
 
+        /// <summary>
+        /// Agregate all <see cref="Feature"/> items.
+        /// </summary>
+        /// <param name="feature">The feature.</param>
+        /// <returns></returns>
         public static Feature[] ToItems(this Feature feature)
         {
             if (feature == null)
