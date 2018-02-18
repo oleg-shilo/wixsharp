@@ -1054,6 +1054,52 @@
             <param name="msiPath">The path.</param>
             <returns></returns>
         </member>
+        <member name="T:WixSharp.CommonTasks.ExternalTool">
+            <summary>
+            A generic utility class for running console application tools (e.g. compilers, utilities)
+            </summary>
+        </member>
+        <member name="P:WixSharp.CommonTasks.ExternalTool.ExePath">
+            <summary>
+            Gets or sets the path to the exe file of the tool to be executed.
+            </summary>
+            <value>The exe path.</value>
+        </member>
+        <member name="P:WixSharp.CommonTasks.ExternalTool.Arguments">
+            <summary>
+            Gets or sets the arguments for the exe file of the tool to be executed.
+            </summary>
+            <value>The arguments.</value>
+        </member>
+        <member name="P:WixSharp.CommonTasks.ExternalTool.WellKnownLocations">
+            <summary>
+            Gets or sets the well known locations for probing the exe file.
+            <para>
+            By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>. By settin <c>WellKnownLocations</c>
+            you can add som extra probing locations. The directories must be separated by the ';' character.
+            </para>
+            </summary>
+            <value>The well known locations.</value>
+        </member>
+        <member name="M:WixSharp.CommonTasks.ExternalTool.WinRun">
+            <summary>
+            Runs the exec file with the console output completely hidden and discarded.
+            </summary>
+            <returns>The process exit code.</returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.ExternalTool.ConsoleRun">
+            <summary>
+            Runs the exec file with the console and redirects the output into the current process console output.
+            </summary>
+            <returns>The process exit code.</returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.ExternalTool.ConsoleRun(System.Action{System.String})">
+            <summary>
+            Runs the exec file with the console and intercepts and redirects the output into the user specified delegate.
+            </summary>
+            <param name="onConsoleOut">The on console out.</param>
+            <returns>The process exit code.</returns>
+        </member>
         <member name="T:WixSharp.CommonTasks.UACRevealer">
             <summary>
             UAC prompt revealer. This is a work around for the MSI limitation/problem with EmbeddedUI UAC prompt.
@@ -16811,52 +16857,6 @@
             <summary>
             WixQuietExec or CAQuietExec
             </summary>
-        </member>
-        <member name="T:ExternalTool">
-            <summary>
-            A generic utility class for running console application tools (e.g. compilers, utilities)
-            </summary>
-        </member>
-        <member name="P:ExternalTool.ExePath">
-            <summary>
-            Gets or sets the path to the exe file of the tool to be executed.
-            </summary>
-            <value>The exe path.</value>
-        </member>
-        <member name="P:ExternalTool.Arguments">
-            <summary>
-            Gets or sets the arguments for the exe file of the tool to be executed.
-            </summary>
-            <value>The arguments.</value>
-        </member>
-        <member name="P:ExternalTool.WellKnownLocations">
-            <summary>
-            Gets or sets the well known locations for probing the exe file.
-            <para>
-            By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>. By settin <c>WellKnownLocations</c>
-            you can add som extra probing locations. The directories must be separated by the ';' character.
-            </para>
-            </summary>
-            <value>The well known locations.</value>
-        </member>
-        <member name="M:ExternalTool.WinRun">
-            <summary>
-            Runs the exec file with the console output completely hidden and discarded.
-            </summary>
-            <returns>The process exit code.</returns>
-        </member>
-        <member name="M:ExternalTool.ConsoleRun">
-            <summary>
-            Runs the exec file with the console and redirects the output into the current process console output.
-            </summary>
-            <returns>The process exit code.</returns>
-        </member>
-        <member name="M:ExternalTool.ConsoleRun(System.Action{System.String})">
-            <summary>
-            Runs the exec file with the console and intercepts and redirects the output into the user specified delegate.
-            </summary>
-            <param name="onConsoleOut">The on console out.</param>
-            <returns>The process exit code.</returns>
         </member>
     </members>
 </doc>

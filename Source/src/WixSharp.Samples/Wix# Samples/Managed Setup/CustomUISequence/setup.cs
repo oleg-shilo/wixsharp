@@ -17,6 +17,8 @@ public class Script
 {
     static public void Main()
     {
+        UACRevealer.Enabled = true;
+
         var binaries = new Feature("Binaries", "Product binaries", true, false);
         var docs = new Feature("Documentation", "Product documentation (manuals and user guides)", true) { Display = FeatureDisplay.expand };
         var tuts = new Feature("Tutorials", "Product tutorials", false) { Display = FeatureDisplay.expand };

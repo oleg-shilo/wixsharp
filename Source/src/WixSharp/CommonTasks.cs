@@ -1380,372 +1380,138 @@ namespace WixSharp.CommonTasks
     }
 
     /// <summary>
-    /// UAC prompt revealer. This is a work around for the MSI limitation/problem with EmbeddedUI UAC prompt.
-    /// <para> The symptom of the problem is the UAC prompt not being displayed during the elevation but rather
-    /// minimized on the taskbar. It's caused by the fact the all background applications (including MSI runtime)
-    /// supposed to register the main window for UAC prompt. And, MSI does not doe the registration for EmbeddedUI.
-    /// </para>
-    /// <para>Call <c>UACRevealer.Enter</c> just before triggering UAC (staring the actual install). This will
-    /// "steal" the focus from the MSI EmbeddedUI window. This in turn will bring UAC prompt to foreground.</para>
-    /// <para>Call <c>UACRevealer.Exit</c> just after UAC prompt has been closed to dispose UACRevealer.
-    /// </para>
-    /// <para> See "Use the HWND Property to Be Acknowledged as a Foreground Application" section at
-    /// https://msdn.microsoft.com/en-us/library/bb756922.aspx
-    /// </para>
+    /// A generic utility class for running console application tools (e.g. compilers, utilities)
     /// </summary>
-    public static class UACRevealer
+    public class ExternalTool
     {
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern bool MoveWindow(IntPtr hwnd, int x, int y, int cx, int cy, bool repaint);
-
-        [DllImport("User32.dll")]
-        static extern int SetForegroundWindow(IntPtr hwnd);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr FindWindow(string className, string windowName);
-
-        [DllImport("user32")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool EnumChildWindows(IntPtr window, EnumWindowProc callback, IntPtr i);
-
-        static string GetWindowClass(IntPtr hWnd)
-        {
-            var class_name = new StringBuilder(1024);
-            var t = GetClassName(hWnd, class_name, class_name.Capacity);
-
-            return class_name.ToString();
-        }
-
-        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        static extern long GetClassName(IntPtr hwnd, StringBuilder lpClassName, long nMaxCount);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr SetActiveWindow(IntPtr hWnd);
-
-        delegate bool EnumWindowProc(IntPtr hWnd, IntPtr parameter);
-
-        static IntPtr GetTaskbarWindow()
-        {
-            var hwndTrayWnd = FindWindow("Shell_TrayWnd", null);
-            IntPtr taskbar = IntPtr.Zero;
-
-            EnumChildWindows(hwndTrayWnd, delegate (IntPtr hWnd, IntPtr param)
-            {
-                var name = GetWindowClass(hWnd);
-                // Debug.WriteLine(name);
-                if (name == "MSTaskListWClass")
-                {
-                    taskbar = hWnd;
-                    return false;
-                }
-                return true;
-            }, IntPtr.Zero);
-
-            return taskbar;
-        }
-
-        static void SetFocusOnTaskbar()
-        {
-            var taskbar = GetTaskbarWindow();
-
-            RECT rect;
-            GetWindowRect(taskbar, out rect);
-
-            POINT pos = GetCursorPos();
-
-            if (rect.IsHorizontal())
-                FireMouseClick(rect.Right - 10, rect.Top + 10);
-            else
-                FireMouseClick(rect.Left + 10, rect.Bottom - 10);
-
-            SetCursorPos(pos);
-        }
-
-        [Flags]
-        enum MouseEventFlags
-        {
-            LEFTDOWN = 0x00000002,
-            LEFTUP = 0x00000004,
-            MIDDLEDOWN = 0x00000020,
-            MIDDLEUP = 0x00000040,
-            MOVE = 0x00000001,
-            ABSOLUTE = 0x00008000,
-            RIGHTDOWN = 0x00000008,
-            RIGHTUP = 0x00000010
-        }
-
-        [DllImport("user32.dll")]
-        static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, int dwExtraInfo);
-
-        static void FireMouseClick(int x, int y)
-        {
-            SetCursorPos(x, y);
-            mouse_event((uint)MouseEventFlags.LEFTDOWN, 0, 0, 0, 0);
-            mouse_event((uint)MouseEventFlags.LEFTUP, 0, 0, 0, 0);
-        }
-
-        [DllImport("user32.dll")]
-        static extern bool SetCursorPos(int X, int Y);
-
-        static void SetCursorPos(POINT p)
-        {
-            SetCursorPos(p.x, p.y);
-        }
-
-        [DllImport("user32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetCursorPos(out POINT lpPoint);
-
-        static POINT GetCursorPos()
-        {
-            POINT p;
-            GetCursorPos(out p);
-            return p;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        struct POINT
-        {
-            public int x;
-            public int y;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        struct RECT
-        {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
-        }
-
-        static bool IsHorizontal(this RECT r)
-        {
-            return (r.Bottom - r.Top) < (r.Right - r.Left);
-        }
-
-        [DllImport("user32.dll")]
-        static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr SetFocus(IntPtr hWnd);
+        /// <summary>
+        /// Gets or sets the path to the exe file of the tool to be executed.
+        /// </summary>
+        /// <value>The exe path.</value>
+        public string ExePath { set; get; }
 
         /// <summary>
-        /// Activates UACRevealer
+        /// Gets or sets the arguments for the exe file of the tool to be executed.
         /// </summary>
-        public static void Enter()
+        /// <value>The arguments.</value>
+        public string Arguments { set; get; }
+
+        /// <summary>
+        /// Gets or sets the well known locations for probing the exe file.
+        /// <para>
+        /// By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>. By settin <c>WellKnownLocations</c>
+        /// you can add som extra probing locations. The directories must be separated by the ';' character.
+        /// </para>
+        /// </summary>
+        /// <value>The well known locations.</value>
+        public string WellKnownLocations { set; get; }
+
+        /// <summary>
+        /// Runs the exec file with the console output completely hidden and discarded.
+        /// </summary>
+        /// <returns>The process exit code.</returns>
+        public int WinRun()
         {
-            // https://superuser.com/questions/89008/vista-admin-user-dialog-hidden
-            // https://msdn.microsoft.com/en-us/library/bb756922.aspx
+            string systemPathOriginal = Environment.GetEnvironmentVariable("PATH");
+            try
+            {
+                Environment.SetEnvironmentVariable("PATH", systemPathOriginal + ";" + Environment.ExpandEnvironmentVariables(this.WellKnownLocations ?? ""));
 
-            // Issue #151: UAC prompt appears minimized on TaskBar.
-            // MSI is a background process (service) thus it is responsible for passing its
-            // main window handle to the UAC. It does it correctly for its own UI but not for
-            // the embedded one.
-            // A simple work around allows to fix this behaver without begging MS for fixing MSI.
-            // It seems that just having a foreground process main window (e.g. notepad.exe)
-            // with the focus is enough to trick the UAC into believing that UAC prompt needs to
-            // be displayed. Tested on Win10.
-            //
-            // Though the trick is not 100% reliable and may not work on all OS versions.
+                var process = new Process();
+                process.StartInfo.FileName = this.ExePath;
+                process.StartInfo.Arguments = this.Arguments;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
 
-            // Issue #301: Managed UI: UAC prompt is always in background
-            // Feb 2018 the trick stopped working on Win10 (presumably after win update)
-            // Change of tactics. now instead of notepad instance let's set focus to task bar.
-            // It works perfect with SetForegroundWindow(taskbar) but it also triggers taksbar item
-            // preview. Thus the approach is to simulate mouse click at the end of the taskbar rect
-            //
-            // Win32.StartMonitoringTaskbarForUAC(); works quite OK too but it's too hacky
+                process.WaitForExit();
+                return process.ExitCode;
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("PATH", systemPathOriginal);
+            }
+        }
 
-            if (Enabled)
-                try
+        /// <summary>
+        /// Runs the exec file with the console and redirects the output into the current process console output.
+        /// </summary>
+        /// <returns>The process exit code.</returns>
+        public int ConsoleRun()
+        {
+            return ConsoleRun(Console.WriteLine);
+        }
+
+        /// <summary>
+        /// Runs the exec file with the console and intercepts and redirects the output into the user specified delegate.
+        /// </summary>
+        /// <param name="onConsoleOut">The on console out.</param>
+        /// <returns>The process exit code.</returns>
+        public int ConsoleRun(Action<string> onConsoleOut)
+        {
+            string systemPathOriginal = Environment.GetEnvironmentVariable("PATH");
+            try
+            {
+                Environment.SetEnvironmentVariable("PATH", Environment.ExpandEnvironmentVariables(this.WellKnownLocations ?? "") + ";" + "%WIXSHARP_PATH%;" + systemPathOriginal);
+
+                string exePath = GetFullPath(this.ExePath);
+
+                if (exePath == null)
                 {
-#pragma warning disable 8321
-                    void approach_1()   // doesn't longer work
+                    Compiler.OutputWriteLine("Error: Cannot find " + this.ExePath);
+                    Compiler.OutputWriteLine("Make sure it is in the System PATH or WIXSHARP_PATH environment variables or WellKnownLocations member/parameter is initialized properly. ");
+                    return 1;
+                }
+
+                Compiler.OutputWriteLine("Execute:\n\"" + this.ExePath + "\" " + this.Arguments);
+
+                var process = new Process();
+                process.StartInfo.FileName = exePath;
+                process.StartInfo.Arguments = this.Arguments;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+
+                if (onConsoleOut != null)
+                {
+                    string line = null;
+                    while (null != (line = process.StandardOutput.ReadLine()))
                     {
-                        var exe = "notepad.exe";
-                        UAC_revealer = System.Diagnostics.Process.Start(exe);
-                        UAC_revealer.WaitForInputIdle(2000);
-                        if (UAC_revealer.MainWindowHandle != IntPtr.Zero)
-                        {
-                            MoveWindow(UAC_revealer.MainWindowHandle, 0, 0, 30, 30, true);
-                        }
+                        onConsoleOut(line);
                     }
 
-                    void approach_2()
-                    {
-                        SetFocusOnTaskbar();
-
-                        ThreadPool.QueueUserWorkItem(x =>
-                        {
-                            for (int i = 0; i < 3; i++)
-                            {
-                                Thread.Sleep(1000);
-                                SetFocusOnTaskbar();
-                            }
-                        });
-                    }
-
-                    approach_2();
+                    string error = process.StandardError.ReadToEnd();
+                    if (!error.IsEmpty())
+                        onConsoleOut(error);
                 }
-                catch { }
-        }
-
-        /// <summary>
-        /// Deactivates UACRevealer
-        /// </summary>
-        public static void Exit()
-        {
-            if (UAC_revealer != null)
+                process.WaitForExit();
+                return process.ExitCode;
+            }
+            finally
             {
-                try { UAC_revealer.Kill(); }
-                catch { }
-                UAC_revealer = null;
+                Environment.SetEnvironmentVariable("PATH", systemPathOriginal);
             }
         }
 
-        /// <summary>
-        /// Enables UACRevealer support. This flag is required for enabling UAC prompt work around for
-        /// the WixSharp built-in EmbeddedUI (ManagedUI).
-        /// </summary>
-        public static bool Enabled = true;
-
-        static System.Diagnostics.Process UAC_revealer;
-    }
-}
-
-/// <summary>
-/// A generic utility class for running console application tools (e.g. compilers, utilities)
-/// </summary>
-public class ExternalTool
-{
-    /// <summary>
-    /// Gets or sets the path to the exe file of the tool to be executed.
-    /// </summary>
-    /// <value>The exe path.</value>
-    public string ExePath { set; get; }
-
-    /// <summary>
-    /// Gets or sets the arguments for the exe file of the tool to be executed.
-    /// </summary>
-    /// <value>The arguments.</value>
-    public string Arguments { set; get; }
-
-    /// <summary>
-    /// Gets or sets the well known locations for probing the exe file.
-    /// <para>
-    /// By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>. By settin <c>WellKnownLocations</c>
-    /// you can add som extra probing locations. The directories must be separated by the ';' character.
-    /// </para>
-    /// </summary>
-    /// <value>The well known locations.</value>
-    public string WellKnownLocations { set; get; }
-
-    /// <summary>
-    /// Runs the exec file with the console output completely hidden and discarded.
-    /// </summary>
-    /// <returns>The process exit code.</returns>
-    public int WinRun()
-    {
-        string systemPathOriginal = Environment.GetEnvironmentVariable("PATH");
-        try
+        string GetFullPath(string path)
         {
-            Environment.SetEnvironmentVariable("PATH", systemPathOriginal + ";" + Environment.ExpandEnvironmentVariables(this.WellKnownLocations ?? ""));
+            if (IO.File.Exists(path))
+                return IO.Path.GetFullPath(path);
 
-            var process = new Process();
-            process.StartInfo.FileName = this.ExePath;
-            process.StartInfo.Arguments = this.Arguments;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.CreateNoWindow = true;
-            process.Start();
-
-            process.WaitForExit();
-            return process.ExitCode;
-        }
-        finally
-        {
-            Environment.SetEnvironmentVariable("PATH", systemPathOriginal);
-        }
-    }
-
-    /// <summary>
-    /// Runs the exec file with the console and redirects the output into the current process console output.
-    /// </summary>
-    /// <returns>The process exit code.</returns>
-    public int ConsoleRun()
-    {
-        return ConsoleRun(Console.WriteLine);
-    }
-
-    /// <summary>
-    /// Runs the exec file with the console and intercepts and redirects the output into the user specified delegate.
-    /// </summary>
-    /// <param name="onConsoleOut">The on console out.</param>
-    /// <returns>The process exit code.</returns>
-    public int ConsoleRun(Action<string> onConsoleOut)
-    {
-        string systemPathOriginal = Environment.GetEnvironmentVariable("PATH");
-        try
-        {
-            Environment.SetEnvironmentVariable("PATH", Environment.ExpandEnvironmentVariables(this.WellKnownLocations ?? "") + ";" + "%WIXSHARP_PATH%;" + systemPathOriginal);
-
-            string exePath = GetFullPath(this.ExePath);
-
-            if (exePath == null)
+            foreach (string dir in Environment.GetEnvironmentVariable("PATH").Split(';'))
             {
-                Compiler.OutputWriteLine("Error: Cannot find " + this.ExePath);
-                Compiler.OutputWriteLine("Make sure it is in the System PATH or WIXSHARP_PATH environment variables or WellKnownLocations member/parameter is initialized properly. ");
-                return 1;
-            }
-
-            Compiler.OutputWriteLine("Execute:\n\"" + this.ExePath + "\" " + this.Arguments);
-
-            var process = new Process();
-            process.StartInfo.FileName = exePath;
-            process.StartInfo.Arguments = this.Arguments;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-
-            process.StartInfo.CreateNoWindow = true;
-            process.Start();
-
-            if (onConsoleOut != null)
-            {
-                string line = null;
-                while (null != (line = process.StandardOutput.ReadLine()))
+                if (IO.Directory.Exists(dir))
                 {
-                    onConsoleOut(line);
+                    string fullPath = IO.Path.Combine(Environment.ExpandEnvironmentVariables(dir).Trim(), path);
+                    if (IO.File.Exists(fullPath))
+                        return fullPath;
                 }
-
-                string error = process.StandardError.ReadToEnd();
-                if (!error.IsEmpty())
-                    onConsoleOut(error);
             }
-            process.WaitForExit();
-            return process.ExitCode;
-        }
-        finally
-        {
-            Environment.SetEnvironmentVariable("PATH", systemPathOriginal);
-        }
-    }
 
-    string GetFullPath(string path)
-    {
-        if (IO.File.Exists(path))
-            return IO.Path.GetFullPath(path);
-
-        foreach (string dir in Environment.GetEnvironmentVariable("PATH").Split(';'))
-        {
-            if (IO.Directory.Exists(dir))
-            {
-                string fullPath = IO.Path.Combine(Environment.ExpandEnvironmentVariables(dir).Trim(), path);
-                if (IO.File.Exists(fullPath))
-                    return fullPath;
-            }
+            return null;
         }
-
-        return null;
     }
 }

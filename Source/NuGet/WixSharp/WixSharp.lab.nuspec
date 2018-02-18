@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.Lab</id>
-    <version>1.6.2.1</version>
+    <version>1.6.3.2-HotFix</version>
     <title>Wix# (WixSharp) - Experimantal features</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -14,32 +14,22 @@
 The package contains the sample code for building a simple MSI with the CLR WinForm dialog inserted into UI sequence between InsallDirDlg and VerifyReadyDlg native MSI dialogs. In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# binaries containing experimental features (e.g. native WiX UI support).</summary>
-    <releaseNotes>Release v1.6.2.0
+    <releaseNotes>Release v1.6.2.2
 
 -----
 
-* All samples updated to comply with the latest ID allocation algorithm
-* Implemented proper Bootstrapper Variables
-* Renamed `Bundle.StringVariablesDefinition` -&gt; `Bundle.Variables`
-* Issue #295: In x64 projects, only add Win64=yes to components that haven't already explicitly specified this attribute. Fixes #295
-* Issue #294: Bootstrapper.PreserveDbgFiles not work.
-* Issue #290: Error LGHT0094 : Unresolved reference to symbol 'File:Registrator.exe'
-* NativeBootstrapper source code has been placed under source control now.
-* Issue #282: Built-in installer placeholders are displayed as format strings with [N] brackets
-* Issue #280: A Shortcut's generated ID is different from what it is explicitly set to
-* Issue #276: HashedTargetPathIdAlgorithm emmits duplicated IDs for Cyrilic file names
-* Issue #265: Exception using RegFile class with REGEDIT4 version reg file
-* Issue #267: Set ARPINSTALLLOCATION custom action in wrong place
-* Issue #264: Project.SetVersionFrom() and Project.Version
-* Issue #268: Files starting with a number cause error - Every identifier must begin with either a letter or an underscore.
-* Condition class: add logical operators &amp;, |, NOT
-* Condition class: added Net47_Installed condition
-* `Project.HashedTargetPathIdAlgorithm` is enabled now by default. Triggered by #204.
+v1.6.2.2
+* UACRevealer algorithm changed to `SetForegroundWindow(taskbar)` as a safer option.
+* UACRevealer is disabled by default. Enable it when needed: `UACRevealer.Enabled = true;`.
 
-
-
+v1.6.2.1
+* Issue #301: Managed UI: UAC prompt is always in background
+* Implemented DirPermissions inheriting parent Dir features if it has no own features specified.
+* Issue #279: Empty directory belonging to a feature causes an error
+* Added `FeatureSet` class to allow passing set of features as a constructor `Feature` parameter
+* NuGet: `nbsbuilder` has been moved into 'tools' folder to avoid being referenced as an assembly.
 </releaseNotes>
-    <copyright>Copyright (C) 2004-2017 Oleg Shilo</copyright>
+    <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# Scripting msi install setup</tags>
     <frameworkAssemblies>
@@ -47,7 +37,7 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
       <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
     </frameworkAssemblies>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.6.2.1" />
+      <dependency id="WixSharp.bin" version="1.6.3.2-HotFix" />
     </dependencies>
   </metadata>
   <files>

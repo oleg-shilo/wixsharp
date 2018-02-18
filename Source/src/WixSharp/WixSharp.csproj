@@ -148,6 +148,7 @@
     <Compile Include="SqlScript.cs" />
     <Compile Include="SqlString.cs" />
     <Compile Include="StringEnum.cs" />
+    <Compile Include="UACRevealer.cs" />
     <Compile Include="UrlReservation.cs" />
     <Compile Include="User.cs" />
     <Compile Include="WixExtension.cs" />
