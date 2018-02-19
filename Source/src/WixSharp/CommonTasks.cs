@@ -38,6 +38,7 @@ using IO = System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace WixSharp.CommonTasks
 {
@@ -1385,6 +1386,15 @@ namespace WixSharp.CommonTasks
     public class ExternalTool
     {
         /// <summary>
+        /// Gets or sets the encoding to be used to process external executable output.
+        /// By default it is <c>Encoding.UTF8</c>.
+        /// </summary>
+        /// <value>
+        /// The encoding.
+        /// </value>
+        public Encoding Encoding { set; get; } = Encoding.UTF8;
+
+        /// <summary>
         /// Gets or sets the path to the exe file of the tool to be executed.
         /// </summary>
         /// <value>The exe path.</value>
@@ -1422,6 +1432,7 @@ namespace WixSharp.CommonTasks
                 process.StartInfo.Arguments = this.Arguments;
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.StandardOutputEncoding = this.Encoding;
                 process.Start();
 
                 process.WaitForExit();
@@ -1471,7 +1482,7 @@ namespace WixSharp.CommonTasks
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
-
+                process.StartInfo.StandardOutputEncoding = this.Encoding;
                 process.StartInfo.CreateNoWindow = true;
                 process.Start();
 
