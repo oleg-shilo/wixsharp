@@ -1387,12 +1387,18 @@ namespace WixSharp.CommonTasks
     {
         /// <summary>
         /// Gets or sets the encoding to be used to process external executable output.
-        /// By default it is <c>Encoding.UTF8</c>.
+        /// By default it is the value of <see cref="ExternalTool.DefaultEncoding"/>.
         /// </summary>
         /// <value>
         /// The encoding.
         /// </value>
-        public Encoding Encoding { set; get; } = Encoding.UTF8;
+        public Encoding Encoding;
+
+        /// <summary>
+        /// Gets or sets the default encoding to be used to process external executable output.
+        /// By default it is the value of <c>System.Text.Encoding.Default</c>.
+        /// </summary>
+        public static Encoding DefaultEncoding = Encoding.Default;
 
         /// <summary>
         /// Gets or sets the path to the exe file of the tool to be executed.
@@ -1432,7 +1438,7 @@ namespace WixSharp.CommonTasks
                 process.StartInfo.Arguments = this.Arguments;
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.CreateNoWindow = true;
-                process.StartInfo.StandardOutputEncoding = this.Encoding;
+                process.StartInfo.StandardOutputEncoding = this.Encoding ?? DefaultEncoding;
                 process.Start();
 
                 process.WaitForExit();
@@ -1451,6 +1457,17 @@ namespace WixSharp.CommonTasks
         public int ConsoleRun()
         {
             return ConsoleRun(Console.WriteLine);
+        }
+
+        /// <summary>
+        /// Runs the exec file with the console and returns the output text.
+        /// </summary>
+        /// <returns>The process console output.</returns>
+        public string GetConsoleRunOutput()
+        {
+            var buf = new StringBuilder();
+            this.ConsoleRun(line => buf.AppendLine(line));
+            return buf.ToString();
         }
 
         /// <summary>
@@ -1482,7 +1499,7 @@ namespace WixSharp.CommonTasks
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
-                process.StartInfo.StandardOutputEncoding = this.Encoding;
+                process.StartInfo.StandardOutputEncoding = this.Encoding ?? DefaultEncoding;
                 process.StartInfo.CreateNoWindow = true;
                 process.Start();
 
