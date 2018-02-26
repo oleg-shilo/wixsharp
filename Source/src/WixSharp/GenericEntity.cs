@@ -25,6 +25,11 @@ namespace WixSharp
         public XElement XParent;
 
         /// <summary>
+        /// 
+        /// </summary>
+        public XElement XParentComponent;
+
+        /// <summary>
         /// Map of features and their associated components. The map contains pairs of Features and their component IDs.
         /// <para>
         /// If <see cref="WixSharp.IGenericEntity"/> needs to create a component it can immediately
@@ -44,7 +49,8 @@ namespace WixSharp
                 FeatureComponents = this.FeatureComponents,
                 XParent = this.XParent,
                 Parent = this.Parent,
-                Project = this.Project
+                Project = this.Project,
+                XParentComponent = this.XParentComponent,
             };
         }
     }

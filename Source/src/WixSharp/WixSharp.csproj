@@ -188,6 +188,7 @@
     <Compile Include="PathFileAction.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Property.cs" />
+    <Compile Include="XmlFile.cs" />
     <None Include="QtCmdLineAction.cs" />
     <Compile Include="RegFileImporter.cs" />
     <Compile Include="RegValueProperty.cs" />

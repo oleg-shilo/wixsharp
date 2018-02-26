@@ -1879,7 +1879,7 @@ namespace WixSharp
                 ProcessFilePermissions(wProject, wFile, file);
 
                 // Expand/serialize file owned generic items and insert the in to the `File` element
-                ProcessGenericItems(wFile, wProject, featureComponents, defaultFeatureComponents, file);
+                ProcessGenericItems(wFile, wProject, featureComponents, defaultFeatureComponents, file, comp);
             }
         }
 
@@ -2042,7 +2042,7 @@ namespace WixSharp
             }
         }
 
-        static void ProcessGenericItems(File file, Project wProject, Dictionary<Feature, List<string>> featureComponents, List<string> defaultFeatureComponents, XElement fileItem)
+        static void ProcessGenericItems(File file, Project wProject, Dictionary<Feature, List<string>> featureComponents, List<string> defaultFeatureComponents, XElement fileItem, XElement componentItem)
         {
             if (file.GenericItems.Any())
             {
@@ -2051,6 +2051,7 @@ namespace WixSharp
                     Project = wProject,
                     Parent = file,
                     XParent = fileItem,
+                    XParentComponent = componentItem,
                     FeatureComponents = featureComponents
                 };
 
