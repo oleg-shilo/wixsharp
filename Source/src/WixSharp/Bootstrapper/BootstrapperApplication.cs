@@ -98,7 +98,7 @@ namespace WixSharp.Bootstrapper
             root.SetAttribute("Id", "ManagedBootstrapperApplicationHost");
 
             var files = new List<Payload> { rawAppAssembly.ToPayload(), bootstrapperCoreConfig.ToPayload() };
-            files.AddRange(Payloads.DistinctBy(x => x.SourceFile)); //note %this% it already resolved at this stage into an absolute path
+            files.AddRange(this.Payloads.DistinctBy(x => x.SourceFile)); //note %this% it already resolved at this stage into an absolute path
 
             if (!Payloads.Any(x => Path.GetFileName(x.SourceFile).SameAs(Path.GetFileName(winInstaller))))
                 files.Add(winInstaller.ToPayload());
@@ -268,6 +268,19 @@ namespace WixSharp.Bootstrapper
     /// <seealso cref="WixSharp.WixEntity" />
     public class Payload : WixEntity
     {
+        [Xml]
+        public new string Id
+        {
+            get
+            {
+                if (base.RawId.IsEmpty() && Compiler.AutoGeneration.SuppressForBundlePayloadUndefinedIds)
+                    return null;
+                else
+                    return base.Id;
+            }
+            set { base.Id = value; }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Payload"/> class.
         /// </summary>
@@ -354,6 +367,8 @@ namespace WixSharp.Bootstrapper
 
             var app = this.ToXElement(bal + "WixStandardBootstrapperApplication");
 
+            var payloads = this.Payloads.ToList();
+
             if (LicensePath.IsNotEmpty() && LicensePath.EndsWith(".rtf", StringComparison.OrdinalIgnoreCase))
             {
                 root.SetAttribute("Id", "WixStandardBootstrapperApplication.RtfLicense");
@@ -377,8 +392,14 @@ namespace WixSharp.Bootstrapper
                     else
                     {
                         app.SetAttribute("LicenseUrl", System.IO.Path.GetFileName(LicensePath));
-                        root.AddElement("Payload").AddAttributes("SourceFile=" + LicensePath);
+                        payloads.Add(new Payload(LicensePath));
                     }
+                }
+
+                foreach (Payload item in payloads)
+                {
+                    var xml = item.ToXElement("Payload");
+                    root.AddElement(xml);
                 }
             }
 

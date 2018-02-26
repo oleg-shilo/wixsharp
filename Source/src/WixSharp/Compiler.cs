@@ -117,6 +117,11 @@ namespace WixSharp
         public bool LegacyDefaultIdAlgorithm = false;
 
         /// <summary>
+        /// The suppress generation of the XML atrtribute 'id' for <see cref="Bootstrapper.Payload"/> undefined ids
+        /// </summary>
+        public bool SuppressForBundlePayloadUndefinedIds = true;
+
+        /// <summary>
         /// The template for <see cref="WixSharp.Project.HashedTargetPathIdAlgorithm"/> auto-generated File id.
         /// <para>
         /// The default value is "{file_name}_{dir_hash}".

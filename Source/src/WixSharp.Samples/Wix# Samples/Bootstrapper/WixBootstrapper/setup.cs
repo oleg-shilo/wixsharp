@@ -32,6 +32,9 @@ public class InstallScript
             DownloadUrl = @"https://dl.dropboxusercontent.com/....../CRT.msi"
         };
 
+        // Compiler.AutoGeneration.SuppressForBundleUndefinedIds = false;
+        // Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = false;
+
         var bootstrapper =
                 new Bundle("My Product",
                     new PackageGroupRef("NetFx40Web"),
@@ -55,6 +58,21 @@ public class InstallScript
         bootstrapper.Version = Tasks.GetVersionFromFile(productMsi); //will extract "product version"
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
         bootstrapper.Application.LogoFile = "logo.png";
+
+        var themes = new[]
+            {
+                new Payload("managedsetup.wxl")
+                {
+                    Name = "1033\thm.wxl"
+                },
+                new Payload("managedsetup - Copy.wxl")
+                {
+                    Name = "1042\thm.wxl"
+                }
+            };
+
+        bootstrapper.Application.Payloads = themes;
+
         bootstrapper.Application.LicensePath = "licence.html";  //HyperlinkLicense app with embedded license file
         //bootstrapper.Application.LicensePath = "licence.rtf"; //RtfLicense app with embedded license file
         //bootstrapper.Application.LicensePath = "http://opensource.org/licenses/MIT"; //HyperlinkLicense app with online license file

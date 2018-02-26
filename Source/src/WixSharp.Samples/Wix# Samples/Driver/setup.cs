@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using System.Xml;
 using WixSharp;
 using WixSharp.CommonTasks;
+using System.Text;
 
 class Script
 {
@@ -32,6 +33,3 @@ class Script
         project.BuildMsi();
     }
 }
-
-
-

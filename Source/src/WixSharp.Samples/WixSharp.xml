@@ -1059,6 +1059,21 @@
             A generic utility class for running console application tools (e.g. compilers, utilities)
             </summary>
         </member>
+        <member name="F:WixSharp.CommonTasks.ExternalTool.Encoding">
+            <summary>
+            Gets or sets the encoding to be used to process external executable output.
+            By default it is the value of <see cref="F:WixSharp.CommonTasks.ExternalTool.DefaultEncoding"/>.
+            </summary>
+            <value>
+            The encoding.
+            </value>
+        </member>
+        <member name="F:WixSharp.CommonTasks.ExternalTool.DefaultEncoding">
+            <summary>
+            Gets or sets the default encoding to be used to process external executable output.
+            By default it is the value of <c>System.Text.Encoding.Default</c>.
+            </summary>
+        </member>
         <member name="P:WixSharp.CommonTasks.ExternalTool.ExePath">
             <summary>
             Gets or sets the path to the exe file of the tool to be executed.
@@ -1092,6 +1107,12 @@
             Runs the exec file with the console and redirects the output into the current process console output.
             </summary>
             <returns>The process exit code.</returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.ExternalTool.GetConsoleRunOutput">
+            <summary>
+            Runs the exec file with the console and returns the output text.
+            </summary>
+            <returns>The process console output.</returns>
         </member>
         <member name="M:WixSharp.CommonTasks.ExternalTool.ConsoleRun(System.Action{System.String})">
             <summary>
@@ -11117,6 +11138,11 @@
         <member name="F:WixSharp.AutoGenerationOptions.LegacyDefaultIdAlgorithm">
             <summary>
             The legacy default identifier algorithm
+            </summary>
+        </member>
+        <member name="F:WixSharp.AutoGenerationOptions.SuppressForBundlePayloadUndefinedIds">
+            <summary>
+            The suppress generation of the XML atrtribute 'id' for <see cref="T:WixSharp.Bootstrapper.Payload"/> undefined ids
             </summary>
         </member>
         <member name="F:WixSharp.AutoGenerationOptions.HashedTargetPathIdAlgorithm_FileIdMask">
