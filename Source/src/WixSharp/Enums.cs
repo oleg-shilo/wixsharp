@@ -707,4 +707,58 @@ namespace WixSharp
         /// </summary>
         version
     }
+
+    /// <summary>
+    /// Specify whether the DOM object should use XPath language or the old XSLPattern language (default) as the query language.
+    /// </summary>
+    public enum XmlFileSelectionLanguage
+    {
+        /// <summary>
+        /// XPath language
+        /// </summary>
+        XPath,
+
+        /// <summary>
+        /// XSLPattern language
+        /// </summary>
+        XSLPattern,
+    }
+
+    /// <summary>
+    /// The type of modification to be made to the XML file when the component is installed.
+    /// </summary>
+    public enum XmlFileAction
+    {
+        /// <summary>
+        /// Creates a new element under the element specified in ElementPath.
+        /// The Name attribute is required in this case and specifies the name of the new element.
+        /// The Value attribute is not necessary when createElement is specified as the action.
+        /// If the Value attribute is set, it will cause the new element's text value to be set.
+        /// </summary>
+        createElement,
+
+        /// <summary>
+        /// Deletes a value from the element specified in the ElementPath.
+        /// If Name is specified, the attribute with that name is deleted.
+        /// If Name is not specified, the text value of the element specified in the ElementPath is deleted.
+        /// The Value attribute is ignored if deleteValue is the action specified.
+        /// </summary>
+        deleteValue,
+
+        /// <summary>
+        /// Sets a value in the element specified in the ElementPath.
+        /// If Name is specified, and attribute with that name is set to the value specified in Value.
+        /// If Name is not specified, the text value of the element is set.
+        /// Value is a required attribute if setValue is the action specified.
+        /// </summary>
+        setValue,
+
+        /// <summary>
+        /// Sets all the values in the elements that match the ElementPath.
+        /// If Name is specified, attributes with that name are set to the same value specified in Value.
+        /// If Name is not specified, the text values of the elements are set.
+        /// Value is a required attribute if setBulkValue is the action specified.
+        /// </summary>
+        bulkSetValue,
+    }
 }

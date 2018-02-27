@@ -2051,11 +2051,14 @@ namespace WixSharp
         {
             if (file.GenericItems.Any())
             {
+                var componentItem = fileItem.FindFirstComponentParent();
+
                 var context = new ProcessingContext
                 {
                     Project = wProject,
                     Parent = file,
                     XParent = fileItem,
+                    XParentComponent = componentItem,
                     FeatureComponents = featureComponents
                 };
 
