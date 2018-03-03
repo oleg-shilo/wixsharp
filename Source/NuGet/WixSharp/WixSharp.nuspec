@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>1.6.3.2-HotFix</version>
+    <version>1.6.3.3-HotFix</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,15 +18,17 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.6.2.2
+    <releaseNotes>Release v1.6.3.3
 
 -----
+v1.6.3.3
+* Package WixSharp.bin: added copying nbsbuilder.exe to output folder
 
-v1.6.2.2
+v1.6.3.2
 * UACRevealer algorithm changed to `SetForegroundWindow(taskbar)` as a safer option.
 * UACRevealer is disabled by default. Enable it when needed: `UACRevealer.Enabled = true;`.
 
-v1.6.2.1
+v1.6.3.1
 * Issue #301: Managed UI: UAC prompt is always in background
 * Implemented DirPermissions inheriting parent Dir features if it has no own features specified.
 * Issue #279: Empty directory belonging to a feature causes an error
@@ -37,7 +39,7 @@ v1.6.2.1
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.6.3.2-HotFix" />
+      <dependency id="WixSharp.bin" version="1.6.3.3-HotFix" />
     </dependencies>
   </metadata>
   <files>
