@@ -34,8 +34,16 @@ v1.6.2.1
     <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
+    <references>
+        <reference file="BootstrapperCore.dll" />
+        <reference file="Microsoft.Deployment.WindowsInstaller.dll" />
+        <reference file="WixSharp.dll" />
+        <reference file="WixSharp.Msi.dll" />
+        <reference file="WixSharp.UI.dll" />
+    </references>
   </metadata>
   <files>
+    <file src="build\WixSharp.bin.targets" target="build" />
     <file src="lib\BootstrapperCore.dll" target="lib\BootstrapperCore.dll" />
     <file src="lib\BootstrapperCore.xml" target="lib\BootstrapperCore.xml" />
     <file src="lib\Microsoft.Deployment.WindowsInstaller.dll" target="lib\Microsoft.Deployment.WindowsInstaller.dll" />
@@ -46,6 +54,6 @@ v1.6.2.1
     <file src="lib\WixSharp.UI.dll" target="lib\WixSharp.UI.dll" />
     <file src="lib\WixSharp.UI.xml" target="lib\WixSharp.UI.xml" />
     <file src="lib\WixSharp.xml" target="lib\WixSharp.xml" />
-    <file src="lib\nbsbuilder.exe" target="tools\nbsbuilder.exe" />
+    <file src="lib\nbsbuilder.exe" target="lib\nbsbuilder.exe" />
   </files>
 </package>
