@@ -78,7 +78,14 @@ namespace WixSharp
         /// </summary>
         /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="FileShortcut"/> instance.</param>
         /// <param name="feature"><see cref="Feature"></see> the shortcut should be included in.</param>
-        /// <param name="location">The directory where the shortcut should be installed.</param>
+        /// <param name="location">The directory where the shortcut should be installed.
+        /// <para>
+        /// Note it is not a path expression but an ID (e.g. "INSTALLDIR"). Though if you pass path expression
+        /// (e.g. @"%ProgramFiles%\My Company\My Product") WixSharp will try to find the <see cref="Dir"/> that corresponds this exprression
+        /// and use the <see cref="Dir"/>.Id for the <see cref="FileShortcut"/>.Location. If <c>location</c> is null or empty the shortcutr will be created in the parent
+        /// directory.
+        /// </para>
+        /// </param>
         public FileShortcut(Id id, Feature feature, string location)
         {
             Id = id.Value;
@@ -91,7 +98,14 @@ namespace WixSharp
         /// <para>This constructor should be used to instantiate shortcuts, which belong to the <see cref="File"/> element.</para>
         /// </summary>
         /// <param name="feature"><see cref="Feature"></see> the shortcut should be included in.</param>
-        /// <param name="location">The directory where the shortcut should be installed.</param>
+        /// <param name="location">The directory where the shortcut should be installed.
+        /// <para>
+        /// Note it is not a path expression but an ID (e.g. "INSTALLDIR"). Though if you pass path expression
+        /// (e.g. @"%ProgramFiles%\My Company\My Product") WixSharp will try to find the <see cref="Dir"/> that corresponds this exprression
+        /// and use the <see cref="Dir"/>.Id for the <see cref="FileShortcut"/>.Location. If <c>location</c> is null or empty the shortcutr will be created in the parent
+        /// directory.
+        /// </para>
+        /// </param>
         public FileShortcut(Feature feature, string location)
         {
             Feature = feature;
@@ -105,13 +119,26 @@ namespace WixSharp
         /// <param name="name">The name of the shortcut to be installed.</param>
         /// <param name="location">The ID of the directory where the shortcut should be installed.
         /// <para>
-        /// Note it is not a path expression but an ID (e.g. "INSTALLDIR").
+        /// Note it is not a path expression but an ID (e.g. "INSTALLDIR"). Though if you pass path expression
+        /// (e.g. @"%ProgramFiles%\My Company\My Product") WixSharp will try to find the <see cref="Dir"/> that corresponds this exprression
+        /// and use the <see cref="Dir"/>.Id for the <see cref="FileShortcut"/>.Location. If <c>location</c> is null or empty the shortcutr will be created in the parent
+        /// directory.
         /// </para>
         /// </param>
         public FileShortcut(string name, string location)
         {
             Name = name;
             Location = location;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileShortcut"/> class with properties/fields initialized with specified parameters.
+        /// <para>This constructor should be used to instantiate shortcuts, which belong to the <see cref="File"/> element.</para>
+        /// </summary>
+        /// <param name="name">The name of the shortcut to be installed.</param>
+        public FileShortcut(string name)
+        {
+            Name = name;
         }
 
         /// <summary>
@@ -128,7 +155,14 @@ namespace WixSharp
         /// </summary>
         /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="FileShortcut"/> instance.</param>
         /// <param name="name">The name of the shortcut to be installed.</param>
-        /// <param name="location">The directory where the shortcut should be installed.</param>
+        /// <param name="location">The directory where the shortcut should be installed.
+        /// <para>
+        /// Note it is not a path expression but an ID (e.g. "INSTALLDIR"). Though if you pass path expression
+        /// (e.g. @"%ProgramFiles%\My Company\My Product") WixSharp will try to find the <see cref="Dir"/> that corresponds this exprression
+        /// and use the <see cref="Dir"/>.Id for the <see cref="FileShortcut"/>.Location. If <c>location</c> is null or empty the shortcutr will be created in the parent
+        /// directory.
+        /// </para>
+        /// </param>
         public FileShortcut(Id id, string name, string location)
         {
             Id = id.Value;
@@ -140,9 +174,28 @@ namespace WixSharp
         /// Initializes a new instance of the <see cref="FileShortcut"/> class with properties/fields initialized with specified parameters.
         /// <para>This constructor should be used to instantiate shortcuts, which belong to the <see cref="File"/> element.</para>
         /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="FileShortcut"/> instance.</param>
+        /// <param name="name">The name of the shortcut to be installed.</param>
+        public FileShortcut(Id id, string name)
+        {
+            Id = id.Value;
+            Name = name;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileShortcut"/> class with properties/fields initialized with specified parameters.
+        /// <para>This constructor should be used to instantiate shortcuts, which belong to the <see cref="File"/> element.</para>
+        /// </summary>
         /// <param name="feature"><see cref="Feature"></see> the shortcut should be included in.</param>
         /// <param name="name">The name of the shortcut to be installed.</param>
-        /// <param name="location">The directory where the shortcut should be installed.</param>
+        /// <param name="location">The directory where the shortcut should be installed.
+        /// <para>
+        /// Note it is not a path expression but an ID (e.g. "INSTALLDIR"). Though if you pass path expression
+        /// (e.g. @"%ProgramFiles%\My Company\My Product") WixSharp will try to find the <see cref="Dir"/> that corresponds this exprression
+        /// and use the <see cref="Dir"/>.Id for the <see cref="FileShortcut"/>.Location. If <c>location</c> is null or empty the shortcutr will be created in the parent
+        /// directory.
+        /// </para>
+        /// </param>
         public FileShortcut(Feature feature, string name, string location)
             : this(feature, location)
         {
@@ -156,7 +209,14 @@ namespace WixSharp
         /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="FileShortcut"/> instance.</param>
         /// <param name="feature"><see cref="Feature"></see> the shortcut should be included in.</param>
         /// <param name="name">The name of the shortcut to be installed.</param>
-        /// <param name="location">The directory where the shortcut should be installed.</param>
+        /// <param name="location">The directory where the shortcut should be installed.
+        /// <para>
+        /// Note it is not a path expression but an ID (e.g. "INSTALLDIR"). Though if you pass path expression
+        /// (e.g. @"%ProgramFiles%\My Company\My Product") WixSharp will try to find the <see cref="Dir"/> that corresponds this exprression
+        /// and use the <see cref="Dir"/>.Id for the <see cref="FileShortcut"/>.Location. If <c>location</c> is null or empty the shortcutr will be created in the parent
+        /// directory.
+        /// </para>
+        /// </param>
         public FileShortcut(Id id, Feature feature, string name, string location)
             : this(id, feature, location)
         {

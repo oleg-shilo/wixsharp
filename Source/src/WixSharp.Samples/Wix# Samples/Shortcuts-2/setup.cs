@@ -21,7 +21,7 @@ class Script
                     //Files and Shortcuts
                     new Dir(new Id("INSTALL_DIR"), @"%ProgramFiles%\My Company\My Product",
                         new File(@"AppFiles\MyApp.exe",
-                            new FileShortcut("MyApp", @"%ProgramMenu%\My Company\My Product")
+                            new FileShortcut("MyApp")
                             {
                                 WorkingDirectory = "[INSTALL_DIR]"
                             }),
@@ -40,7 +40,6 @@ class Script
                     new Property("INSTALLDESKTOPSHORTCUT", "no"),
                     new Property("ALLUSERS", "1"),
                     new ManagedAction(CustomActions.MyAction, Return.ignore, When.Before, Step.LaunchConditions, Condition.NOT_Installed, Sequence.InstallUISequence));
-
 
         project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
         project.UI = WUI.WixUI_ProgressOnly;
@@ -62,5 +61,3 @@ public class CustomActions
         return ActionResult.Success;
     }
 }
-
-
