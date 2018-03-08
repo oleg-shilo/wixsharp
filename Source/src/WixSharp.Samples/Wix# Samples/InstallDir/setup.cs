@@ -14,18 +14,20 @@ class Script
 {
     static public void Main(string[] args)
     {
+        // Wix# recognizes the top level dir as the installation directory and automatically
+        // assigns it the INSTALLDIR id.
+        // If for whatever reason it is undesirable you can always designate the installation directory
+        // by setting the Dir.IsInstallDir to true or use a dedicated 'InstallDir' class that does
+        // it for you automatically.
+
         var project = new Project("CustomActionTest",
-                          new Dir(@"%ProgramFiles%\CustomActionTest",
-                              new File("readme.txt"))
-                          {
-                              IsInstallDir = true //optional, as Wix# recognizes the top level dir as the installation directory
-                          },
+                          new InstallDir(@"%ProgramFiles%\CustomActionTest",
+                              new File("readme.txt")),
 
                           new ManagedAction(CustomActions.MyAction));
 
         //project.Platform = Platform.x64;
         project.UI = WUI.WixUI_InstallDir;
-
         project.BuildMsi("setup.msi");
     }
 }

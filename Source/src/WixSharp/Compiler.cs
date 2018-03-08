@@ -1448,7 +1448,9 @@ namespace WixSharp
                 {
                     if (firstDirWithItems.Id.IsWixConstant())
                         Compiler.OutputWriteLine($"WARNING: Special folder directory ID '{firstDirWithItems.Id}' has been reset to '{dirId}'.\n" +
-                                                  "If it was not intended disable auto assignment by setting 'Compiler.AutoGeneration.InstallDirDefaultId' to null.\n");
+                                                  "If it was not intended disable auto assignment by setting 'Compiler.AutoGeneration.InstallDirDefaultId' to null.\n" +
+                                                  "Or set  'Dir.IsInstallDir = true' for the installation directory.\r" +
+                                                  "Or use instead of 'new Dir(...' use 'new InstallDir(...' for the installation directory.");
 
                     firstDirWithItems.Id = dirId;
                     return logicalPath;

@@ -124,27 +124,6 @@ namespace WixSharp
             lastDir.Feature = feature;
         }
 
-        internal bool HasItemsToInstall()
-        {
-            return Files.Any() || FileCollections.Any() || Shortcuts.Any();
-        }
-
-        static internal string[] ToFlatPathTree(string path)
-        {
-            List<string> retval = new List<string>();
-
-            foreach (var dir in path.Split("\\/".ToCharArray()))
-            {
-                string lastItem = retval.LastOrDefault();
-                if (lastItem == null)
-                    retval.Add(dir);
-                else
-                    retval.Add(lastItem + "\\" + dir);
-            }
-
-            return retval.ToArray();
-        }
-
         internal Dir(Feature feature, string targetPath, Project project)
         {
             //create nested Dirs on-fly but reuse already existing ones in the project
@@ -186,6 +165,27 @@ namespace WixSharp
                     break;
                 }
             }
+        }
+
+        internal bool HasItemsToInstall()
+        {
+            return Files.Any() || FileCollections.Any() || Shortcuts.Any();
+        }
+
+        static internal string[] ToFlatPathTree(string path)
+        {
+            List<string> retval = new List<string>();
+
+            foreach (var dir in path.Split("\\/".ToCharArray()))
+            {
+                string lastItem = retval.LastOrDefault();
+                if (lastItem == null)
+                    retval.Add(dir);
+                else
+                    retval.Add(lastItem + "\\" + dir);
+            }
+
+            return retval.ToArray();
         }
 
         /// <summary>
@@ -400,6 +400,104 @@ namespace WixSharp
             Permissions = dirPermissions.ToArray();
             ODBCDataSources = odbcSources.ToArray();
             IISVirtualDirs = iisVirtualDirs.ToArray();
+        }
+    }
+
+    /// <summary>
+    /// Defines directory to be installed on target system.
+    /// <para>
+    /// Use this class to define file/directory structure of the deployment solution.
+    ///  You can use predefined Wix# environment constants for well-known installation locations. They are directly mapped
+    ///  to the corresponding WiX constants:
+    ///  <para>For the full list of the constants consult WiX documentation or use <c>Compiler.GetMappedWixConstants</c>
+    ///  to explore them programatically./</para>
+    ///  <para>
+    ///  <para><c>Wix#</c> - <c>WiX</c></para>
+    ///  <para>%WindowsFolder% - [WindowsFolder]</para>
+    ///  <para>%ProgramFiles% - [ProgramFilesFolder]</para>
+    ///  <para>%ProgramMenu% - [ProgramMenuFolder]</para>
+    ///  <para>%CommonAppDataFolder% - [CommonAppDataFolder]</para>
+    ///  <para>%AppDataFolder% - [AppDataFolder]</para>
+    ///  <para>%CommonFilesFolder% - [CommonFilesFolder]</para>
+    ///  <para>%LocalAppDataFolder% - [LocalAppDataFolder]</para>
+    ///  <para>%ProgramFiles64Folder% - [ProgramFiles64Folder]</para>
+    ///  <para>%System64Folder% - [System64Folder]</para>
+    ///  <para>%SystemFolder% - [SystemFolder]</para>
+    ///  <para>%TempFolder% - [TempFolder]</para>
+    ///  <para>%Desktop% - [DesktopFolder]</para>
+    ///  <para>...</para>
+    ///  </para>
+    /// </para>
+    /// <para><see cref="InstallDir"/> class is identical to <see cref="Dir"/> except
+    /// it already has <c>IsInstallDir</c> set to <c>true</c> so it is more convenient for
+    /// defining your installation directory.</para>
+    /// </summary>
+    /// <example>The following is an example of defining installation directory <c>Progam Files/My Company/My Product</c>
+    /// containing a single file <c>MyApp.exe</c> and subdirectory <c>Documentation</c> with <c>UserManual.pdf</c> file.
+    /// <code>
+    /// var project = new Project("MyProduct",
+    ///         new InstallDir(@"%ProgramFiles%\My Company\My Product",
+    ///             new File(@"Release\MyApp.exe"),
+    ///             new Dir("Documentation",
+    ///                 new File(@"Release\UserManual.pdf")),
+    ///             ...
+    /// </code>
+    /// </example>
+    public partial class InstallDir : Dir
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstallDir"/> class.
+        /// <para><see cref="InstallDir"/> class is identical to <see cref="Dir"/> except
+        /// it already has <c>IsInstallDir</c> set to <c>true</c> so it is more convenient for
+        /// defining your installation directory.</para>
+        /// </summary>
+        public InstallDir()
+        {
+            IsInstallDir = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstallDir"/> class with properties/fields initialized with specified parameters
+        /// <para><see cref="InstallDir"/> class is identical to <see cref="Dir"/> except
+        /// it already has <c>IsInstallDir</c> set to <c>true</c> so it is more convenient for
+        /// defining your installation directory.</para>
+        /// </summary>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="Dir"/> instance.</param>
+        /// <param name="targetPath">The name of the directory. Note if the directory is a root installation directory <c>targetPath</c> must
+        /// be specified as a full path. However if the directory is a nested installation directory the name must be a directory name only.</param>
+        /// <param name="items">Any <see cref="WixEntity"/> which can be contained by directory (e.g. file, subdirectory).</param>
+        public InstallDir(Id id, string targetPath, params WixEntity[] items) : base(id, targetPath, items)
+        {
+            IsInstallDir = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstallDir"/> class with properties/fields initialized with specified parameters
+        /// <para><see cref="InstallDir"/> class is identical to <see cref="Dir"/> except
+        /// it already has <c>IsInstallDir</c> set to <c>true</c> so it is more convenient for
+        /// defining your installation directory.</para>
+        /// </summary>
+        /// <param name="targetPath">The name of the directory. Note if the directory is a root installation directory <c>targetPath</c> must
+        /// be specified as a full path. However if the directory is a nested installation directory the name must be a directory name only.</param>
+        /// <param name="items">Any <see cref="WixEntity"/> which can be contained by directory (e.g. file, subdirectory).</param>
+        public InstallDir(string targetPath, params WixEntity[] items) : base(targetPath, items)
+        {
+            IsInstallDir = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstallDir"/> class with properties/fields initialized with specified parameters
+        /// <para><see cref="InstallDir"/> class is identical to <see cref="Dir"/> except
+        /// it already has <c>IsInstallDir</c> set to <c>true</c> so it is more convenient for
+        /// defining your installation directory.</para>
+        /// </summary>
+        /// <param name="feature"><see cref="Feature"></see> the directory should be included in.</param>
+        /// <param name="targetPath">The name of the directory. Note if the directory is a root installation directory <c>targetPath</c> must
+        /// be specified as a full path. However if the directory is a nested installation directory the name must be a directory name only.</param>
+        /// <param name="items">Any <see cref="WixEntity"/> which can be contained by directory (e.g. file, subdirectory).</param>
+        public InstallDir(Feature feature, string targetPath, params WixEntity[] items)
+        {
+            IsInstallDir = true;
         }
     }
 }
