@@ -1112,25 +1112,24 @@ namespace WixSharp
 
         /// <summary>
         /// Replaces all Wix# predefined string constants (Environment Constants) in the Wix# directory path with their WiX equivalents and escapes all WiX illegal characters (e.g. space character).
-        /// <para>
-        /// <para>It also replaces all "illegal" characters (e.g. !,\) with '_' character to allow the path value to be used as a WiX Id XML attribute.</para>
-        /// <example>The following is an example of expanding directory name paths.
+        /// <para><para>It also replaces all "illegal" characters (e.g. !,\) with '_' character to allow the path value to be used as a WiX Id XML attribute.</para><example>The following is an example of expanding directory name paths.
         /// <code>
-        /// @"%ProgramFiles%\My Company\My Product".Expand()       -> @"ProgramFilesFolder\My_Company\My_Product"
-        /// @"ProgramFilesFolder\My Company\My Product".Expand()   -> @"ProgramFilesFolder\My_Company\My_Product"
-        /// @"[ProgramFilesFolder]\My Company\My Product".Expand() -> @"ProgramFilesFolder\My_Company\My_Product"
-        /// </code>
-        /// </example>
-        /// </para>
+        /// @"%ProgramFiles%\My Company\My Product".Expand()       -&gt; @"ProgramFilesFolder\My_Company\My_Product"
+        /// @"ProgramFilesFolder\My Company\My Product".Expand()   -&gt; @"ProgramFilesFolder\My_Company\My_Product"
+        /// @"[ProgramFilesFolder]\My Company\My Product".Expand() -&gt; @"ProgramFilesFolder\My_Company\My_Product"
+        /// </code></example></para>
         /// For the list of supported constants analyses <c>WixSharp.Compiler.EnvironmentConstantsMapping.Keys</c>.
         /// </summary>
         /// <param name="path">The Wix# directory path.</param>
-        /// <returns>Replacement result.</returns>
-        public static string Expand(this string path)
+        /// <param name="doNotFixStartDigit">if set to <c>true</c> starting from digit character is permitted.</param>
+        /// <returns>
+        /// Replacement result.
+        /// </returns>
+        public static string Expand(this string path, bool doNotFixStartDigit = false)
         {
             var result = path.ExpandWixEnvConsts()
                              .Replace("\\", ".")
-                             .EscapeIllegalCharacters();
+                             .EscapeIllegalCharacters(doNotFixStartDigit);
 
             if (result.FirstOrDefault() == '.')
                 result = "_" + result.Substring(1);
@@ -1250,8 +1249,9 @@ namespace WixSharp
         /// Escapes the illegal characters in the WiX Id value.
         /// </summary>
         /// <param name="data">The data.</param>
+        /// <param name="doNotFixStartDigit">if set to <c>true</c> starting from digit character is permitted.</param>
         /// <returns></returns>
-        public static string EscapeIllegalCharacters(this string data)
+        public static string EscapeIllegalCharacters(this string data, bool doNotFixStartDigit = false)
         {
             string retval = data;
             List<char> legalChars = new List<char>();
@@ -1264,7 +1264,8 @@ namespace WixSharp
                 if (!legalChars.Contains(retval[i]))
                     retval = retval.Replace(data[i], '_');
             }
-            if (retval.IsNotEmpty() && retval[0].IsDigit())
+
+            if (!doNotFixStartDigit && (retval.IsNotEmpty() && retval[0].IsDigit()))
                 return "_" + retval;
             else
                 return retval;

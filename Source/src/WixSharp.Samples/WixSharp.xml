@@ -6381,23 +6381,22 @@
             <param name="text">The text to be split.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.Expand(System.String)">
+        <member name="M:WixSharp.Extensions.Expand(System.String,System.Boolean)">
             <summary>
             Replaces all Wix# predefined string constants (Environment Constants) in the Wix# directory path with their WiX equivalents and escapes all WiX illegal characters (e.g. space character).
-            <para>
-            <para>It also replaces all "illegal" characters (e.g. !,\) with '_' character to allow the path value to be used as a WiX Id XML attribute.</para>
-            <example>The following is an example of expanding directory name paths.
+            <para><para>It also replaces all "illegal" characters (e.g. !,\) with '_' character to allow the path value to be used as a WiX Id XML attribute.</para><example>The following is an example of expanding directory name paths.
             <code>
-            @"%ProgramFiles%\My Company\My Product".Expand()       -> @"ProgramFilesFolder\My_Company\My_Product"
-            @"ProgramFilesFolder\My Company\My Product".Expand()   -> @"ProgramFilesFolder\My_Company\My_Product"
-            @"[ProgramFilesFolder]\My Company\My Product".Expand() -> @"ProgramFilesFolder\My_Company\My_Product"
-            </code>
-            </example>
-            </para>
+            @"%ProgramFiles%\My Company\My Product".Expand()       -&gt; @"ProgramFilesFolder\My_Company\My_Product"
+            @"ProgramFilesFolder\My Company\My Product".Expand()   -&gt; @"ProgramFilesFolder\My_Company\My_Product"
+            @"[ProgramFilesFolder]\My Company\My Product".Expand() -&gt; @"ProgramFilesFolder\My_Company\My_Product"
+            </code></example></para>
             For the list of supported constants analyses <c>WixSharp.Compiler.EnvironmentConstantsMapping.Keys</c>.
             </summary>
             <param name="path">The Wix# directory path.</param>
-            <returns>Replacement result.</returns>
+            <param name="doNotFixStartDigit">if set to <c>true</c> starting from digit character is permitted.</param>
+            <returns>
+            Replacement result.
+            </returns>
         </member>
         <member name="M:WixSharp.Extensions.ContainsWixConstants(System.String)">
             <summary>
@@ -6465,11 +6464,12 @@
             <param name="path">The path.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.EscapeIllegalCharacters(System.String)">
+        <member name="M:WixSharp.Extensions.EscapeIllegalCharacters(System.String,System.Boolean)">
             <summary>
             Escapes the illegal characters in the WiX Id value.
             </summary>
             <param name="data">The data.</param>
+            <param name="doNotFixStartDigit">if set to <c>true</c> starting from digit character is permitted.</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.PresentIn``1(``0,``0)">

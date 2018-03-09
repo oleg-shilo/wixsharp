@@ -23,17 +23,27 @@ class Script
         // Please for any further infotrmation refer to
         // the https://github.com/oleg-shilo/wixsharp/wiki/Deployment-scenarios/_edit#installation-directory
 
-        var project = new Project("CustomActionTest",
-                          new InstallDir(@"%ProgramFiles%\CustomActionTest",
-                              new File("readme.txt")),
+        var project =
+                new Project("My Product",
+                    new Dir(new Id("INSTALL_DIR"), @"%ProgramFiles%\1My Product",
+                        new WixSharp.File(@"myapp.exe",
+                            new FileShortcut("My App", @"%ProgramMenu%\1My Product") { Advertise = true }))
+                    // ,                    new Dir(@"%ProgramMenu%\1My Product")
+                    );
+        // new Dir(new Id("My_Product"), @"%ProgramMenu%\1My Product"));
 
-                          new ManagedAction(CustomActions.MyAction));
+        // var project = new Project("CustomActionTest",
+        //                   new InstallDir(@"%ProgramFiles%\CustomActionTest",
+        //                       new File("readme.txt")),
+
+        //                   new ManagedAction(CustomActions.MyAction));
 
         var dir = project.FindDir(@"%ProgramFiles%\CustomActionTest");
 
         //project.Platform = Platform.x64;
         project.UI = WUI.WixUI_InstallDir;
         project.PreserveTempFiles = true;
+        // project.BuildWxs();
         project.BuildMsi("setup.msi");
     }
 }
