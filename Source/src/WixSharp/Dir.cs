@@ -75,7 +75,7 @@ namespace WixSharp
     /// </example>
     public partial class Dir : WixEntity
     {
-        Dir lastDir;
+        protected Dir lastDir;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Dir"/> class.
@@ -327,7 +327,7 @@ namespace WixSharp
             return Name;
         }
 
-        Dir ProcessTargetPath(string targetPath)
+        protected Dir ProcessTargetPath(string targetPath)
         {
             Dir currDir = this;
 
@@ -353,7 +353,7 @@ namespace WixSharp
             return currDir;
         }
 
-        void AddItems(WixEntity[] items)
+        internal void AddItems(WixEntity[] items)
         {
             var files = new List<File>();
             var dirs = new List<Dir>();
@@ -466,9 +466,12 @@ namespace WixSharp
         /// <param name="targetPath">The name of the directory. Note if the directory is a root installation directory <c>targetPath</c> must
         /// be specified as a full path. However if the directory is a nested installation directory the name must be a directory name only.</param>
         /// <param name="items">Any <see cref="WixEntity"/> which can be contained by directory (e.g. file, subdirectory).</param>
-        public InstallDir(Id id, string targetPath, params WixEntity[] items) : base(id, targetPath, items)
+        public InstallDir(Id id, string targetPath, params WixEntity[] items)
         {
-            IsInstallDir = true;
+            lastDir = ProcessTargetPath(targetPath);
+            lastDir.AddItems(items);
+            lastDir.Id = id;
+            lastDir.IsInstallDir = true;
         }
 
         /// <summary>
@@ -480,9 +483,11 @@ namespace WixSharp
         /// <param name="targetPath">The name of the directory. Note if the directory is a root installation directory <c>targetPath</c> must
         /// be specified as a full path. However if the directory is a nested installation directory the name must be a directory name only.</param>
         /// <param name="items">Any <see cref="WixEntity"/> which can be contained by directory (e.g. file, subdirectory).</param>
-        public InstallDir(string targetPath, params WixEntity[] items) : base(targetPath, items)
+        public InstallDir(string targetPath, params WixEntity[] items)
         {
-            IsInstallDir = true;
+            lastDir = ProcessTargetPath(targetPath);
+            lastDir.AddItems(items);
+            lastDir.IsInstallDir = true;
         }
 
         /// <summary>
@@ -497,7 +502,10 @@ namespace WixSharp
         /// <param name="items">Any <see cref="WixEntity"/> which can be contained by directory (e.g. file, subdirectory).</param>
         public InstallDir(Feature feature, string targetPath, params WixEntity[] items)
         {
-            IsInstallDir = true;
+            lastDir = ProcessTargetPath(targetPath);
+            lastDir.AddItems(items);
+            lastDir.Feature = feature;
+            lastDir.IsInstallDir = true;
         }
     }
 }

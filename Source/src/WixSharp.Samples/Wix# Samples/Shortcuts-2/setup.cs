@@ -17,21 +17,18 @@ class Script
 
         var project =
                 new Project("My Product",
-
                     //Files and Shortcuts
-                    new Dir(new Id("INSTALL_DIR"), @"%ProgramFiles%\My Company\My Product",
+                    new Dir(@"%ProgramFiles%\My Company\My Product",
                         new File(@"AppFiles\MyApp.exe",
-                            new FileShortcut("MyApp")
-                            {
-                                WorkingDirectory = "[INSTALL_DIR]"
-                            }),
+                            new FileShortcut("MyApp") { WorkingDirectory = "[INSTALL_DIR]" }),
                         new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")),
 
-                    new Dir(@"%ProgramMenu%\My Company\My Product",
-                        new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")),
+                    new Dir(@"%ProgramMenu%\My Company\1My Product",
+                        new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]"),
+                        new ExeFileShortcut("MyApp", "[INSTALL_DIR]MyApp.exe", arguments: "")),
 
                      new Dir(@"%Desktop%",
-                        new ExeFileShortcut("MyApp", "[INSTALL_DIR]MyApp.exe", "")
+                        new ExeFileShortcut("MyApp", "[INSTALL_DIR]MyApp.exe", arguments: "")
                         {
                             Condition = new Condition("INSTALLDESKTOPSHORTCUT=\"yes\"") //property based condition
                         }),

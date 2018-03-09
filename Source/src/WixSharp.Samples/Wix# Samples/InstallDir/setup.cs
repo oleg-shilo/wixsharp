@@ -19,6 +19,9 @@ class Script
         // If for whatever reason it is undesirable you can always designate the installation directory
         // by setting the Dir.IsInstallDir to true or use a dedicated 'InstallDir' class that does
         // it for you automatically.
+        //
+        // Please for any further infotrmation refer to
+        // the https://github.com/oleg-shilo/wixsharp/wiki/Deployment-scenarios/_edit#installation-directory
 
         var project = new Project("CustomActionTest",
                           new InstallDir(@"%ProgramFiles%\CustomActionTest",
@@ -26,8 +29,11 @@ class Script
 
                           new ManagedAction(CustomActions.MyAction));
 
+        var dir = project.FindDir(@"%ProgramFiles%\CustomActionTest");
+
         //project.Platform = Platform.x64;
         project.UI = WUI.WixUI_InstallDir;
+        project.PreserveTempFiles = true;
         project.BuildMsi("setup.msi");
     }
 }

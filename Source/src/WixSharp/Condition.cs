@@ -75,6 +75,21 @@ namespace WixSharp
             Value = value;
         }
 
+        public Condition(string name, string expectedValue)
+        {
+            Value = $"{name}=\"{expectedValue}\"";
+        }
+
+        public Condition(string name, bool expectedValue)
+        {
+            Value = $"{name}=\"{expectedValue.ToYesNo()}\"";
+        }
+
+        public Condition(string name, int expectedValue)
+        {
+            Value = $"{name}=\"{expectedValue}\"";
+        }
+
         /// <summary>
         ///  Returns the WiX <c>Condition</c> as a string.
         /// </summary>
