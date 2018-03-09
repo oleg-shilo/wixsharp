@@ -1845,6 +1845,13 @@ namespace WixSharp
                     {
                         Dir locationDir = wProject.FindDir(wShortcut.Location);
 
+                        if (locationDir == null)
+                        {
+                            // may be location is a path but a dir Id
+                            // Triggered by Fileshortcuts starting with an integer #307
+                            locationDir = wProject.AllDirs.FirstOrDefault(x => x.Id == wShortcut.Location);
+                        }
+
                         if (locationDir != null)
                         {
                             locationDirId = locationDir.Id;

@@ -27,9 +27,14 @@ class Script
                 new Project("My Product",
                     new Dir(new Id("INSTALL_DIR"), @"%ProgramFiles%\1My Product",
                         new WixSharp.File(@"myapp.exe",
-                            new FileShortcut("My App", @"%ProgramMenu%\1My Product") { Advertise = true }))
-                    // ,                    new Dir(@"%ProgramMenu%\1My Product")
-                    );
+                            new FileShortcut("My App", @"%ProgramMenu%\1My Product") { Advertise = true })));
+
+        // var project =
+        //         new Project("My Product",
+        //             new Dir(new Id("My_Product"), @"%ProgramMenu%\1My Product"),
+        //             new Dir(new Id("INSTALL_DIR"), @"%ProgramFiles%\1My Product",
+        //                 new WixSharp.File(@"myapp.exe",
+        //                     new FileShortcut("My App", "My_Product") { Advertise = true })));
         // new Dir(new Id("My_Product"), @"%ProgramMenu%\1My Product"));
 
         // var project = new Project("CustomActionTest",
@@ -37,8 +42,6 @@ class Script
         //                       new File("readme.txt")),
 
         //                   new ManagedAction(CustomActions.MyAction));
-
-        var dir = project.FindDir(@"%ProgramFiles%\CustomActionTest");
 
         //project.Platform = Platform.x64;
         project.UI = WUI.WixUI_InstallDir;
