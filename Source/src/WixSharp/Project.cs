@@ -583,11 +583,16 @@ namespace WixSharp
         ///     if (dir.Files.Any())
         ///         dir.Files = dir.Files.DistinctBy(x => x.Name.PathGetFileName()).ToArray();
         /// };
+        ///
         /// // or built-in routine
+        ///
         /// project.WildCardDedup = Project.UniqueFileNameDedup;
         /// ...
         /// Compiler.BuildMsi(project);
         /// </code>
+        /// <para>Note, the need for <c>project.WildCardDedup</c> may araise only for very specific
+        /// deployment scenarios. Some of them are discussed in this thread: https://github.com/oleg-shilo/wixsharp/issues/270
+        /// </para>
         /// </summary>
         public Action<Dir> WildCardDedup = dir =>
             {
