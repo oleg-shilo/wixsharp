@@ -571,6 +571,49 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// The wild card deduplication algorithm to be used during wild card resolution (<c>ResolveWildCards</c>).
+        /// <para>The default implementation does nothing but you can assgn a custom routine that
+        /// can be used to do post-resolving deduplication of the <see cref="Dir"/> items.</para>
+        /// </summary>
+        /// <example>The following sample demonstrates how to remove files with the same file name:
+        /// <code>
+        /// project.WildCardDedup = dir =>
+        /// {
+        ///     if (dir.Files.Any())
+        ///         dir.Files = dir.Files.DistinctBy(x => x.Name.PathGetFileName()).ToArray();
+        /// };
+        /// // or built-in routine
+        /// project.WildCardDedup = Project.UniqueFileNameDedup;
+        /// ...
+        /// Compiler.BuildMsi(project);
+        /// </code>
+        public Action<Dir> WildCardDedup = dir =>
+            {
+                // Issue #270: Deduplication of files added with wildcards
+                // sample dedup
+            };
+
+        /// <summary>
+        /// The unique file name deduplication algorithm to be used as <see cref="Project.WildCardDedup"/>.
+        /// It implements removing the <see cref="Dir.Files"/> items with the same file name.
+        /// <para>The actual algorithm implementation is very simple:
+        /// <code>
+        /// public static Action&lt;Dir&gt; UniqueFileNameDedup = dir =>
+        /// {
+        ///     if (dir.Files.Any())
+        ///         dir.Files = dir.Files.DistinctBy(x => Path.GetFileName(x.Name)).ToArray();
+        /// }
+        /// </code>
+        /// </para>
+        /// </summary>
+        public static Action<Dir> UniqueFileNameDedup = dir =>
+        {
+            // Issue #270: Deduplication of files added with wildcards sample dedup
+            if (dir.Files.Any())
+                dir.Files = dir.Files.DistinctBy(x => x.Name.PathGetFileName()).ToArray();
+        };
+
+        /// <summary>
         /// Resolves all wild card specifications if any.
         /// <para>
         /// This method is called by <see cref="Compiler" /> during the compilation. However it might be convenient
@@ -592,12 +635,20 @@ namespace WixSharp
             while (iterator < dirList.Count)
             {
                 foreach (Files dirItems in dirList[iterator].FileCollections)
-
+                {
                     foreach (WixEntity item in dirItems.GetAllItems(SourceBaseDir, dirList[iterator]))
+                    {
                         if (item is DirFiles)
+                        {
                             dirList[iterator].AddDirFileCollection(item as DirFiles);
+                        }
                         else if (item is Dir discoveredDir && !dirList[iterator].Dirs.Contains(item))
+                        {
+                            WildCardDedup?.Invoke(discoveredDir);
                             dirList[iterator].AddDir(discoveredDir);
+                        }
+                    }
+                }
 
                 foreach (Dir dir in dirList[iterator].Dirs)
                     dirList.Add(dir);
