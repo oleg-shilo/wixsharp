@@ -10,20 +10,20 @@ using WixSharp;
 
 /// <summary>
 /// <para>
-/// Note, RemoveFolderEx in this sample is chosen as a good candidate for demonstrating how to integrate a WiX extension 
-/// with Wix#. RemoveFolderEx class can be reused in other projects without any limitations. Though do not expect any specific 
-/// behavior from the sample at runtime. The canonical WiX RemoveFolderEx use-case is very complicated and convoluted. 
+/// Note, RemoveFolderEx in this sample is chosen as a good candidate for demonstrating how to integrate a WiX extension
+/// with Wix#. RemoveFolderEx class can be reused in other projects without any limitations. Though do not expect any specific
+/// behavior from the sample at runtime. The canonical WiX RemoveFolderEx use-case is very complicated and convoluted.
 /// In order for RemoveFolderEx to work you will need to schedule an extra custom action to create a property
-/// DIR_PATH_PROPERTY_NAME. Or read the property value from the registry. 
+/// DIR_PATH_PROPERTY_NAME. Or read the property value from the registry.
 /// </para>
 /// <para>
 /// Thus RemoveFolderEx is here only to demonstrate the WiX extensions integration technique but not how to remove folders.
 /// </para>
-/// In fact ManagedProject events is by far a superior choice for the task of removing folders. The following is the sample 
+/// In fact ManagedProject events is by far a superior choice for the task of removing folders. The following is the sample
 /// of removing the installation directory reliably during uninstall:
 /// <code>
 /// var project = new ManagedProject("CustomActionTest"...
-/// 
+///
 /// project.AfterInstall += (e) =>
 ///                         {
 ///                             if (e.IsUninstalling)
@@ -34,7 +34,7 @@ using WixSharp;
 ///                                 catch { /*log error if required*/ }
 ///                         };
 /// </code>
-/// 
+///
 /// </summary>
 
 class Script
@@ -97,7 +97,7 @@ public class RemoveFolderEx : WixEntity, IGenericEntity
     }
 
     /// <summary>
-    /// This method is for demo purposes only. It show an alternative implementation of the 
+    /// This method is for demo purposes only. It show an alternative implementation of the
     /// Process(ProcessingContext) with placing the new element inside of the component.
     /// <para>
     /// The sample also shows various XML manipulation techniques available with Fluent XElement extensions:
@@ -106,22 +106,22 @@ public class RemoveFolderEx : WixEntity, IGenericEntity
     /// </para>
     /// </summary>
     /// <param name="context"></param>
-    public void PseudoProcessWithNewComponet(ProcessingContext context)
+    public void PseudoProcessWithNewComponent(ProcessingContext context)
     {
         context.Project.IncludeWixExtension(WixExtension.Util);
 
         XElement element = this.ToXElement(WixExtension.Util.ToXName("RemoveFolderEx"));
 
         context.XParent
-               .AddElement("Component") 
-               .SetAttribute("Id", "TestComponent") 
+               .AddElement("Component")
+               .SetAttribute("Id", "TestComponent")
                .SetAttribute("Guid", Guid.NewGuid())
                .Add(element);
     }
 
     /// <summary>
-    /// This method is for demo purposes only. It shows an alternative implementation of the 
-    /// Process(ProcessingContext) with placing the new element inside of the component and 
+    /// This method is for demo purposes only. It shows an alternative implementation of the
+    /// Process(ProcessingContext) with placing the new element inside of the component and
     /// associates the component with the new feature 'Test Feature'.
     /// <para>
     /// The sample also shows various XML manipulation techniques available with Fluent XElement extensions:
@@ -130,7 +130,7 @@ public class RemoveFolderEx : WixEntity, IGenericEntity
     /// </para>
     /// </summary>
     /// <param name="context"></param>
-    public void PseudoProcessWithNewComponetAndFeature(ProcessingContext context)
+    public void PseudoProcessWithNewComponentAndFeature(ProcessingContext context)
     {
         context.Project.IncludeWixExtension(WixExtension.Util);
 
@@ -146,4 +146,3 @@ public class RemoveFolderEx : WixEntity, IGenericEntity
                .AddElement("ComponentRef", "Id=TestComponent");
     }
 }
-

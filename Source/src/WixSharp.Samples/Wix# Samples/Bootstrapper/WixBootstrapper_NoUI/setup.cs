@@ -55,7 +55,27 @@ public class InstallScript
         // use this custom BA to modify its behavior in order to meet your requirements
         bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
 
+        // You can implement your own extension types and add them to the Bundle
+        bootstrapper.Items.Add(new BalCondition { Condition = "some condition", Message = "Warning: ..." });
+
         bootstrapper.PreserveTempFiles = true;
         bootstrapper.Build("app_setup");
+    }
+}
+
+class BalCondition : WixEntity, IGenericEntity
+{
+    public string Condition;
+
+    public string Message;
+
+    public void Process(ProcessingContext context)
+    {
+        context.Project.Include(WixExtension.Bal); //indicate that candle needs to use WixBlExtension.dll
+
+        var element = new XElement(WixExtension.Bal.ToXName("Condition"), Condition)
+                                .SetAttribute("Message", Message);
+
+        context.XParent.Add(element);
     }
 }

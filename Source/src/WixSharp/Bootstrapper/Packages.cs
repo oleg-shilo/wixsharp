@@ -108,6 +108,22 @@ namespace WixSharp.Bootstrapper
         abstract public XContainer[] ToXml();
     }
 
+    // /// <summary>
+    // /// The interface for the items that are XML-aware and capable of building
+    // /// XML elements based on the internal content.
+    // /// <para>YOu can use <see cref="IXmlBuilder"/> objects to extend WixSharp type system.
+    // /// See <see cref="Bundle.Items"/> for details.
+    // /// </para>
+    // /// </summary>
+    // public interface IXmlBuilder
+    // {
+    //     /// <summary>
+    //     /// Emits WiX XML.
+    //     /// </summary>
+    //     /// <returns></returns>
+    //     XContainer[] ToXml();
+    // }
+
     /// <summary>
     /// Standard WiX ExePackage.
     /// </summary>

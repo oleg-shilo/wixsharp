@@ -44,8 +44,8 @@ namespace WixSharp.Bootstrapper
                 // in case of Bundle project just do nothing
             }
 
-            WixExtensions.Add("WiXNetFxExtension");
-            WixExtensions.Add("WiXBalExtension");
+            this.Include(WixExtension.NetFx);
+            this.Include(WixExtension.Bal);
         }
 
         /// <summary>
@@ -60,8 +60,8 @@ namespace WixSharp.Bootstrapper
                 // in case of Bundle project just do nothing
             }
 
-            WixExtensions.Add("WiXNetFxExtension");
-            WixExtensions.Add("WiXBalExtension");
+            this.Include(WixExtension.NetFx);
+            this.Include(WixExtension.Bal);
             Name = name;
             Chain.AddRange(items);
         }
@@ -233,6 +233,31 @@ namespace WixSharp.Bootstrapper
         public WixStandardBootstrapperApplication Application = new LicenseBootstrapperApplication();
 
         /// <summary>
+        /// The generic items to be added to the WiX <c>Bundle</c> element during the build. A generic item must implement
+        /// <see cref="IGenericEntity"/> interface;
+        ///<example>The following is an example of extending WixSharp Bundle with otherwise not supported Bal:Condition:
+        /// <code>
+        /// class BalCondition : IXmlBuilder
+        /// {
+        ///     public string Condition;
+        ///     public string Message;
+        ///
+        ///     public XContainer[] ToXml()
+        ///     {
+        ///         return new XContainer[] {
+        ///             new XElement(WixExtension.Bal.ToXName("Condition"), Condition)
+        ///                         .SetAttribute("Message", Message) };
+        ///     }
+        /// }
+        ///
+        /// var bootstrapper = new Bundle("My Product Suite", ...
+        /// bootstrapper.Items.Add(new BalCondition { Condition = "some condition", Message = "Warning: ....." });
+        /// </code>
+        /// </example>
+        /// </summary>
+        public List<IGenericEntity> Items = new List<IGenericEntity>();
+
+        /// <summary>
         /// Emits WiX XML.
         /// </summary>
         /// <returns></returns>
@@ -283,11 +308,15 @@ namespace WixSharp.Bootstrapper
 
             var context = new ProcessingContext
             {
+                Project = this,
                 Parent = this,
                 XParent = root,
             };
 
             foreach (IGenericEntity item in all_variabes)
+                item.Process(context);
+
+            foreach (IGenericEntity item in Items)
                 item.Process(context);
 
             var xChain = root.AddElement("Chain");

@@ -1811,6 +1811,31 @@
             The instance of the Bootstrapper application class application. By default it is a LicenseBootstrapperApplication object.
             </summary>
         </member>
+        <member name="F:WixSharp.Bootstrapper.Bundle.Items">
+             <summary>
+             The generic items to be added to the WiX <c>Bundle</c> element during the build. A generic item must implement
+             <see cref="T:WixSharp.IGenericEntity"/> interface;
+            <example>The following is an example of extending WixSharp Bundle with otherwise not supported Bal:Condition:
+             <code>
+             class BalCondition : IXmlBuilder
+             {
+                 public string Condition;
+                 public string Message;
+            
+                 public XContainer[] ToXml()
+                 {
+                     return new XContainer[] {
+                         new XElement(WixExtension.Bal.ToXName("Condition"), Condition)
+                                     .SetAttribute("Message", Message) };
+                 }
+             }
+            
+             var bootstrapper = new Bundle("My Product Suite", ...
+             bootstrapper.Items.Add(new BalCondition { Condition = "some condition", Message = "Warning: ....." });
+             </code>
+             </example>
+             </summary>
+        </member>
         <member name="M:WixSharp.Bootstrapper.Bundle.ToXml">
             <summary>
             Emits WiX XML.
@@ -4307,9 +4332,9 @@
             </summary>
         </member>
         <member name="F:WixSharp.ProcessingContext.XParentComponent">
-            <summary>
+             <summary>
             
-            </summary>
+             </summary>
         </member>
         <member name="F:WixSharp.ProcessingContext.FeatureComponents">
             <summary>
@@ -6587,6 +6612,14 @@
         <member name="M:WixSharp.Extensions.IncludeWixExtension(WixSharp.WixProject,WixSharp.WixExtension)">
             <summary>
             Adds the specified extension to  <see cref="T:WixSharp.WixProject" />
+            </summary>
+            <param name="project">The project.</param>
+            <param name="extension">The extension.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.Include(WixSharp.WixProject,WixSharp.WixExtension)">
+            <summary>
+            Adds the specified extension to  <see cref="T:WixSharp.WixProject" />.
             </summary>
             <param name="project">The project.</param>
             <param name="extension">The extension.</param>
@@ -13530,6 +13563,47 @@
             Gets or Sets the default Feature for the project.
             All elements without an explicitly assigned Feature will be placed under the DefaultFeature.
             If DefaultFeature is not set, then DefaultFeature will default to a Feature with name 'Complete'.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Project.WildCardDedup">
+             <summary>
+             The wild card deduplication algorithm to be used during wild card resolution (<c>ResolveWildCards</c>).
+             <para>The default implementation does nothing but you can assgn a custom routine that
+             can be used to do post-resolving deduplication of the <see cref="T:WixSharp.Dir"/> items.</para>
+             <para>
+             The following sample demonstrates how to remove files with the same file name:
+             </para>
+             <code>
+             project.WildCardDedup = dir =>
+             {
+                 if (dir.Files.Any())
+                     dir.Files = dir.Files.DistinctBy(x => x.Name.PathGetFileName()).ToArray();
+             };
+            
+             // or built-in routine
+            
+             project.WildCardDedup = Project.UniqueFileNameDedup;
+             ...
+             Compiler.BuildMsi(project);
+             </code>
+             <para>Note, the need for <c>project.WildCardDedup</c> may araise only for very specific
+             deployment scenarios. Some of them are discussed in this thread: https://github.com/oleg-shilo/wixsharp/issues/270
+             </para>
+             </summary>
+        </member>
+        <member name="F:WixSharp.Project.UniqueFileNameDedup">
+            <summary>
+            The unique file name deduplication algorithm to be used as <see cref="F:WixSharp.Project.WildCardDedup"/>.
+            It implements removing the <see cref="F:WixSharp.Dir.Files"/> items with the same file name.
+            <para>The actual algorithm implementation is very simple:
+            <code>
+            public static Action&lt;Dir&gt; UniqueFileNameDedup = dir =>
+            {
+                if (dir.Files.Any())
+                    dir.Files = dir.Files.DistinctBy(x => Path.GetFileName(x.Name)).ToArray();
+            }
+            </code>
+            </para>
             </summary>
         </member>
         <member name="M:WixSharp.Project.ResolveWildCards(System.Boolean)">
