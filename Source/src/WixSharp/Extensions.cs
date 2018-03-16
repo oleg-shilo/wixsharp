@@ -1593,7 +1593,20 @@ namespace WixSharp
         /// <param name="project">The project.</param>
         /// <param name="extension">The extension.</param>
         /// <returns></returns>
+        [Obsolete(message: "This method has been renamed. Use `Include` instead", error: false)]
         static public WixProject IncludeWixExtension(this WixProject project, WixExtension extension)
+        {
+            project.IncludeWixExtension(extension.Assembly, extension.XmlNamespacePrefix, extension.XmlNamespace);
+            return project;
+        }
+
+        /// <summary>
+        /// Adds the specified extension to  <see cref="T:WixSharp.WixProject" />.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="extension">The extension.</param>
+        /// <returns></returns>
+        static public WixProject Include(this WixProject project, WixExtension extension)
         {
             project.IncludeWixExtension(extension.Assembly, extension.XmlNamespacePrefix, extension.XmlNamespace);
             return project;

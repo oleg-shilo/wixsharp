@@ -226,12 +226,14 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public static void MapComponentToFeatures(string componentId, Feature[] features, ProcessingContext context)
         {
+            var project = (Project)context.Project;
+
             if (features.Any())
                 context.FeatureComponents.Map(features, componentId);
-            else if (context.FeatureComponents.ContainsKey(context.Project.DefaultFeature))
-                context.FeatureComponents[context.Project.DefaultFeature].Add(componentId);
+            else if (context.FeatureComponents.ContainsKey(project.DefaultFeature))
+                context.FeatureComponents[project.DefaultFeature].Add(componentId);
             else
-                context.FeatureComponents[context.Project.DefaultFeature] = new List<string> { componentId };
+                context.FeatureComponents[project.DefaultFeature] = new List<string> { componentId };
         }
     }
 

@@ -12,7 +12,7 @@ namespace WixSharp
         /// <summary>
         /// Wix# project being compiled.
         /// </summary>
-        public Project Project;
+        public WixProject Project;
 
         /// <summary>
         /// Wix# project member that hosts (contains) user defined WiX entity being compiled/processed.
@@ -25,7 +25,7 @@ namespace WixSharp
         public XElement XParent;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public XElement XParentComponent;
 
