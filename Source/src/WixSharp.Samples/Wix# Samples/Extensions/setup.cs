@@ -74,7 +74,11 @@ public class RemoveFolderEx : WixEntity, IGenericEntity
     public string Property;
 
     [Xml]
-    new public string Id;
+    public new string Id
+    {
+        get => base.Id;
+        set => base.Id = value;
+    }
 
     /// <summary>
     /// The method demonstrates the correct way of integrating RemoveFolderEx.
@@ -87,7 +91,7 @@ public class RemoveFolderEx : WixEntity, IGenericEntity
     /// <param name="context"></param>
     public void Process(ProcessingContext context)
     {
-        context.Project.IncludeWixExtension(WixExtension.Util); //indicate that candle needs to use WixUtilExtension.dll
+        context.Project.Include(WixExtension.Util); //indicate that candle needs to use WixUtilExtension.dll
 
         XElement element = this.ToXElement(WixExtension.Util.ToXName("RemoveFolderEx"));
 
@@ -108,7 +112,7 @@ public class RemoveFolderEx : WixEntity, IGenericEntity
     /// <param name="context"></param>
     public void PseudoProcessWithNewComponent(ProcessingContext context)
     {
-        context.Project.IncludeWixExtension(WixExtension.Util);
+        context.Project.Include(WixExtension.Util);
 
         XElement element = this.ToXElement(WixExtension.Util.ToXName("RemoveFolderEx"));
 
@@ -132,7 +136,7 @@ public class RemoveFolderEx : WixEntity, IGenericEntity
     /// <param name="context"></param>
     public void PseudoProcessWithNewComponentAndFeature(ProcessingContext context)
     {
-        context.Project.IncludeWixExtension(WixExtension.Util);
+        context.Project.Include(WixExtension.Util);
 
         XElement element = this.ToXElement(WixExtension.Util.ToXName("RemoveFolderEx"));
 

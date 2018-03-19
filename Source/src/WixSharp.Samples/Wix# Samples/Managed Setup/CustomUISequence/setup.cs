@@ -71,6 +71,8 @@ public class Script
 
         project.ControlPanelInfo.InstallLocation = "[INSTALLDIR]";
 
+        project.SetNetFxPrerequisite(Condition.Net45_Installed, "Please install .Net 4.5 First");
+
         project.PreserveTempFiles = true;
         project.SourceBaseDir = @"..\..\";
 

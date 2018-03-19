@@ -251,11 +251,11 @@ namespace WixSharp.Bootstrapper
         /// }
         ///
         /// var bootstrapper = new Bundle("My Product Suite", ...
-        /// bootstrapper.Items.Add(new BalCondition { Condition = "some condition", Message = "Warning: ....." });
+        /// bootstrapper.GenericItems.Add(new BalCondition { Condition = "some condition", Message = "Warning: ....." });
         /// </code>
         /// </example>
         /// </summary>
-        public List<IGenericEntity> Items = new List<IGenericEntity>();
+        public List<IGenericEntity> GenericItems = new List<IGenericEntity>();
 
         /// <summary>
         /// Emits WiX XML.
@@ -316,7 +316,7 @@ namespace WixSharp.Bootstrapper
             foreach (IGenericEntity item in all_variabes)
                 item.Process(context);
 
-            foreach (IGenericEntity item in Items)
+            foreach (IGenericEntity item in GenericItems)
                 item.Process(context);
 
             var xChain = root.AddElement("Chain");

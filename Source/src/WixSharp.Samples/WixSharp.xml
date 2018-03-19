@@ -1811,7 +1811,7 @@
             The instance of the Bootstrapper application class application. By default it is a LicenseBootstrapperApplication object.
             </summary>
         </member>
-        <member name="F:WixSharp.Bootstrapper.Bundle.Items">
+        <member name="F:WixSharp.Bootstrapper.Bundle.GenericItems">
              <summary>
              The generic items to be added to the WiX <c>Bundle</c> element during the build. A generic item must implement
              <see cref="T:WixSharp.IGenericEntity"/> interface;
@@ -1831,7 +1831,7 @@
              }
             
              var bootstrapper = new Bundle("My Product Suite", ...
-             bootstrapper.Items.Add(new BalCondition { Condition = "some condition", Message = "Warning: ....." });
+             bootstrapper.GenericItems.Add(new BalCondition { Condition = "some condition", Message = "Warning: ....." });
              </code>
              </example>
              </summary>
@@ -2701,30 +2701,30 @@
         </member>
         <member name="F:WixSharp.DriverInstaller.DeleteFiles">
             <summary>
-            If set to "true", configures DIFxApp to delete binary files that were copied to the system from the driver store when a driver package 
-            was installed. If this attribute is set to "no" or not present, DIFxApp does not remove these files from a system. Note that configuring 
-            DIFxApp to delete these files is controlled by the Flags entry value of the component that represents the driver package in the 
-            MsiDriverPackages custom table. Setting DeleteFiles to "true" sets the corresponding bit in the Flags entry value. Setting DeleteFiles 
+            If set to "true", configures DIFxApp to delete binary files that were copied to the system from the driver store when a driver package
+            was installed. If this attribute is set to "no" or not present, DIFxApp does not remove these files from a system. Note that configuring
+            DIFxApp to delete these files is controlled by the Flags entry value of the component that represents the driver package in the
+            MsiDriverPackages custom table. Setting DeleteFiles to "true" sets the corresponding bit in the Flags entry value. Setting DeleteFiles
             to "false" clears the corresponding bit in the Flags entry value. If this attribute is not present, DIFxApp uses a default value of "false".
             </summary>
         </member>
         <member name="F:WixSharp.DriverInstaller.ForceInstall">
             <summary>
-            If set to "true", configures DIFxApp to install unsigned driver packages and driver packages with missing files. For more information, 
-            see "Installing Unsigned Driver Packages in Legacy Mode" earlier in this paper. If this attribute is set to "false" or not present, DIFxApp 
-            will install only signed driver packages. Note that configuring DIFxApp to install unsigned drivers is controlled by the Flags entry value 
-            of the component that represents the driver package in the MsiDriverPackages custom table. Setting Legacy to "true" sets the corresponding 
-            bit in the Flags entry value. Setting Legacy to "false" clears the bit in the Flags entry value that configures DIFxApp to install unsigned 
+            If set to "true", configures DIFxApp to install unsigned driver packages and driver packages with missing files. For more information,
+            see "Installing Unsigned Driver Packages in Legacy Mode" earlier in this paper. If this attribute is set to "false" or not present, DIFxApp
+            will install only signed driver packages. Note that configuring DIFxApp to install unsigned drivers is controlled by the Flags entry value
+            of the component that represents the driver package in the MsiDriverPackages custom table. Setting Legacy to "true" sets the corresponding
+            bit in the Flags entry value. Setting Legacy to "false" clears the bit in the Flags entry value that configures DIFxApp to install unsigned
             driver packages. If this attribute is not present, DIFxApp uses a default value of "false".
             </summary>
         </member>
         <member name="F:WixSharp.DriverInstaller.Legacy">
             <summary>
-            If set to "true", configures DIFxApp to install unsigned driver packages and driver packages with missing files. For more information, 
-            see "Installing Unsigned Driver Packages in Legacy Mode" earlier in this paper. If this attribute is set to "false" or not present, 
-            DIFxApp will install only signed driver packages. Note that configuring DIFxApp to install unsigned drivers is controlled by the Flags 
-            entry value of the component that represents the driver package in the MsiDriverPackages custom table. Setting Legacy to "true" sets the 
-            corresponding bit in the Flags entry value. Setting Legacy to "false" clears the bit in the Flags entry value that configures DIFxApp to 
+            If set to "true", configures DIFxApp to install unsigned driver packages and driver packages with missing files. For more information,
+            see "Installing Unsigned Driver Packages in Legacy Mode" earlier in this paper. If this attribute is set to "false" or not present,
+            DIFxApp will install only signed driver packages. Note that configuring DIFxApp to install unsigned drivers is controlled by the Flags
+            entry value of the component that represents the driver package in the MsiDriverPackages custom table. Setting Legacy to "true" sets the
+            corresponding bit in the Flags entry value. Setting Legacy to "false" clears the bit in the Flags entry value that configures DIFxApp to
             install unsigned driver packages. If this attribute is not present, DIFxApp uses a default value of "false"
             </summary>
         </member>
@@ -2735,8 +2735,8 @@
         </member>
         <member name="F:WixSharp.DriverInstaller.Sequence">
             <summary>
-            Specifies an optional installation sequence number. DIFxApp CustomActions install the driver packages in an installation package in the order 
-            of increasing sequence numbers. The same sequence number can be used for more than one driver; however, the order in which packages with the 
+            Specifies an optional installation sequence number. DIFxApp CustomActions install the driver packages in an installation package in the order
+            of increasing sequence numbers. The same sequence number can be used for more than one driver; however, the order in which packages with the
             same sequence number are actually installed cannot be determined.
             </summary>
         </member>

@@ -83,13 +83,14 @@ public class Script
     static void Project_AfterInstall(SetupEventArgs e)
     {
         //Debug.Assert(false);
-        MessageBox.Show(e.Data["test"], "test");
+        MessageBox.Show(e.Data["test"], "Project_AfterInstall");
         if (e.IsInstalling)
             MessageBox.Show($"User '{Defaults.UserName}' with password '{e.Session.Property("PASSWORD")}' has been created");
     }
 
     static void msi_BeforeInstall(SetupEventArgs e)
     {
+        MessageBox.Show(e.Session.Property("PASSWORD"), "msi_BeforeInstall");
         //Note: the property will not be from UserNameDialog if MSI UI is suppressed
         if (e.Session["DOMAIN"] == null)
             e.Session["DOMAIN"] = Environment.MachineName;

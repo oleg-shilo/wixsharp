@@ -173,7 +173,7 @@
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            context.Project.IncludeWixExtension(WixExtension.Util);
+            context.Project.Include(WixExtension.Util);
 
             context.XParent
                 .Add(this.ToXElement(WixExtension.Util, "CloseApplication"));

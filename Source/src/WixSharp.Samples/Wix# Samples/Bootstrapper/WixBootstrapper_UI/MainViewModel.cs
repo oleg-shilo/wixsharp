@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
+
 #if WIX4
 using WixToolset.Bootstrapper;
 #else
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-#endif
 
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+
+#endif
 
 [assembly: BootstrapperApplication(typeof(ManagedBA))]
 
@@ -45,6 +47,7 @@ public class MainViewModel : INotifyPropertyChanged
     }
 
     bool installEnabled;
+
     public bool InstallEnabled
     {
         get { return installEnabled; }
@@ -56,6 +59,7 @@ public class MainViewModel : INotifyPropertyChanged
     }
 
     bool uninstallEnabled;
+
     public bool UninstallEnabled
     {
         get { return uninstallEnabled; }
@@ -67,6 +71,7 @@ public class MainViewModel : INotifyPropertyChanged
     }
 
     bool isThinking;
+
     public bool IsBusy
     {
         get { return isThinking; }
@@ -119,7 +124,6 @@ public class MainViewModel : INotifyPropertyChanged
         {
             if (e.State == PackageState.Absent)
                 InstallEnabled = true;
-
             else if (e.State == PackageState.Present)
                 UninstallEnabled = true;
         }
@@ -127,7 +131,7 @@ public class MainViewModel : INotifyPropertyChanged
 
     /// <summary>
     /// Method that gets invoked when the Bootstrapper PlanComplete event is fired.
-    /// If the planning was successful, it instructs the Bootstrapper Engine to 
+    /// If the planning was successful, it instructs the Bootstrapper Engine to
     /// install the packages.
     /// </summary>
     void OnPlanComplete(object sender, PlanCompleteEventArgs e)

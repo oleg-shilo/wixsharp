@@ -56,7 +56,7 @@ public class InstallScript
         bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
 
         // You can implement your own extension types and add them to the Bundle
-        // bootstrapper.Items.Add(new BalCondition { Condition = "some condition", Message = "Warning: ..." });
+        // bootstrapper.GenericItems.Add(new BalCondition { Condition = "some condition", Message = "Warning: ..." });
 
         bootstrapper.PreserveTempFiles = true;
         bootstrapper.Build("app_setup");

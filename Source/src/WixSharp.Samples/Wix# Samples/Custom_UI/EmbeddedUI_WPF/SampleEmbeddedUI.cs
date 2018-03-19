@@ -15,6 +15,7 @@ namespace Microsoft.Deployment.Samples.EmbeddedUI
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Diagnostics;
     using System.Threading;
     using System.Windows;
     using System.Windows.Threading;
