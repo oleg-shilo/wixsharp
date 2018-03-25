@@ -39,11 +39,17 @@ public class MainViewModel : INotifyPropertyChanged
         this.IsBusy = false;
 
         this.Bootstrapper = bootstrapper;
+        this.Bootstrapper.Error += this.OnError;
         this.Bootstrapper.ApplyComplete += this.OnApplyComplete;
         this.Bootstrapper.DetectPackageComplete += this.OnDetectPackageComplete;
         this.Bootstrapper.PlanComplete += this.OnPlanComplete;
 
         this.Bootstrapper.Engine.Detect();
+    }
+
+    void OnError(object sender, ErrorEventArgs e)
+    {
+        MessageBox.Show(e.ErrorMessage);
     }
 
     bool installEnabled;

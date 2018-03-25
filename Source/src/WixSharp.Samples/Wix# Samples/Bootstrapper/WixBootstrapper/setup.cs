@@ -72,8 +72,8 @@ public class InstallScript
         // bootstrapper.Application.LicensePath = null; //HyperlinkLicense app with no license
 
         bootstrapper.Application.AttributesDefinition = "ShowVersion=yes; ShowFilesInUse=yes";
-
-        bootstrapper.IncludeWixExtension(WixExtension.Util);
+        // bootstrapper.Application.Bo
+        bootstrapper.Include(WixExtension.Util);
 
         // The code below sets WiX variables 'Netfx4FullVersion' and 'AdobeInstalled'. Note it has no affect on
         //the runtime behavior and 'FileSearch' and "RegistrySearch" are only provided as an example.
