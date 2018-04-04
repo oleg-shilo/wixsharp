@@ -165,6 +165,7 @@ namespace WixSharp.CommonTasks
         /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
         /// <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
         /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
+        /// <param name="dualSign">A flag indicating if the file should be signed with both SHA1 and SHA256.</param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
         /// <example>The following is an example of signing <c>Setup.msi</c> file.
@@ -179,22 +180,26 @@ namespace WixSharp.CommonTasks
         /// </code>
         /// </example>
         static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password,
-            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false)
+            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false,
+            bool dualSign = false)
         {
-            //"C:\Program Files\\Microsoft SDKs\Windows\v6.0A\bin\signtool.exe" sign /f "pfxFile" /p password /v "fileToSign" /t timeURL
+            //SHA1: "C:\Program Files\\Microsoft SDKs\Windows\v6.0A\bin\signtool.exe" sign /f "pfxFile" /p password /v "fileToSign" /t timeURL
+            //SHA256: "C:\Program Files\\Microsoft SDKs\Windows\v6.0A\bin\signtool.exe" sign /f "pfxFile" /p password /v "fileToSign" /tr timeURL /td sha256 /fd sha256 /as
             //string args = "sign /v /f \"" + pfxFile + "\" \"" + fileToSign + "\"";
 
             string certPlace = useCertificateStore ? "/n" : "/f";
 
             string args = $"sign /v {certPlace} \"{pfxFile}\"";
-            if (timeURL != null)
-                args += $" /t \"{timeURL}\"";
             if (password != null)
                 args += $" /p \"{password}\"";
-            if (!optionalArguments.IsEmpty())
-                args += " " + optionalArguments;
 
-            args += $" \"{fileToSign}\"";
+            string sha1 = args;
+            if (timeURL != null)
+                sha1 += $" /t \"{timeURL}\"";
+            if (!optionalArguments.IsEmpty())
+                sha1 += " " + optionalArguments;
+
+            sha1 += $" \"{fileToSign}\"";
 
             var tool = new ExternalTool
             {
@@ -206,8 +211,23 @@ namespace WixSharp.CommonTasks
                                                            @"C:\Program Files(x86)\Windows Kits\10\bin\x86;" +
                                                            @"C:\Program Files(x86)\Windows Kits\10\bin\10.0.15063.0\x86",
                 ExePath = "signtool.exe",
-                Arguments = args
+                Arguments = sha1
             };
+
+            var retval = tool.ConsoleRun();
+            var sha1Signed = retval == 0 || retval == 2;
+            if (!dualSign || !sha1Signed)
+                return retval;
+
+            // Append SHA-256 signature
+            string sha256 = args + " /as /fd sha256";
+            if (timeURL != null)
+                sha256 += $" /tr \"{timeURL}\" /td sha256";
+            if (!optionalArguments.IsEmpty())
+                sha256 += " " + optionalArguments;
+
+            sha256 += $" \"{fileToSign}\"";
+            tool.Arguments = sha256;
             return tool.ConsoleRun();
         }
 
@@ -226,6 +246,7 @@ namespace WixSharp.CommonTasks
         /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
         /// <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
         /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
+        /// <param name="dualSign">A flag indicating if the file should be signed with both SHA1 and SHA256.</param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
         /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file.
@@ -239,13 +260,13 @@ namespace WixSharp.CommonTasks
         /// </code>
         /// </example>
         static public int DigitalySignBootstrapper(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
-            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false)
+            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false, bool dualSign = false)
         {
             var retval = DigitalySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore);
             if (retval != 0)
                 return retval;
 
-            return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore);
+            return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore, dualSign);
         }
 
         /// <summary>
@@ -265,6 +286,7 @@ namespace WixSharp.CommonTasks
         /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
         /// <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
         /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
+        /// <param name="dualSign">A flag indicating if the file should be signed with both SHA1 and SHA256.</param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
         /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file engine.
@@ -278,7 +300,7 @@ namespace WixSharp.CommonTasks
         /// </code>
         /// </example>
         static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
-            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false)
+            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false, bool dualSign = false)
         {
             var insigniaPath = IO.Path.Combine(Compiler.WixLocation, "insignia.exe");
             string enginePath = IO.Path.GetTempFileName();
@@ -295,7 +317,7 @@ namespace WixSharp.CommonTasks
                 if (retval != 0)
                     return retval;
 
-                retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore);
+                retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore, dualSign);
                 if (retval != 0)
                     return retval;
 
