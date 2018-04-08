@@ -144,27 +144,36 @@ namespace WixSharp.UI.Forms
 
             static void treeView_DrawNodeText(object sender, DrawTreeNodeEventArgs e)
             {
-                var bounds = e.Bounds;
-
                 //Loosely based on Jason Williams solution (http://stackoverflow.com/questions/1003459/c-treeview-owner-drawing-with-ownerdrawtext-and-the-weird-black-highlighting-w)
-                if (bounds.Height < 1 || bounds.Width < 1)
+
+                if (e.Bounds.Height < 1 || e.Bounds.Width < 1)
                     return;
 
                 var treeView = (TreeView)sender;
 
-                bounds.Width += 5; //found by experiment that text can swallow last character
+                var drawFormat = new StringFormat
+                {
+                    Alignment = StringAlignment.Near,
+                    LineAlignment = StringAlignment.Center,
+                    FormatFlags = StringFormatFlags.NoWrap,
+                };
+
+                SizeF textSize = e.Graphics.MeasureString(e.Node.Text, treeView.Font);
+
+                var bounds = new Rectangle(e.Bounds.Left, e.Bounds.Top, (int)(textSize.Width + 2), e.Bounds.Height);
 
                 if (e.Node.IsSelected)
                 {
-                    e.Graphics.FillRectangle(selectionModeBrush, e.Bounds);
-                    e.Graphics.DrawString(e.Node.Text, treeView.Font, Brushes.White, bounds);
+                    e.Graphics.FillRectangle(selectionModeBrush, bounds);
+                    e.Graphics.DrawString(e.Node.Text, treeView.Font, Brushes.White, bounds, drawFormat);
                 }
                 else
                 {
+                    var brush = Brushes.Black;
                     if (e.Node.IsReadOnly())
-                        e.Graphics.DrawString(e.Node.Text, treeView.Font, Brushes.Gray, bounds);
-                    else
-                        e.Graphics.DrawString(e.Node.Text, treeView.Font, Brushes.Black, bounds);
+                        brush = Brushes.Gray;
+
+                    e.Graphics.DrawString(e.Node.Text, treeView.Font, brush, bounds, drawFormat);
                 }
             }
 

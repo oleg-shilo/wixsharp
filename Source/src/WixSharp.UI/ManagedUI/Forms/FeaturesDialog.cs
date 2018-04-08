@@ -81,6 +81,8 @@ namespace WixSharp.UI.Forms
 
             descriptionPanel.Left = featuresTree.Right + 10;
             descriptionPanel.Width = middlePanel.Width - descriptionPanel.Left - 10;
+
+            featuresTree.Nodes[0].EnsureVisible();
         }
 
         /// <summary>
