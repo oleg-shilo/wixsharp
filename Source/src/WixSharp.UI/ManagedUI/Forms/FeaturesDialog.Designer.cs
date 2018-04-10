@@ -106,6 +106,7 @@ namespace WixSharp.UI.Forms
             // 
             // label3
             // 
+            this.label3.AutoEllipsis = true;
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Location = new System.Drawing.Point(17, 6);
