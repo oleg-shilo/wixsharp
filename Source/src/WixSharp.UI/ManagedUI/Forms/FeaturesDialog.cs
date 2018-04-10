@@ -191,7 +191,7 @@ namespace WixSharp.UI.Forms
 
         void featuresTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            description.Text = e.Node.FeatureItem().Description;
+            description.Text = e.Node.FeatureItem().Description.LocalizeWith(MsiRuntime.Localize);
         }
 
         bool isAutoCheckingActive = false;
