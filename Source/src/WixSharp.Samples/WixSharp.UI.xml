@@ -1197,6 +1197,15 @@
               <c>true</c> if error was detected; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="P:WixSharp.UIShell.CustomErrorDescription">
+            <summary>
+            Gets or sets the custom error description to be displayed in the ExitDialog
+            in case of <see cref="P:WixSharp.IManagedUIShell.ErrorDetected" /> being set to <c>true</c>.
+            </summary>
+            <value>
+            The custom error description.
+            </value>
+        </member>
         <member name="P:WixSharp.UIShell.Errors">
             <summary>
             Gets the MSI installation errors.

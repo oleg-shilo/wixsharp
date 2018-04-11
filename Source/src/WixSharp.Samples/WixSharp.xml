@@ -2061,6 +2061,21 @@
             </summary>
             <seealso cref="T:WixSharp.WixEntity" />
         </member>
+        <member name="P:WixSharp.Bootstrapper.Payload.Id">
+            <summary>
+            Gets or sets the <c>Id</c> value of the <see cref="T:WixSharp.WixEntity" />.
+            <para>This value is used as a <c>Id</c> for the corresponding WiX XML element.</para><para>If the <see cref="P:WixSharp.Bootstrapper.Payload.Id" /> value is not specified explicitly by the user the Wix# compiler
+            generates it automatically insuring its uniqueness.</para><remarks>
+            Note: The ID auto-generation is triggered on the first access (evaluation) and in order to make the id
+            allocation deterministic the compiler resets ID generator just before the build starts. However if you
+            accessing any auto-id before the Build*() is called you can it interferes with the ID auto generation and eventually
+            lead to the WiX ID duplications. To prevent this from happening either:"
+            <para> - Avoid evaluating the auto-generated IDs values before the call to Build*()</para><para> - Set the IDs (to be evaluated) explicitly</para><para> - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";</para></remarks>
+            </summary>
+            <value>
+            The id.
+            </value>
+        </member>
         <member name="M:WixSharp.Bootstrapper.Payload.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.Payload"/> class.
@@ -10263,6 +10278,15 @@
               <c>true</c> if error was detected; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="P:WixSharp.IManagedUIShell.CustomErrorDescription">
+            <summary>
+            Gets or sets the custom error description to be displayed in the ExitDialog
+            in case of <see cref="P:WixSharp.IManagedUIShell.ErrorDetected"/> being set to <c>true</c>.
+            </summary>
+            <value>
+            The custom error description.
+            </value>
+        </member>
         <member name="P:WixSharp.IManagedUIShell.Dialogs">
             <summary>
             Gets the sequence of the UI dialogs specific for the current setup type (e.g. install vs. modify).
@@ -11319,6 +11343,27 @@
             Initializes a new instance of the <see cref="T:WixSharp.Condition"/> class.
             </summary>
             <param name="value">The value of the WiX condition expression.</param>
+        </member>
+        <member name="M:WixSharp.Condition.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Condition"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="expectedValue">The expected value.</param>
+        </member>
+        <member name="M:WixSharp.Condition.#ctor(System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Condition"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="expectedValue">if set to <c>true</c> [expected value].</param>
+        </member>
+        <member name="M:WixSharp.Condition.#ctor(System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Condition"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="expectedValue">The expected value.</param>
         </member>
         <member name="M:WixSharp.Condition.ToString">
             <summary>

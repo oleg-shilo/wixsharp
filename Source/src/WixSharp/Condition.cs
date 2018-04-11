@@ -75,16 +75,31 @@ namespace WixSharp
             Value = value;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Condition"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="expectedValue">The expected value.</param>
         public Condition(string name, string expectedValue)
         {
             Value = $"{name}=\"{expectedValue}\"";
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Condition"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="expectedValue">if set to <c>true</c> [expected value].</param>
         public Condition(string name, bool expectedValue)
         {
             Value = $"{name}=\"{expectedValue.ToYesNo()}\"";
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Condition"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="expectedValue">The expected value.</param>
         public Condition(string name, int expectedValue)
         {
             Value = $"{name}=\"{expectedValue}\"";

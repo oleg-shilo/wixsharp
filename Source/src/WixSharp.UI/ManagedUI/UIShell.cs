@@ -102,6 +102,15 @@ namespace WixSharp
         public bool ErrorDetected { get; set; }
 
         /// <summary>
+        /// Gets or sets the custom error description to be displayed in the ExitDialog
+        /// in case of <see cref="P:WixSharp.IManagedUIShell.ErrorDetected" /> being set to <c>true</c>.
+        /// </summary>
+        /// <value>
+        /// The custom error description.
+        /// </value>
+        public string CustomErrorDescription { get; set; }
+
+        /// <summary>
         /// Gets the MSI installation errors.
         /// </summary>
         /// <value>
