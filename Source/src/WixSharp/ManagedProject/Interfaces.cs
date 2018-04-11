@@ -135,6 +135,15 @@ namespace WixSharp
         bool ErrorDetected { get; set; }
 
         /// <summary>
+        /// Gets or sets the custom error description to be displayed in the ExitDialog
+        /// in case of <see cref="IManagedUIShell.ErrorDetected"/> being set to <c>true</c>.
+        /// </summary>
+        /// <value>
+        /// The custom error description.
+        /// </value>
+        string CustomErrorDescription { get; set; }
+
+        /// <summary>
         /// Gets the sequence of the UI dialogs specific for the current setup type (e.g. install vs. modify).
         /// </summary>
         /// <value>

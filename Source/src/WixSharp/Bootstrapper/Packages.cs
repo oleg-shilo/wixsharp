@@ -245,6 +245,9 @@ namespace WixSharp.Bootstrapper
         /// Specifies whether the bundle will show the UI authored into the msi package. The default is "no" which means all information is routed to
         /// the bootstrapper application to provide a unified installation experience. If "yes" is specified the UI authored into the msi package will be
         /// displayed on top of any bootstrapper application UI.
+        /// <para>Please note that WiX has a pending issue (https://github.com/wixtoolset/issues/issues/4921) associated with the problem
+        /// that prevents EmbeddedUI (ManagedUI) to be displayed even if 'DisplayInternalUI' is set to <c>true</c>. The issue is scheduled to be
+        /// resolved in WiX v4.x.</para>
         /// </summary>
         [Xml]
         public bool? DisplayInternalUI;

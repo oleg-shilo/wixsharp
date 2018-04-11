@@ -169,10 +169,7 @@ namespace WixSharp.UI.Forms
                 }
                 else
                 {
-                    var brush = Brushes.Black;
-                    if (e.Node.IsReadOnly())
-                        brush = Brushes.Gray;
-
+                    var brush = e.Node.IsReadOnly() ? Brushes.Gray : Brushes.Black;
                     e.Graphics.DrawString(e.Node.Text, treeView.Font, brush, bounds, drawFormat);
                 }
             }

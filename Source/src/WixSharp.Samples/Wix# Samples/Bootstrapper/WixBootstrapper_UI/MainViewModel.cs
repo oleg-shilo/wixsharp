@@ -35,6 +35,7 @@ public class MainViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler PropertyChanged;
 
     public MainViewModel(BootstrapperApplication bootstrapper)
+
     {
         this.IsBusy = false;
 

@@ -2287,7 +2287,7 @@ namespace WixSharp
         /// <param name="file">The file.</param>
         public static void SaveBinary(this Session session, string binary, string file)
         {
-            //If binary is accessed this way it will raise "stream handle is not valid" exception
+            //If binary is accessed the way as below it will raise "stream handle is not valid" exception
             //object result = session.Database.ExecuteScalar("select Data from Binary where Name = 'Fake_CRT.msi'");
             //Stream s = (Stream)result;
             //using (FileStream fs = new FileStream(@"....\Wix# Samples\Simplified Bootstrapper\Fake CRT1.msi", FileMode.Create))

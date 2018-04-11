@@ -31,7 +31,7 @@ namespace WixSharp.UI.Forms
             else if (Shell.ErrorDetected)
             {
                 title.Text = "[FatalErrorTitle]";
-                description.Text = "[FatalErrorDescription1]";
+                description.Text = Shell.CustomErrorDescription ?? "[FatalErrorDescription1]";
                 this.Localize();
             }
 

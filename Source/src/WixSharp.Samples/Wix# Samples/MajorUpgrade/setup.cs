@@ -75,6 +75,10 @@ class Script
                 MessageBox.Show("Later version of the product is already installed : " + installedVersion);
 
                 e.ManagedUI.Shell.ErrorDetected = true;
+
+                // provide custom error description if required
+                // e.ManagedUI.Shell.CustomErrorDescription = "Setup was aborted, because Later version of the product is already installed.";
+
                 e.Result = ActionResult.UserExit;
             }
         };
