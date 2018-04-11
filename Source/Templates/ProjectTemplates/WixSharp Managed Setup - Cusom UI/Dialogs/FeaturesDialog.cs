@@ -14,7 +14,7 @@ namespace WixSharpSetup.Dialogs
     /// different user experience as it has checkboxes bound to the features instead of icons context menu
     /// as MSI dialog has.
     /// </summary>
-    public partial class FeaturesDialog : ManagedForm, IManagedDialog
+    public partial class FeaturesDialog : ManagedForm, IManagedDialog // change ManagedForm->Form if you want to show it in designer
     {
         /*https://msdn.microsoft.com/en-us/library/aa367536(v=vs.85).aspx
          * ADDLOCAL - list of features to install
@@ -84,6 +84,8 @@ namespace WixSharpSetup.Dialogs
 
             descriptionPanel.Left = featuresTree.Right + 10;
             descriptionPanel.Width = middlePanel.Width - descriptionPanel.Left - 10;
+
+            featuresTree.Nodes[0].EnsureVisible();
         }
 
         /// <summary>
@@ -192,7 +194,7 @@ namespace WixSharpSetup.Dialogs
 
         void featuresTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            description.Text = e.Node.FeatureItem().Description;
+            description.Text = e.Node.FeatureItem().Description.LocalizeWith(MsiRuntime.Localize);
         }
 
         bool isAutoCheckingActive = false;

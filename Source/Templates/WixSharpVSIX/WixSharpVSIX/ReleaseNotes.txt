@@ -1,4 +1,4 @@
-v1.4.0.0
-* Implemented changing the title and description of the ManagedUI.ExitDialog depending on the Install error or cancellation.
-
+v1.5.0.0
+* Implemented adding custom error description of he ManagedUI.ExitDialog depending on the Install error or cancellation.
+* Various rendering improvements of the ManagedUI.
 

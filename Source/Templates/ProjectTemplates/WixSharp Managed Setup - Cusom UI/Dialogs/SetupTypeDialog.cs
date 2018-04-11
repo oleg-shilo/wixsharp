@@ -9,7 +9,7 @@ namespace WixSharpSetup.Dialogs
     /// <summary>
     /// The standard Setup Type dialog
     /// </summary>
-    public partial class SetupTypeDialog : ManagedForm, IManagedDialog
+    public partial class SetupTypeDialog : ManagedForm, IManagedDialog // change ManagedForm->Form if you want to show it in designer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SetupTypeDialog"/> class.

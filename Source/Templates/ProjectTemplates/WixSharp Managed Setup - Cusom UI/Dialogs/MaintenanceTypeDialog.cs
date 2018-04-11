@@ -10,7 +10,7 @@ namespace WixSharpSetup.Dialogs
     /// <summary>
     /// The standard Maintenance Type dialog
     /// </summary>
-    public partial class MaintenanceTypeDialog : ManagedForm, IManagedDialog
+    public partial class MaintenanceTypeDialog : ManagedForm, IManagedDialog // change ManagedForm->Form if you want to show it in designer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MaintenanceTypeDialog"/> class.

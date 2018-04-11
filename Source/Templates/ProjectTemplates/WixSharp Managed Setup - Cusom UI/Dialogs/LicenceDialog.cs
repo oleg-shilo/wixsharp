@@ -14,7 +14,7 @@ namespace WixSharpSetup.Dialogs
     /// <summary>
     /// The standard Licence dialog
     /// </summary>
-    public partial class LicenceDialog : ManagedForm, IManagedDialog
+    public partial class LicenceDialog : ManagedForm, IManagedDialog // change ManagedForm->Form if you want to show it in designer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenceDialog"/> class.

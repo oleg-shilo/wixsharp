@@ -1,6 +1,10 @@
 using System;
 using Microsoft.Deployment.WindowsInstaller;
 using System.Diagnostics;
+using System.Threading;
+using System.Drawing;
+using System.Windows.Forms;
+using WixSharp.CommonTasks;
 
 using WixSharp;
 using WixSharp.UI.Forms;
@@ -10,7 +14,7 @@ namespace WixSharpSetup.Dialogs
     /// <summary>
     /// The standard Installation Progress dialog
     /// </summary>
-    public partial class ProgressDialog : ManagedForm, IManagedDialog, IProgressDialog
+    public partial class ProgressDialog : ManagedForm, IManagedDialog, IProgressDialog // change ManagedForm->Form if you want to show it in designer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgressDialog"/> class.
@@ -41,6 +45,10 @@ namespace WixSharpSetup.Dialogs
             var upShift = (int)(next.Height * 2.3) - bottomPanel.Height;
             bottomPanel.Top -= upShift;
             bottomPanel.Height += upShift;
+
+            var fontSize = waitPrompt.Font.Size;
+            float scaling = 1;
+            waitPrompt.Font = new Font(waitPrompt.Font.Name, fontSize * scaling, FontStyle.Italic);
         }
 
         /// <summary>
@@ -84,6 +92,13 @@ namespace WixSharpSetup.Dialogs
         {
             switch (messageType)
             {
+                case InstallMessage.InstallStart:
+                case InstallMessage.InstallEnd:
+                    {
+                        waitPrompt.Visible = false;
+                    }
+                    break;
+
                 case InstallMessage.ActionStart:
                     {
                         try
@@ -133,6 +148,11 @@ namespace WixSharpSetup.Dialogs
         public override void OnProgress(int progressPercentage)
         {
             progress.Value = progressPercentage;
+
+            if (progressPercentage > 0)
+            {
+                waitPrompt.Visible = false;
+            }
         }
 
         /// <summary>
