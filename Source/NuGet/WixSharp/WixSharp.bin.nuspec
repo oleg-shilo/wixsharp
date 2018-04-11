@@ -1,61 +1,82 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
-    <metadata>
-        <id>WixSharp.bin</id>
-        <version>1.6.3.3-HotFix</version>
-        <title>Wix# (WixSharp) - Binaries</title>
-        <authors>Oleg Shilo</authors>
-        <owners>Oleg Shilo</owners>
-        <licenseUrl>https://wixsharp.codeplex.com/license</licenseUrl>
-        <projectUrl>https://wixsharp.codeplex.com/</projectUrl>
-        <iconUrl>https://download-codeplex.sec.s-msft.com/Download?ProjectName=wixsharp&amp;DownloadId=872632&amp;Build=20941</iconUrl>
-        <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
+  <metadata>
+    <id>WixSharp.bin</id>
+    <version>1.6.4.0</version>
+    <title>Wix# (WixSharp) - Binaries</title>
+    <authors>Oleg Shilo</authors>
+    <owners>Oleg Shilo</owners>
+    <licenseUrl>https://wixsharp.codeplex.com/license</licenseUrl>
+    <projectUrl>https://wixsharp.codeplex.com/</projectUrl>
+    <iconUrl>https://download-codeplex.sec.s-msft.com/Download?ProjectName=wixsharp&amp;DownloadId=872632&amp;Build=20941</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
 The package contains Wix# binaries only.
 
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
-        <summary>Wix# (WixSharp) - Binaries</summary>
-        <releaseNotes>Release v1.6.3.3
+    <summary>Wix# (WixSharp) - Binaries</summary>
+    <releaseNotes>Release v1.6.4.0
 
 -----
 
-v1.6.3.3
+v1.6.4.0
+* Implemented localization of the Feature's description text (ManagedUI)
+* AutoEllipsis enabled for long Feature's label text
+* Issue #337: How to set ManagedAction execute before Appsearch
+  Added `SetupEventArgs.ManagedUI.Shell.CustomErrorDescription`
+* Add dual signing of binaries.
+* Issue #333: FeaturesDialog drawing issues
+* Added sample for "Issuae #324: Capture Msi error in bootraper"
+* Added support for bootstrapper generic items (`Bundle.Items`): Triggered by #315
+* Issue #270: Deduplication of files added with wildcards sample dedup
+* Added additional resolution algorithm for FileShortcut location, which now can be both dir id and dir path. Triggered by #307
+* Issue #307: Fileshortcuts starting with an integer; Removed '_' inserted by the 'start digit in the name' check for composite Dir Ids (e.g. ProgramMenuFolder.1My_Product);
+* Issue #180: Multiple root level directories. Added `InstallDir` class
+* Added `FileShortcut` constructor that does nor require 'location' parameter. It automatically creates the shortcut in the parent `Dir`.  Triggered by #307.
 * Package WixSharp.bin: added copying nbsbuilder.exe to output folder
+* NuGet package(s): Added &lt;references&gt; section to register only managed dlls. 
+  WixSharp.bin.targets file is added to copy unmanaged dll to the output folder.
+* Implementation XmlFile Element
+* Issue #304: Localization bootstrapper via theme file
+* Added optional generation of the XML id attribute for `Bootstrapper.Payload.Id`
+* Issue #303: ExternalTool method ConsoleRun(Action&lt;string&gt; onConsoleOut) pass invalid unicode strings to onConsoleOut
+* Added `ExternalTool,Encoding`. The default value is `Encoding.UTF8`.
 
-v1.6.3.2
+v1.6.3.2 - HotFix
 * UACRevealer algorithm changed to `SetForegroundWindow(taskbar)` as a safer option.
 * UACRevealer is disabled by default. Enable it when needed: `UACRevealer.Enabled = true;`.
 
-v1.6.3.1
+v1.6.3.1 - HotFix
 * Issue #301: Managed UI: UAC prompt is always in background
 * Implemented DirPermissions inheriting parent Dir features if it has no own features specified.
 * Issue #279: Empty directory belonging to a feature causes an error
 * Added `FeatureSet` class to allow passing set of features as a constructor `Feature` parameter
-* NuGet: `nbsbuilder` has been moved into 'tools' folder to avoid being referenced as an assembly.</releaseNotes>
-        <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
-        <language>en-AU</language>
-        <tags>C# scripting msi install setup wix</tags>
-        <references>
-            <reference file="BootstrapperCore.dll" />
-            <reference file="Microsoft.Deployment.WindowsInstaller.dll" />
-            <reference file="WixSharp.dll" />
-            <reference file="WixSharp.Msi.dll" />
-            <reference file="WixSharp.UI.dll" />
-        </references>
-    </metadata>
-    <files>
-        <file src="build\WixSharp.bin.targets" target="build\WixSharp.bin.targets" />
-        <file src="lib\BootstrapperCore.dll" target="lib\BootstrapperCore.dll" />
-        <file src="lib\BootstrapperCore.xml" target="lib\BootstrapperCore.xml" />
-        <file src="lib\Microsoft.Deployment.WindowsInstaller.dll" target="lib\Microsoft.Deployment.WindowsInstaller.dll" />
-        <file src="lib\Microsoft.Deployment.WindowsInstaller.xml" target="lib\Microsoft.Deployment.WindowsInstaller.xml" />
-        <file src="lib\nbsbuilder.exe" target="lib\nbsbuilder.exe" />
-        <file src="lib\WixSharp.dll" target="lib\WixSharp.dll" />
-        <file src="lib\WixSharp.Msi.dll" target="lib\WixSharp.Msi.dll" />
-        <file src="lib\WixSharp.Msi.xml" target="lib\WixSharp.Msi.xml" />
-        <file src="lib\WixSharp.UI.dll" target="lib\WixSharp.UI.dll" />
-        <file src="lib\WixSharp.UI.xml" target="lib\WixSharp.UI.xml" />
-        <file src="lib\WixSharp.xml" target="lib\WixSharp.xml" />
-    </files>
+* NuGet: `nbsbuilder` has been moved into 'tools' folder to avoid being referenced as an assembly.
+</releaseNotes>
+    <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
+    <language>en-AU</language>
+    <tags>C# scripting msi install setup wix</tags>
+    <references>
+      <reference file="BootstrapperCore.dll" />
+      <reference file="Microsoft.Deployment.WindowsInstaller.dll" />
+      <reference file="WixSharp.dll" />
+      <reference file="WixSharp.Msi.dll" />
+      <reference file="WixSharp.UI.dll" />
+    </references>
+  </metadata>
+  <files>
+    <file src="build\WixSharp.bin.targets" target="build\WixSharp.bin.targets" />
+    <file src="lib\BootstrapperCore.dll" target="lib\BootstrapperCore.dll" />
+    <file src="lib\BootstrapperCore.xml" target="lib\BootstrapperCore.xml" />
+    <file src="lib\Microsoft.Deployment.WindowsInstaller.dll" target="lib\Microsoft.Deployment.WindowsInstaller.dll" />
+    <file src="lib\Microsoft.Deployment.WindowsInstaller.xml" target="lib\Microsoft.Deployment.WindowsInstaller.xml" />
+    <file src="lib\nbsbuilder.exe" target="lib\nbsbuilder.exe" />
+    <file src="lib\WixSharp.dll" target="lib\WixSharp.dll" />
+    <file src="lib\WixSharp.Msi.dll" target="lib\WixSharp.Msi.dll" />
+    <file src="lib\WixSharp.Msi.xml" target="lib\WixSharp.Msi.xml" />
+    <file src="lib\WixSharp.UI.dll" target="lib\WixSharp.UI.dll" />
+    <file src="lib\WixSharp.UI.xml" target="lib\WixSharp.UI.xml" />
+    <file src="lib\WixSharp.xml" target="lib\WixSharp.xml" />
+  </files>
 </package>
