@@ -1349,7 +1349,7 @@
             Enables UAC revealer, which is a work around for the MSI limitation/problem around EmbeddedUI UAC prompt.
             <para> The symptom of the problem is the UAC prompt not being displayed during elevation but rather minimized
             on the taskbar. This is caused by the fact the all background applications (including MSI runtime) supposed to
-            register the main window for UAC prompt. And, MSI does not doe the registration for EmbeddedUI.
+            register the main window for UAC prompt. And, MSI does not do the registration for EmbeddedUI.
             </para>
             <para> See "Use the HWND Property to Be Acknowledged as a Foreground Application" section at
             https://msdn.microsoft.com/en-us/library/bb756922.aspx

@@ -104,13 +104,28 @@ namespace WixSharp
         /// Enables UAC revealer, which is a work around for the MSI limitation/problem around EmbeddedUI UAC prompt.
         /// <para> The symptom of the problem is the UAC prompt not being displayed during elevation but rather minimized
         /// on the taskbar. This is caused by the fact the all background applications (including MSI runtime) supposed to
-        /// register the main window for UAC prompt. And, MSI does not doe the registration for EmbeddedUI.
+        /// register the main window for UAC prompt. And, MSI does not do the registration for EmbeddedUI.
         /// </para>
         /// <para> See "Use the HWND Property to Be Acknowledged as a Foreground Application" section at
         /// https://msdn.microsoft.com/en-us/library/bb756922.aspx
         /// </para>
         /// </summary>
         public static bool EnableUACRevealer = true;
+
+        /// <summary>
+        /// The UAC warning message to be displayed at the start of the actual installation (Progress dialog)
+        /// of the ManagedUI setup.
+        /// <para>The purpose of this message is to draw user attention to the fact that Windows UAC prompt may not
+        /// become visible and instead be minimized on the taskbar.
+        /// </para>
+        /// <remarks>
+        /// Windows prevents UIC prompt from stealing the focus if at the time of elevation user performs
+        /// interaction with other foreground process (application). It is a controversial aspect of Windows
+        /// User Experience that sometimes has undesirable practical implications.
+        /// </remarks>
+        /// </summary>
+        public static string UACWarning = "Please wait for UAC prompt to appear.\r\n\r\nIf it appears minimized then activate it" +
+    " from the taskbar.";
 
         /// <summary>
         /// Forces all <see cref="T:WixSharp.Condition"/> values to be always encoded as CDATA.

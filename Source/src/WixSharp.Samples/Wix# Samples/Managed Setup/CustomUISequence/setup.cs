@@ -12,12 +12,15 @@ using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
 using System.Diagnostics;
+using WixSharp.UI.Forms;
 
 public class Script
 {
     static public void Main()
     {
-        UACRevealer.Enabled = true;
+        // optionally modify UAC related settings
+        AutoElements.EnableUACRevealer = true;
+        AutoElements.UACWarning = "Wait for UAC prompt to appear on the taskbar.";
 
         var binaries = new Feature("Binaries", "Product binaries", true, false);
         var docs = new Feature("Documentation", "Product documentation (manuals and user guides)", true) { Display = FeatureDisplay.expand };

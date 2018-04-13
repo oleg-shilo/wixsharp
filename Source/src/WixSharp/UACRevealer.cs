@@ -122,6 +122,8 @@ namespace WixSharp.CommonTasks
         /// </summary>
         public static bool Enabled = false;
 
+        public static string WarningText = "";
+
         static System.Diagnostics.Process UAC_revealer;
     }
 

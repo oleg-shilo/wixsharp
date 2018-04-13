@@ -227,6 +227,7 @@ namespace WixSharp
             Tasks.UILocalize = text => text.LocalizeWith(msiRuntime.Localize);
 
             UACRevealer.Enabled = !MsiRuntime.Session.Property("UAC_REVEALER_ENABLED").IsEmpty();
+            UACRevealer.WarningText = MsiRuntime.Session.Property("UAC_WARNING_PROMPT");
 
             if (MsiRuntime.Session.IsInstalling())
                 Dialogs = ui.InstallDialogs;

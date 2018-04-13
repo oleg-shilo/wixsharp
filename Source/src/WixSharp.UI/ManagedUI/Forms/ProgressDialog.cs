@@ -25,6 +25,9 @@ namespace WixSharp.UI.Forms
         void ProgressDialog_Load(object sender, EventArgs e)
         {
             banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
+
+            this.waitPrompt.Text = MsiRuntime.Session.Property("UAC_WARNING");
+
             ResetLayout();
 
             Shell.StartExecute();
@@ -171,17 +174,7 @@ namespace WixSharp.UI.Forms
             if (Shell.IsDemoMode)
                 Shell.GoNext();
             else
-            {
-                //Debug.Assert(false);
-
-                //try
-                //{
-                //    MsiRuntime.Session["CANCEL_REQUEST"] = "TRUE";
-                //}
-                //catch { }
-
                 Shell.Cancel();
-            }
         }
     }
 }
