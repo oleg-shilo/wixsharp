@@ -76,8 +76,8 @@ public class RemoveFolderEx : WixEntity, IGenericEntity
     [Xml]
     public new string Id
     {
-        get => base.Id;
-        set => base.Id = value;
+        get { return base.Id; }
+        set { base.Id = value; }
     }
 
     /// <summary>

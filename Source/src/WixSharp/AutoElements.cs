@@ -132,7 +132,18 @@ namespace WixSharp
         /// </summary>
         public static bool ForceCDataForConditions = false;
 
-        public static bool LagacyDummyDirAlgorithm = false;
+        /// <summary>
+        /// Flag indicating if the legacy algorithm should be used for handling setups with no directories
+        /// to be installed but only non-file system components (e.g. RegKey, User, Firewall exceptions).
+        /// <para>The algorithm used in early versions of WixSharp (legacy algorithm) injects a dummy
+        /// directory into the setup definition so it satisfies the MSI constraint that every component must
+        /// belong to a directory. As many other rules this one has no practical value and rather reflection
+        /// of the outdated (~20 years ago) deployment approaches.</para>
+        /// <para>The current algorithm also ensures the that there is a XML directory to host the components.
+        /// However instead of custom (dummy) directory it inserts 'ProgramFilesFolder'. This way MSI constraint
+        /// is satisfied and yet there is no impact on the target file system.</para>
+        /// </summary>
+        public static bool LegacyDummyDirAlgorithm = false;
 
         /// <summary>
         /// Disables automatic insertion of user profile registry elements.
@@ -549,7 +560,7 @@ namespace WixSharp
                         //'EMPTY DIRECTORY' support processing section
                         foreach (XElement item in componentsWithNoFiles)
                         {
-                            // Ridiculous MSI constrains:
+                            // Ridiculous MSI constraints:
                             //  * you cannot install install empty folders
                             //    - workaround is to insert empty component with CreateFolder element
                             //  * if Component+CreateFolder element is inserted the folder will not be removed on uninstall

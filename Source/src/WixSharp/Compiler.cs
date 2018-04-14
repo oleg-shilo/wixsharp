@@ -1406,7 +1406,7 @@ namespace WixSharp
             if (!project.LicenceFile.IsEmpty())
             {
                 if (!AllowNonRtfLicense && !project.LicenceFile.EndsWith(".rtf", StringComparison.OrdinalIgnoreCase))
-                    throw new ApplicationException("License file must have 'rtf' file extension. Specify 'Compiler.AllowNonRtfLicense=true' to overcome this constrain.");
+                    throw new ApplicationException("License file must have 'rtf' file extension. Specify 'Compiler.AllowNonRtfLicense=true' to overcome this constraint.");
 
                 product.Add(
                        new XElement("WixVariable",
@@ -1450,7 +1450,7 @@ namespace WixSharp
                         Compiler.OutputWriteLine($"WARNING: Special folder directory ID '{firstDirWithItems.Id}' has been reset to '{dirId}'.\n" +
                                                   "If it was not intended disable auto assignment by setting 'Compiler.AutoGeneration.InstallDirDefaultId' to null.\n" +
                                                   "Or set  'Dir.IsInstallDir = true' for the installation directory.\r" +
-                                                  "Or use instead of 'new Dir(...' use 'new InstallDir(...' for the installation directory.");
+                                                  "Or instead of 'new Dir(...' use 'new InstallDir(...' for the installation directory.");
 
                     firstDirWithItems.Id = dirId;
                     return logicalPath;
@@ -1709,7 +1709,7 @@ namespace WixSharp
             {
                 var existingCompElement = dirItem.Elements("Component");
 
-                if (existingCompElement.Count() == 0 && AutoElements.LagacyDummyDirAlgorithm)
+                if (existingCompElement.Count() == 0 && AutoElements.LegacyDummyDirAlgorithm)
                 {
                     string compId = wDir.Id + ".EmptyDirectory";
 
@@ -2193,7 +2193,7 @@ namespace WixSharp
                 //WIX/MSI does not like no-directory deployments thus create fake one
                 string dummyDir = @"%ProgramFiles%";
 
-                if (AutoElements.LagacyDummyDirAlgorithm)
+                if (AutoElements.LegacyDummyDirAlgorithm)
                     dummyDir = @"%ProgramFiles%\WixSharp\DummyDir";
 
                 if (wProject.Platform == Platform.x64)

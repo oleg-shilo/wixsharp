@@ -54,6 +54,7 @@ static class Script
             GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b")
         };
 
+        project.AddRegValue(new RegValue(RegistryHive.LocalMachine, @"Software\test", "foo_value", "bar") { Win64 = true });
         project.AddRegValue(new RegValue(RegistryHive.LocalMachine, @"Software\test", "foo_value", "bar") { Win64 = false });
 
         // Compiler.LightOptions += " -sice:ICE80";

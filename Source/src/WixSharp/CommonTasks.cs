@@ -1285,6 +1285,20 @@ namespace WixSharp.CommonTasks
             return new XElement("Component").AddAttributes($@"Id={entity.Id}; Guid={WixGuid.NewGuid(entity.Id)}");
         }
 
+        static public XElement FistProgramFilesDir(this XElement element)
+        {
+            XElement dir = element.FindFirst("Directory");
+            while (dir != null)
+            {
+                if (dir.HasAttribute("Name", x => x.StartsWith("ProgramFiles") && x.EndsWith("Folder")))
+                    return dir;
+
+                dir = dir.Elements("Directory").FirstOrDefault();
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Installs the windows service. It uses InstallUtil.exe to complete the actual installation/uninstallation.
         /// During the run for the InstallUtil.exe console window is hidden.
