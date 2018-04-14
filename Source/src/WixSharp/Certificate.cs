@@ -230,7 +230,7 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            context.Project.IncludeWixExtension(WixExtension.IIs);
+            context.Project.Include(WixExtension.IIs);
 
             XElement component = this.CreateParentComponent();
             component.Add(this.ToXElement(WixExtension.IIs, "Certificate"));

@@ -89,7 +89,7 @@ namespace WixSharp
         public void Process(ProcessingContext context)
         {
             this.Id = this.Id ?? base.Id; // ensure the auto-generated Id is pushed to the XML attribute
-            context.Project.IncludeWixExtension(WixExtension.Util);
+            context.Project.Include(WixExtension.Util);
 
             context.XParent
                    .FindFirst("Component")

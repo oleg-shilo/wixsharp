@@ -429,7 +429,7 @@ namespace WixSharp
         {
             if (SqlDb != null)
             {
-                context.Project.IncludeWixExtension(WixExtension.Sql);
+                context.Project.Include(WixExtension.Sql);
 
                 XElement component = this.CreateParentComponent();
                 XElement sqlString = this.ToXElement(WixExtension.Sql, "SqlString");

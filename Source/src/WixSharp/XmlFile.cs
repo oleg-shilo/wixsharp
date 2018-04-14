@@ -50,7 +50,7 @@ namespace WixSharp
         public new string Name;
 
         /// <summary>
-        /// The type of modification to be made to the XML file when the component is installed. 
+        /// The type of modification to be made to the XML file when the component is installed.
         /// </summary>
         [Xml]
         public XmlFileAction Action;
@@ -64,7 +64,7 @@ namespace WixSharp
         /// </summary>
         [Xml]
         public string ElementPath;
-        
+
         /// <summary>
         /// The value to be written. See the Formatted topic for information how to escape square brackets in the value.
         /// </summary>
@@ -84,10 +84,10 @@ namespace WixSharp
         /// </summary>
         [Xml]
         public bool? PreserveModifiedDate;
-        
+
         /// <summary>
         /// Specifies the order in which the modification is to be attempted on the XML file.
-        /// It is important to ensure that new elements are created before you attempt to add an attribute to them.	
+        /// It is important to ensure that new elements are created before you attempt to add an attribute to them.
         /// </summary>
         [Xml]
         public int? Sequence;
@@ -110,7 +110,7 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            context.Project.IncludeWixExtension(WixExtension.Util);
+            context.Project.Include(WixExtension.Util);
 
             if (File.IsEmpty())
             {
@@ -118,7 +118,6 @@ namespace WixSharp
             }
 
             context.XParentComponent.Add(this.ToXElement(WixExtension.Util, "XmlFile").AddAttributes("File=" + File));
-
         }
     }
 }

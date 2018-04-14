@@ -26,6 +26,7 @@ public class Script
 
         //Note if the property 'PASSWORD' is not preserved as deferred then it will not be available
         //from the Project_AfterInstall, which is a deferred custom action.
+        AutoElements.LagacyDummyDirAlgorithm = true;
 
         var project = new ManagedProject("ManagedSetup",
                           new User

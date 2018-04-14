@@ -1,5 +1,6 @@
 //css_ref ..\..\WixSharp.dll;
 //css_ref System.Core.dll;
+using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,23 @@ using WixSharp.CommonTasks;
 using WixSharp.Forms;
 
 // Truly a throw away project for dev testing
+
+public class CustomActions
+{
+    [CustomAction]
+    public static ActionResult MyAction(Session session)
+    {
+        MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Embedded Managed CA (" + (Is64BitProcess ? "x64" : "x86") + ")");
+        session.Log("Begin MyAction Hello World");
+
+        return ActionResult.Success;
+    }
+
+    public static bool Is64BitProcess
+    {
+        get { return IntPtr.Size == 8; }
+    }
+}
 
 static class Script
 {
@@ -47,9 +65,11 @@ static class Script
     {
         var project =
             new Project("MyProduct",
-                new RegValue(RegistryHive.LocalMachine, @"Software\test", "foo_value", "bar"));
+                new RegValue(RegistryHive.LocalMachine, @"Software\test", "foo_value", "bar") { Win64 = false },
+                new RegValue(RegistryHive.LocalMachine, @"Software\test", "foo_value", "bar") { Win64 = true });
 
         project.PreserveTempFiles = true;
+        project.Platform = Platform.x64;
         project.BuildMsi();
 
         // project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
@@ -60,7 +80,7 @@ static class Script
 
     static public void Main(string[] args)
     {
-        Issue_298b(); return;
+        Issue_298(); return;
         // Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = true;
 
         var serverFeature = new Feature("Server");

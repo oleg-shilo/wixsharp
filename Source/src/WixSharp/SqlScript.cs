@@ -135,7 +135,7 @@ namespace WixSharp
         /// <param name="sqlDb"></param>
         /// <param name="binaryKey"></param>
         /// <param name="executeOptions"></param>
-        public SqlScript(Id id, string sqlDb,string binaryKey, ExecuteSql executeOptions)
+        public SqlScript(Id id, string sqlDb, string binaryKey, ExecuteSql executeOptions)
             : this(binaryKey, executeOptions)
         {
             Id = id;
@@ -759,7 +759,7 @@ namespace WixSharp
         {
             if (SqlDb != null)
             {
-                context.Project.IncludeWixExtension(WixExtension.Sql);
+                context.Project.Include(WixExtension.Sql);
 
                 XElement component = this.CreateParentComponent();
                 XElement sqlScript = this.ToXElement(WixExtension.Sql, "SqlScript");

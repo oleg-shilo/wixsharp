@@ -110,8 +110,8 @@ public class Script
         MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - Load");
 
         var msi = e.MsiFile;
-        if (!e.IsInstalling && !e.IsUpgrading) ;
-        SetEnvVersion(e.Session);
+        if (!e.IsInstalling && !e.IsUpgrading)
+            SetEnvVersion(e.Session);
 
         //MSI doesn't preserve any e.Session properties if they are accessed from deferred actions (e.g. project_AfterInstall)
         //Wix# forces some of the properties to be persisted (via CustomActionData) by using user defined

@@ -35,7 +35,7 @@ class Script
             }
         };
 
-        project.IncludeWixExtension(WixExtension.Util);
+        project.Include(WixExtension.Util);
 
         Compiler.PreserveTempFiles = true;
 

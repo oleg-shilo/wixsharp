@@ -236,7 +236,7 @@ namespace WixSharp
                 || ResetPeriodInDays.HasValue
                 || RestartServiceDelayInSeconds.HasValue)
             {
-                project?.IncludeWixExtension(WixExtension.Util);
+                project?.Include(WixExtension.Util);
 
                 var serviceConfig = new XElement(WixExtension.Util.ToXNamespace() + "ServiceConfig");
 

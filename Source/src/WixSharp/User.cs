@@ -258,7 +258,7 @@ namespace WixSharp
         {
             if (MustDescendFromComponent)
             {
-                context.Project.IncludeWixExtension(WixExtension.Util);
+                context.Project.Include(WixExtension.Util);
 
                 XElement component = this.CreateParentComponent();
                 component.Add(this.ToXElement(WixExtension.Util, "User"));
@@ -268,11 +268,10 @@ namespace WixSharp
             }
             else
             {
-                context.Project.IncludeWixExtension(WixExtension.Util);
+                context.Project.Include(WixExtension.Util);
 
                 context.XParent.Add(this.ToXElement(WixExtension.Util, "User"));
             }
-
         }
     }
 }

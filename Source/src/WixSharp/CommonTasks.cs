@@ -1213,7 +1213,7 @@ namespace WixSharp.CommonTasks
             foreach (var prop in condition.GetDistinctProperties())
                 project.AddProperty(new PropertyRef(prop));
 
-            project.IncludeWixExtension(WixExtension.NetFx);
+            project.Include(WixExtension.NetFx);
 
             return project;
         }

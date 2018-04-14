@@ -31,7 +31,7 @@ class Script
 
         // AddXmlInclude can also be applied to any WixShari entity (e.g. new File("...").AddXmlInclude("FileCommonProperies.wxi")
 
-        project.IncludeWixExtension(WixExtension.Util)
+        project.Include(WixExtension.Util)
                .AddXmlInclude("CommonProperies.wxi")
                .AddXmlInclude("CommonProperies2.wxi");
 
@@ -104,7 +104,7 @@ public class EventSourceEx : WixEntity, IGenericEntity
         var util = WixExtension.Util;
 
         // reflect new dependency
-        context.Project.IncludeWixExtension(util);
+        context.Project.Include(util);
 
         // serialize itself and add to the parent component
         context.XParent

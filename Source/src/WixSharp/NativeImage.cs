@@ -117,7 +117,7 @@ namespace WixSharp
         {
             var util = WixExtension.NetFx;
 
-            context.Project.IncludeWixExtension(util);
+            context.Project.Include(util);
 
             //serialize itself and add to the parent component
             context.XParent

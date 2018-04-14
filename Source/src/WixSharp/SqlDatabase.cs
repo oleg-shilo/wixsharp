@@ -261,7 +261,7 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            context.Project.IncludeWixExtension(WixExtension.Sql);
+            context.Project.Include(WixExtension.Sql);
 
             if (MustDescendFromComponent)
             {

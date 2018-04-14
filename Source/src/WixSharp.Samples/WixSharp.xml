@@ -1356,6 +1356,20 @@
             </para>
             </summary>
         </member>
+        <member name="F:WixSharp.AutoElements.UACWarning">
+            <summary>
+            The UAC warning message to be displayed at the start of the actual installation (Progress dialog)
+            of the ManagedUI setup.
+            <para>The purpose of this message is to draw user attention to the fact that Windows UAC prompt may not
+            become visible and instead be minimized on the taskbar.
+            </para>
+            <remarks>
+            Windows prevents UIC prompt from stealing the focus if at the time of elevation user performs
+            interaction with other foreground process (application). It is a controversial aspect of Windows
+            User Experience that sometimes has undesirable practical implications.
+            </remarks>
+            </summary>
+        </member>
         <member name="F:WixSharp.AutoElements.ForceCDataForConditions">
             <summary>
             Forces all <see cref="T:WixSharp.Condition"/> values to be always encoded as CDATA.
@@ -13979,7 +13993,7 @@
         </member>
         <member name="F:WixSharp.XmlFile.Action">
             <summary>
-            The type of modification to be made to the XML file when the component is installed. 
+            The type of modification to be made to the XML file when the component is installed.
             </summary>
         </member>
         <member name="F:WixSharp.XmlFile.ElementPath">
@@ -14011,7 +14025,7 @@
         <member name="F:WixSharp.XmlFile.Sequence">
             <summary>
             Specifies the order in which the modification is to be attempted on the XML file.
-            It is important to ensure that new elements are created before you attempt to add an attribute to them.	
+            It is important to ensure that new elements are created before you attempt to add an attribute to them.
             </summary>
         </member>
         <member name="F:WixSharp.XmlFile.SelectionLanguage">

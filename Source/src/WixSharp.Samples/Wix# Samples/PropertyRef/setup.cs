@@ -15,7 +15,7 @@ internal class Script
                 new PropertyRef("NETFRAMEWORK20"),
                 new ManagedAction(CustomActions.MyAction, Return.check, When.After, Step.InstallInitialize, Condition.NOT_BeingRemoved));
 
-        project.IncludeWixExtension(WixExtension.NetFx);
+        project.Include(WixExtension.NetFx);
 
         Compiler.BuildMsi(project);
     }

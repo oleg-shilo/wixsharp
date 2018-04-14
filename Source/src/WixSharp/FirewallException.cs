@@ -222,7 +222,7 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            context.Project.IncludeWixExtension(WixExtension.Fire);
+            context.Project.Include(WixExtension.Fire);
 
             var firewallElement = this.ToXElement(WixExtension.Fire, "FirewallException");
 
@@ -230,7 +230,7 @@ namespace WixSharp
             {
                 firewallElement.Add(WixExtension.Fire.XElement("RemoteAddress", (object)address.Trim()));
             });
-            
+
             var findComponent = context.XParent.FindFirst("Component");
 
             if (findComponent != null)
