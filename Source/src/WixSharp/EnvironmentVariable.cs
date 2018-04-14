@@ -172,10 +172,10 @@ namespace WixSharp
                          .AddAttributes(Condition.Attributes));
             }
 
-            var parent = context.XParent.FindFirstComponentParent() ??
-                         context.XParent.FindLastDirectory();
+            XElement bestParent = context.XParent.FindFirstComponentParent() ??
+                                  context.XParent.FistProgramFilesDir();
 
-            parent?.Add(component);
+            bestParent.Add(component);
 
             MapComponentToFeatures(component.Attr("Id"), ActualFeatures, context);
         }

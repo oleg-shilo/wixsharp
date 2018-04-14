@@ -263,7 +263,7 @@ namespace WixSharp
                 XElement component = this.CreateParentComponent();
                 component.Add(this.ToXElement(WixExtension.Util, "User"));
 
-                XElement bestParent = context.XParent.FindFirst("Component")?.Parent ??
+                XElement bestParent = context.XParent.FindFirstComponentParent() ??
                                       context.XParent.FistProgramFilesDir();
 
                 bestParent.Add(component);
