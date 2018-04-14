@@ -132,6 +132,8 @@ namespace WixSharp
         /// </summary>
         public static bool ForceCDataForConditions = false;
 
+        public static bool LagacyDummyDirAlgorithm = false;
+
         /// <summary>
         /// Disables automatic insertion of user profile registry elements.
         /// Required for: AllInOne, ConditionalInstallation, CustomAttributes, ReleaseFolder, Shortcuts,

@@ -1691,7 +1691,7 @@ namespace WixSharp
             {
                 var existingCompElement = dirItem.Elements("Component");
 
-                if (existingCompElement.Count() == 0)
+                if (existingCompElement.Count() == 0 && AutoElements.LagacyDummyDirAlgorithm)
                 {
                     string compId = wDir.Id + ".EmptyDirectory";
 
@@ -2173,7 +2173,11 @@ namespace WixSharp
             if (wProject.Dirs.Count() == 0)
             {
                 //WIX/MSI does not like no-directory deployments thus create fake one
-                string dummyDir = @"%ProgramFiles%\WixSharp\DummyDir";
+                string dummyDir = @"%ProgramFiles%";
+
+                if (AutoElements.LagacyDummyDirAlgorithm)
+                    dummyDir = @"%ProgramFiles%\WixSharp\DummyDir";
+
                 if (wProject.Platform == Platform.x64)
                     dummyDir = dummyDir.Map64Dirs();
 

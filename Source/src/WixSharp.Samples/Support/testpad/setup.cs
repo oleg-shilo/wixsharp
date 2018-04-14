@@ -1,5 +1,6 @@
 //css_ref ..\..\WixSharp.dll;
 //css_ref System.Core.dll;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +26,41 @@ static class Script
         }
     }
 
+    static void Issue_298()
+    {
+        var project = new Project("MyProduct",
+            new Dir(@"%ProgramFiles%\My Company\My Product",
+                new File("setup.cs")))
+        {
+            Platform = Platform.x64,
+            GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b")
+        };
+
+        project.AddRegValue(new RegValue(RegistryHive.LocalMachine, @"Software\test", "foo_value", "bar") { Win64 = false });
+
+        // Compiler.LightOptions += " -sice:ICE80";
+        project.PreserveTempFiles = true;
+        project.BuildMsiCmd();
+    }
+
+    static void Issue_298b()
+    {
+        var project =
+            new Project("MyProduct",
+                new RegValue(RegistryHive.LocalMachine, @"Software\test", "foo_value", "bar"));
+
+        project.PreserveTempFiles = true;
+        project.BuildMsi();
+
+        // project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
+
+        // // Compiler.LightOptions += " -sice:ICE80";
+        // project.BuildMsiCmd();
+    }
+
     static public void Main(string[] args)
     {
+        Issue_298b(); return;
         // Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = true;
 
         var serverFeature = new Feature("Server");
