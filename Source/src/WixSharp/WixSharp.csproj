@@ -240,7 +240,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>md "$(ProjectDir)..\..\..\bin\WixSharp"
+    <PostBuildEvent>md "$(ProjectDir)..\..\bin\WixSharp"
 copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\bin\WixSharp\$(TargetFileName)"
 copy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\bin\WixSharp\$(TargetName).xml"
 copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\src\WixSharp.Samples\$(TargetFileName)"

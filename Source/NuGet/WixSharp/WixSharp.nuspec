@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>1.6.4.0</version>
+    <version>1.6.4.1</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,49 +18,24 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.6.4.0
+    <releaseNotes>Release v1.6.4.1
 
 -----
 
-v1.6.4.0
-* Implemented localization of the Feature's description text (ManagedUI)
-* AutoEllipsis enabled for long Feature's label text
-* Issue #337: How to set ManagedAction execute before Appsearch
-  Added `SetupEventArgs.ManagedUI.Shell.CustomErrorDescription`
-* Add dual signing of binaries.
-* Issue #333: FeaturesDialog drawing issues
-* Added sample for "Issuae #324: Capture Msi error in bootraper"
-* Added support for bootstrapper generic items (`Bundle.Items`): Triggered by #315
-* Issue #270: Deduplication of files added with wildcards sample dedup
-* Added additional resolution algorithm for FileShortcut location, which now can be both dir id and dir path. Triggered by #307
-* Issue #307: Fileshortcuts starting with an integer; Removed '_' inserted by the 'start digit in the name' check for composite Dir Ids (e.g. ProgramMenuFolder.1My_Product);
-* Issue #180: Multiple root level directories. Added `InstallDir` class
-* Added `FileShortcut` constructor that does nor require 'location' parameter. It automatically creates the shortcut in the parent `Dir`.  Triggered by #307.
-* Package WixSharp.bin: added copying nbsbuilder.exe to output folder
-* NuGet package(s): Added &lt;references&gt; section to register only managed dlls. 
-  WixSharp.bin.targets file is added to copy unmanaged dll to the output folder.
-* Implementation XmlFile Element
-* Issue #304: Localization bootstrapper via theme file
-* Added optional generation of the XML id attribute for `Bootstrapper.Payload.Id`
-* Issue #303: ExternalTool method ConsoleRun(Action&lt;string&gt; onConsoleOut) pass invalid unicode strings to onConsoleOut
-* Added `ExternalTool,Encoding`. The default value is `Encoding.UTF8`.
+* Updated all IGenericEntity implementations to support 'no-directory' deployments
+* Removed all references to the obsolete `IncludeWixExtension`
+* Implemented clean algorithm for handling no-dir scenarios without resorting to the `%ProgramFiles%\WixSharp\DummyDir`.
+  Algorithm is controlled by `AutoElements.LagacyDummyDirAlgorithm`
+* Issue #341: UAC Text is not localized
+* Implemented adding custom error description of he ManagedUI.ExitDialog depending on the Install error or cancellation.
 
-v1.6.3.2 - HotFix
-* UACRevealer algorithm changed to `SetForegroundWindow(taskbar)` as a safer option.
-* UACRevealer is disabled by default. Enable it when needed: `UACRevealer.Enabled = true;`.
 
-v1.6.3.1 - HotFix
-* Issue #301: Managed UI: UAC prompt is always in background
-* Implemented DirPermissions inheriting parent Dir features if it has no own features specified.
-* Issue #279: Empty directory belonging to a feature causes an error
-* Added `FeatureSet` class to allow passing set of features as a constructor `Feature` parameter
-* NuGet: `nbsbuilder` has been moved into 'tools' folder to avoid being referenced as an assembly.
 </releaseNotes>
     <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.6.4.0" />
+      <dependency id="WixSharp.bin" version="1.6.4.1" />
     </dependencies>
   </metadata>
   <files>
