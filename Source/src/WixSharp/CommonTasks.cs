@@ -262,7 +262,7 @@ namespace WixSharp.CommonTasks
         static public int DigitalySignBootstrapper(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false, bool dualSign = false)
         {
-            var retval = DigitalySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore);
+            var retval = DigitalySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore, dualSign);
             if (retval != 0)
                 return retval;
 
