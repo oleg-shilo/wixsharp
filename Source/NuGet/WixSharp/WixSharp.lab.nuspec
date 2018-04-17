@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.Lab</id>
-    <version>1.6.4.1</version>
+    <version>1.6.4.2</version>
     <title>Wix# (WixSharp) - Experimantal features</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -14,10 +14,12 @@
 The package contains the sample code for building a simple MSI with the CLR WinForm dialog inserted into UI sequence between InsallDirDlg and VerifyReadyDlg native MSI dialogs. In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# binaries containing experimental features (e.g. native WiX UI support).</summary>
-    <releaseNotes>Release v1.6.4.1
+    <releaseNotes>Release v1.6.4.2-HotFix
 
 -----
-
+v1.6.4.2
+* Issue #344: Duplicate symbol 'Directory:ProgramFilesFolder' found
+v1.6.4.1
 * Updated all IGenericEntity implementations to support 'no-directory' deployments
 * Removed all references to the obsolete `IncludeWixExtension`
 * Implemented clean algorithm for handling no-dir scenarios without resorting to the `%ProgramFiles%\WixSharp\DummyDir`.
@@ -35,7 +37,7 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
       <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
     </frameworkAssemblies>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.6.4.1" />
+      <dependency id="WixSharp.bin" version="1.6.4.2" />
     </dependencies>
   </metadata>
   <files>
