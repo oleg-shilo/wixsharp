@@ -112,7 +112,7 @@ namespace WixSharp.Test
   </BootstrapperApplicationRef>
   <Chain>
     <PackageGroupRef Id=""NetFx40Web"" />
-    <ExePackage InstallCommand=""/q /norestart"" SourceFile=""Samples\Setup1.exe"" PerMachine=""yes"">
+    <ExePackage InstallCommand=""/q /norestart"" PerMachine=""yes"" SourceFile=""Samples\Setup1.exe"">
       <Payload SourceFile=""Samples\setup1.dll"" />
     </ExePackage>
     <MsiPackage SourceFile=""Samples\SetupB.msi"" Vital=""no"">
@@ -212,7 +212,6 @@ namespace WixSharp.Test
             {
                 Behavior = BehaviorValues.error,
                 Value = "1001"
-
             });
             package.ExitCodes.Add(new ExitCode()
             {
