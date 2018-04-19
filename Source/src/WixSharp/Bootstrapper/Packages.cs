@@ -33,12 +33,6 @@ namespace WixSharp.Bootstrapper
         public string Description;
 
         /// <summary>
-        /// Indicates the package must be executed elevated.
-        /// </summary>
-        [Xml]
-        public bool? PerMachine;
-
-        /// <summary>
         /// The URL to use to download the package. The following substitutions are supported:
         /// <para>{0} is replaced by the package Id.</para>
         /// <para>{1} is replaced by the payload Id.</para>
@@ -170,6 +164,12 @@ namespace WixSharp.Bootstrapper
         public string UninstallCommand;
 
         /// <summary>
+        /// Indicates the package must be executed elevated.
+        /// </summary>
+        [Xml]
+        public bool? PerMachine;
+
+        /// <summary>
         /// A condition that determines if the package is present on the target system.
         /// This condition can use built-in variables and variables returned by searches.
         /// This condition is necessary because Windows doesn't provide a method to detect the presence of an ExePackage.
@@ -258,6 +258,13 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         [Xml]
         public bool? Visible;
+
+        /// <summary>
+        /// Override the automatic per-machine detection of MSI packages and force the package to be per-machine. The default is "no", which allows
+        /// the tools to detect the expected value.
+        /// </summary>
+        [Xml]
+        public bool? ForcePerMachine;
 
         /// <summary>
         /// MSI properties to be set based on the value of a burn engine expression. This is a KeyValue mapping expression of the following format:
