@@ -17,11 +17,11 @@ class Script
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         project.ControlPanelInfo.Comments = "Simple test msi";
-        project.ControlPanelInfo.Readme = "https://wixsharp.codeplex.com/manual";
-        project.ControlPanelInfo.HelpLink = "https://wixsharp.codeplex.com/support";
+        project.ControlPanelInfo.Readme = "https://github.com/oleg-shilo/wixsharp/manual";
+        project.ControlPanelInfo.HelpLink = "https://github.com/oleg-shilo/wixsharp/support";
         project.ControlPanelInfo.HelpTelephone = "111-222-333-444";
-        project.ControlPanelInfo.UrlInfoAbout = "https://wixsharp.codeplex.com/About";
-        project.ControlPanelInfo.UrlUpdateInfo = "https://wixsharp.codeplex.com/update";
+        project.ControlPanelInfo.UrlInfoAbout = "https://github.com/oleg-shilo/wixsharp/About";
+        project.ControlPanelInfo.UrlUpdateInfo = "https://github.com/oleg-shilo/wixsharp/update";
         project.ControlPanelInfo.ProductIcon = "app_icon.ico";
         project.ControlPanelInfo.Contact = "Product owner";
         project.ControlPanelInfo.Manufacturer = "My Company";

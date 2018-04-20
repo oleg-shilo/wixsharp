@@ -164,7 +164,7 @@ namespace WixSharp
 
             //https://wixsharp.codeplex.com/discussions/646085
             //Have to disable validation as it only considers 'install' but not 'uninstall'.
-            //Possible solution is to annalyse the action.condition and determine if it is
+            //Possible solution is to analyse the action.condition and determine if it is
             //install /uninstall but it is impossible to do. At least with the adequate accuracy.
             //var incosnistentInstalledFileActions = project.Actions
             //.OfType<InstalledFileAction>()

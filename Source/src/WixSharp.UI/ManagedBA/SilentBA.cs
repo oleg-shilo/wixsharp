@@ -30,7 +30,7 @@ namespace WixSharp.Bootstrapper
     ///          new PackageGroupRef("NetFx40Web"),
     ///          new MsiPackage("product.msi"));
     ///
-    /// bootstrapper.AboutUrl = "https://wixsharp.codeplex.com/";
+    /// bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";
     /// bootstrapper.IconFile = "app_icon.ico";
     /// bootstrapper.Version = new Version("1.0.0.0");
     /// bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");

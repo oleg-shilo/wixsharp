@@ -1,5 +1,7 @@
 using System;
+
 using sys = System;
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
@@ -383,7 +385,7 @@ namespace WixSharp.UI
                     oldHandler = null;
                 }
 
-                //It is important to reference uiHandler here to keep it alive till the end. 
+                //It is important to reference uiHandler here to keep it alive till the end.
                 //The debug build is more forgiving and referencing uiHandler is not essential as the code is not optimized
                 if (uiHandler != null)
                 {
@@ -401,7 +403,7 @@ namespace WixSharp.UI
 
         int OnExternalUI(IntPtr context, uint messageType, string message)
         {
-            MsiInstallMessage msgType = (MsiInstallMessage) (MsiInterop.MessageTypeMask & messageType);
+            MsiInstallMessage msgType = (MsiInstallMessage)(MsiInterop.MessageTypeMask & messageType);
             return OnMessage(message, msgType);
         }
 
@@ -419,11 +421,11 @@ namespace WixSharp.UI
                 {
                     case MsiInstallMessage.ActionData:
                         this.OnActionData(message);
-                        return (int) DialogResult.OK;
+                        return (int)DialogResult.OK;
 
                     case MsiInstallMessage.ActionStart:
                         this.CurrentActionName = message.Substring(message.LastIndexOf(".") + 1);
-                        return (int) DialogResult.OK;
+                        return (int)DialogResult.OK;
 
                     case MsiInstallMessage.CommonData:
                         string[] data = MsiParser.ParseCommonData(message);
@@ -455,7 +457,7 @@ namespace WixSharp.UI
                             }
                         }
 
-                        return (int) DialogResult.OK;
+                        return (int)DialogResult.OK;
 
                     case MsiInstallMessage.Error:
                         OnError(message, false, MsiInstallMessage.Error);
@@ -497,7 +499,7 @@ namespace WixSharp.UI
 
                             if (null == fields || null == fields[0])
                             {
-                                return (int) DialogResult.OK;
+                                return (int)DialogResult.OK;
                             }
 
                             switch (fields.MSI<int>(1))
@@ -514,7 +516,7 @@ namespace WixSharp.UI
                                 case 1:   //   action info
                                     {
                                         if (this.ProgressTotal == 0)
-                                            return (int) DialogResult.OK; //The external handler should not act upon any of these messages until the first a Reset progress message is received.
+                                            return (int)DialogResult.OK; //The external handler should not act upon any of these messages until the first a Reset progress message is received.
 
                                         if (fields.MSI<int>(3) == 1)
                                             TicksPerActionDataMessage = fields.MSI<int>(2);
@@ -524,7 +526,7 @@ namespace WixSharp.UI
                                 case 2:   //   progress
                                     {
                                         if (this.ProgressTotal == 0)
-                                            return (int) DialogResult.OK; //The external handler should not act upon any of these messages until the first a Reset progress message is received.
+                                            return (int)DialogResult.OK; //The external handler should not act upon any of these messages until the first a Reset progress message is received.
 
                                         if (this.ProgressTotal != 0) //initialized
                                         {
@@ -540,19 +542,19 @@ namespace WixSharp.UI
                             }
 
                             if (this.CancelRequested)
-                                return (int) DialogResult.Cancel;
+                                return (int)DialogResult.Cancel;
                             else
-                                return (int) DialogResult.OK;
+                                return (int)DialogResult.OK;
                         }
 
                     case MsiInstallMessage.ResolveSource:
                         return 0;
 
                     case MsiInstallMessage.ShowDialog:
-                        return (int) DialogResult.OK;
+                        return (int)DialogResult.OK;
 
                     case MsiInstallMessage.Terminate:
-                        return (int) DialogResult.OK;
+                        return (int)DialogResult.OK;
 
                     case MsiInstallMessage.User:
                         OnUser(message);

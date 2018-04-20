@@ -53,7 +53,7 @@ public class InstallScript
                     new MsiPackage(crtMsi) { DisplayInternalUI = true, Visible = true, MsiProperties = "PACKAGE_PROPERTY=[BundleVariable]" },
                     new MsiPackage(productMsi) { DisplayInternalUI = true, Payloads = new[] { "script.dll".ToPayload() } });
 
-        bootstrapper.AboutUrl = "https://wixsharp.codeplex.com/";
+        bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";
         bootstrapper.IconFile = "app_icon.ico";
         bootstrapper.Version = Tasks.GetVersionFromFile(productMsi); //will extract "product version"
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");

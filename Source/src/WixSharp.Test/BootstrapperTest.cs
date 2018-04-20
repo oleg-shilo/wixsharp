@@ -96,7 +96,7 @@ namespace WixSharp.Test
                     new RollbackBoundary(),
                     new MsiPackage(@"Samples\SetupA.msi"));
 
-            bootstrapper.AboutUrl = "https://wixsharp.codeplex.com/";
+            bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";
             bootstrapper.IconFile = "icon.ico";
             bootstrapper.Version = new Version("1.0.0.0");
             bootstrapper.UpgradeCode = new Guid("00000000-0000-0000-0000-000000000007");
@@ -106,7 +106,7 @@ namespace WixSharp.Test
 
             var xml = bootstrapper.ToXml().First().ToString();
 
-            var expected = @"<Bundle Name=""My Product"" AboutUrl=""https://wixsharp.codeplex.com/"" IconSourceFile=""icon.ico"" UpgradeCode=""00000000-0000-0000-0000-000000000007"" Version=""1.0.0.0"">
+            var expected = @"<Bundle Name=""My Product"" AboutUrl=""https://github.com/oleg-shilo/wixsharp/"" IconSourceFile=""icon.ico"" UpgradeCode=""00000000-0000-0000-0000-000000000007"" Version=""1.0.0.0"">
   <BootstrapperApplicationRef Id=""WixStandardBootstrapperApplication.RtfLicense"">
     <WixStandardBootstrapperApplication LogoFile=""app_logo.png"" LocalizationFile=""en-us.wxl"" LicenseFile=""readme.rtf"" xmlns=""http://schemas.microsoft.com/wix/BalExtension"" />
   </BootstrapperApplicationRef>

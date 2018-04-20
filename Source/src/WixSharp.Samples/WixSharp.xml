@@ -1669,7 +1669,7 @@
                       new MsiPackage("productA.msi"),
                       new MsiPackage("productB.msi"));
             
-             bootstrapper.AboutUrl = "https://wixsharp.codeplex.com/";
+             bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";
              bootstrapper.IconFile = "app_icon.ico";
              bootstrapper.Version = new Version("1.0.0.0");
              bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
@@ -2160,7 +2160,7 @@
                                      new PackageGroupRef("NetFx40Web"),
                                      new MsiPackage(productMsi) { DisplayInternalUI = true });
             
-             bootstrapper.AboutUrl = "https://wixsharp.codeplex.com/";
+             bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";
              bootstrapper.IconFile = "app_icon.ico";
              bootstrapper.Version = new Version("1.0.0.0");
              bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
@@ -2198,11 +2198,6 @@
             ExePackages use the FileName field from the version information, MsiPackages use the ARPCOMMENTS property, and MspPackages
             use the Description patch metadata property. Other package types must use this attribute to define a description in the
             bootstrapper application data manifest.
-            </summary>
-        </member>
-        <member name="F:WixSharp.Bootstrapper.Package.PerMachine">
-            <summary>
-            Indicates the package must be executed elevated.
             </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.Package.DownloadUrl">
@@ -2296,6 +2291,11 @@
             with no command-line arguments. To prevent an ExePackage from being uninstalled set the Permanent attribute to "yes".
             </summary>
         </member>
+        <member name="F:WixSharp.Bootstrapper.ExePackage.PerMachine">
+            <summary>
+            Indicates the package must be executed elevated.
+            </summary>
+        </member>
         <member name="F:WixSharp.Bootstrapper.ExePackage.DetectCondition">
             <summary>
             A condition that determines if the package is present on the target system.
@@ -2354,6 +2354,12 @@
             <summary>
             Specifies whether the MSI will be displayed in Programs and Features (also known as Add/Remove Programs). If "yes" is specified the MSI package
             information will be displayed in Programs and Features. The default "no" indicates the MSI will not be displayed.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.MsiPackage.ForcePerMachine">
+            <summary>
+            Override the automatic per-machine detection of MSI packages and force the package to be per-machine. The default is "no", which allows
+            the tools to detect the expected value.
             </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.MsiPackage.MsiProperties">
@@ -11037,11 +11043,11 @@
                                 new Dir(@"%ProgramFiles%\My Company\My Product",
                                 ...
              project.ControlPanelInfo.Comments = "Simple test msi";
-             project.ControlPanelInfo.Readme = "https://wixsharp.codeplex.com/manual";
-             project.ControlPanelInfo.HelpLink = "https://wixsharp.codeplex.com/support";
+             project.ControlPanelInfo.Readme = "https://github.com/oleg-shilo/wixsharp/manual";
+             project.ControlPanelInfo.HelpLink = "https://github.com/oleg-shilo/wixsharp/support";
              project.ControlPanelInfo.HelpTelephone = "111-222-333-444";
-             project.ControlPanelInfo.UrlInfoAbout = "https://wixsharp.codeplex.com/About";
-             project.ControlPanelInfo.UrlUpdateInfo = "https://wixsharp.codeplex.com/update";
+             project.ControlPanelInfo.UrlInfoAbout = "https://github.com/oleg-shilo/wixsharp/About";
+             project.ControlPanelInfo.UrlUpdateInfo = "https://github.com/oleg-shilo/wixsharp/update";
              project.ControlPanelInfo.ProductIcon = "app_icon.ico";
              project.ControlPanelInfo.Contact = "Product owner";
              project.ControlPanelInfo.Manufacturer = "My Company";

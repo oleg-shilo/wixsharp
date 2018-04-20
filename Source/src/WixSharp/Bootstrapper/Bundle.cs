@@ -23,7 +23,7 @@ namespace WixSharp.Bootstrapper
     ///          new MsiPackage("productA.msi"),
     ///          new MsiPackage("productB.msi"));
     ///
-    /// bootstrapper.AboutUrl = "https://wixsharp.codeplex.com/";
+    /// bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";
     /// bootstrapper.IconFile = "app_icon.ico";
     /// bootstrapper.Version = new Version("1.0.0.0");
     /// bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
@@ -440,7 +440,8 @@ namespace WixSharp.Bootstrapper
                         Compiler.OutputWriteLine("");
                         Compiler.OutputWriteLine("WARNING: You have selected enabled DisplayInternalUI for EmbeddedUI-based '"
                             + sys.Path.GetFileName(item.SourceFile) + "'. Currently Burn (WiX) " +
-                            "doesn't support integration with EmbeddedUI packages. Read more here: https://wixsharp.codeplex.com/discussions/645838");
+                            "doesn't support integration with EmbeddedUI packages. Read more here: https://github.com/oleg-shilo/wixsharp/wiki/Wix%23-Bootstrapper-(Burn)-integration-notes");
+
                         Compiler.OutputWriteLine("");
                     }
                 }
@@ -468,7 +469,7 @@ namespace WixSharp.Bootstrapper
       <Bundle Name="My Product"
             Version="1.0.0.0"
             Manufacturer="OSH"
-            AboutUrl="https://wixsharp.codeplex.com/"
+            AboutUrl="https://github.com/oleg-shilo/wixsharp/"
             IconSourceFile="app_icon.ico"
             UpgradeCode="acaa3540-97e0-44e4-ae7a-28c20d410a60">
 
