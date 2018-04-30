@@ -206,10 +206,10 @@ namespace WixSharp.CommonTasks
                 WellKnownLocations = wellKnownLocations ?? @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin;" +
                                                            @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin;" +
                                                            @"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool;" +
-                                                           @"C:\Program Files(x86)\Windows Kits\8.0\bin\x86;" +
-                                                           @"C:\Program Files(x86)\Windows Kits\8.1\bin\x86;" +
-                                                           @"C:\Program Files(x86)\Windows Kits\10\bin\x86;" +
-                                                           @"C:\Program Files(x86)\Windows Kits\10\bin\10.0.15063.0\x86",
+                                                           @"C:\Program Files (x86)\Windows Kits\8.0\bin\x86;" +
+                                                           @"C:\Program Files (x86)\Windows Kits\8.1\bin\x86;" +
+                                                           @"C:\Program Files (x86)\Windows Kits\10\bin\x86;" +
+                                                           @"C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x86",
                 ExePath = "signtool.exe",
                 Arguments = sha1
             };
@@ -1452,7 +1452,7 @@ namespace WixSharp.CommonTasks
         /// Gets or sets the well known locations for probing the exe file.
         /// <para>
         /// By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>. By settin <c>WellKnownLocations</c>
-        /// you can add som extra probing locations. The directories must be separated by the ';' character.
+        /// you can add some extra probing locations. The directories must be separated by the ';' character.
         /// </para>
         /// </summary>
         /// <value>The well known locations.</value>
