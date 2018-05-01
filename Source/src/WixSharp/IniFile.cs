@@ -523,15 +523,8 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            XElement component = this.CreateParentComponent();
-            component.Add(this.ToXElement("IniFile"));
-
-            XElement bestParent = context.XParent.FindFirstComponentParent() ??
-                                  context.XParent.FistProgramFilesDir();
-
-            bestParent.Add(component);
-
-            MapComponentToFeatures(component.Attr("Id"), ActualFeatures, context);
+            this.CreateAndInsertParentComponent(context)
+                .Add(this.ToXElement("IniFile"));
         }
     }
 }

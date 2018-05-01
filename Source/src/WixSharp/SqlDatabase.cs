@@ -265,9 +265,7 @@ namespace WixSharp
 
             if (MustDescendFromComponent)
             {
-                XElement component = this.CreateParentComponent();
                 XElement sqlDatabase = this.ToXElement(WixExtension.Sql, "SqlDatabase");
-                component.Add(sqlDatabase);
 
                 if (GenericItems.Any())
                 {
@@ -283,11 +281,8 @@ namespace WixSharp
                         item.Process(newContext);
                 }
 
-                XElement bestParent = context.XParent.FindFirstComponentParent() ??
-                                      context.XParent.FistProgramFilesDir();
-
-                bestParent.Add(component);
-                MapComponentToFeatures(component.Attr("Id"), ActualFeatures, context);
+                XElement component = this.CreateAndInsertParentComponent(context);
+                component.Add(sqlDatabase);
             }
             else
             {

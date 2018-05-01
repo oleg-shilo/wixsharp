@@ -1285,7 +1285,52 @@ namespace WixSharp.CommonTasks
             return new XElement("Component").AddAttributes($@"Id={entity.Id}; Guid={WixGuid.NewGuid(entity.Id)}");
         }
 
-        static public XElement FistProgramFilesDir(this XElement element)
+        /// <summary>
+        /// Maps the component to features. If no features specified then the component is added to the default ("Complete") feature.
+        /// </summary>
+        /// <param name="component">The component.</param>
+        /// <param name="features">The features.</param>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
+        public static XElement MapToFeatures(this XElement component, Feature[] features, ProcessingContext context)
+        {
+            WixObject.MapComponentToFeatures(component.Attr("Id"), features, context);
+            return component;
+        }
+
+        /// <summary>
+        /// Creates the and inserts (into `context`) parent component for a WixEntity object. This method is used
+        /// in the default implementation of the <see cref="IGenericEntity.Process(ProcessingContext)"/>.
+        /// <para>The best insertion point is located according the following algorithm </para>
+        /// <list type="bullet">
+        /// <item><description>The parent of the first descendant 'component' element with respect to <c>context.XParent</c>.</description></item>
+        /// <item><description>The first descendant 'ProgramFiles64Folder' or 'ProgramFilesFolder' element with respect to <c>context.XParent</c>.</description></item>
+        /// <item><description>The <c>context.XParent</c> element itself.</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
+        static public XElement CreateAndInsertParentComponent(this WixEntity entity, ProcessingContext context)
+        {
+            XElement component = entity.CreateParentComponent();
+
+            XElement bestParent = context.XParent.FindFirstComponentParent() ??
+                                  context.XParent.FirstProgramFilesDir() ??
+                                  context.XParent;
+
+            bestParent.Add(component);
+
+            WixEntity.MapComponentToFeatures(component.Attr("Id"), entity.ActualFeatures, context);
+            return component;
+        }
+
+        /// <summary>
+        /// Finds the first descendant 'ProgramFiles' or 'ProgramFiles64Folder' directory element.
+        /// </summary>
+        /// <param name="element">The element.</param>
+        /// <returns></returns>
+        static public XElement FirstProgramFilesDir(this XElement element)
         {
             XElement dir = element.FindFirst("Directory");
             while (dir != null)

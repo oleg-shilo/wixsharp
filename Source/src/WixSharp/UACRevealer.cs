@@ -122,6 +122,10 @@ namespace WixSharp.CommonTasks
         /// </summary>
         public static bool Enabled = false;
 
+        /// <summary>
+        /// The warning text to be displayed in the ProgressDialog. By default it prompts "Please wait for UAC prompt to appear.
+        /// If it appears minimized then activate it from the taskbar.".
+        /// </summary>
         public static string WarningText = "";
 
         static System.Diagnostics.Process UAC_revealer;
@@ -244,7 +248,9 @@ namespace WixSharp.CommonTasks
         {
             RECT? taskbarLastItemRectangle = null;
 
-            bool ChechForUACTaskbarItem()
+#pragma warning disable CS8321 // Local function is declared but never used
+            bool CheckForUACTaskbarItem()
+#pragma warning restore CS8321 // Local function is declared but never used
             {
                 Bitmap image = GetWindowBitmap(Win32.GetTaskbarWindow());
 

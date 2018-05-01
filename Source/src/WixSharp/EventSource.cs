@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using static WixSharp.SetupEventArgs;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
@@ -80,11 +81,10 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            // context.Project.IncludeWixExtension(WixExtension.Util);
+            context.Project.Include(WixExtension.Util);
 
-            context.XParent
-                   .FindFirst("Component")
-                   .Add(this.ToXElement(WixExtension.Util, "EventSource"));
+            XElement component = this.CreateAndInsertParentComponent(context);
+            component.Add(this.ToXElement(WixExtension.Util, "EventSource"));
         }
     }
 }

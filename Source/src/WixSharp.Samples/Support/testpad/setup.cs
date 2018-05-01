@@ -44,11 +44,37 @@ static class Script
         }
     }
 
+    static void Issue_354()
+    {
+        var mainFeature = new Feature("My Product", true, false);
+
+        var project = new Project("My Product",
+            new InstallDir(@"%ProgramFiles%/My Company/My Product"),
+            new Dir("%ProgramMenu%",
+                    // new Dir(mainFeature, "My Product",
+                    new Dir("My Product",
+                    new InternetShortcut()
+                    {
+                        Name = "Wix# project page",
+                        Target = "https://github.com/oleg-shilo/wixsharp",
+                        Type = InternetShortcut.ShortcutType.url
+                    })));
+
+        // project.DefaultFeature = mainFeature;
+
+        project.PreserveTempFiles = true;
+        project.InstallScope = InstallScope.perMachine;
+        project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889c");
+        project.BuildMsi();
+    }
+
     static void Issue_298()
     {
         var project = new Project("MyProduct",
             new Dir(@"%ProgramFiles%\My Company\My Product",
-                new File("setup.cs")))
+                new File("setup.cs"),
+                new File("setup.cs")
+                ))
         {
             Platform = Platform.x64,
             GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b")
@@ -62,7 +88,7 @@ static class Script
 
         // Compiler.LightOptions += " -sice:ICE80";
         project.PreserveTempFiles = true;
-        project.BuildMsiCmd();
+        var ttt = project.BuildMsi();
     }
 
     static void Issue_298b()
@@ -84,6 +110,7 @@ static class Script
 
     static public void Main(string[] args)
     {
+        Issue_354(); return;
         Issue_298(); return;
         // Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = true;
 
@@ -173,6 +200,7 @@ static class Script
 
         // project.Package.AttributesDefinition = "InstallPrivileges=elevated;AdminImage=yes;InstallScope=perMachine";
         // project.UI = WUI.WixUI_InstallDir;
+
         project.ManagedUI = new ManagedUI();
         project.ManagedUI.InstallDialogs.Add(Dialogs.Welcome)
                                         .Add(Dialogs.Features)

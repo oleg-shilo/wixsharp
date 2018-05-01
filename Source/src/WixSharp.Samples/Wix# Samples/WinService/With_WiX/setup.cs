@@ -14,7 +14,7 @@ class Script
         try
         {
             File service;
-            
+
             var project =
                 new Project("My Product",
                     new Dir(@"%ProgramFiles%\My Company\My Product",
@@ -25,29 +25,29 @@ class Script
             //File service = project.AllFiles.Single(f => f.Name.EndsWith("MyApp.exe"));
 
             service.ServiceInstaller = new ServiceInstaller
-                                       {
-                                           Name = "WixSharp.TestSvc",
-                                           DependsOn = "Dnscache;Dhcp",
-                                           StartOn = SvcEvent.Install, //set it to null if you don't want service to start as during deployment
-                                           StopOn = SvcEvent.InstallUninstall_Wait,
-                                           RemoveOn = SvcEvent.Uninstall_Wait,
-                                           DelayedAutoStart = true,
-                                           ServiceSid = ServiceSid.none,
-                                           FirstFailureActionType = FailureActionType.restart,
-                                           SecondFailureActionType = FailureActionType.restart,
-                                           ThirdFailureActionType = FailureActionType.runCommand,
-                                           ProgramCommandLine = "MyApp.exe -run",
-                                           RestartServiceDelayInSeconds = 30,
-                                           ResetPeriodInDays = 1,
-                                           PreShutdownDelay = 1000 * 60 * 3,
-                                           RebootMessage = "Failure actions do not specify reboot",
-                                       };
+            {
+                Name = "WixSharp.TestSvc",
+                DependsOn = "Dnscache;Dhcp",
+                StartOn = SvcEvent.Install, //set it to null if you don't want service to start as during deployment
+                StopOn = SvcEvent.InstallUninstall_Wait,
+                RemoveOn = SvcEvent.Uninstall_Wait,
+                DelayedAutoStart = true,
+                ServiceSid = ServiceSid.none,
+                FirstFailureActionType = FailureActionType.restart,
+                SecondFailureActionType = FailureActionType.restart,
+                ThirdFailureActionType = FailureActionType.runCommand,
+                ProgramCommandLine = "MyApp.exe -run",
+                RestartServiceDelayInSeconds = 30,
+                ResetPeriodInDays = 1,
+                PreShutdownDelay = 1000 * 60 * 3,
+                RebootMessage = "Failure actions do not specify reboot",
+            };
 
             project.GUID = new Guid("6fe30b47-2577-43ad-9195-1861ba25889b");
             project.OutFileName = "setup";
-            
+
             project.PreserveTempFiles = true;
-            project.BuildMsi();            
+            project.BuildMsi();
         }
         catch (System.Exception ex)
         {

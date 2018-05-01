@@ -997,6 +997,37 @@
             <param name="entity">The entity.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.MapToFeatures(System.Xml.Linq.XElement,WixSharp.Feature[],WixSharp.ProcessingContext)">
+            <summary>
+            Maps the component to features. If no features specified then the component is added to the default ("Complete") feature.
+            </summary>
+            <param name="component">The component.</param>
+            <param name="features">The features.</param>
+            <param name="context">The context.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.CreateAndInsertParentComponent(WixSharp.WixEntity,WixSharp.ProcessingContext)">
+            <summary>
+            Creates the and inserts (into `context`) parent component for a WixEntity object. This method is used
+            in the default implementation of the <see cref="M:WixSharp.IGenericEntity.Process(WixSharp.ProcessingContext)"/>.
+            <para>The best insertion point is located according the following algorithm </para>
+            <list type="bullet">
+            <item><description>The parent of the first descendant 'component' element with respect to <c>context.XParent</c>.</description></item>
+            <item><description>The first descendant 'ProgramFiles64Folder' or 'ProgramFilesFolder' element with respect to <c>context.XParent</c>.</description></item>
+            <item><description>The <c>context.XParent</c> element itself.</description></item>
+            </list>
+            </summary>
+            <param name="entity">The entity.</param>
+            <param name="context">The context.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.FirstProgramFilesDir(System.Xml.Linq.XElement)">
+            <summary>
+            Finds the first descendant 'ProgramFiles' or 'ProgramFiles64Folder' directory element.
+            </summary>
+            <param name="element">The element.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.CommonTasks.Tasks.InstallService(System.String,System.Boolean,System.String,System.String)">
             <summary>
             Installs the windows service. It uses InstallUtil.exe to complete the actual installation/uninstallation.
@@ -1094,7 +1125,7 @@
             Gets or sets the well known locations for probing the exe file.
             <para>
             By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>. By settin <c>WellKnownLocations</c>
-            you can add som extra probing locations. The directories must be separated by the ';' character.
+            you can add some extra probing locations. The directories must be separated by the ';' character.
             </para>
             </summary>
             <value>The well known locations.</value>
@@ -1154,6 +1185,12 @@
             <summary>
             Enables UACRevealer support. This flag is required for enabling UAC prompt work around for
             the WixSharp built-in EmbeddedUI (ManagedUI).
+            </summary>
+        </member>
+        <member name="F:WixSharp.CommonTasks.UACRevealer.WarningText">
+            <summary>
+            The warning text to be displayed in the ProgressDialog. By default it prompts "Please wait for UAC prompt to appear.
+            If it appears minimized then activate it from the taskbar.".
             </summary>
         </member>
         <member name="T:WixSharp.Assembly">
@@ -11650,6 +11687,11 @@
              </code>
              </example>
         </member>
+        <member name="F:WixSharp.Dir.lastDir">
+            <summary>
+            The last child <see cref="T:WixSharp.Dir"/> that was created by <see cref="M:WixSharp.Dir.ProcessTargetPath(System.String)"/>.
+            </summary>
+        </member>
         <member name="M:WixSharp.Dir.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.Dir"/> class.
@@ -11767,6 +11809,13 @@
              Returns the WiX <c>Directory</c> as a string.
             </summary>
             <returns>A string representing the directory.</returns>
+        </member>
+        <member name="M:WixSharp.Dir.ProcessTargetPath(System.String)">
+            <summary>
+            Processes the target path by splitting path creating nested <see cref="T:WixSharp.Dir"/>s on-fly.
+            </summary>
+            <param name="targetPath">The target path.</param>
+            <returns></returns>
         </member>
         <member name="T:WixSharp.InstallDir">
             <summary>

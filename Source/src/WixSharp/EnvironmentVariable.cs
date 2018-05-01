@@ -163,7 +163,7 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            XElement component = this.CreateParentComponent();
+            XElement component = this.CreateAndInsertParentComponent(context);
             component.Add(this.ToXElement("Environment"));
 
             if (Condition != null)
@@ -171,13 +171,6 @@ namespace WixSharp
                 component.AddElement(new XElement("Condition", Condition.ToXValue())
                          .AddAttributes(Condition.Attributes));
             }
-
-            XElement bestParent = context.XParent.FindFirstComponentParent() ??
-                                  context.XParent.FistProgramFilesDir();
-
-            bestParent.Add(component);
-
-            MapComponentToFeatures(component.Attr("Id"), ActualFeatures, context);
         }
     }
 }

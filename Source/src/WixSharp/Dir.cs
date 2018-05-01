@@ -75,6 +75,9 @@ namespace WixSharp
     /// </example>
     public partial class Dir : WixEntity
     {
+        /// <summary>
+        /// The last child <see cref="Dir"/> that was created by <see cref="Dir.ProcessTargetPath(string)"/>.
+        /// </summary>
         protected Dir lastDir;
 
         /// <summary>
@@ -327,6 +330,11 @@ namespace WixSharp
             return Name;
         }
 
+        /// <summary>
+        /// Processes the target path by splitting path creating nested <see cref="Dir"/>s on-fly.
+        /// </summary>
+        /// <param name="targetPath">The target path.</param>
+        /// <returns></returns>
         protected Dir ProcessTargetPath(string targetPath)
         {
             Dir currDir = this;

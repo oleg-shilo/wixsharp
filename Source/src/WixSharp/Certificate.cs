@@ -232,15 +232,8 @@ namespace WixSharp
         {
             context.Project.Include(WixExtension.IIs);
 
-            XElement component = this.CreateParentComponent();
-            component.Add(this.ToXElement(WixExtension.IIs, "Certificate"));
-
-            XElement bestParent = context.XParent.FindFirstComponentParent() ??
-                                  context.XParent.FistProgramFilesDir();
-
-            bestParent.Add(component);
-
-            MapComponentToFeatures(component.Attribute("Id")?.Value, ActualFeatures, context);
+            this.CreateAndInsertParentComponent(context)
+                .Add(this.ToXElement(WixExtension.IIs, "Certificate"));
         }
     }
 }

@@ -761,16 +761,8 @@ namespace WixSharp
             {
                 context.Project.Include(WixExtension.Sql);
 
-                XElement component = this.CreateParentComponent();
-                XElement sqlScript = this.ToXElement(WixExtension.Sql, "SqlScript");
-                component.Add(sqlScript);
-
-                XElement bestParent = context.XParent.FindFirstComponentParent() ??
-                                      context.XParent.FistProgramFilesDir();
-
-                bestParent.Add(component);
-
-                MapComponentToFeatures(component.Attr("Id"), ActualFeatures, context);
+                this.CreateAndInsertParentComponent(context)
+                    .Add(this.ToXElement(WixExtension.Sql, "SqlScript"));
             }
             else
             {

@@ -176,7 +176,7 @@
             context.Project.Include(WixExtension.Util);
 
             context.XParent
-                .Add(this.ToXElement(WixExtension.Util, "CloseApplication"));
+                   .Add(this.ToXElement(WixExtension.Util, "CloseApplication"));
         }
     }
 }

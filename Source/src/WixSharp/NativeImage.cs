@@ -115,16 +115,11 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            var util = WixExtension.NetFx;
-
-            context.Project.Include(util);
+            context.Project.Include(WixExtension.NetFx);
 
             //serialize itself and add to the parent component
             context.XParent
-                   //.FindAll("File")
-                   //????
-                   //.First(e => e.HasAttribute("Source", value => value.EndsWith("MyApp.exe")))
-                   .Add(this.ToXElement(util, "NativeImage"));
+                   .Add(this.ToXElement(WixExtension.NetFx, "NativeImage"));
         }
     }
 }

@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using static WixSharp.SetupEventArgs;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
@@ -91,9 +92,8 @@ namespace WixSharp
             this.Id = this.Id ?? base.Id; // ensure the auto-generated Id is pushed to the XML attribute
             context.Project.Include(WixExtension.Util);
 
-            context.XParent
-                   .FindFirst("Component")
-                   .Add(this.ToXElement(WixExtension.Util, "InternetShortcut"));
+            this.CreateAndInsertParentComponent(context)
+                .Add(this.ToXElement(WixExtension.Util, "InternetShortcut"));
         }
     }
 }

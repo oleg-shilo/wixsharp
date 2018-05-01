@@ -6,6 +6,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using WixSharp;
+using WixSharp.CommonTasks;
 
 class Script
 {
@@ -101,14 +102,10 @@ public class EventSourceEx : WixEntity, IGenericEntity
 
     public void Process(ProcessingContext context)
     {
-        var util = WixExtension.Util;
-
         // reflect new dependency
-        context.Project.Include(util);
+        context.Project.Include(WixExtension.Util);
 
-        // serialize itself and add to the parent component
-        context.XParent
-               .FindFirst("Component")
-               .Add(this.ToXElement(util, "EventSource"));
+        this.CreateAndInsertParentComponent(context)
+            .Add(this.ToXElement(WixExtension.Util, "EventSource"));
     }
 }

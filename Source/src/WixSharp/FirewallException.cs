@@ -235,6 +235,8 @@ namespace WixSharp
 
             if (findComponent != null)
             {
+                // candidate for `CreateAndInsertParentComponent(context)`
+
                 XElement newComponent = this.CreateParentComponent();
                 newComponent.Add(firewallElement);
                 findComponent.Parent?.Add(newComponent);
