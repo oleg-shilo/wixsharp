@@ -2107,19 +2107,20 @@ namespace WixSharp
         {
             foreach (Merge msm in wDir.MergeModules)
             {
-                XElement media = dirItem.Parent("Product").Select("Media");
-                XElement package = dirItem.Parent("Product").Select("Package");
+                XElement product = dirItem.Parent("Product");
 
-                string language = package.Attribute("Languages").Value; //note Wix# expects package.Attribute("Languages") to have a single value (yest it is a temporary limitation)
-                string diskId = media.Attribute("Id").Value;
+                //note Wix# expects package.Attribute("Languages") to have a single value (yes it is a temporary limitation)
+                string language = product.Select("Package").Attribute("Languages").Value;
+                string diskId = product.Select("Media")?.Attribute("Id")?.Value ?? "1"; // see Issue #362 (Merge Modules cause NullRefException when MediaTemplate is used) discussion 
 
                 XElement merge = dirItem.AddElement(
                     new XElement("Merge",
                         new XAttribute("Id", msm.Id),
                         new XAttribute("FileCompression", msm.FileCompression.ToYesNo()),
                         new XAttribute("Language", language),
-                        new XAttribute("SourceFile", msm.SourceFile),
-                        new XAttribute("DiskId", diskId))
+                        new XAttribute("SourceFile", msm.SourceFile)
+                        // , new XAttribute("DiskId", diskId)
+                        )
                         .AddAttributes(msm.Attributes));
 
                 //MSM features are very different as they are not associated with the component but with the merge module thus
