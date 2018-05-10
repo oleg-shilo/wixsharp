@@ -2118,8 +2118,8 @@ namespace WixSharp
                         new XAttribute("Id", msm.Id),
                         new XAttribute("FileCompression", msm.FileCompression.ToYesNo()),
                         new XAttribute("Language", language),
-                        new XAttribute("SourceFile", msm.SourceFile)
-                        // , new XAttribute("DiskId", diskId)
+                        new XAttribute("SourceFile", msm.SourceFile),
+                        new XAttribute("DiskId", diskId)
                         )
                         .AddAttributes(msm.Attributes));
 
