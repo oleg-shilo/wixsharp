@@ -22,7 +22,7 @@ namespace WixSharp.UI.Forms
         void ExitDialog_Load(object sender, System.EventArgs e)
         {
             image.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Dialog");
-            if (Shell.UserInterrupted)
+            if (Shell.UserInterrupted || Shell.Log.Contains("User cancelled installation."))
             {
                 title.Text = "[UserExitTitle]";
                 description.Text = "[UserExitDescription1]";

@@ -123,7 +123,7 @@ namespace WixSharp
         /// </summary>
         public void StartExecute()
         {
-            //Debug.Assert(false);
+            // Debug.Assert(false);
             UACRevealer.Enter();
             started = true;
             if (!IsDemoMode)
@@ -499,7 +499,9 @@ namespace WixSharp
 
                             if (messageType == InstallMessage.Info)
                             {
-                                if (messageRecord.ToString().Contains("User canceled installation")) //there is no other way
+                                string msg_data = messageRecord.ToString();
+                                if (msg_data.Contains("User canceled installation") ||
+                                    msg_data.Contains("User cancelled installation")) //there is no other way
                                     UserInterrupted = true;
                             }
 
