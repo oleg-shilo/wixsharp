@@ -1265,7 +1265,7 @@ namespace WixSharp
                     retval = retval.Replace(data[i], '_');
             }
 
-            if (!doNotFixStartDigit && (retval.IsNotEmpty() && retval[0].IsDigit()))
+            if (!doNotFixStartDigit && (retval.IsNotEmpty() && (retval[0].IsDigit() || retval.StartsWith("."))))
                 return "_" + retval;
             else
                 return retval;
