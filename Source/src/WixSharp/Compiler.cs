@@ -1704,7 +1704,7 @@ namespace WixSharp
             {
                 var existingCompElement = dirItem.Elements("Component");
 
-                if (existingCompElement.Count() == 0 && AutoElements.LegacyDummyDirAlgorithm)
+                if (existingCompElement.Count() == 0 && AutoElements.SupportEmptyDirectories != CompilerSupportState.Disabled)
                 {
                     string compId = wDir.Id + ".EmptyDirectory";
 
