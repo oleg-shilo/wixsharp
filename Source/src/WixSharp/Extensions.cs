@@ -18,6 +18,8 @@ using System.Text.RegularExpressions;
 using static WixSharp.SetupEventArgs;
 using WixSharp.CommonTasks;
 using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace WixSharp
 {
@@ -2077,6 +2079,17 @@ namespace WixSharp
                 return (!createdNew);
             }
         }
+
+        /// <summary>
+        /// <para>
+        /// Gets the main window of the <c>msiexec.exe</c> process that has 'MainWindowTitle' containing the name of the product being installed. 
+        /// </para>
+        /// This method is a convenient way to display message box from a custom action with properly specified parent window.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
+        public static IWin32Window GetMainWindow(this Session session) =>
+            Tasks.GetMainWindow("msiexec", p => p.MainWindowTitle.Contains(session.Property("ProductName")));
 
         /// <summary>
         /// Gets a value indicating whether the product is being repaired.

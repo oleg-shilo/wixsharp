@@ -1459,6 +1459,43 @@ namespace WixSharp.CommonTasks
                 return database.Tables["MsiEmbeddedUI"] != null;
             }
         }
+
+        /// <summary>
+        /// Gets the main window of the process, which satisfies the 'filter' condition.
+        /// </summary>
+        /// <param name="processName">Name of the process.</param>
+        /// <param name="filter">The filter.</param>
+        /// <returns></returns>
+        public static IWin32Window GetMainWindow(string processName, Func<Process, bool> filter)
+        {
+            var processes = Process.GetProcessesByName(processName);
+            try
+            {
+                return new NativeWindow(processes.FirstOrDefault(filter)?.MainWindowHandle);
+            }
+            finally
+            {
+                processes.ForEach(x => x.Dispose());
+            }
+        }
+
+        /// <summary>
+        /// Simple implementation of <see cref="System.Windows.Forms.IWin32Window" />.
+        /// </summary>
+        /// <seealso cref="System.Windows.Forms.IWin32Window" />
+        public class NativeWindow : IWin32Window
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="NativeWindow"/> class.
+            /// </summary>
+            /// <param name="_hwnd">The HWND.</param>
+            public NativeWindow(IntPtr? _hwnd) => Handle = _hwnd ?? IntPtr.Zero;
+
+            /// <summary>
+            /// Gets the handle to the window represented by the implementer.
+            /// </summary>
+            public IntPtr Handle { get; }
+        }
     }
 
     /// <summary>
@@ -1622,5 +1659,6 @@ namespace WixSharp.CommonTasks
 
             return null;
         }
+
     }
 }

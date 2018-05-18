@@ -13,6 +13,7 @@ using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
 using System.Diagnostics;
+using System.Linq;
 
 public class Script
 {
@@ -86,7 +87,7 @@ public class Script
 
     static void project_UIInit(SetupEventArgs e)
     {
-        MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - UIInit");
+        MessageBox.Show(e.Session.GetMainWindow(), "Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - UIInit");
         e.Session["TOOLSDIR"] = @"C:\Temp\Doc";
         //set custom installdir
         //This event is fired before Wix# ManagedUI loaded (disabled for demo purposes)
@@ -107,7 +108,7 @@ public class Script
 
     static void project_Load(SetupEventArgs e)
     {
-        MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - Load");
+        MessageBox.Show(e.Session.GetMainWindow(), "Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - Load");
 
         var msi = e.MsiFile;
         if (!e.IsInstalling && !e.IsUpgrading)
@@ -121,12 +122,12 @@ public class Script
         var conn = @"Data Source=.\SQLEXPRESS;Initial Catalog=RequestManagement;Integrated Security=SSPI";
         e.Data["persisted_data"] = conn;
 
-        MessageBox.Show(e.ToString(), "Load " + e.Session["EnvVersion"]);
+        MessageBox.Show(e.Session.GetMainWindow(), e.ToString(), "Load " + e.Session["EnvVersion"]);
     }
 
     static void project_BeforeInstall(SetupEventArgs e)
     {
-        MessageBox.Show(e.ToString(), "BeforeInstall");
+        MessageBox.Show(e.Session.GetMainWindow(), e.ToString(), "BeforeInstall");
     }
 
     static void project_AfterInstall(SetupEventArgs e)
@@ -135,7 +136,8 @@ public class Script
         //been pushed to e.Session.CustomActionData with project.DefaultDeferredProperties are
         //also set as environment variables just before invoking this event handler.
         //Similarly the all content of e.Data is also pushed to the environment variables.
-        MessageBox.Show(e.ToString() +
+        MessageBox.Show(e.Session.GetMainWindow(),
+                        e.ToString() +
                         "\npersisted_data = " + e.Data["persisted_data"] +
                         "\nEnvVar('INSTALLDIR') -> " + Environment.ExpandEnvironmentVariables("%INSTALLDIR%My App.exe") +
                         "\nADDLOCAL = " + e.Session.Property("ADDLOCAL"),
