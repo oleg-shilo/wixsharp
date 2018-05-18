@@ -1488,8 +1488,8 @@ namespace WixSharp.CommonTasks
             /// <summary>
             /// Initializes a new instance of the <see cref="NativeWindow"/> class.
             /// </summary>
-            /// <param name="_hwnd">The HWND.</param>
-            public NativeWindow(IntPtr? _hwnd) => Handle = _hwnd ?? IntPtr.Zero;
+            /// <param name="hwnd">The HWND.</param>
+            public NativeWindow(IntPtr? hwnd) => Handle = (hwnd ?? IntPtr.Zero);
 
             /// <summary>
             /// Gets the handle to the window represented by the implementer.

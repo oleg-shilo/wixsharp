@@ -399,7 +399,7 @@ namespace WixSharp
             if (rawName.IsNotEmpty() && char.IsDigit(rawName[0]))
                 entity.id = "_" + entity.id;
 
-            while (alreadyTakenIds.Contains(entity.id)) //last line of defense against duplication
+            while (alreadyTakenIds.Contains(entity.id)) //last line of defence against duplication
                 entity.id += "_";
 
             alreadyTakenIds.Add(entity.id);
