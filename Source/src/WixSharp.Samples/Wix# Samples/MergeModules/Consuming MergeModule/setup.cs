@@ -24,11 +24,15 @@ class Script
 
         var project =
                 new Project("MyMergeModuleSetup",
+                    new MediaTemplate { CompressionLevel = CompressionLevel.none, EmbedCab = false },
                     new Dir(@"%ProgramFiles%\My Company",
                         // new File(featureA, @"Files\MainFile.txt"),
                         new Merge(featureB, @"Files\MyMergeModule.msm"),
                         new Merge(featureB, @"Files\MyMergeModule1.msm")),
                     new EnvironmentVariable("foo", "bar"));
+
+        //must be cleared to work with MediaTemplate
+        project.Media.Clear();
 
         project.DefaultFeature = complete;
         project.UI = WUI.WixUI_FeatureTree;
