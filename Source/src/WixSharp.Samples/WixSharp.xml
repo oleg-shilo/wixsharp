@@ -1088,6 +1088,31 @@
             <param name="msiPath">The path.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.GetMainWindow(System.String,System.Func{System.Diagnostics.Process,System.Boolean})">
+            <summary>
+            Gets the main window of the process, which satisfies the 'filter' condition.
+            </summary>
+            <param name="processName">Name of the process.</param>
+            <param name="filter">The filter.</param>
+            <returns></returns>
+        </member>
+        <member name="T:WixSharp.CommonTasks.Tasks.NativeWindow">
+            <summary>
+            Simple implementation of <see cref="T:System.Windows.Forms.IWin32Window" />.
+            </summary>
+            <seealso cref="T:System.Windows.Forms.IWin32Window" />
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.NativeWindow.#ctor(System.Nullable{System.IntPtr})">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.CommonTasks.Tasks.NativeWindow"/> class.
+            </summary>
+            <param name="hwnd">The HWND.</param>
+        </member>
+        <member name="P:WixSharp.CommonTasks.Tasks.NativeWindow.Handle">
+            <summary>
+            Gets the handle to the window represented by the implementer.
+            </summary>
+        </member>
         <member name="T:WixSharp.CommonTasks.ExternalTool">
             <summary>
             A generic utility class for running console application tools (e.g. compilers, utilities)
@@ -1101,6 +1126,23 @@
             <value>
             The encoding.
             </value>
+        </member>
+        <member name="F:WixSharp.CommonTasks.ExternalTool.ConsoleOut">
+            <summary>
+            The default console out handler. It can be used when you want to have fine control over 
+            STD output of the external tool.
+            </summary>
+            <example>The following is an example of masking the word 'secret' in the output text.
+            <code>
+            ExternalTool.ConsoleOut = (line) => Console.WriteLine(line.Replace("secret", "******"))
+            var tool = new ExternalTool
+            { 
+                ExePath = "tool.exe",
+                Arguments = "-a -b",
+            };
+            tool.ConsoleRun();
+            </code>
+            </example>
         </member>
         <member name="F:WixSharp.CommonTasks.ExternalTool.DefaultEncoding">
             <summary>
@@ -6961,6 +7003,16 @@
             <value>
             <c>true</c> if installing; otherwise, <c>false</c>.
             </value>
+        </member>
+        <member name="M:WixSharp.Extensions.GetMainWindow(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            <para>
+            Gets the main window of the <c>msiexec.exe</c> process that has 'MainWindowTitle' containing the name of the product being installed. 
+            </para>
+            This method is a convenient way to display message box from a custom action with properly specified parent window.
+            </summary>
+            <param name="session">The session.</param>
+            <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.IsRepairing(Microsoft.Deployment.WindowsInstaller.Session)">
             <summary>

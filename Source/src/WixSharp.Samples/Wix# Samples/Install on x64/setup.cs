@@ -28,8 +28,10 @@ class Script
                 new RegValue(RegistryHive.LocalMachine, @"Software\My Company\My Product", "Message", "Hello"));
 
         project.PreserveTempFiles = true;
-        if (Environment.GetEnvironmentVariable("buid_as_64") != null)
-            project.Platform = Platform.x64;
+
+        // uncomment this line if you want to make the build of the x64 vs x86 controlled by the external condition.
+        // if (Environment.GetEnvironmentVariable("buid_as_64") != null) 
+        project.Platform = Platform.x64;
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 

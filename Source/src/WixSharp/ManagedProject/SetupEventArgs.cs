@@ -177,7 +177,7 @@ namespace WixSharp
         /// <value>
         /// The msi file.
         /// </value>
-        public string MsiFile { get { return Data["MsiFile"]; } }
+        public string MsiFile { get { return Data["MsiFile"] ?? Session.Property("OriginalDatabase"); } } // Data may not be initializaed it 
 
         /// <summary>
         /// Gets the setup mode.
