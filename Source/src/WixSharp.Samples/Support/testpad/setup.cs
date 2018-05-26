@@ -44,6 +44,28 @@ static class Script
         }
     }
 
+    static void Issue_374()
+    {
+        string inDir = @"C:\temp\wixIn\";
+        string outDir = @"C:\temp\wixOut\";
+        string file = @"C:\temp\wixIn\MyApp.exe";
+        file = "setup.cs";
+
+        var project = new Project("TestMsi")
+        {
+            GUID = Guid.NewGuid(),
+            PreserveTempFiles = true,
+            OutDir = outDir,
+            UI = WUI.WixUI_ProgressOnly,
+            Dirs = new[]
+            {
+                 new Dir(@"temp", new Dir(@"wixIn", new WixSharp.File(file, new FileShortcut("MyShortcut", inDir))))
+             }
+        };
+
+        Compiler.BuildMsi(project);
+    }
+
     static void Issue_354()
     {
         var mainFeature = new Feature("My Product", true, false);
@@ -110,6 +132,7 @@ static class Script
 
     static public void Main(string[] args)
     {
+        Issue_374(); return;
         Issue_354(); return;
         Issue_298(); return;
         // Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = true;
