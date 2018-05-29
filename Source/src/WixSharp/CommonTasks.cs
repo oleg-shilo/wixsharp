@@ -655,6 +655,28 @@ namespace WixSharp.CommonTasks
             return file;
         }
 
+        public static void AddFileAssociationIcon(this Project project, string exeId, string icon)
+        {
+            project.WixSourceGenerated += doc =>
+            {
+                var iconPath = icon.PathGetFullPath();
+                var iconId = WixEntity.IncrementalIdFor(new WixEntity { Name = iconPath });
+
+                var progId = doc.FindAll("File")
+                                .First(x => x.HasAttribute("Id", exeId))
+                                .Parent("Component")
+                                .FindFirst("ProgId");
+
+                if (progId.HasAttribute("Advertise", "no"))
+                    throw new Exception($"You can only add icon to the advertised file association (File.Id: {exeId}).");
+
+                progId.SetAttribute("Icon", iconId);
+
+                doc.FindSingle("Product")
+                        .AddElement("Icon", $@"Id={iconId};SourceFile={iconPath}");
+            };
+        }
+
         /// <summary>
         /// Adds the file association to the File.
         /// </summary>
