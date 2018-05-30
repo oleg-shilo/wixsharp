@@ -70,7 +70,7 @@ class Script
         var project = new Project("CustomActionTest",
                           new Dir(@"%ProgramFiles%\My Company\My Product",
                               new DirFiles(@"Release\Bin\*.*")),
-                          new ManagedAction("MyAction"));
+                          new ManagedAction(CustomActions.MyAction));
  
         BuildMsi(project);
     }
