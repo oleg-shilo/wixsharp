@@ -1839,9 +1839,21 @@ namespace WixSharp
 
                     if (wFileAssociation.Icon != null)
                     {
-                        progId.Add(
-                            new XAttribute("Icon", wFileAssociation.Icon != "" ? wFileAssociation.Icon : fileId),
-                            new XAttribute("IconIndex", wFileAssociation.IconIndex));
+                        if (wFileAssociation.Advertise)  
+                        {
+                            var icon = new IconFile { SourceFile = wFileAssociation.Icon };
+
+                            progId.FindSingle("Product")
+                                  .AddElement(icon.ToXElement("Icon"));
+
+                            progId.SetAttribute("Icon", icon.Id);
+                        }
+                        else
+                        {
+                            progId.Add(
+                                new XAttribute("Icon", wFileAssociation.Icon != "" ? wFileAssociation.Icon : fileId),
+                                new XAttribute("IconIndex", wFileAssociation.IconIndex));
+                        }
                     }
                 }
 

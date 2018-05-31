@@ -102,6 +102,7 @@ namespace WixSharp
         /// <para>Set this value to <c>null</c> if you do not want to install <c>DefaultIcon</c> at all.</para>
         /// </summary>
         public string Icon = "";
+
         /// <summary>
         /// The zero-based index of the icon associated with this ProgId. The default value is <c>0</c>. 
         /// </summary>

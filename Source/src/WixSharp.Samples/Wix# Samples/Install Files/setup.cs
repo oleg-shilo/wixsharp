@@ -22,21 +22,13 @@ class Script
                         new File(
                             "MyApp_file".ToId(),
                             @"Files\Bin\MyApp.exe",
-                            new FileAssociation("custom", "application/custom", "open", "\"%1\"")
+                            new FileAssociation("cstm", "application/custom", "open", "\"%1\"")
                             {
-                                Advertise = true
+                                Advertise = true,
+                                Icon = "wixsharp.ico"
                             }
                         ),
-
-                         new File(
-                            "MyApp_file2".ToId(),
-                            @"Files\Bin\MyApp2.exe",
-                            new FileAssociation("custom2", "application/custom", "open", "\"%1\"")
-                            {
-                                Advertise = true
-                            }
-                        ),
-
+                    new IconFile(),
                     new Dir(@"Docs\Manual",
                         new File(@"Files\Docs\Manual.txt")
                         {
@@ -57,22 +49,6 @@ class Script
 
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
-
-        // string exeId = "MyApp_file";
-        // project.WixSourceGenerated += doc =>
-        // {
-
-        //     doc.FindSingle("ProgId")
-        //             .SetAttribute("Icon", "exe_icon");
-
-        //     doc.FindSingle("Product")
-        //             .AddElement("Icon", @"Id=exe_icon;SourceFile=E:\cs-script.web\csscript\css_logo.ico");
-        // };
-
-
-        project.AddFileAssociationIcon("MyApp_file", @"E:\cs-script.web\csscript\css_logo.ico");
-        project.AddFileAssociationIcon("MyApp_file2", @"E:\cs-script.web\csscript\css_logo.ico");
-
         project.BuildMsi();
     }
 
@@ -86,18 +62,3 @@ class Script
     }
 }
 
-public class Icon : WixEntity, IGenericEntity
-{
-    [WixSharp.Xml]
-    new public string Id { get => base.Id; set => Id = value; }
-
-    [WixSharp.Xml]
-    public string SourceFile;
-
-
-    public void Process(ProcessingContext context)
-    {
-        this.CreateAndInsertParentComponent(context)
-            .Add(this.ToXElement("Icon"));
-    }
-}

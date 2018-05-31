@@ -6,7 +6,7 @@ using Microsoft.Win32;
 namespace WixSharp
 {
     /// <summary>
-    /// Searches for file and assigns to fullpath value of parent Property
+    /// Searches for file and assigns to full path value of parent Property
     /// </summary>
     /// <example>The following sample demonstrates how to use FileSearch in canonical WiX RegisterySearch and FileSearch use-case.
     /// the reg file:

@@ -52,7 +52,7 @@ namespace WixSharp
         new public string Id
         {
             get { return base.Id; }
-            set { Id = value; }
+            set { base.Id = value; }
         }
 
         /// <summary>

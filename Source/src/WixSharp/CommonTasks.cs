@@ -655,27 +655,27 @@ namespace WixSharp.CommonTasks
             return file;
         }
 
-        public static void AddFileAssociationIcon(this Project project, string exeId, string icon)
-        {
-            project.WixSourceGenerated += doc =>
-            {
-                var iconPath = icon.PathGetFullPath();
-                var iconId = WixEntity.IncrementalIdFor(new WixEntity { Name = iconPath });
+        // public static void AddFileAssociationIcon(this Project project, string exeId, string icon)
+        // {
+        //     project.WixSourceGenerated += doc =>
+        //     {
+        //         var iconPath = icon.PathGetFullPath();
+        //         var iconId = WixEntity.IncrementalIdFor(new WixEntity { Name = iconPath });
 
-                var progId = doc.FindAll("File")
-                                .First(x => x.HasAttribute("Id", exeId))
-                                .Parent("Component")
-                                .FindFirst("ProgId");
+        //         var progId = doc.FindAll("File")
+        //                         .First(x => x.HasAttribute("Id", exeId))
+        //                         .Parent("Component")
+        //                         .FindFirst("ProgId");
 
-                if (progId.HasAttribute("Advertise", "no"))
-                    throw new Exception($"You can only add icon to the advertised file association (File.Id: {exeId}).");
+        //         if (progId.HasAttribute("Advertise", "no"))
+        //             throw new Exception($"You can only add icon to the advertised file association (File.Id: {exeId}).");
 
-                progId.SetAttribute("Icon", iconId);
+        //         progId.SetAttribute("Icon", iconId);
 
-                doc.FindSingle("Product")
-                        .AddElement("Icon", $@"Id={iconId};SourceFile={iconPath}");
-            };
-        }
+        //         doc.FindSingle("Product")
+        //                 .AddElement("Icon", $@"Id={iconId};SourceFile={iconPath}");
+        //     };
+        // }
 
         /// <summary>
         /// Adds the file association to the File.
@@ -1534,24 +1534,6 @@ namespace WixSharp.CommonTasks
         /// </value>
         public Encoding Encoding;
 
-
-        /// <summary>
-        /// The default console out handler. It can be used when you want to have fine control over 
-        /// STD output of the external tool.
-        /// </summary>
-        /// <example>The following is an example of masking the word 'secret' in the output text.
-        /// <code>
-        /// ExternalTool.ConsoleOut = (line) => Console.WriteLine(line.Replace("secret", "******"))
-        /// var tool = new ExternalTool
-        /// { 
-        ///     ExePath = "tool.exe",
-        ///     Arguments = "-a -b",
-        /// };
-        /// tool.ConsoleRun();
-        /// </code>
-        /// </example>
-        public static Action<string> ConsoleOut = Console.WriteLine;
-
         /// <summary>
         /// Gets or sets the default encoding to be used to process external executable output.
         /// By default it is the value of <c>System.Text.Encoding.Default</c>.
@@ -1614,7 +1596,7 @@ namespace WixSharp.CommonTasks
         /// <returns>The process exit code.</returns>
         public int ConsoleRun()
         {
-            return ConsoleRun(ConsoleOut);
+            return ConsoleRun(Compiler.OutputWriteLine);
         }
 
         /// <summary>

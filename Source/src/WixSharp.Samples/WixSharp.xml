@@ -1127,23 +1127,6 @@
             The encoding.
             </value>
         </member>
-        <member name="F:WixSharp.CommonTasks.ExternalTool.ConsoleOut">
-            <summary>
-            The default console out handler. It can be used when you want to have fine control over 
-            STD output of the external tool.
-            </summary>
-            <example>The following is an example of masking the word 'secret' in the output text.
-            <code>
-            ExternalTool.ConsoleOut = (line) => Console.WriteLine(line.Replace("secret", "******"))
-            var tool = new ExternalTool
-            { 
-                ExePath = "tool.exe",
-                Arguments = "-a -b",
-            };
-            tool.ConsoleRun();
-            </code>
-            </example>
-        </member>
         <member name="F:WixSharp.CommonTasks.ExternalTool.DefaultEncoding">
             <summary>
             Gets or sets the default encoding to be used to process external executable output.
@@ -3648,7 +3631,7 @@
         </member>
         <member name="T:WixSharp.FileSearch">
             <summary>
-            Searches for file and assigns to fullpath value of parent Property
+            Searches for file and assigns to full path value of parent Property
             </summary>
             <example>The following sample demonstrates how to use FileSearch in canonical WiX RegisterySearch and FileSearch use-case.
             the reg file:
@@ -3727,6 +3710,58 @@
             <param name="children">The children.</param>
         </member>
         <member name="M:WixSharp.FileSearch.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project" />.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
+        <member name="T:WixSharp.IconFile">
+            <summary>
+            Icon used for Shortcut, ProgId, or Class elements (but not UI controls)
+            </summary>
+            <seealso cref="T:WixSharp.WixEntity" />
+            <seealso cref="T:WixSharp.IGenericEntity" />
+        </member>
+        <member name="M:WixSharp.IconFile.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IconFile"/> class.
+            </summary>
+        </member>
+        <member name="M:WixSharp.IconFile.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IconFile"/> class.
+            </summary>
+            <param name="sourcePath">The source path.</param>
+        </member>
+        <member name="M:WixSharp.IconFile.#ctor(WixSharp.Id,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IconFile"/> class.
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="sourcePath">The source path.</param>
+        </member>
+        <member name="P:WixSharp.IconFile.Id">
+            <summary>
+            Gets or sets the <c>Id</c> value of the <see cref="T:WixSharp.WixEntity" />.
+            <para>This value is used as a <c>Id</c> for the corresponding WiX XML element.</para><para>If the <see cref="P:WixSharp.IconFile.Id" /> value is not specified explicitly by the user the Wix# compiler
+            generates it automatically insuring its uniqueness.</para><remarks>
+            Note: The ID auto-generation is triggered on the first access (evaluation) and in order to make the id
+            allocation deterministic the compiler resets ID generator just before the build starts. However if you
+            accessing any auto-id before the Build*() is called you can it interferes with the ID auto generation and eventually
+            lead to the WiX ID duplications. To prevent this from happening either:"
+            <para> - Avoid evaluating the auto-generated IDs values before the call to Build*()</para><para> - Set the IDs (to be evaluated) explicitly</para><para> - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";</para></remarks>
+            </summary>
+            <value>
+            The id.
+            </value>
+        </member>
+        <member name="F:WixSharp.IconFile.SourceFile">
+            <summary>
+            The path to the icon file.
+            </summary>
+        </member>
+        <member name="M:WixSharp.IconFile.Process(WixSharp.ProcessingContext)">
             <summary>
             Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project" />.
             See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
