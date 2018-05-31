@@ -25,7 +25,6 @@ class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
-        Compiler.OutputWriteLine = x => Console.WriteLine(x.Replace("my_password", "********"));
         Compiler.BuildMsi(project);
     }
 }

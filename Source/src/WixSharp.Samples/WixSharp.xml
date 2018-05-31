@@ -1118,6 +1118,23 @@
             A generic utility class for running console application tools (e.g. compilers, utilities)
             </summary>
         </member>
+        <member name="F:WixSharp.CommonTasks.ExternalTool.ConsoleOut">
+            <summary>
+            The default console out handler. It can be used when you want to have fine control over 
+            STD output of the external tool.
+            </summary>
+            <example>The following is an example of masking the word 'secret' in the output text.
+            <code>
+            ExternalTool.ConsoleOut = (line) => Console.WriteLine(line.Replace("secret", "******"))
+            var tool = new ExternalTool
+            { 
+                ExePath = "tool.exe",
+                Arguments = "-a -b",
+            };
+            tool.ConsoleRun();
+            </code>
+            </example>
+        </member>
         <member name="F:WixSharp.CommonTasks.ExternalTool.Encoding">
             <summary>
             Gets or sets the encoding to be used to process external executable output.

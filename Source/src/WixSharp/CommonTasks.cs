@@ -211,7 +211,8 @@ namespace WixSharp.CommonTasks
                                                            @"C:\Program Files (x86)\Windows Kits\10\bin\x86;" +
                                                            @"C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x86",
                 ExePath = "signtool.exe",
-                Arguments = sha1
+                Arguments = sha1,
+                ConsoleOut = (line) => Compiler.OutputWriteLine(line.Replace(password, "***"))
             };
 
             var retval = tool.ConsoleRun();
@@ -1526,6 +1527,22 @@ namespace WixSharp.CommonTasks
     public class ExternalTool
     {
         /// <summary>
+        /// The default console out handler. It can be used when you want to have fine control over 
+        /// STD output of the external tool.
+        /// </summary>
+        /// <example>The following is an example of masking the word 'secret' in the output text.
+        /// <code>
+        /// ExternalTool.ConsoleOut = (line) => Console.WriteLine(line.Replace("secret", "******"))
+        /// var tool = new ExternalTool
+        /// { 
+        ///     ExePath = "tool.exe",
+        ///     Arguments = "-a -b",
+        /// };
+        /// tool.ConsoleRun();
+        /// </code>
+        /// </example>
+        public Action<string> ConsoleOut = Compiler.OutputWriteLine;
+        /// <summary>
         /// Gets or sets the encoding to be used to process external executable output.
         /// By default it is the value of <see cref="ExternalTool.DefaultEncoding"/>.
         /// </summary>
@@ -1596,7 +1613,7 @@ namespace WixSharp.CommonTasks
         /// <returns>The process exit code.</returns>
         public int ConsoleRun()
         {
-            return ConsoleRun(Compiler.OutputWriteLine);
+            return ConsoleRun(this.ConsoleOut);
         }
 
         /// <summary>
@@ -1626,12 +1643,12 @@ namespace WixSharp.CommonTasks
 
                 if (exePath == null)
                 {
-                    Compiler.OutputWriteLine("Error: Cannot find " + this.ExePath);
-                    Compiler.OutputWriteLine("Make sure it is in the System PATH or WIXSHARP_PATH environment variables or WellKnownLocations member/parameter is initialized properly. ");
+                    onConsoleOut("Error: Cannot find " + this.ExePath);
+                    onConsoleOut("Make sure it is in the System PATH or WIXSHARP_PATH environment variables or WellKnownLocations member/parameter is initialized properly. ");
                     return 1;
                 }
 
-                Compiler.OutputWriteLine("Execute:\n\"" + this.ExePath + "\" " + this.Arguments);
+                onConsoleOut("Execute:\n\"" + this.ExePath + "\" " + this.Arguments);
 
                 var process = new Process();
                 process.StartInfo.FileName = exePath;
