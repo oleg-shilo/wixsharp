@@ -66,28 +66,20 @@ static class Script
         Compiler.BuildMsi(project);
     }
 
-    static void Issue_354()
+    static void Issue_378()
     {
-        var mainFeature = new Feature("My Product", true, false);
+        AutoElements.DisableAutoUserProfileRegistry = true;
+        // Compiler.LightOptions += " -sice:ICE38";
 
         var project = new Project("My Product",
-            new InstallDir(@"%ProgramFiles%/My Company/My Product"),
-            new Dir("%ProgramMenu%",
-                    // new Dir(mainFeature, "My Product",
-                    new Dir("My Product",
-                    new InternetShortcut()
-                    {
-                        Name = "Wix# project page",
-                        Target = "https://github.com/oleg-shilo/wixsharp",
-                        Type = InternetShortcut.ShortcutType.url
-                    })));
+            // new Dir(@"%ProgramFiles%/My Company/My Product",
+            new Dir(@"%LocalAppData%/My Company/My Product",
+                new File("setup.cs")));
 
         // project.DefaultFeature = mainFeature;
-
         project.PreserveTempFiles = true;
-        project.InstallScope = InstallScope.perMachine;
         project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889c");
-        project.BuildMsi();
+        project.BuildMsi(); 
     }
 
     static void Issue_298()
@@ -132,8 +124,8 @@ static class Script
 
     static public void Main(string[] args)
     {
+        Issue_378(); return;
         Issue_374(); return;
-        Issue_354(); return;
         Issue_298(); return;
         // Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = true;
 

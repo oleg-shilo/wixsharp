@@ -214,7 +214,6 @@ namespace WixSharp
                 serviceConfig.SetAttribute("DelayedAutoStart", DelayedAutoStart)
                              .SetAttribute("PreShutdownDelay", PreShutdownDelay)
                              .SetAttribute("ServiceSid", ServiceSid)
-
                              .SetAttribute("OnInstall", ConfigureServiceTrigger.Install.PresentIn(ConfigureServiceTrigger))
                              .SetAttribute("OnReinstall", ConfigureServiceTrigger.Reinstall.PresentIn(ConfigureServiceTrigger))
                              .SetAttribute("OnUninstall", ConfigureServiceTrigger.Uninstall.PresentIn(ConfigureServiceTrigger));

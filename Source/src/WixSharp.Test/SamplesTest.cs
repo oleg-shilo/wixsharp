@@ -98,7 +98,7 @@ namespace WixSharp.Test
 
                 if (output.Contains(" : error") || output.Contains("Error: ") || (nonMsi && !HasAnyMsis(dir)))
                 {
-                    if (batchFile.EndsWith(@"Signing\Build.cmd") && output.Contains("The signer's certificate is not valid for signing."))
+                    if (batchFile.EndsWith(@"Signing\Build.cmd") && output.Contains("SignTool Error:"))
                     {
                         //just ignore as the certificate is just a demo certificate
                     }

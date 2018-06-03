@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>1.6.4.3</version>
+    <version>1.6.5.1</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,32 +18,18 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.6.4.3-HotFix
-
------
-v1.6.4.3
-- Issue #354: Adding an InternetShortcuts throw NullReferenceException
-- Assorted internal fixes (XML docs etc.)
-- All compatible `IGenericEntity.Process(ProcessingContext)` cases moved to `WixEntity.CreateAndInsertParentComponent`
-
-v1.6.4.2
-* Issue #344: Duplicate symbol 'Directory:ProgramFilesFolder' found
-
-v1.6.4.1
-* Updated all IGenericEntity implementations to support 'no-directory' deployments
-* Removed all references to the obsolete `IncludeWixExtension`
-* Implemented clean algorithm for handling no-dir scenarios without resorting to the `%ProgramFiles%\WixSharp\DummyDir`.
-  Algorithm is controlled by `AutoElements.LagacyDummyDirAlgorithm`
-* Issue #341: UAC Text is not localized
-* Implemented adding custom error description of he ManagedUI.ExitDialog depending on the Install error or cancellation.
-
+    <releaseNotes>Release v1.6.5.1
+* Issue #377: How to register a new MIME type with custom document icon
+* Issue #373: Bootstrapper.DigitalSignature.Apply hide console output
+* Added missing IconFile support
+* SetupEvent sample extended to show how restart itself elevated if required.
 
 </releaseNotes>
     <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.6.4.3" />
+      <dependency id="WixSharp.bin" version="1.6.5.1" />
     </dependencies>
   </metadata>
   <files>

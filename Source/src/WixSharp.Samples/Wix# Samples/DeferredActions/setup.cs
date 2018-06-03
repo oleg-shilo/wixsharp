@@ -31,8 +31,7 @@ class Script
                             new XmlFile(XmlFileAction.setValue, @"//configuration/connectionStrings/add[\[]@name='Server1'[\]]/@providerName", "System.Data.SqlClient"))),
                     new ElevatedManagedAction(CustomActions.OnInstall, Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed)
                     {
-                        UsesProperties = "CONFIG_FILE=[INSTALLDIR]MyApp.exe.config, APP_FILE=[INSTALLDIR]MyApp.exe, DATABASE_CONNECTION_STRING=[DATABASE_CONNECTION_STRING]",
-                        Execute = WixSharp.Execute.deferred
+                        UsesProperties = "CONFIG_FILE=[INSTALLDIR]MyApp.exe.config, APP_FILE=[INSTALLDIR]MyApp.exe, DATABASE_CONNECTION_STRING=[DATABASE_CONNECTION_STRING]"
                     });
 
             project.GUID = new Guid("6fe30b47-2577-43ad-9195-1861ba25889b");

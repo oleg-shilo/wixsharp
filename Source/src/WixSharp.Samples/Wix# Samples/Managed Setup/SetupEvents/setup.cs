@@ -5,6 +5,7 @@
 //css_ref System.Xml.dll;
 
 using System;
+using System.Security.Principal;
 
 //using System.Linq;
 using System.Windows.Forms;
@@ -52,6 +53,7 @@ public class Script
         //project.UI = WUI.WixUI_ProgressOnly; //native MSI UI
 
         project.UILoaded += project_UIInit;
+        project.UIInitialized += Project_UIInitialized;
         project.Load += project_Load;
         project.BeforeInstall += project_BeforeInstall;
         project.AfterInstall += project_AfterInstall;
@@ -72,6 +74,25 @@ public class Script
         // project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project);
+    }
+
+    static void Project_UIInitialized(SetupEventArgs e)
+    {
+        // just an example of restarting the setup UI elevated. Old fashioned but... convenient and reliable.  
+        if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
+        {
+            MessageBox.Show(e.Session.GetMainWindow(), "You must start the msi file as admin");
+            e.Result = ActionResult.Failure;
+
+            var startInfo = new ProcessStartInfo();
+            startInfo.UseShellExecute = true;
+            startInfo.WorkingDirectory = Environment.CurrentDirectory;
+            startInfo.FileName = "msiexec.exe";
+            startInfo.Arguments = "/i \"" + e.MsiFile + "\"";
+            startInfo.Verb = "runas";
+
+            Process.Start(startInfo);
+        }
     }
 
     [CustomAction]

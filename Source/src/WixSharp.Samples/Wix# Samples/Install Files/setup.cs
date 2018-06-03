@@ -28,7 +28,6 @@ class Script
                                 Icon = "wixsharp.ico"
                             }
                         ),
-                    new IconFile(),
                     new Dir(@"Docs\Manual",
                         new File(@"Files\Docs\Manual.txt")
                         {
