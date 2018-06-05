@@ -4,7 +4,9 @@ using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -26,6 +28,30 @@ public class CustomActions
         return ActionResult.Success;
     }
 
+    [CustomAction]
+    public static ActionResult CheckIfAdmin(Session session)
+    {
+        if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
+        {
+            MessageBox.Show(session.GetMainWindow(), "You must start the msi file as admin");
+
+            var startInfo = new ProcessStartInfo();
+            startInfo.UseShellExecute = true;
+            startInfo.WorkingDirectory = Environment.CurrentDirectory;
+            startInfo.FileName = "msiexec.exe";
+            startInfo.Arguments = "/i \"" + session.Property("OriginalDatabase") + "\"";
+            startInfo.Verb = "runas";
+
+            Process.Start(startInfo);
+
+            return ActionResult.Failure;
+        }
+        else
+        {
+            return ActionResult.Success;
+        }
+    }
+
     public static bool Is64BitProcess
     {
         get { return IntPtr.Size == 8; }
@@ -42,6 +68,43 @@ static class Script
             System.IO.Directory.CreateDirectory(dir);
             System.IO.File.WriteAllText(dir.PathJoin($"file_{i}.txt"), i.ToString());
         }
+    }
+
+    static void Issue_386()
+    {
+        var project =
+            new ManagedProject("ElevatedSetup",
+                new Dir(@"%ProgramFiles%\My Company\My Product",
+                     new File(@"Files\bin\MyApp.exe")));
+
+        project.ManagedUI = ManagedUI.Default;
+        project.AddAction(new ManagedAction(CustomActions.CheckIfAdmin, 
+                                            Return.check, 
+                                            When.Before, 
+                                            Step.AppSearch, 
+                                            Condition.NOT_Installed, 
+                                            Sequence.InstallUISequence));
+
+        project.UIInitialized += (SetupEventArgs e) =>
+        {
+            if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
+            {
+                MessageBox.Show(e.Session.GetMainWindow(), "You must start the msi file as admin", e.ProductName);
+                e.Result = ActionResult.Failure;
+
+                var startInfo = new ProcessStartInfo();
+                startInfo.UseShellExecute = true;
+                startInfo.WorkingDirectory = Environment.CurrentDirectory;
+                startInfo.FileName = "msiexec.exe";
+                startInfo.Arguments = "/i \"" + e.MsiFile + "\"";
+                startInfo.Verb = "runas";
+
+                Process.Start(startInfo);
+            }
+        };
+
+        // project.PreserveTempFiles = true;
+        Compiler.BuildMsi(project);
     }
 
     static void Issue_374()
@@ -79,7 +142,7 @@ static class Script
         // project.DefaultFeature = mainFeature;
         project.PreserveTempFiles = true;
         project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889c");
-        project.BuildMsi(); 
+        project.BuildMsi();
     }
 
     static void Issue_298()
@@ -124,6 +187,7 @@ static class Script
 
     static public void Main(string[] args)
     {
+        Issue_386(); return;
         Issue_378(); return;
         Issue_374(); return;
         Issue_298(); return;
