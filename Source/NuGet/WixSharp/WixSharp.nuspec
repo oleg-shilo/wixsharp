@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>1.6.5.1</version>
+    <version>1.6.5.2</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,7 +18,12 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.6.5.1
+    <releaseNotes>Release Release v1.6.5.1-2
+
+v1.6.5.2
+* Issue #387: Certificate password can be null
+
+v1.6.5.1
 * Issue #377: How to register a new MIME type with custom document icon
 * Issue #373: Bootstrapper.DigitalSignature.Apply hide console output
 * Added missing IconFile support
@@ -29,7 +34,7 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.6.5.1" />
+      <dependency id="WixSharp.bin" version="1.6.5.2" />
     </dependencies>
   </metadata>
   <files>
