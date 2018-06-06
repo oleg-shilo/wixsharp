@@ -190,7 +190,7 @@ namespace WixSharp.CommonTasks
             string certPlace = useCertificateStore ? "/n" : "/f";
 
             string args = $"sign /v {certPlace} \"{pfxFile}\"";
-            if (password != null)
+            if (password.IsNotEmpty())
                 args += $" /p \"{password}\"";
 
             string sha1 = args;
@@ -211,9 +211,11 @@ namespace WixSharp.CommonTasks
                                                            @"C:\Program Files (x86)\Windows Kits\10\bin\x86;" +
                                                            @"C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x86",
                 ExePath = "signtool.exe",
-                Arguments = sha1,
-                ConsoleOut = (line) => Compiler.OutputWriteLine(line.Replace(password, "***"))
+                Arguments = sha1
             };
+
+            if (password.IsNotEmpty())
+                tool.ConsoleOut = (line) => Compiler.OutputWriteLine(line.Replace(password, "***"));
 
             var retval = tool.ConsoleRun();
             var sha1Signed = retval == 0 || retval == 2;
