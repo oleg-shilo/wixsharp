@@ -4932,7 +4932,7 @@
              <summary>
              Defines native (un-managed) bootstrapper. The bootstrapper is created by the NSIS installer authoring tool.
              The path to NSIS installation is detected through the WIXSHARP_NSISDIR environment variable or installation in
-             the default "%PROGRAMFILES(x86)%\NSIS" location.
+             the default "%ProgramFiles(x86)%\NSIS" location.
              The primary usage of <see cref="T:WixSharp.NsisBootstrapper.NsisBootstrapper"/> is to build bootstrappers for automatically installing .NET
              for executing MSIs containing managed Custom Actions (<see cref="T:WixSharp.ManagedAction"/>).
              <para></para>
@@ -5015,6 +5015,18 @@
             Gets or sets the optional arguments for the bootstrapper compiler.
             </summary>
             <value>The optional arguments.</value>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.NsisBootstrapper.PrerequisiteFileOptionName">
+            <summary>
+            Gets or sets command line option name for the prerequisite file.
+            </summary>
+            <value>The option name of the prerequisite file.</value>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.NsisBootstrapper.PrimaryFileOptionName">
+            <summary>
+            Gets or sets command line option name for the primary file.
+            </summary>
+            <value>The option name of the primary file.</value>
         </member>
         <member name="P:WixSharp.NsisBootstrapper.NsisBootstrapper.IconFile">
             <summary>
