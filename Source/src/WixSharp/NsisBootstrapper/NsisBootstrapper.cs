@@ -8,7 +8,7 @@ namespace WixSharp.NsisBootstrapper
     /// <summary>
     /// Defines native (un-managed) bootstrapper. The bootstrapper is created by the NSIS installer authoring tool.
     /// The path to NSIS installation is detected through the WIXSHARP_NSISDIR environment variable or installation in
-    /// the default "%PROGRAMFILES(x86)%\NSIS" location.
+    /// the default "%ProgramFiles(x86)%\NSIS" location.
     /// The primary usage of <see cref="NsisBootstrapper"/> is to build bootstrappers for automatically installing .NET
     /// for executing MSIs containing managed Custom Actions (<see cref="ManagedAction"/>).
     /// <para></para>
@@ -92,6 +92,18 @@ namespace WixSharp.NsisBootstrapper
         /// </summary>
         /// <value>The optional arguments.</value>
         public string OptionalArguments { get; set; }
+
+        /// <summary>
+        /// Gets or sets command line option name for the prerequisite file.
+        /// </summary>
+        /// <value>The option name of the prerequisite file.</value>
+        public string PrerequisiteFileOptionName { get; set; }
+
+        /// <summary>
+        /// Gets or sets command line option name for the primary file.
+        /// </summary>
+        /// <value>The option name of the primary file.</value>
+        public string PrimaryFileOptionName { get; set; }
 
         /// <summary>
         /// Path to an icon that will replace the default icon in the output file (bootstrapper)
@@ -221,6 +233,10 @@ namespace WixSharp.NsisBootstrapper
                     file.WriteLine($"File \"{IO.Path.GetFullPath(PrerequisiteFile)}\"");
                 }
                 file.WriteLine($"File \"{IO.Path.GetFullPath(PrimaryFile)}\"");
+                file.WriteLine("SetOutPath $TEMP");
+
+                // Read command line parameters
+                file.WriteLine("${GetParameters} $R0");
 
                 if (PrerequisiteFile != null)
                 {
@@ -230,7 +246,14 @@ namespace WixSharp.NsisBootstrapper
                         file.WriteLine("IfErrors 0 install_primary");
                     }
 
-                    AddExecute(file, IO.Path.GetFileName(PrerequisiteFile), null);
+                    string arguments = null;
+                    if (PrerequisiteFileOptionName != null)
+                    {
+                        file.WriteLine($"${{GetOptions}} \"$R0\" \"{PrerequisiteFileOptionName}\" $R1");
+                        arguments = "$R1";
+                    }
+
+                    AddExecute(file, IO.Path.GetFileName(PrerequisiteFile), arguments, null);
 
                     if (PrerequisiteRegKeyValue != null && !DoNotPostVerifyPrerequisite)
                     {
@@ -240,12 +263,17 @@ namespace WixSharp.NsisBootstrapper
                 }
 
                 file.WriteLine("install_primary:");
-                file.WriteLine("${GetParameters} $R0");
-                AddExecute(file, IO.Path.GetFileName(PrimaryFile), "$R0");
+                if (PrimaryFileOptionName != null)
+                {
+                    file.WriteLine($"${{GetOptions}} \"$R0\" \"{PrimaryFileOptionName}\" $R1");
+                    file.WriteLine("IfErrors 0 +2");
+                }
+                file.WriteLine("StrCpy $R1 $R0");
+                AddExecute(file, IO.Path.GetFileName(PrimaryFile), "$R1", "$0");
+                file.WriteLine("SetErrorlevel $0");
                 file.WriteLine("goto end");
 
                 file.WriteLine("end:");
-                file.WriteLine("RMDir /r /REBOOTOK $PLUGINSDIR");
                 file.WriteLine("FunctionEnd");
 
                 file.WriteLine("Section");
@@ -292,7 +320,9 @@ namespace WixSharp.NsisBootstrapper
                 }
             }
 
-            nsis = Environment.GetEnvironmentVariable("%PROGRAMFILESX86%"); // Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+            // Environment.Is64BitOperatingSystem
+            // Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            nsis = Extensions.Is64OS() ? Environment.GetEnvironmentVariable("ProgramFiles(x86)") : Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             if (nsis != null)
             {
                 nsis = IO.Path.Combine(nsis, IO.Path.Combine("NSIS", makeNsisExe)); // IO.Path.Combine(nsis, "NSIS", makeNsisExe);
@@ -313,24 +343,29 @@ namespace WixSharp.NsisBootstrapper
             }
         }
 
-        private static void AddExecute(IO.TextWriter writer, string fileName, string arguments)
+        private static void AddExecute(IO.TextWriter writer, string fileName, string arguments, string exitCode)
         {
             var extension = IO.Path.GetExtension(fileName)?.ToUpper() ?? string.Empty;
 
+            string text;
             switch (extension)
             {
                 case ".EXE":
-                    writer.WriteLine($"ExecWait '\"$PLUGINSDIR\\{fileName}\" {arguments}'");
+                    text = $"ExecWait '\"$PLUGINSDIR\\{fileName}\" {arguments}'";
+                    text += exitCode != null ? " " + exitCode : "";
                     break;
 
                 case ".MSI":
-                    writer.WriteLine($"ExecWait '\"$%WINDIR%\\System32\\msiexec.exe\" /I \"$PLUGINSDIR\\{fileName}\" {arguments}'");
+                    text = $"ExecWait '\"$%WINDIR%\\System32\\msiexec.exe\" /I \"$PLUGINSDIR\\{fileName}\" {arguments}'";
+                    text += exitCode != null ? " " + exitCode : "";
                     break;
 
                 default:
-                    writer.WriteLine($"ExecShell \"open\" '\"$PLUGINSDIR\\{fileName}\" {arguments}'");
+                    text = $"ExecShell \"open\" '\"$PLUGINSDIR\\{fileName}\" {arguments}'";
                     break;
             }
+
+            writer.WriteLine(text);
         }
 
         private static string ExecutionLevelToString(RequestExecutionLevel level)
