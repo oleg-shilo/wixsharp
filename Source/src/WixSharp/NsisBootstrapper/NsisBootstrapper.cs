@@ -165,8 +165,9 @@ namespace WixSharp.NsisBootstrapper
                 file.WriteLine("!include FileFunc.nsh");
 
                 var assembly = Reflection.Assembly.GetExecutingAssembly();
-                using (var stream = assembly.GetManifestResourceStream("WixSharp.NsisBootstrapper.macros.nsh"))
-                using (var reader = new IO.StreamReader(stream ?? throw new InvalidOperationException()))
+                var resourceName = $"{assembly.GetName().Name}.NsisBootstrapper.macros.nsh";
+                using (var stream = assembly.GetManifestResourceStream(resourceName))
+                using (var reader = new IO.StreamReader(stream ?? throw new InvalidOperationException($"Error: \"{resourceName}\" cannot be found.")))
                 {
                     var result = reader.ReadToEnd();
                     file.WriteLine(result);
