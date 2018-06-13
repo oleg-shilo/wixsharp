@@ -4928,6 +4928,226 @@
             </summary>
             <param name="context">The context.</param>
         </member>
+        <member name="T:WixSharp.NsisBootstrapper.NsisBootstrapper">
+             <summary>
+             Defines native (un-managed) bootstrapper. The bootstrapper is created by the NSIS installer authoring tool.
+             The path to NSIS installation is detected through the WIXSHARP_NSISDIR environment variable or installation in
+             the default "%ProgramFiles(x86)%\NSIS" location.
+             The primary usage of <see cref="T:WixSharp.NsisBootstrapper.NsisBootstrapper"/> is to build bootstrappers for automatically installing .NET
+             for executing MSIs containing managed Custom Actions (<see cref="T:WixSharp.ManagedAction"/>).
+             <para></para>
+             <remarks>
+             NsisBootstrapper is subject to the following limitations:
+             <list type="bullet">
+             <item><description>Only Win32 native bootstrapper can be built.</description></item>
+             <item><description>Only one <c>Prerequisite</c> cen be defined.</description></item>
+             </list>
+             </remarks>
+             </summary>
+             <example>The following is an example of defining and building bootstrapper for installing MyProduct.msi and
+             .NET setup (dotnetfx.exe) as prerequisite installation.
+             <para></para>
+             <code>
+             string setup = new NsisBootstrapper
+                                {
+                                    PrerequisiteFile = "C:\Users\Public\Public Downloads\dotnetfx.exe",
+                                    PrimaryFile = "MyProduct.msi",
+                                    OutputFile = "setup.exe",
+                                    PrerequisiteRegKeyValue = @"HKLM:SOFTWARE\Microsoft\.NETFramework:InstallRoot",
+            
+                                    IconFile = "app_icon.ico",
+            
+                                    VersionInfo = new VersionInformation("1.2.3.4")
+                                    {
+                                        ProductName = "Test Application",
+                                        LegalCopyright = "Copyright Test company",
+                                        FileDescription = "Test Application",
+                                        FileVersion = "1.2.3.4",
+                                        CompanyName = "Test company",
+                                        InternalName = "setup.exe",
+                                        OriginalFilename = "setup.exe"
+                                    }
+                                }
+                                .Build();
+             </code>
+             </example>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.NsisBootstrapper.PrerequisiteFile">
+            <summary>
+            Gets or sets the prerequisite file.
+            </summary>
+            <value>The prerequisite file.</value>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.NsisBootstrapper.PrimaryFile">
+            <summary>
+            Gets or sets the primary setup file.
+            </summary>
+            <value>The primary setup file.</value>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.NsisBootstrapper.PrerequisiteRegKeyValue">
+            <summary>
+            Gets or sets the prerequisite registry key value. This value is used to determine if the <see cref="P:WixSharp.NsisBootstrapper.NsisBootstrapper.PrerequisiteFile"/> should be launched.
+            <para>This value must comply with the following pattern: &lt;RegistryHive&gt;:&lt;KeyPath&gt;:&lt;ValueName&gt;.</para>
+            <code>PrerequisiteRegKeyValue = @"HKLM:Software\My Company\My Product:Installed";</code>
+            Existence of the specified registry value at runtime is interpreted as an indication that the <see cref="P:WixSharp.NsisBootstrapper.NsisBootstrapper.PrerequisiteFile"/> has been already installed.
+            Thus bootstrapper will execute <see cref="P:WixSharp.NsisBootstrapper.NsisBootstrapper.PrimaryFile"/> without launching <see cref="P:WixSharp.NsisBootstrapper.NsisBootstrapper.PrerequisiteFile"/> first.
+            </summary>
+            <value>The prerequisite registry key value.</value>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.NsisBootstrapper.OutputFile">
+            <summary>
+            Gets or sets the output file (bootstrapper) name.
+            </summary>
+            <value>The output file name.</value>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.NsisBootstrapper.DoNotPostVerifyPrerequisite">
+            <summary>
+            Gets or sets the flag which allows you to disable verification of <see cref="P:WixSharp.NsisBootstrapper.NsisBootstrapper.PrerequisiteRegKeyValue"/> after the prerequisite setup is completed.
+            <para>Normally if <c>bootstrapper</c> checkes if <see cref="P:WixSharp.NsisBootstrapper.NsisBootstrapper.PrerequisiteRegKeyValue"/> exists stright after the prerequisite installation and starts
+            the primary setup only if it does.</para>
+            <para>It is possible to instruct bootstrapper to continue with the primary setup regardless of the prerequisite installation outcome. This can be done
+            by setting DoNotPostVerifyPrerequisite to <c>true</c> (default is <c>false</c>)</para>
+            </summary>
+            <value>The do not post verify prerequisite.</value>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.NsisBootstrapper.OptionalArguments">
+            <summary>
+            Gets or sets the optional arguments for the bootstrapper compiler.
+            </summary>
+            <value>The optional arguments.</value>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.NsisBootstrapper.PrerequisiteFileOptionName">
+            <summary>
+            Gets or sets command line option name for the prerequisite file.
+            </summary>
+            <value>The option name of the prerequisite file.</value>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.NsisBootstrapper.PrimaryFileOptionName">
+            <summary>
+            Gets or sets command line option name for the primary file.
+            </summary>
+            <value>The option name of the primary file.</value>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.NsisBootstrapper.IconFile">
+            <summary>
+            Path to an icon that will replace the default icon in the output file (bootstrapper)
+            </summary>
+            <value>The icon file.</value>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.NsisBootstrapper.VersionInfo">
+            <summary>
+            Gets the version information of the output file (bootstrapper).
+            </summary>
+            <value>The version information.</value>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.NsisBootstrapper.RequestExecutionLevel">
+            <summary>
+            Gets or sets the requested execution level. The value is embedded in the installer XML manifest.
+            </summary>
+            <value>The requested execution level.</value>
+        </member>
+        <member name="M:WixSharp.NsisBootstrapper.NsisBootstrapper.Build">
+            <summary>
+            Builds bootstrapper file.
+            </summary>
+            <returns>Path to the built bootstrapper file. Returns <c>null</c> if bootstrapper cannot be built.</returns>
+        </member>
+        <member name="T:WixSharp.NsisBootstrapper.RequestExecutionLevel">
+            <summary>
+            Specifies the requested execution level for Windows Vista+.
+            </summary>
+        </member>
+        <member name="F:WixSharp.NsisBootstrapper.RequestExecutionLevel.None">
+            <summary>
+            Keep the manifest empty and let Windows decide which execution level is required.
+            </summary>
+        </member>
+        <member name="F:WixSharp.NsisBootstrapper.RequestExecutionLevel.RunAsInvoker">
+            <summary>
+            The application runs with the same access token as the parent process.
+            </summary>
+        </member>
+        <member name="F:WixSharp.NsisBootstrapper.RequestExecutionLevel.HighestAvailable">
+            <summary>
+            The application runs with the highest privileges the current user can obtain.
+            </summary>
+        </member>
+        <member name="F:WixSharp.NsisBootstrapper.RequestExecutionLevel.RequireAdministrator">
+            <summary>
+            The application runs only for administrators and requires that the application be launched with the full access token of an administrator.
+            </summary>
+        </member>
+        <member name="T:WixSharp.NsisBootstrapper.VersionInformation">
+            <summary>
+            Defines version information.
+            </summary>
+        </member>
+        <member name="M:WixSharp.NsisBootstrapper.VersionInformation.#ctor(System.String)">
+            <summary>
+            Creates instance of the <see cref="T:WixSharp.NsisBootstrapper.VersionInformation"></see> class with properties initialized with specified parameters.
+            </summary>
+            <param name="productVersion">The version of the product.</param>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.VersionInformation.ProductName">
+            <summary>
+            Gets or sets the name of the product this file is distributed with.
+            </summary>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.VersionInformation.Comments">
+            <summary>
+            Gets or sets the comments associated with the file.
+            </summary>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.VersionInformation.CompanyName">
+            <summary>
+            Gets or sets the name of the company that produced the file.
+            </summary>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.VersionInformation.LegalCopyright">
+            <summary>
+            Gets or sets all copyright notices that apply to the specified file.
+            </summary>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.VersionInformation.FileDescription">
+            <summary>
+            Gets or sets the description of the file.
+            </summary>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.VersionInformation.FileVersion">
+            <summary>
+            Gets or sets the file version number.
+            </summary>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.VersionInformation.ProductVersion">
+            <summary>
+            Gets or sets the version of the product this file is distributed with.
+            </summary>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.VersionInformation.InternalName">
+            <summary>
+            Gets or sets the internal name of the file, if one exists.
+            </summary>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.VersionInformation.LegalTrademarks">
+            <summary>
+            Gets or sets the trademarks and registered trademarks that apply to the file.
+            </summary>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.VersionInformation.OriginalFilename">
+            <summary>
+            Gets or sets the name the file was created with.
+            </summary>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.VersionInformation.PrivateBuild">
+            <summary>
+            Gets or sets information about a private version of the file.
+            </summary>
+        </member>
+        <member name="P:WixSharp.NsisBootstrapper.VersionInformation.SpecialBuild">
+            <summary>
+            Gets or sets the special build information for the file.
+            </summary>
+        </member>
         <member name="T:WixSharp.ODBCDataSource">
              <summary>
              Represents an ODBCDataSource to be registered.
