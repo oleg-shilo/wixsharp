@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.Lab</id>
-    <version>1.6.5.2</version>
+    <version>1.7.0.0</version>
     <title>Wix# (WixSharp) - Experimantal features</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -14,18 +14,13 @@
 The package contains the sample code for building a simple MSI with the CLR WinForm dialog inserted into UI sequence between InsallDirDlg and VerifyReadyDlg native MSI dialogs. In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# binaries containing experimental features (e.g. native WiX UI support).</summary>
-    <releaseNotes>Release Release v1.6.5.1-2
-
-v1.6.5.2
+    <releaseNotes>Release Release v1.7.0
+* Implemented NSIS-based bootstrapper.
 * Issue #387: Certificate password can be null
-
-v1.6.5.1
 * Issue #377: How to register a new MIME type with custom document icon
 * Issue #373: Bootstrapper.DigitalSignature.Apply hide console output
 * Added missing IconFile support
-* SetupEvent sample extended to show how restart itself elevated if required.
-
-</releaseNotes>
+* SetupEvent sample extended to show how restart itself elevated if required.</releaseNotes>
     <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# Scripting msi install setup</tags>
@@ -34,7 +29,7 @@ v1.6.5.1
       <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
     </frameworkAssemblies>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.6.5.2" />
+      <dependency id="WixSharp.bin" version="1.7.0.0" />
     </dependencies>
   </metadata>
   <files>

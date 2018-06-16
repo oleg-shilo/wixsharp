@@ -1,3 +1,7 @@
+//css_syntaxer source:e:\Galos\Projects\WixSharp\Source\src\WixSharp.Samples\Wix# Samples\Bootstrapper\NsisBootstrapper\setup.cs
+//css_syntaxer source:e:\Galos\Projects\WixSharp\Source\src\WixSharp.Samples\Wix# Samples\Bootstrapper\NsisBootstrapper\setup.cs
+//css_syntaxer source:e:\Galos\Projects\WixSharp\Source\src\WixSharp.Samples\Wix# Samples\Bootstrapper\NsisBootstrapper\setup.cs
+//css_syntaxer source:e:\Galos\Projects\WixSharp\Source\src\WixSharp.Samples\Wix# Samples\Bootstrapper\NsisBootstrapper\setup.cs
 //css_dir ..\..\..\;
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 //css_ref System.Core.dll;
@@ -5,6 +9,7 @@
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
+using WixSharp.UI;
 using WixSharp.Nsis;
 
 public static class Script
@@ -13,14 +18,16 @@ public static class Script
     {
         // If `Prerequisite.msi` does not exist yet execute <Wix# Samples>\Bootstrapper\NsisBootstrapper\Build.cmd
 
-        var project = new Project("MainProduct",
+        var project = new ManagedProject("MainProduct",
                           new ManagedAction(CustomActions.MyAction, Return.ignore, When.After, Step.InstallInitialize, Condition.NOT_Installed));
 
-        var msiFile = Compiler.BuildMsi(project);
+        project.ManagedUI = ManagedUI.Default;
+
+        var msiFile = project.BuildMsi();
 
         if (System.IO.File.Exists(msiFile))
         {
-            new NsisBootstrapper
+            var bootstrapper = new NsisBootstrapper
             {
                 DoNotPostVerifyPrerequisite = false,
                 PrerequisiteFile = "Prerequisite.msi",
@@ -40,8 +47,9 @@ public static class Script
                     InternalName = "setup.exe",
                     OriginalFilename = "setup.exe"
                 }
-            }
-            .Build();
+            };
+
+            bootstrapper.Build();
         }
     }
 }
@@ -57,6 +65,3 @@ public static class CustomActions
         return ActionResult.Success;
     }
 }
-
-
-

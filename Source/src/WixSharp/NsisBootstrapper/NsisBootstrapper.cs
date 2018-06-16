@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using WixSharp.CommonTasks;
 using IO = System.IO;
 using Reflection=System.Reflection;
 
@@ -301,24 +302,15 @@ namespace WixSharp.Nsis
 
         private static string ExecuteNsisMake(string nsisMake, string arguments)
         {
-            var startInfo = new ProcessStartInfo
+            var compiler = new ExternalTool
             {
-                FileName = nsisMake,
+                ExePath = nsisMake,
                 Arguments = arguments,
-
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardOutput = true
+                EchoOn = false
             };
 
-            var process = Process.Start(startInfo);
-            if (process == null)
-            {
-                return null;
-            }
-
-            process.WaitForExit();
-            return process.StandardOutput.ReadToEnd();
+            var output = compiler.GetConsoleRunOutput();
+            return output;
         }
 
         private static string DetectNsisMake()
@@ -447,8 +439,8 @@ namespace WixSharp.Nsis
         {
             const string MinimumSupportedVersion = "3.0b3";
 
-            var output = ExecuteNsisMake(nsisMake, "/VERSION");
-            if (string.IsNullOrEmpty(output))
+            var output = ExecuteNsisMake(nsisMake, "/VERSION").Trim();
+            if (output.IsEmpty())
             {
                 throw new InvalidOperationException("Failed to detect the NSIS version.");
             }

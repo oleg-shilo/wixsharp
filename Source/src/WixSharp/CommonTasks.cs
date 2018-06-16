@@ -1544,6 +1544,12 @@ namespace WixSharp.CommonTasks
         /// </code>
         /// </example>
         public Action<string> ConsoleOut = Compiler.OutputWriteLine;
+
+        /// <summary>
+        /// Controls echoing the executed command in the ConsoleOut.
+        /// </summary>
+        public bool EchoOn = true;
+
         /// <summary>
         /// Gets or sets the encoding to be used to process external executable output.
         /// By default it is the value of <see cref="ExternalTool.DefaultEncoding"/>.
@@ -1650,7 +1656,8 @@ namespace WixSharp.CommonTasks
                     return 1;
                 }
 
-                onConsoleOut("Execute:\n\"" + this.ExePath + "\" " + this.Arguments);
+                if (EchoOn)
+                    onConsoleOut("Execute:\n\"" + this.ExePath + "\" " + this.Arguments);
 
                 var process = new Process();
                 process.StartInfo.FileName = exePath;

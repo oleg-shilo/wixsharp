@@ -1,5 +1,6 @@
 //css_dir ..\..\..\;
 //css_ref WixSharp.dll;
+//css_ref WixSharp.UI.dll;
 //css_ref System.Core.dll;
 
 using System;
