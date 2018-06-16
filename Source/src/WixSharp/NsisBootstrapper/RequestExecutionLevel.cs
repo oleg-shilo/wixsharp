@@ -1,4 +1,4 @@
-﻿namespace WixSharp.NsisBootstrapper
+﻿namespace WixSharp.Nsis
 {
     /// <summary>
     /// Specifies the requested execution level for Windows Vista+.

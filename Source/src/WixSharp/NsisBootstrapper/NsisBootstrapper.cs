@@ -3,7 +3,7 @@ using System.Diagnostics;
 using IO = System.IO;
 using Reflection=System.Reflection;
 
-namespace WixSharp.NsisBootstrapper
+namespace WixSharp.Nsis
 {
     /// <summary>
     /// Defines native (un-managed) bootstrapper. The bootstrapper is created by the NSIS installer authoring tool.

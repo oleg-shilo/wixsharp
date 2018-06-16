@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WixSharp.NsisBootstrapper
+namespace WixSharp.Nsis
 {
     /// <summary>
     /// Defines version information.

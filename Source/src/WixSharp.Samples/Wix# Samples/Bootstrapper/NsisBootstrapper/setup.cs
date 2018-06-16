@@ -5,12 +5,14 @@
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
-using WixSharp.NsisBootstrapper;
+using WixSharp.Nsis;
 
 public static class Script
 {
     public static void Main(string[] args)
     {
+        // If `Prerequisite.msi` does not exist yet execute <Wix# Samples>\Bootstrapper\NsisBootstrapper\Build.cmd
+
         var project = new Project("MainProduct",
                           new ManagedAction(CustomActions.MyAction, Return.ignore, When.After, Step.InstallInitialize, Condition.NOT_Installed));
 
@@ -23,7 +25,7 @@ public static class Script
                 DoNotPostVerifyPrerequisite = false,
                 PrerequisiteFile = "Prerequisite.msi",
                 PrimaryFile = msiFile,
-                OutputFile = "setup.exe",
+                OutputFile = "MyProduct.exe",
                 PrerequisiteRegKeyValue = @"HKLM:Software\My Company\My Product:Installed",
 
                 IconFile = "app_icon.ico",

@@ -59,14 +59,14 @@ public class Script
         project.AfterInstall += project_AfterInstall;
         project.DefaultDeferredProperties += ",ADDLOCAL";
 
-        project.BeforeInstall += session =>
+        project.BeforeInstall += args =>
         {
-            if (!session.IsUninstalling)
+            if (!args.IsUninstalling)
                 Tasks.StopService("some_service", throwOnError: false);
         };
-        project.AfterInstall += session =>
+        project.AfterInstall += args =>
         {
-            if (!session.IsUninstalling)
+            if (!args.IsUninstalling)
                 Tasks.StartService("some_service", throwOnError: false);
         };
 
