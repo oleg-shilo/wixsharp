@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Text.RegularExpressions;
 using IO = System.IO;
 using Reflection=System.Reflection;
 
@@ -144,6 +146,8 @@ namespace WixSharp.NsisBootstrapper
         {
             var nsisMake = DetectNsisMake();
 
+            VerifyMinimumSupportedVersion(nsisMake);
+
             string regRootKey = null;
             string regSubKey = null;
             string regValueName = null;
@@ -280,21 +284,10 @@ namespace WixSharp.NsisBootstrapper
                 file.WriteLine("SectionEnd");
             }
 
-            var startInfo = new ProcessStartInfo
+            var output = ExecuteNsisMake(nsisMake, $"/INPUTCHARSET UTF8 {nsiFile} {OptionalArguments}");
+            if (!string.IsNullOrEmpty(output))
             {
-                FileName = nsisMake,
-                Arguments = $"/INPUTCHARSET UTF8 {nsiFile} {OptionalArguments}",
-
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardOutput = true
-            };
-
-            var process = Process.Start(startInfo);
-            if (process != null)
-            {
-                process.WaitForExit();
-                Console.WriteLine(process.StandardOutput.ReadToEnd());
+                Console.WriteLine(output);
             }
 
             if (!IO.File.Exists(OutputFile))
@@ -304,6 +297,28 @@ namespace WixSharp.NsisBootstrapper
 
             IO.File.Delete(nsiFile);
             return OutputFile;
+        }
+
+        private static string ExecuteNsisMake(string nsisMake, string arguments)
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = nsisMake,
+                Arguments = arguments,
+
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true
+            };
+
+            var process = Process.Start(startInfo);
+            if (process == null)
+            {
+                return null;
+            }
+
+            process.WaitForExit();
+            return process.StandardOutput.ReadToEnd();
         }
 
         private static string DetectNsisMake()
@@ -322,7 +337,7 @@ namespace WixSharp.NsisBootstrapper
 
             // Environment.Is64BitOperatingSystem
             // Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-            nsis = Extensions.Is64OS() ? Environment.GetEnvironmentVariable("ProgramFiles(x86)") : Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            nsis = Environment.GetEnvironmentVariable("ProgramFiles(x86)") ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             if (nsis != null)
             {
                 nsis = IO.Path.Combine(nsis, IO.Path.Combine("NSIS", makeNsisExe)); // IO.Path.Combine(nsis, "NSIS", makeNsisExe);
@@ -382,6 +397,65 @@ namespace WixSharp.NsisBootstrapper
                     return "admin";
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private static Version ParseNsisVersion(string text)
+        {
+            var groups = Regex.Matches(text.ToUpperInvariant(), @"v?([\d\.]+)(A|B|RC)?(\d*)?(-.+)?")
+                .Cast<Match>()
+                .SelectMany(m => m.Groups.Cast<Group>().Select(x => x.Value))
+                .ToArray();
+
+            var groupVersion = groups[1];
+            var groupStage = groups[2];
+            var groupRevision = groups[3];
+
+            var version = !string.IsNullOrEmpty(groupVersion) ? new Version(groupVersion) : new Version();
+
+            // 0 for alpha (status)
+            // 1 for beta (status)
+            // 2 for release candidate
+            // 3 for (final) release
+            int revision = 3 << 16; // Release
+            if (!string.IsNullOrEmpty(groupStage))
+            {
+                int number = !string.IsNullOrEmpty(groupRevision) ? int.Parse(groupRevision) : 0;
+                switch (groupStage)
+                {
+                    case "A":
+                        revision = number;
+                        break;
+
+                    case "B":
+                        revision = (1 << 16) + number;
+                        break;
+
+                    case "RC":
+                        revision = (2 << 16) + number;
+                        break;
+                }
+            }
+            return new Version(
+                version.Major != -1 ? version.Major : 0,
+                version.Minor != -1 ? version.Minor : 0,
+                version.Build != -1 ? version.Build : 0,
+                revision);
+        }
+
+        private static void VerifyMinimumSupportedVersion(string nsisMake)
+        {
+            const string MinimumSupportedVersion = "3.0b3";
+
+            var output = ExecuteNsisMake(nsisMake, "/VERSION");
+            if (string.IsNullOrEmpty(output))
+            {
+                throw new InvalidOperationException("Failed to detect the NSIS version.");
+            }
+
+            if (ParseNsisVersion(output) < ParseNsisVersion(MinimumSupportedVersion))
+            {
+                throw new ArgumentOutOfRangeException($"NSIS minimum supported version: \"{MinimumSupportedVersion}\", detected version: \"{output}\".");
             }
         }
     }
