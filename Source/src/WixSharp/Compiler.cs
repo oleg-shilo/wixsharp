@@ -1987,6 +1987,8 @@ namespace WixSharp
                         new XAttribute("KeyPath", wODBCDataSource.KeyPath.ToYesNo()),
                         new XAttribute("Registration", (wODBCDataSource.PerMachineRegistration ? "machine" : "user"))));
 
+                dsn.AddAttributes(wODBCDataSource.Attributes);
+
                 foreach (Property prop in wODBCDataSource.Properties)
                 {
                     dsn.AddElement(
