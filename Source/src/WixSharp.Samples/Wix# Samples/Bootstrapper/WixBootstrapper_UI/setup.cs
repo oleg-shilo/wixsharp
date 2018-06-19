@@ -28,7 +28,10 @@ public class Script
 
         bootstrapper.Version = new Version("1.0.0.0");
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889a");
-        bootstrapper.Application = new ManagedBootstrapperApplication("%this%"); // you can also use System.Reflection.Assembly.GetExecutingAssembly().Location
+        
+        // You can also use System.Reflection.Assembly.GetExecutingAssembly().Location instead of "%this%"
+        // Note, passing "BootstrapperCore.config" is optional and provided for demo purposes only
+        bootstrapper.Application = new ManagedBootstrapperApplication("%this%", "BootstrapperCore.config"); 
 
         bootstrapper.PreserveTempFiles = true;
         bootstrapper.SuppressWixMbaPrereqVars = true;

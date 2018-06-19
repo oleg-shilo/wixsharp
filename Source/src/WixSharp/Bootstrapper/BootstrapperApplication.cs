@@ -33,7 +33,7 @@ namespace WixSharp.Bootstrapper
         {
             AppAssembly = appAssembly;
             Payloads = Payloads.Combine(AppAssembly.ToPayload())
-                               .Combine(dependencies);
+                               .Combine(dependencies.Select(x=>x.ToPayload()));
         }
 
         /// <summary>
@@ -72,10 +72,12 @@ namespace WixSharp.Bootstrapper
         </sectionGroup>
     </configSections>
     <startup useLegacyV2RuntimeActivationPolicy=""true"">
+        <supportedRuntime version=""v2.0.50727"" />
         <supportedRuntime version=""v4.0"" />
     </startup>
     <wix.bootstrapper>
         <host assemblyName=""" + asmName + @""">
+            <supportedFramework version=""v3.5"" runtimeVersion=""v2.0.50727"" />
             <supportedFramework version=""v4\Full"" />
             <supportedFramework version=""v4\Client"" />
         </host>
