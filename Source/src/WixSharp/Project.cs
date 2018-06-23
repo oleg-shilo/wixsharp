@@ -695,6 +695,16 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Finds the first <see cref="File"/> in the <see cref="Project"/> matching the <paramref name="fileName"/>.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>Matching <see cref="File"/>.</returns>
+        public File FindFirstFile(string fileName)
+        {
+            return FindFile(f => f.Name.PathGetFileName().SameAs(fileName, ignoreCase: true)).FirstOrDefault();
+        }
+
+        /// <summary>
         /// Flattened "view" of all <see cref="File"/>s of the <see cref="Project"/>.
         /// </summary>
         public File[] AllFiles
