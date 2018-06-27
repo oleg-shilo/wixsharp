@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WixSharp.CommonTasks;
@@ -182,7 +181,7 @@ namespace WixSharp.Nsis
                 file.WriteLine("!include FileFunc.nsh");
 
                 var assembly = Reflection.Assembly.GetExecutingAssembly();
-                var resourceName = $"{assembly.GetName().Name}.NsisBootstrapper.macros.nsh";
+                var resourceName = $"{assembly.GetName().Name}.Nsis.macros.nsh";
                 using (var stream = assembly.GetManifestResourceStream(resourceName))
                 using (var reader = new IO.StreamReader(stream ?? throw new InvalidOperationException($"Error: \"{resourceName}\" cannot be found.")))
                 {
