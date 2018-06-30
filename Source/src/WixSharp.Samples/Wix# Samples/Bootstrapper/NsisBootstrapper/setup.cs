@@ -46,7 +46,9 @@ public static class Script
                     CompanyName = "Test company",
                     InternalName = "setup.exe",
                     OriginalFilename = "setup.exe"
-                }
+                },
+
+                SplashScreen = new SplashScreen("wixsharp.bmp")
             };
 
             bootstrapper.Build();
