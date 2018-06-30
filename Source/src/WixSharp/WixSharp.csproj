@@ -139,6 +139,7 @@
     <Compile Include="Media.cs" />
     <Compile Include="Nsis\NsisBootstrapper.cs" />
     <Compile Include="Nsis\RequestExecutionLevel.cs" />
+    <Compile Include="Nsis\SplashScreen.cs" />
     <Compile Include="Nsis\VersionInformation.cs" />
     <Compile Include="ODBCDataSource.cs" />
     <Compile Include="Permissions.cs" />

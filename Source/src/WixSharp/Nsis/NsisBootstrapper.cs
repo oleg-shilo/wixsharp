@@ -145,6 +145,12 @@ namespace WixSharp.Nsis
         public string PrimaryFileArguments { get; set; }
 
         /// <summary>
+        /// Gets or sets the simple splash screen for the output file (bootstrapper).
+        /// </summary>
+        /// <value>The simple splash screen for the output file (bootstrapper)</value>
+        public SplashScreen SplashScreen { get; set; }
+
+        /// <summary>
         /// Builds bootstrapper file.
         /// </summary>
         /// <returns>Path to the built bootstrapper file. Returns <c>null</c> if bootstrapper cannot be built.</returns>
@@ -196,18 +202,9 @@ namespace WixSharp.Nsis
             {
                 writer.WriteLine("Unicode true");
 
-                writer.WriteLine("!include LogicLib.nsh");
-                writer.WriteLine("!include x64.nsh");
-                writer.WriteLine("!include FileFunc.nsh");
+                AddIncludes(writer);
 
-                var assembly = Reflection.Assembly.GetExecutingAssembly();
-                var resourceName = $"{assembly.GetName().Name}.Nsis.macros.nsh";
-                using (var stream = assembly.GetManifestResourceStream(resourceName))
-                using (var reader = new IO.StreamReader(stream ?? throw new InvalidOperationException($"Error: \"{resourceName}\" cannot be found.")))
-                {
-                    var result = reader.ReadToEnd();
-                    writer.WriteLine(result);
-                }
+                AddMacros(writer);
 
                 if (IconFile != null)
                 {
@@ -226,6 +223,8 @@ namespace WixSharp.Nsis
 
                 // Read command line parameters
                 writer.WriteLine("${GetParameters} $R0");
+
+                AddSplashScreen(writer);
 
                 AddPrerequisiteFile(writer, regRootKey, regSubKey, regValueName);
 
@@ -258,6 +257,25 @@ namespace WixSharp.Nsis
             return OutputFile;
         }
 
+        private static void AddIncludes(IO.StringWriter writer)
+        {
+            writer.WriteLine("!include LogicLib.nsh");
+            writer.WriteLine("!include x64.nsh");
+            writer.WriteLine("!include FileFunc.nsh");
+        }
+
+        private static void AddMacros(IO.StringWriter writer)
+        {
+            var assembly = Reflection.Assembly.GetExecutingAssembly();
+            var resourceName = $"{assembly.GetName().Name}.Nsis.macros.nsh";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            using (var reader = new IO.StreamReader(stream ?? throw new InvalidOperationException($"Error: \"{resourceName}\" cannot be found.")))
+            {
+                var result = reader.ReadToEnd();
+                writer.WriteLine(result);
+            }
+        }
+
         private void AddPrerequisiteFile(IO.StringWriter writer, string regRootKey, string regSubKey, string regValueName)
         {
             if (PrerequisiteFile == null)
@@ -276,7 +294,7 @@ namespace WixSharp.Nsis
                 arguments = AppendArgument(arguments, "$R1");
             }
 
-            writer.WriteLine($"File \"/oname=$PLUGINSDIR\\{IO.Path.GetFileName(PrerequisiteFile)}\" \"{IO.Path.GetFullPath(PrerequisiteFile)}\"");
+            AddFileCommand(writer, PrerequisiteFile);
             AddExecuteCommand(writer, IO.Path.GetFileName(PrerequisiteFile), arguments, null);
 
             if (PrerequisiteRegKeyValue != null && !DoNotPostVerifyPrerequisite)
@@ -297,7 +315,7 @@ namespace WixSharp.Nsis
             }
             // Copy the original command line options
             writer.WriteLine("StrCpy $R1 $R0");
-            writer.WriteLine($"File \"/oname=$PLUGINSDIR\\{IO.Path.GetFileName(PrimaryFile)}\" \"{IO.Path.GetFullPath(PrimaryFile)}\"");
+            AddFileCommand(writer, PrimaryFile);
             AddExecuteCommand(writer, IO.Path.GetFileName(PrimaryFile), AppendArgument(PrimaryFileArguments, "$R1"), "$0");
             // Set exit code
             writer.WriteLine("SetErrorlevel $0");
@@ -409,6 +427,11 @@ namespace WixSharp.Nsis
             writer.WriteLine(text);
         }
 
+        private static void AddFileCommand(IO.StringWriter writer, string fileName)
+        {
+            writer.WriteLine($@"File ""/oname=$PLUGINSDIR\{IO.Path.GetFileName(fileName)}"" ""{IO.Path.GetFullPath(fileName)}""");
+        }
+
         private static string ExecutionLevelToString(RequestExecutionLevel level)
         {
             switch (level)
@@ -493,6 +516,18 @@ namespace WixSharp.Nsis
             }
 
             return s;
+        }
+
+        private void AddSplashScreen(IO.StringWriter writer)
+        {
+            if (SplashScreen != null)
+            {
+                AddFileCommand(writer, SplashScreen.FileName);
+                writer.WriteLine($@"splash::show {SplashScreen.Delay.TotalMilliseconds} ""$PLUGINSDIR\{IO.Path.GetFileNameWithoutExtension(SplashScreen.FileName)}""");
+                // $0 has '1' if the user closed the splash screen early,
+                // '0' if everything closed normally, and '-1' if some error occurred.
+                writer.WriteLine("Pop $0");
+            }
         }
     }
 }
