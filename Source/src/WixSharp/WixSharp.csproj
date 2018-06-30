@@ -137,9 +137,10 @@
     <Compile Include="InternetShortcut.cs" />
     <Compile Include="MajorUpgrade.cs" />
     <Compile Include="Media.cs" />
-    <Compile Include="NsisBootstrapper\NsisBootstrapper.cs" />
-    <Compile Include="NsisBootstrapper\RequestExecutionLevel.cs" />
-    <Compile Include="NsisBootstrapper\VersionInformation.cs" />
+    <Compile Include="Nsis\NsisBootstrapper.cs" />
+    <Compile Include="Nsis\RequestExecutionLevel.cs" />
+    <Compile Include="Nsis\SplashScreen.cs" />
+    <Compile Include="Nsis\VersionInformation.cs" />
     <Compile Include="ODBCDataSource.cs" />
     <Compile Include="Permissions.cs" />
     <Compile Include="Properties\AssemblyInfo.version.cs" />
@@ -193,7 +194,7 @@
     <Compile Include="Project.cs" />
     <Compile Include="Property.cs" />
     <Compile Include="XmlFile.cs" />
-    <EmbeddedResource Include="NsisBootstrapper\macros.nsh" />
+    <EmbeddedResource Include="Nsis\macros.nsh" />
     <None Include="QtCmdLineAction.cs" />
     <Compile Include="RegFileImporter.cs" />
     <Compile Include="RegValueProperty.cs" />

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using WixSharp.CommonTasks;
 using IO = System.IO;
@@ -36,12 +36,12 @@ namespace WixSharp.Nsis
     ///
     ///                        IconFile = "app_icon.ico",
     ///
-    ///                        VersionInfo = new VersionInformation("1.2.3.4")
+    ///                        VersionInfo = new VersionInformation("1.0.0.0")
     ///                        {
     ///                            ProductName = "Test Application",
     ///                            LegalCopyright = "Copyright Test company",
     ///                            FileDescription = "Test Application",
-    ///                            FileVersion = "1.2.3.4",
+    ///                            FileVersion = "1.0.0.0",
     ///                            CompanyName = "Test company",
     ///                            InternalName = "setup.exe",
     ///                            OriginalFilename = "setup.exe"
@@ -127,6 +127,30 @@ namespace WixSharp.Nsis
         public RequestExecutionLevel RequestExecutionLevel { get; set; }
 
         /// <summary>
+        /// Occurs when NSI source code is generated. Use this event if you need to modify the generated source code
+        /// before it is compiled into EXE.
+        /// </summary>
+        public event Action<StringBuilder> NsiSourceGenerated;
+
+        /// <summary>
+        /// Gets or sets preset command line arguments for the prerequisite file.
+        /// </summary>
+        /// <value>The preset command line arguments of the prerequisite file.</value>
+        public string PrerequisiteFileArguments { get; set; }
+
+        /// <summary>
+        /// Gets or sets preset command line arguments for the primary file.
+        /// </summary>
+        /// <value>The preset command line arguments of the primary file.</value>
+        public string PrimaryFileArguments { get; set; }
+
+        /// <summary>
+        /// Gets or sets the simple splash screen for the output file (bootstrapper).
+        /// </summary>
+        /// <value>The simple splash screen for the output file (bootstrapper)</value>
+        public SplashScreen SplashScreen { get; set; }
+
+        /// <summary>
         /// Builds bootstrapper file.
         /// </summary>
         /// <returns>Path to the built bootstrapper file. Returns <c>null</c> if bootstrapper cannot be built.</returns>
@@ -173,117 +197,49 @@ namespace WixSharp.Nsis
                 throw new InvalidOperationException("NSI script file name can't be null.");
             }
 
-            using (var file = new IO.StreamWriter(nsiFile))
+            var builder = new StringBuilder();
+            using (var writer = new IO.StringWriter(builder))
             {
-                file.WriteLine("Unicode true");
+                writer.WriteLine("Unicode true");
 
-                file.WriteLine("!include LogicLib.nsh");
-                file.WriteLine("!include x64.nsh");
-                file.WriteLine("!include FileFunc.nsh");
+                AddIncludes(writer);
 
-                var assembly = Reflection.Assembly.GetExecutingAssembly();
-                var resourceName = $"{assembly.GetName().Name}.NsisBootstrapper.macros.nsh";
-                using (var stream = assembly.GetManifestResourceStream(resourceName))
-                using (var reader = new IO.StreamReader(stream ?? throw new InvalidOperationException($"Error: \"{resourceName}\" cannot be found.")))
-                {
-                    var result = reader.ReadToEnd();
-                    file.WriteLine(result);
-                }
+                AddMacros(writer);
 
                 if (IconFile != null)
                 {
-                    file.WriteLine($"Icon \"{IO.Path.GetFullPath(IconFile)}\"");
+                    writer.WriteLine($"Icon \"{IO.Path.GetFullPath(IconFile)}\"");
                 }
-                file.WriteLine($"OutFile \"{IO.Path.GetFullPath(OutputFile)}\"");
+                writer.WriteLine($"OutFile \"{IO.Path.GetFullPath(OutputFile)}\"");
 
-                file.WriteLine($"RequestExecutionLevel {ExecutionLevelToString(RequestExecutionLevel)}");
-                file.WriteLine("SilentInstall silent");
+                writer.WriteLine($"RequestExecutionLevel {ExecutionLevelToString(RequestExecutionLevel)}");
+                writer.WriteLine("SilentInstall silent");
 
-                // Version Information
-                if (VersionInfo != null)
-                {
-                    if (VersionInfo.ProductVersion != null)
-                    {
-                        var version = new Version(VersionInfo.ProductVersion);
-                        version = new Version(
-                            version.Major != -1 ? version.Major : 0,
-                            version.Minor != -1 ? version.Minor : 0,
-                            version.Build != -1 ? version.Build : 0,
-                            version.Revision != -1 ? version.Revision : 0);
+                AddVersionInformation(writer);
 
-                        file.WriteLine($"VIProductVersion \"{version}\"");
-                    }
+                writer.WriteLine("Function .onInit");
 
-                    AddVersionKey(file, "ProductName", VersionInfo.ProductName);
-                    AddVersionKey(file, "Comments", VersionInfo.Comments);
-                    AddVersionKey(file, "CompanyName", VersionInfo.CompanyName);
-                    AddVersionKey(file, "LegalTrademarks", VersionInfo.LegalTrademarks);
-                    AddVersionKey(file, "LegalCopyright", VersionInfo.LegalCopyright);
-                    AddVersionKey(file, "FileDescription", VersionInfo.FileDescription);
-                    AddVersionKey(file, "FileVersion", VersionInfo.FileVersion);
-                    AddVersionKey(file, "ProductVersion", VersionInfo.ProductVersion);
-                    AddVersionKey(file, "InternalName", VersionInfo.InternalName);
-                    AddVersionKey(file, "OriginalFilename", VersionInfo.OriginalFilename);
-                    AddVersionKey(file, "PrivateBuild", VersionInfo.PrivateBuild);
-                    AddVersionKey(file, "SpecialBuild", VersionInfo.SpecialBuild);
-                }
-
-                file.WriteLine("Function .onInit");
-
-                file.WriteLine("InitPluginsDir");
-                file.WriteLine("SetOutPath $PLUGINSDIR");
-
-                if (PrerequisiteFile != null)
-                {
-                    file.WriteLine($"File \"{IO.Path.GetFullPath(PrerequisiteFile)}\"");
-                }
-                file.WriteLine($"File \"{IO.Path.GetFullPath(PrimaryFile)}\"");
-                file.WriteLine("SetOutPath $TEMP");
+                writer.WriteLine("InitPluginsDir");
 
                 // Read command line parameters
-                file.WriteLine("${GetParameters} $R0");
+                writer.WriteLine("${GetParameters} $R0");
 
-                if (PrerequisiteFile != null)
-                {
-                    if (PrerequisiteRegKeyValue != null)
-                    {
-                        file.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
-                        file.WriteLine("IfErrors 0 install_primary");
-                    }
+                AddSplashScreen(writer);
 
-                    string arguments = null;
-                    if (PrerequisiteFileOptionName != null)
-                    {
-                        file.WriteLine($"${{GetOptions}} \"$R0\" \"{PrerequisiteFileOptionName}\" $R1");
-                        arguments = "$R1";
-                    }
+                AddPrerequisiteFile(writer, regRootKey, regSubKey, regValueName);
 
-                    AddExecute(file, IO.Path.GetFileName(PrerequisiteFile), arguments, null);
+                AddPrimaryFile(writer);
 
-                    if (PrerequisiteRegKeyValue != null && !DoNotPostVerifyPrerequisite)
-                    {
-                        file.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
-                        file.WriteLine("IfErrors end 0");
-                    }
-                }
+                writer.WriteLine("end:");
+                writer.WriteLine("FunctionEnd");
 
-                file.WriteLine("install_primary:");
-                if (PrimaryFileOptionName != null)
-                {
-                    file.WriteLine($"${{GetOptions}} \"$R0\" \"{PrimaryFileOptionName}\" $R1");
-                    file.WriteLine("IfErrors 0 +2");
-                }
-                file.WriteLine("StrCpy $R1 $R0");
-                AddExecute(file, IO.Path.GetFileName(PrimaryFile), "$R1", "$0");
-                file.WriteLine("SetErrorlevel $0");
-                file.WriteLine("goto end");
-
-                file.WriteLine("end:");
-                file.WriteLine("FunctionEnd");
-
-                file.WriteLine("Section");
-                file.WriteLine("SectionEnd");
+                writer.WriteLine("Section");
+                writer.WriteLine("SectionEnd");
             }
+
+            NsiSourceGenerated?.Invoke(builder);
+
+            IO.File.WriteAllText(nsiFile, builder.ToString());
 
             var output = ExecuteNsisMake(nsisMake, $"/INPUTCHARSET UTF8 {nsiFile} {OptionalArguments}");
             if (!string.IsNullOrEmpty(output))
@@ -291,6 +247,7 @@ namespace WixSharp.Nsis
                 Console.WriteLine(output);
             }
 
+            // Return null if the OutputFile is failed to generate
             if (!IO.File.Exists(OutputFile))
             {
                 return null;
@@ -298,6 +255,103 @@ namespace WixSharp.Nsis
 
             IO.File.Delete(nsiFile);
             return OutputFile;
+        }
+
+        private static void AddIncludes(IO.StringWriter writer)
+        {
+            writer.WriteLine("!include LogicLib.nsh");
+            writer.WriteLine("!include x64.nsh");
+            writer.WriteLine("!include FileFunc.nsh");
+        }
+
+        private static void AddMacros(IO.StringWriter writer)
+        {
+            var assembly = Reflection.Assembly.GetExecutingAssembly();
+            var resourceName = $"{assembly.GetName().Name}.Nsis.macros.nsh";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            using (var reader = new IO.StreamReader(stream ?? throw new InvalidOperationException($"Error: \"{resourceName}\" cannot be found.")))
+            {
+                var result = reader.ReadToEnd();
+                writer.WriteLine(result);
+            }
+        }
+
+        private void AddPrerequisiteFile(IO.StringWriter writer, string regRootKey, string regSubKey, string regValueName)
+        {
+            if (PrerequisiteFile == null)
+                return;
+
+            if (PrerequisiteRegKeyValue != null)
+            {
+                writer.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
+                writer.WriteLine("IfErrors 0 primary");
+            }
+
+            var arguments = PrerequisiteFileArguments;
+            if (PrerequisiteFileOptionName != null)
+            {
+                writer.WriteLine($"${{GetOptions}} \"$R0\" \"{PrerequisiteFileOptionName}\" $R1");
+                arguments = AppendArgument(arguments, "$R1");
+            }
+
+            AddFileCommand(writer, PrerequisiteFile);
+            AddExecuteCommand(writer, IO.Path.GetFileName(PrerequisiteFile), arguments, null);
+
+            if (PrerequisiteRegKeyValue != null && !DoNotPostVerifyPrerequisite)
+            {
+                writer.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
+                writer.WriteLine("IfErrors end 0");
+            }
+        }
+
+        private void AddPrimaryFile(IO.StringWriter writer)
+        {
+            writer.WriteLine("primary:");
+            if (PrimaryFileOptionName != null)
+            {
+                writer.WriteLine($"${{GetOptions}} \"$R0\" \"{PrimaryFileOptionName}\" $R1");
+                // Skip copying the original command line options
+                writer.WriteLine("IfErrors 0 +2");
+            }
+            // Copy the original command line options
+            writer.WriteLine("StrCpy $R1 $R0");
+            AddFileCommand(writer, PrimaryFile);
+            AddExecuteCommand(writer, IO.Path.GetFileName(PrimaryFile), AppendArgument(PrimaryFileArguments, "$R1"), "$0");
+            // Set exit code
+            writer.WriteLine("SetErrorlevel $0");
+            writer.WriteLine("goto end");
+        }
+
+        private void AddVersionInformation(IO.StringWriter writer)
+        {
+            // Version Information
+            if (VersionInfo != null)
+            {
+                if (VersionInfo.ProductVersion != null)
+                {
+                    var version = new Version(VersionInfo.ProductVersion);
+                    version = new Version(
+                        version.Major != -1 ? version.Major : 0,
+                        version.Minor != -1 ? version.Minor : 0,
+                        version.Build != -1 ? version.Build : 0,
+                        version.Revision != -1 ? version.Revision : 0);
+
+                    writer.WriteLine($"VIProductVersion \"{version}\"");
+                }
+
+                AddVersionKey(writer, "ProductName", VersionInfo.ProductName);
+                AddVersionKey(writer, "Comments", VersionInfo.Comments);
+                AddVersionKey(writer, "CompanyName", VersionInfo.CompanyName);
+                AddVersionKey(writer, "LegalTrademarks", VersionInfo.LegalTrademarks);
+                AddVersionKey(writer, "LegalCopyright", VersionInfo.LegalCopyright);
+                AddVersionKey(writer, "FileDescription", VersionInfo.FileDescription);
+                AddVersionKey(writer, "FileVersion", VersionInfo.FileVersion);
+                AddVersionKey(writer, "ProductVersion", VersionInfo.ProductVersion);
+                AddVersionKey(writer, "InternalName", VersionInfo.InternalName);
+                AddVersionKey(writer, "OriginalFilename", VersionInfo.OriginalFilename);
+                AddVersionKey(writer, "PrivateBuild", VersionInfo.PrivateBuild);
+                AddVersionKey(writer, "SpecialBuild", VersionInfo.SpecialBuild);
+            }
         }
 
         private static string ExecuteNsisMake(string nsisMake, string arguments)
@@ -330,13 +384,10 @@ namespace WixSharp.Nsis
             // Environment.Is64BitOperatingSystem
             // Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             nsis = Environment.GetEnvironmentVariable("ProgramFiles(x86)") ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-            if (nsis != null)
+            nsis = IO.Path.Combine(nsis, IO.Path.Combine("NSIS", makeNsisExe)); // IO.Path.Combine(nsis, "NSIS", makeNsisExe);
+            if (IO.File.Exists(nsis))
             {
-                nsis = IO.Path.Combine(nsis, IO.Path.Combine("NSIS", makeNsisExe)); // IO.Path.Combine(nsis, "NSIS", makeNsisExe);
-                if (IO.File.Exists(nsis))
-                {
-                    return nsis;
-                }
+                return nsis;
             }
 
             throw new InvalidOperationException("Cannot detect NSIS location.");
@@ -350,7 +401,7 @@ namespace WixSharp.Nsis
             }
         }
 
-        private static void AddExecute(IO.TextWriter writer, string fileName, string arguments, string exitCode)
+        private static void AddExecuteCommand(IO.TextWriter writer, string fileName, string arguments, string exitCode)
         {
             var extension = IO.Path.GetExtension(fileName)?.ToUpper() ?? string.Empty;
 
@@ -358,21 +409,27 @@ namespace WixSharp.Nsis
             switch (extension)
             {
                 case ".EXE":
-                    text = $"ExecWait '\"$PLUGINSDIR\\{fileName}\" {arguments}'";
-                    text += exitCode != null ? " " + exitCode : "";
+                    text = $"ExecWait '{AppendArgument($"\"$PLUGINSDIR\\{fileName}\"", arguments)}'";
+                    text = AppendArgument(text, exitCode);
                     break;
 
                 case ".MSI":
-                    text = $"ExecWait '\"$%WINDIR%\\System32\\msiexec.exe\" /I \"$PLUGINSDIR\\{fileName}\" {arguments}'";
-                    text += exitCode != null ? " " + exitCode : "";
+                    text = $"ExecWait '{AppendArgument($"\"$%WINDIR%\\System32\\msiexec.exe\" /I \"$PLUGINSDIR\\{fileName}\"", arguments)}'";
+                    text = AppendArgument(text, exitCode);
                     break;
 
                 default:
-                    text = $"ExecShell \"open\" '\"$PLUGINSDIR\\{fileName}\" {arguments}'";
+                    // arguments parameter are not used
+                    text = $"ExecShell \"open\" \"$PLUGINSDIR\\{fileName}\"";
                     break;
             }
 
             writer.WriteLine(text);
+        }
+
+        private static void AddFileCommand(IO.StringWriter writer, string fileName)
+        {
+            writer.WriteLine($@"File ""/oname=$PLUGINSDIR\{IO.Path.GetFileName(fileName)}"" ""{IO.Path.GetFullPath(fileName)}""");
         }
 
         private static string ExecutionLevelToString(RequestExecutionLevel level)
@@ -448,6 +505,28 @@ namespace WixSharp.Nsis
             if (ParseNsisVersion(output) < ParseNsisVersion(MinimumSupportedVersion))
             {
                 throw new ArgumentOutOfRangeException($"NSIS minimum supported version: \"{MinimumSupportedVersion}\", detected version: \"{output}\".");
+            }
+        }
+
+        private static string AppendArgument(string s, string arg)
+        {
+            if (!string.IsNullOrEmpty(arg))
+            {
+                return string.IsNullOrEmpty(s) ? arg : s + " " + arg;
+            }
+
+            return s;
+        }
+
+        private void AddSplashScreen(IO.StringWriter writer)
+        {
+            if (SplashScreen != null)
+            {
+                AddFileCommand(writer, SplashScreen.FileName);
+                writer.WriteLine($@"splash::show {SplashScreen.Delay.TotalMilliseconds} ""$PLUGINSDIR\{IO.Path.GetFileNameWithoutExtension(SplashScreen.FileName)}""");
+                // $0 has '1' if the user closed the splash screen early,
+                // '0' if everything closed normally, and '-1' if some error occurred.
+                writer.WriteLine("Pop $0");
             }
         }
     }
