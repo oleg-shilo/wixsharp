@@ -133,6 +133,18 @@ namespace WixSharp.Nsis
         public event Action<StringBuilder> NsiSourceGenerated;
 
         /// <summary>
+        /// Gets or sets preset command line arguments for the prerequisite file.
+        /// </summary>
+        /// <value>The preset command line arguments of the prerequisite file.</value>
+        public string PrerequisiteFileArguments { get; set; }
+
+        /// <summary>
+        /// Gets or sets preset command line arguments for the primary file.
+        /// </summary>
+        /// <value>The preset command line arguments of the primary file.</value>
+        public string PrimaryFileArguments { get; set; }
+
+        /// <summary>
         /// Builds bootstrapper file.
         /// </summary>
         /// <returns>Path to the built bootstrapper file. Returns <c>null</c> if bootstrapper cannot be built.</returns>
@@ -215,43 +227,9 @@ namespace WixSharp.Nsis
                 // Read command line parameters
                 writer.WriteLine("${GetParameters} $R0");
 
-                if (PrerequisiteFile != null)
-                {
-                    if (PrerequisiteRegKeyValue != null)
-                    {
-                        writer.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
-                        writer.WriteLine("IfErrors 0 install_primary");
-                    }
+                AddPrerequisiteFile(writer, regRootKey, regSubKey, regValueName);
 
-                    string arguments = null;
-                    if (PrerequisiteFileOptionName != null)
-                    {
-                        writer.WriteLine($"${{GetOptions}} \"$R0\" \"{PrerequisiteFileOptionName}\" $R1");
-                        arguments = "$R1";
-                    }
-
-                    writer.WriteLine($"File \"/oname=$PLUGINSDIR\\{IO.Path.GetFileName(PrerequisiteFile)}\" \"{IO.Path.GetFullPath(PrerequisiteFile)}\"");
-                    AddExecuteCommand(writer, IO.Path.GetFileName(PrerequisiteFile), arguments, null);
-
-                    if (PrerequisiteRegKeyValue != null && !DoNotPostVerifyPrerequisite)
-                    {
-                        writer.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
-                        writer.WriteLine("IfErrors end 0");
-                    }
-                }
-
-                writer.WriteLine("install_primary:");
-                if (PrimaryFileOptionName != null)
-                {
-                    writer.WriteLine($"${{GetOptions}} \"$R0\" \"{PrimaryFileOptionName}\" $R1");
-                    writer.WriteLine("IfErrors 0 +2");
-                }
-                writer.WriteLine("StrCpy $R1 $R0");
-                writer.WriteLine($"File \"/oname=$PLUGINSDIR\\{IO.Path.GetFileName(PrimaryFile)}\" \"{IO.Path.GetFullPath(PrimaryFile)}\"");
-                AddExecuteCommand(writer, IO.Path.GetFileName(PrimaryFile), "$R1", "$0");
-                // Set exit code
-                writer.WriteLine("SetErrorlevel $0");
-                writer.WriteLine("goto end");
+                AddPrimaryFile(writer);
 
                 writer.WriteLine("end:");
                 writer.WriteLine("FunctionEnd");
@@ -278,6 +256,52 @@ namespace WixSharp.Nsis
 
             IO.File.Delete(nsiFile);
             return OutputFile;
+        }
+
+        private void AddPrerequisiteFile(IO.StringWriter writer, string regRootKey, string regSubKey, string regValueName)
+        {
+            if (PrerequisiteFile == null)
+                return;
+
+            if (PrerequisiteRegKeyValue != null)
+            {
+                writer.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
+                writer.WriteLine("IfErrors 0 primary");
+            }
+
+            var arguments = PrerequisiteFileArguments;
+            if (PrerequisiteFileOptionName != null)
+            {
+                writer.WriteLine($"${{GetOptions}} \"$R0\" \"{PrerequisiteFileOptionName}\" $R1");
+                arguments = AppendArgument(arguments, "$R1");
+            }
+
+            writer.WriteLine($"File \"/oname=$PLUGINSDIR\\{IO.Path.GetFileName(PrerequisiteFile)}\" \"{IO.Path.GetFullPath(PrerequisiteFile)}\"");
+            AddExecuteCommand(writer, IO.Path.GetFileName(PrerequisiteFile), arguments, null);
+
+            if (PrerequisiteRegKeyValue != null && !DoNotPostVerifyPrerequisite)
+            {
+                writer.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
+                writer.WriteLine("IfErrors end 0");
+            }
+        }
+
+        private void AddPrimaryFile(IO.StringWriter writer)
+        {
+            writer.WriteLine("primary:");
+            if (PrimaryFileOptionName != null)
+            {
+                writer.WriteLine($"${{GetOptions}} \"$R0\" \"{PrimaryFileOptionName}\" $R1");
+                // Skip copying the original command line options
+                writer.WriteLine("IfErrors 0 +2");
+            }
+            // Copy the original command line options
+            writer.WriteLine("StrCpy $R1 $R0");
+            writer.WriteLine($"File \"/oname=$PLUGINSDIR\\{IO.Path.GetFileName(PrimaryFile)}\" \"{IO.Path.GetFullPath(PrimaryFile)}\"");
+            AddExecuteCommand(writer, IO.Path.GetFileName(PrimaryFile), AppendArgument(PrimaryFileArguments, "$R1"), "$0");
+            // Set exit code
+            writer.WriteLine("SetErrorlevel $0");
+            writer.WriteLine("goto end");
         }
 
         private void AddVersionInformation(IO.StringWriter writer)
@@ -367,13 +391,13 @@ namespace WixSharp.Nsis
             switch (extension)
             {
                 case ".EXE":
-                    text = $"ExecWait '\"$PLUGINSDIR\\{fileName}\" {arguments}'";
-                    text += exitCode != null ? " " + exitCode : "";
+                    text = $"ExecWait '{AppendArgument($"\"$PLUGINSDIR\\{fileName}\"", arguments)}'";
+                    text = AppendArgument(text, exitCode);
                     break;
 
                 case ".MSI":
-                    text = $"ExecWait '\"$%WINDIR%\\System32\\msiexec.exe\" /I \"$PLUGINSDIR\\{fileName}\" {arguments}'";
-                    text += exitCode != null ? " " + exitCode : "";
+                    text = $"ExecWait '{AppendArgument($"\"$%WINDIR%\\System32\\msiexec.exe\" /I \"$PLUGINSDIR\\{fileName}\"", arguments)}'";
+                    text = AppendArgument(text, exitCode);
                     break;
 
                 default:
@@ -459,6 +483,16 @@ namespace WixSharp.Nsis
             {
                 throw new ArgumentOutOfRangeException($"NSIS minimum supported version: \"{MinimumSupportedVersion}\", detected version: \"{output}\".");
             }
+        }
+
+        private static string AppendArgument(string s, string arg)
+        {
+            if (!string.IsNullOrEmpty(arg))
+            {
+                return string.IsNullOrEmpty(s) ? arg : s + " " + arg;
+            }
+
+            return s;
         }
     }
 }
