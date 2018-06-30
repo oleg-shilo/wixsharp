@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using WixSharp.CommonTasks;
 using IO = System.IO;
@@ -35,12 +36,12 @@ namespace WixSharp.Nsis
     ///
     ///                        IconFile = "app_icon.ico",
     ///
-    ///                        VersionInfo = new VersionInformation("1.2.3.4")
+    ///                        VersionInfo = new VersionInformation("1.0.0.0")
     ///                        {
     ///                            ProductName = "Test Application",
     ///                            LegalCopyright = "Copyright Test company",
     ///                            FileDescription = "Test Application",
-    ///                            FileVersion = "1.2.3.4",
+    ///                            FileVersion = "1.0.0.0",
     ///                            CompanyName = "Test company",
     ///                            InternalName = "setup.exe",
     ///                            OriginalFilename = "setup.exe"
@@ -126,6 +127,12 @@ namespace WixSharp.Nsis
         public RequestExecutionLevel RequestExecutionLevel { get; set; }
 
         /// <summary>
+        /// Occurs when NSI source code is generated. Use this event if you need to modify the generated source code
+        /// before it is compiled into EXE.
+        /// </summary>
+        public event Action<StringBuilder> NsiSourceGenerated;
+
+        /// <summary>
         /// Builds bootstrapper file.
         /// </summary>
         /// <returns>Path to the built bootstrapper file. Returns <c>null</c> if bootstrapper cannot be built.</returns>
@@ -172,13 +179,14 @@ namespace WixSharp.Nsis
                 throw new InvalidOperationException("NSI script file name can't be null.");
             }
 
-            using (var file = new IO.StreamWriter(nsiFile))
+            var builder = new StringBuilder();
+            using (var writer = new IO.StringWriter(builder))
             {
-                file.WriteLine("Unicode true");
+                writer.WriteLine("Unicode true");
 
-                file.WriteLine("!include LogicLib.nsh");
-                file.WriteLine("!include x64.nsh");
-                file.WriteLine("!include FileFunc.nsh");
+                writer.WriteLine("!include LogicLib.nsh");
+                writer.WriteLine("!include x64.nsh");
+                writer.WriteLine("!include FileFunc.nsh");
 
                 var assembly = Reflection.Assembly.GetExecutingAssembly();
                 var resourceName = $"{assembly.GetName().Name}.Nsis.macros.nsh";
@@ -186,103 +194,75 @@ namespace WixSharp.Nsis
                 using (var reader = new IO.StreamReader(stream ?? throw new InvalidOperationException($"Error: \"{resourceName}\" cannot be found.")))
                 {
                     var result = reader.ReadToEnd();
-                    file.WriteLine(result);
+                    writer.WriteLine(result);
                 }
 
                 if (IconFile != null)
                 {
-                    file.WriteLine($"Icon \"{IO.Path.GetFullPath(IconFile)}\"");
+                    writer.WriteLine($"Icon \"{IO.Path.GetFullPath(IconFile)}\"");
                 }
-                file.WriteLine($"OutFile \"{IO.Path.GetFullPath(OutputFile)}\"");
+                writer.WriteLine($"OutFile \"{IO.Path.GetFullPath(OutputFile)}\"");
 
-                file.WriteLine($"RequestExecutionLevel {ExecutionLevelToString(RequestExecutionLevel)}");
-                file.WriteLine("SilentInstall silent");
+                writer.WriteLine($"RequestExecutionLevel {ExecutionLevelToString(RequestExecutionLevel)}");
+                writer.WriteLine("SilentInstall silent");
 
-                // Version Information
-                if (VersionInfo != null)
-                {
-                    if (VersionInfo.ProductVersion != null)
-                    {
-                        var version = new Version(VersionInfo.ProductVersion);
-                        version = new Version(
-                            version.Major != -1 ? version.Major : 0,
-                            version.Minor != -1 ? version.Minor : 0,
-                            version.Build != -1 ? version.Build : 0,
-                            version.Revision != -1 ? version.Revision : 0);
+                AddVersionInformation(writer);
 
-                        file.WriteLine($"VIProductVersion \"{version}\"");
-                    }
+                writer.WriteLine("Function .onInit");
 
-                    AddVersionKey(file, "ProductName", VersionInfo.ProductName);
-                    AddVersionKey(file, "Comments", VersionInfo.Comments);
-                    AddVersionKey(file, "CompanyName", VersionInfo.CompanyName);
-                    AddVersionKey(file, "LegalTrademarks", VersionInfo.LegalTrademarks);
-                    AddVersionKey(file, "LegalCopyright", VersionInfo.LegalCopyright);
-                    AddVersionKey(file, "FileDescription", VersionInfo.FileDescription);
-                    AddVersionKey(file, "FileVersion", VersionInfo.FileVersion);
-                    AddVersionKey(file, "ProductVersion", VersionInfo.ProductVersion);
-                    AddVersionKey(file, "InternalName", VersionInfo.InternalName);
-                    AddVersionKey(file, "OriginalFilename", VersionInfo.OriginalFilename);
-                    AddVersionKey(file, "PrivateBuild", VersionInfo.PrivateBuild);
-                    AddVersionKey(file, "SpecialBuild", VersionInfo.SpecialBuild);
-                }
-
-                file.WriteLine("Function .onInit");
-
-                file.WriteLine("InitPluginsDir");
-                file.WriteLine("SetOutPath $PLUGINSDIR");
-
-                if (PrerequisiteFile != null)
-                {
-                    file.WriteLine($"File \"{IO.Path.GetFullPath(PrerequisiteFile)}\"");
-                }
-                file.WriteLine($"File \"{IO.Path.GetFullPath(PrimaryFile)}\"");
-                file.WriteLine("SetOutPath $TEMP");
+                writer.WriteLine("InitPluginsDir");
 
                 // Read command line parameters
-                file.WriteLine("${GetParameters} $R0");
+                writer.WriteLine("${GetParameters} $R0");
 
                 if (PrerequisiteFile != null)
                 {
                     if (PrerequisiteRegKeyValue != null)
                     {
-                        file.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
-                        file.WriteLine("IfErrors 0 install_primary");
+                        writer.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
+                        writer.WriteLine("IfErrors 0 install_primary");
                     }
 
                     string arguments = null;
                     if (PrerequisiteFileOptionName != null)
                     {
-                        file.WriteLine($"${{GetOptions}} \"$R0\" \"{PrerequisiteFileOptionName}\" $R1");
+                        writer.WriteLine($"${{GetOptions}} \"$R0\" \"{PrerequisiteFileOptionName}\" $R1");
                         arguments = "$R1";
                     }
 
-                    AddExecute(file, IO.Path.GetFileName(PrerequisiteFile), arguments, null);
+                    writer.WriteLine($"File \"/oname=$PLUGINSDIR\\{IO.Path.GetFileName(PrerequisiteFile)}\" \"{IO.Path.GetFullPath(PrerequisiteFile)}\"");
+                    AddExecuteCommand(writer, IO.Path.GetFileName(PrerequisiteFile), arguments, null);
 
                     if (PrerequisiteRegKeyValue != null && !DoNotPostVerifyPrerequisite)
                     {
-                        file.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
-                        file.WriteLine("IfErrors end 0");
+                        writer.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
+                        writer.WriteLine("IfErrors end 0");
                     }
                 }
 
-                file.WriteLine("install_primary:");
+                writer.WriteLine("install_primary:");
                 if (PrimaryFileOptionName != null)
                 {
-                    file.WriteLine($"${{GetOptions}} \"$R0\" \"{PrimaryFileOptionName}\" $R1");
-                    file.WriteLine("IfErrors 0 +2");
+                    writer.WriteLine($"${{GetOptions}} \"$R0\" \"{PrimaryFileOptionName}\" $R1");
+                    writer.WriteLine("IfErrors 0 +2");
                 }
-                file.WriteLine("StrCpy $R1 $R0");
-                AddExecute(file, IO.Path.GetFileName(PrimaryFile), "$R1", "$0");
-                file.WriteLine("SetErrorlevel $0");
-                file.WriteLine("goto end");
+                writer.WriteLine("StrCpy $R1 $R0");
+                writer.WriteLine($"File \"/oname=$PLUGINSDIR\\{IO.Path.GetFileName(PrimaryFile)}\" \"{IO.Path.GetFullPath(PrimaryFile)}\"");
+                AddExecuteCommand(writer, IO.Path.GetFileName(PrimaryFile), "$R1", "$0");
+                // Set exit code
+                writer.WriteLine("SetErrorlevel $0");
+                writer.WriteLine("goto end");
 
-                file.WriteLine("end:");
-                file.WriteLine("FunctionEnd");
+                writer.WriteLine("end:");
+                writer.WriteLine("FunctionEnd");
 
-                file.WriteLine("Section");
-                file.WriteLine("SectionEnd");
+                writer.WriteLine("Section");
+                writer.WriteLine("SectionEnd");
             }
+
+            NsiSourceGenerated?.Invoke(builder);
+
+            IO.File.WriteAllText(nsiFile, builder.ToString());
 
             var output = ExecuteNsisMake(nsisMake, $"/INPUTCHARSET UTF8 {nsiFile} {OptionalArguments}");
             if (!string.IsNullOrEmpty(output))
@@ -290,6 +270,7 @@ namespace WixSharp.Nsis
                 Console.WriteLine(output);
             }
 
+            // Return null if the OutputFile is failed to generate
             if (!IO.File.Exists(OutputFile))
             {
                 return null;
@@ -297,6 +278,38 @@ namespace WixSharp.Nsis
 
             IO.File.Delete(nsiFile);
             return OutputFile;
+        }
+
+        private void AddVersionInformation(IO.StringWriter writer)
+        {
+            // Version Information
+            if (VersionInfo != null)
+            {
+                if (VersionInfo.ProductVersion != null)
+                {
+                    var version = new Version(VersionInfo.ProductVersion);
+                    version = new Version(
+                        version.Major != -1 ? version.Major : 0,
+                        version.Minor != -1 ? version.Minor : 0,
+                        version.Build != -1 ? version.Build : 0,
+                        version.Revision != -1 ? version.Revision : 0);
+
+                    writer.WriteLine($"VIProductVersion \"{version}\"");
+                }
+
+                AddVersionKey(writer, "ProductName", VersionInfo.ProductName);
+                AddVersionKey(writer, "Comments", VersionInfo.Comments);
+                AddVersionKey(writer, "CompanyName", VersionInfo.CompanyName);
+                AddVersionKey(writer, "LegalTrademarks", VersionInfo.LegalTrademarks);
+                AddVersionKey(writer, "LegalCopyright", VersionInfo.LegalCopyright);
+                AddVersionKey(writer, "FileDescription", VersionInfo.FileDescription);
+                AddVersionKey(writer, "FileVersion", VersionInfo.FileVersion);
+                AddVersionKey(writer, "ProductVersion", VersionInfo.ProductVersion);
+                AddVersionKey(writer, "InternalName", VersionInfo.InternalName);
+                AddVersionKey(writer, "OriginalFilename", VersionInfo.OriginalFilename);
+                AddVersionKey(writer, "PrivateBuild", VersionInfo.PrivateBuild);
+                AddVersionKey(writer, "SpecialBuild", VersionInfo.SpecialBuild);
+            }
         }
 
         private static string ExecuteNsisMake(string nsisMake, string arguments)
@@ -329,13 +342,10 @@ namespace WixSharp.Nsis
             // Environment.Is64BitOperatingSystem
             // Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
             nsis = Environment.GetEnvironmentVariable("ProgramFiles(x86)") ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-            if (nsis != null)
+            nsis = IO.Path.Combine(nsis, IO.Path.Combine("NSIS", makeNsisExe)); // IO.Path.Combine(nsis, "NSIS", makeNsisExe);
+            if (IO.File.Exists(nsis))
             {
-                nsis = IO.Path.Combine(nsis, IO.Path.Combine("NSIS", makeNsisExe)); // IO.Path.Combine(nsis, "NSIS", makeNsisExe);
-                if (IO.File.Exists(nsis))
-                {
-                    return nsis;
-                }
+                return nsis;
             }
 
             throw new InvalidOperationException("Cannot detect NSIS location.");
@@ -349,7 +359,7 @@ namespace WixSharp.Nsis
             }
         }
 
-        private static void AddExecute(IO.TextWriter writer, string fileName, string arguments, string exitCode)
+        private static void AddExecuteCommand(IO.TextWriter writer, string fileName, string arguments, string exitCode)
         {
             var extension = IO.Path.GetExtension(fileName)?.ToUpper() ?? string.Empty;
 
@@ -367,7 +377,8 @@ namespace WixSharp.Nsis
                     break;
 
                 default:
-                    text = $"ExecShell \"open\" '\"$PLUGINSDIR\\{fileName}\" {arguments}'";
+                    // arguments parameter are not used
+                    text = $"ExecShell \"open\" \"$PLUGINSDIR\\{fileName}\"";
                     break;
             }
 
