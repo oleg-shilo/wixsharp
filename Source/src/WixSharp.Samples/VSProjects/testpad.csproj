@@ -104,9 +104,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Support\testpad\Program.cs">
-      <Link>Program.cs</Link>
-    </Compile>
     <Compile Include="..\Support\testpad\setup.cs">
       <Link>setup.cs</Link>
     </Compile>
