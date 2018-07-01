@@ -187,6 +187,7 @@ static class Script
 
     static public void Main(string[] args)
     {
+        HiTeach_MSI.Program.Main1(); return;
         Issue_386(); return;
         Issue_378(); return;
         Issue_374(); return;

@@ -46,6 +46,8 @@ class Script
 
         project.Language = "en-US";
 
+        project.PreserveTempFiles = true;
+
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
         project.BuildMsi();

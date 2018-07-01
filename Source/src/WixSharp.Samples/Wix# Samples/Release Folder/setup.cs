@@ -45,8 +45,7 @@ class Script
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1561ba25889b");
 
         project.ResolveWildCards(ignoreEmptyDirectories: true)
-               .FindFile((f) => f.Name.EndsWith("MyApp.exe"))
-               .First()
+               .FindFirstFile("MyApp.exe")
                .Shortcuts = new[] {
                                        new FileShortcut("MyApp.exe", "INSTALLDIR"),
                                        new FileShortcut("MyApp.exe", "%Desktop%")

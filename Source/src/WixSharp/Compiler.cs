@@ -1800,6 +1800,14 @@ namespace WixSharp
                         new XAttribute("Source", Utils.PathCombine(wProject.SourceBaseDir, wFile.Name)))
                         .AddAttributes(wFile.Attributes));
 
+                if (wFile.OverwriteOnInstall)
+                {
+                    comp.AddElement("RemoveFile",
+                                  $@"Id=Remove_{fileId};
+                                     Name={ wFile.Name.PathGetFileName()};
+                                     On=install");
+                }
+
                 if (wFile is FontFile)
                 {
                     var font = (wFile as FontFile);

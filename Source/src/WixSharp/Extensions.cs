@@ -288,6 +288,17 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Returns the value of teh element attributes with the specified name.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        public static string Attr(this XElement obj, XName name)
+        {
+            return obj.Attribute(name)?.Value;
+        }
+
+        /// <summary>
         /// Sets/adds the attributes to the to a given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
         /// </summary>
         /// <param name="obj">The object.</param>

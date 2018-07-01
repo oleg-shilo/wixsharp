@@ -191,6 +191,20 @@ namespace WixSharp
         public Condition Condition;
 
         /// <summary>
+        /// Controls if an existing file should be overwritten during the installation.
+        /// By default MSI runtime does not install the file if it already exists at the
+        /// deployment destination on the target system. This field allows changing 
+        /// this behaviour and ensuring that a file installed always even when existed 
+        /// prior the installation. 
+        /// <para>If this field is set to <c>true</c> the WixSharp injects the following 
+        /// element into the file's parent component. 
+        /// <pre>&lt;RemoveFile Id="Remove_Filetxt" Name="File.txt" On="install" /&gt;</pre>
+        /// 
+        /// </para>
+        /// </summary>
+        public bool OverwriteOnInstall = false;
+
+        /// <summary>
         /// Collection of <see cref="T:WixSharp.FilePermission" /> to be applied to the file.
         /// </summary>
         public FilePermission[] Permissions = new FilePermission[0];

@@ -78,7 +78,6 @@ class Script
         productElement.Add(new XElement("WixVariable",
                                new XAttribute("Id", "WixUIBannerBmp"),
                                new XAttribute("Value", @"Images\bannrbmp.bmp")));
-
         // alternative syntax
         productElement.AddElement("WixVariable", @"Id=WixUIDialogBmp;Value=Images\dlgbmp.bmp");
     }
