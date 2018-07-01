@@ -4962,12 +4962,12 @@
             
                                     IconFile = "app_icon.ico",
             
-                                    VersionInfo = new VersionInformation("1.2.3.4")
+                                    VersionInfo = new VersionInformation("1.0.0.0")
                                     {
                                         ProductName = "Test Application",
                                         LegalCopyright = "Copyright Test company",
                                         FileDescription = "Test Application",
-                                        FileVersion = "1.2.3.4",
+                                        FileVersion = "1.0.0.0",
                                         CompanyName = "Test company",
                                         InternalName = "setup.exe",
                                         OriginalFilename = "setup.exe"
@@ -5051,6 +5051,30 @@
             </summary>
             <value>The requested execution level.</value>
         </member>
+        <member name="E:WixSharp.Nsis.NsisBootstrapper.NsiSourceGenerated">
+            <summary>
+            Occurs when NSI source code is generated. Use this event if you need to modify the generated source code
+            before it is compiled into EXE.
+            </summary>
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapper.PrerequisiteFileArguments">
+            <summary>
+            Gets or sets preset command line arguments for the prerequisite file.
+            </summary>
+            <value>The preset command line arguments of the prerequisite file.</value>
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapper.PrimaryFileArguments">
+            <summary>
+            Gets or sets preset command line arguments for the primary file.
+            </summary>
+            <value>The preset command line arguments of the primary file.</value>
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapper.SplashScreen">
+            <summary>
+            Gets or sets the simple splash screen for the output file (bootstrapper).
+            </summary>
+            <value>The simple splash screen for the output file (bootstrapper)</value>
+        </member>
         <member name="M:WixSharp.Nsis.NsisBootstrapper.Build">
             <summary>
             Builds bootstrapper file.
@@ -5080,6 +5104,38 @@
         <member name="F:WixSharp.Nsis.RequestExecutionLevel.RequireAdministrator">
             <summary>
             The application runs only for administrators and requires that the application be launched with the full access token of an administrator.
+            </summary>
+        </member>
+        <member name="T:WixSharp.Nsis.SplashScreen">
+            <summary>
+            Defines a splash screen for the <see cref="T:WixSharp.Nsis.NsisBootstrapper"/>.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Nsis.SplashScreen.#ctor(System.String)">
+            <summary>
+            Creates instance of the <see cref="T:WixSharp.Nsis.SplashScreen"></see> class with properties initialized with specified parameters.
+            </summary>
+            <param name="fileName">The splash bitmap filename. Only BMP files are supported.</param>
+            <exception cref="T:System.ArgumentNullException">filename is null or empty.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">filename is not in .BMP format.</exception>
+        </member>
+        <member name="M:WixSharp.Nsis.SplashScreen.#ctor(System.String,System.TimeSpan)">
+            <summary>
+            Creates instance of the <see cref="T:WixSharp.Nsis.SplashScreen"></see> class with properties initialized with specified parameters.
+            </summary>
+            <param name="fileName">The splash bitmap filename. Only BMP files are supported.</param>
+            <param name="delay">The length to show the splash screen.</param>
+            <exception cref="T:System.ArgumentNullException">filename is null or empty.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">filename is not in .BMP format.</exception>
+        </member>
+        <member name="P:WixSharp.Nsis.SplashScreen.FileName">
+            <summary>
+            Gets or sets the splash bitmap filename.
+            </summary>
+        </member>
+        <member name="P:WixSharp.Nsis.SplashScreen.Delay">
+            <summary>
+            Gets or sets the length to show the screen for.
             </summary>
         </member>
         <member name="T:WixSharp.Nsis.VersionInformation">
