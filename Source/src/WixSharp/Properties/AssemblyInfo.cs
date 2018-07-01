@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Oleg Shilo")]
 [assembly: AssemblyProduct("WixSharp")]
-[assembly: AssemblyCopyright("Copyright Oleg Shilo 2008-2017")]
+[assembly: AssemblyCopyright("Copyright Oleg Shilo 2008-2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
