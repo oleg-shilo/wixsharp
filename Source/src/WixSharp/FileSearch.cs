@@ -59,6 +59,26 @@ namespace WixSharp
         public string MaxVersion;
 
         /// <summary>
+        /// The minimum  modification date and time of the file. Formatted as YYYY-MM-DDTHH:mm:ss,
+        /// where YYYY is the year, MM is month, DD is day, 'T' is literal, HH is hour, mm is
+        /// minute and ss is second.
+        /// </summary>
+        [Xml]
+        public string MinDate;
+
+        /// <summary>
+        /// The minimum  size of the file.
+        /// </summary>
+        [Xml]
+        public int? MinSize;
+
+        /// <summary>
+        /// The minimum  version of the file
+        /// </summary>
+        [Xml]
+        public string MinVersion;
+
+        /// <summary>
         /// In prior versions of the WiX toolset, this attribute specified the short file name.
         /// This attribute's value may now be either a short or long file name. If a short file name
         /// is specified, the ShortName attribute may not be specified. If a long file name is specified,
