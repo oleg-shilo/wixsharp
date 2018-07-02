@@ -21,7 +21,7 @@ public class Script
 
         //project.Platform = Platform.x64;
         project.PreserveTempFiles = true;
-        project.OutDir = "bin";
+        // project.OutDir = "bin";
         
         project.BuildMsi();
     }

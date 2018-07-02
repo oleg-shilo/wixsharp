@@ -23,7 +23,7 @@ class Script
                 new Project("My Product",
                     new Dir(@"%ProgramFiles%\MyCompany",
                         new Dir("MyWebApp",
-                            new Dir("AdminWeb2", 
+                            new Dir("AdminWeb2",
                                     new IISVirtualDir
                                     {
                                         Name = "MyWebApp2",
@@ -33,8 +33,8 @@ class Script
                                     },
                                     new Files(@"MyWebApp\AdminWeb2\*.aspx")),
 
-                                new Dir("AdminWeb3", 
-                                    new File(@"MyWebApp\AdminWeb3\Default.aspx", 
+                                new Dir("AdminWeb3",
+                                    new File(@"MyWebApp\AdminWeb3\Default.aspx",
                                         new IISVirtualDir
                                         {
                                             Name = "MyWebApp3",
@@ -49,8 +49,8 @@ class Script
                                  {
                                      Alias = "MyWebApp",
                                      AppName = "Test",
-                                     WebSite = myWebSite 
-                                 }, 
+                                     WebSite = myWebSite
+                                 },
                                  new IISVirtualDir
                                  {
                                      Alias = "MyWebApp1",
@@ -62,15 +62,14 @@ class Script
                             new File(@"MyWebApp\Default.aspx.designer.cs"),
                             new File(@"MyWebApp\Web.config"))));
 
-       
         project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
         project.UI = WUI.WixUI_ProgressOnly;
         project.OutFileName = "setup";
 
         project.PreserveTempFiles = true;
         //uncomment the line below if you want to associate the web site with the app pool via WebApplicaion element
-        //project.WixSourceGenerated += Project_WixSourceGenerated; 
-        project.BuildMsiCmd();
+        //project.WixSourceGenerated += Project_WixSourceGenerated;
+        project.BuildMsi();
     }
 
     static void Project_WixSourceGenerated(XDocument document)
@@ -82,6 +81,3 @@ class Script
         webApp.MoveTo(webSite);
     }
 }
-
-
-

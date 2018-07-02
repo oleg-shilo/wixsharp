@@ -14,7 +14,13 @@ namespace WixSharp.Test
 {
     public class SamplesTest
     {
-        string[] nonMsiProjects = new[] { "CustomAttributes", "External_UI" };
+        IEnumerable<string> nonMsiProjects = @"CustomAttributes,
+                                               External_UI,
+                                               Custom_IDs,
+                                               ASP.NETApp,
+                                               EnvVariables,
+                                               WixBootstrapper"
+                                              .Split(',').Select(x=>x.Trim());
 
         int completedSamples = 0;
         int samplesTotal = 0;
@@ -39,6 +45,8 @@ namespace WixSharp.Test
             files = files.Where(f => !exclude.Any(y => f.EndsWith(y))).ToArray();
 
             files = files.Skip(startStep).ToArray();
+
+            // files = files.Where(x => x.Contains("DeferredActions")).ToArray();
 
             if (howManyToRun.HasValue)
                 files = files.Take(howManyToRun.Value).ToArray();
@@ -96,7 +104,7 @@ namespace WixSharp.Test
 
                 string output = Run(batchFile);
 
-                if (output.Contains(" : error") || output.Contains("Error: ") || (nonMsi && !HasAnyMsis(dir)))
+                if (output.Contains(" : error") || output.Contains("Error: ") || (!nonMsi && !HasAnyMsis(dir)))
                 {
                     if (batchFile.EndsWith(@"Signing\Build.cmd") && output.Contains("SignTool Error:"))
                     {
