@@ -44,7 +44,7 @@ namespace WixSharp
         /// minute and ss is second.
         /// </summary>
         [Xml]
-        public string DateTime;
+        public string MaxDate;
 
         /// <summary>
         /// The maximum size of the file.
@@ -53,7 +53,7 @@ namespace WixSharp
         public int? MaxSize;
 
         /// <summary>
-        /// The minimum version of the file
+        /// The maximum version of the file
         /// </summary>
         [Xml]
         public string MaxVersion;
