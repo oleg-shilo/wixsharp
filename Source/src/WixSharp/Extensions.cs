@@ -1692,6 +1692,16 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Selects the first parent element with the "Component" name.
+        /// </summary>
+        /// <param name="element">The element to search the component element for.</param>
+        /// <returns>Parent component of the XElement.</returns>
+        public static XElement Component(this XElement element)
+        {
+            return element.Parent("Component");
+        }
+
+        /// <summary>
         /// Selects the first descendant "Directory" element that has no other sub-directories (child "Directory" XElements).
         /// </summary>
         /// <param name="element">The element to be searched.</param>

@@ -79,7 +79,7 @@ namespace WixSharp
         public bool? Permanent;
 
         /// <summary>
-        /// Specifies wheter or not the modification should preserve the modified date.
+        /// Specifies whether or not the modification should preserve the modified date.
         /// Preserving the modified date will allow the file to be patched if no other modifications have been made.
         /// </summary>
         [Xml]
@@ -118,6 +118,7 @@ namespace WixSharp
             }
 
             context.XParentComponent.Add(this.ToXElement(WixExtension.Util, "XmlFile").AddAttributes("File=" + File));
+            // context.XParent.ParentComponent().Add(this.ToXElement(WixExtension.Util, "XmlFile").AddAttributes("File=" + File));
         }
     }
 }
