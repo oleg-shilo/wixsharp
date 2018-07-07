@@ -223,6 +223,8 @@ namespace WixSharp
         /// <summary>
         /// The default path of the feature <c>ConfigurableDirectory</c>. If set to non-empty string, MSI runtime will place
         /// <c>Configure</c> button for the feature in the <c>Feature Selection</c> dialog.
+        /// <para>Specify the Id of a Directory that can be configured by the user at installation 
+        /// time. This identifier must be a public property and therefore completely uppercase. </para>
         /// </summary>
         public string ConfigurableDir = "";
 

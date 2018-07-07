@@ -633,6 +633,26 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Creates a new <see cref="Version"/> object from based on <c>version</c> with the revision part omitted.
+        /// </summary>
+        /// <param name="version">The version.</param>
+        /// <returns></returns>
+        static public Version ClearRevision(this Version version)
+        {
+            return new Version(version.Major, version.Minor, version.Build);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Version"/> object from based on <c>version</c> with the revision part omitted.
+        /// </summary>
+        /// <param name="version">The version.</param>
+        /// <returns></returns>
+        static public Version ClearRevision(this FileVersionInfo version)
+        {
+            return new Version(version.FileMajorPart, version.FileMinorPart, version.FileBuildPart);
+        }
+
+        /// <summary>
         /// Adds the assembly references to the ManagedAction.
         /// </summary>
         /// <param name="action">The action.</param>

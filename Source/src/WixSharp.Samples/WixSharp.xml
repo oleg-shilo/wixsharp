@@ -625,6 +625,20 @@
             <param name="file">The file.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.ClearRevision(System.Version)">
+            <summary>
+            Creates a new <see cref="T:System.Version"/> object from based on <c>version</c> with the revision part omitted.
+            </summary>
+            <param name="version">The version.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.ClearRevision(System.Diagnostics.FileVersionInfo)">
+            <summary>
+            Creates a new <see cref="T:System.Version"/> object from based on <c>version</c> with the revision part omitted.
+            </summary>
+            <param name="version">The version.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.CommonTasks.Tasks.AddRefAssemblies(WixSharp.ManagedAction,System.String[])">
             <summary>
             Adds the assembly references to the ManagedAction.
@@ -3682,7 +3696,7 @@
             The languages supported by the file.
             </summary>
         </member>
-        <member name="F:WixSharp.FileSearch.DateTime">
+        <member name="F:WixSharp.FileSearch.MaxDate">
             <summary>
             The maximum modification date and time of the file. Formatted as YYYY-MM-DDTHH:mm:ss,
             where YYYY is the year, MM is month, DD is day, 'T' is literal, HH is hour, mm is
@@ -3696,7 +3710,24 @@
         </member>
         <member name="F:WixSharp.FileSearch.MaxVersion">
             <summary>
-            The minimum version of the file
+            The maximum version of the file
+            </summary>
+        </member>
+        <member name="F:WixSharp.FileSearch.MinDate">
+            <summary>
+            The minimum  modification date and time of the file. Formatted as YYYY-MM-DDTHH:mm:ss,
+            where YYYY is the year, MM is month, DD is day, 'T' is literal, HH is hour, mm is
+            minute and ss is second.
+            </summary>
+        </member>
+        <member name="F:WixSharp.FileSearch.MinSize">
+            <summary>
+            The minimum  size of the file.
+            </summary>
+        </member>
+        <member name="F:WixSharp.FileSearch.MinVersion">
+            <summary>
+            The minimum  version of the file
             </summary>
         </member>
         <member name="F:WixSharp.FileSearch.Name">
@@ -7139,6 +7170,13 @@
             </summary>
             <param name="element">The element to be searched.</param>
             <returns>Parent XElement of the first component.</returns>
+        </member>
+        <member name="M:WixSharp.Extensions.Component(System.Xml.Linq.XElement)">
+            <summary>
+            Selects the first parent element with the "Component" name.
+            </summary>
+            <param name="element">The element to search the component element for.</param>
+            <returns>Parent component of the XElement.</returns>
         </member>
         <member name="M:WixSharp.Extensions.FindLastDirectory(System.Xml.Linq.XContainer)">
             <summary>
@@ -12675,6 +12713,8 @@
             <summary>
             The default path of the feature <c>ConfigurableDirectory</c>. If set to non-empty string, MSI runtime will place
             <c>Configure</c> button for the feature in the <c>Feature Selection</c> dialog.
+            <para>Specify the Id of a Directory that can be configured by the user at installation 
+            time. This identifier must be a public property and therefore completely uppercase. </para>
             </summary>
         </member>
         <member name="F:WixSharp.Feature.Children">
@@ -14500,7 +14540,7 @@
         </member>
         <member name="F:WixSharp.XmlFile.PreserveModifiedDate">
             <summary>
-            Specifies wheter or not the modification should preserve the modified date.
+            Specifies whether or not the modification should preserve the modified date.
             Preserving the modified date will allow the file to be patched if no other modifications have been made.
             </summary>
         </member>
