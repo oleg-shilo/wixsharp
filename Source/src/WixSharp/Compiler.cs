@@ -272,60 +272,68 @@ namespace WixSharp
             EnsureVSIntegration();
         }
 
-        static string FindWixBinPackage(string projectFile)
+        static string FindWixBinPackage()
         {
-            string probePackages(string packagesRoot, bool isGlobalPackage)
-            {
-                if (IO.Directory.Exists(packagesRoot))
-                {
-                    //search for the highest version of the WiX SDK version
-                    string maxVersionPackage = null;
-                    if (!isGlobalPackage)
-                    {
-                        var packages = IO.Directory.GetDirectories(packagesRoot, "WixSharp.wix.bin.*")
-                                                   .Select(d => new
-                                                   {
-                                                       Path = d,
-                                                       Version = d.PathGetFileName().Replace("WixSharp.wix.bin.", "").ToRawVersion()
-                                                   })
-                                                   .Where(x => x.Version != null)
-                                                   .OrderBy(x => x.Version);
+            var binaryDir = IO.Path.GetDirectoryName(Compiler.ClientAssembly);
+            var globalPackages = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\.nuget\packages");
 
-                        maxVersionPackage = packages.LastOrDefault()?.Path;
-                    }
-                    else
+            return probePackages(binaryDir, false) ?? probePackages(globalPackages, true);
+        }
+
+        private static string probePackages(string packagesRoot, bool isGlobalPackage)
+        {
+            if (IO.Directory.Exists(packagesRoot))
+            {
+                //search for the highest version of the WiX SDK version
+                string maxVersionPackage = null;
+                if (!isGlobalPackage)
+                {
+                    if (string.Compare(packagesRoot, IO.Path.GetPathRoot(packagesRoot), true) == 0)
                     {
-                        var packageDir = packagesRoot.PathCombine("WixSharp.wix.bin");
-                        var packages = IO.Directory.GetDirectories(packageDir)
+                        return null;
+                    }
+
+                    // Recursively search for a packages dir
+                    if (!IO.Directory.Exists(packagesRoot.PathCombine("packages")))
+                    {
+                        return probePackages(IO.Path.GetDirectoryName(packagesRoot), isGlobalPackage);
+                    }
+
+                    var packages = IO.Directory.GetDirectories(packagesRoot, "WixSharp.wix.bin.*")
                                                .Select(d => new
                                                {
                                                    Path = d,
-                                                   Version = d.PathGetFileName().ToRawVersion()
+                                                   Version = d.PathGetFileName().Replace("WixSharp.wix.bin.", "").ToRawVersion()
                                                })
                                                .Where(x => x.Version != null)
                                                .OrderBy(x => x.Version);
 
-                        maxVersionPackage = packages.LastOrDefault()?.Path;
-                    }
-
-                    if (maxVersionPackage.IsNotEmpty())
-                    {
-                        var binDir = maxVersionPackage.PathCombine(@"tools\bin");
-                        if (IO.Directory.Exists(binDir))
-                            return binDir;
-                    }
-
+                    maxVersionPackage = packages.LastOrDefault()?.Path;
                 }
-                return null;
+                else
+                {
+                    var packageDir = packagesRoot.PathCombine("WixSharp.wix.bin");
+                    var packages = IO.Directory.GetDirectories(packageDir)
+                                           .Select(d => new
+                                           {
+                                               Path = d,
+                                               Version = d.PathGetFileName().ToRawVersion()
+                                           })
+                                           .Where(x => x.Version != null)
+                                           .OrderBy(x => x.Version);
+
+                    maxVersionPackage = packages.LastOrDefault()?.Path;
+                }
+
+                if (maxVersionPackage.IsNotEmpty())
+                {
+                    var binDir = maxVersionPackage.PathCombine(@"tools\bin");
+                    if (IO.Directory.Exists(binDir))
+                        return binDir;
+                }
+
             }
-
-            var projectDir = projectFile.PathGetDirName();
-            var solutionDir = projectDir.PathGetDirName();
-            var globalPackages = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\.nuget\packages");
-
-            return probePackages(projectDir.PathCombine("packages"), false) ??
-                   probePackages(solutionDir.PathCombine("packages"), false) ??
-                   probePackages(globalPackages, true);
+            return null;
         }
 
         static void EnsureVSIntegration()
@@ -355,7 +363,7 @@ namespace WixSharp
 
                     Environment.SetEnvironmentVariable("MSBUILD", "true");
                     Environment.SetEnvironmentVariable("MSBUILD_PROJ", projFile);
-                    Environment.SetEnvironmentVariable("MSBUILD_WIX_BIN", FindWixBinPackage(projFile));
+                    Environment.SetEnvironmentVariable("MSBUILD_WIX_BIN", FindWixBinPackage());
 
                     var doc = XDocument.Load(projFile);
                     var ns = doc.Root.Name.Namespace;
@@ -403,9 +411,10 @@ namespace WixSharp
         {
             get
             {
-                if (wixLocation.IsEmpty()) //WixSharp did not set WIXSHARP_WIXDIR environment variable so check if the full WiX was installed
+                if (wixLocation.IsEmpty() || !IO.Directory.Exists(wixLocation)) //WixSharp did not set WIXSHARP_WIXDIR environment variable so check if the full WiX was installed
                 {
-                    var dir = Environment.GetEnvironmentVariable("MSBUILD_WIX_BIN") ?? "";
+                    var dir = FindWixBinPackage();
+
                     if (!IO.Directory.Exists(dir))
                         dir = Environment.ExpandEnvironmentVariables("%WIX%\\bin");
 
