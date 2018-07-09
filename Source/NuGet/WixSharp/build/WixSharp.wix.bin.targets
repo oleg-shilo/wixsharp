@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"> 
+  <Target Name="BeforeBuild"> 
+    <PropertyGroup>
+      <CurrentPath>$(MSBuildThisFileDirectory)</CurrentPath>
+      <WixBinPath>$(CurrentPath)..\tools\bin\</WixBinPath>
+      <WixBinPathNormalized>$([System.IO.Path]::GetFullPath($(WixBinPath)))</WixBinPathNormalized>
+    </PropertyGroup>
+
+    <Message Text="[WixSharp.wix.bin] Setting WIX binaries path to $(WixBinPathNormalized)" Importance="High" />
+    <Exec Command="setx WIXSHARP_WIXDIR $(WixBinPathNormalized)" />
+  </Target> 
+</Project>

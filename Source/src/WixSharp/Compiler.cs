@@ -403,6 +403,18 @@ namespace WixSharp
         {
             get
             {
+                // Get the location from the WixSharp.wix.bin package if referenced
+                if (!foundPackage && IO.File.Exists("WixSharp.wix.bin.location"))
+                {
+                    string text = IO.File.ReadAllText("WixSharp.wix.bin.location");
+                    var dir = IO.Path.GetFullPath(text);
+                    wixLocation = dir;
+                    Environment.SetEnvironmentVariable("WixLocation", wixLocation);
+                    foundPackage = true;
+
+                    return wixLocation;
+                }
+
                 if (wixLocation.IsEmpty()) //WixSharp did not set WIXSHARP_WIXDIR environment variable so check if the full WiX was installed
                 {
                     var dir = Environment.GetEnvironmentVariable("MSBUILD_WIX_BIN") ?? "";
@@ -447,6 +459,8 @@ namespace WixSharp
                 Environment.SetEnvironmentVariable("WixLocation", wixLocation);
             }
         }
+
+        static bool foundPackage = false;
 
         static string wixLocation = Environment.GetEnvironmentVariable("WIXSHARP_WIXDIR");
 
