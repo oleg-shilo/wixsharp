@@ -156,6 +156,8 @@
     <Compile Include="UACRevealer.cs" />
     <Compile Include="UrlReservation.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="Utilities\ArgumentUtilities.cs" />
+    <Compile Include="Utilities\WixBinLocator.cs" />
     <Compile Include="WixExtension.cs" />
     <Compile Include="WixProject.cs" />
     <Compile Include="Controls\Control.cs" />
