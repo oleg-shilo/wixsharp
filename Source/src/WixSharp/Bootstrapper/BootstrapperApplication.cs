@@ -64,7 +64,22 @@ namespace WixSharp.Bootstrapper
                 bootstrapperCoreConfig = Path.Combine(outDir, "BootstrapperCore.config");
 
                 sys.File.WriteAllText(bootstrapperCoreConfig,
-    @"<?xml version=""1.0"" encoding=""utf-8"" ?>
+                                      DefaultBootstrapperCoreConfigContent.Replace("{asmName}",asmName));
+
+                Compiler.TempFiles.Add(bootstrapperCoreConfig);
+            }
+        }
+
+        /// <summary>
+        /// The default content of the BootstrapperCore.config file. It is used in the cases when the custom config file was not specified
+        /// in <see cref="ManagedBootstrapperApplication"/> constructor. 
+        /// <para>BootstrapperCore.config is very important as its content can affect both bootstrapper build outcome and the 
+        /// runtime behaviour.</para>
+        /// <para>See this discussions: </para>
+        /// <para>  - https://github.com/oleg-shilo/wixsharp/issues/416 </para>
+        /// <para>  - https://github.com/oleg-shilo/wixsharp/issues/389 </para>
+        /// </summary>
+        public static string DefaultBootstrapperCoreConfigContent = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <configuration>
     <configSections>
         <sectionGroup name=""wix.bootstrapper"" type=""Microsoft.Tools.WindowsInstallerXml.Bootstrapper.BootstrapperSectionGroup, BootstrapperCore"">
@@ -76,17 +91,14 @@ namespace WixSharp.Bootstrapper
         <supportedRuntime version=""v4.0"" />
     </startup>
     <wix.bootstrapper>
-        <host assemblyName=""" + asmName + @""">
+        <host assemblyName=""{asmName}"">
             <supportedFramework version=""v3.5"" runtimeVersion=""v2.0.50727"" />
             <supportedFramework version=""v4\Full"" />
             <supportedFramework version=""v4\Client"" />
         </host>
     </wix.bootstrapper>
 </configuration>
-");
-                Compiler.TempFiles.Add(bootstrapperCoreConfig);
-            }
-        }
+"; 
 
         /// <summary>
         /// Emits WiX XML.
