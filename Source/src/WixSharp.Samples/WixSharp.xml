@@ -2056,6 +2056,9 @@
             in <see cref="T:WixSharp.Bootstrapper.ManagedBootstrapperApplication"/> constructor. 
             <para>BootstrapperCore.config is very important as its content can affect both bootstrapper build outcome and the 
             runtime behaviour.</para>
+            <para>See these discussions: </para>
+            <para>  - https://github.com/oleg-shilo/wixsharp/issues/416 </para>
+            <para>  - https://github.com/oleg-shilo/wixsharp/issues/389 </para>
             </summary>
         </member>
         <member name="M:WixSharp.Bootstrapper.ManagedBootstrapperApplication.ToXml">
@@ -3427,7 +3430,7 @@
              //sequential built-in GUID generator
              Compiler.GuidGenerator = GuidGenerators.Sequential;
             
-             //Custom 'aways-same' GUID generator
+             //Custom 'always-same' GUID generator
              Compiler.GuidGenerator = (seed) => Guid.Parse("9e2974a1-9539-4c5c-bef7-80fc35b9d7b0");
             
              //Custom random GUID generator

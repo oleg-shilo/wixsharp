@@ -37,6 +37,7 @@ using System.Threading;
 using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
+using WixSharp.Utilities;
 using IO = System.IO;
 
 //WIX References:
@@ -272,102 +273,33 @@ namespace WixSharp
             EnsureVSIntegration();
         }
 
-        static string FindWixBinPackage(string projectFile)
-        {
-            string probePackages(string packagesRoot, bool isGlobalPackage)
-            {
-                if (IO.Directory.Exists(packagesRoot))
-                {
-                    //search for the highest version of the WiX SDK version
-                    string maxVersionPackage = null;
-                    if (!isGlobalPackage)
-                    {
-                        var packages = IO.Directory.GetDirectories(packagesRoot, "WixSharp.wix.bin.*")
-                                                   .Select(d => new
-                                                   {
-                                                       Path = d,
-                                                       Version = d.PathGetFileName().Replace("WixSharp.wix.bin.", "").ToRawVersion()
-                                                   })
-                                                   .Where(x => x.Version != null)
-                                                   .OrderBy(x => x.Version);
-
-                        maxVersionPackage = packages.LastOrDefault()?.Path;
-                    }
-                    else
-                    {
-                        var packageDir = packagesRoot.PathCombine("WixSharp.wix.bin");
-                        var packages = IO.Directory.GetDirectories(packageDir)
-                                               .Select(d => new
-                                               {
-                                                   Path = d,
-                                                   Version = d.PathGetFileName().ToRawVersion()
-                                               })
-                                               .Where(x => x.Version != null)
-                                               .OrderBy(x => x.Version);
-
-                        maxVersionPackage = packages.LastOrDefault()?.Path;
-                    }
-
-                    if (maxVersionPackage.IsNotEmpty())
-                    {
-                        var binDir = maxVersionPackage.PathCombine(@"tools\bin");
-                        if (IO.Directory.Exists(binDir))
-                            return binDir;
-                    }
-
-                }
-                return null;
-            }
-
-            var projectDir = projectFile.PathGetDirName();
-            var solutionDir = projectDir.PathGetDirName();
-            var globalPackages = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\.nuget\packages");
-
-            return probePackages(projectDir.PathCombine("packages"), false) ??
-                   probePackages(solutionDir.PathCombine("packages"), false) ??
-                   probePackages(globalPackages, true);
-        }
-
         static void EnsureVSIntegration()
         {
             try
             {
                 //Debug.Assert(false);
-                // /MSBUILD:$(ProjectName)
-                var preffix = "/MSBUILD:";
+                string projectName = Environment.GetCommandLineArgs().FirstPrefixedValue("/MSBUILD:", "/MBSBUILD:");
 
-                string arg = Environment.GetCommandLineArgs().Where(x => x.StartsWith(preffix)).LastOrDefault() ?? "";
-
-                if (arg.IsEmpty())
+                if (projectName.IsNotEmpty())
                 {
-                    preffix = "/MBSBUILD:"; //early versions of NuGet packages had this typo
-                    arg = Environment.GetCommandLineArgs().Where(x => x.StartsWith(preffix)).LastOrDefault() ?? "";
-                }
-
-                if (arg.IsNotEmpty())
-                {
-                    //if building as part of the VS project with WixSharp NuGet package create (auto-generated) wxs file
-
-                    string projName = arg.Substring(preffix.Length);
-
                     //MSBuild always sets currdir to the project directory
-                    string projFile = IO.Path.Combine(Environment.CurrentDirectory, projName + ".csproj");
+                    string projFile = Environment.CurrentDirectory.PathJoin(projectName + ".csproj");
 
                     Environment.SetEnvironmentVariable("MSBUILD", "true");
                     Environment.SetEnvironmentVariable("MSBUILD_PROJ", projFile);
-                    Environment.SetEnvironmentVariable("MSBUILD_WIX_BIN", FindWixBinPackage(projFile));
-
                     var doc = XDocument.Load(projFile);
                     var ns = doc.Root.Name.Namespace;
 
-                    string autogenItem = "wix\\$(ProjectName).g.wxs";
-                    var auto_gen_elements = doc.Root.Descendants(ns + "None").Where(e => e.Attributes("Include").Where(a => a.Value == autogenItem).Any());
+                    string autogenItem = @"wix\$(ProjectName).g.wxs";
+                    var auto_gen_elements = doc.Root.Descendants(ns + "None")
+                                                    .Where(e => e.HasAttribute("Include", autogenItem));
+
                     bool injected = auto_gen_elements.Any();
 
                     if (MSBuild.EmitAutoGenFiles)
                     {
-                        string destDir = IO.Path.Combine(Environment.CurrentDirectory, "wix");
-                        autogeneratedWxsForVS = IO.Path.Combine(destDir, projName + ".g.wxs");
+                        string destDir = Environment.CurrentDirectory.PathJoin("wix");
+                        autogeneratedWxsForVS = destDir.PathJoin(projectName + ".g.wxs");
 
                         if (!injected)
                         {
@@ -389,6 +321,8 @@ namespace WixSharp
             catch { }
         }
 
+
+
         /// <summary>
         /// Gets or sets the location of WiX binaries (compiler/linker/dlls).
         /// The default value is the content of environment variable <c>WIXSHARP_WIXDIR</c>.
@@ -403,39 +337,15 @@ namespace WixSharp
         {
             get
             {
-                if (wixLocation.IsEmpty()) //WixSharp did not set WIXSHARP_WIXDIR environment variable so check if the full WiX was installed
+                if (wixLocation.IsNotEmpty() && !IO.Directory.Exists(wixLocation))
                 {
-                    var dir = Environment.GetEnvironmentVariable("MSBUILD_WIX_BIN") ?? "";
-                    if (!IO.Directory.Exists(dir))
-                        dir = Environment.ExpandEnvironmentVariables("%WIX%\\bin");
+                    Console.Error.WriteLine($"The specified location {wixLocation} was not valid.  Trying other methods to find the Wix assemblies!");
+                    wixLocation = null;
+                }
 
-                    if (!IO.Directory.Exists(dir))
-                    {
-                        string wixDir = IO.Directory.GetDirectories(Utils.ProgramFilesDirectory, "Windows Installer XML v3*")
-                                                    .OrderBy(x => x)
-                                                    .LastOrDefault();
-
-                        if (wixDir.IsEmpty())
-                            wixDir = IO.Directory.GetDirectories(Utils.ProgramFilesDirectory, "WiX Toolset v3*")
-                                                 .OrderBy(x => x)
-                                                 .LastOrDefault();
-
-                        if (!wixDir.IsEmpty())
-                            dir = Utils.PathCombine(wixDir, "bin");
-                    }
-                    else
-                    {
-                        dir = IO.Path.GetFullPath(dir); //normalize
-                    }
-
-                    if (!IO.Directory.Exists(dir))
-                        throw new Exception("WiX binaries cannot be found. Wix# is capable of automatically finding WiX tools only if " +
-                                            "WiX Toolset installed. In all other cases you need to set the environment variable " +
-                                            "WIXSHARP_WIXDIR or WixSharp.Compiler.WixLocation to the valid path to the WiX binaries.\n" +
-                                            "WiX binaries can be brought to the build environment by either installing WiX Toolset, " +
-                                            "downloading Wix# suite or by adding WixSharp.wix.bin NuGet package to your project.");
-
-                    wixLocation = dir;
+                if (wixLocation.IsEmpty()) // Not set from the installer - find it now
+                {
+                    wixLocation = WixBinLocator.FindWixBinLocation();
                     Environment.SetEnvironmentVariable("WixLocation", wixLocation);
                 }
 
@@ -448,10 +358,9 @@ namespace WixSharp
             }
         }
 
-        static string wixLocation = Environment.GetEnvironmentVariable("WIXSHARP_WIXDIR");
+        static string wixLocation;
 
-        static string wixSdkLocation;
-
+        
         /// <summary>
         /// Gets or sets the location of WiX SDK binaries (e.g. MakeSfxCA.exe).
         /// The default value is the '..\SDK' or 'SDK' (whichever exist) sub-directory of WixSharp.Compiler.WixLocation directory.
@@ -468,14 +377,7 @@ namespace WixSharp
             get
             {
                 if (wixSdkLocation.IsEmpty())
-                    wixSdkLocation = IO.Path.GetFullPath(Utils.PathCombine(WixLocation, "..\\sdk"));
-
-                if (!IO.Directory.Exists(wixSdkLocation))
-                {
-                    wixSdkLocation = IO.Path.GetFullPath(Utils.PathCombine(WixLocation, "sdk")); //NuGet package shovels the dirs
-                    if (!IO.Directory.Exists(wixSdkLocation))
-                        throw new Exception("WiX SDK binaries cannot be found. Please set WixSharp.Compiler.WixSdkLocation to valid path to the Wix SDK binaries.");
-                }
+                    wixSdkLocation = WixBinLocator.FindWixSdkLocation(WixLocation);
 
                 return wixSdkLocation;
             }
@@ -484,6 +386,7 @@ namespace WixSharp
                 wixSdkLocation = value;
             }
         }
+        static string wixSdkLocation;
 
         /// <summary>
         /// Forces <see cref="Compiler"/> to preserve all temporary build files (e.g. *.wxs).
@@ -515,7 +418,7 @@ namespace WixSharp
         /// //sequential built-in GUID generator
         /// Compiler.GuidGenerator = GuidGenerators.Sequential;
         ///
-        /// //Custom 'aways-same' GUID generator
+        /// //Custom 'always-same' GUID generator
         /// Compiler.GuidGenerator = (seed) => Guid.Parse("9e2974a1-9539-4c5c-bef7-80fc35b9d7b0");
         ///
         /// //Custom random GUID generator
