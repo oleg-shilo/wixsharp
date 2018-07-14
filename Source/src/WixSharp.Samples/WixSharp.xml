@@ -2050,6 +2050,14 @@
             </summary>
             <param name="outDir">The output directory.</param>
         </member>
+        <member name="F:WixSharp.Bootstrapper.ManagedBootstrapperApplication.DefaultBootstrapperCoreConfigContent">
+            <summary>
+            The default content of the BootstrapperCore.config file. It is used in the cases when the custom config file was not specified
+            in <see cref="T:WixSharp.Bootstrapper.ManagedBootstrapperApplication"/> constructor. 
+            <para>BootstrapperCore.config is very important as its content can affect both bootstrapper build outcome and the 
+            runtime behaviour.</para>
+            </summary>
+        </member>
         <member name="M:WixSharp.Bootstrapper.ManagedBootstrapperApplication.ToXml">
             <summary>
             Emits WiX XML.

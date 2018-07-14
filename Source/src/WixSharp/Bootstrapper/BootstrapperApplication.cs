@@ -75,7 +75,7 @@ namespace WixSharp.Bootstrapper
         /// in <see cref="ManagedBootstrapperApplication"/> constructor. 
         /// <para>BootstrapperCore.config is very important as its content can affect both bootstrapper build outcome and the 
         /// runtime behaviour.</para>
-        /// <para>See this discussions: </para>
+        /// <para>See these discussions: </para>
         /// <para>  - https://github.com/oleg-shilo/wixsharp/issues/416 </para>
         /// <para>  - https://github.com/oleg-shilo/wixsharp/issues/389 </para>
         /// </summary>
