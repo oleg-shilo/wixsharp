@@ -1363,6 +1363,58 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Sorts the elements of a sequence in ascending order with item's default comparison operators.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <returns></returns>
+        public static IOrderedEnumerable<TSource> Order<TSource>(this IEnumerable<TSource> source)
+        {
+            return source.OrderBy(x => x);
+        }
+
+        /// <summary>
+        /// Sorts the elements of a sequence in descending order with item's default comparison operators.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <returns></returns>
+        public static IOrderedEnumerable<TSource> OrderDescending<TSource>(this IEnumerable<TSource> source)
+        {
+            return source.OrderByDescending(x => x);
+        }
+
+        /// <summary>
+        /// Returns the first item that starts with one of the specified possible prefixes.
+        /// The method returns the matching item value without the prefix.
+        /// </summary>
+        /// <example>This method is convenient a convenient way of parsing command line arguments.
+        /// <code>
+        /// // Command line: "app.exe -out:.\log.file"
+        /// // outFile value is ".\log.file"
+        /// string outFile = Environment.GetCommandLineArgs().FirstPrefixedValue("-out:", "-o:");
+        /// </code>
+        /// </example>
+        /// <param name="items">The items.</param>
+        /// <param name="possiblePreffixes">The possible prefixes.</param>
+        /// <returns></returns>
+        public static string FirstPrefixedValue(this IEnumerable<string> items, params string[] possiblePreffixes)
+        {
+            foreach (var preffix in possiblePreffixes)
+            {
+                string match = items.Where(x => x.StartsWith(preffix, true))
+                                    .LastOrDefault();
+
+                if (match.IsNotEmpty())
+                {
+                    return match.Substring(preffix.Length);
+                }
+            }
+
+            return "";
+        }
+
+        /// <summary>
         /// Returns all leading white-space characters.
         /// </summary>
         /// <param name="s">The string to analyse.</param>

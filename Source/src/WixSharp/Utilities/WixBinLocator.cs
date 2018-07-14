@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
 
-namespace WixSharp.Utilities
+namespace WixSharp
 {
     static class WixBinLocator
     {
         public static string FindWixSdkLocation(string wixLocation)
         {
-            var wixSdkLocation = Path.GetFullPath(Utils.PathCombine(wixLocation, "..\\sdk"));
+            var wixSdkLocation = Path.GetFullPath(Utils.PathCombine(wixLocation, @"..\sdk"));
 
             if (!Directory.Exists(wixSdkLocation))
             {
@@ -25,40 +23,44 @@ namespace WixSharp.Utilities
         public static string FindWixBinLocation()
         {
             // See if the command line was set for this property
-            var msBuildArgument = ArgumentUtilities.GetArgumentValue(new[] { "/WIXBIN:" });
-            if (!msBuildArgument.IsNullOrEmpty() && Directory.Exists(msBuildArgument))
+            var msBuildArgument = Environment.GetCommandLineArgs().FirstPrefixedValue("/WIXBIN:");
+            if (msBuildArgument.IsNotEmpty() && Directory.Exists(msBuildArgument))
             {
                 return Path.GetFullPath(msBuildArgument);
             }
             
             // Now check to see if the environment variable was set
             var environmentVar = Environment.GetEnvironmentVariable("WIXSHARP_WIXDIR");
-            if (!environmentVar.IsNullOrEmpty() && Directory.Exists(environmentVar))
+            if (environmentVar.IsNotEmpty() && Directory.Exists(environmentVar))
             {
                 return Path.GetFullPath(environmentVar);
             }
 
             // Now check to see if the WIX install set an environment variable
-            var wixEnvironmentVariable = Environment.ExpandEnvironmentVariables("%WIX%\\bin");
-            if (!wixEnvironmentVariable.IsNullOrEmpty() && Directory.Exists(wixEnvironmentVariable))
+            var wixEnvironmentVariable = Environment.ExpandEnvironmentVariables(@"%WIX%\bin");
+            if (wixEnvironmentVariable.IsNotEmpty() && Directory.Exists(wixEnvironmentVariable))
             {
                 return Path.GetFullPath(wixEnvironmentVariable);
             }
 
             // Now try the program files install location
             string wixInstallDir = Directory.GetDirectories(Utils.ProgramFilesDirectory, "Windows Installer XML v3*")
-                                .OrderBy(x => x).LastOrDefault();
-            if (!wixInstallDir.IsNullOrEmpty() && Directory.Exists(wixInstallDir))
+                                            .Order()
+                                            .LastOrDefault();
+
+            if (wixInstallDir.IsNotEmpty() && Directory.Exists(wixInstallDir))
             {
-                return Path.GetFullPath(Path.Combine(wixInstallDir, "bin"));
+                return Path.GetFullPath(wixInstallDir.PathJoin("bin"));
             }
 
             // Try a secondary location
             wixInstallDir = Directory.GetDirectories(Utils.ProgramFilesDirectory, "WiX Toolset v3*")
-                    .OrderBy(x => x).LastOrDefault();
-            if (!wixInstallDir.IsNullOrEmpty() && Directory.Exists(wixInstallDir))
+                                     .Order()
+                                     .LastOrDefault();
+
+            if (!wixInstallDir.IsNotEmpty() && Directory.Exists(wixInstallDir))
             {
-                return Path.GetFullPath(Path.Combine(wixInstallDir, "bin"));
+                return Path.GetFullPath(wixInstallDir.PathJoin("bin"));
             }
 
             throw new Exception("WiX binaries cannot be found. Wix# is capable of automatically finding WiX tools only if " +
