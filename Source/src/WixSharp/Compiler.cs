@@ -37,7 +37,6 @@ using System.Threading;
 using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
-using WixSharp.Utilities;
 using IO = System.IO;
 
 //WIX References:
