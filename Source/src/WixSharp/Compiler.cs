@@ -577,10 +577,17 @@ namespace WixSharp
 
                 using (var sw = new IO.StreamWriter(batchFile))
                 {
+                    sw.WriteLine("@setlocal");
                     sw.WriteLine(wixLocationEnvVar);
-                    sw.WriteLine("\"" + compiler + "\" " + candleCmd);
-                    sw.WriteLine("\"" + linker + "\" " + lightCmd);
-                    sw.WriteLine("pause");
+                    sw.WriteLine("call \"" + compiler + "\" " + candleCmd);
+                    sw.WriteLine("if ERRORLEVEL 1 @echo candle.exe failed & GOTO ERROR");
+                    sw.WriteLine("call \"" + linker + "\" " + lightCmd);
+                    sw.WriteLine("if ERRORLEVEL 1 @echo light.exe failed & GOTO ERROR");
+                    sw.WriteLine("@endlocal");
+                    sw.WriteLine("EXIT /B 0");
+                    sw.WriteLine(":ERROR");
+                    sw.WriteLine("@endlocal");
+                    sw.WriteLine("EXIT /B 1");
                 }
             }
         }
