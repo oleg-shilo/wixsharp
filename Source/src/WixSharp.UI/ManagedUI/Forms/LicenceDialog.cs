@@ -25,9 +25,9 @@ namespace WixSharp.UI.Forms
 
         void LicenceDialog_Load(object sender, EventArgs e)
         {
-            banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
-            agreement.Rtf = MsiRuntime.Session.GetEmbeddedString("WixSharp_LicenceFile");
-            accepted.Checked = MsiRuntime.Session["LastLicenceAcceptedChecked"] == "True";
+            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
+            agreement.Rtf = Runtime.Session.GetResourceString("WixSharp_LicenceFile");
+            accepted.Checked = Runtime.Session["LastLicenceAcceptedChecked"] == "True";
 
             ResetLayout();
         }
@@ -67,14 +67,14 @@ namespace WixSharp.UI.Forms
         void accepted_CheckedChanged(object sender, EventArgs e)
         {
             next.Enabled = accepted.Checked;
-            MsiRuntime.Session["LastLicenceAcceptedChecked"] = accepted.Checked.ToString();
+            Runtime.Session["LastLicenceAcceptedChecked"] = accepted.Checked.ToString();
         }
 
         void print_Click(object sender, EventArgs e)
         {
             try
             {
-                var file = Path.Combine(Path.GetTempPath(), MsiRuntime.Session.Property("ProductName") + ".licence.rtf");
+                var file = Path.Combine(Path.GetTempPath(), Runtime.Session.Property("ProductName") + ".licence.rtf");
                 io.File.WriteAllText(file, agreement.Rtf);
                 Process.Start(file);
             }

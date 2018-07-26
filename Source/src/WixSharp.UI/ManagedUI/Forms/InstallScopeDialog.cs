@@ -35,31 +35,31 @@ namespace WixSharp.UI.Forms
             // * An ALLUSERS property value of an empty string("") specifies the per - user installation context.
             // * If the value of the ALLUSERS property is set to 2, the Windows Installer always resets the value of the ALLUSERS property to 1 and performs a per-machine installation or it resets the value of the ALLUSERS property to an empty string("") and performs a per-user installation.The value ALLUSERS = 2 enables the system to reset the value of ALLUSERS, and the installation context, dependent upon the user's privileges and the version of Windows
 
-            MsiRuntime.Session["ALLUSERS"] = "2";
+            Runtime.Session["ALLUSERS"] = "2";
 
-            this.machineScopeRadioButton.Checked = MsiRuntime.Session["MSIINSTALLPERUSER"] == "0";
-            this.userScopeRadioButton.Checked = MsiRuntime.Session["MSIINSTALLPERUSER"] == "1";
+            this.machineScopeRadioButton.Checked = Runtime.Session["MSIINSTALLPERUSER"] == "0";
+            this.userScopeRadioButton.Checked = Runtime.Session["MSIINSTALLPERUSER"] == "1";
 
             if (!this.machineScopeRadioButton.Checked && !this.userScopeRadioButton.Checked)
             {
                 this.userScopeRadioButton.Checked = true;
             }
 
-            banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
 
-            this.installDirProperty = MsiRuntime.Session.Property("WixSharp_UI_INSTALLDIR");
+            this.installDirProperty = Runtime.Session.Property("WixSharp_UI_INSTALLDIR");
 
-            string installDirPropertyValue = MsiRuntime.Session.Property(this.installDirProperty);
+            string installDirPropertyValue = Runtime.Session.Property(this.installDirProperty);
 
             if (installDirPropertyValue.IsEmpty())
             {
                 //We are executed before any of the MSI actions are invoked so the INSTALLDIR (if set to absolute path)
                 //is not resolved yet. So we need to do it manually
-                installDir.Text = MsiRuntime.Session.GetDirectoryPath(this.installDirProperty);
+                installDir.Text = Runtime.Session.GetDirectoryPath(this.installDirProperty);
 
                 if (installDir.Text == "ABSOLUTEPATH")
                 {
-                    installDir.Text = MsiRuntime.Session.Property("INSTALLDIR_ABSOLUTEPATH");
+                    installDir.Text = Runtime.Session.Property("INSTALLDIR_ABSOLUTEPATH");
                 }
             }
             else
@@ -100,14 +100,14 @@ namespace WixSharp.UI.Forms
             {
                 if (userScopeRadioButton.Checked)
                 {
-                    MsiRuntime.Session["MSIINSTALLPERUSER"] = "1";
-                    MsiRuntime.Session[installDirProperty] = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\Apps\" + MsiRuntime.ProductName);
+                    Runtime.Session["MSIINSTALLPERUSER"] = "1";
+                    Runtime.Session[installDirProperty] = Environment.ExpandEnvironmentVariables(@"%LOCALAPPDATA%\Apps\" + Runtime.ProductName);
                 }
 
                 if (machineScopeRadioButton.Checked)
                 {
-                    MsiRuntime.Session["MSIINSTALLPERUSER"] = "0";
-                    MsiRuntime.Session[installDirProperty] = installDir.Text;
+                    Runtime.Session["MSIINSTALLPERUSER"] = "0";
+                    Runtime.Session[installDirProperty] = installDir.Text;
                 }
             }
 

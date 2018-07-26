@@ -23,9 +23,9 @@ namespace WixSharp.UI.Forms
          
         void Alternative_Load(object sender, EventArgs e)
         {
-            image.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_LeftBanner");
+            image.Image = Runtime.Session.GetEmbeddedBitmap("WixUI_Bmp_LeftBanner");
             //background additional picturebox occupying the background area 
-            //background.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Dialog");
+            //background.Image = Runtime.Session.GetEmbeddedBitmap("WixUI_Bmp_Dialog");
 
             AlternativeResetLayout();
         }
