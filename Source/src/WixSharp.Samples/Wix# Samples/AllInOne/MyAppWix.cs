@@ -7,7 +7,6 @@ using System.Xml.Linq;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
 

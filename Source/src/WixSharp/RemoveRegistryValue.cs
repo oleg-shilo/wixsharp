@@ -44,7 +44,7 @@ namespace WixSharp
         public RegistryHive Root = RegistryHive.LocalMachine;
 
         [Xml(Name = "Root")]
-        private string root { get { return Root.ToWString(); } }
+        private string root { get { return Root; } }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RemoveRegistryValue" /> class.

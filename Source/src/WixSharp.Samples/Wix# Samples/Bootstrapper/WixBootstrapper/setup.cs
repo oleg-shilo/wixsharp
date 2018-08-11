@@ -4,15 +4,10 @@
 //css_ref System.Xml.Linq.dll;
 //css_ref ..\..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 using System;
-using System.Xml;
-using System.Xml.Linq;
-using System.Linq;
 using io = System.IO;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
-using System.Diagnostics;
-using Microsoft.Win32;
 using System.Windows.Forms;
 
 public class InstallScript

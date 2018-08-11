@@ -176,8 +176,8 @@ namespace WixSharp
             if (tmpLine.StartsWith("HKEY_USERS\\"))
                 return RegistryHive.Users;
 
-            if (tmpLine.StartsWith("HKEY_CURRENT_CONFIG\\"))
-                return RegistryHive.CurrentConfig;
+            // if (tmpLine.StartsWith("HKEY_CURRENT_CONFIG\\"))
+            //     return RegistryHive.CurrentConfig;
 
             if (tmpLine.StartsWith("HKEY_CURRENT_USER\\"))
                 return RegistryHive.CurrentUser;

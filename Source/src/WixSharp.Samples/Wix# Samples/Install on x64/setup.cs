@@ -5,7 +5,6 @@
 using System;
 using System.Linq;
 using System.Xml.Linq;
-using Microsoft.Win32;
 using WixSharp;
 
 class Script

@@ -2260,7 +2260,7 @@ namespace WixSharp
                     XElement regKeyEl;
                     regKeyEl = comp.AddElement(
                             new XElement("RegistryKey",
-                                new XAttribute("Root", regVal.Root.ToWString()),
+                                new XAttribute("Root", regVal.Root),
                                 regValEl = new XElement("RegistryValue")
                                                .SetAttribute("Id", regVal.Id)
                                                .SetAttribute("Type", regVal.RegTypeString)
@@ -2493,7 +2493,7 @@ namespace WixSharp
                                     new XAttribute("Id", rvProp.Name),
                                     RegistrySearchElement = new XElement("RegistrySearch",
                                         new XAttribute("Id", rvProp.Name + "_RegSearch"),
-                                        new XAttribute("Root", rvProp.Root.ToWString()),
+                                        new XAttribute("Root", rvProp.Root),
                                         new XAttribute("Key", rvProp.Key),
                                         new XAttribute("Type", "raw")
                                         ))

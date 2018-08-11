@@ -1823,14 +1823,14 @@ namespace WixSharp
         /// </summary>
         /// <param name="value">The <see cref="T:Microsoft.Win32.RegistryHive"/> value to convert.</param>
         /// <returns>WiX compatible string representation.</returns>
-        public static string ToWString(this RegistryHive value)
+        public static string ToWString(this Microsoft.Win32.RegistryHive value)
         {
             switch (value)
             {
-                case RegistryHive.ClassesRoot: return "HKCR";
-                case RegistryHive.CurrentUser: return "HKCU";
-                case RegistryHive.LocalMachine: return "HKLM";
-                case RegistryHive.Users: return "HKU";
+                case Microsoft.Win32.RegistryHive.ClassesRoot: return "HKCR";
+                case Microsoft.Win32.RegistryHive.CurrentUser: return "HKCU";
+                case Microsoft.Win32.RegistryHive.LocalMachine: return "HKLM";
+                case Microsoft.Win32.RegistryHive.Users: return "HKU";
                 default: return "unsupported root type";
             }
         }

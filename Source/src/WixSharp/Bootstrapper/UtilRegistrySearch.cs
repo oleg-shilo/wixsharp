@@ -1,5 +1,3 @@
-using Microsoft.Win32;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace WixSharp.Bootstrapper
@@ -96,7 +94,7 @@ namespace WixSharp.Bootstrapper
         public XElement ToXml()
         {
             return this.ToXElement(WixExtension.Util.ToXName("RegistrySearch"))
-                       .SetAttribute("Root", Root.ToWString());
+                       .SetAttribute("Root", Root);
         }
     }
 

@@ -50,7 +50,7 @@ namespace WixSharp
         public RegistryHive Root = RegistryHive.LocalMachine;
 
         [Xml(Name = "Root")]
-        private string root { get { return Root.ToWString(); } }
+        private string root { get { return Root; } }
 
         /// <summary>
         /// This is the action that will be taken for this registry value.

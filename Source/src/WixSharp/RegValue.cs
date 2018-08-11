@@ -30,6 +30,29 @@ using Microsoft.Win32;
 namespace WixSharp
 {
     /// <summary>
+    /// Values of this type represent possible registry roots.
+    /// </summary>
+    /// <seealso cref="WixSharp.StringEnum{WixSharp.RegistryHive}" />
+    public class RegistryHive : StringEnum<RegistryHive>
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegistryHive"/> class.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public RegistryHive(string value) : base(value) { }
+
+        public static RegistryHive ClassesRoot = new RegistryHive("HKCR");
+        public static RegistryHive CurrentUser = new RegistryHive("HKCU");
+        public static RegistryHive LocalMachine = new RegistryHive("HKLM");
+        public static RegistryHive Users = new RegistryHive("HKU");
+        /// <summary>
+        /// Defines ”HKMU” value, which makes it so the registry entry will appear in HKLM 
+        /// when a per-machine install is run and in HKCU when a per-user install us run. 
+        /// </summary>
+        public static RegistryHive LocalMachineOrUsers = new RegistryHive("HKMU");
+
+    }
+    /// <summary>
     /// Defines the registry file (*.reg) containing the entries to be installed.
     /// <para>
     /// Compiler uses the data from this class to call <see cref="T:WixSharp.CommonTasks.ImportRegFile"/>

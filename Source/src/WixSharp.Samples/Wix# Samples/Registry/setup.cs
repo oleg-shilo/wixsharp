@@ -3,7 +3,6 @@
 //css_ref System.Core.dll;
 using System;
 using System.Linq;
-using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
 using System.Xml.Linq;
@@ -14,11 +13,6 @@ class Script
     {
         //uncomment the line below if the reg file contains unsupported type to be ignored
         //RegFileImporter.SkipUnknownTypes = true;
-
-        var r = RegistryHive.CurrentUser;
-        var r1 = RegistryHive.LocalMachine;
-        var r2 = RegistryHive.LocalMachine | RegistryHive.CurrentUser;
-
 
         var fullSetup = new Feature("MyApp Binaries");
 

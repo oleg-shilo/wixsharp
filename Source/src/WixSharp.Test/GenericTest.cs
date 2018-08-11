@@ -13,8 +13,8 @@ using WixSharp.UI;
 
 using WixMsi = WixSharpMsi::WixSharp;
 using WixSharp.CommonTasks;
-using Microsoft.Win32;
 using static WixSharp.SetupEventArgs;
+using Microsoft.Win32;
 
 namespace WixSharp.Test
 {

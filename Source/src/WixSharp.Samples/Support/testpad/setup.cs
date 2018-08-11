@@ -1,16 +1,10 @@
 //css_ref ..\..\WixSharp.dll;
 //css_ref System.Core.dll;
 using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Security.Principal;
-using System.Threading;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using System.Xml.XPath;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;

@@ -31,14 +31,11 @@ using System.Text;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using WixSharp;
 using WixSharp.Controls;
 using IO = System.IO;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
-using System.Globalization;
 
 namespace WixSharp.CommonTasks
 {

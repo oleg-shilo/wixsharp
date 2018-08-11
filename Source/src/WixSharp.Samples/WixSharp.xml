@@ -3624,7 +3624,7 @@
         </member>
         <member name="M:WixSharp.Compiler.GetMappedWixConstants(System.Boolean)">
             <summary>
-            Gets list of the the mapped WiX constants.
+            Gets list of the mapped WiX constants.
             </summary>
             <param name="include64Specific">if set to <c>true</c> [include64 specific].</param>
             <returns></returns>
@@ -5895,7 +5895,7 @@
             the default value is 'false'. For x64 and IA64, the default value is 'true'.
             </summary>
         </member>
-        <member name="M:WixSharp.RegistrySearch.#ctor(WixSharp.Id,Microsoft.Win32.RegistryHive,System.String,System.String,WixSharp.RegistrySearchType,WixSharp.IGenericEntity[])">
+        <member name="M:WixSharp.RegistrySearch.#ctor(WixSharp.Id,WixSharp.RegistryHive,System.String,System.String,WixSharp.RegistrySearchType,WixSharp.IGenericEntity[])">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegistrySearch"/> class.
             </summary>
@@ -5906,7 +5906,7 @@
             <param name="type">The type.</param>
             <param name="children">The children.</param>
         </member>
-        <member name="M:WixSharp.RegistrySearch.#ctor(Microsoft.Win32.RegistryHive,System.String,System.String,WixSharp.RegistrySearchType,WixSharp.IGenericEntity[])">
+        <member name="M:WixSharp.RegistrySearch.#ctor(WixSharp.RegistryHive,System.String,System.String,WixSharp.RegistrySearchType,WixSharp.IGenericEntity[])">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegistrySearch"/> class.
             </summary>
@@ -5966,14 +5966,14 @@
             <param name="feature">The Feature.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
             <param name="root">The Root.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Feature,WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
@@ -5996,7 +5996,7 @@
             <param name="name">The Name.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(Microsoft.Win32.RegistryHive,System.String,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.RegistryHive,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
@@ -6004,7 +6004,7 @@
             <param name="name">The Name.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Feature,WixSharp.RegistryHive,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
@@ -6028,7 +6028,7 @@
             <param name="feature">The Feature.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
@@ -6036,7 +6036,7 @@
             <param name="root">The Root.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,WixSharp.Feature,WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
@@ -6062,7 +6062,7 @@
             <param name="name">The Name.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,Microsoft.Win32.RegistryHive,System.String,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,WixSharp.RegistryHive,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
@@ -6071,7 +6071,7 @@
             <param name="name">The Name.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,WixSharp.Feature,WixSharp.RegistryHive,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
@@ -6142,14 +6142,14 @@
             <param name="feature">The Feature.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
             <param name="root">The Root.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Feature,WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
@@ -6172,7 +6172,7 @@
             <param name="key">The Key.</param>
             <param name="action">The Action.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(Microsoft.Win32.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
@@ -6180,7 +6180,7 @@
             <param name="key">The Key.</param>
             <param name="action">The Action.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Feature,WixSharp.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
@@ -6204,7 +6204,7 @@
             <param name="feature">The Feature.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
@@ -6212,7 +6212,7 @@
             <param name="root">The Root.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,WixSharp.Feature,WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
@@ -6238,7 +6238,7 @@
             <param name="key">The Key.</param>
             <param name="action">The Action.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,Microsoft.Win32.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,WixSharp.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
@@ -6247,7 +6247,7 @@
             <param name="key">The Key.</param>
             <param name="action">The Action.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,WixSharp.Feature,WixSharp.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
@@ -7043,6 +7043,38 @@
             <returns>
             	<c>true</c> if the specified string is not empty; otherwise, <c>false</c>.
             </returns>
+        </member>
+        <member name="M:WixSharp.Extensions.Order``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Sorts the elements of a sequence in ascending order with item's default comparison operators.
+            </summary>
+            <typeparam name="TSource">The type of the source.</typeparam>
+            <param name="source">The source.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.OrderDescending``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Sorts the elements of a sequence in descending order with item's default comparison operators.
+            </summary>
+            <typeparam name="TSource">The type of the source.</typeparam>
+            <param name="source">The source.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.FirstPrefixedValue(System.Collections.Generic.IEnumerable{System.String},System.String[])">
+            <summary>
+            Returns the first item that starts with one of the specified possible prefixes.
+            The method returns the matching item value without the prefix.
+            </summary>
+            <example>This method is convenient a convenient way of parsing command line arguments.
+            <code>
+            // Command line: "app.exe -out:.\log.file"
+            // outFile value is ".\log.file"
+            string outFile = Environment.GetCommandLineArgs().FirstPrefixedValue("-out:", "-o:");
+            </code>
+            </example>
+            <param name="items">The items.</param>
+            <param name="possiblePreffixes">The possible prefixes.</param>
+            <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.GetLeftIndent(System.String)">
             <summary>
@@ -14667,7 +14699,7 @@
             Initializes a new instance of the <see cref="T:WixSharp.RegValueProperty"/> class.
             </summary>
         </member>
-        <member name="M:WixSharp.RegValueProperty.#ctor(System.String,Microsoft.Win32.RegistryHive,System.String,System.String,System.String)">
+        <member name="M:WixSharp.RegValueProperty.#ctor(System.String,WixSharp.RegistryHive,System.String,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegValueProperty"/> class with properties/fields initialized with specified parameters.
             </summary>
@@ -14677,7 +14709,7 @@
             <param name="entryName">The registry entry name.</param>
             <param name="defaultValue">The registry entry default value.</param>
         </member>
-        <member name="M:WixSharp.RegValueProperty.#ctor(WixSharp.Id,System.String,Microsoft.Win32.RegistryHive,System.String,System.String,System.String)">
+        <member name="M:WixSharp.RegValueProperty.#ctor(WixSharp.Id,System.String,WixSharp.RegistryHive,System.String,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegValueProperty"/> class with properties/fields initialized with specified parameters.
             </summary>
@@ -14722,6 +14754,24 @@
             However this WiX approach creates non-intuitive behaver when the build outcome may depend on the
             architecture of the build machine.</para>
             <para>Thus WixSharp always uses consistent default value for this property: <c>false</c>.</para>
+            </summary>
+        </member>
+        <member name="T:WixSharp.RegistryHive">
+            <summary>
+            Values of this type represent possible registry roots.
+            </summary>
+            <seealso cref="!:WixSharp.StringEnum&lt;WixSharp.RegistryHive&gt;" />
+        </member>
+        <member name="M:WixSharp.RegistryHive.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.RegistryHive"/> class.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="F:WixSharp.RegistryHive.LocalMachineOrUsers">
+            <summary>
+            Defines ”HKMU” value, which makes it so the registry entry will appear in HKLM 
+            when a per-machine install is run and in HKCU when a per-user install us run. 
             </summary>
         </member>
         <member name="T:WixSharp.RegFile">
@@ -14804,7 +14854,7 @@
             <param name="name">The registry entry name.</param>
             <param name="value">The registry entry value.</param>
         </member>
-        <member name="M:WixSharp.RegValue.#ctor(Microsoft.Win32.RegistryHive,System.String,System.String,System.Object)">
+        <member name="M:WixSharp.RegValue.#ctor(WixSharp.RegistryHive,System.String,System.String,System.Object)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegValue"/> class with properties initialized with specified parameters.
             </summary>
@@ -14813,7 +14863,7 @@
             <param name="name">The registry entry name.</param>
             <param name="value">The registry entry value.</param>
         </member>
-        <member name="M:WixSharp.RegValue.#ctor(WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String,System.String,System.Object)">
+        <member name="M:WixSharp.RegValue.#ctor(WixSharp.Feature,WixSharp.RegistryHive,System.String,System.String,System.Object)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegValue"/> class with properties initialized with specified parameters.
             </summary>
@@ -14832,7 +14882,7 @@
             <param name="name">The registry entry name.</param>
             <param name="value">The registry entry value.</param>
         </member>
-        <member name="M:WixSharp.RegValue.#ctor(WixSharp.Id,Microsoft.Win32.RegistryHive,System.String,System.String,System.Object)">
+        <member name="M:WixSharp.RegValue.#ctor(WixSharp.Id,WixSharp.RegistryHive,System.String,System.String,System.Object)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegValue"/> class with properties initialized with specified parameters.
             </summary>
@@ -14842,7 +14892,7 @@
             <param name="name">The registry entry name.</param>
             <param name="value">The registry entry value.</param>
         </member>
-        <member name="M:WixSharp.RegValue.#ctor(WixSharp.Id,WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String,System.String,System.Object)">
+        <member name="M:WixSharp.RegValue.#ctor(WixSharp.Id,WixSharp.Feature,WixSharp.RegistryHive,System.String,System.String,System.Object)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegValue"/> class with properties initialized with specified parameters.
             </summary>
