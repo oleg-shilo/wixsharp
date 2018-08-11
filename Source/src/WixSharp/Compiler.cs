@@ -1143,11 +1143,13 @@ namespace WixSharp
                                                           .ConcatItems(" ");
 
             var wix3Namespace = "http://schemas.microsoft.com/wix/2006/wi";
-            //var wix4Namespace = "http://wixtoolset.org/schemas/v4/wxs";
+            var wix4Namespace = "http://wixtoolset.org/schemas/v4/wxs";
+
+            var wixNamespace = Compiler.IsWix4 ? wix4Namespace : wix3Namespace;
 
             XDocument doc = XDocument.Parse(
                     @"<?xml version=""1.0"" encoding=""utf-8""?>
-                      <Wix " + $"xmlns=\"{wix3Namespace}\" {extraNamespaces}" + @">
+                      <Wix " + $"xmlns=\"{wixNamespace}\" {extraNamespaces}" + @">
                           <Product>
                               <Package " + $"InstallerVersion=\"{project.InstallerVersion}\"" + @" Compressed=""yes""/>
                           </Product>
@@ -3232,8 +3234,12 @@ namespace WixSharp
                         "\"" + asmFile + "\" " +
                         "\"" + configFile + "\" " +
                         (pdbFileArgument ?? " ") +
-                        referencedAssemblies +
-                        "\"" + Utils.PathCombine(WixSdkLocation, "Microsoft.Deployment.WindowsInstaller.dll") + "\"";
+                        referencedAssemblies;
+
+            if (IsWix4)
+                makeSfxCA_args += $" \"{WixSdkLocation.PathCombine("WixToolset.Dtf.WindowsInstaller.dll")}\"";
+            else
+                makeSfxCA_args += $" \"{WixSdkLocation.PathCombine("Microsoft.Deployment.WindowsInstaller.dll")}\"";
 
             ProjectValidator.ValidateCAAssembly(asmFile);
 #if DEBUG
@@ -3256,8 +3262,13 @@ namespace WixSharp
             }
         }
 
+        public static bool IsWix4
+        {
+            get => false;
+        }
+
         /// <summary>
-        /// Gets list of the the mapped WiX constants.
+        /// Gets list of the mapped WiX constants.
         /// </summary>
         /// <param name="include64Specific">if set to <c>true</c> [include64 specific].</param>
         /// <returns></returns>

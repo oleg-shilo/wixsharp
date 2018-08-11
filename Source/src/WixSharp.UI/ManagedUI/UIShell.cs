@@ -213,7 +213,7 @@ namespace WixSharp
         /// <summary>
         /// Shows the modal window of the MSI UI. This method is called by the <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI" />
         /// when it is initialized at runtime.
-        /// </summary>
+        /// </summary> 
         /// <param name="msiRuntime">The MSI runtime.</param>
         /// <param name="ui">The MSI external/embedded UI.</param>
         public void ShowModal(MsiRuntime msiRuntime, IManagedUI ui)

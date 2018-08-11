@@ -6,7 +6,11 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml;
 using System.Windows.Forms;
+#if Wix4
+using WixToolset.Dtf.WindowsInstaller;
+#else
 using Microsoft.Deployment.WindowsInstaller;
+#endif
 using WixSharp;
 using WixSharp.CommonTasks;
 

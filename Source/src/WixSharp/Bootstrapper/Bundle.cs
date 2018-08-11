@@ -494,7 +494,7 @@ namespace WixSharp.Bootstrapper
 
             <RollbackBoundary />
 
-            <MsiPackage SourceFile="E:\Galos\Projects\WixSharp\src\WixSharp.Samples\Wix# Samples\Managed Setup\ManagedSetup.msi" Vital="yes" />
+            <MsiPackage SourceFile="E:\Projects\WixSharp\src\WixSharp.Samples\Wix# Samples\Managed Setup\ManagedSetup.msi" Vital="yes" />
         </Chain>
     </Bundle>
      */

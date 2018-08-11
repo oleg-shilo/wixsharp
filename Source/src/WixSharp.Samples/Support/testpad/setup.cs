@@ -129,6 +129,26 @@ static class Script
         Compiler.BuildMsi(project);
     }
 
+    static void Issue_440()
+    {
+        Compiler.WixLocation = @"E:\Projects\WixSharp\Support\Issue_#440\wix_error\packages\WiX.4.0.0.5512-pre\tools";
+        Compiler.WixSdkLocation = @"E:\Projects\WixSharp\Support\Issue_#440\wix_error\packages\WiX.4.0.0.5512-pre\tools\sdk";
+
+
+        var project = new ManagedProject("TestMsi")
+        {
+            GUID = Guid.NewGuid(),
+            PreserveTempFiles = true,
+            UI = WUI.WixUI_ProgressOnly,
+            Dirs = new[]
+            {
+                 new Dir(@"temp", new Dir(@"wixIn", new WixSharp.File(@"E:\Projects\WixSharp\Source\src\WixSharp.Samples\Support\testpad\setup.cs")))
+             }
+        };
+
+        Compiler.BuildMsi(project);
+    }
+
     static void Issue_378()
     {
         AutoElements.DisableAutoUserProfileRegistry = true;
@@ -188,6 +208,7 @@ static class Script
     static public void Main(string[] args)
     {
         // HiTeach_MSI.Program.Main1(); return;
+        Issue_440(); return;
         Issue_386(); return;
         Issue_378(); return;
         Issue_374(); return;

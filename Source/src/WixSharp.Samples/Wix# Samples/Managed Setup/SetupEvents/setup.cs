@@ -142,7 +142,7 @@ public class Script
         //SetupEventArgs.Data values can be set and accesses at any time from any custom action including deferred one.
         var conn = @"Data Source=.\SQLEXPRESS;Initial Catalog=RequestManagement;Integrated Security=SSPI";
         e.Data["persisted_data"] = conn;
-
+        
         MessageBox.Show(e.Session.GetMainWindow(), e.ToString(), "Load " + e.Session["EnvVersion"]);
     }
 
