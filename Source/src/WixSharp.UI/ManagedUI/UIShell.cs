@@ -29,9 +29,9 @@ namespace WixSharp
         /// Shows the modal window of the MSI UI. This method is called by the <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI"/>
         /// when it is initialized at runtime.
         /// </summary>
-        /// <param name="msiRuntime">The MSI runtime.</param>
+        /// <param name="runtime">The MSI runtime.</param>
         /// <param name="ui">The MSI external/embedded UI.</param>
-        void ShowModal(MsiRuntime msiRuntime, IManagedUI ui);
+        void ShowModal(InstallerRuntime runtime, IManagedUI ui);
 
         /// <summary>
         /// Called when MSI execution is complete.
@@ -68,7 +68,7 @@ namespace WixSharp
         /// <value>
         /// The runtime context.
         /// </value>
-        public object RuntimeContext { get { return MsiRuntime; } }
+        public object RuntimeContext { get { return Runtime; } }
 
         /// <summary>
         /// Gets or sets the runtime context object. Typically this object is of the <see cref="T:WixSharp.MsiRuntime" /> type.
@@ -76,8 +76,7 @@ namespace WixSharp
         /// <value>
         /// The runtime context.
         /// </value>
-        ///
-        internal MsiRuntime MsiRuntime { get; set; }
+        internal InstallerRuntime Runtime { get; set; }
 
         /// <summary>
         /// Gets or sets the UI.
@@ -128,7 +127,7 @@ namespace WixSharp
             started = true;
             if (!IsDemoMode)
             {
-                MsiRuntime.StartExecute();
+                Runtime.StartExecute();
             }
         }
 
@@ -177,7 +176,7 @@ namespace WixSharp
 
                         var view = (Form)Activator.CreateInstance(viewType);
 
-                        view.LocalizeWith(MsiRuntime.Localize);
+                        view.LocalizeWith(Runtime.Localize);
                         view.FormBorderStyle = forms.FormBorderStyle.None;
                         shellView.ControlBox = view.ControlBox;
                         view.TopLevel = false;
@@ -201,7 +200,7 @@ namespace WixSharp
 
                         try
                         {
-                            MsiRuntime.Session["WIXSHARP_RUNTIME_DATA"] = MsiRuntime.Data.Serialize();
+                            Runtime.Session["WIXSHARP_RUNTIME_DATA"] = Runtime.Data.Serialize();
                         }
                         catch { /*expected to fail on deferred actions stage*/}
                     }
@@ -213,25 +212,25 @@ namespace WixSharp
         /// <summary>
         /// Shows the modal window of the MSI UI. This method is called by the <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI" />
         /// when it is initialized at runtime.
-        /// </summary> 
-        /// <param name="msiRuntime">The MSI runtime.</param>
+        /// </summary>
+        /// <param name="runtime">The MSI runtime.</param>
         /// <param name="ui">The MSI external/embedded UI.</param>
-        public void ShowModal(MsiRuntime msiRuntime, IManagedUI ui)
+        public void ShowModal(InstallerRuntime runtime, IManagedUI ui)
         {
             // Debug.Assert(false);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             UI = ui;
-            MsiRuntime = msiRuntime;
-            Tasks.UILocalize = text => text.LocalizeWith(msiRuntime.Localize);
+            Runtime = runtime;
+            Tasks.UILocalize = text => text.LocalizeWith(runtime.Localize);
 
-            UACRevealer.Enabled = !MsiRuntime.Session.Property("UAC_REVEALER_ENABLED").IsEmpty();
-            UACRevealer.WarningText = MsiRuntime.Session.Property("UAC_WARNING");
+            UACRevealer.Enabled = !runtime.Session.Property("UAC_REVEALER_ENABLED").IsEmpty();
+            UACRevealer.WarningText = runtime.Session.Property("UAC_WARNING");
 
-            if (MsiRuntime.Session.IsInstalling())
+            if (runtime.Session.IsInstalling())
                 Dialogs = ui.InstallDialogs;
-            else if (MsiRuntime.Session.IsRepairing())
+            else if (runtime.Session.IsRepairing())
                 Dialogs = ui.ModifyDialogs;
 
             if (Dialogs.Any())
@@ -239,14 +238,14 @@ namespace WixSharp
 
             try
             {
-                int culture = msiRuntime.Session.Property("ProductLanguage").ToInt();
+                int culture = runtime.Session.Property("ProductLanguage").ToInt();
                 if (culture != 0)
                     Thread.CurrentThread.CurrentUICulture = new CultureInfo(culture);
             }
             catch { }
 
-            ActionResult result = ManagedProject.InvokeClientHandlers(MsiRuntime.Session, "UIInitialized", shellView as IShellView);
-            MsiRuntime.Data.MergeReplace(MsiRuntime.Session["WIXSHARP_RUNTIME_DATA"]); //data may be changed in the client handler
+            ActionResult result = runtime.InvokeClientHandlers("UIInitialized", shellView as IShellView);
+            runtime.Data.MergeReplace(runtime.Session["WIXSHARP_RUNTIME_DATA"]); //data may be changed in the client handler
 
             if (result != ActionResult.Failure)
             {
@@ -254,24 +253,24 @@ namespace WixSharp
                 {
                     shellView.Load += (s, e) =>
                     {
-                        MsiRuntime.Session["WIXSHARP_MANAGED_UI_HANDLE"] =
-                        MsiRuntime.Data["WIXSHARP_MANAGED_UI_HANDLE"] = shellView.Handle.ToString();
+                        Runtime.Session["WIXSHARP_MANAGED_UI_HANDLE"] =
+                        Runtime.Data["WIXSHARP_MANAGED_UI_HANDLE"] = shellView.Handle.ToString();
                         try
                         {
-                            var data = MsiRuntime.Session.GetEmbeddedData("ui_shell_icon");
+                            var data = Runtime.Session.GetResourceData("ui_shell_icon");
                             using (var stream = new System.IO.MemoryStream(data))
                                 shellView.Icon = new Icon(stream);
                         }
                         catch { }
 
-                        result = ManagedProject.InvokeClientHandlers(MsiRuntime.Session, "UILoaded", (IShellView)shellView);
+                        result = runtime.InvokeClientHandlers("UILoaded", (IShellView)shellView);
                         if (result != ActionResult.Success)
                         {
                             // aborting UI dialogs sequence from here is not possible as this event is
                             // simply called when Shell is loaded but not when dialogs are progressing in the sequence.
-                            MsiRuntime.Session.Log("UILoaded returned " + result);
+                            runtime.Session.Log("UILoaded returned " + result);
                         }
-                        MsiRuntime.Data.MergeReplace(MsiRuntime.Session["WIXSHARP_RUNTIME_DATA"]); ; //data may be changed in the client handler
+                        runtime.Data.MergeReplace(runtime.Session["WIXSHARP_RUNTIME_DATA"]); ; //data may be changed in the client handler
                     };
 
                     if (result == ActionResult.SkipRemainingActions)
@@ -298,7 +297,7 @@ namespace WixSharp
             }
             else
             {
-                MsiRuntime.Session.Log("UIInitialized returned " + result);
+                Runtime.Session.Log("UIInitialized returned " + result);
             }
         }
 
@@ -343,7 +342,7 @@ namespace WixSharp
             var resourcesMsi = BuildUiPlayerResources();
             var dummySession = Installer.OpenPackage(resourcesMsi, true);
 
-            MsiRuntime = new MsiRuntime(dummySession);
+            Runtime = new MsiRuntime(dummySession);
             Dialogs = dialogs;
 
             shellView = new ShellView();
@@ -452,7 +451,7 @@ namespace WixSharp
             if (!started)
                 Exit();
 
-            MsiRuntime.CancelExecute?.Invoke();
+            Runtime.CancelExecute?.Invoke();
         }
 
         /// <summary>
@@ -474,8 +473,7 @@ namespace WixSharp
 
                 this.progressCounter.ProcessMessage(messageType, messageRecord);
 
-                if (CurrentDialog != null)
-                    InUIThread(() => CurrentDialog.OnProgress((int)Math.Round(100 * this.progressCounter.Progress)));
+                OnProgress((int)Math.Round(100 * this.progressCounter.Progress));
 
                 switch (messageType)
                 {
@@ -491,7 +489,7 @@ namespace WixSharp
                                 MessageBox.Show(
                                     this.shellView,
                                     messageRecord.ToString(),
-                                    "[ErrorDlg_Title]".LocalizeWith(MsiRuntime.Localize),
+                                    "[ErrorDlg_Title]".LocalizeWith(Runtime.Localize),
                                     (MessageBoxButtons)(int)buttons,
                                     (MessageBoxIcon)(int)icon,
                                     (MessageBoxDefaultButton)(int)defaultButton);
@@ -569,7 +567,7 @@ namespace WixSharp
         public void OnExecuteStarted()
         {
             //Debugger.Break();
-            MsiRuntime.FetchInstallDir(); //user may have updated it
+            Runtime.FetchInstallDir(); //user may have updated it
 
             if (CurrentDialog != null)
                 InUIThread(CurrentDialog.OnExecuteStarted);
@@ -594,6 +592,16 @@ namespace WixSharp
                 shellView.Invoke(action);
             else
                 action();
+        }
+
+        /// <summary>
+        /// Called when MSI execution progress is changed.
+        /// </summary>
+        /// <param name="progressPercentage">The progress percentage.</param>
+        public void OnProgress(int progressPercentage)
+        {
+            if (CurrentDialog != null)
+                InUIThread(() => CurrentDialog.OnProgress(progressPercentage));
         }
     }
 }

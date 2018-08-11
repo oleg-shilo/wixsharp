@@ -36,22 +36,32 @@ namespace WixSharp
     /// <summary>
     /// Represents MSI runtime context. This class is to be used by ManagedUI dialogs to interact with the MSI session.
     /// </summary>
-    public class MsiRuntime
+    public class MsiRuntime : InstallerRuntime
     {
-        /// <summary>
-        /// Starts the execution of the MSI installation.
-        /// </summary>
-        public System.Action StartExecute;
-
-        /// <summary>
-        /// Cancels the execution of the MSI installation, which is already started (progress is displayed).
-        /// </summary>
-        public System.Action CancelExecute;
-
         /// <summary>
         /// The session object.
         /// </summary>
-        public Session Session;
+        public Session MsiSession { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MsiRuntime"/> class.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        public MsiRuntime(Session session) : base(new MsiSessionAdapter(session))
+        {
+            MsiSession = session;
+        }
+
+        /// <summary>
+        /// Invokes Client Handlers
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="UIShell"></param>
+        /// <returns></returns>
+        public override ActionResult InvokeClientHandlers(string eventName, IShellView UIShell = null)
+        {
+            return ManagedProject.InvokeClientHandlers(MsiSession, eventName, UIShell);
+        }
 
         //DOESN'T work reliably. For example if no InstallDir dialog is displayed the MSI session does not have "INSTALLDIR" property initialized.
         //The other properties (e.g. UI Level) are even never available at all.
@@ -61,7 +71,7 @@ namespace WixSharp
         {
             try
             {
-                if (Session.IsActive())
+                if (MsiSession.IsActive())
                 {
                     Data["INSTALLDIR"] = Session["INSTALLDIR"];
                     Data["Installed"] = Session["Installed"];
@@ -74,11 +84,43 @@ namespace WixSharp
             }
             catch { }
         }
+    }
+
+    /// <summary>
+    /// Represents MSI runtime context. This class is to be used by ManagedUI dialogs to interact with the MSI session.
+    /// </summary>
+    public class InstallerRuntime
+    {
+        /// <summary>
+        /// Starts the execution of the MSI installation.
+        /// </summary>
+        public System.Action StartExecute { get; set; }
+
+        /// <summary>
+        /// Cancels the execution of the MSI installation, which is already started (progress is displayed).
+        /// </summary>
+        public System.Action CancelExecute { get; set; }
+
+        /// <summary>
+        /// The session object.
+        /// </summary>
+        public readonly ISession Session;
+
+        /// <summary>
+        /// Invokes Client Handlers
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="UIShell"></param>
+        /// <returns></returns>
+        public virtual ActionResult InvokeClientHandlers(string eventName, IShellView UIShell = null)
+        {
+            return ActionResult.Success;
+        }
 
         /// <summary>
         /// Repository of the session properties to be captured and transfered to the deferred CAs.
         /// </summary>
-        public Dictionary<string, string> Data = new Dictionary<string, string>();
+        public Dictionary<string, string> Data { get; } = new Dictionary<string, string>();
 
         /// <summary>
         /// Localization map.
@@ -96,15 +138,15 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MsiRuntime"/> class.
+        /// Initializes a new instance of the <see cref="InstallerRuntime"/> class.
         /// </summary>
         /// <param name="session">The session.</param>
-        public MsiRuntime(Session session)
+        public InstallerRuntime(ISession session)
         {
             this.Session = session;
             try
             {
-                var bytes = Session.TryReadBinary("WixSharp_UIText");
+                var bytes = TryReadBinary(Session, "WixSharp_UIText");
                 UIText.InitFromWxl(bytes);
 
                 ProductName = Session.Property("ProductName");
@@ -134,12 +176,29 @@ namespace WixSharp
         {
             try
             {
-                byte[] data = Session.ReadBinary(name);
+                byte[] data = ReadBinary(Session, name);
                 using (Stream s = new MemoryStream(data))
                     return (Bitmap)Bitmap.FromStream(s);
             }
             catch { }
             return null;
+        }
+
+        private static byte[] ReadBinary(ISession session, string binary)
+        {
+            return session.GetResourceData(binary);
+        }
+
+        private static byte[] TryReadBinary(ISession session, string binary)
+        {
+            try
+            {
+                return ReadBinary(session, binary);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>

@@ -100,7 +100,7 @@ namespace WixSharp
         /// <returns></returns>
         public static Session Session(this IManagedDialog dialog)
         {
-            return dialog.Shell.MsiRuntime().Session;
+            return dialog.Shell.MsiRuntime().MsiSession;
         }
 
         public static bool IsReadOnly(this TreeNode node)

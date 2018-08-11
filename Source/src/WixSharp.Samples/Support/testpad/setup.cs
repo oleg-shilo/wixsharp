@@ -143,7 +143,7 @@ static class Script
             Dirs = new[]
             {
                  new Dir(@"temp", new Dir(@"wixIn", new WixSharp.File(@"E:\Projects\WixSharp\Source\src\WixSharp.Samples\Support\testpad\setup.cs")))
-             }
+            }
         };
 
         Compiler.BuildMsi(project);

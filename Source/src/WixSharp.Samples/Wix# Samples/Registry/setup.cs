@@ -15,23 +15,30 @@ class Script
         //uncomment the line below if the reg file contains unsupported type to be ignored
         //RegFileImporter.SkipUnknownTypes = true;
 
+        var r = RegistryHive.CurrentUser;
+        var r1 = RegistryHive.LocalMachine;
+        var r2 = RegistryHive.LocalMachine | RegistryHive.CurrentUser;
+
+
         var fullSetup = new Feature("MyApp Binaries");
 
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(fullSetup, @"readme.txt")),
-                new RegFile(fullSetup, "_MyProduct.reg"), //RegFile does the same Tasks.ImportRegFile
+                // new RegFile(fullSetup, "_MyProduct.reg"), //RegFile does the same Tasks.ImportRegFile
                 new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "LICENSE_KEY", "01020304")
                 {
                     AttributesDefinition = "Type=binary"
-                },
-                // HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\My Company\My Product
-                new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "Message", "Hello"),
-                new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "Count", 777),
-                new RegValue(fullSetup, RegistryHive.ClassesRoot, @"test\shell\open\command", "", "\"[INSTALLDIR]test.exe\" \"%1\""),
-                new RemoveRegistryValue(fullSetup, @"Software\My Company\My Product"),
-                new RemoveRegistryKey(fullSetup, @"Software\My Company\My Product"));
+                }
+                //,
+                // // HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\My Company\My Product
+                // new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "Message", "Hello"),
+                // new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "Count", 777),
+                // new RegValue(fullSetup, RegistryHive.ClassesRoot, @"test\shell\open\command", "", "\"[INSTALLDIR]test.exe\" \"%1\""),
+                // new RemoveRegistryValue(fullSetup, @"Software\My Company\My Product"),
+                // new RemoveRegistryKey(fullSetup, @"Software\My Company\My Product")
+                );
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.UI = WUI.WixUI_ProgressOnly;
@@ -46,7 +53,7 @@ class Script
         //                                                                    "User=[WIX_ACCOUNT_USERS]; GenericAll=yes; CreateSubkeys=yes")));
         //              };
 
-        project.PreserveTempFiles = true;
-        project.BuildMsi();
+        // project.PreserveTempFiles = true;
+        project.BuildMsiCmd();
     }
 }
