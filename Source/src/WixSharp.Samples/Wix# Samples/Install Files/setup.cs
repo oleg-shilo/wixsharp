@@ -15,7 +15,7 @@ class Script
 {
     static public void Main(string[] args)
     {
-        var project =
+        var project = 
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new Dir("My Product",
@@ -58,7 +58,7 @@ class Script
         //Will make MyApp.exe directory writable.
         //It is actually a bad practice to write to program files and this code is provided for sample purposes only.
         document.FindAll("Component")
-                .Single(x => x.HasAttribute("Id", value => value.EndsWith("MyApp_file")))
+                .Single(x => x.HasAttribute("Id", value => value.Contains("MyApp_file")))
                 .AddElement("CreateFolder/Permission", "User=Everyone;GenericAll=yes");
     }
 }

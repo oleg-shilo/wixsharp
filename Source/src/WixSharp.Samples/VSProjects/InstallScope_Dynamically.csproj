@@ -8,8 +8,8 @@
     <ProjectGuid>{6EF89B33-A766-457E-8229-C87CCEC125A6}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>InstallFiles</RootNamespace>
-    <AssemblyName>InstallFiles</AssemblyName>
+    <RootNamespace>InstallScope_Dynamically</RootNamespace>
+    <AssemblyName>InstallScope_Dynamically</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>

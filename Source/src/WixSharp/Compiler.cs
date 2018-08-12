@@ -70,8 +70,6 @@ namespace WixSharp
         /// </summary>
         public bool Map64InstallDirs = true;
 
-
-
         /// <summary>
         /// Forces the WXS to be thread-safe. Default value is <c>false</c>.
         /// <para>
@@ -115,6 +113,11 @@ namespace WixSharp
         /// The legacy default identifier algorithm
         /// </summary>
         public bool LegacyDefaultIdAlgorithm = false;
+
+        /// <summary>
+        /// Force Component ID uniqueness.
+        /// </summary>
+        public bool ForceComponentIdUniqueness = true;
 
         /// <summary>
         /// The suppress generation of the XML atrtribute 'id' for <see cref="Bootstrapper.Payload"/> undefined ids
@@ -359,7 +362,7 @@ namespace WixSharp
 
         static string wixLocation;
 
-        
+
         /// <summary>
         /// Gets or sets the location of WiX SDK binaries (e.g. MakeSfxCA.exe).
         /// The default value is the '..\SDK' or 'SDK' (whichever exist) sub-directory of WixSharp.Compiler.WixLocation directory.
@@ -1617,7 +1620,7 @@ namespace WixSharp
 
                 if (existingCompElement.Count() == 0 && AutoElements.SupportEmptyDirectories != CompilerSupportState.Disabled)
                 {
-                    string compId = wDir.Id + ".EmptyDirectory";
+                    string compId = wDir.GenerateComponentId(wProject, ".EmptyDirectory");
 
                     if (wDir.ActualFeatures.Any())
                     {
@@ -1638,7 +1641,8 @@ namespace WixSharp
             {
                 if (wDir.ActualFeatures.Any())
                 {
-                    string compId = "Component." + wDir.Id;
+                    string compId = wDir.GenerateComponentId(wProject);
+
                     featureComponents.Map(wDir.ActualFeatures, compId);
                     dirItem.AddElement(
                             new XElement("Component",
@@ -1663,7 +1667,7 @@ namespace WixSharp
         {
             if (wDir.IISVirtualDirs.Any())
             {
-                string compId = "Component." + wDir.Id + ".VirtDir";
+                string compId = wDir.GenerateComponentId(wProject, ".VirtDir");
 
                 if (wDir.ActualFeatures.Any())
                     featureComponents.Map(wDir.ActualFeatures, compId);
@@ -1684,7 +1688,7 @@ namespace WixSharp
             foreach (File wFile in wDir.Files)
             {
                 string fileId = wFile.Id;
-                string compId = "Component." + wFile.Id;
+                string compId = wFile.GenerateComponentId(wProject);
 
                 if (wFile.ActualFeatures.Any())
                 {
@@ -1758,7 +1762,7 @@ namespace WixSharp
 
                     if (wFileAssociation.Icon != null)
                     {
-                        if (wFileAssociation.Advertise)  
+                        if (wFileAssociation.Advertise)
                         {
                             var icon = new IconFile { SourceFile = wFileAssociation.Icon };
 
@@ -1846,7 +1850,7 @@ namespace WixSharp
             //insert directory owned shortcuts
             foreach (Shortcut wShortcut in wDir.Shortcuts)
             {
-                string compId = wShortcut.Id;
+                string compId = wShortcut.GenerateComponentId(wProject);
                 if (wShortcut.ActualFeatures.Any())
                     featureComponents.Map(wShortcut.ActualFeatures, compId);
                 else
@@ -1886,7 +1890,7 @@ namespace WixSharp
             foreach (ODBCDataSource wODBCDataSource in wDir.ODBCDataSources)
             {
                 string dsnId = wODBCDataSource.Id;
-                string compId = "Component." + wODBCDataSource.Id;
+                string compId = wODBCDataSource.GenerateComponentId(wProject);
 
                 if (wODBCDataSource.ActualFeatures.Any())
                     featureComponents.Map(wODBCDataSource.ActualFeatures, compId);
@@ -1943,7 +1947,7 @@ namespace WixSharp
 
                 foreach (var permission in wDir.Permissions)
                 {
-                    string compId = "Component" + permission.Id;
+                    string compId = permission.GenerateComponentId(wProject);
 
                     if (permission.ActualFeatures.Any())
                     {
@@ -2231,7 +2235,7 @@ namespace WixSharp
                     }
 
                     count++;
-                    string compId = "Registry" + count;
+                    string compId = wProject.ComponentId($"Registry.{count}");
 
                     //all registry of this level belong to the same component
                     if (regVal.ActualFeatures.Any())

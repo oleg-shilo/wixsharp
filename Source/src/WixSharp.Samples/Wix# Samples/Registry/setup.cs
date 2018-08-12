@@ -48,6 +48,6 @@ class Script
         //              };
 
         // project.PreserveTempFiles = true;
-        project.BuildMsiCmd();
+        project.BuildMsi();
     }
 }

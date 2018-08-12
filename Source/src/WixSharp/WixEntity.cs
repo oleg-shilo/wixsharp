@@ -282,6 +282,21 @@ namespace WixSharp
             dest.AttributesDefinition = attrsDefinition;
         }
 
+        internal string GenerateComponentId(Project project, string suffix = "")
+        {
+            return this.GetExplicitComponentId() ??
+                   project.ComponentId($"Component{suffix}.{this.Id}");
+        }
+
+        internal string GetExplicitComponentId()
+        {
+            var attrs = this.AttributesDefinition.ToDictionary();
+            if (attrs.ContainsKey("Component:Id"))
+                return attrs["Component:Id"];
+            else
+                return null;
+        }
+
         internal void AddInclude(string xmlFile, string parentElement)
         {
             SetAttributeDefinition("WixSharpCustomAttributes:xml_include", parentElement + "|" + xmlFile, append: true);

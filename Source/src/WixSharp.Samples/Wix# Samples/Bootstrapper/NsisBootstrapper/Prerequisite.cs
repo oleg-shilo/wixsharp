@@ -2,7 +2,6 @@
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 
 using System;
-using Microsoft.Win32;
 using WixSharp;
 
 class Script
@@ -19,7 +18,3 @@ class Script
         Compiler.BuildMsi(project);
     }
 }
-
-
-
-

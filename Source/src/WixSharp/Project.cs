@@ -65,6 +65,28 @@ namespace WixSharp
     /// </example>
     public partial class Project : WixProject
     {
+        internal string ComponentId(string seed)
+        {
+            // Component id must be globally unique. Otherwise other products can 
+            // accidentally trigger MSI ref-counting by installing more than one product 
+            // with the same component id.
+            // The problem is caused by the mind bending MSi concept that a identity does 
+            // not logically belong to the product but to the target system. Thus if two 
+            // different products happens too have the component with the same id MSI will 
+            // treat the components as the same component.
+            // Using GUID seems to be a good technique to overcome this limitation but the 
+            // the wast majority of the samples (e.g. WiX) use human readable ids, which are 
+            // of course not unique.
+            // The excellent reading on the topic can be found here:
+            // http://geekswithblogs.net/akraus1/archive/2011/06/17/145898.aspx
+            // Ideally we would want to keep readability and uniqueness. Thus the solution
+            // is to merge "human readable" id with the project guid.
+
+            if (Compiler.AutoGeneration.ForceComponentIdUniqueness)
+                return $"{seed}.{this.GUID.ToString().Replace("-", "")}";
+            else
+                return seed;
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class.
         /// </summary>

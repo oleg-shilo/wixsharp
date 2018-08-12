@@ -2,9 +2,10 @@
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
+//css_ref WixSharp.UI;
 using WixSharp;
 using WixSharp.Forms;
-using Win32=Microsoft.Win32;
+using Win32 = Microsoft.Win32;
 
 class Script
 {
