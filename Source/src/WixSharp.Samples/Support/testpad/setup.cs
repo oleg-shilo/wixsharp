@@ -72,11 +72,11 @@ static class Script
                      new File(@"Files\bin\MyApp.exe")));
 
         project.ManagedUI = ManagedUI.Default;
-        project.AddAction(new ManagedAction(CustomActions.CheckIfAdmin, 
-                                            Return.check, 
-                                            When.Before, 
-                                            Step.AppSearch, 
-                                            Condition.NOT_Installed, 
+        project.AddAction(new ManagedAction(CustomActions.CheckIfAdmin,
+                                            Return.check,
+                                            When.Before,
+                                            Step.AppSearch,
+                                            Condition.NOT_Installed,
                                             Sequence.InstallUISequence));
 
         project.UIInitialized += (SetupEventArgs e) =>
@@ -119,6 +119,23 @@ static class Script
                  new Dir(@"temp", new Dir(@"wixIn", new WixSharp.File(file, new FileShortcut("MyShortcut", inDir))))
              }
         };
+
+        Compiler.BuildMsi(project);
+    }
+
+    static void Issue_377()
+    {
+        var project = new Project("someProject",
+            new Dir(new Id("someDirId"), "someDirPath",
+                new File("someFilePath"
+                    ,new FileAssociation("someExt")
+                    {
+                         Icon = "someFile.ico",
+                        Advertise = true
+                    }
+                    )));
+
+        project.ControlPanelInfo.ProductIcon = "someProduct.ico";
 
         Compiler.BuildMsi(project);
     }
@@ -202,6 +219,7 @@ static class Script
     static public void Main(string[] args)
     {
         // HiTeach_MSI.Program.Main1(); return;
+        Issue_377(); return;
         Issue_440(); return;
         Issue_386(); return;
         Issue_378(); return;

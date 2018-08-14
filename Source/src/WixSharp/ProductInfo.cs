@@ -139,7 +139,10 @@ namespace WixSharp
                         if (attr.Name == "ARPPRODUCTICON")
                         {
                             if (!propertyExists)
-                                properties.Add(new Property(attr.Name, "app_icon.ico") { AttributesDefinition = "Icon:Id=app_icon.ico;Icon:SourceFile=" + value });
+                            {
+                                properties.Add(new Property(attr.Name, "app_icon.ico"));
+                                project.Add(new IconFile(new Id("app_icon.ico"), value.ToString()));
+                            }
                         }
                         else
                         {

@@ -454,14 +454,6 @@ namespace WixSharp
                 }
             }
 
-            if (element == "Icon" && source.Name.LocalName == "Property")
-            {
-                source.Parent("Product")
-                      .SelectOrCreate("Icon")
-                      .SetAttribute(key, value);
-                return true;
-            }
-
             if (element == "Custom" && source.Name.LocalName == "CustomAction")
             {
                 string id = source.Attribute("Id").Value;
