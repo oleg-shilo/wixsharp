@@ -11805,6 +11805,11 @@
             The legacy default identifier algorithm
             </summary>
         </member>
+        <member name="F:WixSharp.AutoGenerationOptions.ForceComponentIdUniqueness">
+            <summary>
+            Force Component ID uniqueness.
+            </summary>
+        </member>
         <member name="F:WixSharp.AutoGenerationOptions.SuppressForBundlePayloadUndefinedIds">
             <summary>
             The suppress generation of the XML atrtribute 'id' for <see cref="T:WixSharp.Bootstrapper.Payload"/> undefined ids

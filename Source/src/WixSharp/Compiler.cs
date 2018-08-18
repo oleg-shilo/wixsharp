@@ -580,6 +580,7 @@ namespace WixSharp
 
                 using (var sw = new IO.StreamWriter(batchFile))
                 {
+                    sw.WriteLine("echo off");
                     sw.WriteLine("@setlocal");
                     sw.WriteLine(wixLocationEnvVar);
                     sw.WriteLine("call \"" + compiler + "\" " + candleCmd);
@@ -2773,7 +2774,8 @@ namespace WixSharp
                                                     new XAttribute("Sequence", wAction.SequenceNumber.Value) :
                                                     new XAttribute("After", "InstallInitialize");
 
-                            if (wAction.RawId == nameof(ManagedProjectActions.WixSharp_AfterInstall_Action))
+
+                            if (AutoElements.ScheduleDeferredActionsAfterTunnellingTheirProperties || wAction.RawId == nameof(ManagedProjectActions.WixSharp_AfterInstall_Action))
                             {
                                 // Inject fetching properties CA just before the deferred action AfterInstrallEventHandler.
                                 // This might be a good practice to do for all deferred actions. However it's hard to predict the 
@@ -2791,10 +2793,9 @@ namespace WixSharp
                         }
                     }
 
-                    sequences.ForEach(sequence =>
-                    sequence.Add(new XElement("Custom", wAction.Condition.ToXValue(),
-                                     new XAttribute("Action", wAction.Id),
-                                     sequenceNumberAttr)));
+                    sequences.ForEach(item => item.Add(new XElement("Custom", wAction.Condition.ToXValue(),
+                                                           new XAttribute("Action", wAction.Id),
+                                                           sequenceNumberAttr)));
 
                     product.Add(new XElement("CustomAction",
                                     new XAttribute("Id", wAction.Id),

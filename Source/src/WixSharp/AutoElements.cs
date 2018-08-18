@@ -146,6 +146,12 @@ namespace WixSharp
         public static bool LegacyDummyDirAlgorithm = false;
 
         /// <summary>
+        /// Enables scheduling deferred actions just after their corresponding 
+        /// "SetDeferredActionProperties" custom action. Enabled by default.
+        /// </summary>
+        public static bool ScheduleDeferredActionsAfterTunnellingTheirProperties = true;
+
+        /// <summary>
         /// Disables automatic insertion of user profile registry elements.
         /// Required for: AllInOne, ConditionalInstallation, CustomAttributes, ReleaseFolder, Shortcuts,
         /// Shortcuts (advertised), Shortcuts-2, WildCardFiles samples.

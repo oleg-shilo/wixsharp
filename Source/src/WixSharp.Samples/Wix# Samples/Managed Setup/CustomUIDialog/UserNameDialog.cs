@@ -50,6 +50,8 @@ namespace MyProduct
         void next_Click(object sender, EventArgs e)
         {
             Runtime.Session["PASSWORD"] = password.Text;
+            Runtime.Session["HOSTNAME"] = "HOSTNAME-VAL";
+            Runtime.Session["DB"] = "DB-VAL";
             Runtime.Session["DOMAIN"] = domain.Text;
             Runtime.Data["test"] = "test value";
             Shell.GoNext();
