@@ -148,6 +148,7 @@
     <Compile Include="RegistrySearch.cs" />
     <Compile Include="RemoveRegistryValue.cs" />
     <Compile Include="RemoveRegistryKey.cs" />
+    <Compile Include="ResilientPackage.cs" />
     <Compile Include="SharedExtensions.cs" />
     <Compile Include="SqlDatabase.cs" />
     <Compile Include="SqlScript.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="UACRevealer.cs" />
     <Compile Include="UrlReservation.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="Utilities\RegistryWOW6432.cs" />
     <Compile Include="Utilities\WixBinLocator.cs" />
     <Compile Include="WixExtension.cs" />
     <Compile Include="WixProject.cs" />

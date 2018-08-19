@@ -63,6 +63,9 @@ class Script
 
             project.InstallPrivileges = InstallPrivileges.elevated;
 
+            // Optionally enable an ability to repair the installation even when the original MSI is no longer available.
+            project.EnableResilientPackage();
+
             // project.PreserveTempFiles = true;
             project.WixSourceGenerated += Compiler_WixSourceGenerated;
             project.BuildMsi();
