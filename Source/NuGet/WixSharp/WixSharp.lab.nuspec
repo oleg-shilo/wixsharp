@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.Lab</id>
-    <version>1.8.0.0</version>
+    <version>1.9.0.0</version>
     <title>Wix# (WixSharp) - Experimantal features</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -14,17 +14,24 @@
 The package contains the sample code for building a simple MSI with the CLR WinForm dialog inserted into UI sequence between InsallDirDlg and VerifyReadyDlg native MSI dialogs. In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# binaries containing experimental features (e.g. native WiX UI support).</summary>
-    <releaseNotes>Release Release v1.8.0
-* Nsis improvements
-  - Restructured the resulting nsis source code. The native bootstrapper should startup faster.
-  - NsiSourceGenerated event is added
-  - PrerequisiteFileArguments and PrimaryFileArguments properties are added
-  - SplashScreen is added
-* Added `File.OverwriteOnInstall`
-* Added extension method `string Attr(this XElement obj, XName name)` for immediate access to an `XElement` attribute value.
-* Added extension method `Project.FindFirstFile`
-* Issue #398: Registry keys for both 32 and 64 bit machines
-* Issue #389: Custom WPF UI - Show dotNet Licence Prompt as BootStrapp Window
+    <releaseNotes>Release Release v1.9.0
+
+* Issue #458: Deferred session Variables.
+* Issue #377: How to register a new MIME type with custom document icon
+* Issue #416: WPF Bootstrap application fails to run after upgrading from Wixharp v1.7 to v1.8
+* Issue #409: NullReferenceException in XmlFile
+* Issue #452: Component Id generation for RegValue does not take RegValue.Id into account
+* Added repairing MSI package with `project.EnableResilientPackage()` (see https://github.com/oleg-shilo/wixsharp/pull/457 for details).
+  Added generation of globally unique `Component` Id.
+* Issue #453: There is no way to set virtual HKMU registry hive supported by WiX for RegValue
+  `Microsoft.Win32.RegistryHive` replaced with `WixSharp.RegistryHive`
+* Added generating cmd bat with exit code and handling compiler and linker exit codes
+* Improved the algorithm for discovery wix_bin_package in the VS Project
+* Added an argument utilities to parse arguments easier
+* Fixed/reviewed all falsely failed samples
+* Added `Version.ClearRevision` extension method.
+* `FileSearch` class extended to match the current WiX `FileSearch` element.
+* Pre-work for WiX4 integration
 </releaseNotes>
     <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
     <language>en-AU</language>
@@ -34,7 +41,7 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
       <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
     </frameworkAssemblies>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.8.0.0" />
+      <dependency id="WixSharp.bin" version="1.9.0.0" />
     </dependencies>
   </metadata>
   <files>

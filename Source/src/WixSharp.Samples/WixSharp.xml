@@ -1486,6 +1486,12 @@
             is satisfied and yet there is no impact on the target file system.</para>
             </summary>
         </member>
+        <member name="F:WixSharp.AutoElements.ScheduleDeferredActionsAfterTunnellingTheirProperties">
+            <summary>
+            Enables scheduling deferred actions just after their corresponding 
+            "SetDeferredActionProperties" custom action. Enabled by default.
+            </summary>
+        </member>
         <member name="F:WixSharp.AutoElements.DisableAutoUserProfileRegistry">
             <summary>
             Disables automatic insertion of user profile registry elements.
