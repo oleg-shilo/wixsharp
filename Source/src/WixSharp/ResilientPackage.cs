@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Deployment.WindowsInstaller;
@@ -27,18 +28,30 @@ namespace WixSharp
     /// </summary>
     public static class ResilientPackage
     {
-        private const string WIXSHARP_PACKAGENAME = "WIXSHARP_PACKAGENAME";
-        private const string WIXSHARP_RESILIENT_SOURCE_DIR = "WIXSHARP_RESILIENT_SOURCE_DIR";
+        const string WIXSHARP_PACKAGENAME = "WIXSHARP_PACKAGENAME";
+        const string WIXSHARP_RESILIENT_SOURCE_DIR = "WIXSHARP_RESILIENT_SOURCE_DIR";
 
         /// <summary>
         /// Enables source resiliency for the installer.
         /// Creates a symbolic link/hard link or makes a copy of the original MSI package in the specified location and points SOURCELIST to it.
-        /// The default resilient source directory is INSTALLDIR.
+        /// <para>
+        /// The default resilient source directory is INSTALLDIR (controlled by <see cref="Compiler.AutoGeneration.InstallDirDefaultId"/>).
+        /// </para>
         /// </summary>
+        ///<example>If the installation directory id is set explicitly (e.g. <c>new Dir(new Id("MY_INSTALLDIR"), ...</c>)
+        /// then you must pass this id:
+        ///<code>
+        /// project.EnableResilientPackage("MY_INSTALLDIR");
+        /// </code>
+        /// </example>
         /// <param name="project">The project.</param>
         public static void EnableResilientPackage(this Project project)
         {
-            project.EnableResilientPackage("[INSTALLDIR]");
+            var id = project.AllDirs
+                            .FirstOrDefault(x=>x.IsInstallDir)?
+                            .Id ?? Compiler.AutoGeneration.InstallDirDefaultId; 
+
+            project.EnableResilientPackage($"{id}");
         }
 
         /// <summary>
@@ -51,7 +64,7 @@ namespace WixSharp
         {
             project.AddActions(
                 new SetPropertyAction(new Id($"WixSharp_SetProperty_{WIXSHARP_RESILIENT_SOURCE_DIR}"),
-                    WIXSHARP_RESILIENT_SOURCE_DIR, resilientSourceDir,
+                    WIXSHARP_RESILIENT_SOURCE_DIR, $"[{resilientSourceDir}]",
                     Return.check,
                     When.Before, Step.InstallInitialize,
                     $"{WIXSHARP_RESILIENT_SOURCE_DIR}=\"\""),
@@ -166,7 +179,7 @@ namespace WixSharp
         [DllImport("Kernel32.dll", CharSet = CharSet.Unicode)]
         internal static extern bool CreateHardLink(string lpFileName, string lpExistingFileName, IntPtr lpSecurityAttributes);
 
-        private static void CreateResilientPackage(Session session)
+        static void CreateResilientPackage(Session session)
         {
             var productCode = session.Property("ProductCode");
 
@@ -218,14 +231,14 @@ namespace WixSharp
             }
         }
 
-        private static string Reverse(string s)
+        static string Reverse(string s)
         {
             char[] charArray = s.ToCharArray();
             Array.Reverse(charArray);
             return new string(charArray);
         }
 
-        private static string CompressGUID(string guid)
+        static string CompressGUID(string guid)
         {
             var builder = new StringBuilder(5);
             var parts = guid.Trim('{', '}').Split('-');
@@ -244,7 +257,7 @@ namespace WixSharp
             return builder.ToString();
         }
 
-        private static string GetLocalPackageFromRegistry(string productCode, string userSID)
+        static string GetLocalPackageFromRegistry(string productCode, string userSID)
         {
             var compressedGuid = CompressGUID(productCode);
             var keyName = $@"SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\{userSID}\Products\{compressedGuid}\InstallProperties";
@@ -265,13 +278,13 @@ namespace WixSharp
             // return localPackage;
         }
 
-        private static string GetPackageName(string productCode)
+        static string GetPackageName(string productCode)
         {
             var product = new ProductInstallation(productCode);
             return product.AdvertisedPackageName;
         }
 
-        private static string GetPackageNameFromRegistry(string productCode)
+        static string GetPackageNameFromRegistry(string productCode)
         {
             var compressedGuid = CompressGUID(productCode);
             var keyName = $@"SOFTWARE\Classes\Installer\Products\{compressedGuid}\SourceList";
@@ -293,13 +306,13 @@ namespace WixSharp
         }
 
         // ReSharper disable once UnusedMember.Local
-        private static bool IsSymbolicLink(string path)
+        static bool IsSymbolicLink(string path)
         {
             var fileInfo = new IO.FileInfo(path);
             return IsSymbolicLink(fileInfo);
         }
 
-        private static bool IsSymbolicLink(IO.FileInfo fileInfo)
+        static bool IsSymbolicLink(IO.FileInfo fileInfo)
         {
             return (fileInfo.Attributes & IO.FileAttributes.ReparsePoint) != 0;
         }
