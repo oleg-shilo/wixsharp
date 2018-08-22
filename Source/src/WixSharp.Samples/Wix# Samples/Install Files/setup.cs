@@ -17,22 +17,20 @@ class Script
     {
         var project = 
             new Project("MyProduct",
-                new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new Dir("My Product",
-                        new File(
-                            "MyApp_file".ToId(),
-                            @"Files\Bin\MyApp.exe",
-                            new FileAssociation("cstm", "application/custom", "open", "\"%1\"")
-                            {
-                                Advertise = true,
-                                Icon = "wixsharp.ico"
-                            }
+                new Dir(new Id("MY_INSTALLDIR"), @"%ProgramFiles%\My Company\My Product",
+                    new File("MyApp_file".ToId(),
+                             @"Files\Bin\MyApp.exe",
+                             new FileAssociation("cstm", "application/custom", "open", "\"%1\"")
+                             {
+                                 Advertise = true,
+                                 Icon = "wixsharp.ico"
+                             }
                         ),
                     new Dir(@"Docs\Manual",
                         new File(@"Files\Docs\Manual.txt")
                         {
                             NeverOverwrite = true
-                        }))),
+                        })),
                     new Property("PropName", "<your value>"));
 
         project.SetVersionFrom("MyApp_file");
@@ -43,6 +41,8 @@ class Script
         project.EmitConsistentPackageId = true;
         project.PreserveTempFiles = true;
         project.PreserveDbgFiles = true;
+
+        project.EnableResilientPackage();
 
         project.Language = "en-US";
 

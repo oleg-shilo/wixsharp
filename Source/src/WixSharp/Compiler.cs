@@ -2168,7 +2168,7 @@ namespace WixSharp
             }
 
             // MSI doesn't allow absolute path to be assigned via name. Instead it requires it to be set via 
-            // SetProperty custom action. And what is even more weired the id of such a dir has to be public 
+            // SetProperty custom action. And what is even more weird the id of such a dir has to be public 
             // (capitalized). Thus the id auto-assignment cannot be used as it creates non public id(s).   
             var absolutePathDirs = wProject.AllDirs.Where(x => !x.IsIdSet() && x.Name.IsAbsolutePath()).ToArray();
             foreach (var item in absolutePathDirs)

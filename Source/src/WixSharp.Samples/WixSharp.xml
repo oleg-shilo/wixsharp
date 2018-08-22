@@ -6270,6 +6270,69 @@
             </summary>
             <param name="context">The context.</param>
         </member>
+        <member name="T:WixSharp.ResilientPackage">
+             <summary>
+             Allows to repair the MSI package even when the original installation package is no longer available.
+             <para>Adds an additional source of the resiliency by attempting to create a symbolic link to the locally cached MSI package (%WINDIR%\Installer)
+             or a hard link/full copy to the original installation MSI package in the specified directory.</para>
+             <para><c>WIXSHARP_RESILIENT_SOURCE_DIR</c> property can be used to configure the target directory. <c>INSTALLDIR property is used by default.</c></para>
+             <para>Windows 7 is shipped with the Windows Installer version 5.0, which unlike the previous versions of the windows installer caches the entire MSI,
+             including internal CAB files. Unfortunately the complete cached MSI package is not used for repairs, a call is made to the original source
+             which might not be available.
+            </para>
+             <para>See also:
+             <list type="bullet">
+             <item>https://docs.microsoft.com/en-us/windows/desktop/msi/source-resiliency</item>
+             <item>https://www.symantec.com/connect/articles/reducing-windows-installer-disk-wastage-windows-7</item>
+             </list>
+             </para>
+             </summary>
+        </member>
+        <member name="M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project)">
+             <summary>
+             Enables source resiliency for the installer.
+             Creates a symbolic link/hard link or makes a copy of the original MSI package in the specified location and points SOURCELIST to it.
+             <para>
+             The default resilient source directory is INSTALLDIR (controlled by <see cref="!:Compiler.AutoGeneration.InstallDirDefaultId"/>).
+             </para>
+             </summary>
+            <example>If the installation directory id is set explicitly (e.g. <c>new Dir(new Id("MY_INSTALLDIR"), ...</c>)
+             then you must pass this id:
+            <code>
+             project.EnableResilientPackage("MY_INSTALLDIR");
+             </code>
+             </example>
+             <param name="project">The project.</param>
+        </member>
+        <member name="M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project,System.String)">
+            <summary>
+            Enables source resiliency for the installer.
+            Creates a symbolic link/hard link or makes a copy of the original MSI package in the specified location and points SOURCELIST to it.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="resilientSourceDir">Resilient source directory.</param>
+        </member>
+        <member name="M:WixSharp.ResilientPackage.WixSharp_SetPackageName_Action(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Internal ResilientPackage action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
+            </summary>
+            <param name="session">The session.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.ResilientPackage.WixSharp_RemoveResilientPackage_Action(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Internal ResilientPackage action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
+            </summary>
+            <param name="session">The session.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.ResilientPackage.WixSharp_CreateResilientPackage_Action(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Internal ResilientPackage action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
+            </summary>
+            <param name="session">The session.</param>
+            <returns></returns>
+        </member>
         <member name="T:WixSharp.Extensions">
             <summary>
             Collection of generic WixSharp extension methods
