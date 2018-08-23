@@ -20,33 +20,23 @@ class Script
         // by setting the Dir.IsInstallDir to true or use a dedicated 'InstallDir' class that does
         // it for you automatically.
         //
-        // Please for any further infotrmation refer to
+        // Please for any further information refer to
         // the https://github.com/oleg-shilo/wixsharp/wiki/Deployment-scenarios/_edit#installation-directory
 
         var project =
                 new Project("My Product",
-                    new Dir(new Id("INSTALL_DIR"), @"%ProgramFiles%\1My Product",
+                    new Dir(@"%ProgramFiles%\My Product",
                         new WixSharp.File(@"myapp.exe",
-                            new FileShortcut("My App", @"%ProgramMenu%\1My Product") { Advertise = true })));
-
+                            new FileShortcut("My App", @"%ProgramMenu%\My Product") { Advertise = true })));
         // var project =
         //         new Project("My Product",
-        //             new Dir(new Id("My_Product"), @"%ProgramMenu%\1My Product"),
-        //             new Dir(new Id("INSTALL_DIR"), @"%ProgramFiles%\1My Product",
+        //             new InstallDir(@"%ProgramFiles%\My Product",
         //                 new WixSharp.File(@"myapp.exe",
-        //                     new FileShortcut("My App", "My_Product") { Advertise = true })));
-        // new Dir(new Id("My_Product"), @"%ProgramMenu%\1My Product"));
+        //                     new FileShortcut("My App", @"%ProgramMenu%\My Product") { Advertise = true })));
 
-        // var project = new Project("CustomActionTest",
-        //                   new InstallDir(@"%ProgramFiles%\CustomActionTest",
-        //                       new File("readme.txt")),
-
-        //                   new ManagedAction(CustomActions.MyAction));
-
-        //project.Platform = Platform.x64;
         project.UI = WUI.WixUI_InstallDir;
         project.PreserveTempFiles = true;
-        // project.BuildWxs();
+        
         project.BuildMsi("setup.msi");
     }
 }
