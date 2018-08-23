@@ -2167,6 +2167,11 @@ namespace WixSharp
                 }
             }
 
+            if (wProject.ActualInstallDirId.IsEmpty())
+            {
+                wProject.ActualInstallDirId = wProject.GetLogicalInstallDir()?.Id;
+            }
+
             // MSI doesn't allow absolute path to be assigned via name. Instead it requires it to be set via 
             // SetProperty custom action. And what is even more weird the id of such a dir has to be public 
             // (capitalized). Thus the id auto-assignment cannot be used as it creates non public id(s).   

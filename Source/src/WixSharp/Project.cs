@@ -911,6 +911,21 @@ namespace WixSharp
 
         internal string ActualInstallDirId = "";
 
+        internal Dir GetLogicalInstallDir()
+        {
+            Dir firstDirWithItems = Dirs.First();
+
+            string logicalPath = firstDirWithItems.Name;
+            while (firstDirWithItems.Shortcuts.Count() == 0 &&
+                   firstDirWithItems.Dirs.Count() == 1 &&
+                   firstDirWithItems.Files.Count() == 0)
+            {
+                firstDirWithItems = firstDirWithItems.Dirs.First();
+            }
+
+            return firstDirWithItems;
+        }
+
         /// <summary>
         /// Builds the MSI file from the specified <see cref="Project"/> instance.
         /// </summary>

@@ -34,24 +34,15 @@ namespace WixSharp
         /// <summary>
         /// Enables source resiliency for the installer.
         /// Creates a symbolic link/hard link or makes a copy of the original MSI package in the specified location and points SOURCELIST to it.
-        /// <para>
-        /// The default resilient source directory is INSTALLDIR (controlled by <see cref="Compiler.AutoGeneration.InstallDirDefaultId"/>).
-        /// </para>
-        /// </summary>
-        ///<example>If the installation directory id is set explicitly (e.g. <c>new Dir(new Id("MY_INSTALLDIR"), ...</c>)
-        /// then you must pass this id:
-        ///<code>
-        /// project.EnableResilientPackage("MY_INSTALLDIR");
-        /// </code>
-        /// </example>
         /// <param name="project">The project.</param>
         public static void EnableResilientPackage(this Project project)
         {
-            var id = project.AllDirs
-                            .FirstOrDefault(x=>x.IsInstallDir)?
-                            .Id ?? Compiler.AutoGeneration.InstallDirDefaultId; 
+            project.EnableResilientPackage("{$ResilientPackageIstallDir}");
 
-            project.EnableResilientPackage($"{id}");
+            project.WixSourceFormated += (ref string content) =>
+            {
+                content = content.Replace("{$ResilientPackageIstallDir}", project.ActualInstallDirId);
+            };
         }
 
         /// <summary>
