@@ -335,8 +335,13 @@ namespace WixSharp
             set
             {
                 guid = value;
-                WixGuid.ConsistentGenerationStartValue = new WixGuid.SequentialGuid(guid.Value);
+                ResetWixGuidStartValue();
             }
+        }
+
+        internal void ResetWixGuidStartValue()
+        {
+            WixGuid.ConsistentGenerationStartValue = guid ?? Guid.NewGuid();
         }
 
         /// <summary>

@@ -903,7 +903,9 @@ namespace WixSharp
                 var oldAlgorithm = AutoGeneration.CustomIdAlgorithm;
                 try
                 {
+                    project.ResetWixGuidStartValue();
                     WixEntity.ResetIdGenerator(false);
+
                     AutoGeneration.CustomIdAlgorithm = project.CustomIdAlgorithm ?? AutoGeneration.CustomIdAlgorithm;
 
                     string file = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, project.OutFileName) + ".wxs");
