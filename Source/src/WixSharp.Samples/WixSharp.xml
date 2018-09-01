@@ -16767,7 +16767,7 @@
             <param name="sequentialGuid">The sequential GUID.</param>
             <returns>The result of the operator.</returns>
         </member>
-        <member name="F:WixSharp.WixGuid.ConsistentGenerationStartValue">
+        <member name="F:WixSharp.WixGuid.consistentGenerationStartValue">
             <summary>
             Initial value to be used as a seed for Guid generation. If you want the Wix# project items to contain 
             not random but reproducible sequential Guids you should initialize this field.

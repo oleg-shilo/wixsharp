@@ -341,12 +341,12 @@ namespace WixSharp
 
         internal void ResetWixGuidStartValue()
         {
-            WixGuid.ConsistentGenerationStartValue = this.ProductId;
+            WixGuid.ConsistentGenerationStartValue = this.ProductId ?? this.GUID ?? Guid.NewGuid();
         }
 
         internal void ResetAutoIdGeneration(bool supressWarning)
         {
-            WixGuid.ConsistentGenerationStartValue = this.ProductId ?? this.GUID ?? Guid.NewGuid();
+            ResetWixGuidStartValue();
             WixEntity.ResetIdGenerator(supressWarning);
         }
 
