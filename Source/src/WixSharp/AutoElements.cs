@@ -146,7 +146,7 @@ namespace WixSharp
         public static bool LegacyDummyDirAlgorithm = false;
 
         /// <summary>
-        /// Enables scheduling deferred actions just after their corresponding 
+        /// Enables scheduling deferred actions just after their corresponding
         /// "SetDeferredActionProperties" custom action. Enabled by default.
         /// </summary>
         public static bool ScheduleDeferredActionsAfterTunnellingTheirProperties = true;
@@ -315,7 +315,7 @@ namespace WixSharp
             return (nonAdvertisedShortcuts.Count() != 0);
         }
 
-        static XElement CrteateComponentFor(this XDocument doc, XElement xDir)
+        static XElement CreateComponentFor(this XDocument doc, XElement xDir)
         {
             string compId = xDir.Attribute("Id").Value;
             XElement xComponent = xDir.AddElement(
@@ -509,6 +509,40 @@ namespace WixSharp
             return false;
         }
 
+        static void InsertEmptyComponentsInParentDirectories(XDocument doc, XElement item)
+        {
+            XElement parent = item.Parent("Directory");
+            while (parent != null)
+            {
+                if (parent.Element("Component") == null)
+                {
+                    var dirId = parent.Attribute("Id")?.Value;
+                    if (Compiler.EnvironmentConstantsMapping.ContainsValue(dirId))
+                        break; //stop when reached start of user defined subdirs chain: TARGETDIR/ProgramFilesFolder!!!/ProgramFilesFolder.Company/INSTALLDIR
+
+                    //just folder with nothing in it but not the last leaf
+                    doc.CreateComponentFor(parent);
+                }
+                parent = parent.Parent("Directory");
+            }
+        }
+
+        static void CreateEmptyComponentsInDirectoriesToRemove(XDocument doc)
+        {
+            XElement product = doc.Root.Select("Product");
+
+            // Create new empty components in parent directories of components with no files or registry
+            var dirsWithNoFilesOrRegistryComponents = product.Descendants("Directory")
+                .SelectMany(x => x.Elements("Component"))
+                .Where(e => !e.ContainsFilesOrRegistries())
+                .Select(x => x.Parent("Directory"));
+
+            foreach (var item in dirsWithNoFilesOrRegistryComponents)
+            {
+                InsertEmptyComponentsInParentDirectories(doc, item);
+            }
+        }
+
         internal static void HandleEmptyDirectories(XDocument doc)
         {
             XElement product = doc.Root.Select("Product");
@@ -516,7 +550,7 @@ namespace WixSharp
             var dummyDirs = product.Descendants("Directory")
                                    .SelectMany(x => x.Elements("Component"))
                                    .Where(e => e.HasAttribute("Id", v => v.EndsWith(".EmptyDirectory")))
-                                   .Select(x => x.Parent("Directory"));
+                                   .Select(x => x.Parent("Directory")).ToArray();
 
             if (SupportEmptyDirectories == CompilerSupportState.Automatic)
             {
@@ -530,20 +564,7 @@ namespace WixSharp
                 {
                     foreach (var item in dummyDirs)
                     {
-                        XElement parent = item.Parent("Directory");
-                        while (parent != null)
-                        {
-                            if (parent.Element("Component") == null)
-                            {
-                                var dirId = parent.Attribute("Id").Value;
-                                if (Compiler.EnvironmentConstantsMapping.ContainsValue(dirId))
-                                    break; //stop when reached start of user defined subdirs chain: TARGETDIR/ProgramFilesFolder!!!/ProgramFilesFolder.Company/INSTALLDIR
-
-                                //just folder with nothing in it but not the last leaf
-                                doc.CrteateComponentFor(parent);
-                            }
-                            parent = parent.Parent("Directory");
-                        }
+                        InsertEmptyComponentsInParentDirectories(doc, item);
                     }
                 }
 
@@ -648,15 +669,17 @@ namespace WixSharp
                 }
             }
 
+            CreateEmptyComponentsInDirectoriesToRemove(doc);
+
             foreach (XElement xDir in product.Descendants("Directory").ToArray())
             {
-                var dirComponents = xDir.Elements("Component");
+                var dirComponents = xDir.Elements("Component").ToArray();
 
                 if (dirComponents.Any())
                 {
-                    var componentsWithNoFilesOrRegestry = dirComponents.Where(x => !x.ContainsFilesOrRegistries()).ToArray();
+                    var componentsWithNoFilesOrRegistry = dirComponents.Where(x => !x.ContainsFilesOrRegistries()).ToArray();
 
-                    foreach (XElement item in componentsWithNoFilesOrRegestry)
+                    foreach (XElement item in componentsWithNoFilesOrRegistry)
                     {
                         //if (!item.Attribute("Id").Value.EndsWith(".EmptyDirectory"))
                         EnsureKeyPath(item);
@@ -692,7 +715,7 @@ namespace WixSharp
                 {
                     if (!xDir.IsUserProfileRoot())
                     {
-                        XElement xComp1 = doc.CrteateComponentFor(xDir);
+                        XElement xComp1 = doc.CreateComponentFor(xDir);
                         if (!xDir.ContainsAnyRemoveFolder())
                             InsertRemoveFolder(xDir, xComp1);
 
