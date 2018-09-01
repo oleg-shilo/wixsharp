@@ -117,10 +117,10 @@ namespace WixSharp
         /// <summary>
         /// Force Component ID uniqueness.
         /// </summary>
-        public bool ForceComponentIdUniqueness = true;
+        public bool ForceComponentIdUniqueness = false;
 
         /// <summary>
-        /// The suppress generation of the XML atrtribute 'id' for <see cref="Bootstrapper.Payload"/> undefined ids
+        /// The suppress generation of the XML attribute 'id' for <see cref="Bootstrapper.Payload"/> undefined ids
         /// </summary>
         public bool SuppressForBundlePayloadUndefinedIds = true;
 
@@ -903,8 +903,7 @@ namespace WixSharp
                 var oldAlgorithm = AutoGeneration.CustomIdAlgorithm;
                 try
                 {
-                    project.ResetWixGuidStartValue();
-                    WixEntity.ResetIdGenerator(false);
+                    project.ResetAutoIdGeneration(supressWarning: false);
 
                     AutoGeneration.CustomIdAlgorithm = project.CustomIdAlgorithm ?? AutoGeneration.CustomIdAlgorithm;
 
@@ -918,7 +917,9 @@ namespace WixSharp
                 }
                 finally
                 {
+
                     AutoGeneration.CustomIdAlgorithm = oldAlgorithm;
+                    project.ResetAutoIdGeneration(supressWarning: true);
                 }
             }
         }

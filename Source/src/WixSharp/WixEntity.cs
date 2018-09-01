@@ -436,7 +436,7 @@ namespace WixSharp
         /// <summary>
         /// The do not reset auto-ID generator before starting the build.
         /// </summary>
-        static public bool DoNotResetIdGenerator = true;
+        static public bool DoNotResetIdGenerator = false;
 
         static Dictionary<Type, Dictionary<string, int>> idMaps = new Dictionary<Type, Dictionary<string, int>>();
 
@@ -465,8 +465,7 @@ namespace WixSharp
                                              "   - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true");
                     Compiler.OutputWriteLine("----------------------------");
                 }
-                idMaps.Clear();
-                alreadyTakenIds.Clear();
+                ResetIdGenerator();
             }
         }
 
