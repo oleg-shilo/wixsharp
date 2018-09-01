@@ -346,7 +346,7 @@ namespace WixSharp
 
         internal void ResetAutoIdGeneration(bool supressWarning)
         {
-            WixGuid.ConsistentGenerationStartValue = this.ProductId;
+            WixGuid.ConsistentGenerationStartValue = this.ProductId ?? this.GUID ?? Guid.NewGuid();
             WixEntity.ResetIdGenerator(supressWarning);
         }
 

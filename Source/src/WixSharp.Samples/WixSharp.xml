@@ -1915,6 +1915,7 @@
              custom Wix# based BA the required variables are inserted automatically, similarly to the standards WiX/Burn BA. However some other
              bundle packages (e.g. new PackageGroupRef("NetFx40Web")) may also define these variables so some duplication/collision is possible.
              To avoid this you can suppress variables auto-insertion and define them manually as needed.</para>
+             </summary>
             <example>The following is an example of suppressing auto-insertion:
              <code>
              var bootstrapper = new Bundle("My Product Suite",
@@ -1928,7 +1929,6 @@
              bootstrapper.SuppressWixMbaPrereqVars = true;
              </code>
              </example>
-             </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.Bundle.Version">
             <summary>
@@ -6288,22 +6288,7 @@
              </para>
              </summary>
         </member>
-        <member name="M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project)">
-             <summary>
-             Enables source resiliency for the installer.
-             Creates a symbolic link/hard link or makes a copy of the original MSI package in the specified location and points SOURCELIST to it.
-             <para>
-             The default resilient source directory is INSTALLDIR (controlled by <see cref="!:Compiler.AutoGeneration.InstallDirDefaultId"/>).
-             </para>
-             </summary>
-            <example>If the installation directory id is set explicitly (e.g. <c>new Dir(new Id("MY_INSTALLDIR"), ...</c>)
-             then you must pass this id:
-            <code>
-             project.EnableResilientPackage("MY_INSTALLDIR");
-             </code>
-             </example>
-             <param name="project">The project.</param>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project)" -->
         <member name="M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project,System.String)">
             <summary>
             Enables source resiliency for the installer.
@@ -11881,7 +11866,7 @@
         </member>
         <member name="F:WixSharp.AutoGenerationOptions.SuppressForBundlePayloadUndefinedIds">
             <summary>
-            The suppress generation of the XML atrtribute 'id' for <see cref="T:WixSharp.Bootstrapper.Payload"/> undefined ids
+            The suppress generation of the XML attribute 'id' for <see cref="T:WixSharp.Bootstrapper.Payload"/> undefined ids
             </summary>
         </member>
         <member name="F:WixSharp.AutoGenerationOptions.HashedTargetPathIdAlgorithm_FileIdMask">

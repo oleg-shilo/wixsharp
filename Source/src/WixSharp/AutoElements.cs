@@ -559,7 +559,7 @@ namespace WixSharp
                         foreach (XElement item in componentsWithNoFiles)
                         {
                             // Ridiculous MSI constraints:
-                            //  * you cannot install install empty folders
+                            //  * you cannot install empty folders
                             //    - workaround is to insert empty component with CreateFolder element
                             //  * if Component+CreateFolder element is inserted the folder will not be removed on uninstall
                             //    - workaround is to insert RemoveFolder element in to empty component as well
