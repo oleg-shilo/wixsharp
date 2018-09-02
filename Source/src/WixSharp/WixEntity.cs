@@ -285,7 +285,7 @@ namespace WixSharp
         internal string GenerateComponentId(Project project, string suffix = "")
         {
             return this.GetExplicitComponentId() ??
-                   project.ComponentId($"Component{suffix}.{this.Id}");
+                   project.ComponentId($"Component.{this.Id}{suffix}");
         }
 
         internal string GetExplicitComponentId()
