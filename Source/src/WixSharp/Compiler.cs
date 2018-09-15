@@ -1724,7 +1724,7 @@ namespace WixSharp
                     comp.AddElement("RemoveFile",
                                   $@"Id=Remove_{fileId};
                                      Name={ wFile.Name.PathGetFileName()};
-                                     On=install");
+                                     On=both");
                 }
 
                 if (wFile is FontFile)
