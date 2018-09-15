@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Deployment.WindowsInstaller;
@@ -34,6 +33,7 @@ namespace WixSharp
         /// <summary>
         /// Enables source resiliency for the installer.
         /// Creates a symbolic link/hard link or makes a copy of the original MSI package in the specified location and points SOURCELIST to it.
+        /// </summary>
         /// <param name="project">The project.</param>
         /// </summary>
         public static void EnableResilientPackage(this Project project)
@@ -197,6 +197,13 @@ namespace WixSharp
 
             IO.File.Delete(resilientPackage);
 
+            // NOTES: * CreateSymbolicLink() fails under Windows 7 in the elevated context (works with Windows 8 and above),
+            //          so the execution falls back to the CreateHardLink().
+            //        * Non-elevated installers don't have access to the %WINDIR%\Installer, so the execution falls back to the file copying.
+            //        * One should be careful with trying to created a hard link to the "originalPackage", because when MSI is installed through
+            //          the NSIS bootstrapper, the bootstrapper is extracting MSI in a temporary folder with very restrictive access rights.
+            //          A hard link to the MSI has the same restrictive access rights preventing it from doing repairs through ARP applet.
+
             // Create a symbolic link
             var result = CreateSymbolicLink(resilientPackage, localPackage, SymbolicLinkFlag.File);
             if (!result)
@@ -208,7 +215,7 @@ namespace WixSharp
             // Create a hard link
             if (!result)
             {
-                result = CreateHardLink(resilientPackage, originalPackage, IntPtr.Zero);
+                result = CreateHardLink(resilientPackage, localPackage, IntPtr.Zero);
                 if (!result)
                 {
                     var errorMessage = new Win32Exception(Marshal.GetLastWin32Error()).Message;
