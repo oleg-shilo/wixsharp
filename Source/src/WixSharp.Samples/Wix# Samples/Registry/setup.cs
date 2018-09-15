@@ -12,74 +12,43 @@ class Script
 {
     static public void Main(string[] args)
     {
-// var projecA_ComponentGuid = WixGuid.NewGuid("Registry.1.af330b47257743ad90951861ba25889b");
-// var projecA_ComponentGuid = WixGuid.NewGuid("Registry.1.bf330b47257743ad90951861ba25889b");
+        // uncomment the line below if the reg file contains unsupported type to be ignored
+        // RegFileImporter.SkipUnknownTypes = true;
 
-//         Debug.WriteLine(aaa);
-//         Debug.WriteLine(bbb);
+        var fullSetup = new Feature("MyApp Binaries");
 
-        //uncomment the line below if the reg file contains unsupported type to be ignored
-        //RegFileImporter.SkipUnknownTypes = true;
-
-        // var fullSetup = new Feature("MyApp Binaries");
-
-        // var project =
-        //     new Project("MyProduct",
-        //         new Dir(@"%ProgramFiles%\My Company\My Product",
-        //             new File(fullSetup, @"readme.txt")),
-        //         // new RegFile(fullSetup, "_MyProduct.reg"), //RegFile does the same Tasks.ImportRegFile
-        //         new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "LICENSE_KEY", "01020304")
-        //         {
-        //             AttributesDefinition = "Type=binary"
-        //         }
-        //         //,
-        //         // // HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\My Company\My Product
-        //         // new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "Message", "Hello"),
-        //         // new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "Count", 777),
-        //         // new RegValue(fullSetup, RegistryHive.ClassesRoot, @"test\shell\open\command", "", "\"[INSTALLDIR]test.exe\" \"%1\""),
-        //         // new RemoveRegistryValue(fullSetup, @"Software\My Company\My Product"),
-        //         // new RemoveRegistryKey(fullSetup, @"Software\My Company\My Product")
-        //         );
-
-        // project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-        // project.UI = WUI.WixUI_ProgressOnly;
-
-        // // Below is the code sample for associating PermissionEx with a registry key
-        // // project.WixSourceGenerated += (doc) =>
-        // //              {
-        // //                  project.IncludeWixExtension(WixExtension.Util);
-
-        // //                  doc.FindAll("RegistryKey")
-        // //                     .ForEach(x => x.Add(WixExtension.Util.XElement("PermissionEx",
-        // //                                                                    "User=[WIX_ACCOUNT_USERS]; GenericAll=yes; CreateSubkeys=yes")));
-        // //              };
-
-        // project.PreserveTempFiles = true;
-        // project.BuildMsi();
-
-        var project1 =
+        var project =
             new Project("MyProduct",
-                // new Dir(@"%ProgramFiles%\My Company\My Product", new File("readme.txt")), 
-                new RegValue(RegistryHive.LocalMachine,
-                        @"Software\My Company\My Product", "LICENSE_KEY", "01020304"));
+                new Dir(@"%ProgramFiles%\My Company\My Product",
+                    new File(fullSetup, @"readme.txt")),
+                // new RegFile(fullSetup, "_MyProduct.reg"), //RegFile does the same as Tasks.ImportRegFile
+                new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "LICENSE_KEY", "01020304")
+                {
+                    AttributesDefinition = "Type=binary"
+                }
+                ,
+                 // HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\My Company\My Product
+                 new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "Message", "Hello"),
+                 new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "Count", 777),
+                 new RegValue(fullSetup, RegistryHive.ClassesRoot, @"test\shell\open\command", "", "\"[INSTALLDIR]test.exe\" \"%1\""),
+                 new RemoveRegistryValue(fullSetup, @"Software\My Company\My Product"),
+                 new RemoveRegistryKey(fullSetup, @"Software\My Company\My Product")
+                );
 
-        project1.PreserveTempFiles = true;
-        project1.OutFileName = "project1";
-        project1.GUID = new Guid("af330b47-2577-43ad-9095-1861ba25889b");
+        project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
+        project.UI = WUI.WixUI_ProgressOnly;
 
-        var project2 =
-            new Project("MyProduct",
-                // new Dir(@"%ProgramFiles%\My Company\My Product", new File("readme.txt")),
-                new RegValue(RegistryHive.LocalMachine,
-                            @"Software\My Company\My Product", "LICENSE_KEY", "01020304"));
+        // Below is the code sample for associating PermissionEx with a registry key
+        // project.WixSourceGenerated += (doc) =>
+        //              {
+        //                  project.IncludeWixExtension(WixExtension.Util);
 
-        project2.PreserveTempFiles = true;
-        project2.OutFileName = "project2";
-        project2.GUID = new Guid("bf330b47-2577-43ad-9095-1861ba25889b");
+        //                  doc.FindAll("RegistryKey")
+        //                     .ForEach(x => x.Add(WixExtension.Util.XElement("PermissionEx",
+        //                                                                    "User=[WIX_ACCOUNT_USERS]; GenericAll=yes; CreateSubkeys=yes")));
+        //              };
 
-        // WixEntity.DoNotResetIdGenerator = false;
-        project1.BuildWxs();
-        WixEntity.ResetIdGenerator();
-        project2.BuildWxs();
+        project.PreserveTempFiles = true;
+        project.BuildMsi();
     }
 }

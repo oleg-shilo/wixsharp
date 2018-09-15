@@ -13,7 +13,7 @@ class Script
     static public void Main(string[] args)
     {
         AutoElements.LegacyDummyDirAlgorithm = true;
-        AutoElements.SupportEmptyDirectories = CompilerSupportState.Enabled;
+        // AutoElements.SupportEmptyDirectories = CompilerSupportState.Enabled;
         var common = new Feature("Common Files");
         var samples = new Feature("Samples");
 

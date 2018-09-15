@@ -1622,7 +1622,14 @@ namespace WixSharp
             {
                 var existingCompElement = dirItem.Elements("Component");
 
-                if (existingCompElement.Count() == 0 && AutoElements.SupportEmptyDirectories == CompilerSupportState.Enabled)
+                // experimenting revealed that `AutoElements.SupportEmptyDirectories != CompilerSupportState.Disabled`
+                // may lead to empty folders remaining after uninstall in case of `CompilerSupportState.Auto`. 
+                // The actual cause is not entirely clear but changing the code to `AutoElements.SupportEmptyDirectories == CompilerSupportState.Enabled`
+                // addresses the issue. Though, in turn, effectively disables auto mode and requires explicit declaration
+                // of `AutoElements.SupportEmptyDirectories = CompilerSupportState.Enabled` for empty dir scenarios.
+                // Restoring the original approach for now... (15/09/2018)
+
+                if (existingCompElement.Count() == 0 && AutoElements.SupportEmptyDirectories != CompilerSupportState.Disabled)
                 {
                     string compId = wDir.GenerateComponentId(wProject, ".EmptyDirectory");
 
@@ -3282,6 +3289,12 @@ namespace WixSharp
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the compiler supports WiX version 4 (and above) toolset.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is wix4; otherwise, <c>false</c>.
+        /// </value>
         public static bool IsWix4
         {
             get => false;

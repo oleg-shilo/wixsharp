@@ -1488,7 +1488,7 @@
         </member>
         <member name="F:WixSharp.AutoElements.ScheduleDeferredActionsAfterTunnellingTheirProperties">
             <summary>
-            Enables scheduling deferred actions just after their corresponding 
+            Enables scheduling deferred actions just after their corresponding
             "SetDeferredActionProperties" custom action. Enabled by default.
             </summary>
         </member>
@@ -3627,6 +3627,14 @@
             <param name="platform">The platform.</param>
             <param name="embeddedUI">if set to <c>true</c> the assembly as an 'EmbeddedUI' assembly.</param>
             <returns>Package file path.</returns>
+        </member>
+        <member name="P:WixSharp.Compiler.IsWix4">
+            <summary>
+            Gets a value indicating whether the compiler supports WiX version 4 (and above) toolset.
+            </summary>
+            <value>
+              <c>true</c> if this instance is wix4; otherwise, <c>false</c>.
+            </value>
         </member>
         <member name="M:WixSharp.Compiler.GetMappedWixConstants(System.Boolean)">
             <summary>
@@ -6288,7 +6296,13 @@
              </para>
              </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project)" -->
+        <member name="M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project)">
+            <summary>
+            Enables source resiliency for the installer.
+            Creates a symbolic link/hard link or makes a copy of the original MSI package in the specified location and points SOURCELIST to it.
+            <param name="project">The project.</param>
+            </summary>
+        </member>
         <member name="M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project,System.String)">
             <summary>
             Enables source resiliency for the installer.
@@ -16767,7 +16781,7 @@
             <param name="sequentialGuid">The sequential GUID.</param>
             <returns>The result of the operator.</returns>
         </member>
-        <member name="F:WixSharp.WixGuid.consistentGenerationStartValue">
+        <member name="F:WixSharp.WixGuid.ConsistentGenerationStartValue">
             <summary>
             Initial value to be used as a seed for Guid generation. If you want the Wix# project items to contain 
             not random but reproducible sequential Guids you should initialize this field.

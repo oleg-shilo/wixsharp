@@ -35,6 +35,7 @@ namespace WixSharp
         /// Enables source resiliency for the installer.
         /// Creates a symbolic link/hard link or makes a copy of the original MSI package in the specified location and points SOURCELIST to it.
         /// <param name="project">The project.</param>
+        /// </summary>
         public static void EnableResilientPackage(this Project project)
         {
             project.EnableResilientPackage("{$ResilientPackageIstallDir}");
