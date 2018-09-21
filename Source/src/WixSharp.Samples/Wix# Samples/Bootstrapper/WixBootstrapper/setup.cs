@@ -45,8 +45,17 @@ public class InstallScript
 
                     //msiOnlinePackage, //just a demo sample
 
-                    new MsiPackage(crtMsi) { DisplayInternalUI = true, Visible = true, MsiProperties = "PACKAGE_PROPERTY=[BundleVariable]" },
-                    new MsiPackage(productMsi) { DisplayInternalUI = true, Payloads = new[] { "script.dll".ToPayload() } });
+                    new MsiPackage(crtMsi)
+                    {
+                        DisplayInternalUI = true,
+                        Visible = true,
+                        MsiProperties = "PACKAGE_PROPERTY=[BundleVariable]"
+                    },
+                    new MsiPackage(productMsi)
+                    {
+                        DisplayInternalUI = true,
+                        Payloads = new[] { "script.dll".ToPayload() }
+                    });
 
         bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";
         bootstrapper.IconFile = "app_icon.ico";
@@ -67,11 +76,13 @@ public class InstallScript
         // bootstrapper.Application.LicensePath = null; //HyperlinkLicense app with no license
 
         bootstrapper.Application.AttributesDefinition = "ShowVersion=yes; ShowFilesInUse=yes";
-        // bootstrapper.Application.Bo
         bootstrapper.Include(WixExtension.Util);
 
+        bootstrapper.IncludeWixExtension(@"WixDependencyExtension.dll", "dep", "http://schemas.microsoft.com/wix/DependencyExtension");
+        bootstrapper.AttributesDefinition = "{dep}ProviderKey=01234567-8901-2345-6789-012345678901";
+
         // The code below sets WiX variables 'Netfx4FullVersion' and 'AdobeInstalled'. Note it has no affect on
-        //the runtime behavior and 'FileSearch' and "RegistrySearch" are only provided as an example.
+        //the runtime behaviour and 'FileSearch' and "RegistrySearch" are only provided as an example.
         bootstrapper.AddWixFragment("Wix/Bundle",
                                      new UtilRegistrySearch
                                      {

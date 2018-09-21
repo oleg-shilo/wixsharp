@@ -421,7 +421,7 @@ namespace WixSharp
             }
         }
 
-        static void ExpandCustomAttributes(XDocument doc, Project project)
+        internal static void ExpandCustomAttributes(XDocument doc, WixProject project)
         {
             foreach (XAttribute instructionAttr in doc.Root.Descendants().Select(x => x.Attribute("WixSharpCustomAttributes")).Where(x => x != null))
             {
@@ -438,9 +438,9 @@ namespace WixSharp
             }
         }
 
-        static Func<XElement, string, Project, bool> ExpandCustomAttribute = DefaultExpandCustomAttribute;
+        static Func<XElement, string, WixProject, bool> ExpandCustomAttribute = DefaultExpandCustomAttribute;
 
-        static bool DefaultExpandCustomAttribute(XElement source, string item, Project project)
+        static bool DefaultExpandCustomAttribute(XElement source, string item, WixProject project)
         {
             var attrParts = item.Split('=');
             // {dep}ProductKey=12345 vs Component:{dep}ProductKey=12345

@@ -275,6 +275,9 @@ namespace WixSharp
                         AutoElements.NormalizeFilePaths(doc, project.SourceBaseDir, EmitRelativePaths);
 
                         project.InvokeWixSourceGenerated(doc);
+
+                        AutoElements.ExpandCustomAttributes(doc, project);
+
                         if (WixSourceGenerated != null)
                             WixSourceGenerated(doc);
 
