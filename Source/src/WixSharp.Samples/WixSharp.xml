@@ -6296,13 +6296,7 @@
              </para>
              </summary>
         </member>
-        <member name="M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project)">
-            <summary>
-            Enables source resiliency for the installer.
-            Creates a symbolic link/hard link or makes a copy of the original MSI package in the specified location and points SOURCELIST to it.
-            <param name="project">The project.</param>
-            </summary>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project)" -->
         <member name="M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project,System.String)">
             <summary>
             Enables source resiliency for the installer.
