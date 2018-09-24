@@ -37,7 +37,7 @@ namespace WixSharpSetup.Dialogs
         void FeaturesDialog_Load(object sender, System.EventArgs e)
         {
             //Debug.Assert(false);
-            string drawTextOnlyProp = MsiRuntime.Session.Property("WixSharpUI_TreeNode_TexOnlyDrawing");
+            string drawTextOnlyProp = Runtime.Session.Property("WixSharpUI_TreeNode_TexOnlyDrawing");
 
             bool drawTextOnly = true;
 
@@ -57,7 +57,7 @@ namespace WixSharpSetup.Dialogs
 
             ReadOnlyTreeNode.Behavior.AttachTo(featuresTree, drawTextOnly);
 
-            banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
             BuildFeaturesHierarchy();
 
             ResetLayout();
@@ -95,12 +95,7 @@ namespace WixSharpSetup.Dialogs
 
         void BuildFeaturesHierarchy()
         {
-            //Cannot use MsiRuntime.Session.Features (FeatureInfo collection).
-            //This WiX feature is just not implemented yet. All members except 'Name' throw InvalidHandeException
-            //Thus instead of using FeatureInfo just collect the names and query database for the rest of the properties.
-            string[] names = MsiRuntime.Session.Features.Select(x => x.Name).ToArray();
-
-            features = names.Select(name => new FeatureItem(MsiRuntime.Session, name)).ToArray();
+            features = Runtime.Session.Features;
 
             //build the hierarchy tree
             var rootItems = features.Where(x => x.ParentName.IsEmpty())
@@ -178,10 +173,10 @@ namespace WixSharpSetup.Dialogs
                                            .Join(",");
 
             if (itemsToRemove.Any())
-                MsiRuntime.Session["REMOVE"] = itemsToRemove;
+                Runtime.Session["REMOVE"] = itemsToRemove;
 
             if (itemsToInstall.Any())
-                MsiRuntime.Session["ADDLOCAL"] = itemsToInstall;
+                Runtime.Session["ADDLOCAL"] = itemsToInstall;
 
             SaveUserSelection();
             Shell.GoNext();
@@ -194,7 +189,7 @@ namespace WixSharpSetup.Dialogs
 
         void featuresTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            description.Text = e.Node.FeatureItem().Description.LocalizeWith(MsiRuntime.Localize);
+            description.Text = e.Node.FeatureItem().Description.LocalizeWith(Runtime.Localize);
         }
 
         bool isAutoCheckingActive = false;

@@ -34,13 +34,13 @@ namespace WixSharpSetup.Dialogs
 
         void change_Click(object sender, System.EventArgs e)
         {
-            MsiRuntime.Session["MODIFY_ACTION"] = "Change";
+            Runtime.Session["MODIFY_ACTION"] = "Change";
             Shell.GoNext();
         }
 
         void repair_Click(object sender, System.EventArgs e)
         {
-            MsiRuntime.Session["MODIFY_ACTION"] = "Repair";
+            Runtime.Session["MODIFY_ACTION"] = "Repair";
             int index = Shell.Dialogs.IndexOf(ProgressDialog);
             if (index != -1)
                 Shell.GoTo(index);
@@ -50,8 +50,8 @@ namespace WixSharpSetup.Dialogs
 
         void remove_Click(object sender, System.EventArgs e)
         {
-            MsiRuntime.Session["REMOVE"] = "ALL";
-            MsiRuntime.Session["MODIFY_ACTION"] = "Remove";
+            Runtime.Session["REMOVE"] = "ALL";
+            Runtime.Session["MODIFY_ACTION"] = "Remove";
 
             int index = Shell.Dialogs.IndexOf(ProgressDialog);
             if (index != -1)
@@ -77,7 +77,7 @@ namespace WixSharpSetup.Dialogs
 
         void MaintenanceTypeDialog_Load(object sender, System.EventArgs e)
         {
-            banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
 
             ResetLayout();
         }

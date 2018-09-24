@@ -45,7 +45,7 @@ namespace WixSharpSetup.Dialogs
             this.bottomBorder = new System.Windows.Forms.Panel();
             this.description = new System.Windows.Forms.Label();
             this.currentActionLabel = new System.Windows.Forms.Label();
-            this.waitPrompt = new System.Windows.Forms.LinkLabel();
+            this.waitPrompt = new System.Windows.Forms.Label();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.banner)).BeginInit();
             this.bottomPanel.SuspendLayout();
@@ -220,12 +220,13 @@ namespace WixSharpSetup.Dialogs
             // 
             this.waitPrompt.AutoSize = true;
             this.waitPrompt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.waitPrompt.ForeColor = System.Drawing.Color.Blue;
             this.waitPrompt.Location = new System.Drawing.Point(85, 209);
             this.waitPrompt.Name = "waitPrompt";
             this.waitPrompt.Size = new System.Drawing.Size(265, 39);
             this.waitPrompt.TabIndex = 23;
             this.waitPrompt.TabStop = true;
-            this.waitPrompt.Text = "Please wait for UAC prompt to appear.\r\n\r\nIf it appears minimised then activate it" +
+            this.waitPrompt.Text = "Please wait for UAC prompt to appear.\r\n\r\nIf it appears minimized then activate it" +
     " from the taskbar.";
             // 
             // ProgressDialog
@@ -270,6 +271,6 @@ namespace WixSharpSetup.Dialogs
         private System.Windows.Forms.Button back;
         private System.Windows.Forms.Button next;
         private System.Windows.Forms.Button cancel;
-        private System.Windows.Forms.LinkLabel waitPrompt;
+        private System.Windows.Forms.Label waitPrompt;
     }
 }

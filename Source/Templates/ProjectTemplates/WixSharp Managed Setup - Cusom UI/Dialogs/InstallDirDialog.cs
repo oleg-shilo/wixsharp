@@ -26,20 +26,20 @@ namespace WixSharpSetup.Dialogs
 
         void InstallDirDialog_Load(object sender, EventArgs e)
         {
-            banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
 
-            installDirProperty = MsiRuntime.Session.Property("WixSharp_UI_INSTALLDIR");
+            installDirProperty = Runtime.Session.Property("WixSharp_UI_INSTALLDIR");
 
-            string installDirPropertyValue = MsiRuntime.Session.Property(installDirProperty);
+            string installDirPropertyValue = Runtime.Session.Property(installDirProperty);
 
             if (installDirPropertyValue.IsEmpty())
             {
                 //We are executed before any of the MSI actions are invoked so the INSTALLDIR (if set to absolute path)
                 //is not resolved yet. So we need to do it manually
-                installDir.Text = MsiRuntime.Session.GetDirectoryPath(installDirProperty);
+                installDir.Text = Runtime.Session.GetDirectoryPath(installDirProperty);
 
                 if (installDir.Text == "ABSOLUTEPATH")
-                    installDir.Text = MsiRuntime.Session.Property("INSTALLDIR_ABSOLUTEPATH");
+                    installDir.Text = Runtime.Session.Property("INSTALLDIR_ABSOLUTEPATH");
             }
             else
             {
@@ -74,7 +74,7 @@ namespace WixSharpSetup.Dialogs
         void next_Click(object sender, EventArgs e)
         {
             if (!installDirProperty.IsEmpty())
-                MsiRuntime.Session[installDirProperty] = installDir.Text;
+                Runtime.Session[installDirProperty] = installDir.Text;
             Shell.GoNext();
         }
 
