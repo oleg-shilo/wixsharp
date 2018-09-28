@@ -62,6 +62,7 @@ public class Script
             if (!args.IsUninstalling)
                 Tasks.StopService("some_service", throwOnError: false);
         };
+
         project.AfterInstall += args =>
         {
             if (!args.IsUninstalling)
@@ -69,7 +70,7 @@ public class Script
         };
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-        // project.PreserveTempFiles = true;
+        project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project);
     }

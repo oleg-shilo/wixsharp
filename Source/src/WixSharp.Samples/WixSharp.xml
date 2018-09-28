@@ -11872,6 +11872,19 @@
             Force Component ID uniqueness.
             </summary>
         </member>
+        <member name="F:WixSharp.AutoGenerationOptions.ValidateCAAssemblies">
+            <summary>
+            Enable validating CA assemblies for all CA methods to be public instance method.
+            <para>
+            Validating must be performed in a temporary AppDomain as it is the only way to avoid 
+            locking the assembly being validated. Unfortunately `ReflectionOnlyLoadFrom` is incompatible
+            with this task as it does not allow browsing members attributes.
+            </para>
+            <para>
+            You may need to disable the validation if WixSharp is hosted on the runtime that does not 
+            support AppDomain unloading (e.g. .NET Core)</para>
+            </summary>
+        </member>
         <member name="F:WixSharp.AutoGenerationOptions.SuppressForBundlePayloadUndefinedIds">
             <summary>
             The suppress generation of the XML attribute 'id' for <see cref="T:WixSharp.Bootstrapper.Payload"/> undefined ids

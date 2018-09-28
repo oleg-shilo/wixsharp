@@ -120,6 +120,19 @@ namespace WixSharp
         public bool ForceComponentIdUniqueness = false;
 
         /// <summary>
+        /// Enable validating CA assemblies for all CA methods to be public instance method.
+        /// <para>
+        /// Validating must be performed in a temporary AppDomain as it is the only way to avoid 
+        /// locking the assembly being validated. Unfortunately `ReflectionOnlyLoadFrom` is incompatible
+        /// with this task as it does not allow browsing members attributes.
+        /// </para>
+        /// <para>
+        /// You may need to disable the validation if WixSharp is hosted on the runtime that does not 
+        /// support AppDomain unloading (e.g. .NET Core)</para>
+        /// </summary>
+        public bool ValidateCAAssemblies = true;
+
+        /// <summary>
         /// The suppress generation of the XML attribute 'id' for <see cref="Bootstrapper.Payload"/> undefined ids
         /// </summary>
         public bool SuppressForBundlePayloadUndefinedIds = true;
