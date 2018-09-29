@@ -122,15 +122,21 @@ namespace WixSharp
         /// <summary>
         /// Enable validating CA assemblies for all CA methods to be public instance method.
         /// <para>
-        /// Validating must be performed in a temporary AppDomain as it is the only way to avoid 
-        /// locking the assembly being validated. Unfortunately `ReflectionOnlyLoadFrom` is incompatible
-        /// with this task as it does not allow browsing members attributes.
+        /// By default validation is performed in a temporary AppDomain (`CAValidation.InRemoteAppDomain`)
+        /// as it is the only way to avoid locking the assembly being validated. Unfortunately 
+        /// `ReflectionOnlyLoadFrom` is incompatible with this task as it does not allow browsing members 
+        /// attributes.
         /// </para>
         /// <para>
-        /// You may need to disable the validation if WixSharp is hosted on the runtime that does not 
-        /// support AppDomain unloading (e.g. .NET Core)</para>
+        /// You may need to disable (`CAValidation.Disabled`) the validation if WixSharp is hosted on the 
+        /// runtime that does not support AppDomain unloading (e.g. .NET Core)</para>
+        /// <para>
+        /// If you want to perform validation without the use of temporary AppDomain you can chose the 
+        /// `CAValidation.InCurrentAppDomain` option. In this case the assembly being validated is loaded in 
+        /// the current AppDomain but from the memory without locking the assembly file. This option is valid 
+        /// but not recommended as it may lead to the unpredictable reflection scenarios. </para>
         /// </summary>
-        public bool ValidateCAAssemblies = true;
+        public CAValidation ValidateCAAssemblies = CAValidation.InRemoteAppDomain;
 
         /// <summary>
         /// The suppress generation of the XML attribute 'id' for <see cref="Bootstrapper.Payload"/> undefined ids

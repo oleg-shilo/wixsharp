@@ -180,16 +180,29 @@ namespace WixSharp
             //     catch { }
         }
 
-        public static void ValidateCAAssembly(string file)
+        public static void ValidateCAAssembly(string caAssembly)
         {
-            if (Compiler.AutoGeneration.ValidateCAAssemblies)
+            string dtfAssembly = typeof(CustomActionAttribute).Assembly.Location;
+
+            // need to do it in a separate domain as we do not want to lock the assembly and 
+            // `ReflectionOnlyLoadFrom` is incompatible with the task
+
+            if (Compiler.AutoGeneration.ValidateCAAssemblies == CAValidation.InRemoteAppDomain)
             {
-                // need to do it in a separate domain as we do not want to lock the assembly and 
-                // `ReflectionOnlyLoadFrom` is incompatible with the task
+                // will not lock the file and will unload the assembly
                 Utils.ExecuteInTempDomain<AsmReflector>(asmReflector =>
                     {
-                        asmReflector.ValidateCAAssembly(file, typeof(CustomActionAttribute).Assembly.Location);
+                        asmReflector.ValidateCAAssembly(caAssembly, dtfAssembly);
                     });
+            }
+            else if (Compiler.AutoGeneration.ValidateCAAssemblies == CAValidation.InCurrentAppDomain)
+            {
+                // will not lock the file but will not unload the assembly
+                new AsmReflector().ValidateCAAssemblyLocally(caAssembly, dtfAssembly);
+            }
+            else
+            {
+                // disabled
             }
         }
 
@@ -228,11 +241,16 @@ namespace WixSharp
             };
 
             AppDomain.CurrentDomain.AssemblyResolve += resolver;
-            ValidateCAAssemblyImpl(file, dtfAsm);
+            ValidateCAAssemblyImpl(file, dtfAsm, loadFromMemory: false);
             AppDomain.CurrentDomain.AssemblyResolve -= resolver;
         }
 
-        internal void ValidateCAAssemblyImpl(string file, string refAsms)
+        internal void ValidateCAAssemblyLocally(string file, string dtfAsm)
+        {
+            ValidateCAAssemblyImpl(file, dtfAsm, loadFromMemory: true);
+        }
+
+        internal void ValidateCAAssemblyImpl(string file, string dtfAsm, bool loadFromMemory)
         {
             //Debug.Assert(false);
             try
@@ -247,11 +265,13 @@ namespace WixSharp
                 // Unfortunately `AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve` does not help (does not get fired).
 
                 // var assembly = System.Reflection.Assembly.ReflectionOnlyLoadFrom(file); 
-                var assembly = System.Reflection.Assembly.LoadFrom(file);
+                var assembly = loadFromMemory ?
+                     Reflection.Assembly.Load(System.IO.File.ReadAllBytes(file)) :
+                     Reflection.Assembly.LoadFrom(file);
 
                 var caMembers = assembly.GetTypes()
                                         .SelectMany(t => t.GetMembers(bf)
-                                                          .Where(mem => mem.GetCustomAttributes (false)
+                                                          .Where(mem => mem.GetCustomAttributes(false)
                                                           .Where(x => x.ToString() == "Microsoft.Deployment.WindowsInstaller.CustomActionAttribute")
                                                           .Any()))
                                          .ToArray();

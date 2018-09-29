@@ -18,6 +18,8 @@ public class Script
 {
     static public void Main()
     {
+        Compiler.AutoGeneration.ValidateCAAssemblies = CAValidation.Disabled;
+
         var bin = new Feature("MyApp Binaries");
         var tools = new Feature("MyApp Tools");
 
