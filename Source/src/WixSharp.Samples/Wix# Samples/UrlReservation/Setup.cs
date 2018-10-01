@@ -19,24 +19,32 @@ namespace FutoRollbackGeneration
                         new Dir(@"%ProgramFiles%\My Company\My Product",
                             new File(@"File\MyApp.exe")
                             {
-                                ServiceInstaller = new ServiceInstaller
+                                ServiceInstaller = new ServiceInstaller("WixSharp.TestSvc")
                                 {
-                                    Name = "WixSharp.TestSvc",
-                                    DependsOn = "Dnscache;Dhcp",
                                     StartOn = SvcEvent.Install, //set it to null if you don't want service to start as during deployment
                                     StopOn = SvcEvent.InstallUninstall_Wait,
                                     RemoveOn = SvcEvent.Uninstall_Wait,
-                                    DelayedAutoStart = true,
-                                    ServiceSid = ServiceSid.none,
-                                    FirstFailureActionType = FailureActionType.restart,
-                                    SecondFailureActionType = FailureActionType.restart,
-                                    ThirdFailureActionType = FailureActionType.runCommand,
-                                    ProgramCommandLine = "MyApp.exe -run",
-                                    RestartServiceDelayInSeconds = 30,
-                                    ResetPeriodInDays = 1,
-                                    PreShutdownDelay = 1000 * 60 * 3,
-                                    RebootMessage = "Failure actions do not specify reboot",
-
+                                    DependsOn = new[]
+                                    {
+                                        new ServiceDependency("Dnscache"),
+                                        new ServiceDependency("Dhcp"),
+                                    },
+                                    Config = new ServiceConfig
+                                    {
+                                        DelayedAutoStart = true,
+                                        ServiceSid = ServiceSid.none,
+                                        PreShutdownDelay = 1000 * 60 * 3,
+                                    },
+                                    ConfigUtil = new ServiceConfigUtil
+                                    {
+                                        FirstFailureActionType = FailureActionType.restart,
+                                        SecondFailureActionType = FailureActionType.restart,
+                                        ThirdFailureActionType = FailureActionType.runCommand,
+                                        ProgramCommandLine = "MyApp.exe -run",
+                                        RestartServiceDelayInSeconds = 30,
+                                        ResetPeriodInDays = 1,
+                                        RebootMessage = "Failure actions do not specify reboot",
+                                    },
                                     UrlReservations = new[]
                                     {
                                         new UrlReservation(new Id("SeervicesUrl"), "http://+:4131/url/device_service/", "*S-1-1-0", UrlReservationRights.all)

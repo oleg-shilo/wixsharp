@@ -115,7 +115,6 @@ namespace WixSharp
             var props = new List<Property>();
             var bins = new List<Binary>();
             var genericItems = new List<IGenericEntity>();
-            var urlreservation = new List<UrlReservation>();
 
             if (items.OfType<Media>().Any())
                 this.Media.Clear();
@@ -138,8 +137,6 @@ namespace WixSharp
                         actions.Add(item as Action);
                     else if (item is RegValue)
                         regs.Add(item as RegValue);
-                    else if (item is UrlReservation)
-                        urlreservation.Add(item as UrlReservation);
                     else if (item is RegFile)
                     {
                         var file = item as RegFile;
@@ -172,7 +169,6 @@ namespace WixSharp
             RegValues = regs.ToArray();
             Properties = props.ToArray();
             Binaries = bins.ToArray();
-            UrlReservations = urlreservation.ToArray();
             GenericItems = genericItems.ToArray();
         }
 
