@@ -1,2 +1,2 @@
 ..\..\cscs.exe setup.cs FeatureTree
-pause
+rem pause

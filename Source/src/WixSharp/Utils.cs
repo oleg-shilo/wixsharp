@@ -120,10 +120,27 @@ namespace WixSharp
         internal static string OriginalAssemblyFile(string file)
         {
             //need to do it in a separate domain as we do not want to lock the assembly
-            return (string)ExecuteInTempDomain<AsmReflector>(asm =>
+            string dir = IO.Path.GetDirectoryName(IO.Path.GetFullPath(file));
+
+            System.Reflection.Assembly asm = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a =>
             {
-                return asm.OriginalAssemblyFile(file);
+                try
+                {
+                    return a.Location.SamePathAs(file); //some domain assemblies may throw when accessing .Locatioon
+                }
+                catch
+                {
+                    return false;
+                }
             });
+
+            if (asm == null)
+                asm = System.Reflection.Assembly.ReflectionOnlyLoadFrom(file);
+
+            // for example 'setup.cs.dll' vs 'setup.cs.compiled'
+            var name = asm.ManifestModule.ScopeName;
+
+            return IO.Path.Combine(dir, name);
         }
 
         internal static void ExecuteInTempDomain<T>(Action<T> action) where T : MarshalByRefObject
