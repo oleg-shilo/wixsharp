@@ -836,7 +836,7 @@ namespace WixSharp
         restart,
         runCommand
 #pragma warning restore 1591
-
+    }
     /// CA assembly validation mode
     /// </summary>
     public enum CAValidation
