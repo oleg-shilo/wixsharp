@@ -1,3 +1,3 @@
 ..\..\cscs.exe MyAppWix.cs
 
-pause
+rem pause

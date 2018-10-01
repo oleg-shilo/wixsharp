@@ -18,6 +18,8 @@ public class Script
 {
     static public void Main()
     {
+        Compiler.AutoGeneration.ValidateCAAssemblies = CAValidation.Disabled;
+
         var bin = new Feature("MyApp Binaries");
         var tools = new Feature("MyApp Tools");
 
@@ -62,6 +64,7 @@ public class Script
             if (!args.IsUninstalling)
                 Tasks.StopService("some_service", throwOnError: false);
         };
+
         project.AfterInstall += args =>
         {
             if (!args.IsUninstalling)

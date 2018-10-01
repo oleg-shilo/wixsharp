@@ -11872,6 +11872,25 @@
             Force Component ID uniqueness.
             </summary>
         </member>
+        <member name="F:WixSharp.AutoGenerationOptions.ValidateCAAssemblies">
+            <summary>
+            Enable validating CA assemblies for all CA methods to be public instance method.
+            <para>
+            By default validation is performed in a temporary AppDomain (`CAValidation.InRemoteAppDomain`)
+            as it is the only way to avoid locking the assembly being validated. Unfortunately 
+            `ReflectionOnlyLoadFrom` is incompatible with this task as it does not allow browsing members 
+            attributes.
+            </para>
+            <para>
+            You may need to disable (`CAValidation.Disabled`) the validation if WixSharp is hosted on the 
+            runtime that does not support AppDomain unloading (e.g. .NET Core)</para>
+            <para>
+            If you want to perform validation without the use of temporary AppDomain you can chose the 
+            `CAValidation.InCurrentAppDomain` option. In this case the assembly being validated is loaded in 
+            the current AppDomain but from the memory without locking the assembly file. This option is valid 
+            but not recommended as it may lead to the unpredictable reflection scenarios. </para>
+            </summary>
+        </member>
         <member name="F:WixSharp.AutoGenerationOptions.SuppressForBundlePayloadUndefinedIds">
             <summary>
             The suppress generation of the XML attribute 'id' for <see cref="T:WixSharp.Bootstrapper.Payload"/> undefined ids
@@ -14835,6 +14854,26 @@
             </summary>
             <param name="value">The value.</param>
         </member>
+        <member name="F:WixSharp.RegistryHive.ClassesRoot">
+            <summary>
+            The classes root. Equivalent of `HKCR`.
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegistryHive.CurrentUser">
+            <summary>
+            The current user.  Equivalent of `HKCU`.
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegistryHive.LocalMachine">
+            <summary>
+            The local machine.  Equivalent of `HKLM`.
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegistryHive.Users">
+            <summary>
+            The users.  Equivalent of `HKU`.
+            </summary>
+        </member>
         <member name="F:WixSharp.RegistryHive.LocalMachineOrUsers">
             <summary>
             Defines ”HKMU” value, which makes it so the registry entry will appear in HKLM 
@@ -17758,6 +17797,29 @@
             If Name is specified, attributes with that name are set to the same value specified in Value.
             If Name is not specified, the text values of the elements are set.
             Value is a required attribute if setBulkValue is the action specified.
+            </summary>
+        </member>
+        <member name="T:WixSharp.CAValidation">
+            <summary>
+            CA assembly validation mode
+            </summary>
+        </member>
+        <member name="F:WixSharp.CAValidation.InRemoteAppDomain">
+            <summary>
+            The CA assembly is loaded in the temporary remote AppDomain for validation.
+            Assembly file is unlocked and at the end of the validation the assembly is unloaded.
+            </summary>
+        </member>
+        <member name="F:WixSharp.CAValidation.InCurrentAppDomain">
+            <summary>
+            The CA assembly is loaded in the current AppDomain for validation.
+            Assembly file is unlocked but the assembly will not be unloaded at the end of the validation.
+            This mode may lead to unpredictable behaviour.
+            </summary>
+        </member>
+        <member name="F:WixSharp.CAValidation.Disabled">
+            <summary>
+            CA assembly validation is disabled.
             </summary>
         </member>
         <member name="T:WixSharp.WixQuietExecAction">

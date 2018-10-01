@@ -836,5 +836,25 @@ namespace WixSharp
         restart,
         runCommand
 #pragma warning restore 1591
+
+    /// CA assembly validation mode
+    /// </summary>
+    public enum CAValidation
+    {
+        /// <summary>
+        /// The CA assembly is loaded in the temporary remote AppDomain for validation.
+        /// Assembly file is unlocked and at the end of the validation the assembly is unloaded.
+        /// </summary>
+        InRemoteAppDomain,
+        /// <summary>
+        /// The CA assembly is loaded in the current AppDomain for validation.
+        /// Assembly file is unlocked but the assembly will not be unloaded at the end of the validation.
+        /// This mode may lead to unpredictable behaviour.
+        /// </summary>
+        InCurrentAppDomain,
+        /// <summary>
+        /// CA assembly validation is disabled.
+        /// </summary>
+        Disabled
     }
 }

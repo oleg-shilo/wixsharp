@@ -65,8 +65,14 @@ public class InstallScript
 
 class BalCondition : WixEntity, IGenericEntity
 {
+    /// <summary>
+    /// The condition expression
+    /// </summary>
     public string Condition;
 
+    /// <summary>
+    /// The condition message
+    /// </summary>
     public string Message;
 
     public void Process(ProcessingContext context)

@@ -33,7 +33,6 @@ class Script
 
         //must be cleared to work with MediaTemplate
         project.Media.Clear();
-
         project.DefaultFeature = complete;
         project.UI = WUI.WixUI_FeatureTree;
         project.InstallerVersion = 200; //you may want to change it to match MSM module installer version
