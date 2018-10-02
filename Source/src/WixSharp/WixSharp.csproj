@@ -111,6 +111,7 @@
     <Compile Include="AppSearch.cs" />
     <Compile Include="Assembly.cs" />
     <Compile Include="AutoElements.cs" />
+    <Compile Include="BalCondition.cs" />
     <Compile Include="Bootstrapper\UtilFileSearch.cs" />
     <Compile Include="Bootstrapper\UtilRegistrySearch.cs" />
     <Compile Include="Bootstrapper\Variable.cs" />
