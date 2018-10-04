@@ -55,6 +55,11 @@ namespace WixSharp
         public bool UseCertificateStore { get; set; }
 
         /// <summary>
+        /// A flag indicating the output level of the <c>SignTool.exe</c> utility.
+        /// </summary>
+        public SignOutputLevel OutputLevel { get; set; }
+
+        /// <summary>
         /// Applies digital signature to a file
         /// </summary>
         /// <param name="fileToSign">The file to sign.</param>
@@ -62,12 +67,12 @@ namespace WixSharp
         public virtual int Apply(string fileToSign)
         {
             var retValue = CommonTasks.Tasks.DigitalySign(fileToSign, PfxFilePath, TimeUrl?.AbsoluteUri, Password,
-                PrepareOptionalArguments(), WellKnownLocations, UseCertificateStore);
+                PrepareOptionalArguments(), WellKnownLocations, UseCertificateStore, false, OutputLevel);
 
             Console.WriteLine(retValue != 0
                 ? $"Could not sign the {fileToSign} file."
                 : $"The file {fileToSign} was signed successfully.");
-
+            
             return retValue;
         }
 
