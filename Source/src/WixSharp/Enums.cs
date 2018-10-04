@@ -783,4 +783,29 @@ namespace WixSharp
         /// </summary>
         Disabled
     }
+
+    /// <summary>
+    /// Sign Tool output level
+    /// </summary>
+    public enum SignOutputLevel
+    {
+        /// <summary>
+        /// Displays verbose output regardless of whether the command runs successfully or fails,
+        /// and displays warning messages.
+        /// </summary>
+        Verbose,
+        /// <summary>
+        /// Displays no output if the command runs successfully,
+        /// and displays minimal output if the command fails.
+        /// </summary>
+        Minimal,
+        /// <summary>
+        /// Displays standard output
+        /// </summary>
+        Standard,
+        /// <summary>
+        /// Displays debugging information.
+        /// </summary>
+        Debug
+    }
 }
