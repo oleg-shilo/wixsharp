@@ -187,9 +187,9 @@ namespace WixSharp
         /// </summary>
         public ServiceDependency[] DependsOn;
 
-        public ServiceConfig Config;
+        private ServiceConfig Config;
 
-        public ServiceConfigUtil ConfigUtil;
+        private ServiceConfigUtil ConfigUtil;
 
         /// <summary>
         /// Fully qualified names must be used even for local accounts,
@@ -235,6 +235,79 @@ namespace WixSharp
         [Xml]
         public bool? Vital;
 
+        #region ServiceConfig attributes	
+        
+        /// <summary>	
+        /// Specifies whether an auto-start service should delay its start until after all other auto-start services.	
+        /// This property only affects auto-start services. If this property is not initialized the setting is not configured.	
+        /// </summary>	
+        public bool? DelayedAutoStart;
+        
+        ///public object FailureActionsWhen { get; set; } //note implementing util:serviceconfig instead	
+        /// <summary>	            ConfigUtil?.Process(newContext);
+        /// Specifies time in milliseconds that the Service Control Manager (SCM) waits after notifying	
+        /// the service of a system shutdown. If this attribute is not present the default value, 3 minutes, is used.	
+        /// </summary>	
+        public int? PreShutdownDelay;
+        
+        /// <summary>	
+        /// Specifies the service SID to apply to the service	
+        /// </summary>	
+        public ServiceSid ServiceSid;
+        
+        /// <summary>	
+        /// Specifies whether to configure the service when the parent Component is installed, reinstalled, or uninstalled	
+        /// </summary>	
+        /// <remarks>	
+        /// Defaults to ConfigureServiceTrigger.Install.	
+        /// Strictly applies to the configuration of properties: DelayedAutoStart, PreShutdownDelay, ServiceSid.	
+        /// </remarks>	
+        public ConfigureServiceTrigger ConfigureServiceTrigger = ConfigureServiceTrigger.Install;
+        
+        #endregion ServiceConfig attributes	
+        
+        #region Util:ServiceConfig attributes	
+        
+        /// <summary>	
+        /// Action to take on the first failure of the service	
+        /// </summary>	
+        public FailureActionType FirstFailureActionType = FailureActionType.none;
+        
+        /// <summary>	
+        /// If any of the three *ActionType attributes is "runCommand",	
+        /// this specifies the command to run when doing so.	
+        /// </summary>	
+        public string ProgramCommandLine;
+        
+        /// <summary>	
+        /// If any of the three *ActionType attributes is "reboot",	
+        /// this specifies the message to broadcast to server users before doing so.	
+        /// </summary>	
+        public string RebootMessage;
+        
+        /// <summary>	
+        /// Number of days after which to reset the failure count to zero if there are no failures.	
+        /// </summary>	
+        public int? ResetPeriodInDays;
+        
+        /// <summary>	
+        /// If any of the three *ActionType attributes is "restart",	
+        /// this specifies the number of seconds to wait before doing so.	
+        /// </summary>	
+        public int? RestartServiceDelayInSeconds;
+        
+        /// <summary>	
+        /// Action to take on the second failure of the service.	
+        /// </summary>	
+        public FailureActionType SecondFailureActionType = FailureActionType.none;
+
+        /// <summary>	
+        /// Action to take on the third failure of the service.	
+        /// </summary>	
+        public FailureActionType ThirdFailureActionType = FailureActionType.none;
+
+        #endregion Util:ServiceConfig attributes
+
         /// <summary>
         /// The URL reservations associated with the service
         /// </summary>
@@ -247,6 +320,25 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
+            Config = new ServiceConfig
+            {
+                DelayedAutoStart = DelayedAutoStart,
+                PreShutdownDelay = PreShutdownDelay,
+                ServiceSid = ServiceSid,
+                ConfigureServiceTrigger = ConfigureServiceTrigger,
+            };
+            
+            ConfigUtil = new ServiceConfigUtil
+            {
+                FirstFailureActionType = FirstFailureActionType,
+                SecondFailureActionType = SecondFailureActionType,
+                ThirdFailureActionType = ThirdFailureActionType,
+                ProgramCommandLine = ProgramCommandLine,
+                RebootMessage = RebootMessage,
+                ResetPeriodInDays = ResetPeriodInDays,
+                RestartServiceDelayInSeconds = RestartServiceDelayInSeconds,
+            };
+            
             XElement ServiceInstaller = this.ToXElement("ServiceInstall");
             context.XParent.Add(ServiceInstaller);
 

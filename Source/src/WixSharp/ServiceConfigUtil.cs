@@ -7,6 +7,9 @@ namespace WixSharp
     /// </summary>
     public class ServiceConfigUtil : WixEntity, IGenericEntity
     {
+        internal ServiceConfigUtil()
+        {}
+
         /// <summary>
         /// Action to take on the first failure of the service
         /// </summary>

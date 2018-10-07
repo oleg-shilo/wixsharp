@@ -7,6 +7,9 @@ namespace WixSharp
     /// </summary>
     public class ServiceConfig : WixEntity, IGenericEntity
     {
+        internal ServiceConfig()
+        {}
+
         /// <summary>
         /// Specifies whether an auto-start service should delay its start until after all other auto-start services.
         /// This property only affects auto-start services. If this property is not initialized the setting is not configured.
