@@ -19,10 +19,8 @@ namespace FutoRollbackGeneration
                         new Dir(@"%ProgramFiles%\My Company\My Product",
                             new File(@"File\MyApp.exe")
                             {
-                                ServiceInstaller = new ServiceInstaller
+                                ServiceInstaller = new ServiceInstaller("WixSharp.TestSvc")
                                 {
-                                    Name = "WixSharp.TestSvc",
-                                    DependsOn = "Dnscache;Dhcp",
                                     StartOn = SvcEvent.Install, //set it to null if you don't want service to start as during deployment
                                     StopOn = SvcEvent.InstallUninstall_Wait,
                                     RemoveOn = SvcEvent.Uninstall_Wait,
@@ -36,7 +34,11 @@ namespace FutoRollbackGeneration
                                     ResetPeriodInDays = 1,
                                     PreShutdownDelay = 1000 * 60 * 3,
                                     RebootMessage = "Failure actions do not specify reboot",
-
+                                    DependsOn = new[]
+                                    {
+                                        new ServiceDependency("Dnscache"),
+                                        new ServiceDependency("Dhcp"),
+                                    },
                                     UrlReservations = new[]
                                     {
                                         new UrlReservation(new Id("SeervicesUrl"), "http://+:4131/url/device_service/", "*S-1-1-0", UrlReservationRights.all)

@@ -172,7 +172,7 @@ namespace WixSharp
         /// The service installer associated with the file.
         ///  Set this field to the properly initialized instance of <see cref="ServiceInstaller"/> if the file is a windows service module.
         /// </summary>
-        public ServiceInstaller ServiceInstaller = null;
+        public IGenericEntity ServiceInstaller = null;
         
         /// <summary>
         /// Collection of the contained <see cref="IISVirtualDir"/>s.

@@ -150,12 +150,17 @@
     <Compile Include="RemoveRegistryValue.cs" />
     <Compile Include="RemoveRegistryKey.cs" />
     <Compile Include="ResilientPackage.cs" />
+    <Compile Include="ServiceConfig.cs" />
+    <Compile Include="ServiceConfigUtil.cs" />
+    <Compile Include="SvcEvent.cs" />
+    <Compile Include="ServiceDependency.cs" />
     <Compile Include="SharedExtensions.cs" />
     <Compile Include="SqlDatabase.cs" />
     <Compile Include="SqlScript.cs" />
     <Compile Include="SqlString.cs" />
     <Compile Include="StringEnum.cs" />
     <Compile Include="UACRevealer.cs" />
+    <Compile Include="UrlAce.cs" />
     <Compile Include="UrlReservation.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Utilities\RegistryWOW6432.cs" />

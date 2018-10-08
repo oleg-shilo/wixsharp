@@ -1,54 +1,31 @@
 ﻿using System.Xml.Linq;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
     /// <summary>
-    /// Specifies the behavior when trying to install a URL reservation and it already exists.
-    /// </summary>
-    public enum UrlReservationHandleExisting
-    {
-        /// <summary>
-        /// Replaces the existing URL reservation (the default).
-        /// </summary>
-        replace,
-
-        /// <summary>
-        /// Keeps the existing URL reservation.
-        /// </summary>
-        ignore,
-
-        /// <summary>
-        /// The installation fails.
-        /// </summary>
-        fail,
-    }
-
-    /// <summary>
-    /// Rights for this ACE.
-    /// </summary>
-    public enum UrlReservationRights
-    {
-        /// <summary>
-        /// The 'register' rights value of the child UrlAce element
-        /// </summary>
-        register,
-
-        /// <summary>
-        /// The 'delete' rights value of the child UrlAce element
-        /// </summary>
-        @delegate,
-
-        /// <summary>
-        /// The 'all' rights value of the child UrlAce element
-        /// </summary>
-        all,
-    }
-
-    /// <summary>
     /// Makes a reservation record for the HTTP Server API configuration store on Windows XP SP2, Windows Server 2003, and later.
     /// </summary>
-    public class UrlReservation : WixEntity
+    public class UrlReservation : WixEntity, IGenericEntity
     {
+        /// <summary>
+        /// Primary key used to identify this particular entry.
+        /// </summary>
+        [Xml]
+        public new string Id { get { return base.Id; } set { base.Id = value; } }
+
+        /// <summary>
+        /// The UrlPrefix string that defines the portion of the URL namespace to which this reservation pertains.
+        /// </summary>
+        [Xml]
+        public string Url;
+
+        /// <summary>
+        /// Security descriptor to apply to the URL reservation. Can't be specified when using children UrlAce elements.
+        /// </summary>
+        [Xml]
+        public string Sddl;
+
         /// <summary>
         /// Specifies the behavior when trying to install a URL reservation and it already exists. This attribute's value must be one of the following:
         /// <list type="bullet">
@@ -57,37 +34,13 @@ namespace WixSharp
         /// <item><description>fail</description></item>
         /// </list>
         /// </summary>
-        public UrlReservationHandleExisting HandleExisting = UrlReservationHandleExisting.replace;
+        [Xml]
+        public UrlReservationHandleExisting? HandleExisting = UrlReservationHandleExisting.replace;
 
         /// <summary>
-        /// Security descriptor to apply to the URL reservation. Can't be specified when using children UrlAce elements.
+        /// The security principal and which rights to assign to them for the URL reservation.
         /// </summary>
-        public string Sddl;
-
-        /// <summary>
-        /// The UrlPrefix string that defines the portion of the URL namespace to which this reservation pertains.
-        /// </summary>
-        public string Url;
-
-        /// <summary>
-        /// Rights for this ACE. Default is "all". This attribute's value must be one of the following:
-        /// <list type="bullet">
-        /// <item><description>register</description></item>
-        /// <item><description>delegate</description></item>
-        /// <item><description>all</description></item>
-        /// </list>
-        /// </summary>
-        public UrlReservationRights Rights;
-
-        /// <summary>
-        /// The security principal for this ACE.
-        ///  When the UrlReservation is under a ServiceInstall element, this defaults to "NT SERVICE\ServiceInstallName".
-        ///  This may be either a SID or an account name in a format that LookupAccountName supports. When using a SID, an asterisk must be prepended.
-        /// <example>
-        /// "*S-1-5-18"
-        /// </example>
-        /// </summary>
-        public string SecurityPrincipal;
+        private UrlAce UrlAce;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UrlReservation" /> class.
@@ -116,8 +69,23 @@ namespace WixSharp
         {
             Id = id;
             Url = url;
-            SecurityPrincipal = securityPrincipal;
-            Rights = rights;
+            UrlAce = new UrlAce(id, rights, securityPrincipal);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UrlReservation" /> class.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <param name="feature">The Feature.</param>
+        /// <param name="url"></param>
+        /// <param name="securityPrincipal"></param>
+        /// <param name="rights"></param>
+        public UrlReservation(Id id, Feature feature, string url, string securityPrincipal, UrlReservationRights rights)
+        {
+            Id = id;
+            Feature = feature;
+            Url = url;
+            UrlAce = new UrlAce(new Id(id), rights, securityPrincipal);
         }
 
         /// <summary>
@@ -128,9 +96,24 @@ namespace WixSharp
         /// <param name="rights"></param>
         public UrlReservation(string url, string securityPrincipal, UrlReservationRights rights)
         {
+            Id = id;
             Url = url;
-            SecurityPrincipal = securityPrincipal;
-            Rights = rights;
+            UrlAce = new UrlAce(new Id(id), rights, securityPrincipal);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UrlReservation" /> class.
+        /// </summary>
+        /// <param name="feature">The Feature.</param>
+        /// <param name="url"></param>
+        /// <param name="securityPrincipal"></param>
+        /// <param name="rights"></param>
+        public UrlReservation(Feature feature, string url, string securityPrincipal, UrlReservationRights rights)
+        {
+            Id = id;
+            Feature = feature;
+            Url = url;
+            UrlAce = new UrlAce(new Id(id), rights, securityPrincipal);
         }
 
         /// <summary>
@@ -149,6 +132,21 @@ namespace WixSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="UrlReservation" /> class.
         /// </summary>
+        /// <param name="id">The id.</param>
+        /// <param name="feature">The Feature.</param>
+        /// <param name="url"></param>
+        /// <param name="sddl"></param>
+        public UrlReservation(Id id, Feature feature, string url, string sddl)
+        {
+            Id = id;
+            Feature = feature;
+            Url = url;
+            Sddl = sddl;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UrlReservation" /> class.
+        /// </summary>
         /// <param name="url"></param>
         /// <param name="sddl"></param>
         public UrlReservation(string url, string sddl)
@@ -159,26 +157,51 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Emits WiX XML for UrlReservation.
+        /// Initializes a new instance of the <see cref="UrlReservation" /> class.
         /// </summary>
-        /// <returns></returns>
-        public XElement ToXml()
+        /// <param name="feature">The Feature.</param>
+        /// <param name="url"></param>
+        /// <param name="sddl"></param>
+        public UrlReservation(Feature feature, string url, string sddl)
         {
-            var retval = this.ToXElement(WixExtension.Http.ToXName("UrlReservation"))
-                .SetAttribute("Id", this.Id)
-                .SetAttribute("Url", this.Url)
-                .SetAttribute("Sddl", this.Sddl)
-                .SetAttribute("HandleExisting", this.HandleExisting);
+            Id = id;
+            Feature = feature;
+            Url = url;
+            Sddl = sddl;
+        }
 
-            if (Sddl.IsEmpty())
+        /// <summary>
+        /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        public void Process(ProcessingContext context)
+        {
+            XElement UrlReservation = this.ToXElement(WixExtension.Http, GetType().Name);
+            if (UrlAce != null)
             {
-                retval.AddElement(WixExtension.Http.ToXName("UrlAce"))
-                    .SetAttribute("Id", this.Id)
-                    .SetAttribute("Rights", this.Rights)
-                    .SetAttribute("SecurityPrincipal", this.SecurityPrincipal);
+                var newContext = new ProcessingContext
+                {
+                    Project = context.Project,
+                    Parent = context.Project,
+                    XParent = UrlReservation,
+                    FeatureComponents = context.FeatureComponents,
+                };
+
+                UrlAce.Process(newContext);
             }
 
-            return retval;
+            if (context.XParent.Name == "ServiceInstall")
+            {
+                context.XParent.Add(UrlReservation);
+            }
+            else
+            {
+                var component = this.CreateParentComponent();
+                component.Add(UrlReservation);
+                context.XParent.FindFirst("Component").Parent?.Add(component);
+                MapComponentToFeatures(component.Attribute("Id")?.Value, ActualFeatures, context);
+            }
         }
     }
 }
