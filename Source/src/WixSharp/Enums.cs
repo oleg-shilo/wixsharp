@@ -2,9 +2,7 @@
 
 /*
 The MIT License (MIT)
-
 Copyright (c) 2014 Oleg Shilo
-
 Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -12,10 +10,8 @@ in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +22,8 @@ THE SOFTWARE.
 */
 
 #endregion Licence...
+
+using System;
 
 namespace WixSharp
 {
@@ -760,6 +758,80 @@ namespace WixSharp
         /// Value is a required attribute if setBulkValue is the action specified.
         /// </summary>
         bulkSetValue,
+    }
+
+    /// <summary>
+    /// Rights for this ACE.
+    /// </summary>
+    public enum UrlReservationRights
+    {
+        /// <summary>
+        /// The 'register' rights value of the child UrlAce element
+        /// </summary>
+        register,
+
+        /// <summary>
+        /// The 'delete' rights value of the child UrlAce element
+        /// </summary>
+        @delegate,
+
+        /// <summary>
+        /// The 'all' rights value of the child UrlAce element
+        /// </summary>
+        all,
+    }
+
+    /// <summary>
+    /// Specifies the behavior when trying to install a URL reservation and it already exists.
+    /// </summary>
+    public enum UrlReservationHandleExisting
+    {
+        /// <summary>
+        /// Replaces the existing URL reservation (the default).
+        /// </summary>
+        replace,
+
+        /// <summary>
+        /// Keeps the existing URL reservation.
+        /// </summary>
+        ignore,
+
+        /// <summary>
+        /// The installation fails.
+        /// </summary>
+        fail,
+    }
+
+    /// <summary>
+    /// Flags for indicating when the service should be configured.
+    /// </summary>
+    [Flags]
+    public enum ConfigureServiceTrigger
+    {
+#pragma warning disable 1591
+
+        /// <summary>
+        /// Not a valid value for ServiceConfig.On(Install, Reinstall, Uninstall)
+        /// </summary>
+        None = 0,
+
+        Install = 1,
+        Reinstall = 2,
+        Uninstall = 4
+#pragma warning restore 1591
+    }
+
+    /// <summary>
+    /// Possible values for ServiceInstall.(First|Second|Third)FailureActionType
+    /// </summary>
+    public enum FailureActionType
+    {
+#pragma warning disable 1591
+        none,
+        reboot,
+        restart,
+        runCommand
+#pragma warning restore 1591
     }
 
     /// <summary>
