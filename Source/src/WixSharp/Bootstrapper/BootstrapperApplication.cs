@@ -249,6 +249,7 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         public Payload[] Payloads = new Payload[0];
 
+
         /// <summary>
         /// The Bundle string variables associated with the Bootstrapper application.
         /// <para>The variables are defined as a named values map.</para>
@@ -265,162 +266,213 @@ namespace WixSharp.Bootstrapper
     }
 
     /// <summary>
-    /// Describes a payload to a bootstrapper.
-    /// </summary>
+    /// Describes a remote payload to a bootstrapper.
+    /// <para>Describes information about a remote file payload that is not
+    /// available at the time of building the bundle. The parent must specify DownloadUrl
+    /// and must not specify SourceFile when using this element.</para></summary>
     /// <seealso cref="WixSharp.WixEntity" />
-    public class Payload : WixEntity
+    public class RemotePayload : WixEntity
     {
         /// <summary>
-        /// Gets or sets the <c>Id</c> value of the <see cref="WixEntity" />.
-        /// <para>This value is used as a <c>Id</c> for the corresponding WiX XML element.</para><para>If the <see cref="Id" /> value is not specified explicitly by the user the Wix# compiler
-        /// generates it automatically insuring its uniqueness.</para><remarks>
-        /// Note: The ID auto-generation is triggered on the first access (evaluation) and in order to make the id
-        /// allocation deterministic the compiler resets ID generator just before the build starts. However if you
-        /// accessing any auto-id before the Build*() is called you can it interferes with the ID auto generation and eventually
-        /// lead to the WiX ID duplications. To prevent this from happening either:"
-        /// <para> - Avoid evaluating the auto-generated IDs values before the call to Build*()</para><para> - Set the IDs (to be evaluated) explicitly</para><para> - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";</para></remarks>
+        /// Description of the file from version resources.
         /// </summary>
-        /// <value>
-        /// The id.
-        /// </value>
         [Xml]
-        public new string Id
+        public string Description;
+
+        /// <summary>
+        /// Public key of the authenticode certificate used to sign the RemotePayload.Include this attribute if the remote file is signed.
+        /// </summary>
+        [Xml]
+        public string CertificatePublicKey;
+
+        /// <summary>
+        /// Thumbprint of the authenticode certificate used to sign the RemotePayload.Include this attribute if the remote file is signed.
+        /// </summary>
+        [Xml]
+        public string CertificateThumbprint;
+
+        /// <summary>
+        /// SHA-1 hash of the RemotePayload.Include this attribute if the remote file is unsigned or SuppressSignatureVerification is set to Yes.
+        /// </summary>
+        [Xml]
+        public string Hash;
+
+        /// <summary>
+        /// Product name of the file from version resources.
+        /// </summary>
+        [Xml]
+        public string ProductName;
+
+        /// <summary>
+        /// Size of the remote file in bytes.
+        /// </summary>
+        [Xml]
+        public int Size;
+
+        /// <summary>
+        /// Version of the remote file
+        /// </summary>
+        [Xml]
+        public Version Version;
+    }
+
+        /// <summary>
+        /// Describes a payload to a bootstrapper.
+        /// </summary>
+        /// <seealso cref="WixSharp.WixEntity" />
+        public class Payload : WixEntity
         {
-            get
+            /// <summary>
+            /// Gets or sets the <c>Id</c> value of the <see cref="WixEntity" />.
+            /// <para>This value is used as a <c>Id</c> for the corresponding WiX XML element.</para><para>If the <see cref="Id" /> value is not specified explicitly by the user the Wix# compiler
+            /// generates it automatically insuring its uniqueness.</para><remarks>
+            /// Note: The ID auto-generation is triggered on the first access (evaluation) and in order to make the id
+            /// allocation deterministic the compiler resets ID generator just before the build starts. However if you
+            /// accessing any auto-id before the Build*() is called you can it interferes with the ID auto generation and eventually
+            /// lead to the WiX ID duplications. To prevent this from happening either:"
+            /// <para> - Avoid evaluating the auto-generated IDs values before the call to Build*()</para><para> - Set the IDs (to be evaluated) explicitly</para><para> - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";</para></remarks>
+            /// </summary>
+            /// <value>
+            /// The id.
+            /// </value>
+            [Xml]
+            public new string Id
             {
-                if (base.RawId.IsEmpty() && Compiler.AutoGeneration.SuppressForBundlePayloadUndefinedIds)
-                    return null;
-                else
-                    return base.Id;
+                get
+                {
+                    if (base.RawId.IsEmpty() && Compiler.AutoGeneration.SuppressForBundlePayloadUndefinedIds)
+                        return null;
+                    else
+                        return base.Id;
+                }
+                set { base.Id = value; }
             }
-            set { base.Id = value; }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Payload"/> class.
+            /// </summary>
+            public Payload() { }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Payload"/> class.
+            /// </summary>
+            /// <param name="sourceFile">The source file.</param>
+            public Payload(string sourceFile) { SourceFile = sourceFile; }
+
+            /// <summary>
+            /// The URL to use to download the package. The following substitutions are supported:
+            /// <para>  •{0} is replaced by the package Id. </para>
+            /// <para>  •{1} is replaced by the payload Id. </para>
+            /// <para>  •{2} is replaced by the payload file name. </para>
+            /// </summary>
+            [Xml]
+            public string DownloadUrl;
+
+            /// <summary>
+            /// The destination path and file name for this payload.
+            /// The default is the source file name. The use of '..' directories is not allowed
+            /// </summary>
+            [Xml]
+            public new string Name;
+
+            /// <summary>
+            /// Location of the source file.
+            /// </summary>
+            [Xml]
+            public string SourceFile;
+
+            /// <summary>
+            /// By default, a Bundle will use a package's Authenticode signature to verify the contents.
+            /// If the package does not have an Authenticode signature then the Bundle will use a hash
+            /// of the package instead. Set this attribute to "yes" to suppress the default behavior and
+            /// force the Bundle to always use the hash of the package even when the package is signed.
+            /// </summary>
+            [Xml]
+            public bool? SuppressSignatureVerification;
+
+            /// <summary>
+            /// Whether the payload should be embedded in a container or left as an external payload.
+            /// </summary>
+            [Xml]
+            public bool? Compressed;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Payload"/> class.
+        /// Generic License-based WiX bootstrapper application.
+        /// <para>Depending on the value of LicensePath compiler will resolve the application in either <c>WixStandardBootstrapperApplication.RtfLicense</c>
+        /// or <c>WixStandardBootstrapperApplication.HyperlinkLicense</c> standard application.</para>
+        /// <para>Note: empty LicensePath will suppress displaying the license completely</para>
         /// </summary>
-        public Payload() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Payload"/> class.
-        /// </summary>
-        /// <param name="sourceFile">The source file.</param>
-        public Payload(string sourceFile) { SourceFile = sourceFile; }
-
-        /// <summary>
-        /// The URL to use to download the package. The following substitutions are supported:
-        /// <para>  •{0} is replaced by the package Id. </para>
-        /// <para>  •{1} is replaced by the payload Id. </para>
-        /// <para>  •{2} is replaced by the payload file name. </para>
-        /// </summary>
-        [Xml]
-        public string DownloadUrl;
-
-        /// <summary>
-        /// The destination path and file name for this payload.
-        /// The default is the source file name. The use of '..' directories is not allowed
-        /// </summary>
-        [Xml]
-        public new string Name;
-
-        /// <summary>
-        /// Location of the source file.
-        /// </summary>
-        [Xml]
-        public string SourceFile;
-
-        /// <summary>
-        /// By default, a Bundle will use a package's Authenticode signature to verify the contents.
-        /// If the package does not have an Authenticode signature then the Bundle will use a hash
-        /// of the package instead. Set this attribute to "yes" to suppress the default behavior and
-        /// force the Bundle to always use the hash of the package even when the package is signed.
-        /// </summary>
-        [Xml]
-        public bool? SuppressSignatureVerification;
-
-        /// <summary>
-        /// Whether the payload should be embedded in a container or left as an external payload.
-        /// </summary>
-        [Xml]
-        public bool? Compressed;
-    }
-
-    /// <summary>
-    /// Generic License-based WiX bootstrapper application.
-    /// <para>Depending on the value of LicensePath compiler will resolve the application in either <c>WixStandardBootstrapperApplication.RtfLicense</c>
-    /// or <c>WixStandardBootstrapperApplication.HyperlinkLicense</c> standard application.</para>
-    /// <para>Note: empty LicensePath will suppress displaying the license completely</para>
-    /// </summary>
-    /// <example>The following is an example of defining a simple bootstrapper displaying the license as an
-    /// embedded HTML file.
-    /// <code>
-    /// var bootstrapper = new Bundle("My Product",
-    ///                         new PackageGroupRef("NetFx40Web"),
-    ///                         new MsiPackage(productMsi) { DisplayInternalUI = true });
-    ///
-    /// bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";
-    /// bootstrapper.IconFile = "app_icon.ico";
-    /// bootstrapper.Version = new Version("1.0.0.0");
-    /// bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
-    /// bootstrapper.Application.LogoFile = "logo.png";
-    /// bootstrapper.Application.LicensePath = "licence.html";
-    ///
-    /// bootstrapper.Build();
-    /// </code>
-    /// </example>
-    public class LicenseBootstrapperApplication : WixStandardBootstrapperApplication
-    {
-        /// <summary>
-        /// Emits WiX XML.
-        /// </summary>
-        /// <returns></returns>
-        public override XContainer[] ToXml()
+        /// <example>The following is an example of defining a simple bootstrapper displaying the license as an
+        /// embedded HTML file.
+        /// <code>
+        /// var bootstrapper = new Bundle("My Product",
+        ///                         new PackageGroupRef("NetFx40Web"),
+        ///                         new MsiPackage(productMsi) { DisplayInternalUI = true });
+        ///
+        /// bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";
+        /// bootstrapper.IconFile = "app_icon.ico";
+        /// bootstrapper.Version = new Version("1.0.0.0");
+        /// bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
+        /// bootstrapper.Application.LogoFile = "logo.png";
+        /// bootstrapper.Application.LicensePath = "licence.html";
+        ///
+        /// bootstrapper.Build();
+        /// </code>
+        /// </example>
+        public class LicenseBootstrapperApplication : WixStandardBootstrapperApplication
         {
-            XNamespace bal = "http://schemas.microsoft.com/wix/BalExtension";
-
-            var root = new XElement("BootstrapperApplicationRef");
-
-            var app = this.ToXElement(bal + "WixStandardBootstrapperApplication");
-
-            var payloads = this.Payloads.ToList();
-
-            if (LicensePath.IsNotEmpty() && LicensePath.EndsWith(".rtf", StringComparison.OrdinalIgnoreCase))
+            /// <summary>
+            /// Emits WiX XML.
+            /// </summary>
+            /// <returns></returns>
+            public override XContainer[] ToXml()
             {
-                root.SetAttribute("Id", "WixStandardBootstrapperApplication.RtfLicense");
-                app.SetAttribute("LicenseFile", LicensePath);
-            }
-            else
-            {
-                root.SetAttribute("Id", "WixStandardBootstrapperApplication.HyperlinkLicense");
+                XNamespace bal = "http://schemas.microsoft.com/wix/BalExtension";
 
-                if (LicensePath.IsEmpty())
+                var root = new XElement("BootstrapperApplicationRef");
+
+                var app = this.ToXElement(bal + "WixStandardBootstrapperApplication");
+
+                var payloads = this.Payloads.ToList();
+
+                if (LicensePath.IsNotEmpty() && LicensePath.EndsWith(".rtf", StringComparison.OrdinalIgnoreCase))
                 {
-                    //cannot use SetAttribute as we want to preserve empty attrs
-                    app.Add(new XAttribute("LicenseUrl", ""));
+                    root.SetAttribute("Id", "WixStandardBootstrapperApplication.RtfLicense");
+                    app.SetAttribute("LicenseFile", LicensePath);
                 }
                 else
                 {
-                    if (LicensePath.StartsWith("http")) //online HTML file
+                    root.SetAttribute("Id", "WixStandardBootstrapperApplication.HyperlinkLicense");
+
+                    if (LicensePath.IsEmpty())
                     {
-                        app.SetAttribute("LicenseUrl", LicensePath);
+                        //cannot use SetAttribute as we want to preserve empty attrs
+                        app.Add(new XAttribute("LicenseUrl", ""));
                     }
                     else
                     {
-                        app.SetAttribute("LicenseUrl", System.IO.Path.GetFileName(LicensePath));
-                        payloads.Add(new Payload(LicensePath));
+                        if (LicensePath.StartsWith("http")) //online HTML file
+                        {
+                            app.SetAttribute("LicenseUrl", LicensePath);
+                        }
+                        else
+                        {
+                            app.SetAttribute("LicenseUrl", System.IO.Path.GetFileName(LicensePath));
+                            payloads.Add(new Payload(LicensePath));
+                        }
+                    }
+
+                    foreach (Payload item in payloads)
+                    {
+                        var xml = item.ToXElement("Payload");
+                        root.AddElement(xml);
                     }
                 }
 
-                foreach (Payload item in payloads)
-                {
-                    var xml = item.ToXElement("Payload");
-                    root.AddElement(xml);
-                }
+                root.Add(app);
+
+                return new[] { root };
             }
-
-            root.Add(app);
-
-            return new[] { root };
         }
     }
-}

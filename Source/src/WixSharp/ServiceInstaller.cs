@@ -29,7 +29,7 @@ namespace WixSharp
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
-    public partial class ServiceInstaller : WixEntity
+    public class ServiceInstaller : WixEntity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceInstaller"/> class.

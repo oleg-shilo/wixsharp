@@ -38,15 +38,21 @@ public class InstallScript
         var bootstrapper =
                 new Bundle("My Product",
                     new PackageGroupRef("NetFx40Web"),
-                    //new ExePackage(@"..\redist\dotNetFx40_Full_x86_x64.exe") //just a demo sample
-                    //{
+                    // new ExePackage(@"..\redist\dotNetFx40_Full_x86_x64.exe") //just a demo sample
+                    // {
                     //     Name = "Microsoft .NET Framework 4.0",
                     //     InstallCommand = "/passive /norestart",
                     //     Permanent = true,
                     //     Vital = true,
                     //     DetectCondition = "Netfx4FullVersion AND (NOT VersionNT64 OR Netfx4x64FullVersion)",
-                    //     Compressed = true
-                    //},
+                    //     Compressed = true,
+                    //     RemotePayloads = new[] {
+                    //                                new RemotePayload
+                    //                                {
+                    //                                    ...
+                    //                                }
+                    //                             }
+                    // },
 
                     //msiOnlinePackage, //just a demo sample
 
@@ -110,6 +116,15 @@ public class InstallScript
 
         //in real life scenarios suppression may need to be enabled (see SuppressWixMbaPrereqVars documentation)
         //bootstrapper.SuppressWixMbaPrereqVars = true;
+
+        bootstrapper.WixSourceGenerated += (XDocument document) =>
+        {
+            // inject here the WiX/Burn elements that are not directly supported by WixSharp
+
+            // document.FindFirst("ExePackage")
+            //         .AddElement("RemotePayload"...
+        };
+
         var setup = bootstrapper.Build("app_setup");
         Console.WriteLine(setup);
         //---------------------------------------------------------

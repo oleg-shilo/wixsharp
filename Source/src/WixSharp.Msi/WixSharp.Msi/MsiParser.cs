@@ -8,11 +8,11 @@ using WindowsInstaller;
 namespace WixSharp.UI
 {
     /// <summary>
-    /// Utility class for simplifying MSI interpreting tasks DB querying, message data parsing  
+    /// Utility class for simplifying MSI interpreting tasks DB querying, message data parsing
     /// </summary>
     public class MsiParser : IDisposable
     {
-        bool disposedValue = false; 
+        bool disposedValue = false;
         string msiFile;
         IntPtr db;
 
@@ -98,7 +98,7 @@ namespace WixSharp.UI
         /// <returns>Returns <c>true</c> if the product is installed. Otherwise returns <c>false</c>.</returns>
         public static bool IsInstalled(string productCode)
         {
-            StringBuilder sb = new StringBuilder(2048);
+            var sb = new StringBuilder(2048);
             uint size = 2048;
             MsiError err = MsiInterop.MsiGetProductInfo(productCode, "InstallDate", sb, ref size);
 
@@ -125,7 +125,7 @@ namespace WixSharp.UI
         ///// <para><remarks>The DB view is not closed after the call</remarks></para>
         ///// </summary>
         ///// <returns>
-        ///// Root component of install directory. If the 'TARGETDIR' cannot be located then the return value is the 
+        ///// Root component of install directory. If the 'TARGETDIR' cannot be located then the return value is the
         ///// expanded value of 'ProgramFilesFolder' WiX constant.
         ///// </returns>
         //public string GetInstallDirectoryRoot()
@@ -195,7 +195,7 @@ namespace WixSharp.UI
         /// <returns>Collection of parsed tokens (fields).</returns>
         public static string[] ParseCommonData(string s)
         {
-            //Example: 1: 0 2: 1033 3: 1252 
+            //Example: 1: 0 2: 1033 3: 1252
             var res = new string[3];
             var regex = new Regex(@"\d:\s?\w+\s");
 
@@ -218,7 +218,7 @@ namespace WixSharp.UI
         /// <returns>Collection of parsed tokens (fields).</returns>
         public static string[] ParseProgressString(string s)
         {
-            //1: 0 2: 86 3: 0 4: 1 
+            //1: 0 2: 86 3: 0 4: 1
             var res = new string[4];
             var regex = new Regex(@"\d:\s\d+\s");
 

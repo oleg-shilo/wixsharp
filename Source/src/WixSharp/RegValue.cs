@@ -263,17 +263,17 @@ namespace WixSharp
         {
             get
             {
-                if (attributesBag.ContainsKey("Component:NeverOverwrite"))
-                    return (attributesBag["Component:NeverOverwrite"] == "yes");
+                if (AttributesBag.ContainsKey("Component:NeverOverwrite"))
+                    return (AttributesBag["Component:NeverOverwrite"] == "yes");
                 else
                     return null;
             }
             set
             {
                 if (value.HasValue)
-                    attributesBag["Component:NeverOverwrite"] = value.Value.ToYesNo();
-                else if (attributesBag.ContainsKey("Component:NeverOverwrite"))
-                    attributesBag.Remove("Component:NeverOverwrite");
+                    AttributesBag["Component:NeverOverwrite"] = value.Value.ToYesNo();
+                else if (AttributesBag.ContainsKey("Component:NeverOverwrite"))
+                    AttributesBag.Remove("Component:NeverOverwrite");
             }
         }
 

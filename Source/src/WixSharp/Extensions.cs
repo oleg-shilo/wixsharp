@@ -288,7 +288,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Returns the value of teh element attributes with the specified name.
+        /// Returns the value of the element attributes with the specified name.
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="name">The name.</param>
