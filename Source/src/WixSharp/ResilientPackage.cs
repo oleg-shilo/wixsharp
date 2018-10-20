@@ -35,7 +35,6 @@ namespace WixSharp
         /// Creates a symbolic link/hard link or makes a copy of the original MSI package in the specified location and points SOURCELIST to it.
         /// </summary>
         /// <param name="project">The project.</param>
-        /// </summary>
         public static void EnableResilientPackage(this Project project)
         {
             project.EnableResilientPackage("{$ResilientPackageIstallDir}");
@@ -178,7 +177,7 @@ namespace WixSharp
             var userSID = session.Property("ALLUSERS") == "1" ? "S-1-5-18" : session.Property("UserSID");
             var localPackage = GetLocalPackageFromRegistry(productCode, userSID);
 
-            session.Log("LocalPackage: " + localPackage);
+            session.Log($"LocalPackage:'{localPackage}'");
 
             var resilientLocation = session.Property(WIXSHARP_RESILIENT_SOURCE_DIR);
             var originalPackage = session.Property("OriginalDatabase");
@@ -199,28 +198,22 @@ namespace WixSharp
 
             // NOTES: * CreateSymbolicLink() fails under Windows 7 in the elevated context (works with Windows 8 and above),
             //          so the execution falls back to the CreateHardLink().
+            //
             //        * Non-elevated installers don't have access to the %WINDIR%\Installer, so the execution falls back to the file copying.
+            //
             //        * One should be careful with trying to created a hard link to the "originalPackage", because when MSI is installed through
             //          the NSIS bootstrapper, the bootstrapper is extracting MSI in a temporary folder with very restrictive access rights.
             //          A hard link to the MSI has the same restrictive access rights preventing it from doing repairs through ARP applet.
+            //
+            //        * Hard links should not be created to the "localPackage" (e.g. %WINDIR%\Installer\xxxxxxx.msi), because during the uninstall
+            //          the local package file and therefore the hard-linked file are both locked by MSI installer and cannot be removed.
 
             // Create a symbolic link
             var result = CreateSymbolicLink(resilientPackage, localPackage, SymbolicLinkFlag.File);
             if (!result)
             {
                 var errorMessage = new Win32Exception(Marshal.GetLastWin32Error()).Message;
-                session.Log($"Failed to create a symbolic link. Link:{resilientPackage} Target:{localPackage} Error:{errorMessage}");
-            }
-
-            // Create a hard link
-            if (!result)
-            {
-                result = CreateHardLink(resilientPackage, localPackage, IntPtr.Zero);
-                if (!result)
-                {
-                    var errorMessage = new Win32Exception(Marshal.GetLastWin32Error()).Message;
-                    session.Log($"Failed to create a hard link. Link:{resilientPackage} Target:{localPackage} Error:{errorMessage}");
-                }
+                session.Log($"Failed to create a symbolic link. Link:'{resilientPackage}' Target:'{localPackage}' Error:{errorMessage}");
             }
 
             // Copy the file
