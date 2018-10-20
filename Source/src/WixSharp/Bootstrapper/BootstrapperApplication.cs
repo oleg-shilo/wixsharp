@@ -72,8 +72,8 @@ namespace WixSharp.Bootstrapper
 
         /// <summary>
         /// The default content of the BootstrapperCore.config file. It is used in the cases when the custom config file was not specified
-        /// in <see cref="ManagedBootstrapperApplication"/> constructor. 
-        /// <para>BootstrapperCore.config is very important as its content can affect both bootstrapper build outcome and the 
+        /// in <see cref="ManagedBootstrapperApplication"/> constructor.
+        /// <para>BootstrapperCore.config is very important as its content can affect both bootstrapper build outcome and the
         /// runtime behaviour.</para>
         /// <para>See these discussions: </para>
         /// <para>  - https://github.com/oleg-shilo/wixsharp/issues/416 </para>
@@ -98,7 +98,7 @@ namespace WixSharp.Bootstrapper
         </host>
     </wix.bootstrapper>
 </configuration>
-"; 
+";
 
         /// <summary>
         /// Emits WiX XML.
@@ -274,6 +274,57 @@ namespace WixSharp.Bootstrapper
         /// </code>
         /// </example>
         public Variable[] Variables = new Variable[0];
+    }
+
+    /// <summary>
+    /// Describes a remote payload to a bootstrapper.
+    /// <para>Describes information about a remote file payload that is not
+    /// available at the time of building the bundle. The parent must specify DownloadUrl
+    /// and must not specify SourceFile when using this element.</para></summary>
+    /// <seealso cref="WixSharp.WixEntity" />
+    public class RemotePayload : WixEntity
+    {
+        /// <summary>
+        /// Description of the file from version resources.
+        /// </summary>
+        [Xml]
+        public string Description;
+
+        /// <summary>
+        /// Public key of the authenticode certificate used to sign the RemotePayload.Include this attribute if the remote file is signed.
+        /// </summary>
+        [Xml]
+        public string CertificatePublicKey;
+
+        /// <summary>
+        /// Thumbprint of the authenticode certificate used to sign the RemotePayload.Include this attribute if the remote file is signed.
+        /// </summary>
+        [Xml]
+        public string CertificateThumbprint;
+
+        /// <summary>
+        /// SHA-1 hash of the RemotePayload.Include this attribute if the remote file is unsigned or SuppressSignatureVerification is set to Yes.
+        /// </summary>
+        [Xml]
+        public string Hash;
+
+        /// <summary>
+        /// Product name of the file from version resources.
+        /// </summary>
+        [Xml]
+        public string ProductName;
+
+        /// <summary>
+        /// Size of the remote file in bytes.
+        /// </summary>
+        [Xml]
+        public int Size;
+
+        /// <summary>
+        /// Version of the remote file
+        /// </summary>
+        [Xml]
+        public Version Version;
     }
 
     /// <summary>
