@@ -17,7 +17,7 @@ namespace WixSharpSetup
 
         void dialog_Load(object sender, EventArgs e)
         {
-            banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
+            banner.Image = Runtime.MsiSession.GetResourceBitmap("WixUI_Bmp_Banner");
             Text = "[ProductName] Setup";
 
             //resolve all Control.Text cases with embedded MSI properties (e.g. 'ProductName') and *.wxl file entries
