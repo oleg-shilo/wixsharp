@@ -127,7 +127,6 @@
     <Compile Include="CommonTasks.cs" />
     <Compile Include="Compiler.Bootstrapper.cs" />
     <Compile Include="FileSearch.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IconFile.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="NativeImage.cs" />
