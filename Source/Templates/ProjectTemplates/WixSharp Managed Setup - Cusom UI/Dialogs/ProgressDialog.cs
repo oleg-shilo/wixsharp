@@ -27,7 +27,10 @@ namespace WixSharpSetup.Dialogs
 
         void ProgressDialog_Load(object sender, EventArgs e)
         {
-            banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
+
+            this.waitPrompt.Text = Runtime.Session.Property("UAC_WARNING");
+
             ResetLayout();
 
             Shell.StartExecute();
@@ -57,19 +60,19 @@ namespace WixSharpSetup.Dialogs
         /// </summary>
         protected override void OnShellChanged()
         {
-            if (MsiRuntime.Session.IsUninstalling())
+            if (Runtime.Session.IsUninstalling())
             {
                 dialogText.Text =
                 Text = "[ProgressDlgTitleRemoving]";
                 description.Text = "[ProgressDlgTextRemoving]";
             }
-            else if (MsiRuntime.Session.IsRepairing())
+            else if (Runtime.Session.IsRepairing())
             {
                 dialogText.Text =
                 Text = "[ProgressDlgTextRepairing]";
                 description.Text = "[ProgressDlgTitleRepairing]";
             }
-            else if (MsiRuntime.Session.IsInstalling())
+            else if (Runtime.Session.IsInstalling())
             {
                 dialogText.Text =
                 Text = "[ProgressDlgTitleInstalling]";
@@ -174,17 +177,7 @@ namespace WixSharpSetup.Dialogs
             if (Shell.IsDemoMode)
                 Shell.GoNext();
             else
-            {
-                //Debug.Assert(false);
-
-                //try
-                //{
-                //    MsiRuntime.Session["CANCEL_REQUEST"] = "TRUE";
-                //}
-                //catch { }
-
                 Shell.Cancel();
-            }
         }
     }
 }

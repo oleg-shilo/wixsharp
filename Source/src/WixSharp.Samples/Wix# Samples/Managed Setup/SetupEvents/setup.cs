@@ -7,10 +7,8 @@
 using System;
 using System.Security.Principal;
 
-//using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
 using System.Diagnostics;
@@ -20,6 +18,8 @@ public class Script
 {
     static public void Main()
     {
+        Compiler.AutoGeneration.ValidateCAAssemblies = CAValidation.Disabled;
+
         var bin = new Feature("MyApp Binaries");
         var tools = new Feature("MyApp Tools");
 
@@ -64,6 +64,7 @@ public class Script
             if (!args.IsUninstalling)
                 Tasks.StopService("some_service", throwOnError: false);
         };
+
         project.AfterInstall += args =>
         {
             if (!args.IsUninstalling)
@@ -142,7 +143,7 @@ public class Script
         //SetupEventArgs.Data values can be set and accesses at any time from any custom action including deferred one.
         var conn = @"Data Source=.\SQLEXPRESS;Initial Catalog=RequestManagement;Integrated Security=SSPI";
         e.Data["persisted_data"] = conn;
-
+        
         MessageBox.Show(e.Session.GetMainWindow(), e.ToString(), "Load " + e.Session["EnvVersion"]);
     }
 

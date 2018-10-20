@@ -162,31 +162,48 @@ namespace WixSharp
                                                              "Project.DefaultRefAssemblies.\n{1}", incosnistentRefAsmActions.Assembly, errorInfo));
             }
 
-            //https://wixsharp.codeplex.com/discussions/646085
-            //Have to disable validation as it only considers 'install' but not 'uninstall'.
-            //Possible solution is to analyse the action.condition and determine if it is
-            //install /uninstall but it is impossible to do. At least with the adequate accuracy.
-            //var incosnistentInstalledFileActions = project.Actions
-            //.OfType<InstalledFileAction>()
-            //.Where(x => x.When != When.After || x.Step != Step.InstallExecute)
-            //.Any();
-            //if (incosnistentInstalledFileActions)
-            //try
-            //{
-            //var msg = "Warning: InstalledFileAction should be scheduled for after InstallExecute. Otherwise it may produce undesired side effects.";
-            //Debug.WriteLine(msg);
-            //Console.WriteLine(msg);
-            //}
-            //catch { }
+            // https://wixsharp.codeplex.com/discussions/646085
+            // Have to disable validation as it only considers 'install' but not 'uninstall'.
+            // Possible solution is to analyse the action.condition and determine if it is
+            // install /uninstall but it is impossible to do. At least with the adequate accuracy.
+            // var incosnistentInstalledFileActions = project.Actions
+            //                                               .OfType<InstalledFileAction>()
+            //                                               .Where(x => x.When != When.After || x.Step != Step.InstallExecute)
+            //                                               .Any();
+            // if (incosnistentInstalledFileActions)
+            //     try
+            //     {
+            //         var msg = "Warning: InstalledFileAction should be scheduled for after InstallExecute. Otherwise it may produce undesired side effects.";
+            //         Debug.WriteLine(msg);
+            //         Console.WriteLine(msg);
+            //     }
+            //     catch { }
         }
 
-        public static void ValidateCAAssembly(string file)
+        public static void ValidateCAAssembly(string caAssembly)
         {
-            //need to do it in a separate domain as we do not want to lock the assembly
-            Utils.ExecuteInTempDomain<AsmReflector>(asmReflector =>
-                {
-                    asmReflector.ValidateCAAssembly(file, typeof(CustomActionAttribute).Assembly.Location);
-                });
+            string dtfAssembly = typeof(CustomActionAttribute).Assembly.Location;
+
+            // need to do it in a separate domain as we do not want to lock the assembly and 
+            // `ReflectionOnlyLoadFrom` is incompatible with the task
+
+            if (Compiler.AutoGeneration.ValidateCAAssemblies == CAValidation.InRemoteAppDomain)
+            {
+                // will not lock the file and will unload the assembly
+                Utils.ExecuteInTempDomain<AsmReflector>(asmReflector =>
+                    {
+                        asmReflector.ValidateCAAssembly(caAssembly, dtfAssembly);
+                    });
+            }
+            else if (Compiler.AutoGeneration.ValidateCAAssemblies == CAValidation.InCurrentAppDomain)
+            {
+                // will not lock the file but will not unload the assembly
+                new AsmReflector().ValidateCAAssemblyLocally(caAssembly, dtfAssembly);
+            }
+            else
+            {
+                // disabled
+            }
         }
 
         public static void ValidateAssemblyCompatibility(Reflection.Assembly assembly)
@@ -210,56 +227,54 @@ namespace WixSharp
     {
         public string OriginalAssemblyFile(string file)
         {
-            string dir = IO.Path.GetDirectoryName(IO.Path.GetFullPath(file));
-
-            System.Reflection.Assembly asm = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a =>
-            {
-                try
-                {
-                    return a.Location.SamePathAs(file); //some domain assemblies may throw when accessing .Locatioon
-                }
-                catch
-                {
-                    return false;
-                }
-            });
-
-            if (asm == null)
-                asm = System.Reflection.Assembly.ReflectionOnlyLoadFrom(file);
-
-            // for example 'setup.cs.dll' vs 'setup.cs.compiled'
-            var name = asm.ManifestModule.ScopeName;
-
-            return IO.Path.Combine(dir, name);
+            return Utils.OriginalAssemblyFile(file);
         }
 
         public void ValidateCAAssembly(string file, string dtfAsm)
         {
+            // `ValidateCAAssemblyImpl` will load assembly from `file` for validation. Though for this to happen 
+            // the AppDomain will need to be able resolve the only dependence assembly `file` has - dtfAsm.
+            // Thus always resolve it to dtfAsm (regardless of `args.Name` value) when AssemblyResolve is fired.
             ResolveEventHandler resolver = (sender, args) =>
             {
                 return System.Reflection.Assembly.LoadFrom(dtfAsm);
             };
 
             AppDomain.CurrentDomain.AssemblyResolve += resolver;
-            ValidateCAAssemblyImpl(file, dtfAsm);
+            ValidateCAAssemblyImpl(file, dtfAsm, loadFromMemory: false);
             AppDomain.CurrentDomain.AssemblyResolve -= resolver;
         }
 
-        void ValidateCAAssemblyImpl(string file, string refAsms)
+        internal void ValidateCAAssemblyLocally(string file, string dtfAsm)
+        {
+            ValidateCAAssemblyImpl(file, dtfAsm, loadFromMemory: true);
+        }
+
+        internal void ValidateCAAssemblyImpl(string file, string dtfAsm, bool loadFromMemory)
         {
             //Debug.Assert(false);
             try
             {
                 var bf = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Static;
 
-                //var assembly = System.Reflection.Assembly.ReflectionOnlyLoadFrom(file); //cannot prelaod all required assemblies
-                var assembly = System.Reflection.Assembly.LoadFrom(file);
+                // `ReflectionOnlyLoadFrom` cannot preload all required assemblies and triggers 
+                // "System.InvalidOperationException: 'It is illegal to reflect on the custom attributes 
+                // of a Type loaded via ReflectionOnlyGetType (see Assembly.ReflectionOnly) -- use CustomAttributeData 
+                // instead.'" exception. Thus need to use `LoadFrom`, which locks the assembly unless the operation is
+                // performed in the temp AppDomain, which is unloaded after at the end.  
+                // Unfortunately `AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve` does not help (does not get fired).
 
-                var caMembers = assembly.GetTypes().SelectMany(t =>
-                                        t.GetMembers(bf)
-                                         .Where(mem =>
-                                                mem.GetCustomAttributes(false)
-                                                   .Where(x => x.ToString() == "Microsoft.Deployment.WindowsInstaller.CustomActionAttribute").Any())).ToArray();
+                // var assembly = System.Reflection.Assembly.ReflectionOnlyLoadFrom(file); 
+                var assembly = loadFromMemory ?
+                     Reflection.Assembly.Load(System.IO.File.ReadAllBytes(file)) :
+                     Reflection.Assembly.LoadFrom(file);
+
+                var caMembers = assembly.GetTypes()
+                                        .SelectMany(t => t.GetMembers(bf)
+                                                          .Where(mem => mem.GetCustomAttributes(false)
+                                                          .Where(x => x.ToString() == "Microsoft.Deployment.WindowsInstaller.CustomActionAttribute")
+                                                          .Any()))
+                                         .ToArray();
 
                 var invalidMembers = new List<string>();
                 foreach (MemberInfo mi in caMembers)

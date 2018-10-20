@@ -86,7 +86,6 @@ public class Script
     static void Project_UILoaded(SetupEventArgs e)
     {
         var msiFile = e.Session.Database.FilePath;
-        bool upgrading = e.Session.IsUpgrading();
 
         // Simulate analyzing the runtime conditions with the message box.
         // Make a decision to show (or not) Licence dialog by injecting it in the Dialogs collection
@@ -98,9 +97,7 @@ public class Script
 
     static void ManagedUIShell_OnCurrentDialogChanged(IManagedDialog obj)
     {
-        var session = obj.Shell.MsiRuntime().Session;
-
-        if (obj.GetType() == Dialogs.Licence && session.IsUpgrading())
+        if (obj.GetType() == Dialogs.Licence)
             // Simulate analyzing the runtime conditions with the message box.
             // Make a decision to jump over the dialog in the sequence
             if (MessageBox.Show("Do you want to skip 'Licence Dialog'?", "Wix#", MessageBoxButtons.YesNo) == DialogResult.Yes)

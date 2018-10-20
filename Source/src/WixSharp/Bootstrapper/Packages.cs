@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Win32;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -186,28 +185,6 @@ namespace WixSharp.Bootstrapper
         public List<ExitCode> ExitCodes;
 
         /// <summary>
-        /// Collection of RemotePayloads (the package dependencies).
-        /// </summary>
-        /// <example>
-        /// <code>
-        ///  var bootstrapper =
-        ///      new Bundle("My Product",
-        ///          new ExePackage()
-        ///          {
-        ///              ...,
-        ///              RemotePayloads = new[] {
-        ///                                         new RemotePayload
-        ///                                         {
-        ///                                             Size=50352408,
-        ///                                             ...
-        ///                                         }
-        ///                                     }
-        ///              ...
-        /// </code>
-        /// </example>
-        public RemotePayload[] RemotePayloads = new RemotePayload[0];
-
-        /// <summary>
         /// Emits WiX XML.
         /// </summary>
         /// <returns></returns>
@@ -225,9 +202,6 @@ namespace WixSharp.Bootstrapper
 
             if (Payloads.Any())
                 Payloads.ForEach(p => root.Add(p.ToXElement("Payload")));
-
-            if (RemotePayloads.Any())
-                RemotePayloads.ForEach(p => root.Add(p.ToXElement("RemotePayload")));
 
             foreach (var exitCode in ExitCodes)
             {

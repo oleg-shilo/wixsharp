@@ -2,17 +2,10 @@
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
-using System.Windows.Forms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
+//css_ref WixSharp.UI;
 using WixSharp;
-using WixSharp.UI;
 using WixSharp.Forms;
-using WixSharp.CommonTasks;
-using Microsoft.Win32;
+using Win32 = Microsoft.Win32;
 
 class Script
 {
@@ -66,12 +59,12 @@ class Script
             {
                 e.Session["ALLUSERS"] = "2";
 
-                var installPerUser = (string)Registry.GetValue(Registry.CurrentUser.Name + @"\SOFTWARE\My Company\My Product", "InstallPerUser", "no");
+                var installPerUser = (string)Win32.Registry.GetValue(Win32.Registry.CurrentUser.Name + @"\SOFTWARE\My Company\My Product", "InstallPerUser", "no");
                 e.Session["MSIINSTALLPERUSER"] = installPerUser == "yes" ? "1" : "0";
 
                 if (string.IsNullOrEmpty(installPerUser) || installPerUser == "no")
                 {
-                    var installDir = (string)Registry.GetValue(Registry.LocalMachine.Name + @"\SOFTWARE\My Company\My Product", "InstallDir", string.Empty);
+                    var installDir = (string)Win32.Registry.GetValue(Microsoft.Win32.Registry.LocalMachine.Name + @"\SOFTWARE\My Company\My Product", "InstallDir", string.Empty);
 
                     if (!string.IsNullOrEmpty(installDir))
                     {

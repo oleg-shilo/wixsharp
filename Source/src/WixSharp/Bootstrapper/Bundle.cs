@@ -200,6 +200,7 @@ namespace WixSharp.Bootstrapper
         /// custom Wix# based BA the required variables are inserted automatically, similarly to the standards WiX/Burn BA. However some other
         /// bundle packages (e.g. new PackageGroupRef("NetFx40Web")) may also define these variables so some duplication/collision is possible.
         /// To avoid this you can suppress variables auto-insertion and define them manually as needed.</para>
+        /// </summary>
         ///<example>The following is an example of suppressing auto-insertion:
         /// <code>
         /// var bootstrapper = new Bundle("My Product Suite",
@@ -213,7 +214,6 @@ namespace WixSharp.Bootstrapper
         /// bootstrapper.SuppressWixMbaPrereqVars = true;
         /// </code>
         /// </example>
-        /// </summary>
         public bool SuppressWixMbaPrereqVars = false;
 
         /// <summary>
@@ -494,7 +494,7 @@ namespace WixSharp.Bootstrapper
 
             <RollbackBoundary />
 
-            <MsiPackage SourceFile="E:\Galos\Projects\WixSharp\src\WixSharp.Samples\Wix# Samples\Managed Setup\ManagedSetup.msi" Vital="yes" />
+            <MsiPackage SourceFile="E:\Projects\WixSharp\src\WixSharp.Samples\Wix# Samples\Managed Setup\ManagedSetup.msi" Vital="yes" />
         </Chain>
     </Bundle>
      */

@@ -24,9 +24,9 @@ namespace WixSharp.UI.Forms
 
         void ProgressDialog_Load(object sender, EventArgs e)
         {
-            banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
 
-            this.waitPrompt.Text = MsiRuntime.Session.Property("UAC_WARNING");
+            this.waitPrompt.Text = Runtime.Session.Property("UAC_WARNING");
 
             ResetLayout();
 
@@ -57,19 +57,19 @@ namespace WixSharp.UI.Forms
         /// </summary>
         protected override void OnShellChanged()
         {
-            if (MsiRuntime.Session.IsUninstalling())
+            if (Runtime.Session.IsUninstalling())
             {
                 dialogText.Text =
                 Text = "[ProgressDlgTitleRemoving]";
                 description.Text = "[ProgressDlgTextRemoving]";
             }
-            else if (MsiRuntime.Session.IsRepairing())
+            else if (Runtime.Session.IsRepairing())
             {
                 dialogText.Text =
                 Text = "[ProgressDlgTextRepairing]";
                 description.Text = "[ProgressDlgTitleRepairing]";
             }
-            else if (MsiRuntime.Session.IsInstalling())
+            else if (Runtime.Session.IsInstalling())
             {
                 dialogText.Text =
                 Text = "[ProgressDlgTitleInstalling]";

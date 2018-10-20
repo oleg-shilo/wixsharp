@@ -24,8 +24,8 @@ namespace WixSharpSetup.Dialogs
 
         void ExitDialog_Load(object sender, System.EventArgs e)
         {
-            image.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Dialog");
-            if (Shell.UserInterrupted)
+            image.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Dialog");
+            if (Shell.UserInterrupted || Shell.Log.Contains("User cancelled installation."))
             {
                 title.Text = "[UserExitTitle]";
                 description.Text = "[UserExitDescription1]";
@@ -81,7 +81,7 @@ namespace WixSharpSetup.Dialogs
                 if (!Directory.Exists(wixSharpDir))
                     Directory.CreateDirectory(wixSharpDir);
 
-                string logFile = Path.Combine(wixSharpDir, MsiRuntime.ProductName + ".log");
+                string logFile = Path.Combine(wixSharpDir, Runtime.ProductName + ".log");
                 System.IO.File.WriteAllText(logFile, Shell.Log);
                 Process.Start(logFile);
             }

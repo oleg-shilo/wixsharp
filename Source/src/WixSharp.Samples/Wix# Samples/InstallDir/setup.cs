@@ -12,58 +12,34 @@ using System.Windows.Forms;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         // Wix# recognizes the top level dir as the installation directory and automatically
         // assigns it the INSTALLDIR id.
         // If for whatever reason it is undesirable you can always designate the installation directory
-        // by setting the Dir.IsInstallDir to true or use a dedicated 'InstallDir' class that does
-        // it for you automatically.
+        // by setting the Dir.IsInstallDir to true or use a dedicated 'InstallDir' class (instead of `Dir`)
+        // that does it for you automatically.
         //
-        // Please for any further infotrmation refer to
+        // Please for any further information refer to
         // the https://github.com/oleg-shilo/wixsharp/wiki/Deployment-scenarios/_edit#installation-directory
 
         var project =
-                new Project("My Product",
-                    new Dir(new Id("INSTALL_DIR"), @"%ProgramFiles%\1My Product",
+                new ManagedProject("My Product",
+                    new Dir(@"%ProgramFiles%\My Product",
                         new WixSharp.File(@"myapp.exe",
-                            new FileShortcut("My App", @"%ProgramMenu%\1My Product") { Advertise = true })));
-
-        // var project =
-        //         new Project("My Product",
-        //             new Dir(new Id("My_Product"), @"%ProgramMenu%\1My Product"),
-        //             new Dir(new Id("INSTALL_DIR"), @"%ProgramFiles%\1My Product",
-        //                 new WixSharp.File(@"myapp.exe",
-        //                     new FileShortcut("My App", "My_Product") { Advertise = true })));
-        // new Dir(new Id("My_Product"), @"%ProgramMenu%\1My Product"));
-
-        // var project = new Project("CustomActionTest",
-        //                   new InstallDir(@"%ProgramFiles%\CustomActionTest",
-        //                       new File("readme.txt")),
-
-        //                   new ManagedAction(CustomActions.MyAction));
-
-        //project.Platform = Platform.x64;
+                            new FileShortcut("My App", @"%ProgramMenu%\My Product") { Advertise = true })));
+        
         project.UI = WUI.WixUI_InstallDir;
         project.PreserveTempFiles = true;
-        // project.BuildWxs();
-        project.BuildMsi("setup.msi");
-    }
-}
 
-public class CustomActions
-{
-    [CustomAction]
-    public static ActionResult MyAction(Session session)
-    {
-        try
+        project.BeforeInstall += args =>
         {
-            MessageBox.Show(session["INSTALLDIR"], "InstallDir (actual INSTALLDIR)");
-        }
-        catch (Exception e)
-        {
-            MessageBox.Show(e.ToString(), "Error");
-        }
-        return ActionResult.Success;
+            if (args.IsUninstalling)
+                MessageBox.Show(args.InstallDir, "Uninstalling...");
+            else
+                MessageBox.Show(args.InstallDir, "Installing...");
+        };
+
+        project.BuildMsi("setup.msi");
     }
 }

@@ -19,7 +19,7 @@ namespace WixSharp.UI.Forms
 
         void WelcomeDialog_Load(object sender, EventArgs e)
         {
-            image.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Dialog");
+            image.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Dialog");
 
             ResetLayout();
         }

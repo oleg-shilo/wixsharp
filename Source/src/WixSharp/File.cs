@@ -172,7 +172,7 @@ namespace WixSharp
         /// The service installer associated with the file.
         ///  Set this field to the properly initialized instance of <see cref="ServiceInstaller"/> if the file is a windows service module.
         /// </summary>
-        public ServiceInstaller ServiceInstaller = null;
+        public IGenericEntity ServiceInstaller = null;
         
         /// <summary>
         /// Collection of the contained <see cref="IISVirtualDir"/>s.
@@ -231,17 +231,17 @@ namespace WixSharp
         {
             get
             {
-                if (AttributesBag.ContainsKey("Component:NeverOverwrite"))
-                    return (AttributesBag["Component:NeverOverwrite"] == "yes");
+                if (attributesBag.ContainsKey("Component:NeverOverwrite"))
+                    return (attributesBag["Component:NeverOverwrite"] == "yes");
                 else
                     return null;
             }
             set
             {
                 if (value.HasValue)
-                    AttributesBag["Component:NeverOverwrite"] = value.Value.ToYesNo();
-                else if (AttributesBag.ContainsKey("Component:NeverOverwrite"))
-                    AttributesBag.Remove("Component:NeverOverwrite");
+                    attributesBag["Component:NeverOverwrite"] = value.Value.ToYesNo();
+                else if (attributesBag.ContainsKey("Component:NeverOverwrite"))
+                    attributesBag.Remove("Component:NeverOverwrite");
             }
         }
     }

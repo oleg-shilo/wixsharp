@@ -7,7 +7,6 @@ using System.Xml.Linq;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
 
@@ -63,6 +62,9 @@ class Script
             project.OutFileName = "MyApp";
 
             project.InstallPrivileges = InstallPrivileges.elevated;
+
+            // Optionally enable an ability to repair the installation even when the original MSI is no longer available.
+            project.EnableResilientPackage();
 
             // project.PreserveTempFiles = true;
             project.WixSourceGenerated += Compiler_WixSourceGenerated;

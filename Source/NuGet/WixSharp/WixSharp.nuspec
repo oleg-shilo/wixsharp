@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>1.8.0.0</version>
+    <version>1.9.2.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,24 +18,25 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release Release v1.8.0
+    <releaseNotes>Release Release v1.9.2
 
-* Nsis improvements
-  - Restructured the resulting nsis source code. The native bootstrapper should startup faster.
-  - NsiSourceGenerated event is added
-  - PrerequisiteFileArguments and PrimaryFileArguments properties are added
-  - SplashScreen is added
-* Added `File.OverwriteOnInstall`
-* Added extension method `string Attr(this XElement obj, XName name)` for immediate access to an `XElement` attribute value.
-* Added extension method `Project.FindFirstFile`
-* Issue #398: Registry keys for both 32 and 64 bit machines
-* Issue #389: Custom WPF UI - Show dotNet Licence Prompt as BootStrapp Window
+* Issue #137: Add custom attribute to Bundle project (Bootstrapper)
+* Issue #452: Component Id generation for RegValue does not take RegValue.Id into account
+* An empty directory remains after the uninstall #464
+* `AutoElements.SupportEmptyDirectories` default setting to `Automatic` is made obsolete, though is not removed yet. In the future releases `AutoElements.SupportEmptyDirectories` will be enabled by default.
+* `File.OverwriteOnInstall` now triggers insertion of `&lt;RemoveFile On=both ...&gt;` instead of `&lt;RemoveFile On=install ...&gt;`. To avoid upgrade problems with individual files.
+* Fixed the problem with `project.ActualInstallDirId` being potentially undefined
+* ResilientPackage improvements
+  - Create a hard link to the local package instead of the original MSI.
+  - Added deterministic assignment of installdir id in `EnableResilientPackage`
+* Bootstrapper_UI sample is updated to show how to pass user input from BA to MSI package.
+
 </releaseNotes>
     <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.8.0.0" />
+      <dependency id="WixSharp.bin" version="1.9.2.0" />
     </dependencies>
   </metadata>
   <files>

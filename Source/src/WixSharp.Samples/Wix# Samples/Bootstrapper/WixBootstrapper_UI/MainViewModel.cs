@@ -65,6 +65,19 @@ public class MainViewModel : INotifyPropertyChanged
         }
     }
 
+    string userInput = "User input content...";
+    
+    public string UserInput
+    {
+        get => userInput;
+        
+        set
+        {
+            userInput = value;
+            OnPropertyChanged("UserInput");
+        }
+    }
+
     bool uninstallEnabled;
 
     public bool UninstallEnabled
@@ -91,9 +104,11 @@ public class MainViewModel : INotifyPropertyChanged
 
     public BootstrapperApplication Bootstrapper { get; set; }
 
-    public void InstallExecute()
+    public void InstallExecute() 
     {
         IsBusy = true;
+
+        Bootstrapper.Engine.StringVariables["UserInput"] = UserInput;
         Bootstrapper.Engine.Plan(LaunchAction.Install);
     }
 
@@ -133,6 +148,7 @@ public class MainViewModel : INotifyPropertyChanged
                 InstallEnabled = true;
             else if (e.State == PackageState.Present)
                 UninstallEnabled = true;
+
         }
     }
 

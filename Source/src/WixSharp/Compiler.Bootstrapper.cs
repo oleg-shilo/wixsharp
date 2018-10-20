@@ -261,11 +261,13 @@ namespace WixSharp
                                                                       .ConcatItems(" ");
 
                         var wix3Namespace = "http://schemas.microsoft.com/wix/2006/wi";
-                        //var wix4Namespace = "http://wixtoolset.org/schemas/v4/wxs";
+                        var wix4Namespace = "http://wixtoolset.org/schemas/v4/wxs";
+
+                        var wixNamespace = Compiler.IsWix4 ? wix4Namespace : wix3Namespace;
 
                         var doc = XDocument.Parse(
                                @"<?xml version=""1.0"" encoding=""utf-8""?>
-                             " + $"<Wix xmlns=\"{wix3Namespace}\" {extraNamespaces} " + @" >
+                             " + $"<Wix xmlns=\"{wixNamespace}\" {extraNamespaces} " + @" >
                         </Wix>");
 
                         doc.Root.Add(project.ToXml());
@@ -273,6 +275,9 @@ namespace WixSharp
                         AutoElements.NormalizeFilePaths(doc, project.SourceBaseDir, EmitRelativePaths);
 
                         project.InvokeWixSourceGenerated(doc);
+
+                        AutoElements.ExpandCustomAttributes(doc, project);
+
                         if (WixSourceGenerated != null)
                             WixSourceGenerated(doc);
 

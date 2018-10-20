@@ -16,10 +16,10 @@ namespace MyProduct
 
         void dialog_Load(object sender, EventArgs e)
         {
-            banner.Image = MsiRuntime.Session.GetEmbeddedBitmap("WixUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
 
             name.Text = Defaults.UserName;
-            password.Text = MsiRuntime.Session["PASSWORD"];
+            password.Text = Runtime.Session["PASSWORD"];
 
             localDomain.Checked = true;
 
@@ -49,9 +49,11 @@ namespace MyProduct
 
         void next_Click(object sender, EventArgs e)
         {
-            MsiRuntime.Session["PASSWORD"] = password.Text;
-            MsiRuntime.Session["DOMAIN"] = domain.Text;
-            MsiRuntime.Data["test"] = "test value";
+            Runtime.Session["PASSWORD"] = password.Text;
+            Runtime.Session["HOSTNAME"] = "HOSTNAME-VAL";
+            Runtime.Session["DB"] = "DB-VAL";
+            Runtime.Session["DOMAIN"] = domain.Text;
+            Runtime.Data["test"] = "test value";
             Shell.GoNext();
         }
 

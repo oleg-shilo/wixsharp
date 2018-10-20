@@ -27,7 +27,6 @@ class Script
             service.ServiceInstaller = new ServiceInstaller
             {
                 Name = "WixSharp.TestSvc",
-                DependsOn = "Dnscache;Dhcp",
                 StartOn = SvcEvent.Install, //set it to null if you don't want service to start as during deployment
                 StopOn = SvcEvent.InstallUninstall_Wait,
                 RemoveOn = SvcEvent.Uninstall_Wait,
@@ -41,6 +40,11 @@ class Script
                 ResetPeriodInDays = 1,
                 PreShutdownDelay = 1000 * 60 * 3,
                 RebootMessage = "Failure actions do not specify reboot",
+                DependsOn = new[]
+                {
+                    new ServiceDependency("Dnscache"),
+                    new ServiceDependency("Dhcp"),
+                },
             };
 
             project.GUID = new Guid("6fe30b47-2577-43ad-9195-1861ba25889b");

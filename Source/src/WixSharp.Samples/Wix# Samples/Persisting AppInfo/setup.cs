@@ -3,9 +3,7 @@
 //css_ref System.Core.dll;
 
 using System;
-using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using WixSharp;
 
 class Script
@@ -62,8 +60,8 @@ public class CustomActions
     {
         try
         {
-            Registry.LocalMachine.CreateSubKey(@"Software\My Company\My Product")
-                                 .SetValue("InstallationDirectory", session.Property("INSTALLDIR"));
+            Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"Software\My Company\My Product")
+                                                 .SetValue("InstallationDirectory", session.Property("INSTALLDIR"));
         }
         catch { }
 
@@ -75,9 +73,9 @@ public class CustomActions
     {
         try
         {
-            session["INSTALLDIR"] = Registry.LocalMachine.OpenSubKey(@"Software\My Company\My Product")
-                                                         .GetValue("InstallationDirectory")
-                                                         .ToString();
+            session["INSTALLDIR"] = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"Software\My Company\My Product")
+                                                                         .GetValue("InstallationDirectory")
+                                                                         .ToString();
         }
         catch { }
 

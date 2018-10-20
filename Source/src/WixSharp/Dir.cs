@@ -309,7 +309,7 @@ namespace WixSharp
                 // It's important to recognize that 'this' can be a composite Dir that has been unfolded into
                 // a branch of the child dirs (e.g. new Dir(@"%ProgramFiles%\CustomActionTest"). If it is the case then
                 // the intention of the user when he uses initializer to set IsInstallDir is to set it for the directory itself
-                // when it is a single directory or to the lats leaf of the unfolded tree of the composite dir.
+                // when it is a single directory or to the last leaf of the unfolded tree of the composite dir.
                 // Getter should always return the own actual value as it is used by the compiler to decide if the dir
                 //should be assigned INSTALLDIR value
                 if (lastDir != null)

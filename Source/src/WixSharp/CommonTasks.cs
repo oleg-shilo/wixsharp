@@ -31,14 +31,11 @@ using System.Text;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using WixSharp;
 using WixSharp.Controls;
 using IO = System.IO;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
-using System.Globalization;
 
 namespace WixSharp.CommonTasks
 {
@@ -166,6 +163,7 @@ namespace WixSharp.CommonTasks
         /// <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
         /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
         /// <param name="dualSign">A flag indicating if the file should be signed with both SHA1 and SHA256.</param>
+        /// <param name="outputLevel">A flag indicating the output level</param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
         /// <example>The following is an example of signing <c>Setup.msi</c> file.
@@ -181,7 +179,7 @@ namespace WixSharp.CommonTasks
         /// </example>
         static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false,
-            bool dualSign = false)
+            bool dualSign = false, SignOutputLevel outputLevel = SignOutputLevel.Verbose)
         {
             //SHA1: "C:\Program Files\\Microsoft SDKs\Windows\v6.0A\bin\signtool.exe" sign /f "pfxFile" /p password /v "fileToSign" /t timeURL
             //SHA256: "C:\Program Files\\Microsoft SDKs\Windows\v6.0A\bin\signtool.exe" sign /f "pfxFile" /p password /v "fileToSign" /tr timeURL /td sha256 /fd sha256 /as
@@ -189,7 +187,23 @@ namespace WixSharp.CommonTasks
 
             string certPlace = useCertificateStore ? "/n" : "/f";
 
-            string args = $"sign /v {certPlace} \"{pfxFile}\"";
+            string outputLevelArg = string.Empty;
+            switch (outputLevel)
+            {
+                case SignOutputLevel.Minimal:
+                    outputLevelArg = "/q ";
+                    break;
+                case SignOutputLevel.Standard:
+                    break;
+                case SignOutputLevel.Verbose:
+                    outputLevelArg = "/v ";
+                    break;
+                case SignOutputLevel.Debug:
+                    outputLevelArg = "/debug ";
+                    break;
+            }
+
+            string args = $"sign {outputLevelArg}{certPlace} \"{pfxFile}\"";
             if (password.IsNotEmpty())
                 args += $" /p \"{password}\"";
 
@@ -250,6 +264,7 @@ namespace WixSharp.CommonTasks
         /// <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
         /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
         /// <param name="dualSign">A flag indicating if the file should be signed with both SHA1 and SHA256.</param>
+        /// <param name="outputLevel">A flag indicating the output level</param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
         /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file.
@@ -263,13 +278,13 @@ namespace WixSharp.CommonTasks
         /// </code>
         /// </example>
         static public int DigitalySignBootstrapper(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
-            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false, bool dualSign = false)
+            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false, bool dualSign = false, SignOutputLevel outputLevel = SignOutputLevel.Verbose)
         {
-            var retval = DigitalySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore, dualSign);
+            var retval = DigitalySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore, dualSign, outputLevel);
             if (retval != 0)
                 return retval;
 
-            return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore, dualSign);
+            return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore, dualSign, outputLevel);
         }
 
         /// <summary>
@@ -290,6 +305,7 @@ namespace WixSharp.CommonTasks
         /// <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
         /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
         /// <param name="dualSign">A flag indicating if the file should be signed with both SHA1 and SHA256.</param>
+        /// <param name="outputLevel">A flag indicating the output level</param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
         /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file engine.
@@ -303,7 +319,7 @@ namespace WixSharp.CommonTasks
         /// </code>
         /// </example>
         static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
-            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false, bool dualSign = false)
+            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false, bool dualSign = false, SignOutputLevel outputLevel = SignOutputLevel.Verbose)
         {
             var insigniaPath = IO.Path.Combine(Compiler.WixLocation, "insignia.exe");
             string enginePath = IO.Path.GetTempFileName();
@@ -320,7 +336,7 @@ namespace WixSharp.CommonTasks
                 if (retval != 0)
                     return retval;
 
-                retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore, dualSign);
+                retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore, dualSign, outputLevel);
                 if (retval != 0)
                     return retval;
 
@@ -630,6 +646,26 @@ namespace WixSharp.CommonTasks
         static public ManagedAction AddRefAssembly(this ManagedAction action, string file)
         {
             return action.AddRefAssemblies(file);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Version"/> object from based on <c>version</c> with the revision part omitted.
+        /// </summary>
+        /// <param name="version">The version.</param>
+        /// <returns></returns>
+        static public Version ClearRevision(this Version version)
+        {
+            return new Version(version.Major, version.Minor, version.Build);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Version"/> object from based on <c>version</c> with the revision part omitted.
+        /// </summary>
+        /// <param name="version">The version.</param>
+        /// <returns></returns>
+        static public Version ClearRevision(this FileVersionInfo version)
+        {
+            return new Version(version.FileMajorPart, version.FileMinorPart, version.FileBuildPart);
         }
 
         /// <summary>

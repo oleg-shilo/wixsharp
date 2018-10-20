@@ -27,6 +27,8 @@ THE SOFTWARE.
 
 #endregion Licence...
 
+using System;
+
 namespace WixSharp
 {
     /// <summary>
@@ -760,5 +762,126 @@ namespace WixSharp
         /// Value is a required attribute if setBulkValue is the action specified.
         /// </summary>
         bulkSetValue,
+    }
+
+    /// <summary>
+    /// Rights for this ACE.
+    /// </summary>
+    public enum UrlReservationRights
+    {
+        /// <summary>
+        /// The 'register' rights value of the child UrlAce element
+        /// </summary>
+        register,
+
+        /// <summary>
+        /// The 'delete' rights value of the child UrlAce element
+        /// </summary>
+        @delegate,
+
+        /// <summary>
+        /// The 'all' rights value of the child UrlAce element
+        /// </summary>
+        all,
+    }
+
+    /// <summary>
+    /// Specifies the behavior when trying to install a URL reservation and it already exists.
+    /// </summary>
+    public enum UrlReservationHandleExisting
+    {
+        /// <summary>
+        /// Replaces the existing URL reservation (the default).
+        /// </summary>
+        replace,
+
+        /// <summary>
+        /// Keeps the existing URL reservation.
+        /// </summary>
+        ignore,
+
+        /// <summary>
+        /// The installation fails.
+        /// </summary>
+        fail,
+    }
+
+    /// <summary>
+    /// Flags for indicating when the service should be configured.
+    /// </summary>
+    [Flags]
+    public enum ConfigureServiceTrigger
+    {
+#pragma warning disable 1591
+
+        /// <summary>
+        /// Not a valid value for ServiceConfig.On(Install, Reinstall, Uninstall)
+        /// </summary>
+        None = 0,
+
+        Install = 1,
+        Reinstall = 2,
+        Uninstall = 4
+#pragma warning restore 1591
+    }
+
+    /// <summary>
+    /// Possible values for ServiceInstall.(First|Second|Third)FailureActionType
+    /// </summary>
+    public enum FailureActionType
+    {
+#pragma warning disable 1591
+        none,
+        reboot,
+        restart,
+        runCommand
+#pragma warning restore 1591
+    }
+
+    /// <summary>
+    /// CA assembly validation mode
+    /// </summary>
+    public enum CAValidation
+    {
+        /// <summary>
+        /// The CA assembly is loaded in the temporary remote AppDomain for validation.
+        /// Assembly file is unlocked and at the end of the validation the assembly is unloaded.
+        /// </summary>
+        InRemoteAppDomain,
+        /// <summary>
+        /// The CA assembly is loaded in the current AppDomain for validation.
+        /// Assembly file is unlocked but the assembly will not be unloaded at the end of the validation.
+        /// This mode may lead to unpredictable behaviour.
+        /// </summary>
+        InCurrentAppDomain,
+        /// <summary>
+        /// CA assembly validation is disabled.
+        /// </summary>
+        Disabled
+    }
+
+    /// <summary>
+    /// Sign Tool output level
+    /// </summary>
+    public enum SignOutputLevel
+    {
+        /// <summary>
+        /// Displays verbose output regardless of whether the command runs successfully or fails,
+        /// and displays warning messages.
+        /// </summary>
+        Verbose,
+        /// <summary>
+        /// Displays no output if the command runs successfully,
+        /// and displays minimal output if the command fails.
+        /// </summary>
+        Minimal,
+        /// <summary>
+        /// Displays standard output
+        /// </summary>
+        Standard,
+        /// <summary>
+        /// Displays debugging information.
+        /// </summary>
+        Debug
     }
 }

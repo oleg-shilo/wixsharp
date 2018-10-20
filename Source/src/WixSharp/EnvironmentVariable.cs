@@ -52,7 +52,7 @@ namespace WixSharp
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
-    public class EnvironmentVariable : WixEntity, IGenericEntity
+    public partial class EnvironmentVariable : WixEntity, IGenericEntity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EnvironmentVariable"/> class.

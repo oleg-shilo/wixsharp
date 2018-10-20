@@ -76,7 +76,7 @@ namespace WixSharp
         public RegistryHive Root;
 
         [Xml(Name = "Root")]
-        internal string root { get => Root.ToWString(); }
+        internal string root { get => Root; }
 
         /// <summary>
         /// Key for the registry value.

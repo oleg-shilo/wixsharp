@@ -4,15 +4,10 @@
 //css_ref System.Xml.Linq.dll;
 //css_ref ..\..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 using System;
-using System.Xml;
-using System.Xml.Linq;
-using System.Linq;
 using io = System.IO;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
-using System.Diagnostics;
-using Microsoft.Win32;
 using System.Windows.Forms;
 
 public class InstallScript
@@ -38,26 +33,29 @@ public class InstallScript
         var bootstrapper =
                 new Bundle("My Product",
                     new PackageGroupRef("NetFx40Web"),
-                    // new ExePackage(@"..\redist\dotNetFx40_Full_x86_x64.exe") //just a demo sample
-                    // {
+                    //new ExePackage(@"..\redist\dotNetFx40_Full_x86_x64.exe") //just a demo sample
+                    //{
                     //     Name = "Microsoft .NET Framework 4.0",
                     //     InstallCommand = "/passive /norestart",
                     //     Permanent = true,
                     //     Vital = true,
                     //     DetectCondition = "Netfx4FullVersion AND (NOT VersionNT64 OR Netfx4x64FullVersion)",
-                    //     Compressed = true,
-                    //     RemotePayloads = new[] {
-                    //                                new RemotePayload
-                    //                                {
-                    //                                    ...
-                    //                                }
-                    //                             }
-                    // },
+                    //     Compressed = true
+                    //},
 
                     //msiOnlinePackage, //just a demo sample
 
-                    new MsiPackage(crtMsi) { DisplayInternalUI = true, Visible = true, MsiProperties = "PACKAGE_PROPERTY=[BundleVariable]" },
-                    new MsiPackage(productMsi) { DisplayInternalUI = true, Payloads = new[] { "script.dll".ToPayload() } });
+                    new MsiPackage(crtMsi)
+                    {
+                        DisplayInternalUI = true,
+                        Visible = true,
+                        MsiProperties = "PACKAGE_PROPERTY=[BundleVariable]"
+                    },
+                    new MsiPackage(productMsi)
+                    {
+                        DisplayInternalUI = true,
+                        Payloads = new[] { "script.dll".ToPayload() }
+                    });
 
         bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";
         bootstrapper.IconFile = "app_icon.ico";
@@ -78,11 +76,13 @@ public class InstallScript
         // bootstrapper.Application.LicensePath = null; //HyperlinkLicense app with no license
 
         bootstrapper.Application.AttributesDefinition = "ShowVersion=yes; ShowFilesInUse=yes";
-        // bootstrapper.Application.Bo
         bootstrapper.Include(WixExtension.Util);
 
+        bootstrapper.IncludeWixExtension(@"WixDependencyExtension.dll", "dep", "http://schemas.microsoft.com/wix/DependencyExtension");
+        bootstrapper.AttributesDefinition = "{dep}ProviderKey=01234567-8901-2345-6789-012345678901";
+
         // The code below sets WiX variables 'Netfx4FullVersion' and 'AdobeInstalled'. Note it has no affect on
-        //the runtime behavior and 'FileSearch' and "RegistrySearch" are only provided as an example.
+        //the runtime behaviour and 'FileSearch' and "RegistrySearch" are only provided as an example.
         bootstrapper.AddWixFragment("Wix/Bundle",
                                      new UtilRegistrySearch
                                      {
@@ -116,15 +116,6 @@ public class InstallScript
 
         //in real life scenarios suppression may need to be enabled (see SuppressWixMbaPrereqVars documentation)
         //bootstrapper.SuppressWixMbaPrereqVars = true;
-
-        bootstrapper.WixSourceGenerated += (XDocument document) =>
-        {
-            // inject here the WiX/Burn elements that are not directly supported by WixSharp
-
-            // document.FindFirst("ExePackage")
-            //         .AddElement("RemotePayload"...
-        };
-
         var setup = bootstrapper.Build("app_setup");
         Console.WriteLine(setup);
         //---------------------------------------------------------

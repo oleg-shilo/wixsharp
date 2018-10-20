@@ -11,6 +11,8 @@ namespace WixSharp
     /// </summary>
     public class Certificate : WixEntity, IGenericEntity
     {
+        #region constructors
+
         /// <summary>
         /// Creates an instance of Certificate
         /// </summary>
@@ -32,8 +34,8 @@ namespace WixSharp
         /// </exception>
         public Certificate(string name, StoreLocation storeLocation, StoreName storeName, string binaryKey)
         {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name), "name is a null reference or empty");
-            if (string.IsNullOrEmpty(binaryKey)) throw new ArgumentNullException(nameof(binaryKey), "binaryKey is a null reference or empty");
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name", "name is a null reference or empty");
+            if (string.IsNullOrEmpty(binaryKey)) throw new ArgumentNullException("binaryKey", "binaryKey is a null reference or empty");
 
             base.Name = name;
 
@@ -52,7 +54,7 @@ namespace WixSharp
         /// <param name="storeName">Name of the store.</param>
         /// <param name="binaryKey">The binary key.</param>
         public Certificate(Id id, string name, StoreLocation storeLocation, StoreName storeName, string binaryKey)
-            : this(name, storeLocation, storeName, binaryKey)
+        : this(name, storeLocation, storeName, binaryKey)
         {
             Id = id;
         }
@@ -81,7 +83,7 @@ namespace WixSharp
         /// <param name="storeName">Name of the store.</param>
         /// <param name="binaryKey">The binary key.</param>
         public Certificate(Id id, Feature feature, string name, StoreLocation storeLocation, StoreName storeName, string binaryKey)
-            : this(name, storeLocation, storeName, binaryKey)
+        : this(name, storeLocation, storeName, binaryKey)
         {
             Id = id;
             Feature = feature;
@@ -100,10 +102,10 @@ namespace WixSharp
         /// certificatePath;certificatePath is a null reference or empty</exception>
         public Certificate(string name, StoreLocation storeLocation, StoreName storeName, string certificatePath, bool authorityRequest)
         {
-            if (name.IsEmpty())
-                throw new ArgumentNullException(nameof(name), "name is a null reference or empty");
-            if (certificatePath.IsEmpty())
-                throw new ArgumentNullException(nameof(certificatePath), "certificatePath is a null reference or empty");
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name", "name is a null reference or empty");
+            if (string.IsNullOrEmpty(certificatePath)) throw new ArgumentNullException("certificatePath", "certificatePath is a null reference or empty");
+
+            base.Name = name;
 
             Name = name;
             CertificatePath = certificatePath;
@@ -122,7 +124,7 @@ namespace WixSharp
         /// <param name="certificatePath">The certificate path.</param>
         /// <param name="request">if set to <c>true</c> [request].</param>
         public Certificate(Id id, string name, StoreLocation storeLocation, StoreName storeName, string certificatePath, bool request)
-            : this(name, storeLocation, storeName, certificatePath, request)
+        : this(name, storeLocation, storeName, certificatePath, request)
         {
             Id = id;
         }
@@ -137,7 +139,7 @@ namespace WixSharp
         /// <param name="certificatePath">The certificate path.</param>
         /// <param name="request">if set to <c>true</c> [request].</param>
         public Certificate(Feature feature, string name, StoreLocation storeLocation, StoreName storeName, string certificatePath, bool request)
-            : this(name, storeLocation, storeName, certificatePath, request)
+        : this(name, storeLocation, storeName, certificatePath, request)
         {
             Feature = feature;
         }
@@ -153,17 +155,21 @@ namespace WixSharp
         /// <param name="certificatePath">The certificate path.</param>
         /// <param name="request">if set to <c>true</c> [request].</param>
         public Certificate(Id id, Feature feature, string name, StoreLocation storeLocation, StoreName storeName, string certificatePath, bool request)
-            : this(name, storeLocation, storeName, certificatePath, request)
+        : this(name, storeLocation, storeName, certificatePath, request)
         {
             Id = id;
             Feature = feature;
         }
 
+        #endregion constructors
+
+        #region attributes
+
         /// <summary>
         /// Primary key used to identify this particular entry.
         /// </summary>
         [Xml]
-        public new string Id { get => base.Id; set => base.Id = value; }
+        public new string Id { get { return base.Id; } set { base.Id = value; } }
 
         /// <summary>
         /// The Id of a Binary instance that is the certificate to be installed
@@ -214,6 +220,8 @@ namespace WixSharp
         /// </summary>
         [Xml]
         public StoreName? StoreName;
+
+        #endregion attributes
 
         /// <summary>
         /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.

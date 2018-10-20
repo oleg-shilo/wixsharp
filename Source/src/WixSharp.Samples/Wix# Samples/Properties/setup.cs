@@ -21,7 +21,7 @@ class Script
 
             Actions = new WixSharp.Action[] 
             { 
-                new ManagedAction("ShowGritting"), 
+                new ManagedAction(CustonActions.ShowGritting), 
                 new WixQuietExecAction("notepad.exe", "[NOTEPAD_FILE]"),
             },
 
@@ -33,7 +33,8 @@ class Script
             }
         };
 
-        Compiler.BuildMsi(project);
+        project.PreserveTempFiles = true;
+        project.BuildMsi();
     }
 }
 

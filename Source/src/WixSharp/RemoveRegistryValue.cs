@@ -18,8 +18,8 @@ namespace WixSharp
         [Xml]
         public new string Id
         {
-            get => base.Id;
-            set => Id = value;
+            get { return base.Id; }
+            set { Id = value; }
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace WixSharp
         public RegistryHive Root = RegistryHive.LocalMachine;
 
         [Xml(Name = "Root")]
-        private string root => Root.ToWString();
+        private string root { get { return Root; } }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RemoveRegistryValue" /> class.

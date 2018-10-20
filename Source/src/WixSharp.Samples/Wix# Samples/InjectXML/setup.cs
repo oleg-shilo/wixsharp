@@ -21,7 +21,7 @@ class Script
                         Log = "Application",
                         EventMessageFile = @"%SystemRoot%\Microsoft.NET\Framework\v2.0.50727\EventLogMessages.dll"
                     },
-                    new File("myapp_exe".ToId(), @"Files\Bin\MyApp.exe"),
+                    new File("myapp_exe".ToId(), @"Files\Bin\MyApp.exe") { AttributesDefinition = "Component:Id=Component.myapp_exe" },
                     new Dir(@"Docs\Manual",
                         new File(@"Files\Docs\Manual.txt"))));
 

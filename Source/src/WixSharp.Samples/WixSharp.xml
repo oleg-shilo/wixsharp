@@ -625,6 +625,20 @@
             <param name="file">The file.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.ClearRevision(System.Version)">
+            <summary>
+            Creates a new <see cref="T:System.Version"/> object from based on <c>version</c> with the revision part omitted.
+            </summary>
+            <param name="version">The version.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.ClearRevision(System.Diagnostics.FileVersionInfo)">
+            <summary>
+            Creates a new <see cref="T:System.Version"/> object from based on <c>version</c> with the revision part omitted.
+            </summary>
+            <param name="version">The version.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.CommonTasks.Tasks.AddRefAssemblies(WixSharp.ManagedAction,System.String[])">
             <summary>
             Adds the assembly references to the ManagedAction.
@@ -1472,6 +1486,12 @@
             is satisfied and yet there is no impact on the target file system.</para>
             </summary>
         </member>
+        <member name="F:WixSharp.AutoElements.ScheduleDeferredActionsAfterTunnellingTheirProperties">
+            <summary>
+            Enables scheduling deferred actions just after their corresponding
+            "SetDeferredActionProperties" custom action. Enabled by default.
+            </summary>
+        </member>
         <member name="F:WixSharp.AutoElements.DisableAutoUserProfileRegistry">
             <summary>
             Disables automatic insertion of user profile registry elements.
@@ -1895,6 +1915,7 @@
              custom Wix# based BA the required variables are inserted automatically, similarly to the standards WiX/Burn BA. However some other
              bundle packages (e.g. new PackageGroupRef("NetFx40Web")) may also define these variables so some duplication/collision is possible.
              To avoid this you can suppress variables auto-insertion and define them manually as needed.</para>
+             </summary>
             <example>The following is an example of suppressing auto-insertion:
              <code>
              var bootstrapper = new Bundle("My Product Suite",
@@ -1908,7 +1929,6 @@
              bootstrapper.SuppressWixMbaPrereqVars = true;
              </code>
              </example>
-             </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.Bundle.Version">
             <summary>
@@ -2035,6 +2055,17 @@
             user involvement (e.g. BootstrapperCore.config).
             </summary>
             <param name="outDir">The output directory.</param>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.ManagedBootstrapperApplication.DefaultBootstrapperCoreConfigContent">
+            <summary>
+            The default content of the BootstrapperCore.config file. It is used in the cases when the custom config file was not specified
+            in <see cref="T:WixSharp.Bootstrapper.ManagedBootstrapperApplication"/> constructor. 
+            <para>BootstrapperCore.config is very important as its content can affect both bootstrapper build outcome and the 
+            runtime behaviour.</para>
+            <para>See these discussions: </para>
+            <para>  - https://github.com/oleg-shilo/wixsharp/issues/416 </para>
+            <para>  - https://github.com/oleg-shilo/wixsharp/issues/389 </para>
+            </summary>
         </member>
         <member name="M:WixSharp.Bootstrapper.ManagedBootstrapperApplication.ToXml">
             <summary>
@@ -3405,7 +3436,7 @@
              //sequential built-in GUID generator
              Compiler.GuidGenerator = GuidGenerators.Sequential;
             
-             //Custom 'aways-same' GUID generator
+             //Custom 'always-same' GUID generator
              Compiler.GuidGenerator = (seed) => Guid.Parse("9e2974a1-9539-4c5c-bef7-80fc35b9d7b0");
             
              //Custom random GUID generator
@@ -3597,9 +3628,17 @@
             <param name="embeddedUI">if set to <c>true</c> the assembly as an 'EmbeddedUI' assembly.</param>
             <returns>Package file path.</returns>
         </member>
+        <member name="P:WixSharp.Compiler.IsWix4">
+            <summary>
+            Gets a value indicating whether the compiler supports WiX version 4 (and above) toolset.
+            </summary>
+            <value>
+              <c>true</c> if this instance is wix4; otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="M:WixSharp.Compiler.GetMappedWixConstants(System.Boolean)">
             <summary>
-            Gets list of the the mapped WiX constants.
+            Gets list of the mapped WiX constants.
             </summary>
             <param name="include64Specific">if set to <c>true</c> [include64 specific].</param>
             <returns></returns>
@@ -3682,7 +3721,7 @@
             The languages supported by the file.
             </summary>
         </member>
-        <member name="F:WixSharp.FileSearch.DateTime">
+        <member name="F:WixSharp.FileSearch.MaxDate">
             <summary>
             The maximum modification date and time of the file. Formatted as YYYY-MM-DDTHH:mm:ss,
             where YYYY is the year, MM is month, DD is day, 'T' is literal, HH is hour, mm is
@@ -3696,7 +3735,24 @@
         </member>
         <member name="F:WixSharp.FileSearch.MaxVersion">
             <summary>
-            The minimum version of the file
+            The maximum version of the file
+            </summary>
+        </member>
+        <member name="F:WixSharp.FileSearch.MinDate">
+            <summary>
+            The minimum  modification date and time of the file. Formatted as YYYY-MM-DDTHH:mm:ss,
+            where YYYY is the year, MM is month, DD is day, 'T' is literal, HH is hour, mm is
+            minute and ss is second.
+            </summary>
+        </member>
+        <member name="F:WixSharp.FileSearch.MinSize">
+            <summary>
+            The minimum  size of the file.
+            </summary>
+        </member>
+        <member name="F:WixSharp.FileSearch.MinVersion">
+            <summary>
+            The minimum  version of the file
             </summary>
         </member>
         <member name="F:WixSharp.FileSearch.Name">
@@ -5853,7 +5909,7 @@
             the default value is 'false'. For x64 and IA64, the default value is 'true'.
             </summary>
         </member>
-        <member name="M:WixSharp.RegistrySearch.#ctor(WixSharp.Id,Microsoft.Win32.RegistryHive,System.String,System.String,WixSharp.RegistrySearchType,WixSharp.IGenericEntity[])">
+        <member name="M:WixSharp.RegistrySearch.#ctor(WixSharp.Id,WixSharp.RegistryHive,System.String,System.String,WixSharp.RegistrySearchType,WixSharp.IGenericEntity[])">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegistrySearch"/> class.
             </summary>
@@ -5864,7 +5920,7 @@
             <param name="type">The type.</param>
             <param name="children">The children.</param>
         </member>
-        <member name="M:WixSharp.RegistrySearch.#ctor(Microsoft.Win32.RegistryHive,System.String,System.String,WixSharp.RegistrySearchType,WixSharp.IGenericEntity[])">
+        <member name="M:WixSharp.RegistrySearch.#ctor(WixSharp.RegistryHive,System.String,System.String,WixSharp.RegistrySearchType,WixSharp.IGenericEntity[])">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegistrySearch"/> class.
             </summary>
@@ -5924,14 +5980,14 @@
             <param name="feature">The Feature.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
             <param name="root">The Root.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Feature,WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
@@ -5954,7 +6010,7 @@
             <param name="name">The Name.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(Microsoft.Win32.RegistryHive,System.String,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.RegistryHive,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
@@ -5962,7 +6018,7 @@
             <param name="name">The Name.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Feature,WixSharp.RegistryHive,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
@@ -5986,7 +6042,7 @@
             <param name="feature">The Feature.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
@@ -5994,7 +6050,7 @@
             <param name="root">The Root.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,WixSharp.Feature,WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
@@ -6020,7 +6076,7 @@
             <param name="name">The Name.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,Microsoft.Win32.RegistryHive,System.String,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,WixSharp.RegistryHive,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
@@ -6029,7 +6085,7 @@
             <param name="name">The Name.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String,System.String)">
+        <member name="M:WixSharp.RemoveRegistryValue.#ctor(WixSharp.Id,WixSharp.Feature,WixSharp.RegistryHive,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryValue" /> class.
             </summary>
@@ -6100,14 +6156,14 @@
             <param name="feature">The Feature.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
             <param name="root">The Root.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Feature,WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
@@ -6130,7 +6186,7 @@
             <param name="key">The Key.</param>
             <param name="action">The Action.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(Microsoft.Win32.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
@@ -6138,7 +6194,7 @@
             <param name="key">The Key.</param>
             <param name="action">The Action.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Feature,WixSharp.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
@@ -6162,7 +6218,7 @@
             <param name="feature">The Feature.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
@@ -6170,7 +6226,7 @@
             <param name="root">The Root.</param>
             <param name="key">The Key.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,WixSharp.Feature,WixSharp.RegistryHive,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
@@ -6196,7 +6252,7 @@
             <param name="key">The Key.</param>
             <param name="action">The Action.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,Microsoft.Win32.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,WixSharp.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
@@ -6205,7 +6261,7 @@
             <param name="key">The Key.</param>
             <param name="action">The Action.</param>
         </member>
-        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
+        <member name="M:WixSharp.RemoveRegistryKey.#ctor(WixSharp.Id,WixSharp.Feature,WixSharp.RegistryHive,System.String,WixSharp.RemoveRegistryKeyAction)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RemoveRegistryKey" /> class.
             </summary>
@@ -6221,6 +6277,54 @@
             See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
             </summary>
             <param name="context">The context.</param>
+        </member>
+        <member name="T:WixSharp.ResilientPackage">
+             <summary>
+             Allows to repair the MSI package even when the original installation package is no longer available.
+             <para>Adds an additional source of the resiliency by attempting to create a symbolic link to the locally cached MSI package (%WINDIR%\Installer)
+             or a hard link/full copy to the original installation MSI package in the specified directory.</para>
+             <para><c>WIXSHARP_RESILIENT_SOURCE_DIR</c> property can be used to configure the target directory. <c>INSTALLDIR property is used by default.</c></para>
+             <para>Windows 7 is shipped with the Windows Installer version 5.0, which unlike the previous versions of the windows installer caches the entire MSI,
+             including internal CAB files. Unfortunately the complete cached MSI package is not used for repairs, a call is made to the original source
+             which might not be available.
+            </para>
+             <para>See also:
+             <list type="bullet">
+             <item>https://docs.microsoft.com/en-us/windows/desktop/msi/source-resiliency</item>
+             <item>https://www.symantec.com/connect/articles/reducing-windows-installer-disk-wastage-windows-7</item>
+             </list>
+             </para>
+             </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project)" -->
+        <member name="M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project,System.String)">
+            <summary>
+            Enables source resiliency for the installer.
+            Creates a symbolic link/hard link or makes a copy of the original MSI package in the specified location and points SOURCELIST to it.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="resilientSourceDir">Resilient source directory.</param>
+        </member>
+        <member name="M:WixSharp.ResilientPackage.WixSharp_SetPackageName_Action(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Internal ResilientPackage action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
+            </summary>
+            <param name="session">The session.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.ResilientPackage.WixSharp_RemoveResilientPackage_Action(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Internal ResilientPackage action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
+            </summary>
+            <param name="session">The session.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.ResilientPackage.WixSharp_CreateResilientPackage_Action(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Internal ResilientPackage action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
+            </summary>
+            <param name="session">The session.</param>
+            <returns></returns>
         </member>
         <member name="T:WixSharp.Extensions">
             <summary>
@@ -7002,6 +7106,38 @@
             	<c>true</c> if the specified string is not empty; otherwise, <c>false</c>.
             </returns>
         </member>
+        <member name="M:WixSharp.Extensions.Order``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Sorts the elements of a sequence in ascending order with item's default comparison operators.
+            </summary>
+            <typeparam name="TSource">The type of the source.</typeparam>
+            <param name="source">The source.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.OrderDescending``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Sorts the elements of a sequence in descending order with item's default comparison operators.
+            </summary>
+            <typeparam name="TSource">The type of the source.</typeparam>
+            <param name="source">The source.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.FirstPrefixedValue(System.Collections.Generic.IEnumerable{System.String},System.String[])">
+            <summary>
+            Returns the first item that starts with one of the specified possible prefixes.
+            The method returns the matching item value without the prefix.
+            </summary>
+            <example>This method is convenient a convenient way of parsing command line arguments.
+            <code>
+            // Command line: "app.exe -out:.\log.file"
+            // outFile value is ".\log.file"
+            string outFile = Environment.GetCommandLineArgs().FirstPrefixedValue("-out:", "-o:");
+            </code>
+            </example>
+            <param name="items">The items.</param>
+            <param name="possiblePreffixes">The possible prefixes.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.GetLeftIndent(System.String)">
             <summary>
             Returns all leading white-space characters.
@@ -7139,6 +7275,13 @@
             </summary>
             <param name="element">The element to be searched.</param>
             <returns>Parent XElement of the first component.</returns>
+        </member>
+        <member name="M:WixSharp.Extensions.Component(System.Xml.Linq.XElement)">
+            <summary>
+            Selects the first parent element with the "Component" name.
+            </summary>
+            <param name="element">The element to search the component element for.</param>
+            <returns>Parent component of the XElement.</returns>
         </member>
         <member name="M:WixSharp.Extensions.FindLastDirectory(System.Xml.Linq.XContainer)">
             <summary>
@@ -11724,9 +11867,33 @@
             The legacy default identifier algorithm
             </summary>
         </member>
+        <member name="F:WixSharp.AutoGenerationOptions.ForceComponentIdUniqueness">
+            <summary>
+            Force Component ID uniqueness.
+            </summary>
+        </member>
+        <member name="F:WixSharp.AutoGenerationOptions.ValidateCAAssemblies">
+            <summary>
+            Enable validating CA assemblies for all CA methods to be public instance method.
+            <para>
+            By default validation is performed in a temporary AppDomain (`CAValidation.InRemoteAppDomain`)
+            as it is the only way to avoid locking the assembly being validated. Unfortunately 
+            `ReflectionOnlyLoadFrom` is incompatible with this task as it does not allow browsing members 
+            attributes.
+            </para>
+            <para>
+            You may need to disable (`CAValidation.Disabled`) the validation if WixSharp is hosted on the 
+            runtime that does not support AppDomain unloading (e.g. .NET Core)</para>
+            <para>
+            If you want to perform validation without the use of temporary AppDomain you can chose the 
+            `CAValidation.InCurrentAppDomain` option. In this case the assembly being validated is loaded in 
+            the current AppDomain but from the memory without locking the assembly file. This option is valid 
+            but not recommended as it may lead to the unpredictable reflection scenarios. </para>
+            </summary>
+        </member>
         <member name="F:WixSharp.AutoGenerationOptions.SuppressForBundlePayloadUndefinedIds">
             <summary>
-            The suppress generation of the XML atrtribute 'id' for <see cref="T:WixSharp.Bootstrapper.Payload"/> undefined ids
+            The suppress generation of the XML attribute 'id' for <see cref="T:WixSharp.Bootstrapper.Payload"/> undefined ids
             </summary>
         </member>
         <member name="F:WixSharp.AutoGenerationOptions.HashedTargetPathIdAlgorithm_FileIdMask">
@@ -12675,6 +12842,8 @@
             <summary>
             The default path of the feature <c>ConfigurableDirectory</c>. If set to non-empty string, MSI runtime will place
             <c>Configure</c> button for the feature in the <c>Feature Selection</c> dialog.
+            <para>Specify the Id of a Directory that can be configured by the user at installation 
+            time. This identifier must be a public property and therefore completely uppercase. </para>
             </summary>
         </member>
         <member name="F:WixSharp.Feature.Children">
@@ -14500,7 +14669,7 @@
         </member>
         <member name="F:WixSharp.XmlFile.PreserveModifiedDate">
             <summary>
-            Specifies wheter or not the modification should preserve the modified date.
+            Specifies whether or not the modification should preserve the modified date.
             Preserving the modified date will allow the file to be patched if no other modifications have been made.
             </summary>
         </member>
@@ -14616,7 +14785,7 @@
             Initializes a new instance of the <see cref="T:WixSharp.RegValueProperty"/> class.
             </summary>
         </member>
-        <member name="M:WixSharp.RegValueProperty.#ctor(System.String,Microsoft.Win32.RegistryHive,System.String,System.String,System.String)">
+        <member name="M:WixSharp.RegValueProperty.#ctor(System.String,WixSharp.RegistryHive,System.String,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegValueProperty"/> class with properties/fields initialized with specified parameters.
             </summary>
@@ -14626,7 +14795,7 @@
             <param name="entryName">The registry entry name.</param>
             <param name="defaultValue">The registry entry default value.</param>
         </member>
-        <member name="M:WixSharp.RegValueProperty.#ctor(WixSharp.Id,System.String,Microsoft.Win32.RegistryHive,System.String,System.String,System.String)">
+        <member name="M:WixSharp.RegValueProperty.#ctor(WixSharp.Id,System.String,WixSharp.RegistryHive,System.String,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegValueProperty"/> class with properties/fields initialized with specified parameters.
             </summary>
@@ -14671,6 +14840,44 @@
             However this WiX approach creates non-intuitive behaver when the build outcome may depend on the
             architecture of the build machine.</para>
             <para>Thus WixSharp always uses consistent default value for this property: <c>false</c>.</para>
+            </summary>
+        </member>
+        <member name="T:WixSharp.RegistryHive">
+            <summary>
+            Values of this type represent possible registry roots.
+            </summary>
+            <seealso cref="!:WixSharp.StringEnum&lt;WixSharp.RegistryHive&gt;" />
+        </member>
+        <member name="M:WixSharp.RegistryHive.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.RegistryHive"/> class.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="F:WixSharp.RegistryHive.ClassesRoot">
+            <summary>
+            The classes root. Equivalent of `HKCR`.
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegistryHive.CurrentUser">
+            <summary>
+            The current user.  Equivalent of `HKCU`.
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegistryHive.LocalMachine">
+            <summary>
+            The local machine.  Equivalent of `HKLM`.
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegistryHive.Users">
+            <summary>
+            The users.  Equivalent of `HKU`.
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegistryHive.LocalMachineOrUsers">
+            <summary>
+            Defines ”HKMU” value, which makes it so the registry entry will appear in HKLM 
+            when a per-machine install is run and in HKCU when a per-user install us run. 
             </summary>
         </member>
         <member name="T:WixSharp.RegFile">
@@ -14753,7 +14960,7 @@
             <param name="name">The registry entry name.</param>
             <param name="value">The registry entry value.</param>
         </member>
-        <member name="M:WixSharp.RegValue.#ctor(Microsoft.Win32.RegistryHive,System.String,System.String,System.Object)">
+        <member name="M:WixSharp.RegValue.#ctor(WixSharp.RegistryHive,System.String,System.String,System.Object)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegValue"/> class with properties initialized with specified parameters.
             </summary>
@@ -14762,7 +14969,7 @@
             <param name="name">The registry entry name.</param>
             <param name="value">The registry entry value.</param>
         </member>
-        <member name="M:WixSharp.RegValue.#ctor(WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String,System.String,System.Object)">
+        <member name="M:WixSharp.RegValue.#ctor(WixSharp.Feature,WixSharp.RegistryHive,System.String,System.String,System.Object)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegValue"/> class with properties initialized with specified parameters.
             </summary>
@@ -14781,7 +14988,7 @@
             <param name="name">The registry entry name.</param>
             <param name="value">The registry entry value.</param>
         </member>
-        <member name="M:WixSharp.RegValue.#ctor(WixSharp.Id,Microsoft.Win32.RegistryHive,System.String,System.String,System.Object)">
+        <member name="M:WixSharp.RegValue.#ctor(WixSharp.Id,WixSharp.RegistryHive,System.String,System.String,System.Object)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegValue"/> class with properties initialized with specified parameters.
             </summary>
@@ -14791,7 +14998,7 @@
             <param name="name">The registry entry name.</param>
             <param name="value">The registry entry value.</param>
         </member>
-        <member name="M:WixSharp.RegValue.#ctor(WixSharp.Id,WixSharp.Feature,Microsoft.Win32.RegistryHive,System.String,System.String,System.Object)">
+        <member name="M:WixSharp.RegValue.#ctor(WixSharp.Id,WixSharp.Feature,WixSharp.RegistryHive,System.String,System.String,System.Object)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegValue"/> class with properties initialized with specified parameters.
             </summary>
@@ -17590,6 +17797,29 @@
             If Name is specified, attributes with that name are set to the same value specified in Value.
             If Name is not specified, the text values of the elements are set.
             Value is a required attribute if setBulkValue is the action specified.
+            </summary>
+        </member>
+        <member name="T:WixSharp.CAValidation">
+            <summary>
+            CA assembly validation mode
+            </summary>
+        </member>
+        <member name="F:WixSharp.CAValidation.InRemoteAppDomain">
+            <summary>
+            The CA assembly is loaded in the temporary remote AppDomain for validation.
+            Assembly file is unlocked and at the end of the validation the assembly is unloaded.
+            </summary>
+        </member>
+        <member name="F:WixSharp.CAValidation.InCurrentAppDomain">
+            <summary>
+            The CA assembly is loaded in the current AppDomain for validation.
+            Assembly file is unlocked but the assembly will not be unloaded at the end of the validation.
+            This mode may lead to unpredictable behaviour.
+            </summary>
+        </member>
+        <member name="F:WixSharp.CAValidation.Disabled">
+            <summary>
+            CA assembly validation is disabled.
             </summary>
         </member>
         <member name="T:WixSharp.WixQuietExecAction">

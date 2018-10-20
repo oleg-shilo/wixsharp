@@ -83,7 +83,7 @@ namespace WixSharp
         /// The id.
         /// </value>
         [WixSharp.Xml]
-        new public string Id { get => base.Id; set => Id = value; }
+        new public string Id { get => base.Id; set => base.Id = value; }
 
         /// <summary>
         /// The path to the icon file.
@@ -99,7 +99,7 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            context.XParent.Parent.Add(this.ToXElement("Icon"));
+            context.XParent.Add(this.ToXElement("Icon"));
         }
     }
 

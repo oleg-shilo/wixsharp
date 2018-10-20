@@ -27,9 +27,6 @@ THE SOFTWARE.
 
 #endregion Licence...
 
-#pragma warning disable RCS1018 // Add default access modifier.
-#pragma warning disable RECS0063 // Warns when a culture-aware 'StartsWith' call is used by default.
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -76,7 +73,10 @@ namespace WixSharp
                 ProcessAttributesDefinition();
                 return attributes;
             }
-            set => attributes = value;
+            set
+            {
+                attributes = value;
+            }
         }
 
         Dictionary<string, string> attributes = new Dictionary<string, string>();
@@ -104,12 +104,15 @@ namespace WixSharp
         /// </example>
         public string AttributesDefinition { get; set; }
 
-        internal Dictionary<string, string> AttributesBag = new Dictionary<string, string>();
+        internal Dictionary<string, string> attributesBag = new Dictionary<string, string>();
 
         void ProcessAttributesDefinition()
         {
             if (!AttributesDefinition.IsEmpty())
             {
+                var attrToAdd = new Dictionary<string, string>();
+                var attrs = AttributesDefinition.ToDictionary();
+
                 try
                 {
                     this.Attributes = AttributesDefinition.ToDictionary();
@@ -120,7 +123,7 @@ namespace WixSharp
                 }
             }
 
-            foreach (var item in AttributesBag)
+            foreach (var item in attributesBag)
                 this.attributes[item.Key] = item.Value;
         }
 
@@ -165,7 +168,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// <see cref="Feature"></see> the Wix# object belongs to. This member is processed only for the
+        /// <see cref="Feature"></see> the Wix object belongs to. This member is processed only for the
         /// WiX objects/elements that can be associated with the features (e.g. WebSite, FirewallException, ODBCDataSource, User,
         /// EnvironmentVariable, Merge, Dir, RegFile, RegValue, Shortcut, SqlDatabase, SqlScript).
         /// <remarks>
@@ -177,7 +180,13 @@ namespace WixSharp
         /// then you need to use <see cref="WixSharp.WixObject.Features"/>.
         /// </remarks>
         /// </summary>
-        public Feature Feature { set; internal get; }
+        public Feature Feature
+        {
+            set { feature = value; }
+            internal get { return feature; }
+        }
+
+        Feature feature;
 
         /// <summary>
         /// The collection of <see cref="Feature"></see>s the Wix object belongs to. This member is processed only for the
@@ -198,10 +207,16 @@ namespace WixSharp
         /// <value>
         /// The actual features.
         /// </value>
-        public Feature[] ActualFeatures => Features.Concat(this.Feature.ToItems())
-                                                   .Where(x => x != null)
-                                                   .Distinct()
-                                                   .ToArray();
+        public Feature[] ActualFeatures
+        {
+            get
+            {
+                return Features.Concat(this.feature.ToItems())
+                               .Where(x => x != null)
+                               .Distinct()
+                               .ToArray();
+            }
+        }
 
         /// <summary>
         /// Maps the component to features. If no features specified then the component is added to the default ("Complete") feature.
@@ -259,10 +274,27 @@ namespace WixSharp
     {
         internal void MoveAttributesTo(WixEntity dest)
         {
-            dest.Attributes = this.Attributes.Clone();
-            dest.AttributesDefinition = this.AttributesDefinition;
+            var attrs = this.Attributes;
+            var attrsDefinition = this.AttributesDefinition;
             this.Attributes.Clear();
             this.AttributesDefinition = null;
+            dest.Attributes = attrs;
+            dest.AttributesDefinition = attrsDefinition;
+        }
+
+        internal string GenerateComponentId(Project project, string suffix = "")
+        {
+            return this.GetExplicitComponentId() ??
+                   project.ComponentId($"Component.{this.Id}{suffix}");
+        }
+
+        internal string GetExplicitComponentId()
+        {
+            var attrs = this.AttributesDefinition.ToDictionary();
+            if (attrs.ContainsKey("Component:Id"))
+                return attrs["Component:Id"];
+            else
+                return null;
         }
 
         internal void AddInclude(string xmlFile, string parentElement)
@@ -275,16 +307,6 @@ namespace WixSharp
         /// <para>This value is used as a <c>Name</c> for the corresponding WiX XML element.</para>
         /// </summary>
         public string Name = "";
-
-        /// <summary>
-        /// The element name to be used for the root XML element of the XML generated from this
-        /// instance of <see cref="WixEntity"/>.
-        /// <para>This value is used for overwriting the default element name that is
-        /// generated by WixSharp compiler. Provide a new value only is you want to overwrite the
-        /// default behavior.
-        /// </para>
-        /// </summary>
-        public string ElementName = "";
 
         /// <summary>
         /// Gets or sets the <c>Id</c> value of the <see cref="WixEntity"/>.
@@ -392,7 +414,7 @@ namespace WixSharp
             if (rawName.IsNotEmpty() && char.IsDigit(rawName[0]))
                 entity.id = "_" + entity.id;
 
-            while (alreadyTakenIds.Contains(entity.id)) //last line of defense against duplication
+            while (alreadyTakenIds.Contains(entity.id)) //last line of defence against duplication
                 entity.id += "_";
 
             alreadyTakenIds.Add(entity.id);
@@ -409,12 +431,12 @@ namespace WixSharp
         /// </summary>
         protected string id;
 
-        internal string RawId { get => id;  }
+        internal string RawId { get { return id; } }
 
         /// <summary>
         /// The do not reset auto-ID generator before starting the build.
         /// </summary>
-        public static bool DoNotResetIdGenerator = true;
+        static public bool DoNotResetIdGenerator = false;
 
         static Dictionary<Type, Dictionary<string, int>> idMaps = new Dictionary<Type, Dictionary<string, int>>();
 
@@ -423,13 +445,13 @@ namespace WixSharp
         /// <c>Build</c> operations to ensure reproducibility of the <see cref="Id"/> set between <c>Build()</c>
         /// calls.
         /// </summary>
-        public static void ResetIdGenerator()
+        static public void ResetIdGenerator()
         {
             idMaps.Clear();
             alreadyTakenIds.Clear();
         }
 
-        internal static void ResetIdGenerator(bool supressWarning)
+        static internal void ResetIdGenerator(bool supressWarning)
         {
             if (!DoNotResetIdGenerator)
             {
@@ -443,8 +465,7 @@ namespace WixSharp
                                              "   - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true");
                     Compiler.OutputWriteLine("----------------------------");
                 }
-                idMaps.Clear();
-                alreadyTakenIds.Clear();
+                ResetIdGenerator();
             }
         }
 

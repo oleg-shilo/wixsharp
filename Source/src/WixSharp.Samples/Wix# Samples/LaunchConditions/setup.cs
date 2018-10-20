@@ -2,7 +2,6 @@
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
-using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
 

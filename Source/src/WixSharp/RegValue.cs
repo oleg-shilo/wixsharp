@@ -30,6 +30,41 @@ using Microsoft.Win32;
 namespace WixSharp
 {
     /// <summary>
+    /// Values of this type represent possible registry roots.
+    /// </summary>
+    /// <seealso cref="WixSharp.StringEnum{T}" />
+    public class RegistryHive : StringEnum<RegistryHive>
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegistryHive"/> class.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public RegistryHive(string value) : base(value) { }
+
+        /// <summary>
+        /// The classes root. Equivalent of `HKCR`.
+        /// </summary>
+        public static RegistryHive ClassesRoot = new RegistryHive("HKCR");
+        /// <summary>
+        /// The current user.  Equivalent of `HKCU`.
+        /// </summary>
+        public static RegistryHive CurrentUser = new RegistryHive("HKCU");
+        /// <summary>
+        /// The local machine.  Equivalent of `HKLM`.
+        /// </summary>
+        public static RegistryHive LocalMachine = new RegistryHive("HKLM");
+        /// <summary>
+        /// The users.  Equivalent of `HKU`.
+        /// </summary>
+        public static RegistryHive Users = new RegistryHive("HKU");
+        /// <summary>
+        /// Defines ”HKMU” value, which makes it so the registry entry will appear in HKLM 
+        /// when a per-machine install is run and in HKCU when a per-user install us run. 
+        /// </summary>
+        public static RegistryHive LocalMachineOrUsers = new RegistryHive("HKMU");
+    }
+
+    /// <summary>
     /// Defines the registry file (*.reg) containing the entries to be installed.
     /// <para>
     /// Compiler uses the data from this class to call <see cref="T:WixSharp.CommonTasks.ImportRegFile"/>
@@ -263,17 +298,17 @@ namespace WixSharp
         {
             get
             {
-                if (AttributesBag.ContainsKey("Component:NeverOverwrite"))
-                    return (AttributesBag["Component:NeverOverwrite"] == "yes");
+                if (attributesBag.ContainsKey("Component:NeverOverwrite"))
+                    return (attributesBag["Component:NeverOverwrite"] == "yes");
                 else
                     return null;
             }
             set
             {
                 if (value.HasValue)
-                    AttributesBag["Component:NeverOverwrite"] = value.Value.ToYesNo();
-                else if (AttributesBag.ContainsKey("Component:NeverOverwrite"))
-                    AttributesBag.Remove("Component:NeverOverwrite");
+                    attributesBag["Component:NeverOverwrite"] = value.Value.ToYesNo();
+                else if (attributesBag.ContainsKey("Component:NeverOverwrite"))
+                    attributesBag.Remove("Component:NeverOverwrite");
             }
         }
 
