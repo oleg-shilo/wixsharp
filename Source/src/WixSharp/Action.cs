@@ -50,12 +50,12 @@ namespace WixSharp
     ///                  ...
     /// </code>
     /// </example>
-    public partial class Action : WixEntity
+    public class Action : WixEntity
     {
         /// <summary>
         /// Default constructor. Creates instance of the <see cref="Action"></see> class.
         /// </summary>
-        protected Action()
+        public Action()
         {
         }
 
@@ -63,7 +63,7 @@ namespace WixSharp
         /// Creates instance of the <see cref="Action"></see> class with properties initialized with specified parameters.
         /// </summary>
         /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="Action"/> instance.</param>
-        protected Action(Id id)
+        public Action(Id id)
         {
             Id = id.Value;
         }
@@ -75,7 +75,7 @@ namespace WixSharp
         /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
         /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
         /// <param name="condition">The launch condition for the <see cref="Action"/>.</param>
-        protected Action(Return returnType, When when, Step step, Condition condition)
+        public Action(Return returnType, When when, Step step, Condition condition)
         {
             Return = returnType;
             Step = step;
@@ -91,7 +91,7 @@ namespace WixSharp
         /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
         /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
         /// <param name="condition">The launch condition for the <see cref="Action"/>.</param>
-        protected Action(Id id, Return returnType, When when, Step step, Condition condition)
+        public Action(Id id, Return returnType, When when, Step step, Condition condition)
         {
             Id = id.Value;
             Return = returnType;
@@ -108,7 +108,7 @@ namespace WixSharp
         /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
         /// <param name="condition">The launch condition for the <see cref="Action"/>.</param>
         /// <param name="sequence">The MSI sequence the action belongs to.</param>
-        protected Action(Return returnType, When when, Step step, Condition condition, Sequence sequence)
+        public Action(Return returnType, When when, Step step, Condition condition, Sequence sequence)
         {
             Sequence = sequence;
             Return = returnType;
@@ -126,7 +126,7 @@ namespace WixSharp
         /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
         /// <param name="condition">The launch condition for the <see cref="Action"/>.</param>
         /// <param name="sequence">The MSI sequence the action belongs to.</param>
-        protected Action(Id id, Return returnType, When when, Step step, Condition condition, Sequence sequence)
+        public Action(Id id, Return returnType, When when, Step step, Condition condition, Sequence sequence)
         {
             Id = id.Value;
             Sequence = sequence;
