@@ -8,13 +8,21 @@ using WindowsInstaller;
 namespace WixSharp.UI
 {
     /// <summary>
-    /// Utility class for simplifying MSI interpreting tasks DB querying, message data parsing  
+    /// Utility class for simplifying MSI interpreting tasks DB querying, message data parsing
     /// </summary>
     public class MsiParser : IDisposable
     {
-        bool disposedValue = false; 
-        string msiFile;
-        IntPtr db;
+        bool disposedValue = false;
+
+        /// <summary>
+        /// The msi file
+        /// </summary>
+        protected string msiFile;
+
+        /// <summary>
+        /// The msi file database handle.
+        /// </summary>
+        protected IntPtr db;
 
         /// <summary>
         /// Opens the specified MSI file and returns the database handle.
@@ -80,6 +88,16 @@ namespace WixSharp.UI
         }
 
         /// <summary>
+        /// Gets the property value.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        public string GetProperty(string name)
+        {
+            return GetStringValue($"SELECT `Value` FROM `Property` WHERE `Property` = '{name}'");
+        }
+
+        /// <summary>
         /// Queries the code of the product from the encapsulated MSI database.
         /// <para>
         /// <remarks>The DB view is not closed after the call</remarks>
@@ -125,12 +143,11 @@ namespace WixSharp.UI
         ///// <para><remarks>The DB view is not closed after the call</remarks></para>
         ///// </summary>
         ///// <returns>
-        ///// Root component of install directory. If the 'TARGETDIR' cannot be located then the return value is the 
+        ///// Root component of install directory. If the 'TARGETDIR' cannot be located then the return value is the
         ///// expanded value of 'ProgramFilesFolder' WiX constant.
         ///// </returns>
         //public string GetInstallDirectoryRoot()
         //{
-
         //    while (IntPtr.Zero != (rec = view.NextRecord()))
         //    {
         //        var row = view.GetFieldValues(rec);
@@ -187,7 +204,6 @@ namespace WixSharp.UI
             return path.ToArray();
         }
 
-
         /// <summary>
         /// Parses the <c>MsiInstallMessage.CommonData</c> data.
         /// </summary>
@@ -195,7 +211,7 @@ namespace WixSharp.UI
         /// <returns>Collection of parsed tokens (fields).</returns>
         public static string[] ParseCommonData(string s)
         {
-            //Example: 1: 0 2: 1033 3: 1252 
+            //Example: 1: 0 2: 1033 3: 1252
             var res = new string[3];
             var regex = new Regex(@"\d:\s?\w+\s");
 
@@ -218,7 +234,7 @@ namespace WixSharp.UI
         /// <returns>Collection of parsed tokens (fields).</returns>
         public static string[] ParseProgressString(string s)
         {
-            //1: 0 2: 86 3: 0 4: 1 
+            //1: 0 2: 86 3: 0 4: 1
             var res = new string[4];
             var regex = new Regex(@"\d:\s\d+\s");
 
