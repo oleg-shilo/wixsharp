@@ -1913,6 +1913,37 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Gets the value by specified key. Return <c>null</c> if the dictionary does not contains 
+        /// the specified key.   
+        /// </summary>
+        /// <typeparam name="T1">The type of the 1.</typeparam>
+        /// <typeparam name="T2">The type of the 2.</typeparam>
+        /// <param name="map">The map.</param>
+        /// <param name="key">The key.</param>
+        /// <returns></returns>
+        public static T2 Get<T1, T2>(this Dictionary<T1, T2> map, T1 key) where T2 : class
+            => map.ContainsKey(key) ? map[key] : null;
+
+        /// <summary>
+        /// Sets the adds or sets key/value pair. <para>Removes the key/value pair if the specified 
+        /// value is <c>null</c>.</para>
+        /// </summary>
+        /// <typeparam name="T1">The type of the 1.</typeparam>
+        /// <typeparam name="T2">The type of the 2.</typeparam>
+        /// <param name="map">The map.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public static Dictionary<T1, T2> Set<T1, T2>(this Dictionary<T1, T2> map, T1 key, T2 value) where T2 : class
+        {
+            if (value != null)
+                map[key] = value;
+            else if (map.ContainsKey(key))
+                map.Remove(key);
+            return map;
+        }
+
+        /// <summary>
         /// Clones the specified collection.
         /// </summary>
         /// <param name="collection">The collection.</param>
@@ -2155,7 +2186,7 @@ namespace WixSharp
 
         /// <summary>
         /// <para>
-        /// Gets the main window of the <c>msiexec.exe</c> process that has 'MainWindowTitle' containing the name of the product being installed. 
+        /// Gets the main window of the <c>msiexec.exe</c> process that has 'MainWindowTitle' containing the name of the product being installed.
         /// </para>
         /// This method is a convenient way to display message box from a custom action with properly specified parent window.
         /// </summary>

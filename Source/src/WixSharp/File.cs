@@ -173,7 +173,7 @@ namespace WixSharp
         ///  Set this field to the properly initialized instance of <see cref="ServiceInstaller"/> if the file is a windows service module.
         /// </summary>
         public IGenericEntity ServiceInstaller = null;
-        
+
         /// <summary>
         /// Collection of the contained <see cref="IISVirtualDir"/>s.
         /// </summary>
@@ -193,13 +193,13 @@ namespace WixSharp
         /// <summary>
         /// Controls if an existing file should be overwritten during the installation.
         /// By default MSI runtime does not install the file if it already exists at the
-        /// deployment destination on the target system. This field allows changing 
-        /// this behaviour and ensuring that a file installed always even when existed 
-        /// prior the installation. 
-        /// <para>If this field is set to <c>true</c> the WixSharp injects the following 
-        /// element into the file's parent component. 
+        /// deployment destination on the target system. This field allows changing
+        /// this behaviour and ensuring that a file installed always even when existed
+        /// prior the installation.
+        /// <para>If this field is set to <c>true</c> the WixSharp injects the following
+        /// element into the file's parent component.
         /// <pre>&lt;RemoveFile Id="Remove_Filetxt" Name="File.txt" On="install" /&gt;</pre>
-        /// 
+        ///
         /// </para>
         /// </summary>
         public bool OverwriteOnInstall = false;
@@ -229,20 +229,24 @@ namespace WixSharp
         /// </value>
         public bool? NeverOverwrite
         {
-            get
-            {
-                if (attributesBag.ContainsKey("Component:NeverOverwrite"))
-                    return (attributesBag["Component:NeverOverwrite"] == "yes");
-                else
-                    return null;
-            }
-            set
-            {
-                if (value.HasValue)
-                    attributesBag["Component:NeverOverwrite"] = value.Value.ToYesNo();
-                else if (attributesBag.ContainsKey("Component:NeverOverwrite"))
-                    attributesBag.Remove("Component:NeverOverwrite");
-            }
+            get => attributesBag.Get("Component:NeverOverwrite") == "yes";
+
+            set => attributesBag.Set("Component:NeverOverwrite", value.ToNullOrYesNo());
+        }
+
+        /// <summary>
+        /// Gets or sets the custom name of the target file. By default the name is
+        /// the same name as the source file. IE file <c>c:\files\app.exe</c> will be installed
+        /// as <c>app.exe</c>.
+        /// </summary>
+        /// <value>
+        /// The name of the target file.
+        /// </value>
+        public string TargetFileName
+        {
+            get => attributesBag.Get("Name");
+
+            set => attributesBag.Set("Name", value);
         }
     }
 }

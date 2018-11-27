@@ -25,6 +25,7 @@ class Script
         project.MajorUpgradeStrategy = MajorUpgradeStrategy.Default;
         project.MajorUpgradeStrategy.RemoveExistingProductAfter = Step.InstallInitialize;
         project.BeforeInstall += project_BeforeInstall;
+        project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project, "setup.1.msi");
     }
