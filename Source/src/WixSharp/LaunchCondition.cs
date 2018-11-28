@@ -62,14 +62,14 @@ namespace WixSharp
     ///
     /// </code>
     /// </example>
-    public partial class LaunchCondition : WixEntity
+    public class LaunchCondition : WixEntity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LaunchCondition"/> class.
         /// It is made protected to encourage user to use non-default constructor to handle Escape Characters
         /// of the <c>value</c> string properly.
         /// </summary>
-        protected LaunchCondition()
+        public LaunchCondition()
         {
         }
 

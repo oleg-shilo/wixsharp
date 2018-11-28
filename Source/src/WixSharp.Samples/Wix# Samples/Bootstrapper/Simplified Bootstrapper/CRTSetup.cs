@@ -7,7 +7,7 @@ using WixSharp;
 
 class InstallScript
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         var msi = Compiler.BuildMsi(
             new Project("Fake CRT")
@@ -17,6 +17,3 @@ class InstallScript
             });
     }
 }
-
-
-

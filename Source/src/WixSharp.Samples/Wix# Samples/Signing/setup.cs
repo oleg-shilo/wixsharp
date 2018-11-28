@@ -7,7 +7,7 @@ using WixSharp.CommonTasks;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         Project project =
             new Project("MyProduct",

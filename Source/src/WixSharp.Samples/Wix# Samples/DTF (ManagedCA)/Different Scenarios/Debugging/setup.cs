@@ -3,13 +3,12 @@
 //css_ref ..\..\..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 
 using System;
-using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         var project = new Project()
         {

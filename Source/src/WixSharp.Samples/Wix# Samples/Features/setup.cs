@@ -6,7 +6,7 @@ using WixSharp;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         // Note you can detect at runtime if the feature has been marked for installation by using condition
         // like this Condition.Create("ADDLOCAL >< \"your_feature_name\"")

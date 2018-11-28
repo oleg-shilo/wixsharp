@@ -35,7 +35,7 @@ namespace WixSharp
     /// Defines shortcut to be installed. <see cref="Shortcut"/> is not supposed to be instantiated directly.
     /// Derivative class constructors should be used instead (e.g. <see cref="FileShortcut"/>, <see cref="ExeFileShortcut"/>).
     /// </summary>
-    public partial class Shortcut : WixEntity
+    public class Shortcut : WixEntity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Shortcut"/> class.

@@ -9,7 +9,7 @@ namespace WixSharp.Controls
     /// <summary>
     /// Defines the association between an MSI dialog control and the <see cref="T:WixSharp.PublishingInfo" />.
     /// </summary>
-    public partial class PublishingInfo : WixEntity
+    public class PublishingInfo : WixEntity
     {
         /// <summary>
         /// Gets or sets the dialog Id.
@@ -36,7 +36,7 @@ namespace WixSharp.Controls
     /// <summary>
     /// Defines <see cref="T:WixSharp.DialogAction"/> for showing MSI dialog.
     /// </summary>
-    public partial class ShowDialog : DialogAction
+    public class ShowDialog : DialogAction
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ShowDialog"/> class.
@@ -62,11 +62,11 @@ namespace WixSharp.Controls
             this.Value = dialogName;
         }
     }
-   
+
     /// <summary>
-    /// Defines <see cref="T:WixSharp.DialogAction"/> for creating a child of a modal dialog box while keeping the present dialog box running. 
+    /// Defines <see cref="T:WixSharp.DialogAction"/> for creating a child of a modal dialog box while keeping the present dialog box running.
     /// </summary>
-    public partial class SpawnDialog : DialogAction
+    public class SpawnDialog : DialogAction
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SpawnDialog"/> class.
@@ -93,11 +93,10 @@ namespace WixSharp.Controls
         }
     }
 
-
     /// <summary>
     /// Defines <see cref="T:WixSharp.DialogAction"/> for executing MSI CustomAction ("DoAction").
     /// </summary>
-    public partial class ExecuteCustomAction : DialogAction
+    public class ExecuteCustomAction : DialogAction
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ExecuteCustomAction"/> class.
@@ -110,7 +109,7 @@ namespace WixSharp.Controls
             this.Condition = condition;
             this.Value = actionName;
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ExecuteCustomAction"/> class.
         /// </summary>
@@ -127,7 +126,7 @@ namespace WixSharp.Controls
     /// <summary>
     /// Defines "SetTargetPath" <see cref="T:WixSharp.DialogAction"/>.
     /// </summary>
-    public partial class SetTargetPath : DialogAction
+    public class SetTargetPath : DialogAction
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SetTargetPath"/> class.
@@ -145,7 +144,7 @@ namespace WixSharp.Controls
     /// <summary>
     /// Defines <see cref="T:WixSharp.DialogAction"/> for setting property.
     /// </summary>
-    public partial class SetProperty : DialogAction
+    public class SetProperty : DialogAction
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SetProperty"/> class.
@@ -164,7 +163,7 @@ namespace WixSharp.Controls
     /// <summary>
     /// Defines custom UI control "Close Dialog" action.
     /// </summary>
-    public partial class CloseDialog : DialogAction
+    public class CloseDialog : DialogAction
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="T:WixSharp.CloseDialog"/> class.
@@ -192,9 +191,9 @@ namespace WixSharp.Controls
     }
 
     /// <summary>
-    /// Defines custom UI control generic action. 
+    /// Defines custom UI control generic action.
     /// </summary>
-    public partial class DialogAction : WixEntity
+    public class DialogAction : WixEntity
     {
 #pragma warning disable 1591
         new public string Name;
@@ -234,7 +233,7 @@ namespace WixSharp.Controls
 
         /// <summary>
         /// Defines the WiX Dialog UI control Action (event handler).
-        /// <para>Note that all handlers will have <c>Order</c> field automatically assigned '5' 
+        /// <para>Note that all handlers will have <c>Order</c> field automatically assigned '5'
         /// to ensure the overriding the default WiX event handlers</para>
         /// </summary>
         /// <param name="dialog">The dialog.</param>
@@ -257,17 +256,17 @@ namespace WixSharp.Controls
     }
 
     /// <summary>
-    /// Defines custom UI (WiX <c>UI</c> element). This class is to be used to define the customization of the standard MSI UI. 
-    /// The usual scenario of the customization is the injection of the custom <see cref="T:WixSharp.Dialog"/> 
-    /// into the sequence of the standard dialogs. This can be accomplished by defining the custom dialog as  
-    /// <see cref="T:WixSharp.WixForm"/>. Such a <see cref="T:WixSharp.WixForm"/> can be edited with the Visual Studio form designer. 
+    /// Defines custom UI (WiX <c>UI</c> element). This class is to be used to define the customization of the standard MSI UI.
+    /// The usual scenario of the customization is the injection of the custom <see cref="T:WixSharp.Dialog"/>
+    /// into the sequence of the standard dialogs. This can be accomplished by defining the custom dialog as
+    /// <see cref="T:WixSharp.WixForm"/>. Such a <see cref="T:WixSharp.WixForm"/> can be edited with the Visual Studio form designer.
     /// <para>
-    /// When <see cref="T:WixSharp.WixForm"/> is complete it can be converted into <see cref="T:WixSharp.Dialog"/> 
-    /// with the <see cref="T:WixSharp.Dialog.ToWDialog"/>() call. And at compile time Wix# compiler converts 
+    /// When <see cref="T:WixSharp.WixForm"/> is complete it can be converted into <see cref="T:WixSharp.Dialog"/>
+    /// with the <see cref="T:WixSharp.Dialog.ToWDialog"/>() call. And at compile time Wix# compiler converts
     /// <see cref="T:WixSharp.Dialog"/> into the final WiX <c>UI</c> element XML definition.
     /// </para>
     /// <para>
-    /// While it is possible to construct <see cref="T:WixSharp.CustomUI"/> instance manually it is preferred to use 
+    /// While it is possible to construct <see cref="T:WixSharp.CustomUI"/> instance manually it is preferred to use
     /// Factory methods of  <see cref="T:WixSharp.CustomUIBuilder"/> (e.g. BuildPostLicenseDialogUI) for this.
     /// </para>
     /// <code>
@@ -278,7 +277,7 @@ namespace WixSharp.Controls
     ///                                                                                 new ShowDialog(Dialogs.InstallDirDlg, "SERIALNUMBER_VALIDATED = \"TRUE\"")});
     /// </code>
     /// </summary>
-    public partial class CustomUI : WixEntity
+    public class CustomUI : WixEntity
     {
         /// <summary>
         /// The collection of PropertyId vs. PropertyValue pairs to be defined as the <c>Property</c> WiX elements inside of the <c>UI</c> element.
@@ -313,7 +312,7 @@ namespace WixSharp.Controls
         public List<Dialog> CustomDialogs = new List<Dialog>();
 
         /// <summary>
-        /// Defines UI sequence via collection of <see cref="T:WixSharp.PublishingInfo"/> items containing association between Dialog controls and MSI Dialog actions. 
+        /// Defines UI sequence via collection of <see cref="T:WixSharp.PublishingInfo"/> items containing association between Dialog controls and MSI Dialog actions.
         /// </summary>
         public List<PublishingInfo> UISequence = new List<PublishingInfo>();
 
@@ -335,10 +334,10 @@ namespace WixSharp.Controls
             if (actionInfo == null)
             {
                 UISequence.Add(actionInfo = new PublishingInfo
-                    {
-                        Dialog = dialog,
-                        Control = control
-                    });
+                {
+                    Dialog = dialog,
+                    Control = control
+                });
             }
 
             actionInfo.Actions.AddRange(handlers);
@@ -433,8 +432,8 @@ namespace WixSharp.Controls
     }
 
     /// <summary>
-    /// Class defining all <c>Publish</c> declarations associated with the <c>WixUI_Common</c> dialogs. This class is used as a starting point for 
-    /// UI customization with injection of CLR Dialog (WinForms). 
+    /// Class defining all <c>Publish</c> declarations associated with the <c>WixUI_Common</c> dialogs. This class is used as a starting point for
+    /// UI customization with injection of CLR Dialog (WinForms).
     /// </summary>
     public class CommomDialogsUI : CustomUI
     {
@@ -473,7 +472,7 @@ namespace WixSharp.Controls
     }
 
     /// <summary>
-    /// Defines values (names) for the WiX custom UI predefined dialog types. 
+    /// Defines values (names) for the WiX custom UI predefined dialog types.
     /// </summary>
     public class CommonDialogs
     {
@@ -489,6 +488,7 @@ namespace WixSharp.Controls
         public const string ResumeDlg = "ResumeDlg";
         public const string UserExit = "UserExit";
 #pragma warning restore 1591
+
         /// <summary>
         /// Returns all WiX custom UI predefined dialog types.
         /// </summary>
@@ -500,7 +500,7 @@ namespace WixSharp.Controls
     }
 
     /// <summary>
-    /// Defines values (names) for the standard WiX dialogs. 
+    /// Defines values (names) for the standard WiX dialogs.
     /// </summary>
     public class NativeDialogs
     {
@@ -509,10 +509,12 @@ namespace WixSharp.Controls
         public const string WelcomeDlg = "WelcomeDlg";
         public const string LicenseAgreementDlg = "LicenseAgreementDlg";
         public const string InstallDirDlg = "InstallDirDlg";
+
         /// <summary>
         /// The customize features dialog
         /// </summary>
         public const string CustomizeDlg = "CustomizeDlg";
+
         public const string VerifyReadyDlg = "VerifyReadyDlg";
         public const string MaintenanceWelcomeDlg = "MaintenanceWelcomeDlg";
         public const string MaintenanceTypeDlg = "MaintenanceTypeDlg";
@@ -534,7 +536,6 @@ namespace WixSharp.Controls
         public string Condition;
 #pragma warning restore 1591
     }
-
 
     /// <summary>
     /// Predefined WiX custom UI control (element) action types.
@@ -564,7 +565,7 @@ namespace WixSharp.Controls
     }
 
     /// <summary>
-    /// Defines values (names) for the WiX custom UI predefined buttons. 
+    /// Defines values (names) for the WiX custom UI predefined buttons.
     /// </summary>
     public class Buttons
     {
@@ -579,12 +580,10 @@ namespace WixSharp.Controls
 #pragma warning restore 1591
     }
 
-
-
     /// <summary>
-    /// The Factory class for building <see cref="T:WixSharp.CustomUI"/>. 
+    /// The Factory class for building <see cref="T:WixSharp.CustomUI"/>.
     /// <para>
-    /// While it is possible to construct  instance manually it is preferred to use 
+    /// While it is possible to construct  instance manually it is preferred to use
     /// Factory methods of  <see cref="T:WixSharp.CustomUIBuilder"/> for this.
     /// </para>
     /// <code>
@@ -597,10 +596,9 @@ namespace WixSharp.Controls
     /// </summary>
     public class CustomUIBuilder
     {
-
         /// <summary>
-        /// Builds <see cref="T:WixSharp.CustomUI"/> instance and injects <see cref="T:WixSharp.Dialog"/> into the standard UI sequence 
-        /// just after <c>LicenceDialog</c> step. 
+        /// Builds <see cref="T:WixSharp.CustomUI"/> instance and injects <see cref="T:WixSharp.Dialog"/> into the standard UI sequence
+        /// just after <c>LicenceDialog</c> step.
         /// </summary>
         /// <param name="customDialog">The <see cref="T:WixSharp.Dialog"/> dialog to be injected.</param>
         /// <param name="onNextActions">The on next actions.</param>

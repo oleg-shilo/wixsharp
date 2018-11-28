@@ -826,8 +826,8 @@ namespace WixSharp
         ///<returns>The index of the first matching item, or -1 if no items match.</returns>
         public static int FindIndex<T>(this IEnumerable<T> items, Func<T, bool> predicate)
         {
-            if (items == null) throw new ArgumentNullException("items");
-            if (predicate == null) throw new ArgumentNullException("predicate");
+            if (items == null) throw new ArgumentNullException(nameof(items));
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
 
             int retVal = 0;
             foreach (var item in items)
@@ -2155,7 +2155,7 @@ namespace WixSharp
 
         /// <summary>
         /// <para>
-        /// Gets the main window of the <c>msiexec.exe</c> process that has 'MainWindowTitle' containing the name of the product being installed. 
+        /// Gets the main window of the <c>msiexec.exe</c> process that has 'MainWindowTitle' containing the name of the product being installed.
         /// </para>
         /// This method is a convenient way to display message box from a custom action with properly specified parent window.
         /// </summary>

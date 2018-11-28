@@ -37,6 +37,8 @@ class Script
             DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
         };
 
+        project.
+
         return project;
     }
 

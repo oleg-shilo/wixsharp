@@ -10,7 +10,7 @@ using WixSharp;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         var project = new Project()
         {
@@ -22,7 +22,7 @@ class Script
                 new ManagedAction(CustomActions.MyAction, "%this%")
             }
         };
-       
+
         Compiler.BuildMsi(project);
     }
 }
@@ -38,6 +38,3 @@ public class CustomActions
         return ActionResult.Success;
     }
 }
-
-
-

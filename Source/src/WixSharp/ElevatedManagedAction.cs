@@ -45,7 +45,7 @@ namespace WixSharp
     ///  }
     /// </code>
     /// </summary>summary>
-    public partial class ElevatedManagedAction : ManagedAction
+    public class ElevatedManagedAction : ManagedAction
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ElevatedManagedAction"/> class.

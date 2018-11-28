@@ -46,7 +46,7 @@ namespace WixSharp
 
             var parser = new RegParser();
 
-            char[] delimiter = new[] { '\\' };
+            char[] delimiter = { '\\' };
 
             foreach (KeyValuePair<string, Dictionary<string, string>> entry in parser.Parse(content))
                 foreach (KeyValuePair<string, string> item in entry.Value)

@@ -9,7 +9,7 @@ using WixSharp.Controls;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         Project project =
             new Project("MyProduct",
@@ -26,7 +26,7 @@ class Script
                                    .On(NativeDialogs.InstallDirDlg, Buttons.Back, new ShowDialog(NativeDialogs.WelcomeDlg));
 
         //or
-        //Compiler.WixSourceGenerated += Compiler_WixSourceGenerated; 
+        //Compiler.WixSourceGenerated += Compiler_WixSourceGenerated;
         Compiler.PreserveTempFiles = true;
         Compiler.BuildMsi(project);
     }

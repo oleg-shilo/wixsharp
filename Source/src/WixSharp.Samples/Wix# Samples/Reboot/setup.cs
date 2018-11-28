@@ -12,7 +12,7 @@ using Microsoft.Win32;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         var project =
             new Project("RebootTest",

@@ -6,7 +6,7 @@ using WixSharp;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         Project project =
             new Project("MyProduct",
@@ -19,6 +19,3 @@ class Script
         Compiler.BuildMsi(project);
     }
 }
-
-
-

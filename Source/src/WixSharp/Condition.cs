@@ -59,7 +59,7 @@ namespace WixSharp
     ///                                         ...
     ///   </code>
     ///   </example>
-    public partial class Condition : WixEntity
+    public class Condition : WixEntity
     {
         /// <summary>
         /// String value of WiX <c>Condition</c>.

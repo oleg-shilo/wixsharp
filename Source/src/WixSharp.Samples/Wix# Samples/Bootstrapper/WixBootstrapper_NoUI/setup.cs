@@ -17,7 +17,7 @@ using System.Diagnostics;
 
 public class InstallScript
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         var productProj =
             new Project("My Product",

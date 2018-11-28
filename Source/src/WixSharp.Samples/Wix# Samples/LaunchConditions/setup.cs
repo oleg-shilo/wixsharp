@@ -7,7 +7,7 @@ using WixSharp.CommonTasks;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         //Both methods produce the sameWiX/MSI
         //CheckDotNetByAnalysingRegistryValue();

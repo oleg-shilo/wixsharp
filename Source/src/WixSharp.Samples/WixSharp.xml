@@ -345,10 +345,10 @@
             Thus bootstrapper will execute <c>PrimaryFile</c> without launching <c>PrerequisiteFile</c> first.</param>
             <returns>Path to the built bootstrapper file. Returns <c>null</c> if bootstrapper cannot be built.</returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySign(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean)">
+        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySign(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,WixSharp.SignOutputLevel)">
              <summary>
              Applies digital signature to a file (e.g. msi, exe, dll) with MS <c>SignTool.exe</c> utility.
-             Please use <see cref="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean)"/> for signing a bootstrapper.
+             Please use <see cref="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,WixSharp.SignOutputLevel)"/> for signing a bootstrapper.
              </summary>
              <param name="fileToSign">The file to sign.</param>
              <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
@@ -362,6 +362,7 @@
              <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
              from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
              <param name="dualSign">A flag indicating if the file should be signed with both SHA1 and SHA256.</param>
+             <param name="outputLevel">A flag indicating the output level</param>
              <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
             
              <example>The following is an example of signing <c>Setup.msi</c> file.
@@ -376,7 +377,7 @@
              </code>
              </example>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean)">
+        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,WixSharp.SignOutputLevel)">
              <summary>
              Applies digital signature to a bootstrapper and the bootstrapper engine with MS <c>SignTool.exe</c> utility.
              <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about bootstrapper engine signing</a>
@@ -393,6 +394,7 @@
              <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
              from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
              <param name="dualSign">A flag indicating if the file should be signed with both SHA1 and SHA256.</param>
+             <param name="outputLevel">A flag indicating the output level</param>
              <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
             
              <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file.
@@ -406,11 +408,11 @@
              </code>
              </example>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapperEngine(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean)">
+        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapperEngine(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,WixSharp.SignOutputLevel)">
              <summary>
              Applies digital signature to a bootstrapper engine with MS <c>SignTool.exe</c> utility.
              Note : this method doesn't sign the bootstrapper file but the engine only.
-             Please use <see cref="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean)"/> for signing both (bootstrapper and bootstrapper engine) instead.
+             Please use <see cref="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,WixSharp.SignOutputLevel)"/> for signing both (bootstrapper and bootstrapper engine) instead.
              <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about Bootstrapper engine signing</a>
              </summary>
              <param name="bootstrapperFileToSign">The Bootstrapper file to sign.</param>
@@ -425,6 +427,7 @@
              <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
              from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
              <param name="dualSign">A flag indicating if the file should be signed with both SHA1 and SHA256.</param>
+             <param name="outputLevel">A flag indicating the output level</param>
              <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
             
              <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file engine.
@@ -1500,6 +1503,41 @@
             <para>Can also be managed by disabling ICE validation via Light.exe command line arguments.</para>
             </summary>
         </member>
+        <member name="T:WixSharp.BalCondition">
+            <summary>
+            Conditions for a bundle.
+            The condition is specified in the inner text of the element.
+            </summary>
+        </member>
+        <member name="F:WixSharp.BalCondition.Condition">
+            <summary>
+            Conditions for a bundle.
+            </summary>
+        </member>
+        <member name="F:WixSharp.BalCondition.Message">
+            <summary>
+            Set the value to the text to display when the condition fails and the installation must be terminated.
+            </summary>
+        </member>
+        <member name="M:WixSharp.BalCondition.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.BalCondition" /> class.
+            </summary>
+        </member>
+        <member name="M:WixSharp.BalCondition.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.BalCondition" /> class.
+            </summary>
+            <param name="condition">The Condition.</param>
+            <param name="message">The Message</param>
+        </member>
+        <member name="M:WixSharp.BalCondition.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
         <member name="T:WixSharp.Bootstrapper.UtilFileSearch">
             <summary>
             Defines a file search based on WiX FileSearch element (Util Extension).
@@ -2059,8 +2097,8 @@
         <member name="F:WixSharp.Bootstrapper.ManagedBootstrapperApplication.DefaultBootstrapperCoreConfigContent">
             <summary>
             The default content of the BootstrapperCore.config file. It is used in the cases when the custom config file was not specified
-            in <see cref="T:WixSharp.Bootstrapper.ManagedBootstrapperApplication"/> constructor. 
-            <para>BootstrapperCore.config is very important as its content can affect both bootstrapper build outcome and the 
+            in <see cref="T:WixSharp.Bootstrapper.ManagedBootstrapperApplication"/> constructor.
+            <para>BootstrapperCore.config is very important as its content can affect both bootstrapper build outcome and the
             runtime behaviour.</para>
             <para>See these discussions: </para>
             <para>  - https://github.com/oleg-shilo/wixsharp/issues/416 </para>
@@ -2196,6 +2234,49 @@
             }
             </code>
             </example>
+        </member>
+        <member name="T:WixSharp.Bootstrapper.RemotePayload">
+            <summary>
+            Describes a remote payload to a bootstrapper.
+            <para>Describes information about a remote file payload that is not
+            available at the time of building the bundle. The parent must specify DownloadUrl
+            and must not specify SourceFile when using this element.</para></summary>
+            <seealso cref="T:WixSharp.WixEntity" />
+        </member>
+        <member name="F:WixSharp.Bootstrapper.RemotePayload.Description">
+            <summary>
+            Description of the file from version resources.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.RemotePayload.CertificatePublicKey">
+            <summary>
+            Public key of the authenticode certificate used to sign the RemotePayload.Include this attribute if the remote file is signed.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.RemotePayload.CertificateThumbprint">
+            <summary>
+            Thumbprint of the authenticode certificate used to sign the RemotePayload.Include this attribute if the remote file is signed.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.RemotePayload.Hash">
+            <summary>
+            SHA-1 hash of the RemotePayload.Include this attribute if the remote file is unsigned or SuppressSignatureVerification is set to Yes.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.RemotePayload.ProductName">
+            <summary>
+            Product name of the file from version resources.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.RemotePayload.Size">
+            <summary>
+            Size of the remote file in bytes.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.RemotePayload.Version">
+            <summary>
+            Version of the remote file
+            </summary>
         </member>
         <member name="T:WixSharp.Bootstrapper.Payload">
             <summary>
@@ -2425,6 +2506,28 @@
              Describes map of exit code returned from executable package to a bootstrapper behavior.
             http://wixtoolset.org/documentation/manual/v3/xsd/wix/exitcode.html
              </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.ExePackage.RemotePayloads">
+            <summary>
+            Collection of RemotePayloads (the package dependencies).
+            </summary>
+            <example>
+            <code>
+             var bootstrapper =
+                 new Bundle("My Product",
+                     new ExePackage()
+                     {
+                         ...,
+                         RemotePayloads = new[] {
+                                                    new RemotePayload
+                                                    {
+                                                        Size=50352408,
+                                                        ...
+                                                    }
+                                                }
+                         ...
+            </code>
+            </example>
         </member>
         <member name="M:WixSharp.Bootstrapper.ExePackage.ToXml">
             <summary>
@@ -2815,6 +2918,11 @@
             from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.
             </summary>
         </member>
+        <member name="P:WixSharp.DigitalSignature.OutputLevel">
+            <summary>
+            A flag indicating the output level of the <c>SignTool.exe</c> utility.
+            </summary>
+        </member>
         <member name="M:WixSharp.DigitalSignature.Apply(System.String)">
             <summary>
             Applies digital signature to a file
@@ -3160,6 +3268,17 @@
             <param name="storeName">Name of the store.</param>
             <param name="binaryKey">The binary key.</param>
         </member>
+        <member name="M:WixSharp.Certificate.#ctor(WixSharp.Id,System.String,WixSharp.StoreLocation,WixSharp.StoreName,System.String,System.Boolean)">
+            <summary>
+            Creates an instance of Certificate where the certificate is requested or exists at the specified path
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="name">The name.</param>
+            <param name="storeLocation">The store location.</param>
+            <param name="storeName">Name of the store.</param>
+            <param name="certificatePath">The certificate path.</param>
+            <param name="request">if set to <c>true</c> [request].</param>
+        </member>
         <member name="M:WixSharp.Certificate.#ctor(System.String,WixSharp.StoreLocation,WixSharp.StoreName,System.String,System.Boolean)">
             <summary>
             Creates an instance of Certificate where the certificate is requested or exists at the specified path
@@ -3172,17 +3291,6 @@
             <exception cref="T:System.ArgumentNullException">name;name is a null reference or empty
             or
             certificatePath;certificatePath is a null reference or empty</exception>
-        </member>
-        <member name="M:WixSharp.Certificate.#ctor(WixSharp.Id,System.String,WixSharp.StoreLocation,WixSharp.StoreName,System.String,System.Boolean)">
-            <summary>
-            Creates an instance of Certificate where the certificate is requested or exists at the specified path
-            </summary>
-            <param name="id">The identifier.</param>
-            <param name="name">The name.</param>
-            <param name="storeLocation">The store location.</param>
-            <param name="storeName">Name of the store.</param>
-            <param name="certificatePath">The certificate path.</param>
-            <param name="request">if set to <c>true</c> [request].</param>
         </member>
         <member name="M:WixSharp.Certificate.#ctor(WixSharp.Feature,System.String,WixSharp.StoreLocation,WixSharp.StoreName,System.String,System.Boolean)">
             <summary>
@@ -6296,7 +6404,13 @@
              </para>
              </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project)" -->
+        <member name="M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project)">
+            <summary>
+            Enables source resiliency for the installer.
+            Creates a symbolic link/hard link or makes a copy of the original MSI package in the specified location and points SOURCELIST to it.
+            </summary>
+            <param name="project">The project.</param>
+        </member>
         <member name="M:WixSharp.ResilientPackage.EnableResilientPackage(WixSharp.Project,System.String)">
             <summary>
             Enables source resiliency for the installer.
@@ -6325,6 +6439,259 @@
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
+        </member>
+        <member name="T:WixSharp.ServiceConfig">
+            <summary>
+            Configures a service being installed or one that already exists. This element's functionality is available starting with MSI 5.0.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceConfig.DelayedAutoStart">
+            <summary>
+            Specifies whether an auto-start service should delay its start until after all other auto-start services.
+            This property only affects auto-start services. If this property is not initialized the setting is not configured.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceConfig.PreShutdownDelay">
+            <summary>
+            Specifies time in milliseconds that the Service Control Manager (SCM) waits after notifying
+            the service of a system shutdown. If this attribute is not present the default value, 3 minutes, is used.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceConfig.ServiceSid">
+            <summary>
+            Specifies the service SID to apply to the service
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceConfig.OnInstall">
+            <summary>
+            Specifies whether to configure the service when the parent Component is installed.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceConfig.OnReinstall">
+            <summary>
+            Specifies whether to configure the service when the parent Component is reinstalled.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceConfig.OnUninstall">
+            <summary>
+            Specifies whether to configure the service when the parent Component is uninstalled.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceConfig.ConfigureServiceTrigger">
+            <summary>
+            Specifies whether to configure the service when the parent Component is installed, reinstalled, or uninstalled
+            </summary>
+            <remarks>
+            Defaults to ConfigureServiceTrigger.Install.
+            Strictly applies to the configuration of properties: DelayedAutoStart, PreShutdownDelay, ServiceSid.
+            </remarks>
+        </member>
+        <member name="M:WixSharp.ServiceConfig.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
+        <member name="T:WixSharp.ServiceSid">
+            <summary>
+            Specifies the service SID to apply to the service.
+            Valid values are "none", "restricted", "unrestricted" or a
+            Formatted property that resolves to "0" (for "none"),
+            "3" (for "restricted") or "1" (for "unrestricted").
+            </summary>
+        </member>
+        <member name="M:WixSharp.ServiceSid.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ServiceSid"/> class.
+            </summary>
+            <param name="value">The value.</param>
+        </member>
+        <member name="T:WixSharp.ServiceConfigUtil">
+            <summary>
+            Service configuration information for failure actions.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceConfigUtil.FirstFailureActionType">
+            <summary>
+            Action to take on the first failure of the service
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceConfigUtil.SecondFailureActionType">
+            <summary>
+            Action to take on the second failure of the service.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceConfigUtil.ThirdFailureActionType">
+            <summary>
+            Action to take on the third failure of the service.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceConfigUtil.ProgramCommandLine">
+            <summary>
+            If any of the three *ActionType attributes is "runCommand",
+            this specifies the command to run when doing so.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceConfigUtil.RebootMessage">
+            <summary>
+            If any of the three *ActionType attributes is "reboot",
+            this specifies the message to broadcast to server users before doing so.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceConfigUtil.ResetPeriodInDays">
+            <summary>
+            Number of days after which to reset the failure count to zero if there are no failures.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceConfigUtil.RestartServiceDelayInSeconds">
+            <summary>
+            If any of the three *ActionType attributes is "restart",
+            this specifies the number of seconds to wait before doing so.
+            </summary>
+        </member>
+        <member name="M:WixSharp.ServiceConfigUtil.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
+        <member name="T:WixSharp.SvcEvent">
+            <summary>
+            Starts, stops, and removes services for parent Component.
+            This element is used to control the state of a service installed by the MSI or MSM file by using the start, stop and remove attributes.
+            </summary>
+        </member>
+        <member name="F:WixSharp.SvcEvent.Type">
+            <summary>
+            Specifies when the service action occur. It can be one of the <see cref="T:WixSharp.SvcEventType"/> values.
+            </summary>
+        </member>
+        <member name="F:WixSharp.SvcEvent.Install">
+            <summary>
+            Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.install"/>
+            and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without
+            waiting for the completion.
+            </summary>
+        </member>
+        <member name="F:WixSharp.SvcEvent.Install_Wait">
+            <summary>
+            Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.install"/>
+            and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
+            waiting for the completion.
+            </summary>
+        </member>
+        <member name="F:WixSharp.SvcEvent.Uninstall">
+            <summary>
+            Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.uninstall"/>
+            and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation
+            without waiting for the completion.
+            </summary>
+        </member>
+        <member name="F:WixSharp.SvcEvent.Uninstall_Wait">
+            <summary>
+            Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.uninstall"/>
+            and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
+            waiting for the completion.
+            </summary>
+        </member>
+        <member name="F:WixSharp.SvcEvent.InstallUninstall">
+            <summary>
+            Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.both"/>
+            and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without
+            waiting for the completion.
+            </summary>
+        </member>
+        <member name="F:WixSharp.SvcEvent.InstallUninstall_Wait">
+            <summary>
+            Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.both"/>
+            and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
+            waiting for the completion.
+            </summary>
+        </member>
+        <member name="P:WixSharp.SvcEvent.Id">
+            <summary>
+            Primary key used to identify this particular entry.
+            </summary>
+        </member>
+        <member name="P:WixSharp.SvcEvent.Name">
+            <summary>
+            Name of the service.
+            </summary>
+        </member>
+        <member name="F:WixSharp.SvcEvent.Remove">
+            <summary>
+            Specifies whether the service should be removed by the DeleteServices action on install, uninstall or both.
+            For 'install', the service will be removed only when the parent component is being installed (msiInstallStateLocal or msiInstallStateSource);
+            for 'uninstall', the service will be removed only when the parent component is being removed (msiInstallStateAbsent);
+            for 'both', the service will be removed in both cases.
+            </summary>
+        </member>
+        <member name="F:WixSharp.SvcEvent.Start">
+            <summary>
+            Specifies whether the service should be started by the StartServices action on install, uninstall or both.
+            For 'install', the service will be started only when the parent component is being installed (msiInstallStateLocal or msiInstallStateSource);
+            for 'uninstall', the service will be started only when the parent component is being removed (msiInstallStateAbsent);
+            for 'both', the service will be started in both cases.
+            </summary>
+        </member>
+        <member name="F:WixSharp.SvcEvent.Stop">
+            <summary>
+            Specifies whether the service should be stopped by the StopServices action on install, uninstall or both.
+            For 'install', the service will be stopped only when the parent component is being installed (msiInstallStateLocal or msiInstallStateSource);
+            for 'uninstall', the service will be stopped only when the parent component is being removed (msiInstallStateAbsent);
+            for 'both', the service will be stopped in both cases.
+            </summary>
+        </member>
+        <member name="F:WixSharp.SvcEvent.Wait">
+            <summary>
+            The flag indicating if after triggering the service action the setup should wait until te action is completed.
+            </summary>
+        </member>
+        <member name="M:WixSharp.SvcEvent.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
+        <member name="T:WixSharp.ServiceDependency">
+            <summary>
+            Service or group of services that must start before the parent service.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceDependency.Id">
+            <summary>
+            The value of this attribute should be one of the following:
+            1) The name(not the display name) of a previously installed service.
+            2) The name of a service group(in which case the Group attribute must be set to 'yes').
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceDependency.Group">
+            <summary>
+            Set to 'yes' to indicate that the value in the Id attribute is the name of a group of services.
+            </summary>
+        </member>
+        <member name="M:WixSharp.ServiceDependency.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ServiceDependency" /> class.
+            </summary>
+            <param name="id">The ID.</param>
+        </member>
+        <member name="M:WixSharp.ServiceDependency.#ctor(System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.ServiceDependency" /> class.
+            </summary>
+            <param name="id">The ID.</param>
+            <param name="group">The Group</param>
+        </member>
+        <member name="M:WixSharp.ServiceDependency.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.Extensions">
             <summary>
@@ -7491,7 +7858,7 @@
         <member name="M:WixSharp.Extensions.GetMainWindow(Microsoft.Deployment.WindowsInstaller.Session)">
             <summary>
             <para>
-            Gets the main window of the <c>msiexec.exe</c> process that has 'MainWindowTitle' containing the name of the product being installed. 
+            Gets the main window of the <c>msiexec.exe</c> process that has 'MainWindowTitle' containing the name of the product being installed.
             </para>
             This method is a convenient way to display message box from a custom action with properly specified parent window.
             </summary>
@@ -8730,49 +9097,76 @@
             A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
             </returns>
         </member>
-        <member name="T:WixSharp.UrlReservationHandleExisting">
+        <member name="T:WixSharp.UrlAce">
             <summary>
-            Specifies the behavior when trying to install a URL reservation and it already exists.
+            The security principal and which rights to assign to them for the URL reservation.
             </summary>
         </member>
-        <member name="F:WixSharp.UrlReservationHandleExisting.replace">
+        <member name="P:WixSharp.UrlAce.Id">
             <summary>
-            Replaces the existing URL reservation (the default).
+            Primary key used to identify this particular entry.
             </summary>
         </member>
-        <member name="F:WixSharp.UrlReservationHandleExisting.ignore">
+        <member name="F:WixSharp.UrlAce.Rights">
             <summary>
-            Keeps the existing URL reservation.
+            Rights for this ACE. Default is "all". This attribute's value must be one of the following:
+            <list type="bullet">
+            <item><description>register</description></item>
+            <item><description>delegate</description></item>
+            <item><description>all</description></item>
+            </list>
             </summary>
         </member>
-        <member name="F:WixSharp.UrlReservationHandleExisting.fail">
+        <member name="F:WixSharp.UrlAce.SecurityPrincipal">
             <summary>
-            The installation fails.
+            The security principal for this ACE.
+             When the UrlReservation is under a ServiceInstall element, this defaults to "NT SERVICE\ServiceInstallName".
+             This may be either a SID or an account name in a format that LookupAccountName supports. When using a SID, an asterisk must be prepended.
+            <example>
+            "*S-1-5-18"
+            </example>
             </summary>
         </member>
-        <member name="T:WixSharp.UrlReservationRights">
+        <member name="M:WixSharp.UrlAce.#ctor(WixSharp.UrlReservationRights,System.String)">
             <summary>
-            Rights for this ACE.
+            Initializes a new instance of the <see cref="T:WixSharp.UrlAce" /> class.
             </summary>
+            <param name="rights">The Rights.</param>
+            <param name="securityPrincipal">The SecurityPrincipal.</param>
         </member>
-        <member name="F:WixSharp.UrlReservationRights.register">
+        <member name="M:WixSharp.UrlAce.#ctor(WixSharp.Id,WixSharp.UrlReservationRights,System.String)">
             <summary>
-            The 'register' rights value of the child UrlAce element
+            Initializes a new instance of the <see cref="T:WixSharp.UrlAce" /> class.
             </summary>
+            <param name="id">The Id</param>
+            <param name="rights">The Rights.</param>
+            <param name="securityPrincipal">The SecurityPrincipal.</param>
         </member>
-        <member name="F:WixSharp.UrlReservationRights.delegate">
+        <member name="M:WixSharp.UrlAce.Process(WixSharp.ProcessingContext)">
             <summary>
-            The 'delete' rights value of the child UrlAce element
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
             </summary>
-        </member>
-        <member name="F:WixSharp.UrlReservationRights.all">
-            <summary>
-            The 'all' rights value of the child UrlAce element
-            </summary>
+            <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.UrlReservation">
             <summary>
             Makes a reservation record for the HTTP Server API configuration store on Windows XP SP2, Windows Server 2003, and later.
+            </summary>
+        </member>
+        <member name="P:WixSharp.UrlReservation.Id">
+            <summary>
+            Primary key used to identify this particular entry.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservation.Url">
+            <summary>
+            The UrlPrefix string that defines the portion of the URL namespace to which this reservation pertains.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservation.Sddl">
+            <summary>
+            Security descriptor to apply to the URL reservation. Can't be specified when using children UrlAce elements.
             </summary>
         </member>
         <member name="F:WixSharp.UrlReservation.HandleExisting">
@@ -8785,34 +9179,9 @@
             </list>
             </summary>
         </member>
-        <member name="F:WixSharp.UrlReservation.Sddl">
+        <member name="F:WixSharp.UrlReservation.UrlAce">
             <summary>
-            Security descriptor to apply to the URL reservation. Can't be specified when using children UrlAce elements.
-            </summary>
-        </member>
-        <member name="F:WixSharp.UrlReservation.Url">
-            <summary>
-            The UrlPrefix string that defines the portion of the URL namespace to which this reservation pertains.
-            </summary>
-        </member>
-        <member name="F:WixSharp.UrlReservation.Rights">
-            <summary>
-            Rights for this ACE. Default is "all". This attribute's value must be one of the following:
-            <list type="bullet">
-            <item><description>register</description></item>
-            <item><description>delegate</description></item>
-            <item><description>all</description></item>
-            </list>
-            </summary>
-        </member>
-        <member name="F:WixSharp.UrlReservation.SecurityPrincipal">
-            <summary>
-            The security principal for this ACE.
-             When the UrlReservation is under a ServiceInstall element, this defaults to "NT SERVICE\ServiceInstallName".
-             This may be either a SID or an account name in a format that LookupAccountName supports. When using a SID, an asterisk must be prepended.
-            <example>
-            "*S-1-5-18"
-            </example>
+            The security principal and which rights to assign to them for the URL reservation.
             </summary>
         </member>
         <member name="M:WixSharp.UrlReservation.#ctor">
@@ -8835,10 +9204,29 @@
             <param name="securityPrincipal"></param>
             <param name="rights"></param>
         </member>
+        <member name="M:WixSharp.UrlReservation.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.String,WixSharp.UrlReservationRights)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="feature">The Feature.</param>
+            <param name="url"></param>
+            <param name="securityPrincipal"></param>
+            <param name="rights"></param>
+        </member>
         <member name="M:WixSharp.UrlReservation.#ctor(System.String,System.String,WixSharp.UrlReservationRights)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
             </summary>
+            <param name="url"></param>
+            <param name="securityPrincipal"></param>
+            <param name="rights"></param>
+        </member>
+        <member name="M:WixSharp.UrlReservation.#ctor(WixSharp.Feature,System.String,System.String,WixSharp.UrlReservationRights)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
+            </summary>
+            <param name="feature">The Feature.</param>
             <param name="url"></param>
             <param name="securityPrincipal"></param>
             <param name="rights"></param>
@@ -8851,6 +9239,15 @@
             <param name="url"></param>
             <param name="sddl"></param>
         </member>
+        <member name="M:WixSharp.UrlReservation.#ctor(WixSharp.Id,WixSharp.Feature,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="feature">The Feature.</param>
+            <param name="url"></param>
+            <param name="sddl"></param>
+        </member>
         <member name="M:WixSharp.UrlReservation.#ctor(System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
@@ -8858,11 +9255,20 @@
             <param name="url"></param>
             <param name="sddl"></param>
         </member>
-        <member name="M:WixSharp.UrlReservation.ToXml">
+        <member name="M:WixSharp.UrlReservation.#ctor(WixSharp.Feature,System.String,System.String)">
             <summary>
-            Emits WiX XML for UrlReservation.
+            Initializes a new instance of the <see cref="T:WixSharp.UrlReservation" /> class.
             </summary>
-            <returns></returns>
+            <param name="feature">The Feature.</param>
+            <param name="url"></param>
+            <param name="sddl"></param>
+        </member>
+        <member name="M:WixSharp.UrlReservation.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.User">
             <summary>
@@ -9588,7 +9994,7 @@
         </member>
         <member name="T:WixSharp.Controls.SpawnDialog">
             <summary>
-            Defines <see cref="T:WixSharp.DialogAction"/> for creating a child of a modal dialog box while keeping the present dialog box running. 
+            Defines <see cref="T:WixSharp.DialogAction"/> for creating a child of a modal dialog box while keeping the present dialog box running.
             </summary>
         </member>
         <member name="M:WixSharp.Controls.SpawnDialog.#ctor(System.String,System.String)">
@@ -9670,7 +10076,7 @@
         </member>
         <member name="T:WixSharp.Controls.DialogAction">
             <summary>
-            Defines custom UI control generic action. 
+            Defines custom UI control generic action.
             </summary>
         </member>
         <member name="T:WixSharp.Controls.DialogSequence">
@@ -9694,7 +10100,7 @@
         <member name="M:WixSharp.Controls.DialogSequence.On(System.String,System.String,WixSharp.Controls.DialogAction[])">
             <summary>
             Defines the WiX Dialog UI control Action (event handler).
-            <para>Note that all handlers will have <c>Order</c> field automatically assigned '5' 
+            <para>Note that all handlers will have <c>Order</c> field automatically assigned '5'
             to ensure the overriding the default WiX event handlers</para>
             </summary>
             <param name="dialog">The dialog.</param>
@@ -9709,17 +10115,17 @@
         </member>
         <member name="T:WixSharp.Controls.CustomUI">
             <summary>
-            Defines custom UI (WiX <c>UI</c> element). This class is to be used to define the customization of the standard MSI UI. 
-            The usual scenario of the customization is the injection of the custom <see cref="T:WixSharp.Dialog"/> 
-            into the sequence of the standard dialogs. This can be accomplished by defining the custom dialog as  
-            <see cref="T:WixSharp.WixForm"/>. Such a <see cref="T:WixSharp.WixForm"/> can be edited with the Visual Studio form designer. 
+            Defines custom UI (WiX <c>UI</c> element). This class is to be used to define the customization of the standard MSI UI.
+            The usual scenario of the customization is the injection of the custom <see cref="T:WixSharp.Dialog"/>
+            into the sequence of the standard dialogs. This can be accomplished by defining the custom dialog as
+            <see cref="T:WixSharp.WixForm"/>. Such a <see cref="T:WixSharp.WixForm"/> can be edited with the Visual Studio form designer.
             <para>
-            When <see cref="T:WixSharp.WixForm"/> is complete it can be converted into <see cref="T:WixSharp.Dialog"/> 
-            with the <see cref="T:WixSharp.Dialog.ToWDialog"/>() call. And at compile time Wix# compiler converts 
+            When <see cref="T:WixSharp.WixForm"/> is complete it can be converted into <see cref="T:WixSharp.Dialog"/>
+            with the <see cref="T:WixSharp.Dialog.ToWDialog"/>() call. And at compile time Wix# compiler converts
             <see cref="T:WixSharp.Dialog"/> into the final WiX <c>UI</c> element XML definition.
             </para>
             <para>
-            While it is possible to construct <see cref="T:WixSharp.CustomUI"/> instance manually it is preferred to use 
+            While it is possible to construct <see cref="T:WixSharp.CustomUI"/> instance manually it is preferred to use
             Factory methods of  <see cref="T:WixSharp.CustomUIBuilder"/> (e.g. BuildPostLicenseDialogUI) for this.
             </para>
             <code>
@@ -9754,7 +10160,7 @@
         </member>
         <member name="F:WixSharp.Controls.CustomUI.UISequence">
             <summary>
-            Defines UI sequence via collection of <see cref="T:WixSharp.PublishingInfo"/> items containing association between Dialog controls and MSI Dialog actions. 
+            Defines UI sequence via collection of <see cref="T:WixSharp.PublishingInfo"/> items containing association between Dialog controls and MSI Dialog actions.
             </summary>
         </member>
         <member name="M:WixSharp.Controls.CustomUI.On(System.String,System.String,WixSharp.Controls.DialogAction[])">
@@ -9789,8 +10195,8 @@
         </member>
         <member name="T:WixSharp.Controls.CommomDialogsUI">
             <summary>
-            Class defining all <c>Publish</c> declarations associated with the <c>WixUI_Common</c> dialogs. This class is used as a starting point for 
-            UI customization with injection of CLR Dialog (WinForms). 
+            Class defining all <c>Publish</c> declarations associated with the <c>WixUI_Common</c> dialogs. This class is used as a starting point for
+            UI customization with injection of CLR Dialog (WinForms).
             </summary>
         </member>
         <member name="M:WixSharp.Controls.CommomDialogsUI.#ctor">
@@ -9800,7 +10206,7 @@
         </member>
         <member name="T:WixSharp.Controls.CommonDialogs">
             <summary>
-            Defines values (names) for the WiX custom UI predefined dialog types. 
+            Defines values (names) for the WiX custom UI predefined dialog types.
             </summary>
         </member>
         <member name="M:WixSharp.Controls.CommonDialogs.AllValues">
@@ -9811,7 +10217,7 @@
         </member>
         <member name="T:WixSharp.Controls.NativeDialogs">
             <summary>
-            Defines values (names) for the standard WiX dialogs. 
+            Defines values (names) for the standard WiX dialogs.
             </summary>
         </member>
         <member name="F:WixSharp.Controls.NativeDialogs.CustomizeDlg">
@@ -9836,14 +10242,14 @@
         </member>
         <member name="T:WixSharp.Controls.Buttons">
             <summary>
-            Defines values (names) for the WiX custom UI predefined buttons. 
+            Defines values (names) for the WiX custom UI predefined buttons.
             </summary>
         </member>
         <member name="T:WixSharp.Controls.CustomUIBuilder">
             <summary>
-            The Factory class for building <see cref="T:WixSharp.CustomUI"/>. 
+            The Factory class for building <see cref="T:WixSharp.CustomUI"/>.
             <para>
-            While it is possible to construct  instance manually it is preferred to use 
+            While it is possible to construct  instance manually it is preferred to use
             Factory methods of  <see cref="T:WixSharp.CustomUIBuilder"/> for this.
             </para>
             <code>
@@ -9857,8 +10263,8 @@
         </member>
         <member name="M:WixSharp.Controls.CustomUIBuilder.BuildPostLicenseDialogUI(WixSharp.Controls.Dialog,WixSharp.Controls.DialogAction[],WixSharp.Controls.DialogAction[],WixSharp.Controls.DialogAction[])">
             <summary>
-            Builds <see cref="T:WixSharp.CustomUI"/> instance and injects <see cref="T:WixSharp.Dialog"/> into the standard UI sequence 
-            just after <c>LicenceDialog</c> step. 
+            Builds <see cref="T:WixSharp.CustomUI"/> instance and injects <see cref="T:WixSharp.Dialog"/> into the standard UI sequence
+            just after <c>LicenceDialog</c> step.
             </summary>
             <param name="customDialog">The <see cref="T:WixSharp.Dialog"/> dialog to be injected.</param>
             <param name="onNextActions">The on next actions.</param>
@@ -12978,18 +13384,18 @@
             </summary>
         </member>
         <member name="F:WixSharp.File.OverwriteOnInstall">
-            <summary>
-            Controls if an existing file should be overwritten during the installation.
-            By default MSI runtime does not install the file if it already exists at the
-            deployment destination on the target system. This field allows changing 
-            this behaviour and ensuring that a file installed always even when existed 
-            prior the installation. 
-            <para>If this field is set to <c>true</c> the WixSharp injects the following 
-            element into the file's parent component. 
-            <pre>&lt;RemoveFile Id="Remove_Filetxt" Name="File.txt" On="install" /&gt;</pre>
+             <summary>
+             Controls if an existing file should be overwritten during the installation.
+             By default MSI runtime does not install the file if it already exists at the
+             deployment destination on the target system. This field allows changing
+             this behaviour and ensuring that a file installed always even when existed
+             prior the installation.
+             <para>If this field is set to <c>true</c> the WixSharp injects the following
+             element into the file's parent component.
+             <pre>&lt;RemoveFile Id="Remove_Filetxt" Name="File.txt" On="install" /&gt;</pre>
             
-            </para>
-            </summary>
+             </para>
+             </summary>
         </member>
         <member name="F:WixSharp.File.Permissions">
             <summary>
@@ -14846,7 +15252,7 @@
             <summary>
             Values of this type represent possible registry roots.
             </summary>
-            <seealso cref="!:WixSharp.StringEnum&lt;WixSharp.RegistryHive&gt;" />
+            <seealso cref="T:WixSharp.StringEnum`1" />
         </member>
         <member name="M:WixSharp.RegistryHive.#ctor(System.String)">
             <summary>
@@ -14876,8 +15282,8 @@
         </member>
         <member name="F:WixSharp.RegistryHive.LocalMachineOrUsers">
             <summary>
-            Defines ”HKMU” value, which makes it so the registry entry will appear in HKLM 
-            when a per-machine install is run and in HKCU when a per-user install us run. 
+            Defines ”HKMU” value, which makes it so the registry entry will appear in HKLM
+            when a per-machine install is run and in HKCU when a per-user install us run.
             </summary>
         </member>
         <member name="T:WixSharp.RegFile">
@@ -15421,14 +15827,14 @@
             </summary>
             <param name="name">The name.</param>
         </member>
-        <member name="F:WixSharp.ServiceInstaller.ErrorControl">
+        <member name="P:WixSharp.ServiceInstaller.Id">
             <summary>
-            The error control associated with the service startup. The default value is <c>SvcErrorControl.normal</c>.
+            Primary key used to identify this particular entry.
             </summary>
         </member>
-        <member name="F:WixSharp.ServiceInstaller.StartType">
+        <member name="P:WixSharp.ServiceInstaller.Name">
             <summary>
-            Defines the way service starts. The default value is <c>SvcStartType.auto</c>.
+            This is the localizable name of the environment variable
             </summary>
         </member>
         <member name="F:WixSharp.ServiceInstaller.DisplayName">
@@ -15447,7 +15853,17 @@
             The type of the service (e.g. kernel/system driver, process). The default value is <c>SvcType.ownProcess</c>.
             </summary>
         </member>
-        <member name="F:WixSharp.ServiceInstaller.StartOn">
+        <member name="F:WixSharp.ServiceInstaller.Start">
+            <summary>
+            Defines the way service starts. The default value is <c>SvcStartType.auto</c>.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceInstaller.ErrorControl">
+            <summary>
+            The error control associated with the service startup. The default value is <c>SvcErrorControl.normal</c>.
+            </summary>
+        </member>
+        <member name="P:WixSharp.ServiceInstaller.StartOn">
             <summary>
             Associates 'start service' action with the specific service installation event.
             The default value is <c>SvcEvent.Install</c>. Meaning "start the service when it is installed".
@@ -15456,7 +15872,7 @@
             </para>
             </summary>
         </member>
-        <member name="F:WixSharp.ServiceInstaller.StopOn">
+        <member name="P:WixSharp.ServiceInstaller.StopOn">
             <summary>
             Associates 'stop service' action with the specific service installation event.
             The default value is <c>SvcEvent.InstallUninstall_Wait</c>. Meaning "stop the
@@ -15466,7 +15882,7 @@
             </para>
             </summary>
         </member>
-        <member name="F:WixSharp.ServiceInstaller.RemoveOn">
+        <member name="P:WixSharp.ServiceInstaller.RemoveOn">
             <summary>
             Associates 'remove service' action with the specific service installation event.
             The default value is <c>SvcEvent.Uninstall</c>. Meaning "remove the service when it is uninstalled".
@@ -15519,23 +15935,6 @@
             The overall install should fail if this service fails to install.
             </summary>
         </member>
-        <member name="F:WixSharp.ServiceInstaller.UrlReservations">
-            <summary>
-            The URL reservations associated with the service
-            </summary>
-        </member>
-        <member name="M:WixSharp.ServiceInstaller.ToXml(WixSharp.Project)">
-            <summary>
-            Renders ServiceInstaller properties to appropriate WiX elements
-            </summary>
-            <param name="project">
-            Project instance - may be modified to include WixUtilExtension namespace,
-            if necessary.
-            </param>
-            <returns>
-            Collection of XML entities to be added to the project XML result
-            </returns>
-        </member>
         <member name="F:WixSharp.ServiceInstaller.DelayedAutoStart">
             <summary>
             Specifies whether an auto-start service should delay its start until after all other auto-start services.
@@ -15543,10 +15942,11 @@
             </summary>
         </member>
         <member name="F:WixSharp.ServiceInstaller.PreShutdownDelay">
-            <summary>
-            Specifies time in milliseconds that the Service Control Manager (SCM) waits after notifying
-            the service of a system shutdown. If this attribute is not present the default value, 3 minutes, is used.
-            </summary>
+            public object FailureActionsWhen { get; set; } //note implementing util:serviceconfig instead
+             <summary>	            ConfigUtil?.Process(newContext);
+             Specifies time in milliseconds that the Service Control Manager (SCM) waits after notifying
+             the service of a system shutdown. If this attribute is not present the default value, 3 minutes, is used.
+             </summary>
         </member>
         <member name="F:WixSharp.ServiceInstaller.ServiceSid">
             <summary>
@@ -15600,92 +16000,17 @@
             Action to take on the third failure of the service.
             </summary>
         </member>
-        <member name="T:WixSharp.ConfigureServiceTrigger">
-             <summary>
-            
-             Flags for indicating when the service should be configured.
-             </summary>
-        </member>
-        <member name="F:WixSharp.ConfigureServiceTrigger.None">
+        <member name="F:WixSharp.ServiceInstaller.UrlReservations">
             <summary>
-            Not a valid value for ServiceConfig.On(Install, Reinstall, Uninstall)
+            The URL reservations associated with the service
             </summary>
         </member>
-        <member name="T:WixSharp.SvcEvent">
+        <member name="M:WixSharp.ServiceInstaller.Process(WixSharp.ProcessingContext)">
             <summary>
-            Defines details of the setup event triggering the service actions to be performed during the service installation.
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
             </summary>
-        </member>
-        <member name="F:WixSharp.SvcEvent.Type">
-            <summary>
-            Specifies when the service action occur. It can be one of the <see cref="T:WixSharp.SvcEventType"/> values.
-            </summary>
-        </member>
-        <member name="F:WixSharp.SvcEvent.Wait">
-            <summary>
-            The flag indicating if after triggering the service action the setup should wait until te action is completed.
-            </summary>
-        </member>
-        <member name="F:WixSharp.SvcEvent.Install">
-            <summary>
-            Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.install"/>
-            and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without
-            waiting for the completion.
-            </summary>
-        </member>
-        <member name="F:WixSharp.SvcEvent.Install_Wait">
-            <summary>
-            Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.install"/>
-            and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
-            waiting for the completion.
-            </summary>
-        </member>
-        <member name="F:WixSharp.SvcEvent.Uninstall">
-            <summary>
-            Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.uninstall"/>
-            and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation
-            without waiting for the completion.
-            </summary>
-        </member>
-        <member name="F:WixSharp.SvcEvent.Uninstall_Wait">
-            <summary>
-            Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.uninstall"/>
-            and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
-            waiting for the completion.
-            </summary>
-        </member>
-        <member name="F:WixSharp.SvcEvent.InstallUninstall">
-            <summary>
-            Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.both"/>
-            and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without
-            waiting for the completion.
-            </summary>
-        </member>
-        <member name="F:WixSharp.SvcEvent.InstallUninstall_Wait">
-            <summary>
-            Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.both"/>
-            and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
-            waiting for the completion.
-            </summary>
-        </member>
-        <member name="T:WixSharp.ServiceSid">
-            <summary>
-            Specifies the service SID to apply to the service.
-            Valid values are "none", "restricted", "unrestricted" or a
-            Formatted property that resolves to "0" (for "none"),
-            "3" (for "restricted") or "1" (for "unrestricted").
-            </summary>
-        </member>
-        <member name="M:WixSharp.ServiceSid.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:WixSharp.ServiceSid"/> class.
-            </summary>
-            <param name="value">The value.</param>
-        </member>
-        <member name="T:WixSharp.FailureActionType">
-            <summary>
-            Possible values for ServiceInstall.(First|Second|Third)FailureActionType
-            </summary>
+            <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.SetPropertyAction">
              <summary>
@@ -16755,8 +17080,8 @@
         </member>
         <member name="T:WixSharp.WixGuid.SequentialGuid">
             <summary>
-            Class for generation of sequential <see cref="T:System.Guid"/>. 
-            <para>Based on http://developmenttips.blogspot.com/2008/03/generate-sequential-guids-for-sql.html</para> 
+            Class for generation of sequential <see cref="T:System.Guid"/>.
+            <para>Based on http://developmenttips.blogspot.com/2008/03/generate-sequential-guids-for-sql.html</para>
             <para>This class is used by Wix# engine internally to emit reproducible WiX code.</para>
             </summary>
         </member>
@@ -16816,7 +17141,7 @@
         </member>
         <member name="F:WixSharp.WixGuid.ConsistentGenerationStartValue">
             <summary>
-            Initial value to be used as a seed for Guid generation. If you want the Wix# project items to contain 
+            Initial value to be used as a seed for Guid generation. If you want the Wix# project items to contain
             not random but reproducible sequential Guids you should initialize this field.
             </summary>
         </member>
@@ -16855,8 +17180,8 @@
         </member>
         <member name="M:WixSharp.GuidGenerators.Sequential(System.Object)">
             <summary>
-            Returns sequentially incremented GUID. The specified seed is ignored. Every consecutive 
-            call to this method will increase the last returned GUID by 1 and return its value. 
+            Returns sequentially incremented GUID. The specified seed is ignored. Every consecutive
+            call to this method will increase the last returned GUID by 1 and return its value.
             </summary>
             <param name="seed">The seed.</param>
             <returns></returns>
@@ -17799,6 +18124,61 @@
             Value is a required attribute if setBulkValue is the action specified.
             </summary>
         </member>
+        <member name="T:WixSharp.UrlReservationRights">
+            <summary>
+            Rights for this ACE.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservationRights.register">
+            <summary>
+            The 'register' rights value of the child UrlAce element
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservationRights.delegate">
+            <summary>
+            The 'delete' rights value of the child UrlAce element
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservationRights.all">
+            <summary>
+            The 'all' rights value of the child UrlAce element
+            </summary>
+        </member>
+        <member name="T:WixSharp.UrlReservationHandleExisting">
+            <summary>
+            Specifies the behavior when trying to install a URL reservation and it already exists.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservationHandleExisting.replace">
+            <summary>
+            Replaces the existing URL reservation (the default).
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservationHandleExisting.ignore">
+            <summary>
+            Keeps the existing URL reservation.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UrlReservationHandleExisting.fail">
+            <summary>
+            The installation fails.
+            </summary>
+        </member>
+        <member name="T:WixSharp.ConfigureServiceTrigger">
+            <summary>
+            Flags for indicating when the service should be configured.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ConfigureServiceTrigger.None">
+            <summary>
+            Not a valid value for ServiceConfig.On(Install, Reinstall, Uninstall)
+            </summary>
+        </member>
+        <member name="T:WixSharp.FailureActionType">
+            <summary>
+            Possible values for ServiceInstall.(First|Second|Third)FailureActionType
+            </summary>
+        </member>
         <member name="T:WixSharp.CAValidation">
             <summary>
             CA assembly validation mode
@@ -17820,6 +18200,33 @@
         <member name="F:WixSharp.CAValidation.Disabled">
             <summary>
             CA assembly validation is disabled.
+            </summary>
+        </member>
+        <member name="T:WixSharp.SignOutputLevel">
+            <summary>
+            Sign Tool output level
+            </summary>
+        </member>
+        <member name="F:WixSharp.SignOutputLevel.Verbose">
+            <summary>
+            Displays verbose output regardless of whether the command runs successfully or fails,
+            and displays warning messages.
+            </summary>
+        </member>
+        <member name="F:WixSharp.SignOutputLevel.Minimal">
+            <summary>
+            Displays no output if the command runs successfully,
+            and displays minimal output if the command fails.
+            </summary>
+        </member>
+        <member name="F:WixSharp.SignOutputLevel.Standard">
+            <summary>
+            Displays standard output
+            </summary>
+        </member>
+        <member name="F:WixSharp.SignOutputLevel.Debug">
+            <summary>
+            Displays debugging information.
             </summary>
         </member>
         <member name="T:WixSharp.WixQuietExecAction">

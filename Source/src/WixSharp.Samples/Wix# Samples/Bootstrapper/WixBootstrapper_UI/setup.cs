@@ -9,7 +9,7 @@ public class Script
     //The UI implementation is based on the work of BRYANPJOHNSTON
     //http://bryanpjohnston.com/2012/09/28/custom-wix-managed-bootstrapper-application/
 
-    static public void Main(string[] args)
+    static public void Main()
     {
         var productProj =
             new ManagedProject("My Product",
@@ -17,7 +17,7 @@ public class Script
                     new File("readme.txt")))
             { InstallScope = InstallScope.perMachine };
 
-        productProj.Load += (SetupEventArgs e)=>
+        productProj.Load += (SetupEventArgs e) =>
         {
             MessageBox.Show(e.Session.Property("USERINPUT"));
         };
@@ -43,7 +43,7 @@ public class Script
 
         // You can also use System.Reflection.Assembly.GetExecutingAssembly().Location instead of "%this%"
         // Note, passing BootstrapperCore.config is optional and if not provided the default BootstrapperCore.config
-        // will be used. The content of the default BootstrapperCore.config can be accessed via 
+        // will be used. The content of the default BootstrapperCore.config can be accessed via
         // ManagedBootstrapperApplication.DefaultBootstrapperCoreConfigContent.
         //
         // Note that the DefaultBootstrapperCoreConfigContent may not be suitable for all build and runtime scenarios.
@@ -56,6 +56,4 @@ public class Script
         bootstrapper.Build("my_app.exe");
         io.File.Delete(productMsi);
     }
-
-    
 }

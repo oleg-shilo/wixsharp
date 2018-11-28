@@ -5,7 +5,7 @@ using WixSharp;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         var docFile = new File(@"Files\Docs\Manual.txt");
         var exeFile = new File(@"Files\Bin\MyApp.exe");
@@ -17,7 +17,7 @@ class Script
 
         project.Name = "MyProduct";
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-        
+
         Compiler.BuildMsiCmd(project);
     }
 }

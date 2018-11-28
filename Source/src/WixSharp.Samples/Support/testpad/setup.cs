@@ -128,9 +128,9 @@ static class Script
         var project = new Project("someProject",
             new Dir(new Id("someDirId"), "someDirPath",
                 new File("someFilePath"
-                    ,new FileAssociation("someExt")
+                    , new FileAssociation("someExt")
                     {
-                         Icon = "someFile.ico",
+                        Icon = "someFile.ico",
                         Advertise = true
                     }
                     )));
@@ -144,7 +144,6 @@ static class Script
     {
         Compiler.WixLocation = @"E:\Projects\WixSharp\Support\Issue_#440\wix_error\packages\WiX.4.0.0.5512-pre\tools";
         Compiler.WixSdkLocation = @"E:\Projects\WixSharp\Support\Issue_#440\wix_error\packages\WiX.4.0.0.5512-pre\tools\sdk";
-
 
         var project = new ManagedProject("TestMsi")
         {
@@ -216,7 +215,7 @@ static class Script
         // project.BuildMsiCmd();
     }
 
-    static public void Main(string[] args)
+    static public void Main()
     {
         // HiTeach_MSI.Program.Main1(); return;
         Issue_377(); return;
@@ -245,7 +244,7 @@ static class Script
         project.BuildMsiCmd();
     }
 
-    static public void Main1(string[] args)
+    static public void Main1()
     {
         var project = new ManagedProject("IsUninstallTest",
                             new Dir(@"%ProgramFiles%\UninstallTest",
@@ -294,7 +293,7 @@ static class Script
         project.BuildMsi();
     }
 
-    static public void Main3(string[] args)
+    static public void Main3()
     {
         var application = new Feature("Application") { Name = "Application", Description = "Application" };
         var drivers = new Feature("Drivers") { Name = "Drivers", Description = "Drivers", AttributesDefinition = $"Display = {FeatureDisplay.expand}" };

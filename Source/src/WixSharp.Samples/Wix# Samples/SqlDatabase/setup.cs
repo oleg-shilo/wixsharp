@@ -7,18 +7,18 @@ using WixSharp;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
-        Feature featureA = new Feature("Install") {Condition = new FeatureCondition(Condition.NOT_Installed, 1)};
-        Feature featureB = new Feature("Update") {Condition = new FeatureCondition(Condition.Installed, 1)};
+        Feature featureA = new Feature("Install") { Condition = new FeatureCondition(Condition.NOT_Installed, 1) };
+        Feature featureB = new Feature("Update") { Condition = new FeatureCondition(Condition.Installed, 1) };
 
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(@"Files\Bin\MyApp.exe")),
                 //define users
-                new User(new Id("MyOtherUser"), "James") {CreateUser = true, Password = "Password1"},
-                new User("James") {Password = "Password1"},
+                new User(new Id("MyOtherUser"), "James") { CreateUser = true, Password = "Password1" },
+                new User("James") { Password = "Password1" },
                 new Binary(new Id("script"), "script.sql"),
                 //define sql
                 new SqlDatabase("MyDatabase0", ".\\SqlExpress", SqlDbOption.CreateOnInstall,

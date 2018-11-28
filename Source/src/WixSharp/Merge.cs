@@ -55,7 +55,7 @@ namespace WixSharp
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
-    public partial class Merge : WixEntity
+    public class Merge : WixEntity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Merge"/> class.

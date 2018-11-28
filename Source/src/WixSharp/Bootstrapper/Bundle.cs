@@ -32,7 +32,7 @@ namespace WixSharp.Bootstrapper
     /// bootstrapper.Build();
     /// </code>
     /// </example>
-    public partial class Bundle : WixProject
+    public class Bundle : WixProject
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Bootstrapper"/> class.

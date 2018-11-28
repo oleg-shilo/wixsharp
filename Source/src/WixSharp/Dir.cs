@@ -73,7 +73,7 @@ namespace WixSharp
     ///             ...
     /// </code>
     /// </example>
-    public partial class Dir : WixEntity
+    public class Dir : WixEntity
     {
         /// <summary>
         /// The last child <see cref="Dir"/> that was created by <see cref="Dir.ProcessTargetPath(string)"/>.
@@ -451,7 +451,7 @@ namespace WixSharp
     ///             ...
     /// </code>
     /// </example>
-    public partial class InstallDir : Dir
+    public class InstallDir : Dir
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="InstallDir"/> class.

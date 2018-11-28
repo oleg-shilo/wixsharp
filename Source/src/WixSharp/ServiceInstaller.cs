@@ -29,19 +29,19 @@ namespace WixSharp
     /// </example>
     public class ServiceInstaller : WixEntity, IGenericEntity
     {
-        private SvcEvent _startOn;
-        private SvcEvent _stopOn;
-        private SvcEvent _removeOn;
+        private SvcEvent startOn;
+        private SvcEvent stopOn;
+        private SvcEvent removeOn;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceInstall"/> class.
+        /// Initializes a new instance of the <see cref="ServiceInstaller"/> class.
         /// </summary>
         public ServiceInstaller()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceInstall"/> class with properties/fields initialized with specified parameters.
+        /// Initializes a new instance of the <see cref="ServiceInstaller"/> class with properties/fields initialized with specified parameters.
         /// </summary>
         /// <param name="name">The name.</param>
         public ServiceInstaller(string name)
@@ -59,7 +59,8 @@ namespace WixSharp
         /// This is the localizable name of the environment variable
         /// </summary>
         [Xml]
-        public new string Name {
+        public new string Name
+        {
             get
             {
                 return base.Name;
@@ -121,7 +122,7 @@ namespace WixSharp
         {
             get
             {
-                return _startOn;
+                return startOn;
             }
             set
             {
@@ -129,7 +130,7 @@ namespace WixSharp
                 value.Name = Name;
                 value.Start = value.Type;
 
-                _startOn = value;
+                startOn = value;
             }
         }
 
@@ -145,7 +146,7 @@ namespace WixSharp
         {
             get
             {
-                return _stopOn;
+                return stopOn;
             }
             set
             {
@@ -153,7 +154,7 @@ namespace WixSharp
                 value.Name = Name;
                 value.Stop = value.Type;
 
-                _stopOn = value;
+                stopOn = value;
             }
         }
 
@@ -168,7 +169,7 @@ namespace WixSharp
         {
             get
             {
-                return _removeOn;
+                return removeOn;
             }
             set
             {
@@ -176,7 +177,7 @@ namespace WixSharp
                 value.Name = Name;
                 value.Remove = value.Type;
 
-                _removeOn = value;
+                removeOn = value;
             }
         }
 
@@ -235,75 +236,75 @@ namespace WixSharp
         [Xml]
         public bool? Vital;
 
-        #region ServiceConfig attributes	
-        
-        /// <summary>	
-        /// Specifies whether an auto-start service should delay its start until after all other auto-start services.	
-        /// This property only affects auto-start services. If this property is not initialized the setting is not configured.	
-        /// </summary>	
+        #region ServiceConfig attributes
+
+        /// <summary>
+        /// Specifies whether an auto-start service should delay its start until after all other auto-start services.
+        /// This property only affects auto-start services. If this property is not initialized the setting is not configured.
+        /// </summary>
         public bool? DelayedAutoStart;
-        
-        ///public object FailureActionsWhen { get; set; } //note implementing util:serviceconfig instead	
+
+        ///public object FailureActionsWhen { get; set; } //note implementing util:serviceconfig instead
         /// <summary>	            ConfigUtil?.Process(newContext);
-        /// Specifies time in milliseconds that the Service Control Manager (SCM) waits after notifying	
-        /// the service of a system shutdown. If this attribute is not present the default value, 3 minutes, is used.	
-        /// </summary>	
+        /// Specifies time in milliseconds that the Service Control Manager (SCM) waits after notifying
+        /// the service of a system shutdown. If this attribute is not present the default value, 3 minutes, is used.
+        /// </summary>
         public int? PreShutdownDelay;
-        
-        /// <summary>	
-        /// Specifies the service SID to apply to the service	
-        /// </summary>	
+
+        /// <summary>
+        /// Specifies the service SID to apply to the service
+        /// </summary>
         public ServiceSid ServiceSid;
-        
-        /// <summary>	
-        /// Specifies whether to configure the service when the parent Component is installed, reinstalled, or uninstalled	
-        /// </summary>	
-        /// <remarks>	
-        /// Defaults to ConfigureServiceTrigger.Install.	
-        /// Strictly applies to the configuration of properties: DelayedAutoStart, PreShutdownDelay, ServiceSid.	
-        /// </remarks>	
+
+        /// <summary>
+        /// Specifies whether to configure the service when the parent Component is installed, reinstalled, or uninstalled
+        /// </summary>
+        /// <remarks>
+        /// Defaults to ConfigureServiceTrigger.Install.
+        /// Strictly applies to the configuration of properties: DelayedAutoStart, PreShutdownDelay, ServiceSid.
+        /// </remarks>
         public ConfigureServiceTrigger ConfigureServiceTrigger = ConfigureServiceTrigger.Install;
-        
-        #endregion ServiceConfig attributes	
-        
-        #region Util:ServiceConfig attributes	
-        
-        /// <summary>	
-        /// Action to take on the first failure of the service	
-        /// </summary>	
+
+        #endregion ServiceConfig attributes
+
+        #region Util:ServiceConfig attributes
+
+        /// <summary>
+        /// Action to take on the first failure of the service
+        /// </summary>
         public FailureActionType FirstFailureActionType = FailureActionType.none;
-        
-        /// <summary>	
-        /// If any of the three *ActionType attributes is "runCommand",	
-        /// this specifies the command to run when doing so.	
-        /// </summary>	
+
+        /// <summary>
+        /// If any of the three *ActionType attributes is "runCommand",
+        /// this specifies the command to run when doing so.
+        /// </summary>
         public string ProgramCommandLine;
-        
-        /// <summary>	
-        /// If any of the three *ActionType attributes is "reboot",	
-        /// this specifies the message to broadcast to server users before doing so.	
-        /// </summary>	
+
+        /// <summary>
+        /// If any of the three *ActionType attributes is "reboot",
+        /// this specifies the message to broadcast to server users before doing so.
+        /// </summary>
         public string RebootMessage;
-        
-        /// <summary>	
-        /// Number of days after which to reset the failure count to zero if there are no failures.	
-        /// </summary>	
+
+        /// <summary>
+        /// Number of days after which to reset the failure count to zero if there are no failures.
+        /// </summary>
         public int? ResetPeriodInDays;
-        
-        /// <summary>	
-        /// If any of the three *ActionType attributes is "restart",	
-        /// this specifies the number of seconds to wait before doing so.	
-        /// </summary>	
+
+        /// <summary>
+        /// If any of the three *ActionType attributes is "restart",
+        /// this specifies the number of seconds to wait before doing so.
+        /// </summary>
         public int? RestartServiceDelayInSeconds;
-        
-        /// <summary>	
-        /// Action to take on the second failure of the service.	
-        /// </summary>	
+
+        /// <summary>
+        /// Action to take on the second failure of the service.
+        /// </summary>
         public FailureActionType SecondFailureActionType = FailureActionType.none;
 
-        /// <summary>	
-        /// Action to take on the third failure of the service.	
-        /// </summary>	
+        /// <summary>
+        /// Action to take on the third failure of the service.
+        /// </summary>
         public FailureActionType ThirdFailureActionType = FailureActionType.none;
 
         #endregion Util:ServiceConfig attributes
@@ -312,7 +313,7 @@ namespace WixSharp
         /// The URL reservations associated with the service
         /// </summary>
         public IGenericEntity[] UrlReservations = new IGenericEntity[0];
-        
+
         /// <summary>
         /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
         /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
@@ -327,7 +328,7 @@ namespace WixSharp
                 ServiceSid = ServiceSid,
                 ConfigureServiceTrigger = ConfigureServiceTrigger,
             };
-            
+
             ConfigUtil = new ServiceConfigUtil
             {
                 FirstFailureActionType = FirstFailureActionType,
@@ -338,7 +339,7 @@ namespace WixSharp
                 ResetPeriodInDays = ResetPeriodInDays,
                 RestartServiceDelayInSeconds = RestartServiceDelayInSeconds,
             };
-            
+
             XElement ServiceInstaller = this.ToXElement("ServiceInstall");
             context.XParent.Add(ServiceInstaller);
 

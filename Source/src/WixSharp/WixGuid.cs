@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,7 +24,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
 
 using System;
 using System.Diagnostics;
@@ -51,9 +53,10 @@ namespace WixSharp
         }
 
         #region SequentialGuid
+
         /// <summary>
-        /// Class for generation of sequential <see cref="T:System.Guid"/>. 
-        /// <para>Based on http://developmenttips.blogspot.com/2008/03/generate-sequential-guids-for-sql.html</para> 
+        /// Class for generation of sequential <see cref="T:System.Guid"/>.
+        /// <para>Based on http://developmenttips.blogspot.com/2008/03/generate-sequential-guids-for-sql.html</para>
         /// <para>This class is used by Wix# engine internally to emit reproducible WiX code.</para>
         /// </summary>
         public class SequentialGuid
@@ -90,7 +93,7 @@ namespace WixSharp
             {
                 CurrentGuid = previousGuid;
             }
-            
+
             /// <summary>
             /// Initializes a new instance of the <see cref="SequentialGuid"/> class.
             /// </summary>
@@ -145,9 +148,10 @@ namespace WixSharp
                 return sequentialGuid;
             }
 
-            // 3 - the least significant byte in Guid ByteArray 
+            // 3 - the least significant byte in Guid ByteArray
             // 15 - the most significant byte in Guid ByteArray
-            private static readonly int[] orderMap = new int[16] { 15, 14, 13, 12, 11, 10, 9, 8, 6, 7, 4, 5, 0, 1, 2, 3 };
+            static readonly int[] orderMap = { 15, 14, 13, 12, 11, 10, 9, 8, 6, 7, 4, 5, 0, 1, 2, 3 };
+
             static void PrintOrderMap()
             {
                 Action<string> print = (str) =>
@@ -181,10 +185,11 @@ namespace WixSharp
                 Trace.WriteLine("");
             }
         }
-        #endregion
+
+        #endregion SequentialGuid
 
         /// <summary>
-        /// Initial value to be used as a seed for Guid generation. If you want the Wix# project items to contain 
+        /// Initial value to be used as a seed for Guid generation. If you want the Wix# project items to contain
         /// not random but reproducible sequential Guids you should initialize this field.
         /// </summary>
         static public SequentialGuid ConsistentGenerationStartValue = new SequentialGuid();
@@ -202,6 +207,7 @@ namespace WixSharp
             var seed = rnd.Next(int.MaxValue);
             return Generator(seed);
         }
+
         static Random rnd = new Random(1);
 
         /// <summary>
@@ -234,9 +240,8 @@ namespace WixSharp
             set { generator = value; }
         }
 
+        static int[] orderMap = { 15, 14, 13, 12, 11, 10, 9, 8, 6, 7, 4, 5, 0, 1, 2, 3 };
 
-
-        static int[] orderMap = new int[16] { 15, 14, 13, 12, 11, 10, 9, 8, 6, 7, 4, 5, 0, 1, 2, 3 };
         /// <summary>
         /// Hashes the Guid by the specified integer hash value.
         /// </summary>
@@ -263,8 +268,8 @@ namespace WixSharp
     public static class GuidGenerators
     {
         /// <summary>
-        /// Returns sequentially incremented GUID. The specified seed is ignored. Every consecutive 
-        /// call to this method will increase the last returned GUID by 1 and return its value. 
+        /// Returns sequentially incremented GUID. The specified seed is ignored. Every consecutive
+        /// call to this method will increase the last returned GUID by 1 and return its value.
         /// </summary>
         /// <param name="seed">The seed.</param>
         /// <returns></returns>

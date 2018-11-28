@@ -13,7 +13,7 @@ using Microsoft.Deployment.WindowsInstaller;
 
 public class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         // to install a one of the predefined instances, run from commandline
         // msiexec /i "My Product.msi" MSINEWINSTANCE=1 TRANSFORMS=":SecondInstance"

@@ -90,7 +90,7 @@ namespace WixSharp
     /// }
     /// </code>
     /// </example>
-    public partial class ManagedAction : Action
+    public class ManagedAction : Action
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedAction"/> class.

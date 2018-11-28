@@ -12,7 +12,7 @@ using WixSharp;
 
 public class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         var project =
             new Project("MyProduct",
@@ -20,19 +20,18 @@ public class Script
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new WixSharp.File(@"readme.txt")),
 
-                new ManagedAction(Script.OnSetupStartup, 
-                                    Return.check, 
-                                    When.Before, 
-                                    Step.LaunchConditions, 
+                new ManagedAction(Script.OnSetupStartup,
+                                    Return.check,
+                                    When.Before,
+                                    Step.LaunchConditions,
                                     Condition.NOT_Installed,
                                     Sequence.InstallUISequence));
-        
+
         project.UI = WUI.WixUI_InstallDir;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
 
         Compiler.BuildMsi(project);
     }
-
 
     [CustomAction]
     public static ActionResult OnSetupStartup(Session session)
@@ -42,4 +41,3 @@ public class Script
         return ActionResult.Success;
     }
 }
-

@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         // uncomment the line below if the reg file contains unsupported type to be ignored
         // RegFileImporter.SkipUnknownTypes = true;

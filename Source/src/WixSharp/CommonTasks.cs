@@ -42,7 +42,7 @@ namespace WixSharp.CommonTasks
     /// <summary>
     ///
     /// </summary>
-    public static partial class Tasks
+    public static class Tasks
     {
         /// <summary>
         /// Builds the bootstrapper.

@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         var featureA = new Feature("Feature A", "Feature A description");
         var featureB = new Feature("Feature B", "Feature B description");

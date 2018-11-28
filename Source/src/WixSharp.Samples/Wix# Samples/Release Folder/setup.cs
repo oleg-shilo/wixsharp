@@ -7,7 +7,7 @@ using WixSharp;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         SimpleScenario();
     }

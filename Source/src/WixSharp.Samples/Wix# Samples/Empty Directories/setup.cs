@@ -10,7 +10,7 @@ using WixSharp;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         AutoElements.LegacyDummyDirAlgorithm = true;
         // AutoElements.SupportEmptyDirectories = CompilerSupportState.Enabled;
@@ -30,6 +30,3 @@ class Script
         project.BuildMsi();
     }
 }
-
-
-

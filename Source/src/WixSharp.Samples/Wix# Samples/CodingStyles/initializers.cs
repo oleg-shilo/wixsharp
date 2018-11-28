@@ -5,9 +5,9 @@ using WixSharp;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
-        var project =   
+        var project =
             new Project()
             {
                 Name = "MyProduct",

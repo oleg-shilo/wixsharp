@@ -39,7 +39,7 @@ using WixSharp;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         var project = new Project("CustomActionTest",
                           new Dir(@"%ProgramFiles%\CustomActionTest",

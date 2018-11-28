@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 public class InstallScript
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         string productMsi = BuildMainMsi();
         string crtMsi = BuildCrtMsi();

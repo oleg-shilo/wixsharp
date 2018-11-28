@@ -11,7 +11,7 @@ using WixSharp;
 
 public class InstallScript
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         var project =
             new Project("MyProduct",
@@ -20,10 +20,10 @@ public class InstallScript
                     new WixSharp.File(@"readme.txt")),
 
                 new Binary(@"Fake CRT.msi"),
-                new ManagedAction(InstallScript.InstallCRTAction, 
-                                  Return.check, 
-                                  When.Before, 
-                                  Step.LaunchConditions, 
+                new ManagedAction(InstallScript.InstallCRTAction,
+                                  Return.check,
+                                  When.Before,
+                                  Step.LaunchConditions,
                                   Condition.NOT_Installed,
                                   Sequence.InstallUISequence));
 
@@ -32,11 +32,9 @@ public class InstallScript
         Compiler.BuildMsi(project);
     }
 
-
     [CustomAction]
     public static ActionResult InstallCRTAction(Session session)
     {
-
         //This can be successfully executed only from UISequence
         if (!IsCRTInstalled())
         {
@@ -44,7 +42,7 @@ public class InstallScript
             string CRTMsiFile = Path.ChangeExtension(Path.GetTempFileName(), ".msi");
             string CRTMsiId = "Fake CRT.msi".Expand();//Expand() is needed to normalize file name into file ID
 
-            session.SaveBinary(CRTMsiId, CRTMsiFile); 
+            session.SaveBinary(CRTMsiId, CRTMsiFile);
 
             //install CTR
             Process.Start(CRTMsiFile).WaitForExit();
@@ -67,4 +65,3 @@ public class InstallScript
             return key != null;
     }
 }
-

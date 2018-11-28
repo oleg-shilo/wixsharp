@@ -45,21 +45,25 @@ namespace WixSharp
         /// The classes root. Equivalent of `HKCR`.
         /// </summary>
         public static RegistryHive ClassesRoot = new RegistryHive("HKCR");
+
         /// <summary>
         /// The current user.  Equivalent of `HKCU`.
         /// </summary>
         public static RegistryHive CurrentUser = new RegistryHive("HKCU");
+
         /// <summary>
         /// The local machine.  Equivalent of `HKLM`.
         /// </summary>
         public static RegistryHive LocalMachine = new RegistryHive("HKLM");
+
         /// <summary>
         /// The users.  Equivalent of `HKU`.
         /// </summary>
         public static RegistryHive Users = new RegistryHive("HKU");
+
         /// <summary>
-        /// Defines ”HKMU” value, which makes it so the registry entry will appear in HKLM 
-        /// when a per-machine install is run and in HKCU when a per-user install us run. 
+        /// Defines ”HKMU” value, which makes it so the registry entry will appear in HKLM
+        /// when a per-machine install is run and in HKCU when a per-user install us run.
         /// </summary>
         public static RegistryHive LocalMachineOrUsers = new RegistryHive("HKMU");
     }
@@ -84,7 +88,7 @@ namespace WixSharp
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
-    public partial class RegFile : WixObject
+    public class RegFile : WixObject
     {
         /// <summary>
         /// The path to the registry file (*.reg).
@@ -139,7 +143,7 @@ namespace WixSharp
     /// }
     /// </code>
     /// </example>
-    public partial class RegValue : WixEntity
+    public class RegValue : WixEntity
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RegValue"/> class.

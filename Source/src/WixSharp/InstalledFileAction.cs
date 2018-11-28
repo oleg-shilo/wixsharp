@@ -64,7 +64,7 @@ namespace WixSharp
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
-    public partial class InstalledFileAction : Action
+    public class InstalledFileAction : Action
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="InstalledFileAction"/> class with properties/fields initialized with specified parameters.

@@ -34,8 +34,8 @@ namespace WixSharp
         /// </exception>
         public Certificate(string name, StoreLocation storeLocation, StoreName storeName, string binaryKey)
         {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name", "name is a null reference or empty");
-            if (string.IsNullOrEmpty(binaryKey)) throw new ArgumentNullException("binaryKey", "binaryKey is a null reference or empty");
+            if (name.IsEmpty()) throw new ArgumentNullException(nameof(name));
+            if (binaryKey.IsEmpty()) throw new ArgumentNullException(nameof(binaryKey));
 
             base.Name = name;
 
@@ -92,31 +92,6 @@ namespace WixSharp
         /// <summary>
         /// Creates an instance of Certificate where the certificate is requested or exists at the specified path
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="storeLocation">The store location.</param>
-        /// <param name="storeName">Name of the store.</param>
-        /// <param name="certificatePath">The certificate path.</param>
-        /// <param name="authorityRequest">if set to <c>true</c> [authority request].</param>
-        /// <exception cref="ArgumentNullException">name;name is a null reference or empty
-        /// or
-        /// certificatePath;certificatePath is a null reference or empty</exception>
-        public Certificate(string name, StoreLocation storeLocation, StoreName storeName, string certificatePath, bool authorityRequest)
-        {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name", "name is a null reference or empty");
-            if (string.IsNullOrEmpty(certificatePath)) throw new ArgumentNullException("certificatePath", "certificatePath is a null reference or empty");
-
-            base.Name = name;
-
-            Name = name;
-            CertificatePath = certificatePath;
-            Request = authorityRequest;
-            StoreLocation = storeLocation;
-            StoreName = storeName;
-        }
-
-        /// <summary>
-        /// Creates an instance of Certificate where the certificate is requested or exists at the specified path
-        /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="name">The name.</param>
         /// <param name="storeLocation">The store location.</param>
@@ -127,6 +102,31 @@ namespace WixSharp
         : this(name, storeLocation, storeName, certificatePath, request)
         {
             Id = id;
+        }
+
+        /// <summary>
+        /// Creates an instance of Certificate where the certificate is requested or exists at the specified path
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="storeLocation">The store location.</param>
+        /// <param name="storeName">Name of the store.</param>
+        /// <param name="certificatePath">The certificate path.</param>
+        /// <param name="authorityRequest">if set to <c>true</c> [authority request].</param>
+        /// <exception cref="ArgumentNullException">name;name is a null reference or empty
+        /// or
+        /// certificatePath;certificatePath is a null reference or empty</exception>
+        public Certificate(string name, StoreLocation storeLocation, StoreName storeName, string certificatePath, bool authorityRequest)
+        {
+            if (name.IsEmpty()) throw new ArgumentNullException(nameof(name));
+            if (certificatePath.IsEmpty()) throw new ArgumentNullException(nameof(certificatePath));
+
+            base.Name = name;
+
+            Name = name;
+            CertificatePath = certificatePath;
+            Request = authorityRequest;
+            StoreLocation = storeLocation;
+            StoreName = storeName;
         }
 
         /// <summary>
