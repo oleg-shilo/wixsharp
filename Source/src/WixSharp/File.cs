@@ -229,20 +229,24 @@ namespace WixSharp
         /// </value>
         public bool? NeverOverwrite
         {
-            get
-            {
-                if (attributesBag.ContainsKey("Component:NeverOverwrite"))
-                    return (attributesBag["Component:NeverOverwrite"] == "yes");
-                else
-                    return null;
-            }
-            set
-            {
-                if (value.HasValue)
-                    attributesBag["Component:NeverOverwrite"] = value.Value.ToYesNo();
-                else if (attributesBag.ContainsKey("Component:NeverOverwrite"))
-                    attributesBag.Remove("Component:NeverOverwrite");
-            }
+            get => attributesBag.Get("Component:NeverOverwrite") == "yes";
+
+            set => attributesBag.Set("Component:NeverOverwrite", value.ToNullOrYesNo());
+        }
+
+        /// <summary>
+        /// Gets or sets the custom name of the target file. By default the name is
+        /// the same name as the source file. IE file <c>c:\files\app.exe</c> will be installed
+        /// as <c>app.exe</c>.
+        /// </summary>
+        /// <value>
+        /// The name of the target file.
+        /// </value>
+        public string TargetFileName
+        {
+            get => attributesBag.Get("Name");
+
+            set => attributesBag.Set("Name", value);
         }
     }
 }

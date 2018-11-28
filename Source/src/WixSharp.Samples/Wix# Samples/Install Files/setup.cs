@@ -15,17 +15,20 @@ class Script
 {
     static public void Main(string[] args)
     {
-        var project = 
+        File f;
+        var project =
             new Project("MyProduct",
                 new Dir(new Id("MY_INSTALLDIR"), @"%ProgramFiles%\My Company\My Product",
-                    new File("MyApp_file".ToId(),
+                    f = new File("MyApp_file".ToId(),
                              @"Files\Bin\MyApp.exe",
                              new FileAssociation("cstm", "application/custom", "open", "\"%1\"")
                              {
                                  Advertise = true,
                                  Icon = "wixsharp.ico"
-                             }
-                        ),
+                             })
+                    {
+                        TargetFileName = "app.exe"
+                    },
                     new Dir(@"Docs\Manual",
                         new File(@"Files\Docs\Manual.txt")
                         {
@@ -62,4 +65,3 @@ class Script
                 .AddElement("CreateFolder/Permission", "User=Everyone;GenericAll=yes");
     }
 }
-

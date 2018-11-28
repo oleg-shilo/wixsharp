@@ -28,7 +28,7 @@ namespace WixSharp
             {
                 return Path.GetFullPath(msBuildArgument);
             }
-            
+
             // Now check to see if the environment variable was set
             var environmentVar = Environment.GetEnvironmentVariable("WIXSHARP_WIXDIR");
             if (environmentVar.IsNotEmpty() && Directory.Exists(environmentVar))
@@ -53,12 +53,13 @@ namespace WixSharp
                 return Path.GetFullPath(wixInstallDir.PathJoin("bin"));
             }
 
+            // C:\Program Files (x86)\WiX Toolset v3.11\bin\candle.exe
             // Try a secondary location
             wixInstallDir = Directory.GetDirectories(Utils.ProgramFilesDirectory, "WiX Toolset v3*")
                                      .Order()
                                      .LastOrDefault();
 
-            if (!wixInstallDir.IsNotEmpty() && Directory.Exists(wixInstallDir))
+            if (wixInstallDir.IsNotEmpty() && Directory.Exists(wixInstallDir))
             {
                 return Path.GetFullPath(wixInstallDir.PathJoin("bin"));
             }

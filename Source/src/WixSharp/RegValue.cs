@@ -300,20 +300,9 @@ namespace WixSharp
         /// </value>
         public bool? NeverOverwrite
         {
-            get
-            {
-                if (attributesBag.ContainsKey("Component:NeverOverwrite"))
-                    return (attributesBag["Component:NeverOverwrite"] == "yes");
-                else
-                    return null;
-            }
-            set
-            {
-                if (value.HasValue)
-                    attributesBag["Component:NeverOverwrite"] = value.Value.ToYesNo();
-                else if (attributesBag.ContainsKey("Component:NeverOverwrite"))
-                    attributesBag.Remove("Component:NeverOverwrite");
-            }
+            get => attributesBag.Get("Component:NeverOverwrite") == "yes";
+
+            set => attributesBag.Set("Component:NeverOverwrite", value.ToNullOrYesNo());
         }
 
         internal string RegValueString
