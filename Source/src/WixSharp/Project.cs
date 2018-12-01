@@ -209,12 +209,12 @@ namespace WixSharp
                 foreach (Shortcut s in this.AllFiles.SelectMany(f => f.Shortcuts))
                 {
                     s.Location = s.Location.Map64Dirs();
-                };
+                }
 
                 foreach (var action in this.Actions.OfType<PathFileAction>())
                 {
                     action.AppPath = action.AppPath.Map64Dirs();
-                };
+                }
             }
         }
 

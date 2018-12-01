@@ -63,7 +63,10 @@ public class InstallScript
     }
 }
 
-class BalCondition : WixEntity, IGenericEntity
+/// <summary>
+///
+/// </summary>
+public class BalCondition : WixEntity, IGenericEntity
 {
     /// <summary>
     /// The condition expression

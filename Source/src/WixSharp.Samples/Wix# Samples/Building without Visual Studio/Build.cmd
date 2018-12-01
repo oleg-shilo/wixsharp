@@ -6,4 +6,4 @@ set PATH=%CSSCRIPT_DIR%;%WIXSHARP_DIR%;%PATH%
 
 cscs.exe setup.cs
 
-rem pause
+pause

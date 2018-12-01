@@ -11,7 +11,7 @@ using WixSharp.CommonTasks;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         string package = Compiler.BuildPackageAsm("%this%", "myaction.CA.dll");
 
@@ -37,7 +37,7 @@ class Script
                 document =>
                 {
                     var product = document.Select("Wix/Product");
-               
+
                     product.AddElement("CustomAction",
                                       @"Id=MyAction;
                                         BinaryKey=MyAction_File;
@@ -45,9 +45,9 @@ class Script
                                         Impersonate=yes;
                                         Execute=immediate;
                                         Return=check");
-               
+
                     var custom = product.SelectOrCreate("InstallExecuteSequence")
-                                        .AddElement("Custom", 
+                                        .AddElement("Custom",
                                                     "Action=MyAction;After=InstallInitialize",
                                                     "(NOT Installed)");
                 };

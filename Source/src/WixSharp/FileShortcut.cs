@@ -63,7 +63,7 @@ namespace WixSharp
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
-    public partial class FileShortcut : Shortcut
+    public class FileShortcut : Shortcut
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FileShortcut"/> class.

@@ -639,7 +639,7 @@ namespace WixSharp
         /// <typeparam name="T"></typeparam>
         /// <param name="collection">The collection.</param>
         /// <returns></returns>
-        public static int GetItemsHashCode<T>(this IEnumerable<T> collection)
+        public static int GetItemsHashCode<T>(this IEnumerable<T> collection) where T : class
         {
             var hash = new StringBuilder();
             foreach (T item in collection)
@@ -1913,8 +1913,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Gets the value by specified key. Return <c>null</c> if the dictionary does not contains 
-        /// the specified key.   
+        /// Gets the value by specified key. Return <c>null</c> if the dictionary does not contains
+        /// the specified key.
         /// </summary>
         /// <typeparam name="T1">The type of the 1.</typeparam>
         /// <typeparam name="T2">The type of the 2.</typeparam>
@@ -1925,7 +1925,7 @@ namespace WixSharp
             => map.ContainsKey(key) ? map[key] : null;
 
         /// <summary>
-        /// Sets the adds or sets key/value pair. <para>Removes the key/value pair if the specified 
+        /// Sets the adds or sets key/value pair. <para>Removes the key/value pair if the specified
         /// value is <c>null</c>.</para>
         /// </summary>
         /// <typeparam name="T1">The type of the 1.</typeparam>
@@ -1985,7 +1985,7 @@ namespace WixSharp
         /// <param name="item">The item to be added.</param>
         /// <returns>Combined <see cref="T:System.Array"/> object.</returns>
         [Obsolete(message: "This method name is obsolete use `Combine` instead", error: true)]
-        public static T1[] Add<T1, T2>(this T1[] obj, T2 item) where T2 : T1
+        public static T1[] Add<T1, T2>(this T1[] obj, T2 item) where T2 : class, T1
         {
             if (item != null)
             {
@@ -2864,8 +2864,9 @@ namespace WixSharp
     }
 
     /// <summary>
-    /// The attribute indicating the type member being mapped to XML element. Used by Wix# compiler to emmit XML base on CLR types.
+    /// The attribute indicating the type member being mapped to XML element. Used by Wix# compiler to emit XML base on CLR types.
     /// </summary>
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class XmlAttribute : Attribute
     {
         /// <summary>

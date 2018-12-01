@@ -1,8 +1,9 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 Copyright (c) 2014 Oleg Shilo
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -19,7 +20,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
+
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -94,7 +97,6 @@ namespace WixSharp
             return string.Join(dirSeparator.ToString(), result);
         }
 
-
         internal static string[] AllConstStringValues<T>()
         {
             var fields = typeof(T).GetFields()
@@ -164,7 +166,6 @@ namespace WixSharp
 
                 var result = action(obj);
                 return result;
-
             }
             finally
             {
@@ -180,7 +181,6 @@ namespace WixSharp
                 return Compiler.AssemblyResolve(sender, args);
             else
                 return DefaultDomain_AssemblyResolve(sender, args);
-
         }
 
         static System.Reflection.Assembly DefaultDomain_AssemblyResolve(object sender, ResolveEventArgs args)
@@ -220,10 +220,9 @@ namespace WixSharp
             setup.ApplicationBase = IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             setup.ShadowCopyFiles = "true";
             setup.ShadowCopyDirectories = setup.ApplicationBase;
-            setup.PrivateBinPath = AppDomain.CurrentDomain.BaseDirectory;
+            setup.PrivateBinPath = domain.BaseDirectory;
             return AppDomain.CreateDomain(name ?? Guid.NewGuid().ToString(), null, setup);
         }
-
 
         internal static void EnsureFileDir(string file)
         {
@@ -248,8 +247,6 @@ namespace WixSharp
                 return programFilesDir;
             }
         }
-
-
 
         /// <summary>
         /// Returns the hash code for the instance of a string. It uses deterministic hash-code generation algorithm,

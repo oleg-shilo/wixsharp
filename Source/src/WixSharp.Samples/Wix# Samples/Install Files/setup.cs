@@ -13,7 +13,7 @@ using WixSharp.CommonTasks;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         File f;
         var project =

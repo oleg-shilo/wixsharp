@@ -7,7 +7,7 @@ using System.Linq;
 using System.Xml.Linq;
 using WixSharp;
 
-class Script
+static class Script
 {
     static public void Main()
     {

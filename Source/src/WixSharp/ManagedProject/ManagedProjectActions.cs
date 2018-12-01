@@ -9,9 +9,9 @@ using System.Windows.Forms;
 namespace WixSharp
 {
     /// <summary>
-    ///
+    /// Class for hosting all custom actions of the ManagedProject
     /// </summary>
-    public class ManagedProjectActions
+    public static class ManagedProjectActions
     {
         /// <summary>
         /// Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.

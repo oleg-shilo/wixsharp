@@ -1137,14 +1137,14 @@
         </member>
         <member name="F:WixSharp.CommonTasks.ExternalTool.ConsoleOut">
             <summary>
-            The default console out handler. It can be used when you want to have fine control over 
+            The default console out handler. It can be used when you want to have fine control over
             STD output of the external tool.
             </summary>
             <example>The following is an example of masking the word 'secret' in the output text.
             <code>
             ExternalTool.ConsoleOut = (line) => Console.WriteLine(line.Replace("secret", "******"))
             var tool = new ExternalTool
-            { 
+            {
                 ExePath = "tool.exe",
                 Arguments = "-a -b",
             };
@@ -2629,9 +2629,9 @@
             <returns></returns>
         </member>
         <member name="T:WixSharp.Bootstrapper.ExitCode">
-             <summary>
-            
-             </summary>
+            <summary>
+            Exit code returned from executable package.
+            </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.ExitCode.Value">
             <summary>
@@ -7727,6 +7727,29 @@
             <param name="data">The merge key/values source in it's serialized form data.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.Get``2(System.Collections.Generic.Dictionary{``0,``1},``0)">
+            <summary>
+            Gets the value by specified key. Return <c>null</c> if the dictionary does not contains
+            the specified key.
+            </summary>
+            <typeparam name="T1">The type of the 1.</typeparam>
+            <typeparam name="T2">The type of the 2.</typeparam>
+            <param name="map">The map.</param>
+            <param name="key">The key.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.Set``2(System.Collections.Generic.Dictionary{``0,``1},``0,``1)">
+            <summary>
+            Sets the adds or sets key/value pair. <para>Removes the key/value pair if the specified
+            value is <c>null</c>.</para>
+            </summary>
+            <typeparam name="T1">The type of the 1.</typeparam>
+            <typeparam name="T2">The type of the 2.</typeparam>
+            <param name="map">The map.</param>
+            <param name="key">The key.</param>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.Clone(System.Collections.Generic.Dictionary{System.String,System.String})">
             <summary>
             Clones the specified collection.
@@ -11416,9 +11439,9 @@
             <returns></returns>
         </member>
         <member name="T:WixSharp.ManagedProjectActions">
-             <summary>
-            
-             </summary>
+            <summary>
+            Class for hosting all custom actions of the ManagedProject
+            </summary>
         </member>
         <member name="M:WixSharp.ManagedProjectActions.WixSharp_InitRuntime_Action(Microsoft.Deployment.WindowsInstaller.Session)">
             <summary>
@@ -12219,7 +12242,7 @@
             <summary>
             The ID of the root directory, which is automatically assigned to the first directory of the project directories.
             <para>
-            The default value "INSTALLDIR" has special meaning as apart from being a traditional choice of the id for the root 
+            The default value "INSTALLDIR" has special meaning as apart from being a traditional choice of the id for the root
             directory it is also used in binding root directory to the textbox of the <c>InstallDirDialog</c>.
             </para>
             <para>
@@ -12283,17 +12306,17 @@
             Enable validating CA assemblies for all CA methods to be public instance method.
             <para>
             By default validation is performed in a temporary AppDomain (`CAValidation.InRemoteAppDomain`)
-            as it is the only way to avoid locking the assembly being validated. Unfortunately 
-            `ReflectionOnlyLoadFrom` is incompatible with this task as it does not allow browsing members 
+            as it is the only way to avoid locking the assembly being validated. Unfortunately
+            `ReflectionOnlyLoadFrom` is incompatible with this task as it does not allow browsing members
             attributes.
             </para>
             <para>
-            You may need to disable (`CAValidation.Disabled`) the validation if WixSharp is hosted on the 
+            You may need to disable (`CAValidation.Disabled`) the validation if WixSharp is hosted on the
             runtime that does not support AppDomain unloading (e.g. .NET Core)</para>
             <para>
-            If you want to perform validation without the use of temporary AppDomain you can chose the 
-            `CAValidation.InCurrentAppDomain` option. In this case the assembly being validated is loaded in 
-            the current AppDomain but from the memory without locking the assembly file. This option is valid 
+            If you want to perform validation without the use of temporary AppDomain you can chose the
+            `CAValidation.InCurrentAppDomain` option. In this case the assembly being validated is loaded in
+            the current AppDomain but from the memory without locking the assembly file. This option is valid
             but not recommended as it may lead to the unpredictable reflection scenarios. </para>
             </summary>
         </member>
@@ -13054,7 +13077,7 @@
         </member>
         <member name="T:WixSharp.XmlAttribute">
             <summary>
-            The attribute indicating the type member being mapped to XML element. Used by Wix# compiler to emmit XML base on CLR types.
+            The attribute indicating the type member being mapped to XML element. Used by Wix# compiler to emit XML base on CLR types.
             </summary>
         </member>
         <member name="P:WixSharp.XmlAttribute.Name">
@@ -13420,6 +13443,16 @@
             </summary>
             <value>
             The never overwrite.
+            </value>
+        </member>
+        <member name="P:WixSharp.File.TargetFileName">
+            <summary>
+            Gets or sets the custom name of the target file. By default the name is
+            the same name as the source file. IE file <c>c:\files\app.exe</c> will be installed
+            as <c>app.exe</c>.
+            </summary>
+            <value>
+            The name of the target file.
             </value>
         </member>
         <member name="T:WixSharp.DirFiles">
@@ -16690,6 +16723,18 @@
             </summary>
             <param name="message">The exception message.</param>
         </member>
+        <member name="M:WixSharp.UpgradeStrategyValidationException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UpgradeStrategyValidationException"/> class.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UpgradeStrategyValidationException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UpgradeStrategyValidationException"/> class.
+            </summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+            <param name="innerException">The exception that is the cause of the current exception. If the <paramref name="innerException" /> parameter is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
+        </member>
         <member name="T:WixSharp.ValidationException">
             <summary>
             Generic validation exception class.
@@ -17692,14 +17737,14 @@
             </summary>
         </member>
         <member name="F:WixSharp.DefaultScript.VBScript">
-             <summary>
-            
-             </summary>
+            <summary>
+            VBScript
+            </summary>
         </member>
         <member name="F:WixSharp.DefaultScript.JScript">
-             <summary>
-            
-             </summary>
+            <summary>
+            JScript
+            </summary>
         </member>
         <member name="T:WixSharp.NativeImagePlatform">
             <summary>

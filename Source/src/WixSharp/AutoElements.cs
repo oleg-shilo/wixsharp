@@ -83,9 +83,9 @@ namespace WixSharp
         /// <para>If set to <c>Automatic</c> then the compiler will enable this feature only if any empty directory
         /// is detected in the project definition.</para>
         /// </summary>
-        [Obsolete(message: "This property will be defaulted to the `Enabled` in the next release. Due to the fact that `Automatic` " +
+        [Obsolete(message: "This property will is defaulted to `Enabled`. Due to the fact that `Automatic` " +
             "brings some ambiguity while no longer yielding any benefits", error: false)]
-        public static CompilerSupportState SupportEmptyDirectories = CompilerSupportState.Automatic;
+        public static CompilerSupportState SupportEmptyDirectories = CompilerSupportState.Enabled;
 
         /// <summary>
         /// Disables automatic insertion of <c>KeyPath=yes</c> attribute for the Component element.

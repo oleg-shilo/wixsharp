@@ -9,7 +9,7 @@ using File = WixSharp.File;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         Environment.SetEnvironmentVariable("bin", @"Files\Bin");
         Environment.SetEnvironmentVariable("docs", @"Files\Docs");
@@ -24,7 +24,7 @@ class Script
                         new File(@"%docs%\Manual.txt"))),
 
                 new EnvironmentVariable("MYPRODUCT_DIR", "[INSTALLDIR]"),
-                new EnvironmentVariable("PATH", "[INSTALLDIR]") { Part = EnvVarPart.last, Condition = Condition.Installed});
+                new EnvironmentVariable("PATH", "[INSTALLDIR]") { Part = EnvVarPart.last, Condition = Condition.Installed });
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.UI = WUI.WixUI_InstallDir;
@@ -35,9 +35,6 @@ class Script
 
         project.PreserveTempFiles = true;
 
-       project.BuildMsi();
+        project.BuildMsi();
     }
 }
-
-
-

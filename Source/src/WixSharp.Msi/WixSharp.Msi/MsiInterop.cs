@@ -18,7 +18,7 @@ namespace WindowsInstaller
         UnknownProduct = 1605
     }
 
-    public enum MsiColInfoType : Int32
+    public enum MsiColInfoType
     {
         Names = 0,
     }
@@ -65,13 +65,14 @@ namespace WindowsInstaller
         ShowDialog = 0x0e000000,
     }
 
+    [Flags]
     public enum MsiInstallUILevel : UInt32
     {
         None = 2,
         SourceResOnly = 0x100,
     }
 
-    public enum MsiLogAttribute : Int32
+    public enum MsiLogAttribute
     {
         FlushEachLine = (1 << 1),
     }

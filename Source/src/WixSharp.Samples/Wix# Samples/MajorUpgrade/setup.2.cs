@@ -11,7 +11,7 @@ using WixSharp.CommonTasks;
 
 public class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         var project =
             new ManagedProject("MyProduct",
@@ -38,8 +38,6 @@ public class Script
 
     static void project_BeforeInstall(SetupEventArgs e)
     {
-        MessageBox.Show(e.ToString(), "BeforeInstall "+ AppSearch.GetProductVersionFromUpgradeCode(e.UpgradeCode));
+        MessageBox.Show(e.ToString(), "BeforeInstall " + AppSearch.GetProductVersionFromUpgradeCode(e.UpgradeCode));
     }
 }
-
-

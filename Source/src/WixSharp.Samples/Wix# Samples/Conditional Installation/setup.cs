@@ -8,10 +8,10 @@ using WixSharp;
 
 class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         //Note that if the install condition for the component can be set without interacting with user (e.g. analysing registry)
-        //as part InstallExecuteSequence. However if interaction is required (e.g. message box, checkbox) install condition should 
+        //as part InstallExecuteSequence. However if interaction is required (e.g. message box, checkbox) install condition should
         //be set form InstallUISequence.
 
         string installDir = @"%ProgramFiles%\My Company\My Product";
@@ -38,7 +38,6 @@ class Script
                     new Property("INSTALLDESKTOPSHORTCUT", "no"),
                     new ManagedAction(CustomActions.MyAction, Return.ignore, When.Before, Step.LaunchConditions, Condition.NOT_Installed, Sequence.InstallUISequence));
 
-
         project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
         project.UI = WUI.WixUI_ProgressOnly;
         project.OutFileName = "setup";
@@ -50,7 +49,7 @@ class Script
 
 public class CustomActions
 {
-    [CustomAction] 
+    [CustomAction]
     public static ActionResult MyAction(Session session)
     {
         if (DialogResult.Yes == MessageBox.Show("Do you want to install desktop shortcut", "Installation", MessageBoxButtons.YesNo))
@@ -59,5 +58,3 @@ public class CustomActions
         return ActionResult.Success;
     }
 }
-
-

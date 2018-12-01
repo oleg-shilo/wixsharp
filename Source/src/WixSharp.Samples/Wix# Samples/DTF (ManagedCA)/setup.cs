@@ -6,17 +6,21 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml;
 using System.Windows.Forms;
+
 #if Wix4
 using WixToolset.Dtf.WindowsInstaller;
 #else
+
 using Microsoft.Deployment.WindowsInstaller;
+
 #endif
+
 using WixSharp;
 using WixSharp.CommonTasks;
 
 public class Script
 {
-    static public void Main(string[] args)
+    static public void Main()
     {
         var project = new ManagedProject("CustomActionTest",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
@@ -26,7 +30,7 @@ public class Script
         //project.Platform = Platform.x64;
         project.PreserveTempFiles = true;
         // project.OutDir = "bin";
-        
+
         project.BuildMsi();
     }
 }

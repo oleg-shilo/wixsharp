@@ -34,7 +34,7 @@ namespace WixSharp
     /// </code>
     /// </example>
     /// </summary>
-    public partial class ProductInfo : WixEntity
+    public class ProductInfo : WixEntity
     {
         /// <summary>
         /// Provides Comments for the Add/Remove Programs in the Control Panel.
@@ -168,6 +168,7 @@ namespace WixSharp
             project.AddActions(actions.ToArray());
         }
 
+        [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
         class ArpPropertyAttribute : Attribute
         {
             public bool SetAsAction = false;

@@ -300,12 +300,12 @@ namespace WixSharp
     public enum DefaultScript
     {
         /// <summary>
-        ///
+        /// VBScript
         /// </summary>
         VBScript,
 
         /// <summary>
-        ///
+        /// JScript
         /// </summary>
         JScript
     }
@@ -848,12 +848,14 @@ namespace WixSharp
         /// Assembly file is unlocked and at the end of the validation the assembly is unloaded.
         /// </summary>
         InRemoteAppDomain,
+
         /// <summary>
         /// The CA assembly is loaded in the current AppDomain for validation.
         /// Assembly file is unlocked but the assembly will not be unloaded at the end of the validation.
         /// This mode may lead to unpredictable behaviour.
         /// </summary>
         InCurrentAppDomain,
+
         /// <summary>
         /// CA assembly validation is disabled.
         /// </summary>
@@ -870,15 +872,18 @@ namespace WixSharp
         /// and displays warning messages.
         /// </summary>
         Verbose,
+
         /// <summary>
         /// Displays no output if the command runs successfully,
         /// and displays minimal output if the command fails.
         /// </summary>
         Minimal,
+
         /// <summary>
         /// Displays standard output
         /// </summary>
         Standard,
+
         /// <summary>
         /// Displays debugging information.
         /// </summary>

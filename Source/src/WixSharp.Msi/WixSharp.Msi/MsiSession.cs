@@ -344,7 +344,7 @@ namespace WixSharp.UI
             MsiInstallUIHandler uiHandler = null;
 
             IntPtr parent = IntPtr.Zero;
-            MsiInstallUILevel oldLevel = MsiInterop.MsiSetInternalUI(MsiInstallUILevel.None | MsiInstallUILevel.SourceResOnly, ref parent);
+            var oldLevel = MsiInterop.MsiSetInternalUI(MsiInstallUILevel.None | MsiInstallUILevel.SourceResOnly, ref parent);
             MsiInstallUIHandler oldHandler = null;
             try
             {

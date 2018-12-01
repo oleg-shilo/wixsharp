@@ -382,7 +382,7 @@ namespace WixSharp.Bootstrapper
     }
 
     /// <summary>
-    ///
+    /// Exit code returned from executable package.
     /// </summary>
     public class ExitCode
     {

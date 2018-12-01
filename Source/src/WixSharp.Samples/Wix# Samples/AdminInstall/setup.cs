@@ -12,7 +12,7 @@ using System.Xml.XPath;
 using System.Xml;
 using System.Diagnostics;
 
-class Script
+static class Script
 {
     static public void Main()
     {
@@ -29,7 +29,7 @@ class Script
     }
 }
 
-public class CustomActions
+public static class CustomActions
 {
     [CustomAction]
     public static ActionResult RunAsAdminInstall(Session session)

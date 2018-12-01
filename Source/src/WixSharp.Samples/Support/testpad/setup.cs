@@ -265,7 +265,7 @@ static class Script
         }
     }
 
-    static public void Main2(string[] args)
+    static public void Main2()
     {
         var project = new ManagedProject("MyProduct",
                             new Dir(@"C:\My Company\My Product",

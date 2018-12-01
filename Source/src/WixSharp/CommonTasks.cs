@@ -193,11 +193,14 @@ namespace WixSharp.CommonTasks
                 case SignOutputLevel.Minimal:
                     outputLevelArg = "/q ";
                     break;
+
                 case SignOutputLevel.Standard:
                     break;
+
                 case SignOutputLevel.Verbose:
                     outputLevelArg = "/v ";
                     break;
+
                 case SignOutputLevel.Debug:
                     outputLevelArg = "/debug ";
                     break;
@@ -1565,14 +1568,14 @@ namespace WixSharp.CommonTasks
     public class ExternalTool
     {
         /// <summary>
-        /// The default console out handler. It can be used when you want to have fine control over 
+        /// The default console out handler. It can be used when you want to have fine control over
         /// STD output of the external tool.
         /// </summary>
         /// <example>The following is an example of masking the word 'secret' in the output text.
         /// <code>
         /// ExternalTool.ConsoleOut = (line) => Console.WriteLine(line.Replace("secret", "******"))
         /// var tool = new ExternalTool
-        /// { 
+        /// {
         ///     ExePath = "tool.exe",
         ///     Arguments = "-a -b",
         /// };
@@ -1743,6 +1746,5 @@ namespace WixSharp.CommonTasks
 
             return null;
         }
-
     }
 }

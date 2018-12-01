@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,7 +24,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -42,7 +45,25 @@ namespace WixSharp
         /// Initializes a new instance of the <see cref="UpgradeStrategyValidationException"/> class.
         /// </summary>
         /// <param name="message">The exception message.</param>
-        public UpgradeStrategyValidationException(string message) : base(message) { }
+        public UpgradeStrategyValidationException(string message) : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpgradeStrategyValidationException"/> class.
+        /// </summary>
+        public UpgradeStrategyValidationException() : base()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpgradeStrategyValidationException"/> class.
+        /// </summary>
+        /// <param name="message">The error message that explains the reason for the exception.</param>
+        /// <param name="innerException">The exception that is the cause of the current exception. If the <paramref name="innerException" /> parameter is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
+        public UpgradeStrategyValidationException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 
     /// <summary>
@@ -56,6 +77,4 @@ namespace WixSharp
         /// <param name="message">The exception message.</param>
         public ValidationException(string message) : base(message) { }
     }
-
-
 }

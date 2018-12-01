@@ -53,7 +53,17 @@
         </member>
         <member name="T:WixSharp.UI.MsiParser">
             <summary>
-            Utility class for simplifying MSI interpreting tasks DB querying, message data parsing  
+            Utility class for simplifying MSI interpreting tasks DB querying, message data parsing
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.MsiParser.msiFile">
+            <summary>
+            The msi file
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.MsiParser.db">
+            <summary>
+            The msi file database handle.
             </summary>
         </member>
         <member name="M:WixSharp.UI.MsiParser.Open(System.String)">
@@ -96,6 +106,13 @@
             </para>
             </summary>
             <returns>Product version.</returns>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.GetProperty(System.String)">
+            <summary>
+            Gets the property value.
+            </summary>
+            <param name="name">The name.</param>
+            <returns></returns>
         </member>
         <member name="M:WixSharp.UI.MsiParser.GetProductCode">
             <summary>

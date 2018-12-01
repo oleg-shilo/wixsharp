@@ -54,7 +54,7 @@ namespace WixSharp
         /// <summary>
         /// The ID of the root directory, which is automatically assigned to the first directory of the project directories.
         /// <para>
-        /// The default value "INSTALLDIR" has special meaning as apart from being a traditional choice of the id for the root 
+        /// The default value "INSTALLDIR" has special meaning as apart from being a traditional choice of the id for the root
         /// directory it is also used in binding root directory to the textbox of the <c>InstallDirDialog</c>.
         /// </para>
         /// <para>
@@ -123,17 +123,17 @@ namespace WixSharp
         /// Enable validating CA assemblies for all CA methods to be public instance method.
         /// <para>
         /// By default validation is performed in a temporary AppDomain (`CAValidation.InRemoteAppDomain`)
-        /// as it is the only way to avoid locking the assembly being validated. Unfortunately 
-        /// `ReflectionOnlyLoadFrom` is incompatible with this task as it does not allow browsing members 
+        /// as it is the only way to avoid locking the assembly being validated. Unfortunately
+        /// `ReflectionOnlyLoadFrom` is incompatible with this task as it does not allow browsing members
         /// attributes.
         /// </para>
         /// <para>
-        /// You may need to disable (`CAValidation.Disabled`) the validation if WixSharp is hosted on the 
+        /// You may need to disable (`CAValidation.Disabled`) the validation if WixSharp is hosted on the
         /// runtime that does not support AppDomain unloading (e.g. .NET Core)</para>
         /// <para>
-        /// If you want to perform validation without the use of temporary AppDomain you can chose the 
-        /// `CAValidation.InCurrentAppDomain` option. In this case the assembly being validated is loaded in 
-        /// the current AppDomain but from the memory without locking the assembly file. This option is valid 
+        /// If you want to perform validation without the use of temporary AppDomain you can chose the
+        /// `CAValidation.InCurrentAppDomain` option. In this case the assembly being validated is loaded in
+        /// the current AppDomain but from the memory without locking the assembly file. This option is valid
         /// but not recommended as it may lead to the unpredictable reflection scenarios. </para>
         /// </summary>
         public CAValidation ValidateCAAssemblies = CAValidation.InRemoteAppDomain;
@@ -1641,7 +1641,7 @@ namespace WixSharp
                 var existingCompElement = dirItem.Elements("Component");
 
                 // experimenting revealed that `AutoElements.SupportEmptyDirectories != CompilerSupportState.Disabled`
-                // may lead to empty folders remaining after uninstall in case of `CompilerSupportState.Auto`. 
+                // may lead to empty folders remaining after uninstall in case of `CompilerSupportState.Auto`.
                 // The actual cause is not entirely clear but changing the code to `AutoElements.SupportEmptyDirectories == CompilerSupportState.Enabled`
                 // addresses the issue. Though, in turn, effectively disables auto mode and requires explicit declaration
                 // of `AutoElements.SupportEmptyDirectories = CompilerSupportState.Enabled` for empty dir scenarios.
@@ -1991,7 +1991,7 @@ namespace WixSharp
                     }
                     else
                     {
-                        // since permissions belong to the directory 
+                        // since permissions belong to the directory
                         // it makes sense to use the parent features if the has not its own features set
                         if (wDir.ActualFeatures.Any())
                             featureComponents.Map(wDir.ActualFeatures, compId);
@@ -2082,7 +2082,7 @@ namespace WixSharp
 
                 //note Wix# expects package.Attribute("Languages") to have a single value (yes it is a temporary limitation)
                 string language = product.Select("Package").Attribute("Languages").Value;
-                string diskId = product.Select("Media")?.Attribute("Id")?.Value ?? "1"; // see Issue #362 (Merge Modules cause NullRefException when MediaTemplate is used) discussion 
+                string diskId = product.Select("Media")?.Attribute("Id")?.Value ?? "1"; // see Issue #362 (Merge Modules cause NullRefException when MediaTemplate is used) discussion
 
                 XElement merge = dirItem.AddElement(
                     new XElement("Merge",
@@ -2207,9 +2207,9 @@ namespace WixSharp
                 wProject.ActualInstallDirId = wProject.GetLogicalInstallDir()?.Id;
             }
 
-            // MSI doesn't allow absolute path to be assigned via name. Instead it requires it to be set via 
-            // SetProperty custom action. And what is even more weird the id of such a dir has to be public 
-            // (capitalized). Thus the id auto-assignment cannot be used as it creates non public id(s).   
+            // MSI doesn't allow absolute path to be assigned via name. Instead it requires it to be set via
+            // SetProperty custom action. And what is even more weird the id of such a dir has to be public
+            // (capitalized). Thus the id auto-assignment cannot be used as it creates non public id(s).
             var absolutePathDirs = wProject.AllDirs.Where(x => !x.IsIdSet() && x.Name.IsAbsolutePath()).ToArray();
             foreach (var item in absolutePathDirs)
                 item.Id = $"TARGETDIR{absolutePathDirs.FindIndex(item) + 1}";
@@ -2284,7 +2284,7 @@ namespace WixSharp
                     else
                         defaultFeatureComponents.Add(compId);
 
-                    // WiX/MSI requires the registry to belong to directory 
+                    // WiX/MSI requires the registry to belong to directory
                     // (either by nesting XML element or bu having Directory attribute in the registry key component)
                     // Instead of placing the reg component into the user dir element place it in the ProgramFiles
                     // dir element. This dir is not going to be created nor deleted during the installation.
@@ -2386,7 +2386,7 @@ namespace WixSharp
             }
         }
 
-        static void InsertIISElements(XElement dirItem, XElement component, IISVirtualDir[] wVDirs, Project project, Dictionary<Feature, List<string>> featureComponents = null, List<string> defaultFeatureComponents = null)
+        static void InsertIISElements(XElement dirItem, XElement component, IISVirtualDir[] wVDirs, Project project)
         {
             if (!wVDirs.Any())
                 return;
@@ -2789,8 +2789,8 @@ namespace WixSharp
                             if (AutoElements.ScheduleDeferredActionsAfterTunnellingTheirProperties || wAction.RawId == nameof(ManagedProjectActions.WixSharp_AfterInstall_Action))
                             {
                                 // Inject fetching properties CA just before the deferred action AfterInstrallEventHandler.
-                                // This might be a good practice to do for all deferred actions. However it's hard to predict the 
-                                // full impact of the auto-change for all user defined deferred actions. So limit the technique 
+                                // This might be a good practice to do for all deferred actions. However it's hard to predict the
+                                // full impact of the auto-change for all user defined deferred actions. So limit the technique
                                 // to the deferred actions defined by WixSharp itself only.
 
                                 stepAttr = sequenceNumberAttr;
@@ -3381,11 +3381,11 @@ namespace WixSharp
 
             string name;
             // name needs to be escaped but only if it is not an absolute path.
-            // Absolute path is going to be handled via auto-injection and 
+            // Absolute path is going to be handled via auto-injection and
             if (isAbsolutePathDir)
                 name = wDir.Name;
             else
-                //Issue #45 Can't install dll to windows/system32 
+                //Issue #45 Can't install dll to windows/system32
                 name = wDir.Name.ExpandWixEnvConsts();
 
             if (!wDir.IsIdSet())
