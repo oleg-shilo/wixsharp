@@ -2415,6 +2415,7 @@ namespace WixSharp
                                                      xWebApp = new XElement(ns + "WebApplication",
                                                                    new XAttribute("Id", wVDir.AppName.Expand() + "WebApplication"),
                                                                    new XAttribute("Name", wVDir.AppName))));
+                xVDir.AddAttributes(wVDir.Attributes);
 
                 xWebApp.SetAttribute("AllowSessions", wVDir.AllowSessions)
                        .SetAttribute("Buffer", wVDir.Buffer)
