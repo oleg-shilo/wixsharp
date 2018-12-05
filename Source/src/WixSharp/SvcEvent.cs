@@ -16,43 +16,43 @@
         /// and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without
         /// waiting for the completion.
         /// </summary>
-        public static SvcEvent Install = new SvcEvent { Type = SvcEventType.install, Wait = false };
+        public static SvcEvent Install => new SvcEvent { Type = SvcEventType.install, Wait = false };
 
         /// <summary>
         /// Predefined instance of <see cref="SvcEvent"/> with <c>Type</c> set to <see cref="SvcEventType.install"/>
         /// and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
         /// waiting for the completion.
         /// </summary>
-        public static SvcEvent Install_Wait = new SvcEvent { Type = SvcEventType.install, Wait = true };
+        public static SvcEvent Install_Wait => new SvcEvent { Type = SvcEventType.install, Wait = true };
 
         /// <summary>
         /// Predefined instance of <see cref="SvcEvent"/> with <c>Type</c> set to <see cref="SvcEventType.uninstall"/>
         /// and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation
         /// without waiting for the completion.
         /// </summary>
-        public static SvcEvent Uninstall = new SvcEvent { Type = SvcEventType.uninstall, Wait = false };
+        public static SvcEvent Uninstall => new SvcEvent { Type = SvcEventType.uninstall, Wait = false };
 
         /// <summary>
         /// Predefined instance of <see cref="SvcEvent"/> with <c>Type</c> set to <see cref="SvcEventType.uninstall"/>
         /// and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
         /// waiting for the completion.
         /// </summary>
-        public static SvcEvent Uninstall_Wait = new SvcEvent { Type = SvcEventType.uninstall, Wait = true };
+        public static SvcEvent Uninstall_Wait => new SvcEvent { Type = SvcEventType.uninstall, Wait = true };
 
         /// <summary>
         /// Predefined instance of <see cref="SvcEvent"/> with <c>Type</c> set to <see cref="SvcEventType.both"/>
         /// and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without
         /// waiting for the completion.
         /// </summary>
-        public static SvcEvent InstallUninstall = new SvcEvent { Type = SvcEventType.both, Wait = false };
+        public static SvcEvent InstallUninstall => new SvcEvent { Type = SvcEventType.both, Wait = false };
 
         /// <summary>
         /// Predefined instance of <see cref="SvcEvent"/> with <c>Type</c> set to <see cref="SvcEventType.both"/>
         /// and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
         /// waiting for the completion.
         /// </summary>
-        public static SvcEvent InstallUninstall_Wait = new SvcEvent { Type = SvcEventType.both, Wait = true };
-        
+        public static SvcEvent InstallUninstall_Wait => new SvcEvent { Type = SvcEventType.both, Wait = true };
+
         /// <summary>
         /// Primary key used to identify this particular entry.
         /// </summary>
