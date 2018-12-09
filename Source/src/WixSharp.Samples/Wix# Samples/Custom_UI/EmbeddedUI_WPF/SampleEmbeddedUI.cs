@@ -12,7 +12,6 @@
 
 namespace Microsoft.Deployment.Samples.EmbeddedUI
 {
-    using System;
     using Microsoft.Deployment.WindowsInstaller;
     using System;
     using System.Threading;

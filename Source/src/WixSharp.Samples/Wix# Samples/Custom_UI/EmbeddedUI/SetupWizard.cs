@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System;
 using Microsoft.Deployment.Samples.EmbeddedUI;
 using Microsoft.Deployment.WindowsInstaller;
 using System;

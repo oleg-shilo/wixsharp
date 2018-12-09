@@ -3270,7 +3270,10 @@ namespace WixSharp
                         referencedAssemblies;
 
             if (IsWix4)
+            {
                 makeSfxCA_args += $" \"{WixSdkLocation.PathCombine("WixToolset.Dtf.WindowsInstaller.dll")}\"";
+                // makeSfxCA_args += $" \"{WixSdkLocation.PathCombine("Microsoft.Deployment.WindowsInstaller.dll")}\"";
+            }
             else
                 makeSfxCA_args += $" \"{WixSdkLocation.PathCombine("Microsoft.Deployment.WindowsInstaller.dll")}\"";
 

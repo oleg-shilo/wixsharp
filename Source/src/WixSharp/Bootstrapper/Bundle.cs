@@ -5,9 +5,6 @@ using System.Text;
 using System.Xml.Linq;
 using WixSharp.CommonTasks;
 using sys = System.IO;
-using System;
-using System.Linq;
-using System.Xml.Linq;
 
 namespace WixSharp.Bootstrapper
 {

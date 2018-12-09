@@ -21,7 +21,7 @@ public class Script
         project.PreserveTempFiles = true;
         // project.OutDir = "bin";
 
-        project.BuildMsi();
+        project.BuildMsiCmd();
     }
 }
 

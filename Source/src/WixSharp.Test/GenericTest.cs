@@ -1,7 +1,4 @@
 ﻿extern alias WixSharpMsi;
-using System.Xml.Linq;
-using System.Linq;
-using System;
 using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using System;
