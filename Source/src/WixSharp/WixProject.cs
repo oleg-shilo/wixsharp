@@ -3,16 +3,14 @@ using System.Xml.Linq;
 using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
-using System.Xml.Linq;
 
 namespace WixSharp
 {
     /// <summary>
     /// Base class for WiX projects (e.g. Project, Bundle).
     /// </summary>
-    public abstract partial class WixProject : WixEntity
+    public abstract class WixProject : WixEntity
     {
         string sourceBaseDir = "";
 

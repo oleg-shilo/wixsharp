@@ -29,7 +29,6 @@ THE SOFTWARE.
 
 using System;
 using IO = System.IO;
-using System;
 
 namespace WixSharp
 {
@@ -59,7 +58,7 @@ namespace WixSharp
     ///                    .Build();
     /// </code>
     /// </example>
-    public partial class NativeBootstrapper
+    public class NativeBootstrapper
     {
         /// <summary>
         /// Gets or sets the prerequisite file.

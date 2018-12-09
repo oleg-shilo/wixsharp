@@ -9,7 +9,6 @@ using System.Configuration;
 using System.Linq;
 using System.Security.Principal;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using System.Xml.XPath;
 using WixSharp;
 using WixSharp.CommonTasks;

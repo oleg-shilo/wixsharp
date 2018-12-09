@@ -5,8 +5,6 @@ using System;
 using System.Xml.Linq;
 using System.Linq;
 using System.Xml;
-using System.Linq;
-using System.Xml.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
 

@@ -6,8 +6,6 @@ using System.Xml.Linq;
 using System.IO;
 using System.Linq;
 using System.Xml;
-using System.Linq;
-using System.IO;
 using WixSharp;
 using WixToolset.Dtf.WindowsInstaller;
 using File = WixSharp.File;

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System;
 using ConsoleApplication1;
-using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using WixSharp;

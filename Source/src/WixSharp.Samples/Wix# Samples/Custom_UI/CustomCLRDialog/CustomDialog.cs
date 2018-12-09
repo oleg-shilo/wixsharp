@@ -3,7 +3,6 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using WixSharp;
-using System.IO;
 using WixToolset.Dtf.WindowsInstaller;
 
 public class CustomDialog : WixCLRDialog
