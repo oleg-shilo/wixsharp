@@ -2,10 +2,16 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 using WixSharp.Utilities;
 using IO = System.IO;
+#if WIX4
+// using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp
 {

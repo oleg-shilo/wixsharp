@@ -56,10 +56,9 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Deployment.WindowsInstaller, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
+    <Reference Include="WixToolset.Dtf.WindowsInstaller, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c9acf360d0e036e3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-      <HintPath>..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll</HintPath>
+      <HintPath>..\Wix_bin\bin\WixToolset.Dtf.WindowsInstaller.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">

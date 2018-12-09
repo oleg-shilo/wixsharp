@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2015 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,31 +24,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
 
 using IO = System.IO;
-using System.Linq;
-using System.Collections.Generic;
 using System;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace WixSharp
 {
-
     /// <summary>
     /// Defines file to be installed.
     /// </summary>
-    /// 
+    ///
     ///<example>The following is an example of installing <c>MyApp.exe</c> file.
     ///<code>
-    /// var project = 
+    /// var project =
     ///         new Project("MyProduct",
     ///             new Dir(@"%ProgramFiles%\My Company\My Product",
     ///                 new File("readme.txt")),
     ///             new Dir("%Fonts%",
     ///                 new FontFile("FreeSansBold.ttf")));
     ///         ...
-    ///         
+    ///
     /// project.BuildMsi();
     /// </code>
     /// </example>
@@ -73,6 +73,7 @@ namespace WixSharp
         {
             TrueType = true;
         }
+
         /// <summary>
         /// Creates instance of the <see cref="FontFile"></see> class with properties initialized with specified parameters.
         /// </summary>
@@ -94,7 +95,7 @@ namespace WixSharp
 
         /// <summary>
         /// Gets or sets the font title.
-        /// <para>Causes an entry to be generated for the file in the Font 
+        /// <para>Causes an entry to be generated for the file in the Font
         /// table with the specified FontTitle. This attribute is intended to be used to register the file as a non-TrueType font.</para>
         /// </summary>
         /// <value>The font title.</value>
@@ -113,6 +114,7 @@ namespace WixSharp
             Feature = feature;
             TrueType = true;
         }
+
         /// <summary>
         /// Creates instance of the <see cref="FontFile"></see> class with properties initialized with specified parameters.
         /// </summary>
@@ -122,6 +124,7 @@ namespace WixSharp
             Name = sourcePath;
             TrueType = true;
         }
+
         /// <summary>
         /// Creates instance of the <see cref="FontFile"></see> class with properties initialized with specified parameters.
         /// </summary>

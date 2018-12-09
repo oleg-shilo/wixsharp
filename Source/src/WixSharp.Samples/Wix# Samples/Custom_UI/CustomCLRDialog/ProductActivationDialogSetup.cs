@@ -1,7 +1,7 @@
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Controls;
+using WixToolset.Dtf.WindowsInstaller;
 
 public static class ProductActivationDialogSetup
 {
@@ -11,6 +11,7 @@ public static class ProductActivationDialogSetup
 
         InjectProductActivationDialog(project);
 
+        Compiler.LightOptions += " -spdb";
         Compiler.PreserveTempFiles = true;
         Compiler.BuildMsi(project);
     }

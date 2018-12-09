@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
-
 using sys = System.IO;
+#if WIX4
+// using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp.Bootstrapper
 {
@@ -33,7 +38,7 @@ namespace WixSharp.Bootstrapper
         {
             AppAssembly = appAssembly;
             Payloads = Payloads.Combine(AppAssembly.ToPayload())
-                               .Combine(dependencies.Select(x=>x.ToPayload()));
+                               .Combine(dependencies.Select(x => x.ToPayload()));
         }
 
         /// <summary>
@@ -64,7 +69,7 @@ namespace WixSharp.Bootstrapper
                 bootstrapperCoreConfig = Path.Combine(outDir, "BootstrapperCore.config");
 
                 sys.File.WriteAllText(bootstrapperCoreConfig,
-                                      DefaultBootstrapperCoreConfigContent.Replace("{asmName}",asmName));
+                                      DefaultBootstrapperCoreConfigContent.Replace("{asmName}", asmName));
 
                 Compiler.TempFiles.Add(bootstrapperCoreConfig);
             }

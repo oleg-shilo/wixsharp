@@ -1,14 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
-
-#if WIX4
 using WixToolset.Bootstrapper;
-#else
-
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-
-#endif
 
 [assembly: BootstrapperApplication(typeof(ManagedBA))]
 
@@ -66,11 +58,11 @@ public class MainViewModel : INotifyPropertyChanged
     }
 
     string userInput = "User input content...";
-    
+
     public string UserInput
     {
         get => userInput;
-        
+
         set
         {
             userInput = value;
@@ -104,7 +96,7 @@ public class MainViewModel : INotifyPropertyChanged
 
     public BootstrapperApplication Bootstrapper { get; set; }
 
-    public void InstallExecute() 
+    public void InstallExecute()
     {
         IsBusy = true;
 
@@ -148,7 +140,6 @@ public class MainViewModel : INotifyPropertyChanged
                 InstallEnabled = true;
             else if (e.State == PackageState.Present)
                 UninstallEnabled = true;
-
         }
     }
 

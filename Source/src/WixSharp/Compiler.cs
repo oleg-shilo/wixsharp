@@ -35,9 +35,15 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 using IO = System.IO;
+#if WIX4
+// using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 //WIX References:
 //http://www.wixwiki.com/index.php?title=Main_Page
@@ -277,8 +283,10 @@ namespace WixSharp
         /// <summary>
         /// WiX linker <c>Light.exe</c> options (e.g. " -sice:ICE30").
         /// <para>The default value is "-sw1076 -sw1079" (disable warning 1076 and 1079).</para>
+        /// <para>Need to use <c>-spdb</c> as the WiX issue #5169 (https://github.com/wixtoolset/issues/issues/5169)
+        /// is still not fixed as at 9 Dec 2018.</para>
         /// </summary>
-        static public string LightOptions = "-sw1076 -sw1079 ";
+        static public string LightOptions = "-sw1076 -sw1079 -spdb";
 
         /// <summary>
         /// WiX compiler <c>Candle.exe</c> options.
@@ -836,7 +844,8 @@ namespace WixSharp
                         Compiler.OutputWriteLine(linker + " " + lightCmd);
                         Compiler.OutputWriteLine("->");
 #endif
-
+                        // https://github.com/wixtoolset/issues/issues/5169
+                        // as per 9-12-2018 the bug is still there
                         Run(linker, lightCmd);
 
                         if (IO.File.Exists(outFile))
@@ -3294,7 +3303,7 @@ namespace WixSharp
         /// </value>
         public static bool IsWix4
         {
-            get => false;
+            get => typeof(Session).Assembly.Location.EndsWith("WixToolset.Dtf.WindowsInstaller.dll", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

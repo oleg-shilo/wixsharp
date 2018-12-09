@@ -7,6 +7,7 @@ using System.Text;
 namespace WixSharp.Utilities
 {
     #region Enums
+
     enum RegSAM
     {
         QueryValue = 0x0001,
@@ -23,7 +24,8 @@ namespace WixSharp.Utilities
         Execute = 0x00020019,
         AllAccess = 0x000f003f
     }
-    #endregion
+
+    #endregion Enums
 
     static class RegHive
     {
@@ -34,7 +36,9 @@ namespace WixSharp.Utilities
     static class RegistryWOW6432
     {
         #region Member Variables
+
         #region Read 64bit Reg from 32bit app
+
         [DllImport("Advapi32.dll")]
         static extern uint RegOpenKeyEx(
             UIntPtr hKey,
@@ -53,10 +57,13 @@ namespace WixSharp.Utilities
             ref uint lpType,
             StringBuilder lpData,
             ref uint lpcbData);
-        #endregion
-        #endregion
+
+        #endregion Read 64bit Reg from 32bit app
+
+        #endregion Member Variables
 
         #region Functions
+
         public static string GetRegKey64(UIntPtr inHive, String inKeyName, String inPropertyName)
         {
             return GetRegKey64(inHive, inKeyName, RegSAM.WOW64_64Key, inPropertyName);
@@ -87,6 +94,7 @@ namespace WixSharp.Utilities
                 if (0 != hkey) RegCloseKey(hkey);
             }
         }
-        #endregion
+
+        #endregion Functions
     }
 }

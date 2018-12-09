@@ -1,15 +1,19 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\SDK\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref WixSharp.UI.dll;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
+
+using System.Xml.Linq;
+using System.Xml;
+using System;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 using io = System.IO;
-using Microsoft.Win32;
 
 public class Script
 {

@@ -42,7 +42,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;CSS_PROJECT</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CSS_PROJECT WIX4</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
@@ -70,12 +70,9 @@
     <AssemblyOriginatorKeyFile>WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BootstrapperCore, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
-      <HintPath>../WixSharp.Samples/Wix_bin/SDK/BootstrapperCore.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Deployment.WindowsInstaller, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
-      <HintPath>../WixSharp.Samples/Wix_bin/SDK/Microsoft.Deployment.WindowsInstaller.dll</HintPath>
+    <Reference Include="BootstrapperCore, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c9acf360d0e036e3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\WixSharp.Samples\Wix_bin\SDK\BootstrapperCore.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -104,6 +101,10 @@
     <Reference Include="System.Xml.Linq">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>System.Xml.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="WixToolset.Dtf.WindowsInstaller, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c9acf360d0e036e3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\WixSharp.Samples\Wix_bin\bin\WixToolset.Dtf.WindowsInstaller.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

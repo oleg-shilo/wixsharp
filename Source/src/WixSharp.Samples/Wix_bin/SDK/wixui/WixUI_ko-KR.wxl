@@ -2,7 +2,7 @@
 <!-- Copyright (c) .NET Foundation and contributors. All rights reserved. Licensed under the Microsoft Reciprocal License. See LICENSE.TXT file in the project root for full license information. -->
 
 
-<WixLocalization Culture="ko-kr" Codepage="949" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+<WixLocalization Culture="ko-kr" Codepage="949" xmlns="http://wixtoolset.org/schemas/v4/wxl">
     <String Id="WixUIBack" Overridable="yes">뒤로(&amp;B)</String>
     <String Id="WixUINext" Overridable="yes">다음(&amp;N)</String>
     <String Id="WixUICancel" Overridable="yes">취소</String>

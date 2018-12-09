@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-using System.Runtime.InteropServices;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace WixSharp

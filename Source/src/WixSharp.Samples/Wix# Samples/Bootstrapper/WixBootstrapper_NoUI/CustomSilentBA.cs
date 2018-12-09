@@ -1,17 +1,8 @@
 //using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
-using WixSharp;
-
-#if WIX4
 using WixToolset.Bootstrapper;
-#else
-
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-
-#endif
 
 [assembly: BootstrapperApplication(typeof(CustomSilentBA))]
 

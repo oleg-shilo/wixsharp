@@ -5,16 +5,19 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Deployment.Samples.EmbeddedUI;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
-
 using forms = System.Windows.Forms;
-
-using System.Diagnostics;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Globalization;
+#if WIX4
+// using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp
 {

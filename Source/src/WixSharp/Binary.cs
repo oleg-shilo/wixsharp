@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,7 +24,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
 
 using System;
 using System.Diagnostics;
@@ -34,25 +36,25 @@ namespace WixSharp
     /// <summary>
     /// Defines binary file to be embedded into MSI (<c>Binary</c> table).
     /// <para>
-    /// You can use this class to embed any file (e.g. exe, dll, image) to be used during the installation. 
+    /// You can use this class to embed any file (e.g. exe, dll, image) to be used during the installation.
     /// Note that none of the binary files are installed on the target system. They are just available at installation time
     /// for using <c>CustomActions</c>.
     /// </para>
     /// </summary>
-    /// 
-    /// <example>The following is an example of embedding <c>CRTSetup.msi</c> file into MSI for further use in 
+    ///
+    /// <example>The following is an example of embedding <c>CRTSetup.msi</c> file into MSI for further use in
     /// <c>InstallCRTAction</c>  <see cref="ManagedAction"/>.
     /// <code>
     /// var project = new Project("MyProduct",
-    ///     
+    ///
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
     ///             new File("readme.txt")),
     ///             ...
-    ///             
+    ///
     ///         new Binary("CRTSetup.msi"),
     ///         new ManagedAction("InstallCRTAction",
-    ///         ... 
-    ///                             
+    ///         ...
+    ///
     /// </code>
     /// </example>
     public partial class Binary : WixEntity
@@ -61,6 +63,7 @@ namespace WixSharp
         /// Initializes a new instance of the <see cref="Binary"/> class.
         /// </summary>
         public Binary() { }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Binary"/> class with properties initialized with specified parameters.
         /// </summary>
@@ -69,6 +72,7 @@ namespace WixSharp
         {
             Name = ResolvePath(sourcePath);
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Binary"/> class.
         /// </summary>
@@ -103,40 +107,42 @@ namespace WixSharp
     /// <summary>
     /// Defines assembly file to be embedded into MSI (<c>Binary</c> table).
     /// <para>
-    /// You can use this class to embed any .NET assembly to be used during the installation. 
+    /// You can use this class to embed any .NET assembly to be used during the installation.
     /// Note that none of the binary files are installed on the target system. They are just available at installation time
     /// for using <c>CustomActions</c>.
     /// </para>
     /// </summary>
-    /// 
-    /// <example>The following is an example of embedding <c>CRTSetup.msi</c> file into MSI for further use in 
+    ///
+    /// <example>The following is an example of embedding <c>CRTSetup.msi</c> file into MSI for further use in
     /// <c>InstallCRTAction</c>  <see cref="ManagedAction"/>.
     /// <code>
     /// var project = new Project("MyProduct",
-    ///     
+    ///
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
     ///             new File(@"readme.txt")),
     ///             ...
-    ///             
+    ///
     ///         new EmbeddedAssembly("config.exe") { RefAssemblies = new [] { "utils.dll" }},
     ///         new ManagedAction("InstallCRTAction",
-    ///         ... 
-    ///                             
+    ///         ...
+    ///
     /// </code>
     /// </example>
-    public partial class EmbeddedAssembly: Binary
+    public partial class EmbeddedAssembly : Binary
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EmbeddedAssembly"/> class.
         /// </summary>
         public EmbeddedAssembly() { }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EmbeddedAssembly"/> class with properties initialized with specified parameters.
         /// </summary>
         /// <param name="sourcePath">Relative path to the assembly file to be taken for building the MSI.</param>
-        public EmbeddedAssembly(string sourcePath) :base(sourcePath)
+        public EmbeddedAssembly(string sourcePath) : base(sourcePath)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EmbeddedAssembly"/> class.
         /// </summary>

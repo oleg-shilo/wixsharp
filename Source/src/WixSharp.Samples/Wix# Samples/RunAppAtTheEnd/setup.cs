@@ -1,11 +1,10 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\SDK\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
-
-using System;
-using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
+using System.Xml;
+using System.Xml.Linq;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {

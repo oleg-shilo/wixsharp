@@ -22,7 +22,7 @@ namespace WixSharp.UI
 
         void session_SetupComplete()
         {
-            if(string.IsNullOrEmpty(session.ErrorStatus))
+            if (string.IsNullOrEmpty(session.ErrorStatus))
                 setupStatusLbl.Text = "Success";
             else
                 setupStatusLbl.Text = "Error. See Log for details";
@@ -39,9 +39,9 @@ namespace WixSharp.UI
         void session_ProgressChanged(object sender, EventArgs e)
         {
             progressBar.Maximum = session.ProgressTotal;
-            
+
             //do not trust MSI events. session.ProgressCurrentPosition can be even negative
-            if (session.ProgressCurrentPosition > 0 && session.ProgressCurrentPosition <= progressBar.Maximum) 
+            if (session.ProgressCurrentPosition > 0 && session.ProgressCurrentPosition <= progressBar.Maximum)
                 progressBar.Value = Math.Min(session.ProgressTotal, session.ProgressCurrentPosition);
         }
 

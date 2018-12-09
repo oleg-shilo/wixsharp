@@ -35,7 +35,7 @@ namespace WixSharp
         /// </summary>
         /// <param name="id">The ID.</param>
         /// <param name="group">The Group</param>
-        public ServiceDependency(string id,bool group)
+        public ServiceDependency(string id, bool group)
         {
             Id = id;
             Group = group;

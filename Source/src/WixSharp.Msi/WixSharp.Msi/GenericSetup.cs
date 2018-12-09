@@ -5,8 +5,8 @@ using System.Threading;
 namespace WixSharp.UI
 {
     /// <summary>
-    /// Generic class that represents runtime properties of the typical MSI setup. 
-    /// It is a ViewModel class, which has 'value changed' events for all bindable properties 
+    /// Generic class that represents runtime properties of the typical MSI setup.
+    /// It is a ViewModel class, which has 'value changed' events for all bindable properties
     /// automatically marshalled for the cross-thread calls.
     /// </summary>
     public class GenericSetup : MsiSession
@@ -101,7 +101,7 @@ namespace WixSharp.UI
         void RunAsync(System.Action action)
         {
             //Task.Factory.StartNew(() =>
-            ThreadPool.QueueUserWorkItem(x=>
+            ThreadPool.QueueUserWorkItem(x =>
             {
                 try
                 {
@@ -215,7 +215,7 @@ namespace WixSharp.UI
 
         /// <summary>
         /// Gets or sets a value indicating whether setup was not started yet. This information
-        /// can be useful for implementing "not started" UI state in the setup GUI.  
+        /// can be useful for implementing "not started" UI state in the setup GUI.
         /// </summary>
         /// <value>
         ///   <c>true</c> if setup was not started; otherwise, <c>false</c>.

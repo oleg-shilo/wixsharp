@@ -25,7 +25,6 @@ THE SOFTWARE.
 
 using System;
 using System.Linq;
-using Microsoft.Win32;
 
 namespace WixSharp
 {

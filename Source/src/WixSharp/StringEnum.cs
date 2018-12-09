@@ -1,8 +1,7 @@
-
 namespace WixSharp
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class StringEnum<T>
     {
@@ -46,6 +45,7 @@ namespace WixSharp
             else
                 return false;
         }
+
         /// <summary>
         /// Implements the operator !=.
         /// </summary>
@@ -58,7 +58,7 @@ namespace WixSharp
                 return string.Compare(obj1.Value, obj2.Value) != 0;
             else if ((object)obj1 == null && (object)obj2 == null)
                 return false;
-            else 
+            else
                 return true;
         }
 
@@ -84,7 +84,6 @@ namespace WixSharp
         /// <exception cref="T:System.NullReferenceException">The <paramref name="obj"/> parameter is null.</exception>
         public override bool Equals(object obj)
         {
-
             if (!(obj is StringEnum<T>))
             {
                 if (obj is string)
@@ -93,8 +92,8 @@ namespace WixSharp
                     return false;
             }
             return this == (StringEnum<T>)obj;
-
         }
+
         /// <summary>
         /// Returns a hash code for this instance.
         /// </summary>

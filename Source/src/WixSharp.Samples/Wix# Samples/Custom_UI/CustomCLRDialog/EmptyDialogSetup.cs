@@ -1,8 +1,8 @@
-using Microsoft.Deployment.WindowsInstaller;
 using System.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Controls;
+using WixToolset.Dtf.WindowsInstaller;
 
 public class EmptyDialogSetup
 {

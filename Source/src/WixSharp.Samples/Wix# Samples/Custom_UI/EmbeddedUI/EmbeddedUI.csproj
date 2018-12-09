@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InstallProgressCounter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleEmbeddedUI.cs" />

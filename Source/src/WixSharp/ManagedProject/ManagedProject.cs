@@ -4,13 +4,15 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
-using IO = System.IO;
-
 using System.IO;
-
-using System.Diagnostics;
+#if WIX4
+// using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp
 {

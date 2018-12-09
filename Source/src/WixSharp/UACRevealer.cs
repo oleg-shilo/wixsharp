@@ -1,20 +1,17 @@
 using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Collections;
-using System.Diagnostics;
-using System.Text;
-using System.Xml.Linq;
-using System.Xml.XPath;
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
-using WixSharp;
-using WixSharp.Controls;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Xml.Linq;
+using System.Threading;
+#if WIX4
+// using WixToolset.Bootstrapper;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp.CommonTasks
 {

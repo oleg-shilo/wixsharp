@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -43,8 +42,7 @@ namespace WpfSetup
 
         public static void DoEvents()
         {
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate { })); 
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate { }));
         }
-
     }
 }

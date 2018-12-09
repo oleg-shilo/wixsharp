@@ -1,10 +1,3 @@
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Drawing;
-using System.Drawing.Design;
-using System.Windows.Forms;
-using Wix = WixSharp;
 using System;
 
 namespace WixSharp.Controls
@@ -40,7 +33,7 @@ namespace WixSharp.Controls
     }
 
     /// <summary>
-    /// Defines condition action type values for the WiX Control elements. 
+    /// Defines condition action type values for the WiX Control elements.
     /// </summary>
     public enum ConditionAction
     {

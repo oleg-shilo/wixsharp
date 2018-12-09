@@ -5,7 +5,6 @@ namespace WixSharp.Test
 {
     public class ManagedActionsTest
     {
-
         [Fact]
         public void Should_Normalize_AsmReferences()
         {
@@ -21,14 +20,14 @@ namespace WixSharp.Test
             project.Preprocess();
 
             var actions = project.Actions.OfType<ManagedAction>().ToArray();
-            var action = actions[0]; 
+            var action = actions[0];
             Assert.Equal("%this%", action.ActionAssembly);
             Assert.Equal(3, action.RefAssemblies.Length);
             Assert.Contains("asm1.dll", action.RefAssemblies);
             Assert.Contains("asm2.dll", action.RefAssemblies);
             Assert.Contains("asm3.dll", action.RefAssemblies);
 
-            action = actions[1]; 
+            action = actions[1];
             Assert.Equal("%this%", action.ActionAssembly);
             Assert.Equal(3, action.RefAssemblies.Length);
             Assert.Contains("asm1.dll", action.RefAssemblies);
@@ -64,7 +63,7 @@ namespace WixSharp.Test
             Assert.Contains("asm6.dll", action.RefAssemblies);
             Assert.Contains("asm7.dll", action.RefAssemblies);
             Assert.Contains("asm8.dll", action.RefAssemblies);
-            
+
             action = actions[6];
             Assert.Equal("test.dll", action.ActionAssembly);
             Assert.Equal(4, action.RefAssemblies.Length);

@@ -1,9 +1,14 @@
-﻿using Microsoft.Deployment.WindowsInstaller;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
-using WixSharp.CommonTasks;
+#if WIX4
+// using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp
 {
@@ -177,7 +182,7 @@ namespace WixSharp
         /// <value>
         /// The msi file.
         /// </value>
-        public string MsiFile { get { return Data["MsiFile"] ?? Session.Property("OriginalDatabase"); } } // Data may not be initializaed it 
+        public string MsiFile { get { return Data["MsiFile"] ?? Session.Property("OriginalDatabase"); } } // Data may not be initializaed it
 
         /// <summary>
         /// Gets the setup mode.

@@ -1,6 +1,5 @@
 //css_ref ..\..\WixSharp.dll;
 //css_ref System.Core.dll;
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Diagnostics;
 using System.Security.Principal;
@@ -8,6 +7,7 @@ using System.Windows.Forms;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
+using WixToolset.Dtf.WindowsInstaller;
 
 // Truly a throw away project for dev testing
 
@@ -219,6 +219,7 @@ static class Script
     {
         // HiTeach_MSI.Program.Main1(); return;
         Issue_377(); return;
+#pragma warning disable CS0162 // Unreachable code detected
         Issue_440(); return;
         Issue_386(); return;
         Issue_378(); return;

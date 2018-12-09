@@ -1,9 +1,5 @@
 using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 using WixSharp;
 using WixSharp.CommonTasks;

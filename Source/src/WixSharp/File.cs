@@ -27,10 +27,11 @@ THE SOFTWARE.
 
 #endregion Licence...
 
-using IO = System.IO;
-using System.Linq;
-using System.Collections.Generic;
 using System;
+using System.Linq;
+using IO = System.IO;
+using System;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace WixSharp

@@ -3,7 +3,6 @@ using System.Xml.Linq;
 
 namespace WixSharp.Bootstrapper
 {
-
     /// <summary>
     /// Defines a file search based on WiX FileSearch element (Util Extension).
     /// </summary>
@@ -63,5 +62,4 @@ namespace WixSharp.Bootstrapper
             return this.ToXElement(WixExtension.Util.ToXName("FileSearch"));
         }
     }
-
 }

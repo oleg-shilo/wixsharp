@@ -2,23 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-
-using io = System.IO;
-
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
-using sys = System.Windows.Forms;
 using System.Drawing.Imaging;
-
+using io = System.IO;
+using sys = System.Windows.Forms;
 using System.Windows.Forms;
-
 using WixSharp.UI.Forms;
 using System.Threading;
-using System.Diagnostics;
+
+#if WIX4
+using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
 using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+#endif
 
 namespace WixSharp
 {

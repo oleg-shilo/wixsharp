@@ -8,7 +8,7 @@ namespace WixSharp
     public class ServiceConfigUtil : WixEntity, IGenericEntity
     {
         internal ServiceConfigUtil()
-        {}
+        { }
 
         /// <summary>
         /// Action to take on the first failure of the service
@@ -54,7 +54,7 @@ namespace WixSharp
         /// </summary>
         [Xml]
         public int? RestartServiceDelayInSeconds;
-        
+
         /// <summary>
         /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
         /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
@@ -64,7 +64,6 @@ namespace WixSharp
         {
             context.Project.Include(WixExtension.Util);
             context.XParent.Add(this.ToXElement(WixExtension.Util, "ServiceConfig"));
-
         }
     }
 }

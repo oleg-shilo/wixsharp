@@ -2,13 +2,13 @@
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 //css_ref System.Xml.Linq.dll;
-//css_ref ..\..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref ..\..\..\Wix_bin\SDK\WixToolset.Dtf.WindowsInstaller.dll;
 using System;
-using io = System.IO;
+using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
-using System.Windows.Forms;
+using io = System.IO;
 
 public class InstallScript
 {

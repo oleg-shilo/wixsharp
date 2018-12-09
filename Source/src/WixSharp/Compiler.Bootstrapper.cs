@@ -27,19 +27,19 @@ THE SOFTWARE.
 
 #endregion Licence...
 
-using Microsoft.Deployment.WindowsInstaller;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using System.Xml.Linq;
 using WixSharp.Bootstrapper;
 using IO = System.IO;
+#if WIX4
+// using WixToolset.Bootstrapper;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp
 {
@@ -288,8 +288,8 @@ namespace WixSharp
                             xml = sw.ToString();
                         }
 
-                        //of course you can use XmlTextWriter.WriteRaw but this is just a temporary quick'n'dirty solution
-                        //http://forums.microsoft.com/MSDN/ShowPost.aspx?PostID=2657663&SiteID=1
+                        // of course you can use XmlTextWriter.WriteRaw but this is just a temporary quick'n'dirty solution
+                        // http://forums.microsoft.com/MSDN/ShowPost.aspx?PostID=2657663&SiteID=1
                         xml = xml.Replace("xmlns=\"\"", "");
 
                         DefaultWixSourceFormatedHandler(ref xml);

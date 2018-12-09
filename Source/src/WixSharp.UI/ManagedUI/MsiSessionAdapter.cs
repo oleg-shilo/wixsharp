@@ -1,7 +1,13 @@
 using System.Drawing;
 using System.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.UI.Forms;
+#if WIX4
+// using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp
 {

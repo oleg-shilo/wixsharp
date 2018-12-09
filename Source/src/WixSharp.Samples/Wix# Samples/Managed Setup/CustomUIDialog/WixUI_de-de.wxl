@@ -7,7 +7,7 @@
     LICENSE.TXT at the root directory of the distribution.
   </copyright>
 -->
-<WixLocalization Culture="de-de" Codepage="1252" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+<WixLocalization Culture="de-de" Codepage="1252" xmlns="http://wixtoolset.org/schemas/v4/wxl">
     <String Id="WixUIBack" Overridable="yes">&amp;Zurück</String>
     <String Id="WixUINext" Overridable="yes">&amp;Weiter</String>
     <String Id="WixUICancel" Overridable="yes">Abbrechen</String>

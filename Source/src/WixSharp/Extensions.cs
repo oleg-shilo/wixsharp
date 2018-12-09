@@ -7,19 +7,22 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using IO = System.IO;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text.RegularExpressions;
-using static WixSharp.SetupEventArgs;
 using WixSharp.CommonTasks;
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using System.Windows.Forms;
-using System.Diagnostics;
+using static WixSharp.SetupEventArgs;
+#if WIX4
+// using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp
 {

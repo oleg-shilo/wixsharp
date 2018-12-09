@@ -27,8 +27,6 @@ THE SOFTWARE.
 
 #endregion Licence...
 
-using Microsoft.Win32;
-
 namespace WixSharp
 {
     /// <summary>

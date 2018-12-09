@@ -13,13 +13,10 @@
 namespace Microsoft.Deployment.Samples.EmbeddedUI
 {
     using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Diagnostics;
-    using System.Threading;
-    using System.Windows;
-    using System.Windows.Threading;
     using Microsoft.Deployment.WindowsInstaller;
+    using System;
+    using System.Threading;
+    using System.Windows.Threading;
     using Application = System.Windows.Application;
 
     public class SampleEmbeddedUI : IEmbeddedUI
@@ -103,11 +100,11 @@ namespace Microsoft.Deployment.Samples.EmbeddedUI
         {
             // Synchronously send the message to the setup wizard window on its thread.
             object result = this.setupWizard.Dispatcher.Invoke(DispatcherPriority.Send,
-                new Func<MessageResult>(delegate()
+                new Func<MessageResult>(delegate ()
                 {
                     return this.setupWizard.ProcessMessage(messageType, messageRecord, buttons, icon, defaultButton);
                 }));
-            return (MessageResult) result;
+            return (MessageResult)result;
         }
 
         /// <summary>
@@ -121,7 +118,7 @@ namespace Microsoft.Deployment.Samples.EmbeddedUI
         {
             // Wait for the user to exit the setup wizard.
             this.setupWizard.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                new Action(delegate()
+                new Action(delegate ()
                 {
                     this.setupWizard.EnableExit();
                 }));

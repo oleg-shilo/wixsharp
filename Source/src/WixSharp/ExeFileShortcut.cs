@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,33 +24,35 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
+
 namespace WixSharp
 {
     /// <summary>
-    /// Defines <see cref="ExeFileShortcut"/> to be installed. <para><see cref="ExeFileShortcut"/> is a specialized version of the <see cref="Shortcut"/> designed 
+    /// Defines <see cref="ExeFileShortcut"/> to be installed. <para><see cref="ExeFileShortcut"/> is a specialized version of the <see cref="Shortcut"/> designed
     /// for using <see cref="Shortcut"/> as a <see cref="Dir"/> nested element</para>
     /// <para>There are different ways of defining shortcuts of the Wix# project: </para>
-    /// <para> - It can be specified as a nested element of the <see cref="File"/>. In this case after 
+    /// <para> - It can be specified as a nested element of the <see cref="File"/>. In this case after
     /// the installation the shortcut will point to the file it belongs to.</para>
-    /// <para> - Alternatively the <c>Shortcut</c> can be specified as a <see cref="Dir"/> nested 
-    /// element. In this case after the installation the shortcut will point to the file 
+    /// <para> - Alternatively the <c>Shortcut</c> can be specified as a <see cref="Dir"/> nested
+    /// element. In this case after the installation the shortcut will point to the file
     /// it belongs to.</para>
     /// </summary>
-    /// 
+    ///
     /// <example>
     /// The following is an example of installing "Uninstall Product" shortcut to the product directory.
     /// <code>
-    /// var project = 
+    /// var project =
     ///     new Project("My Product",
-    ///     
+    ///
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
-    ///             new ExeFileShortcut("Uninstall MyApp", 
-    ///                                 "[System64Folder]msiexec.exe", 
+    ///             new ExeFileShortcut("Uninstall MyApp",
+    ///                                 "[System64Folder]msiexec.exe",
     ///                                 "/x [ProductCode]")),
-    ///                 
+    ///
     ///         ...
-    ///         
+    ///
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
@@ -76,6 +79,7 @@ namespace WixSharp
             Target = target;
             Arguments = arguments;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ExeFileShortcut"/> class with properties/fields initialized with specified parameters.
         /// <para>This constructor should be used to instantiate shortcuts which belong to the <see cref="Dir"/> element.</para>
@@ -92,6 +96,7 @@ namespace WixSharp
             Arguments = arguments;
             Feature = feature;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ExeFileShortcut"/> class with properties/fields initialized with specified parameters.
         /// <para>This constructor should be used to instantiate shortcuts which belong to the <see cref="Dir"/> element.</para>
@@ -108,6 +113,7 @@ namespace WixSharp
             Target = target;
             Arguments = arguments;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ExeFileShortcut"/> class with properties/fields initialized with specified parameters.
         /// <para>This constructor should be used to instantiate shortcuts which belong to the <see cref="Dir"/> element.</para>

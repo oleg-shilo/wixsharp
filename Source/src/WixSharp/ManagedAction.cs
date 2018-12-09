@@ -26,8 +26,13 @@ THE SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
+#if WIX4
+// using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp
 {

@@ -7,9 +7,7 @@ using System.Diagnostics;
 #if WIX4
 using WixToolset.Bootstrapper;
 #else
-
 using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-
 #endif
 
 [assembly: BootstrapperApplication(typeof(WixSharp.Bootstrapper.SilentManagedBA))]

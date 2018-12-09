@@ -1,10 +1,5 @@
 ﻿using System.Windows;
-#if WIX4
 using WixToolset.Bootstrapper;
-#else
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-#endif
-
 
 public partial class MainView : Window
 {

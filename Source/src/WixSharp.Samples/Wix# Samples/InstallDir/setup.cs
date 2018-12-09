@@ -1,14 +1,11 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\SDK\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
-
-using System;
-using System.Linq;
 using System.Xml.Linq;
 using System.Xml;
-using Microsoft.Deployment.WindowsInstaller;
-using WixSharp;
+using System;
 using System.Windows.Forms;
+using WixSharp;
 
 class Script
 {
@@ -28,7 +25,7 @@ class Script
                     new Dir(@"%ProgramFiles%\My Product",
                         new WixSharp.File(@"myapp.exe",
                             new FileShortcut("My App", @"%ProgramMenu%\My Product") { Advertise = true })));
-        
+
         project.UI = WUI.WixUI_InstallDir;
         project.PreserveTempFiles = true;
 

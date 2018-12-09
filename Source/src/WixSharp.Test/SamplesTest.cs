@@ -20,7 +20,7 @@ namespace WixSharp.Test
                                                ASP.NETApp,
                                                EnvVariables,
                                                WixBootstrapper"
-                                              .Split(',').Select(x=>x.Trim());
+                                              .Split(',').Select(x => x.Trim());
 
         int completedSamples = 0;
         int samplesTotal = 0;

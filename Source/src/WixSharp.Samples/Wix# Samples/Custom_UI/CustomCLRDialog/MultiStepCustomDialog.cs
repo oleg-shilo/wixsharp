@@ -1,15 +1,16 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using Microsoft.Deployment.WindowsInstaller;
-using WixSharp;
+﻿using System.Linq;
+using System;
+using ConsoleApplication1;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using ConsoleApplication1;
+using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 
 public partial class MultiStepCustomDialog : WixCLRDialog
 {
     List<Form> stepsViews = new List<Form>();
+
     int CurrentStep
     {
         get
@@ -33,7 +34,7 @@ public partial class MultiStepCustomDialog : WixCLRDialog
         : base(session)
     {
         InitializeComponent();
-         
+
         stepsViews.Add(InitView(new Step1Panel(session)));
         stepsViews.Add(InitView(new Step2Panel(session)));
 

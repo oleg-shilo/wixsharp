@@ -8,35 +8,41 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+#if WIX4
+// using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp
 {
     /// <summary>
     /// Defines System.Windows.Forms.<see cref="T:System.Windows.Forms.Form" />, which is to be used as the  for custom MSI dialog.
     /// <para>
-    /// As opposite to the WixSharp.<see cref="T:WixSharp.WixForm" /> based custom dialogs <c>WixCLRDialog</c> is instantiated not at 
+    /// As opposite to the WixSharp.<see cref="T:WixSharp.WixForm" /> based custom dialogs <c>WixCLRDialog</c> is instantiated not at
     /// compile but at run time. Thus it is possible to implement comprehensive deployment algorithms in any of the available Form event handlers.
     /// </para>
     /// <para>
-    /// The usual usability scenario is the injection of the managed Custom Action (for displaying the <c>WixCLRDialog</c>) 
-    /// into the sequence of the standard dialogs (WixSharp.<see cref="T:WixSharp.CustomUI"/>). 
+    /// The usual usability scenario is the injection of the managed Custom Action (for displaying the <c>WixCLRDialog</c>)
+    /// into the sequence of the standard dialogs (WixSharp.<see cref="T:WixSharp.CustomUI"/>).
     /// </para>
     /// <para>
-    /// While it is possible to construct <see cref="T:WixSharp.CustomUI"/> instance manually it is preferred to use 
+    /// While it is possible to construct <see cref="T:WixSharp.CustomUI"/> instance manually it is preferred to use
     /// Factory methods of  <see cref="T:WixSharp.CustomUIBuilder"/> (e.g. InjectPostLicenseClrDialog) for this.
     /// </para>
     /// <code>
     /// static public void Main()
     /// {
     ///     ManagedAction showDialog;
-    /// 
+    ///
     ///     var project = new Project("CustomDialogTest",
     ///                                 showDialog = new ShowClrDialogAction("ShowProductActivationDialog"));
-    /// 
+    ///
     ///     project.UI = WUI.WixUI_Common;
     ///     project.CustomUI = CustomUIBuilder.InjectPostLicenseClrDialog(showDialog.Id, " LicenseAccepted = \"1\"");
-    ///     
+    ///
     ///     Compiler.BuildMsi(project);
     /// }
     /// ...
@@ -53,13 +59,13 @@ namespace WixSharp
     /// {
     ///     private GroupBox groupBox1;
     ///     private Button cancelBtn;
-    ///     ... 
+    ///     ...
     /// </code>
     /// <para>
-    /// The all communications with the installation in progress are to be done by modifying the MSI properties or executing MSI actions 
+    /// The all communications with the installation in progress are to be done by modifying the MSI properties or executing MSI actions
     /// via <c>Session</c> object.</para>
     /// <para>
-    /// When closing the dialog make sure you set the DeialogResul properly. <c>WixCLRDialog</c> offers three predefined routines for setting the 
+    /// When closing the dialog make sure you set the DeialogResul properly. <c>WixCLRDialog</c> offers three predefined routines for setting the
     /// DialogResult:
     /// <para>- MSINext</para>
     /// <para>- MSIBack</para>
@@ -70,12 +76,12 @@ namespace WixSharp
     /// {
     ///     MSICancel();
     /// }
-    /// 
+    ///
     /// void nextBtn_Click(object sender, EventArgs e)
     /// {
     ///     MSINext();
     /// }
-    /// 
+    ///
     /// void backBtn_Click(object sender, EventArgs e)
     /// {
     ///     MSIBack();
@@ -98,7 +104,7 @@ namespace WixSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="WixCLRDialog"/> class.
         /// <remarks>
-        /// This constructor is to be used by the Visual Studio Form designer only. 
+        /// This constructor is to be used by the Visual Studio Form designer only.
         /// You should always use <c>WixCLRDialog(Session session)</c> constructor instead.
         /// </remarks>
         /// </summary>
@@ -217,7 +223,6 @@ namespace WixSharp
             else return IntPtr.Zero;
         }
 
-
         /// <summary>
         /// There is some strange resizing artifact (at least on Win7) when MoveWindow does not resize the window accurately.
         /// Thus special adjustment ('delta') is needed to fix the problem.
@@ -225,7 +230,6 @@ namespace WixSharp
         /// The delta value is used in the ReplaceHost method.</para>
         /// </summary>
         protected int delta = 4;
-
 
         /// <summary>
         /// 'Replaces' the current step dialog with the "itself".
@@ -295,7 +299,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.Cancel' value ensuring the 
+        /// Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.Cancel' value ensuring the
         /// setup is canceled.
         /// </summary>
         public void MSICancel()
@@ -305,7 +309,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.Retry' value ensuring the 
+        /// Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.Retry' value ensuring the
         /// setup is resumed with the previous UI sequence dialog is displayed.
         /// </summary>
         public void MSIBack()
@@ -315,7 +319,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.OK' value ensuring the 
+        /// Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.OK' value ensuring the
         /// setup is resumed and the UI sequence advanced to the next step.
         /// </summary>
         public void MSINext()
@@ -459,6 +463,7 @@ internal class MsiWindowFinder
         return handles;
     }
 }
+
 //public static class ProcessExtensions
 //{
 //    private static string FindIndexedProcessName(int pid)

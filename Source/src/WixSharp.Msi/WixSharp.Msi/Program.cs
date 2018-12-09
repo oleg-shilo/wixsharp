@@ -1,11 +1,5 @@
 //css_inc MsiInterop.cs
 using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using WindowsInstaller;
 using WixSharp.UI;
 
 //http://msdn.microsoft.com/en-us/library/windows/desktop/aa370573(v=vs.85).aspx

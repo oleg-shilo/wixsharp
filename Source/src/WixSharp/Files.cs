@@ -35,7 +35,6 @@ using IO = System.IO;
 
 namespace WixSharp
 {
-
     /// <summary>
     /// Defines all files of a given source directory and all subdirectories to be installed on target system.
     /// <para>

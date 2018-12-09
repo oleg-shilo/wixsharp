@@ -17,7 +17,7 @@ Patch dialog sequence:
  - WixUI_VerifyReadyDlg
 -->
 
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
     <Fragment>
         <UI Id="WixUI_Minimal">
             <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />

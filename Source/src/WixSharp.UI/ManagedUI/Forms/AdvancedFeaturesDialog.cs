@@ -1,9 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms;
+#if WIX4
+// using WixToolset.Bootstrapper;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp.UI.Forms
 {

@@ -1,9 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Windows.Forms;
+﻿using System.Linq;
+using System;
 using Microsoft.Deployment.Samples.EmbeddedUI;
 using Microsoft.Deployment.WindowsInstaller;
+using System;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace EmbeddedUI
 {
@@ -70,7 +71,6 @@ namespace EmbeddedUI
 
         void exitButton_Click(object sender, EventArgs e)
         {
-
             Close();
         }
 

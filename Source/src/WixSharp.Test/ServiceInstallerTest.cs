@@ -1,13 +1,12 @@
 using System.Linq;
 using System.Xml.Linq;
-using Xunit;
 
 namespace WixSharp.Test
 {
     public class ServiceInstallerTest
     {
         Project projectMock = new Project();
-        
+
         //[Fact]
         //public void Should_Emit_FullSetOfMembers()
         //{

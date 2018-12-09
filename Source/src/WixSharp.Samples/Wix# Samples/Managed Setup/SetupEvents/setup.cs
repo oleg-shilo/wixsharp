@@ -1,18 +1,18 @@
 //css_dir ..\..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\SDK\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref WixSharp.UI.dll;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 
 using System;
+using System.Xml;
+using System.Xml.Linq;
+using System.Diagnostics;
 using System.Security.Principal;
-
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
-using System.Diagnostics;
-using System.Linq;
+using WixToolset.Dtf.WindowsInstaller;
 
 public class Script
 {
@@ -79,7 +79,7 @@ public class Script
 
     static void Project_UIInitialized(SetupEventArgs e)
     {
-        // just an example of restarting the setup UI elevated. Old fashioned but... convenient and reliable.  
+        // just an example of restarting the setup UI elevated. Old fashioned but... convenient and reliable.
         if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
         {
             MessageBox.Show(e.Session.GetMainWindow(), "You must start the msi file as admin");
@@ -143,7 +143,7 @@ public class Script
         //SetupEventArgs.Data values can be set and accesses at any time from any custom action including deferred one.
         var conn = @"Data Source=.\SQLEXPRESS;Initial Catalog=RequestManagement;Integrated Security=SSPI";
         e.Data["persisted_data"] = conn;
-        
+
         MessageBox.Show(e.Session.GetMainWindow(), e.ToString(), "Load " + e.Session["EnvVersion"]);
     }
 

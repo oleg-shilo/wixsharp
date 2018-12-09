@@ -2,7 +2,7 @@
 <!-- Copyright (c) .NET Foundation and contributors. All rights reserved. Licensed under the Microsoft Reciprocal License. See LICENSE.TXT file in the project root for full license information. -->
 
 
-<WixLocalization Culture="ar-sa" Codepage="1256" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+<WixLocalization Culture="ar-sa" Codepage="1256" xmlns="http://wixtoolset.org/schemas/v4/wxl">
     <String Id="WixUIBack" Overridable="yes">ال&amp;سابق</String>
     <String Id="WixUINext" Overridable="yes">التا&amp;لي</String>
     <String Id="WixUICancel" Overridable="yes">إلغاء الأمر</String>

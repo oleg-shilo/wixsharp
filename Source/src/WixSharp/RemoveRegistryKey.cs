@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Xml.Linq;
-using Microsoft.Win32;
 using WixSharp.CommonTasks;
 
 namespace WixSharp

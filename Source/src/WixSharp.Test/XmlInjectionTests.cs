@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Xml.Linq;
 using System.IO;
-using File = WixSharp.File;
 using Xunit;
 
 namespace WixSharp.Test
@@ -33,7 +31,7 @@ namespace WixSharp.Test
             });
 
             Assert.True(ex.Message.StartsWith("WixSharp.Merge is unexpected."));
-         }
+        }
     }
 
     public class XmlInjectionTests

@@ -11,13 +11,18 @@
 //---------------------------------------------------------------------
 
 using System;
+#if WIX4
+// using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 #pragma warning disable 1591
 
 namespace Microsoft.Deployment.Samples.EmbeddedUI
 {
-
     /// <summary>
     /// Tracks MSI progress messages and converts them to usable progress.
     /// </summary>

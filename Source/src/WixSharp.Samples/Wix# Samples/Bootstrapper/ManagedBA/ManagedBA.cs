@@ -1,13 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Linq;
+﻿using System.Threading;
 using System.Windows;
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-using System.Diagnostics;
+using WixToolset.Bootstrapper;
 
 namespace Bootstrapper
 {
-
     //////////////////////////////////////
     //                                  //
     //                                  //
@@ -39,7 +35,7 @@ namespace Bootstrapper
 
         /// <summary>
         /// Method that gets invoked when the Bootstrapper PlanComplete event is fired.
-        /// If the planning was successful, it instructs the Bootstrapper Engine to 
+        /// If the planning was successful, it instructs the Bootstrapper Engine to
         /// install the packages.
         /// </summary>
         void ManagedBA_PlanComplete(object sender, PlanCompleteEventArgs e)
@@ -80,6 +76,4 @@ namespace Bootstrapper
             done.Set();
         }
     }
-
-    
 }

@@ -2,7 +2,7 @@
 <!-- Copyright (c) .NET Foundation and contributors. All rights reserved. Licensed under the Microsoft Reciprocal License. See LICENSE.TXT file in the project root for full license information. -->
 
 
-<WixLocalization Culture="ja-jp" Codepage="932" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+<WixLocalization Culture="ja-jp" Codepage="932" xmlns="http://wixtoolset.org/schemas/v4/wxl">
     <String Id="WixUIBack" Overridable="yes">戻る(&amp;B)</String>
     <String Id="WixUINext" Overridable="yes">次へ(&amp;N)</String>
     <String Id="WixUICancel" Overridable="yes">キャンセル</String>

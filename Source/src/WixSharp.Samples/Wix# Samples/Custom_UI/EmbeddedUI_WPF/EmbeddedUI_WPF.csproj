@@ -53,6 +53,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="SampleEmbeddedUI.cs" />
     <Compile Include="setup.cs" />
     <Compile Include="SetupWizard.xaml.cs">

@@ -28,10 +28,7 @@ THE SOFTWARE.
 #endregion Licence...
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using WixSharp.CommonTasks;
-using IO = System.IO;
 
 namespace WixSharp
 {
@@ -91,7 +88,6 @@ namespace WixSharp
         [WixSharp.Xml]
         public string SourceFile;
 
-
         /// <summary>
         /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project" />.
         /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
@@ -102,5 +98,4 @@ namespace WixSharp
             context.XParent.Add(this.ToXElement("Icon"));
         }
     }
-
 }

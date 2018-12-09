@@ -1,9 +1,10 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\SDK\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 using System;
-using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Linq;
 using WixSharp;
 
@@ -29,7 +30,7 @@ class Script
         project.PreserveTempFiles = true;
 
         // uncomment this line if you want to make the build of the x64 vs x86 controlled by the external condition.
-        // if (Environment.GetEnvironmentVariable("buid_as_64") != null) 
+        // if (Environment.GetEnvironmentVariable("buid_as_64") != null)
         project.Platform = Platform.x64;
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
@@ -52,7 +53,7 @@ class Script
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         //Alternatively you can set Component Attribute for all files together (do not forget to remove "Component:Win64=yes" from file's AttributesDefinition)
-        
+
         //either before XML generation
         //foreach (var file in project.AllFiles)
         //    file.Attributes.Add("Component:Win64", "yes");
@@ -66,9 +67,6 @@ class Script
     static void Compiler_WixSourceGenerated(XDocument document)
     {
         document.Descendants("Component")
-                .ForEach(comp=>comp.SetAttributeValue("Win64", "yes"));
+                .ForEach(comp => comp.SetAttributeValue("Win64", "yes"));
     }
 }
-
-
-

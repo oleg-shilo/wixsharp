@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using WixSharp.CommonTasks;
 using IO = System.IO;
-using Reflection=System.Reflection;
+using Reflection = System.Reflection;
 
 namespace WixSharp.Nsis
 {
@@ -438,12 +438,16 @@ namespace WixSharp.Nsis
             {
                 case RequestExecutionLevel.None:
                     return "none";
+
                 case RequestExecutionLevel.RunAsInvoker:
                     return "user";
+
                 case RequestExecutionLevel.HighestAvailable:
                     return "highest";
+
                 case RequestExecutionLevel.RequireAdministrator:
                     return "admin";
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }

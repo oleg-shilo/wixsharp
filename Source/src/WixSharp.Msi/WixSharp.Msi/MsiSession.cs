@@ -1,12 +1,9 @@
 using System;
-
-using sys = System;
-
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 using WindowsInstaller;
+using sys = System;
 
 #pragma warning disable 1591
 

@@ -25,7 +25,6 @@ THE SOFTWARE.
 
 using System;
 using System.Linq;
-using System.Linq.Expressions;
 using IO = System.IO;
 
 namespace WixSharp

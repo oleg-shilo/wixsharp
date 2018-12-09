@@ -132,7 +132,7 @@
             Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.FeatureItem"/> class.
             </summary>
         </member>
-        <member name="M:WixSharp.UI.Forms.FeatureItem.#ctor(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.UI.Forms.FeatureItem.#ctor(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.FeatureItem"/> class.
             </summary>
@@ -147,7 +147,7 @@
             A <see cref="T:System.String" /> that represents this instance.
             </returns>
         </member>
-        <member name="M:WixSharp.UI.Forms.FeatureItem.DetectFeatureState(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.UI.Forms.FeatureItem.DetectFeatureState(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
             Detects the state of the feature.
             </summary>
@@ -274,7 +274,7 @@
             The installer runtime.
             </value>
         </member>
-        <member name="M:WixSharp.UI.Forms.ManagedForm.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+        <member name="M:WixSharp.UI.Forms.ManagedForm.ProcessMessage(WixToolset.Dtf.WindowsInstaller.InstallMessage,WixToolset.Dtf.WindowsInstaller.Record,WixToolset.Dtf.WindowsInstaller.MessageButtons,WixToolset.Dtf.WindowsInstaller.MessageIcon,WixToolset.Dtf.WindowsInstaller.MessageDefaultButton)">
             <summary>
             Processes information and progress messages sent to the user interface.
             <para> This method directly mapped to the
@@ -525,7 +525,7 @@
             (e.g. localize the view).
             </summary>
         </member>
-        <member name="M:WixSharp.UI.Forms.ProgressDialog.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+        <member name="M:WixSharp.UI.Forms.ProgressDialog.ProcessMessage(WixToolset.Dtf.WindowsInstaller.InstallMessage,WixToolset.Dtf.WindowsInstaller.Record,WixToolset.Dtf.WindowsInstaller.MessageButtons,WixToolset.Dtf.WindowsInstaller.MessageIcon,WixToolset.Dtf.WindowsInstaller.MessageDefaultButton)">
             <summary>
             Processes the message.
             </summary>
@@ -722,7 +722,7 @@
             The MSI session object.
             </summary>
         </member>
-        <member name="M:WixSharp.MsiSessionAdapter.#ctor(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.MsiSessionAdapter.#ctor(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.MsiSessionAdapter"/> class.
             </summary>
@@ -902,7 +902,7 @@
             A window icon that appears in the left top corner of the UI shell window.
             </summary>
         </member>
-        <member name="M:WixSharp.ManagedUI.Initialize(Microsoft.Deployment.WindowsInstaller.Session,System.String,Microsoft.Deployment.WindowsInstaller.InstallUIOptions@)">
+        <member name="M:WixSharp.ManagedUI.Initialize(WixToolset.Dtf.WindowsInstaller.Session,System.String,WixToolset.Dtf.WindowsInstaller.InstallUIOptions@)">
             <summary>
             Initializes the specified session.
             </summary>
@@ -910,9 +910,9 @@
             <param name="resourcePath">The resource path.</param>
             <param name="uiLevel">The UI level.</param>
             <returns></returns>
-            <exception cref="T:Microsoft.Deployment.WindowsInstaller.InstallCanceledException"></exception>
+            <exception cref="T:WixToolset.Dtf.WindowsInstaller.InstallCanceledException"></exception>
         </member>
-        <member name="M:WixSharp.ManagedUI.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+        <member name="M:WixSharp.ManagedUI.ProcessMessage(WixToolset.Dtf.WindowsInstaller.InstallMessage,WixToolset.Dtf.WindowsInstaller.Record,WixToolset.Dtf.WindowsInstaller.MessageButtons,WixToolset.Dtf.WindowsInstaller.MessageIcon,WixToolset.Dtf.WindowsInstaller.MessageDefaultButton)">
             <summary>
             Processes information and progress messages sent to the user interface.
             </summary>
@@ -1043,7 +1043,7 @@
             The session object.
             </summary>
         </member>
-        <member name="M:WixSharp.MsiRuntime.#ctor(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.MsiRuntime.#ctor(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.MsiRuntime"/> class.
             </summary>
@@ -1161,7 +1161,7 @@
              <summary>
              Defines Wix# bootstrapper managed application with no User Interface.
              <para>It is a design time 'adapter' for the canonical WiX managed bootstrapper application <see cref="T:WixSharp.Bootstrapper.SilentManagedBA"/>.</para>
-             <para><see cref="T:WixSharp.Bootstrapper.SilentManagedBA"/> automatically handles <see cref="T:Microsoft.Tools.WindowsInstallerXml.Bootstrapper.BootstrapperApplication"/> events and
+             <para><see cref="T:WixSharp.Bootstrapper.SilentManagedBA"/> automatically handles <see cref="T:WixToolset.Bootstrapper.BootstrapperApplication"/> events and
              detects the current package/product state (present vs. absent). The package state detection is based on the <see cref="T:WixSharp.Bootstrapper.SilentBootstrapperApplication.PrimaryPackageId"/>.
              If this member is no t then the Id of the lats package in the Bundle will be used instead.</para>
              </summary>
@@ -1223,14 +1223,14 @@
             Entry point that is called when the Bootstrapper application is ready to run.
             </summary>
         </member>
-        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.OnPlanComplete(System.Object,Microsoft.Tools.WindowsInstallerXml.Bootstrapper.PlanCompleteEventArgs)">
+        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.OnPlanComplete(System.Object,WixToolset.Bootstrapper.PlanCompleteEventArgs)">
             <summary>
             Method that gets invoked when the Bootstrapper PlanComplete event is fired.
             If the planning was successful, it instructs the Bootstrapper Engine to
             install the packages.
             </summary>
         </member>
-        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.OnDetectPackageComplete(System.Object,Microsoft.Tools.WindowsInstallerXml.Bootstrapper.DetectPackageCompleteEventArgs)">
+        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.OnDetectPackageComplete(System.Object,WixToolset.Bootstrapper.DetectPackageCompleteEventArgs)">
             <summary>
             Method that gets invoked when the Bootstrapper DetectPackageComplete event is fired.
             Checks the PackageId and sets the installation scenario. The PackageId is the ID
@@ -1238,7 +1238,7 @@
             msupackage) in the WiX bundle.
             </summary>
         </member>
-        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.OnApplyComplete(System.Object,Microsoft.Tools.WindowsInstallerXml.Bootstrapper.ApplyCompleteEventArgs)">
+        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.OnApplyComplete(System.Object,WixToolset.Bootstrapper.ApplyCompleteEventArgs)">
             <summary>
             Method that gets invoked when the Bootstrapper ApplyComplete event is fired.
             This is called after a bundle installation has completed. Make sure we updated the view.
@@ -1321,7 +1321,7 @@
             <param name="dialog">The dialog.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.UIExtensions.GetDirectoryPath(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.UIExtensions.GetDirectoryPath(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
             Gets the target system directory path based on specified directory name (MSI Directory table).
             </summary>
@@ -1383,7 +1383,7 @@
             Called when MSI execute started.
             </summary>
         </member>
-        <member name="M:WixSharp.IUIContainer.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+        <member name="M:WixSharp.IUIContainer.ProcessMessage(WixToolset.Dtf.WindowsInstaller.InstallMessage,WixToolset.Dtf.WindowsInstaller.Record,WixToolset.Dtf.WindowsInstaller.MessageButtons,WixToolset.Dtf.WindowsInstaller.MessageIcon,WixToolset.Dtf.WindowsInstaller.MessageDefaultButton)">
             <summary>
              Processes information and progress messages sent to the user interface.
             <para> This method directly mapped to the
@@ -1551,7 +1551,7 @@
             Cancels the MSI installation.
             </summary>
         </member>
-        <member name="M:WixSharp.UIShell.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+        <member name="M:WixSharp.UIShell.ProcessMessage(WixToolset.Dtf.WindowsInstaller.InstallMessage,WixToolset.Dtf.WindowsInstaller.Record,WixToolset.Dtf.WindowsInstaller.MessageButtons,WixToolset.Dtf.WindowsInstaller.MessageIcon,WixToolset.Dtf.WindowsInstaller.MessageDefaultButton)">
             <summary>
             Processes information and progress messages sent to the user interface.
             <para> This method directly mapped to the
@@ -1600,77 +1600,77 @@
             </summary>
         </member>
         <member name="T:WixSharp.WixCLRDialog">
-            <summary>
-            Defines System.Windows.Forms.<see cref="T:System.Windows.Forms.Form" />, which is to be used as the  for custom MSI dialog.
-            <para>
-            As opposite to the WixSharp.<see cref="T:WixSharp.WixForm" /> based custom dialogs <c>WixCLRDialog</c> is instantiated not at 
-            compile but at run time. Thus it is possible to implement comprehensive deployment algorithms in any of the available Form event handlers.
-            </para>
-            <para>
-            The usual usability scenario is the injection of the managed Custom Action (for displaying the <c>WixCLRDialog</c>) 
-            into the sequence of the standard dialogs (WixSharp.<see cref="T:WixSharp.CustomUI"/>). 
-            </para>
-            <para>
-            While it is possible to construct <see cref="T:WixSharp.CustomUI"/> instance manually it is preferred to use 
-            Factory methods of  <see cref="T:WixSharp.CustomUIBuilder"/> (e.g. InjectPostLicenseClrDialog) for this.
-            </para>
-            <code>
-            static public void Main()
-            {
-                ManagedAction showDialog;
+             <summary>
+             Defines System.Windows.Forms.<see cref="T:System.Windows.Forms.Form" />, which is to be used as the  for custom MSI dialog.
+             <para>
+             As opposite to the WixSharp.<see cref="T:WixSharp.WixForm" /> based custom dialogs <c>WixCLRDialog</c> is instantiated not at
+             compile but at run time. Thus it is possible to implement comprehensive deployment algorithms in any of the available Form event handlers.
+             </para>
+             <para>
+             The usual usability scenario is the injection of the managed Custom Action (for displaying the <c>WixCLRDialog</c>)
+             into the sequence of the standard dialogs (WixSharp.<see cref="T:WixSharp.CustomUI"/>).
+             </para>
+             <para>
+             While it is possible to construct <see cref="T:WixSharp.CustomUI"/> instance manually it is preferred to use
+             Factory methods of  <see cref="T:WixSharp.CustomUIBuilder"/> (e.g. InjectPostLicenseClrDialog) for this.
+             </para>
+             <code>
+             static public void Main()
+             {
+                 ManagedAction showDialog;
             
-                var project = new Project("CustomDialogTest",
-                                            showDialog = new ShowClrDialogAction("ShowProductActivationDialog"));
+                 var project = new Project("CustomDialogTest",
+                                             showDialog = new ShowClrDialogAction("ShowProductActivationDialog"));
             
-                project.UI = WUI.WixUI_Common;
-                project.CustomUI = CustomUIBuilder.InjectPostLicenseClrDialog(showDialog.Id, " LicenseAccepted = \"1\"");
-                
-                Compiler.BuildMsi(project);
-            }
-            ...
-            public class CustomActions
-            {
-                [CustomAction]
-                public static ActionResult ShowProductActivationDialog(Session session)
-                {
-                    return WixCLRDialog.ShowAsMsiDialog(new CustomDialog(session));
-                }
-            }
-            ...
-            public partial class CustomDialog : WixCLRDialog
-            {
-                private GroupBox groupBox1;
-                private Button cancelBtn;
-                ... 
-            </code>
-            <para>
-            The all communications with the installation in progress are to be done by modifying the MSI properties or executing MSI actions 
-            via <c>Session</c> object.</para>
-            <para>
-            When closing the dialog make sure you set the DeialogResul properly. <c>WixCLRDialog</c> offers three predefined routines for setting the 
-            DialogResult:
-            <para>- MSINext</para>
-            <para>- MSIBack</para>
-            <para>- MSICancel</para>
-            By invoking these routines from the corresponding event handlers you can control your MSI UI sequence:
-            <code>
-            void cancelBtn_Click(object sender, EventArgs e)
-            {
-                MSICancel();
-            }
+                 project.UI = WUI.WixUI_Common;
+                 project.CustomUI = CustomUIBuilder.InjectPostLicenseClrDialog(showDialog.Id, " LicenseAccepted = \"1\"");
             
-            void nextBtn_Click(object sender, EventArgs e)
-            {
-                MSINext();
-            }
+                 Compiler.BuildMsi(project);
+             }
+             ...
+             public class CustomActions
+             {
+                 [CustomAction]
+                 public static ActionResult ShowProductActivationDialog(Session session)
+                 {
+                     return WixCLRDialog.ShowAsMsiDialog(new CustomDialog(session));
+                 }
+             }
+             ...
+             public partial class CustomDialog : WixCLRDialog
+             {
+                 private GroupBox groupBox1;
+                 private Button cancelBtn;
+                 ...
+             </code>
+             <para>
+             The all communications with the installation in progress are to be done by modifying the MSI properties or executing MSI actions
+             via <c>Session</c> object.</para>
+             <para>
+             When closing the dialog make sure you set the DeialogResul properly. <c>WixCLRDialog</c> offers three predefined routines for setting the
+             DialogResult:
+             <para>- MSINext</para>
+             <para>- MSIBack</para>
+             <para>- MSICancel</para>
+             By invoking these routines from the corresponding event handlers you can control your MSI UI sequence:
+             <code>
+             void cancelBtn_Click(object sender, EventArgs e)
+             {
+                 MSICancel();
+             }
             
-            void backBtn_Click(object sender, EventArgs e)
-            {
-                MSIBack();
-            }
-            </code>
-            </para>
-            </summary>
+             void nextBtn_Click(object sender, EventArgs e)
+             {
+                 MSINext();
+             }
+            
+             void backBtn_Click(object sender, EventArgs e)
+             {
+                 MSIBack();
+             }
+             </code>
+             </para>
+             </summary>
         </member>
         <member name="F:WixSharp.WixCLRDialog.session">
             <summary>
@@ -1686,12 +1686,12 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.WixCLRDialog"/> class.
             <remarks>
-            This constructor is to be used by the Visual Studio Form designer only. 
+            This constructor is to be used by the Visual Studio Form designer only.
             You should always use <c>WixCLRDialog(Session session)</c> constructor instead.
             </remarks>
             </summary>
         </member>
-        <member name="M:WixSharp.WixCLRDialog.#ctor(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.WixCLRDialog.#ctor(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.WixCLRDialog"/> class.
             </summary>
@@ -1730,19 +1730,19 @@
         </member>
         <member name="M:WixSharp.WixCLRDialog.MSICancel">
             <summary>
-            Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.Cancel' value ensuring the 
+            Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.Cancel' value ensuring the
             setup is canceled.
             </summary>
         </member>
         <member name="M:WixSharp.WixCLRDialog.MSIBack">
             <summary>
-            Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.Retry' value ensuring the 
+            Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.Retry' value ensuring the
             setup is resumed with the previous UI sequence dialog is displayed.
             </summary>
         </member>
         <member name="M:WixSharp.WixCLRDialog.MSINext">
             <summary>
-            Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.OK' value ensuring the 
+            Closes the dialog and sets the <c>this.DialogResult</c> to the 'DialogResult.OK' value ensuring the
             setup is resumed and the UI sequence advanced to the next step.
             </summary>
         </member>

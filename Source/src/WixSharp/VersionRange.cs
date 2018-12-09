@@ -64,7 +64,7 @@ namespace WixSharp
         /// <summary>
         /// Set to <c>true</c> to detect products and applications but do not uninstall.
         /// </summary>
-        public bool? OnlyDetect; 
+        public bool? OnlyDetect;
 
         /// <summary>
         /// Predefined "open ended" range between version of the product MSI being built (inclusive) and any newer version.

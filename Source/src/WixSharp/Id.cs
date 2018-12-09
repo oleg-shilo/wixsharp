@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,13 +24,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
 
 namespace WixSharp
 {
     /// <summary>
-    /// The unique string identifier of the Wix# project item. The <c>Id</c> is automatically generated 
-    /// by Wix# engine during the MSI build unless it is explicitly specified by a project item 
+    /// The unique string identifier of the Wix# project item. The <c>Id</c> is automatically generated
+    /// by Wix# engine during the MSI build unless it is explicitly specified by a project item
     /// constructor parameter.
     /// <para><c>Id</c> is used to "stamp" every XML element of the WiX source file produced by Wix#.</para>
     /// </summary>
@@ -71,6 +73,7 @@ namespace WixSharp
         {
             return string.Compare(id1.Value, id2.Value) == 0;
         }
+
         /// <summary>
         /// Implements the operator !=.
         /// </summary>
@@ -90,7 +93,8 @@ namespace WixSharp
         /// The result of the conversion.
         /// </returns>
         public static implicit operator System.String(Id id)
-        {   return id.Value;
+        {
+            return id.Value;
         }
 
         /// <summary>
@@ -103,22 +107,20 @@ namespace WixSharp
         /// <exception cref="T:System.NullReferenceException">The <paramref name="obj"/> parameter is null.</exception>
         public override bool Equals(object obj)
         {
-
             if (!(obj is Id)) return false;
 
             return this == (Id)obj;
-
         }
+
         /// <summary>
         /// Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
         public override int GetHashCode()
         {
             return Value.GetHashCode();
         }
-
     }
 }

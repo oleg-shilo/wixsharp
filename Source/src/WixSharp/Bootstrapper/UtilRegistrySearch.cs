@@ -2,7 +2,6 @@ using System.Xml.Linq;
 
 namespace WixSharp.Bootstrapper
 {
-
     /// <summary>
     /// Defines a registry search based on WiX RegistrySearch element (Util Extension).
     /// </summary>
@@ -97,5 +96,4 @@ namespace WixSharp.Bootstrapper
                        .SetAttribute("Root", Root);
         }
     }
-
 }

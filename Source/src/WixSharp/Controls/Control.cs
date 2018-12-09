@@ -4,7 +4,7 @@ using System.Xml.Linq;
 namespace WixSharp.Controls
 {
     /// <summary>
-    /// Defines generic WiX Control.  
+    /// Defines generic WiX Control.
     /// </summary>
     public partial class Control : WixEntity
     {

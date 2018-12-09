@@ -275,7 +275,7 @@
              <para>This value is used to determine if the <c>PrerequisiteFile</c> should be launched.</para>
              <para>This value must comply with the following pattern: &lt;RegistryHive&gt;:&lt;KeyPath&gt;:&lt;ValueName&gt;.</para>
              <code>PrerequisiteRegKeyValue = @"HKLM:Software\My Company\My Product:Installed";</code>
-             Existence of the specified registry value at runtime is interpreted as an indication of the <c>PrerequisiteFile</c> has been alreday installed.
+             Existence of the specified registry value at runtime is interpreted as an indication of the <c>PrerequisiteFile</c> has been already installed.
              Thus bootstrapper will execute <c>PrimaryFile</c> without launching <c>PrerequisiteFile</c> first.</param>
              <param name="doNotPostVerifyPrerequisite">The flag which allows you to disable verification of <c>PrerequisiteRegKeyValue</c> after the prerequisite setup is completed.
              <para>Normally if <c>bootstrapper</c> checks if <c>PrerequisiteRegKeyValue</c>/> exists straight after the prerequisite installation and starts
@@ -3480,6 +3480,8 @@
             <summary>
             WiX linker <c>Light.exe</c> options (e.g. " -sice:ICE30").
             <para>The default value is "-sw1076 -sw1079" (disable warning 1076 and 1079).</para>
+            <para>Need to use <c>-spdb</c> as the WiX issue #5169 (https://github.com/wixtoolset/issues/issues/5169)
+            is still not fixed as at 9 Dec 2018.</para>
             </summary>
         </member>
         <member name="F:WixSharp.Compiler.CandleOptions">
@@ -4592,17 +4594,17 @@
              <summary>
              Defines file to be installed.
              </summary>
-             
+            
             <example>The following is an example of installing <c>MyApp.exe</c> file.
             <code>
-             var project = 
+             var project =
                      new Project("MyProduct",
                          new Dir(@"%ProgramFiles%\My Company\My Product",
                              new File("readme.txt")),
                          new Dir("%Fonts%",
                              new FontFile("FreeSansBold.ttf")));
                      ...
-                     
+            
              project.BuildMsi();
              </code>
              </example>
@@ -4639,7 +4641,7 @@
         <member name="P:WixSharp.FontFile.FontTitle">
             <summary>
             Gets or sets the font title.
-            <para>Causes an entry to be generated for the file in the Font 
+            <para>Causes an entry to be generated for the file in the Font
             table with the specified FontTitle. This attribute is intended to be used to register the file as a non-TrueType font.</para>
             </summary>
             <value>The font title.</value>
@@ -6419,21 +6421,21 @@
             <param name="project">The project.</param>
             <param name="resilientSourceDir">Resilient source directory.</param>
         </member>
-        <member name="M:WixSharp.ResilientPackage.WixSharp_SetPackageName_Action(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.ResilientPackage.WixSharp_SetPackageName_Action(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Internal ResilientPackage action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.ResilientPackage.WixSharp_RemoveResilientPackage_Action(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.ResilientPackage.WixSharp_RemoveResilientPackage_Action(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Internal ResilientPackage action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.ResilientPackage.WixSharp_CreateResilientPackage_Action(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.ResilientPackage.WixSharp_CreateResilientPackage_Action(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Internal ResilientPackage action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
             </summary>
@@ -6568,42 +6570,42 @@
             Specifies when the service action occur. It can be one of the <see cref="T:WixSharp.SvcEventType"/> values.
             </summary>
         </member>
-        <member name="F:WixSharp.SvcEvent.Install">
+        <member name="P:WixSharp.SvcEvent.Install">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.install"/>
             and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without
             waiting for the completion.
             </summary>
         </member>
-        <member name="F:WixSharp.SvcEvent.Install_Wait">
+        <member name="P:WixSharp.SvcEvent.Install_Wait">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.install"/>
             and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
             waiting for the completion.
             </summary>
         </member>
-        <member name="F:WixSharp.SvcEvent.Uninstall">
+        <member name="P:WixSharp.SvcEvent.Uninstall">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.uninstall"/>
             and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation
             without waiting for the completion.
             </summary>
         </member>
-        <member name="F:WixSharp.SvcEvent.Uninstall_Wait">
+        <member name="P:WixSharp.SvcEvent.Uninstall_Wait">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.uninstall"/>
             and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
             waiting for the completion.
             </summary>
         </member>
-        <member name="F:WixSharp.SvcEvent.InstallUninstall">
+        <member name="P:WixSharp.SvcEvent.InstallUninstall">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.both"/>
             and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without
             waiting for the completion.
             </summary>
         </member>
-        <member name="F:WixSharp.SvcEvent.InstallUninstall_Wait">
+        <member name="P:WixSharp.SvcEvent.InstallUninstall_Wait">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.both"/>
             and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
@@ -7830,7 +7832,7 @@
             <param name="obj">A <see cref="T:System.String"/> whose value to analyse.</param>
             <returns>true if the value parameter is null or an empty string (""); otherwise, false.</returns>
         </member>
-        <member name="M:WixSharp.Extensions.IsActive(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.Extensions.IsActive(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Determines whether the specified <see cref="T:Microsoft.Deployment.WindowsInstaller.Session"/> is active.
             <para>It is useful for checking if the session is terminated (e.g. in deferred custom actions).</para>
@@ -7838,7 +7840,7 @@
             <param name="session">The session.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.IsInstalled(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.Extensions.IsInstalled(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Determines whether the product associated with the session is installed.
             <para>
@@ -7849,7 +7851,7 @@
             <param name="session">The session.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.IsUISupressed(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.Extensions.IsUISupressed(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Gets a value indicating whether Authored UI and wizard dialog boxes suppressed.
             </summary>
@@ -7857,7 +7859,7 @@
             <c>true</c> if UI is suppressed; otherwise, <c>false</c>.
             </value>
         </member>
-        <member name="M:WixSharp.Extensions.UILevel(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.Extensions.UILevel(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Gets the UIlevel.
             <para>UILevel > 4 lead to displaying modal dialogs. See https://msdn.microsoft.com/en-us/library/aa369487(v=vs.85).aspx. </para>
@@ -7866,7 +7868,7 @@
             The UI level.
             </value>
         </member>
-        <member name="M:WixSharp.Extensions.IsInstalling(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.Extensions.IsInstalling(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Gets a value indicating whether the product is being installed.
             <para>
@@ -7878,7 +7880,7 @@
             <c>true</c> if installing; otherwise, <c>false</c>.
             </value>
         </member>
-        <member name="M:WixSharp.Extensions.GetMainWindow(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.Extensions.GetMainWindow(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             <para>
             Gets the main window of the <c>msiexec.exe</c> process that has 'MainWindowTitle' containing the name of the product being installed.
@@ -7888,7 +7890,7 @@
             <param name="session">The session.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.IsRepairing(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.Extensions.IsRepairing(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Gets a value indicating whether the product is being repaired.
             <para>
@@ -7897,7 +7899,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:WixSharp.Extensions.IsUpgrading(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.Extensions.IsUpgrading(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Gets a value indicating whether the product is being upgraded.
             <para>
@@ -7910,7 +7912,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:WixSharp.Extensions.IsModifying(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.Extensions.IsModifying(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Determines whether MSI is running in "modifying" mode.
             <para>
@@ -7921,7 +7923,7 @@
             <param name="session">The session.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.IsUninstalling(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.Extensions.IsUninstalling(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Determines whether MSI is running in "uninstalling" mode.
             <para>
@@ -7932,7 +7934,7 @@
             <param name="session">The session.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.IsFeatureEnabled(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.Extensions.IsFeatureEnabled(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
             Determines whether the feature is selected in the feature tree of the Features dialog
             and will be installed.
@@ -7968,14 +7970,14 @@
             <param name="feature">The feature.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.IsBasic(Microsoft.Deployment.WindowsInstaller.InstallUIOptions)">
+        <member name="M:WixSharp.Extensions.IsBasic(WixToolset.Dtf.WindowsInstaller.InstallUIOptions)">
             <summary>
             Determines whether this is basic UI level.
             </summary>
             <param name="level">The level.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.Property(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.Extensions.Property(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
             Returns the value of the named property of the specified <see cref="T:Microsoft.Deployment.WindowsInstaller.Session"/> object.
             <para>It can be uses as a generic way of accessing the properties as it redirects (transparently) access to the
@@ -7986,7 +7988,7 @@
             <param name="name">The name.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.QueryProperty(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.Extensions.QueryProperty(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
             Queries MSI database directly for the table 'Property' value. This method is particularly useful for the stages when WiX session
             object is not fully initialized. For example properties are not discovered yet during EmbeddedUI loading event.
@@ -7995,28 +7997,28 @@
             <param name="name">The name.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.LookupInstalledVersion(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.Extensions.LookupInstalledVersion(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Lookups the installed version.
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.QueryUpgradeCode(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.Extensions.QueryUpgradeCode(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Queries the upgrade code.
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.QueryProductVersion(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.Extensions.QueryProductVersion(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Queries the product version.
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.SaveBinary(Microsoft.Deployment.WindowsInstaller.Session,System.String,System.String)">
+        <member name="M:WixSharp.Extensions.SaveBinary(WixToolset.Dtf.WindowsInstaller.Session,System.String,System.String)">
             <summary>
             Saves the binary (from the Binary table) into the file.
             </summary>
@@ -8024,7 +8026,7 @@
             <param name="binary">The binary.</param>
             <param name="file">The file.</param>
         </member>
-        <member name="M:WixSharp.Extensions.TryReadBinary(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.Extensions.TryReadBinary(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
             Tries the read the binary (from the Binary table) into the byte array.
             </summary>
@@ -8032,7 +8034,7 @@
             <param name="binary">The binary.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.ReadBinary(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.Extensions.ReadBinary(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
             Read the binary (from the Binary table) into the byte array.
             </summary>
@@ -8040,7 +8042,7 @@
             <param name="binary">The binary.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.OpenView(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.Extensions.OpenView(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
             A simple generic wrapper around MSI View open operation. It retrieves all view data and returns it as a
             collection of dictionaries (set of named values).
@@ -8049,7 +8051,7 @@
             <param name="sqlText">The SQL text.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.GetEmbeddedBitmap(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.Extensions.GetEmbeddedBitmap(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
             Extracts the bitmap embedded into MSI (into Binary table).
             </summary>
@@ -8057,7 +8059,7 @@
             <param name="binary">The name on resource in the Binary table.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.GetEmbeddedString(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.Extensions.GetEmbeddedString(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
              Extracts the string embedded into MSI (into Binary table).
             </summary>
@@ -8065,7 +8067,7 @@
             <param name="binary">The name on resource in the Binary table.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.GetEmbeddedData(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.Extensions.GetEmbeddedData(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
              Extracts the data embedded into MSI (into Binary table).
             </summary>
@@ -8073,7 +8075,7 @@
             <param name="binary">The name on resource in the Binary table.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.HandleErrors(Microsoft.Deployment.WindowsInstaller.Session,System.Action)">
+        <member name="M:WixSharp.Extensions.HandleErrors(WixToolset.Dtf.WindowsInstaller.Session,System.Action)">
             <summary>
             Handles the errors in the specified action being executed. The all exceptions are caught and logged to the msi log.
             </summary>
@@ -9054,9 +9056,9 @@
             <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.StringEnum`1">
-            <summary>
+             <summary>
             
-            </summary>
+             </summary>
         </member>
         <member name="M:WixSharp.StringEnum`1.#ctor(System.String)">
             <summary>
@@ -9542,6 +9544,14 @@
             <param name="namespace"></param>
             <returns></returns>
         </member>
+        <member name="P:WixSharp.WixExtension.IsWix4">
+            <summary>
+            Gets a value indicating whether this WixSharp is building for WiX4.
+            </summary>
+            <value>
+              <c>true</c> if this instance is wix4; otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="F:WixSharp.WixExtension.Difx">
             <summary>
             Well-known Wix Extension: difx
@@ -9580,6 +9590,46 @@
         <member name="F:WixSharp.WixExtension.Http">
             <summary>
             Well-known Wix Extension Http
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixExtension.ComPlus">
+            <summary>
+            Well-known Wix Extension COM+
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixExtension.Dependency">
+            <summary>
+            Well-known Wix Extension Dependency
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixExtension.Gaming">
+            <summary>
+            Well-known Wix Extension Gaming
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixExtension.Msmq">
+            <summary>
+            The Well-known Wix Extension MSMQ
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixExtension.Ps">
+            <summary>
+            The Well-known Wix Extension PowerShell
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixExtension.Tag">
+            <summary>
+            Well-known Wix Extension Tag
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixExtension.Vs">
+            <summary>
+            Well-known Wix Extension VS
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixExtension.Lux">
+            <summary>
+            Well-known Wix Extension LUX
             </summary>
         </member>
         <member name="F:WixSharp.WixExtension.UI">
@@ -9774,7 +9824,7 @@
         </member>
         <member name="T:WixSharp.Controls.Control">
             <summary>
-            Defines generic WiX Control.  
+            Defines generic WiX Control.
             </summary>
         </member>
         <member name="M:WixSharp.Controls.Control.#ctor">
@@ -10384,7 +10434,7 @@
         </member>
         <member name="T:WixSharp.Controls.ConditionAction">
             <summary>
-            Defines condition action type values for the WiX Control elements. 
+            Defines condition action type values for the WiX Control elements.
             </summary>
         </member>
         <member name="T:WixSharp.ElevatedManagedAction">
@@ -10703,33 +10753,33 @@
             <param name="rollback">The full name of static CustomAction rollback method.</param>
         </member>
         <member name="T:WixSharp.ExeFileShortcut">
-            <summary>
-            Defines <see cref="T:WixSharp.ExeFileShortcut"/> to be installed. <para><see cref="T:WixSharp.ExeFileShortcut"/> is a specialized version of the <see cref="T:WixSharp.Shortcut"/> designed 
-            for using <see cref="T:WixSharp.Shortcut"/> as a <see cref="T:WixSharp.Dir"/> nested element</para>
-            <para>There are different ways of defining shortcuts of the Wix# project: </para>
-            <para> - It can be specified as a nested element of the <see cref="T:WixSharp.File"/>. In this case after 
-            the installation the shortcut will point to the file it belongs to.</para>
-            <para> - Alternatively the <c>Shortcut</c> can be specified as a <see cref="T:WixSharp.Dir"/> nested 
-            element. In this case after the installation the shortcut will point to the file 
-            it belongs to.</para>
-            </summary>
+             <summary>
+             Defines <see cref="T:WixSharp.ExeFileShortcut"/> to be installed. <para><see cref="T:WixSharp.ExeFileShortcut"/> is a specialized version of the <see cref="T:WixSharp.Shortcut"/> designed
+             for using <see cref="T:WixSharp.Shortcut"/> as a <see cref="T:WixSharp.Dir"/> nested element</para>
+             <para>There are different ways of defining shortcuts of the Wix# project: </para>
+             <para> - It can be specified as a nested element of the <see cref="T:WixSharp.File"/>. In this case after
+             the installation the shortcut will point to the file it belongs to.</para>
+             <para> - Alternatively the <c>Shortcut</c> can be specified as a <see cref="T:WixSharp.Dir"/> nested
+             element. In this case after the installation the shortcut will point to the file
+             it belongs to.</para>
+             </summary>
             
-            <example>
-            The following is an example of installing "Uninstall Product" shortcut to the product directory.
-            <code>
-            var project = 
-                new Project("My Product",
-                
-                    new Dir(@"%ProgramFiles%\My Company\My Product",
-                        new ExeFileShortcut("Uninstall MyApp", 
-                                            "[System64Folder]msiexec.exe", 
-                                            "/x [ProductCode]")),
-                            
-                    ...
-                    
-            Compiler.BuildMsi(project);
-            </code>
-            </example>
+             <example>
+             The following is an example of installing "Uninstall Product" shortcut to the product directory.
+             <code>
+             var project =
+                 new Project("My Product",
+            
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+                         new ExeFileShortcut("Uninstall MyApp",
+                                             "[System64Folder]msiexec.exe",
+                                             "/x [ProductCode]")),
+            
+                     ...
+            
+             Compiler.BuildMsi(project);
+             </code>
+             </example>
         </member>
         <member name="M:WixSharp.ExeFileShortcut.#ctor">
             <summary>
@@ -10888,14 +10938,14 @@
              </summary>
             <example>The following is an example of associating file extension ".my" with installed application MyViewer.exe.
             <code>
-             var project = 
+             var project =
                  new Project("My Product",
                      new Dir(@"%ProgramFiles%\My Company\My Product",
                          new Dir(@"Notepad",
                              new File("MyViewer.exe",
-                                 new FileAssociation("my", "application/my", "open", "\"%1\"")))));  
+                                 new FileAssociation("my", "application/my", "open", "\"%1\"")))));
                      ...
-                     
+            
              Compiler.BuildMsi(project);
              </code>
              </example>
@@ -10933,9 +10983,9 @@
         </member>
         <member name="F:WixSharp.FileAssociation.SequenceNo">
             <summary>
-            The sequence of the commands. Only <see cref="T:WixSharp.FileAssociation"/> for which the SequenceNo is specified are 
-            used to prepare an ordered list for the default value of the shell key. 
-            The <see cref="T:WixSharp.FileAssociation"/> with the lowest value in this column becomes the default <see cref="T:WixSharp.FileAssociation"/>. 
+            The sequence of the commands. Only <see cref="T:WixSharp.FileAssociation"/> for which the SequenceNo is specified are
+            used to prepare an ordered list for the default value of the shell key.
+            The <see cref="T:WixSharp.FileAssociation"/> with the lowest value in this column becomes the default <see cref="T:WixSharp.FileAssociation"/>.
             Used only for Advertised <see cref="T:WixSharp.FileAssociation"/>.
             </summary>
         </member>
@@ -10952,7 +11002,7 @@
         </member>
         <member name="F:WixSharp.FileAssociation.IconIndex">
             <summary>
-            The zero-based index of the icon associated with this ProgId. The default value is <c>0</c>. 
+            The zero-based index of the icon associated with this ProgId. The default value is <c>0</c>.
             </summary>
         </member>
         <member name="F:WixSharp.FileAssociation.ContentType">
@@ -11214,7 +11264,7 @@
             The shell.
             </value>
         </member>
-        <member name="M:WixSharp.IManagedDialog.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+        <member name="M:WixSharp.IManagedDialog.ProcessMessage(WixToolset.Dtf.WindowsInstaller.InstallMessage,WixToolset.Dtf.WindowsInstaller.Record,WixToolset.Dtf.WindowsInstaller.MessageButtons,WixToolset.Dtf.WindowsInstaller.MessageIcon,WixToolset.Dtf.WindowsInstaller.MessageDefaultButton)">
             <summary>
             Processes information and progress messages sent to the user interface.
             <para> This method directly mapped to the
@@ -11443,35 +11493,35 @@
             Class for hosting all custom actions of the ManagedProject
             </summary>
         </member>
-        <member name="M:WixSharp.ManagedProjectActions.WixSharp_InitRuntime_Action(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.ManagedProjectActions.WixSharp_InitRuntime_Action(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.ManagedProjectActions.WixSharp_Load_Action(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.ManagedProjectActions.WixSharp_Load_Action(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.ManagedProjectActions.WixSharp_BeforeInstall_Action(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.ManagedProjectActions.WixSharp_BeforeInstall_Action(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.ManagedProjectActions.WixSharp_AfterInstall_Action(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.ManagedProjectActions.WixSharp_AfterInstall_Action(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
             </summary>
             <param name="session">The session.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.ManagedProjectActions.CancelRequestHandler(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.ManagedProjectActions.CancelRequestHandler(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Internal ManagedProject action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
             </summary>
@@ -11960,7 +12010,7 @@
         </member>
         <member name="T:WixSharp.NativeBootstrapper">
             <summary>
-            Defines native (un-managed) bootstrapper. The primary usage of <see cref="T:WixSharp.NativeBootstrapper"/> is to build bootstrappers for automatically installing .NET 
+            Defines native (un-managed) bootstrapper. The primary usage of <see cref="T:WixSharp.NativeBootstrapper"/> is to build bootstrappers for automatically installing .NET
             for executing MSIs containing managed Custom Actions (<see cref="T:WixSharp.ManagedAction"/>).
             <para></para>
             <remarks>
@@ -11971,7 +12021,7 @@
             </list>
             </remarks>
             </summary>
-            <example>The following is an example of defining and building bootstrapper for installing MyProduct.msi and 
+            <example>The following is an example of defining and building bootstrapper for installing MyProduct.msi and
             .NET setup (dotnetfx.exe) as prerequisite installation.
             <para></para>
             <code>
@@ -12135,30 +12185,30 @@
             </summary>
         </member>
         <member name="T:WixSharp.Binary">
-            <summary>
-            Defines binary file to be embedded into MSI (<c>Binary</c> table).
-            <para>
-            You can use this class to embed any file (e.g. exe, dll, image) to be used during the installation. 
-            Note that none of the binary files are installed on the target system. They are just available at installation time
-            for using <c>CustomActions</c>.
-            </para>
-            </summary>
+             <summary>
+             Defines binary file to be embedded into MSI (<c>Binary</c> table).
+             <para>
+             You can use this class to embed any file (e.g. exe, dll, image) to be used during the installation.
+             Note that none of the binary files are installed on the target system. They are just available at installation time
+             for using <c>CustomActions</c>.
+             </para>
+             </summary>
             
-            <example>The following is an example of embedding <c>CRTSetup.msi</c> file into MSI for further use in 
-            <c>InstallCRTAction</c>  <see cref="T:WixSharp.ManagedAction"/>.
-            <code>
-            var project = new Project("MyProduct",
-                
-                    new Dir(@"%ProgramFiles%\My Company\My Product",
-                        new File("readme.txt")),
-                        ...
-                        
-                    new Binary("CRTSetup.msi"),
-                    new ManagedAction("InstallCRTAction",
-                    ... 
-                                        
-            </code>
-            </example>
+             <example>The following is an example of embedding <c>CRTSetup.msi</c> file into MSI for further use in
+             <c>InstallCRTAction</c>  <see cref="T:WixSharp.ManagedAction"/>.
+             <code>
+             var project = new Project("MyProduct",
+            
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+                         new File("readme.txt")),
+                         ...
+            
+                     new Binary("CRTSetup.msi"),
+                     new ManagedAction("InstallCRTAction",
+                     ...
+            
+             </code>
+             </example>
         </member>
         <member name="M:WixSharp.Binary.#ctor">
             <summary>
@@ -12184,30 +12234,30 @@
             </summary>
         </member>
         <member name="T:WixSharp.EmbeddedAssembly">
-            <summary>
-            Defines assembly file to be embedded into MSI (<c>Binary</c> table).
-            <para>
-            You can use this class to embed any .NET assembly to be used during the installation. 
-            Note that none of the binary files are installed on the target system. They are just available at installation time
-            for using <c>CustomActions</c>.
-            </para>
-            </summary>
+             <summary>
+             Defines assembly file to be embedded into MSI (<c>Binary</c> table).
+             <para>
+             You can use this class to embed any .NET assembly to be used during the installation.
+             Note that none of the binary files are installed on the target system. They are just available at installation time
+             for using <c>CustomActions</c>.
+             </para>
+             </summary>
             
-            <example>The following is an example of embedding <c>CRTSetup.msi</c> file into MSI for further use in 
-            <c>InstallCRTAction</c>  <see cref="T:WixSharp.ManagedAction"/>.
-            <code>
-            var project = new Project("MyProduct",
-                
-                    new Dir(@"%ProgramFiles%\My Company\My Product",
-                        new File(@"readme.txt")),
-                        ...
-                        
-                    new EmbeddedAssembly("config.exe") { RefAssemblies = new [] { "utils.dll" }},
-                    new ManagedAction("InstallCRTAction",
-                    ... 
-                                        
-            </code>
-            </example>
+             <example>The following is an example of embedding <c>CRTSetup.msi</c> file into MSI for further use in
+             <c>InstallCRTAction</c>  <see cref="T:WixSharp.ManagedAction"/>.
+             <code>
+             var project = new Project("MyProduct",
+            
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+                         new File(@"readme.txt")),
+                         ...
+            
+                     new EmbeddedAssembly("config.exe") { RefAssemblies = new [] { "utils.dll" }},
+                     new ManagedAction("InstallCRTAction",
+                     ...
+            
+             </code>
+             </example>
         </member>
         <member name="M:WixSharp.EmbeddedAssembly.#ctor">
             <summary>
@@ -13271,7 +13321,7 @@
             <summary>
             The default path of the feature <c>ConfigurableDirectory</c>. If set to non-empty string, MSI runtime will place
             <c>Configure</c> button for the feature in the <c>Feature Selection</c> dialog.
-            <para>Specify the Id of a Directory that can be configured by the user at installation 
+            <para>Specify the Id of a Directory that can be configured by the user at installation
             time. This identifier must be a public property and therefore completely uppercase. </para>
             </summary>
         </member>
@@ -17423,8 +17473,8 @@
         </member>
         <member name="T:WixSharp.Id">
             <summary>
-            The unique string identifier of the Wix# project item. The <c>Id</c> is automatically generated 
-            by Wix# engine during the MSI build unless it is explicitly specified by a project item 
+            The unique string identifier of the Wix# project item. The <c>Id</c> is automatically generated
+            by Wix# engine during the MSI build unless it is explicitly specified by a project item
             constructor parameter.
             <para><c>Id</c> is used to "stamp" every XML element of the WiX source file produced by Wix#.</para>
             </summary>
@@ -17489,7 +17539,7 @@
             Returns a hash code for this instance.
             </summary>
             <returns>
-            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+            A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
             </returns>
         </member>
         <member name="T:WixSharp.WUI">

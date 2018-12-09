@@ -1,15 +1,15 @@
 using System;
-using System.Linq;
 using System.Threading;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 using WixSharp.UI.ManagedUI;
-using System.Diagnostics;
 using WixSharp.UI.Forms;
-using System.Xml.Linq;
-using System.Text;
-using System.Drawing;
-using System.Windows.Forms;
+#if WIX4
+// using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp
 {
@@ -181,7 +181,7 @@ namespace WixSharp
         /// <param name="resourcePath">The resource path.</param>
         /// <param name="uiLevel">The UI level.</param>
         /// <returns></returns>
-        /// <exception cref="Microsoft.Deployment.WindowsInstaller.InstallCanceledException"></exception>
+        /// <exception cref="InstallCanceledException"></exception>
         public bool Initialize(Session session, string resourcePath, ref InstallUIOptions uiLevel)
         {
             //System.Diagnostics.Debugger.Launch();
@@ -207,14 +207,14 @@ namespace WixSharp
                             StartExecute = () => startEvent.Set(),
                             CancelExecute = () =>
                             {
-                                                // NOTE: IEmbeddedUI interface has no way to cancel the installation, which has been started
-                                                // (e.g. ProgressDialog is displayed). What is even worse is that UI can pass back to here
-                                                // a signal the user pressed 'Cancel' but nothing we can do with it. Install is already started
-                                                // and session object is now invalid.
-                                                // To solve this we use this work around - set a unique "cancel request mutex" form here
-                                                // and ManagedProjectActions.CancelRequestHandler built-in CA will pick the request and yield
-                                                // return code UserExit.
-                                                cancelRequest = new Mutex(true, "WIXSHARP_UI_CANCEL_REQUEST." + upgradeCode);
+                                // NOTE: IEmbeddedUI interface has no way to cancel the installation, which has been started
+                                // (e.g. ProgressDialog is displayed). What is even worse is that UI can pass back to here
+                                // a signal the user pressed 'Cancel' but nothing we can do with it. Install is already started
+                                // and session object is now invalid.
+                                // To solve this we use this work around - set a unique "cancel request mutex" form here
+                                // and ManagedProjectActions.CancelRequestHandler built-in CA will pick the request and yield
+                                // return code UserExit.
+                                cancelRequest = new Mutex(true, "WIXSHARP_UI_CANCEL_REQUEST." + upgradeCode);
                             }
                         },
                                         this);

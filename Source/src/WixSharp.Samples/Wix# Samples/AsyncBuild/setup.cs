@@ -1,13 +1,13 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\SDK\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 using System;
-using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WixSharp;
-using WixSharp.CommonTasks;
 
 static class Script
 {

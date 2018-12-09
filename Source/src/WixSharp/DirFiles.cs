@@ -26,7 +26,6 @@ THE SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using IO = System.IO;
 
 namespace WixSharp

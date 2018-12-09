@@ -347,8 +347,8 @@
         </member>
         <member name="T:WixSharp.UI.GenericSetup">
             <summary>
-            Generic class that represents runtime properties of the typical MSI setup. 
-            It is a ViewModel class, which has 'value changed' events for all bindable properties 
+            Generic class that represents runtime properties of the typical MSI setup.
+            It is a ViewModel class, which has 'value changed' events for all bindable properties
             automatically marshalled for the cross-thread calls.
             </summary>
         </member>
@@ -430,7 +430,7 @@
         <member name="P:WixSharp.UI.GenericSetup.NotStarted">
             <summary>
             Gets or sets a value indicating whether setup was not started yet. This information
-            can be useful for implementing "not started" UI state in the setup GUI.  
+            can be useful for implementing "not started" UI state in the setup GUI.
             </summary>
             <value>
               <c>true</c> if setup was not started; otherwise, <c>false</c>.

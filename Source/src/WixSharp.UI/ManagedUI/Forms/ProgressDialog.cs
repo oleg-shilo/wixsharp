@@ -1,10 +1,12 @@
 using System;
-using Microsoft.Deployment.WindowsInstaller;
-using System.Diagnostics;
-using System.Threading;
 using System.Drawing;
-using System.Windows.Forms;
-using WixSharp.CommonTasks;
+#if WIX4
+// using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp.UI.Forms
 {

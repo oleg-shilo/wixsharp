@@ -8,7 +8,7 @@ namespace WixSharp
     public class ServiceConfig : WixEntity, IGenericEntity
     {
         internal ServiceConfig()
-        {}
+        { }
 
         /// <summary>
         /// Specifies whether an auto-start service should delay its start until after all other auto-start services.
@@ -18,7 +18,7 @@ namespace WixSharp
         public bool? DelayedAutoStart;
 
         //public object FailureActionsWhen { get; set; } //note implementing util:serviceconfig instead
-        
+
         /// <summary>
         /// Specifies time in milliseconds that the Service Control Manager (SCM) waits after notifying
         /// the service of a system shutdown. If this attribute is not present the default value, 3 minutes, is used.
@@ -70,21 +70,25 @@ namespace WixSharp
             {
                 case ConfigureServiceTrigger.None:
                     break;
+
                 case ConfigureServiceTrigger.Install:
                     OnInstall = true;
                     OnReinstall = false;
                     OnUninstall = false;
                     break;
+
                 case ConfigureServiceTrigger.Reinstall:
                     OnInstall = false;
                     OnReinstall = true;
                     OnUninstall = false;
                     break;
+
                 case ConfigureServiceTrigger.Uninstall:
                     OnInstall = false;
                     OnReinstall = false;
                     OnUninstall = true;
                     break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }

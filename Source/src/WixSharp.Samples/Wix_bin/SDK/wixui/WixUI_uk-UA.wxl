@@ -2,7 +2,7 @@
 <!-- Copyright (c) .NET Foundation and contributors. All rights reserved. Licensed under the Microsoft Reciprocal License. See LICENSE.TXT file in the project root for full license information. -->
 
 
-<WixLocalization Culture="uk-ua" Codepage="1251" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+<WixLocalization Culture="uk-ua" Codepage="1251" xmlns="http://wixtoolset.org/schemas/v4/wxl">
     <String Id="WixUIBack" Overridable="yes">&amp;Назад</String>
     <String Id="WixUINext" Overridable="yes">&amp;Далі</String>
     <String Id="WixUICancel" Overridable="yes">Скасувати</String>

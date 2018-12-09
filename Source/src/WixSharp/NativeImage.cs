@@ -1,18 +1,12 @@
 using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Collections;
-using System.Data;
-using System.Drawing;
-using System.Security.Principal;
-using System.Text;
 using System.Xml.Linq;
+#if WIX4
+// using WixToolset.Bootstrapper;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
-using System.Globalization;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using static WixSharp.SetupEventArgs;
+#endif
 
 namespace WixSharp
 {

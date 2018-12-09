@@ -29,18 +29,20 @@ THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Microsoft.Deployment.WindowsInstaller;
-
 using IO = System.IO;
 using Reflection = System.Reflection;
-
 using System.Drawing;
-using WixSharp.CommonTasks;
+#if WIX4
+// using WixToolset.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
+#else
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Deployment.WindowsInstaller;
+#endif
 
 namespace WixSharp
 {
@@ -184,7 +186,7 @@ namespace WixSharp
         {
             string dtfAssembly = typeof(CustomActionAttribute).Assembly.Location;
 
-            // need to do it in a separate domain as we do not want to lock the assembly and 
+            // need to do it in a separate domain as we do not want to lock the assembly and
             // `ReflectionOnlyLoadFrom` is incompatible with the task
 
             if (Compiler.AutoGeneration.ValidateCAAssemblies == CAValidation.InRemoteAppDomain)
@@ -232,7 +234,7 @@ namespace WixSharp
 
         public void ValidateCAAssembly(string file, string dtfAsm)
         {
-            // `ValidateCAAssemblyImpl` will load assembly from `file` for validation. Though for this to happen 
+            // `ValidateCAAssemblyImpl` will load assembly from `file` for validation. Though for this to happen
             // the AppDomain will need to be able resolve the only dependence assembly `file` has - dtfAsm.
             // Thus always resolve it to dtfAsm (regardless of `args.Name` value) when AssemblyResolve is fired.
             ResolveEventHandler resolver = (sender, args) =>
@@ -257,14 +259,14 @@ namespace WixSharp
             {
                 var bf = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Static;
 
-                // `ReflectionOnlyLoadFrom` cannot preload all required assemblies and triggers 
-                // "System.InvalidOperationException: 'It is illegal to reflect on the custom attributes 
-                // of a Type loaded via ReflectionOnlyGetType (see Assembly.ReflectionOnly) -- use CustomAttributeData 
+                // `ReflectionOnlyLoadFrom` cannot preload all required assemblies and triggers
+                // "System.InvalidOperationException: 'It is illegal to reflect on the custom attributes
+                // of a Type loaded via ReflectionOnlyGetType (see Assembly.ReflectionOnly) -- use CustomAttributeData
                 // instead.'" exception. Thus need to use `LoadFrom`, which locks the assembly unless the operation is
-                // performed in the temp AppDomain, which is unloaded after at the end.  
+                // performed in the temp AppDomain, which is unloaded after at the end.
                 // Unfortunately `AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve` does not help (does not get fired).
 
-                // var assembly = System.Reflection.Assembly.ReflectionOnlyLoadFrom(file); 
+                // var assembly = System.Reflection.Assembly.ReflectionOnlyLoadFrom(file);
                 var assembly = loadFromMemory ?
                      Reflection.Assembly.Load(System.IO.File.ReadAllBytes(file)) :
                      Reflection.Assembly.LoadFrom(file);
