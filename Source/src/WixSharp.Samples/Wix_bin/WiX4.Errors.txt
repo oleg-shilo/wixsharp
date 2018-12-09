@@ -1,5 +1,5 @@
-As at 9 Dec 2018 these are still the bugs that are not fixed in WiX4. Efectivelly preventing WixSharp supporting this new platform. 
+As at 9 Dec 2018 these are still the bugs that are not fixed in WiX4. Efectivelly preventing WixSharp supporting this new platform.
 
- 
-https://github.com/wixtoolset/issues/issues/5169
-https://github.com/wixtoolset/issues/issues/5216
+- https://github.com/wixtoolset/issues/issues/5169
+- https://github.com/wixtoolset/issues/issues/5216
+- MakeSfxCA.exe Error: Microsoft.Deployment.WindowsInstaller.dll must be included in the list of support files. If using the MSBuild targets, make sure the assembly reference has the Private (Copy Local) flag set.

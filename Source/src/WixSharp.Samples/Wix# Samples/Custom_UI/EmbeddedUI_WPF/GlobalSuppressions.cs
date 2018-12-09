@@ -1,0 +1,8 @@
+﻿// This file is used by Code Analysis to maintain SuppressMessage
+// attributes that are applied to this project.
+// Project-level suppressions either have no target or are given
+// a specific target and scoped to a namespace, type, member, etc.
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Redundancies in Symbol Declarations", "RECS0154:Parameter is never used", Justification = "<Pending>", Scope = "member", Target = "~M:Microsoft.Deployment.Samples.EmbeddedUI.SampleEmbeddedUI.Initialize(Session,System.String,InstallUIOptions@)~System.Boolean")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Redundancies in Symbol Declarations", "RECS0154:Parameter is never used", Justification = "<Pending>", Scope = "member", Target = "~M:Microsoft.Deployment.Samples.EmbeddedUI.SetupWizard.ProcessMessage(InstallMessage,Record,MessageButtons,MessageIcon,MessageDefaultButton)~MessageResult")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Redundancies in Symbol Declarations", "RECS0154:Parameter is never used", Justification = "<Pending>", Scope = "member", Target = "~M:Microsoft.Deployment.Samples.EmbeddedUI.SetupWizard.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)~Microsoft.Deployment.WindowsInstaller.MessageResult")]
