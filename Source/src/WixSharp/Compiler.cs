@@ -720,8 +720,6 @@ namespace WixSharp
                                      .Distinct()
                                      .Join(" ", file => "\"" + file + "\"");
 
-
-
             var candleOptions = CandleOptions + " " + project.CandleOptions;
 
             var candleCmdLineParams = new StringBuilder();

@@ -70,7 +70,7 @@ namespace WixSharp
 
                 if (!IO.File.Exists(compiler) || !IO.File.Exists(linker))
                 {
-                    Compiler.OutputWriteLine("Wix binaries cannot be found. Expected location is " + IO.Path.GetDirectoryName(compiler));
+                    Compiler.OutputWriteLine("Wix binaries cannot be found. Expected location is " + compiler.PathGetDirName());
                     throw new ApplicationException("Wix compiler/linker cannot be found");
                 }
                 else
@@ -92,7 +92,23 @@ namespace WixSharp
                         wxsFiles += " \"" + file + "\"";
 
                     var candleOptions = CandleOptions + " " + project.CandleOptions;
-                    string command = (candleOptions + " " + extensionDlls + " \"" + wxsFile + "\" " + wxsFiles + " -out \"" + objFile + "\"").ExpandEnvVars();
+                    string command = candleOptions + " " + extensionDlls + " \"" + wxsFile + "\" ";
+
+                    if (wxsFiles.IsNotEmpty())
+                    {
+                        command += wxsFiles;
+                        string outDir = IO.Path.GetDirectoryName(wxsFile);
+                        // if multiple files are specified candle expect a path for the -out switch
+                        // or no path at all (use current directory)
+                        // note the '\' character must be escaped twice: as a C# string and as a CMD char
+                        if (outDir.IsNotEmpty())
+                            command += $" -out \"{outDir}\\\\\"";
+                    }
+                    else
+                        command += $" -out \"{objFile}\"";
+
+                    command = command.ExpandEnvVars();
+
                     Run(compiler, command);
 
                     if (IO.File.Exists(objFile))
@@ -202,14 +218,24 @@ namespace WixSharp
                     wxsFiles += " \"" + file + "\"";
 
                 var candleOptions = CandleOptions + " " + project.CandleOptions;
-                string batchFileContent = wixLocationEnvVar + "\"" + compiler + "\" " + candleOptions + " " + extensionDlls + " \"" + IO.Path.GetFileName(wxsFile) + "\" " + wxsFiles + "\r\n";
 
-                //Run(compiler, CandleOptions + " " + extensionDlls + " \"" + wxsFile + "\" -out \"" + objFile + "\"");
+                string batchFileContent = wixLocationEnvVar + "\"" + compiler + "\" " + candleOptions + " " + extensionDlls +
+                                          " \"" + IO.Path.GetFileName(wxsFile) + "\" ";
 
-                //if (project.IsLocalized && IO.File.Exists(project.LocalizationFile))
-                //    Run(linker, LightOptions + " \"" + objFile + "\" -out \"" + msiFile + "\"" + extensionDlls + " -cultures:" + project.Language + " -loc \"" + project.LocalizationFile + "\"");
-                //else
-                //Run(linker, LightOptions + " \"" + objFile + "\" -out \"" + msiFile + "\"" + extensionDlls + " -cultures:" + project.Language);
+                if (wxsFiles.IsNotEmpty())
+                {
+                    batchFileContent += wxsFiles;
+                    string outDir = IO.Path.GetDirectoryName(wxsFile);
+                    // if multiple files are specified candle expect a path for the -out switch
+                    // or no path at all (use current directory)
+                    // note the '\' character must be escaped twice: as a C# string and as a CMD char
+                    if (outDir.IsNotEmpty())
+                        batchFileContent += $" -out \"{outDir}\\\\\"";
+                }
+                else
+                    batchFileContent += $" -out \"{objFile}\"";
+
+                batchFileContent += "\r\n";
 
                 string lightOptions = LightOptions + " " + project.LightOptions;
 

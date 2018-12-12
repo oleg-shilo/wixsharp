@@ -28,7 +28,7 @@ class Script
                     new Dir(@"%ProgramFiles%\My Product",
                         new WixSharp.File(@"myapp.exe",
                             new FileShortcut("My App", @"%ProgramMenu%\My Product") { Advertise = true })));
-        
+
         project.UI = WUI.WixUI_InstallDir;
         project.PreserveTempFiles = true;
 
