@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Forms;
+using WixSharpSetup;
 
 namespace $safeprojectname$
 {
@@ -10,7 +11,7 @@ namespace $safeprojectname$
     {
         static void Main()
         {
-            DON'T FORGET to add NuGet package "WixSharp".
+            //DON'T FORGET to add NuGet package "WixSharp".
             
             var project = new ManagedProject("MyProduct",
                              new Dir(@"%ProgramFiles%\My Company\My Product",
