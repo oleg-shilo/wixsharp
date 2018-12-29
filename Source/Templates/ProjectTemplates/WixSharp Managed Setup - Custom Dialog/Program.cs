@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Forms;
+using WixSharpSetup;
 
 namespace $safeprojectname$
 {
