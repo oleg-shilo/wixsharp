@@ -71,7 +71,7 @@ class Script
         project.BuildMsi();
     }
 
-    static void InjectImages(System.Xml.Linq.XDocument document)
+    private static void InjectImages(System.Xml.Linq.XDocument document)
     {
         var productElement = document.Root.Select("Product");
 

@@ -339,7 +339,14 @@ namespace WixSharp
                     }
                 }
             }
-            catch { }
+            catch
+            {
+                // No need to do anything.
+                // The whole purpose of EnsureVSIntegration is pure cosmetic - just to let user to access "*.g.wsx"
+                // file from Visual Studio. There is a high chance of failure as the method depends on the project
+                // file undocumented structure, which is subject to change by the third party(MS).
+                // Even a complete failure of EnsureVSIntegration does not affect the MSI authoring outcome.
+            }
         }
 
 

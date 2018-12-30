@@ -83,7 +83,7 @@ namespace WixSharp
             // is to merge "human readable" id with the project guid.
 
             if (Compiler.AutoGeneration.ForceComponentIdUniqueness)
-                return $"{seed}.{this.GUID.ToString().Replace("-", "")}";
+                return $"{seed}.{this.UpgradeCode.ToString().Replace("-", "")}";
             else
                 return seed;
         }
@@ -312,7 +312,7 @@ namespace WixSharp
         /// </summary>
         public Guid? UpgradeCode;
 
-        Guid? guid;
+        private Guid? guid;
 
         /// <summary>
         /// This value uniquely identifies the software product being installed.
@@ -868,7 +868,7 @@ namespace WixSharp
         /// </summary>
         public int InstallerVersion = 200;
 
-        string codepage = "";
+        private string codepage = "";
 
         /// <summary>
         /// Installation UI Code Page. If not specified

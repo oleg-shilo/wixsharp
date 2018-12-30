@@ -6568,42 +6568,42 @@
             Specifies when the service action occur. It can be one of the <see cref="T:WixSharp.SvcEventType"/> values.
             </summary>
         </member>
-        <member name="F:WixSharp.SvcEvent.Install">
+        <member name="P:WixSharp.SvcEvent.Install">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.install"/>
             and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without
             waiting for the completion.
             </summary>
         </member>
-        <member name="F:WixSharp.SvcEvent.Install_Wait">
+        <member name="P:WixSharp.SvcEvent.Install_Wait">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.install"/>
             and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
             waiting for the completion.
             </summary>
         </member>
-        <member name="F:WixSharp.SvcEvent.Uninstall">
+        <member name="P:WixSharp.SvcEvent.Uninstall">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.uninstall"/>
             and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation
             without waiting for the completion.
             </summary>
         </member>
-        <member name="F:WixSharp.SvcEvent.Uninstall_Wait">
+        <member name="P:WixSharp.SvcEvent.Uninstall_Wait">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.uninstall"/>
             and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with
             waiting for the completion.
             </summary>
         </member>
-        <member name="F:WixSharp.SvcEvent.InstallUninstall">
+        <member name="P:WixSharp.SvcEvent.InstallUninstall">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.both"/>
             and <c>Wait</c> to <c>false</c>. It triggers the action during the service installation without
             waiting for the completion.
             </summary>
         </member>
-        <member name="F:WixSharp.SvcEvent.InstallUninstall_Wait">
+        <member name="P:WixSharp.SvcEvent.InstallUninstall_Wait">
             <summary>
             Predefined instance of <see cref="T:WixSharp.SvcEvent"/> with <c>Type</c> set to <see cref="F:WixSharp.SvcEventType.both"/>
             and <c>Wait</c> to <c>true</c>. It triggers the action during the service installation with

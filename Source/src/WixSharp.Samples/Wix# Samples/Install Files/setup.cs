@@ -39,8 +39,8 @@ class Script
         project.SetVersionFrom("MyApp_file");
         // project.SetVersionFromFileId("MyApp_file");
         // project.SetVersionFromFile(@"Files\Bin\MyApp.exe");
-
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
+
         project.EmitConsistentPackageId = true;
         project.PreserveTempFiles = true;
         project.PreserveDbgFiles = true;
@@ -56,7 +56,7 @@ class Script
         project.BuildMsi();
     }
 
-    static void Compiler_WixSourceGenerated(XDocument document)
+    private static void Compiler_WixSourceGenerated(XDocument document)
     {
         //Will make MyApp.exe directory writable.
         //It is actually a bad practice to write to program files and this code is provided for sample purposes only.
