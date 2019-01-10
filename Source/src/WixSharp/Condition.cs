@@ -224,7 +224,7 @@ namespace WixSharp
         /// <summary>
         /// Software is being removed and no newer version is being installed.
         /// </summary>
-        public static readonly Condition UninstallCondition = new Condition("(NOT UPGRADINGPRODUCTCODE) AND (REMOVE=\"ALL\")");
+        public static readonly Condition BeingRemovedAndNotBeingUpgrated = new Condition("(NOT UPGRADINGPRODUCTCODE) AND (REMOVE=\"ALL\")");
 
         /// <summary>
         /// The .NET2.0 installed. This condition is to be used in Project.SetNetFxPrerequisite.
