@@ -219,12 +219,12 @@ namespace WixSharp
         /// <summary>
         /// String representation of the <c>REMOVE="ALL"</c> condition of the WiX <c>Condition</c>.
         /// </summary>
-        public readonly static Condition BeingRemoved = new Condition(" (REMOVE=\"ALL\") ");
+        public readonly static Condition BeingUninstalled = new Condition(" (REMOVE=\"ALL\") ");
 
         /// <summary>
         /// Software is being removed and no newer version is being installed.
         /// </summary>
-        public static readonly Condition BeingRemovedAndNotBeingUpgrated = new Condition("(NOT UPGRADINGPRODUCTCODE) AND (REMOVE=\"ALL\")");
+        public static readonly Condition BeingUninstalledAndNotBeingUpgraded = new Condition("(NOT UPGRADINGPRODUCTCODE) AND (REMOVE=\"ALL\")");
 
         /// <summary>
         /// The .NET2.0 installed. This condition is to be used in Project.SetNetFxPrerequisite.

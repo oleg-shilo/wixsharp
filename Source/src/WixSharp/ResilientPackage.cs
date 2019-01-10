@@ -74,13 +74,13 @@ namespace WixSharp
                     WixSharp_SetPackageName_Action, assembly,
                     Return.ignore,
                     When.Before, Step.InstallInitialize,
-                    Condition.BeingRemoved),
+                    Condition.BeingUninstalled),
 
                 new ElevatedManagedAction(new Id(nameof(WixSharp_RemoveResilientPackage_Action)),
                     WixSharp_RemoveResilientPackage_Action, assembly,
                     Return.ignore,
                     When.Before, Step.RemoveFiles,
-                    Condition.BeingRemoved)
+                    Condition.BeingUninstalled)
                 {
                     UsesProperties = $"{WIXSHARP_RESILIENT_SOURCE_DIR},{WIXSHARP_PACKAGENAME}"
                 },
