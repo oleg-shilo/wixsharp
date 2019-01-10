@@ -88,19 +88,19 @@ namespace WixSharp
             /// <summary>
             /// Initializes a new instance of the <see cref="SequentialGuid"/> class.
             /// </summary>
-            /// <param name="previousGuid">The previous GUID.</param>
-            public SequentialGuid(Guid previousGuid)
+            /// <param name="initialGuid">The initial GUID.</param>
+            public SequentialGuid(Guid initialGuid)
             {
-                CurrentGuid = previousGuid;
+                CurrentGuid = initialGuid;
             }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="SequentialGuid"/> class.
             /// </summary>
-            /// <param name="previousGuid">The previous GUID.</param>
-            public SequentialGuid(Guid? previousGuid)
+            /// <param name="initialGuid">The previous GUID.</param>
+            public SequentialGuid(Guid? initialGuid)
             {
-                CurrentGuid = previousGuid.Value;
+                CurrentGuid = initialGuid.Value;
             }
 
             /// <summary>
