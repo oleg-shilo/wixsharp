@@ -233,7 +233,7 @@ namespace WixSharp
     /// <code>
     /// var project = new Project();
     /// ...
-    /// Compiler.BuildWxsCmd(project);
+    /// Compiler.BuildMsiCmd(project);
     /// </code>
     /// </description>
     /// </item>
