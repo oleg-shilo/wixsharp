@@ -31,7 +31,6 @@ public class Script
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         // project.PreserveTempFiles = true;
-
         project.ManagedUI = ManagedUI.Default;
         project.UIInitialized += Project_UIInitialized;
         project.Load += msi_Load;
@@ -42,11 +41,20 @@ public class Script
 
     static void Project_UIInitialized(SetupEventArgs e)
     {
-        e.Session["INSTALLDIR"] = Registry.CurrentUser
-                                          .OpenSubKey(@"SOFTWARE\7-Zip", false)
-                                          .GetValue("Path")
-                                          .ToString();
-        MessageBox.Show(e.Session["INSTALLDIR"]);
+        try
+        {
+            e.Session["INSTALLDIR"] = Registry.CurrentUser
+                                              .OpenSubKey(@"SOFTWARE\7-Zip", false)
+                                              .GetValue("Path")
+                                              .ToString();
+        }
+        catch
+        {
+        }
+
+        var message = e.Session["INSTALLDIR"];
+
+        MessageBox.Show(message.IsNotEmpty() ? message : "<not initialized yet>");
     }
 
     static void msi_Load(SetupEventArgs e)
