@@ -126,9 +126,12 @@ namespace WixSharp
             }
             set
             {
-                value.Id = "Start" + Id;
-                value.Name = Name;
-                value.Start = value.Type;
+                if (value != null)
+                {
+                    value.Id = "Start" + Id;
+                    value.Name = Name;
+                    value.Start = value.Type;
+                }
 
                 startOn = value;
             }
@@ -150,9 +153,12 @@ namespace WixSharp
             }
             set
             {
-                value.Id = "Stop" + Id;
-                value.Name = Name;
-                value.Stop = value.Type;
+                if (value != null)
+                {
+                    value.Id = "Stop" + Id;
+                    value.Name = Name;
+                    value.Stop = value.Type;
+                }
 
                 stopOn = value;
             }
@@ -173,9 +179,12 @@ namespace WixSharp
             }
             set
             {
-                value.Id = "Remove" + Id;
-                value.Name = Name;
-                value.Remove = value.Type;
+                if (value != null)
+                {
+                    value.Id = "Remove" + Id;
+                    value.Name = Name;
+                    value.Remove = value.Type;
+                }
 
                 removeOn = value;
             }
