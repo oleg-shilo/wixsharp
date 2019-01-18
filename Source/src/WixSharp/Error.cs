@@ -39,7 +39,7 @@
         {
             var ui = context.XParent.SelectOrCreate("UI");
 
-            ui.Add(this.ToXElement("Error"));
+            ui.Add(this.ToXElement());
         }
     }
 }

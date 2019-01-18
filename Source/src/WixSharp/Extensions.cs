@@ -2724,11 +2724,44 @@ namespace WixSharp
         /// <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
         /// </summary>
         /// <param name="obj"></param>
+        /// <returns></returns>
+        internal static XElement ToXElement(this WixObject obj)
+        {
+            var root = new XElement(obj.GetType().Name);
+
+            root.AddAttributes(obj.Attributes).Add(obj.MapToXmlAttributes());
+            root.Add(obj.MapToXmlCData());
+
+            return root;
+        }
+
+        /// <summary>
+        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked with
+        /// <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
+        /// </summary>
+        /// <param name="obj"></param>
         /// <param name="elementName"></param>
         /// <returns></returns>
         public static XElement ToXElement(this WixObject obj, XName elementName)
         {
             var root = new XElement(elementName);
+
+            root.AddAttributes(obj.Attributes).Add(obj.MapToXmlAttributes());
+            root.Add(obj.MapToXmlCData());
+
+            return root;
+        }
+
+        /// <summary>
+        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked with
+        /// <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <param name="extension">The extension.</param>
+        /// <returns></returns>
+        public static XElement ToXElement(this WixObject obj, WixExtension extension)
+        {
+            var root = new XElement(obj.GetType().Name);
 
             root.AddAttributes(obj.Attributes).Add(obj.MapToXmlAttributes());
             root.Add(obj.MapToXmlCData());
