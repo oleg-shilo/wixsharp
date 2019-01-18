@@ -127,6 +127,7 @@
     <Compile Include="Certificate.cs" />
     <Compile Include="CommonTasks.cs" />
     <Compile Include="Compiler.Bootstrapper.cs" />
+    <Compile Include="Error.cs" />
     <Compile Include="FileSearch.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IconFile.cs" />

@@ -2724,14 +2724,47 @@ namespace WixSharp
         /// <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
         /// </summary>
         /// <param name="obj"></param>
+        /// <returns></returns>
+        internal static XElement ToXElement(this WixObject obj)
+        {
+            var root = new XElement(obj.GetType().Name);
+
+            root.AddAttributes(obj.Attributes).Add(obj.MapToXmlAttributes());
+            root.Add(obj.MapToXmlCData());
+
+            return root;
+        }
+
+        /// <summary>
+        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked with
+        /// <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
+        /// </summary>
+        /// <param name="obj"></param>
         /// <param name="elementName"></param>
         /// <returns></returns>
         public static XElement ToXElement(this WixObject obj, XName elementName)
         {
             var root = new XElement(elementName);
 
-            root.AddAttributes(obj.Attributes)
-                .Add(obj.MapToXmlAttributes());
+            root.AddAttributes(obj.Attributes).Add(obj.MapToXmlAttributes());
+            root.Add(obj.MapToXmlCData());
+
+            return root;
+        }
+
+        /// <summary>
+        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked with
+        /// <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <param name="extension">The extension.</param>
+        /// <returns></returns>
+        public static XElement ToXElement(this WixObject obj, WixExtension extension)
+        {
+            var root = new XElement(extension.ToXName(obj.GetType().Name));
+
+            root.AddAttributes(obj.Attributes).Add(obj.MapToXmlAttributes());
+            root.Add(obj.MapToXmlCData());
 
             return root;
         }
@@ -2748,8 +2781,8 @@ namespace WixSharp
         {
             var root = new XElement(extension.ToXName(elementName));
 
-            root.AddAttributes(obj.Attributes)
-                .Add(obj.MapToXmlAttributes());
+            root.AddAttributes(obj.Attributes).Add(obj.MapToXmlAttributes());
+            root.Add(obj.MapToXmlCData());
 
             return root;
         }
@@ -2766,32 +2799,32 @@ namespace WixSharp
 
             var result = new List<XAttribute>();
 
-            // BindingFlags.NonPublic is needed to cover "internal" but not necessarily "private"
-            var fields = obj.GetType()
-                            .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                            .Cast<MemberInfo>()
-                            .ToArray();
-
-            var props = obj.GetType()
-                           .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                           .Where(x => x.CanRead)
-                           .Cast<MemberInfo>()
-                           .ToArray();
-
-            var items = props.Concat(fields)
+            var items = getMemberInfo(obj)
                              .Select(x =>
                              {
                                  var xmlAttr = (XmlAttribute)x.GetCustomAttributes(typeof(XmlAttribute), false)
                                                                .FirstOrDefault();
+                                 bool IsCData = false;
                                  string name = null;
                                  if (xmlAttr != null)
+                                 {
                                      name = xmlAttr.Name ?? x.Name;
+                                     IsCData = xmlAttr.IsCData;
+                                 }
 
                                  object value = null;
-                                 if (x is FieldInfo)
-                                     value = (x as FieldInfo).GetValue(obj);
-                                 else if (x is PropertyInfo)
-                                     value = (x as PropertyInfo).GetValue(obj, emptyArgs);
+                                 if (!IsCData)
+                                 {
+                                     switch (x)
+                                     {
+                                         case FieldInfo fieldInfo:
+                                             value = fieldInfo.GetValue(obj);
+                                             break;
+                                         case PropertyInfo propertyInfo:
+                                             value = propertyInfo.GetValue(obj, emptyArgs);
+                                             break;
+                                     }
+                                 }
 
                                  return new
                                  {
@@ -2823,6 +2856,68 @@ namespace WixSharp
             }
 
             return result.ToArray();
+        }
+
+        private static XCData MapToXmlCData(this object obj)
+        {
+            var emptyArgs = new object[0];
+
+            XCData result = null;
+
+            var items = getMemberInfo(obj)
+                .Select(x =>
+                {
+                    var xmlAttr = (XmlAttribute)x.GetCustomAttributes(typeof(XmlAttribute), false).FirstOrDefault();
+                    bool IsCData = false;
+                    if (xmlAttr != null)
+                        IsCData = xmlAttr.IsCData;
+
+                    object value = null;
+
+                    if (IsCData)
+                    {
+                        switch (x)
+                        {
+                            case FieldInfo fieldInfo:
+                                value = fieldInfo.GetValue(obj);
+                                break;
+                            case PropertyInfo propertyInfo:
+                                value = propertyInfo.GetValue(obj, emptyArgs);
+                                break;
+                        }
+                    }
+
+                    return new
+                    {
+                        Value = value
+                    };
+                }).Where(x => x.Value != null);
+
+            foreach (var item in items)
+            {
+                string xmlValue = item.Value.ToString();
+
+                result = new XCData(xmlValue);
+            }
+
+            return result;
+        }
+
+        private static IEnumerable<MemberInfo> getMemberInfo(object obj)
+        {
+            // BindingFlags.NonPublic is needed to cover "internal" but not necessarily "private"
+            var fields = obj.GetType()
+                .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .Cast<MemberInfo>()
+                .ToArray();
+
+            var props = obj.GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(x => x.CanRead)
+                .Cast<MemberInfo>()
+                .ToArray();
+
+            return props.Concat(fields);
         }
 
         /// <summary>
@@ -2869,11 +2964,33 @@ namespace WixSharp
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class XmlAttribute : Attribute
     {
+        public XmlAttribute()
+        {
+        }
+
+        public XmlAttribute(string name)
+        {
+            Name = name;
+        }
+
+        public XmlAttribute(bool isCData)
+        {
+            IsCData = isCData;
+        }
+
+        public XmlAttribute(string name, bool isCData)
+        {
+            Name = name;
+            IsCData = isCData;
+        }
+
         /// <summary>
         /// Gets or sets the name of the mapped XML element.
         /// </summary>
         /// <value>The name.</value>
         public string Name { get; set; }
+
+        internal bool IsCData { get; set; }
 
         // public string Value { get; set; }
     }
