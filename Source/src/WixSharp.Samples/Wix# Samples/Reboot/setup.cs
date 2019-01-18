@@ -3,12 +3,12 @@
 //css_ref System.Core.dll;
 
 using System;
-using System.Windows.Forms;
 using System.Diagnostics;
+using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
+using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
-using Microsoft.Win32;
 
 class Script
 {
@@ -36,11 +36,9 @@ public class CustonActions
     [CustomAction]
     public static ActionResult PromptToReboot(Session session)
     {
-        Record record = new Record(1)
-        {
-            [1] = "9000",
-        };
-
+        var record = new Record(1);
+        record[1] = "9000";
+        // Using `Record` only as example. Otherwise the direct WinForm message can be used instead.
         if (MessageResult.Yes == session.Message(InstallMessage.User | (InstallMessage)MessageButtons.YesNo | (InstallMessage)MessageIcon.Question, record))
         {
             Process.Start("shutdown.exe", "-r -t 30 -c \"Reboot has been requested from RebootTest.msi\"");

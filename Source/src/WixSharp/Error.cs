@@ -1,7 +1,17 @@
 ﻿namespace WixSharp
 {
+    /// <summary>
+    /// Implements `Error` element that can be used to define and customize runtime error messages.
+    /// </summary>
+    /// <seealso cref="WixSharp.WixEntity" />
+    /// <seealso cref="WixSharp.IGenericEntity" />
     public class Error : WixEntity, IGenericEntity
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Error"/> class.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="message">The message.</param>
         public Error(string id, string message)
         {
             Id = id;
@@ -14,14 +24,8 @@
         [Xml]
         private new string Id
         {
-            get
-            {
-                return base.Id;
-            }
-            set
-            {
-                base.Id = value;
-            }
+            get => base.Id;
+            set => base.Id = value;
         }
 
         /// <summary>

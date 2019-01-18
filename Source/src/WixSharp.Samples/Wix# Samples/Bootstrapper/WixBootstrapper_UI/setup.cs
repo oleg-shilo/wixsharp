@@ -28,14 +28,14 @@ public class Script
         //------------------------------------
 
         var bootstrapper =
-                new Bundle("My Product",
-                    new PackageGroupRef("NetFx40Web"),
-                    new MsiPackage(productMsi)
-                    {
-                        Id = "MyProductPackageId",
-                        DisplayInternalUI = true,
-                        MsiProperties = "USERINPUT=[UserInput]"
-                    });
+            new Bundle("My Product",
+                       new PackageGroupRef("NetFx40Web"),
+                       new MsiPackage(productMsi)
+                       {
+                       Id = "MyProductPackageId",
+                       DisplayInternalUI = true,
+                       MsiProperties = "USERINPUT=[UserInput]"
+                       });
 
         bootstrapper.Variables = new[] { new Variable("UserInput", "<none>"), };
         bootstrapper.Version = new Version("1.0.0.0");

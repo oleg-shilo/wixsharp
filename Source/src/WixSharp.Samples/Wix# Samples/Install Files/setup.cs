@@ -20,12 +20,12 @@ class Script
             new Project("MyProduct",
                 new Dir(new Id("MY_INSTALLDIR"), @"%ProgramFiles%\My Company\My Product",
                     f = new File("MyApp_file".ToId(),
-                             @"Files\Bin\MyApp.exe",
-                             new FileAssociation("cstm", "application/custom", "open", "\"%1\"")
-                             {
-                                 Advertise = true,
-                                 Icon = "wixsharp.ico"
-                             })
+                                 @"Files\Bin\MyApp.exe",
+                                 new FileAssociation("cstm", "application/custom", "open", "\"%1\"")
+                                 {
+                                     Advertise = true,
+                                     Icon = "wixsharp.ico"
+                                 })
                     {
                         TargetFileName = "app.exe"
                     },
