@@ -2761,7 +2761,7 @@ namespace WixSharp
         /// <returns></returns>
         public static XElement ToXElement(this WixObject obj, WixExtension extension)
         {
-            var root = new XElement(obj.GetType().Name);
+            var root = new XElement(extension.ToXName(obj.GetType().Name));
 
             root.AddAttributes(obj.Attributes).Add(obj.MapToXmlAttributes());
             root.Add(obj.MapToXmlCData());
