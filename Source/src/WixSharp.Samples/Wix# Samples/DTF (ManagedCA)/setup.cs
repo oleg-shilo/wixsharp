@@ -25,7 +25,8 @@ public class Script
         var project = new ManagedProject("CustomActionTest",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("setup.cs")),
-                new ManagedAction(CustomActions.MyAction, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed));
+                new ManagedAction(CustomActions.MyAction, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed),
+                new Error("9000", "Hello World! (CLR: v[2]) Embedded Managed CA ([3])"));
 
         //project.Platform = Platform.x64;
         project.PreserveTempFiles = true;
@@ -40,7 +41,15 @@ public class CustomActions
     [CustomAction]
     public static ActionResult MyAction(Session session)
     {
-        MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Embedded Managed CA (" + (Is64BitProcess ? "x64" : "x86") + ")");
+        Record record = new Record(3)
+        {
+            [1] = "9000",
+            [2] = Environment.Version,
+            [3] = Is64BitProcess ? "x64" : "x86",
+        };
+        session.Message(InstallMessage.User | (InstallMessage)MessageButtons.OK | (InstallMessage)MessageIcon.Information, record);
+
+        //MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Embedded Managed CA (" + (Is64BitProcess ? "x64" : "x86") + ")");
         session.Log("Begin MyAction Hello World");
 
         return ActionResult.Success;
