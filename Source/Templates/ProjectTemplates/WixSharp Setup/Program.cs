@@ -7,8 +7,6 @@ namespace $safeprojectname$
     {
         static void Main()
         {
-            DON'T FORGET to add NuGet package "WixSharp".
-
             var project = new Project("MyProduct",
                               new Dir(@"%ProgramFiles%\My Company\My Product",
                                   new File("Program.cs")));

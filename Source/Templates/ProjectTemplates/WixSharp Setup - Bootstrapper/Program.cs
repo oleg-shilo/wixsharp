@@ -8,8 +8,6 @@ namespace $safeprojectname$
 {
     static void Main()
     {
-        DON'T FORGET to add NuGet package "WixSharp".
-        
         string productMsi = BuildMsi();
 
         var bootstrapper =
