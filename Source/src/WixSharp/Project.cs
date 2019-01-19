@@ -65,7 +65,7 @@ namespace WixSharp
     /// </example>
     public class Project : WixProject
     {
-        internal string ComponentId(string seed)
+        internal new string ComponentId(string seed)
         {
             // Component id must be globally unique. Otherwise other products can
             // accidentally trigger MSI ref-counting by installing more than one product

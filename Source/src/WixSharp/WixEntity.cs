@@ -132,10 +132,10 @@ namespace WixSharp
             var preffix = name + "=";
 
             return (AttributesDefinition ?? "").Trim()
-                                             .Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
-                                             .Where(x => x.StartsWith(preffix))
-                                             .Select(x => x.Substring(preffix.Length))
-                                             .FirstOrDefault();
+                                               .Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+                                               .Where(x => x.StartsWith(preffix))
+                                               .Select(x => x.Substring(preffix.Length))
+                                               .FirstOrDefault();
         }
 
         internal void SetAttributeDefinition(string name, string value, bool append = false)
@@ -297,6 +297,12 @@ namespace WixSharp
                 return null;
         }
 
+        /// <summary>
+        /// Gets or sets the id of the Component element that is to contain XML equivalent of the <see cref="WixEntity"/>.
+        /// </summary>
+        /// <value>
+        /// The component identifier.
+        /// </value>
         public string ComponentId
         {
             get => GetAttributeDefinition("Component:Id");

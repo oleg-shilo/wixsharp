@@ -83,8 +83,9 @@ namespace WixSharp
         /// <para>If set to <c>Automatic</c> then the compiler will enable this feature only if any empty directory
         /// is detected in the project definition.</para>
         /// </summary>
-        [Obsolete(message: "This property will is defaulted to `Enabled`. Due to the fact that `Automatic` " +
-            "brings some ambiguity while no longer yielding any benefits", error: false)]
+        [Obsolete(message: "This property is defaulted to `CompilerSupportState.Enabled`. Due to the fact that " +
+            "`CompilerSupportState.Automatic` brings some ambiguity while no longer yielding any benefits",
+            error: false)]
         public static CompilerSupportState SupportEmptyDirectories = CompilerSupportState.Enabled;
 
         /// <summary>
@@ -171,8 +172,8 @@ namespace WixSharp
                                                 .Any();
                 if (!alreadyPresent)
                     xComponent.Add(new XElement("RemoveFolder",
-                                       new XAttribute("Id", xDir.Attribute("Id").Value),
-                                       new XAttribute("On", when)));
+                                                new XAttribute("Id", xDir.Attribute("Id").Value),
+                                                new XAttribute("On", when)));
             }
         }
 
@@ -181,8 +182,8 @@ namespace WixSharp
             var xDir = xComponent.Parent("Directory");
             if (!xDir.Descendants("RemoveFolder").Any() && !xDir.IsUserProfileRoot())
                 xComponent.Add(new XElement("RemoveFolder",
-                                   new XAttribute("Id", xDir.Attribute("Id").Value),
-                                   new XAttribute("On", "uninstall")));
+                                            new XAttribute("Id", xDir.Attribute("Id").Value),
+                                            new XAttribute("On", "uninstall")));
 
             return xComponent;
         }
@@ -245,13 +246,13 @@ namespace WixSharp
             xComponent.ClearKeyPath();
 
             xComponent.Add(
-                        new XElement("RegistryKey",
-                            new XAttribute("Root", "HKCU"),
-                            new XAttribute("Key", @"Software\WixSharp\Used"),
-                            new XElement("RegistryValue",
-                                new XAttribute("Value", "0"),
-                                new XAttribute("Type", "string"),
-                                new XAttribute("KeyPath", "yes"))));
+                           new XElement("RegistryKey",
+                           new XAttribute("Root", "HKCU"),
+                           new XAttribute("Key", @"Software\WixSharp\Used"),
+                           new XElement("RegistryValue",
+                               new XAttribute("Value", "0"),
+                               new XAttribute("Type", "string"),
+                               new XAttribute("KeyPath", "yes"))));
             return xComponent;
         }
 
@@ -321,7 +322,7 @@ namespace WixSharp
         {
             string compId = xDir.Attribute("Id").Value;
             XElement xComponent = xDir.AddElement(
-                              new XElement("Component",
+                                  new XElement("Component",
                                   new XAttribute("Id", compId),
                                   new XAttribute("Guid", WixGuid.NewGuid(compId))));
 
@@ -335,15 +336,15 @@ namespace WixSharp
         private static string[] GetUserProfileFolders()
         {
             return new[]
-                    {
-                        "ProgramMenuFolder",
-                        "AppDataFolder",
-                        "LocalAppDataFolder",
-                        "TempFolder",
-                        "PersonalFolder",
-                        "DesktopFolder",
-                        "StartupFolder"
-                    };
+                   {
+                       "ProgramMenuFolder",
+                       "AppDataFolder",
+                       "LocalAppDataFolder",
+                       "TempFolder",
+                       "PersonalFolder",
+                       "DesktopFolder",
+                       "StartupFolder"
+                   };
         }
 
         static bool InUserProfile(this XElement xDir)
@@ -651,9 +652,9 @@ namespace WixSharp
                     string customAction = $"Set_DirAbsolutePath{absPathCount}";
 
                     product.Add(new XElement("CustomAction",
-                                 new XAttribute("Id", customAction),
-                                 new XAttribute("Property", actualDirName),
-                                 new XAttribute("Value", absolutePath)));
+                                new XAttribute("Id", customAction),
+                                new XAttribute("Property", actualDirName),
+                                new XAttribute("Value", absolutePath)));
 
                     product.SelectOrCreate("InstallExecuteSequence").Add(
                            new XElement("Custom", $"(NOT Installed) AND (UILevel < 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
@@ -661,9 +662,9 @@ namespace WixSharp
                                new XAttribute("Before", "AppSearch")));
 
                     product.SelectOrCreate("InstallUISequence").Add(
-                          new XElement("Custom", $"(NOT Installed) AND (UILevel = 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
-                              new XAttribute("Action", customAction),
-                              new XAttribute("Before", "AppSearch")));
+                           new XElement("Custom", $"(NOT Installed) AND (UILevel = 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
+                               new XAttribute("Action", customAction),
+                               new XAttribute("Before", "AppSearch")));
 
                     if (absPathCount == null)
                         absPathCount = 0;

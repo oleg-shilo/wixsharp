@@ -2,24 +2,24 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
-using IO = System.IO;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Security.Principal;
+using System.Text;
 using System.Text.RegularExpressions;
-using static WixSharp.SetupEventArgs;
-using WixSharp.CommonTasks;
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using System.Windows.Forms;
-using System.Diagnostics;
+using System.Xml.Linq;
+using Microsoft.Deployment.WindowsInstaller;
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Win32;
+using WixSharp.CommonTasks;
+using static WixSharp.SetupEventArgs;
+using IO = System.IO;
 
 namespace WixSharp
 {
@@ -2800,40 +2800,41 @@ namespace WixSharp
             var result = new List<XAttribute>();
 
             var items = getMemberInfo(obj)
-                             .Select(x =>
-                             {
-                                 var xmlAttr = (XmlAttribute)x.GetCustomAttributes(typeof(XmlAttribute), false)
-                                                               .FirstOrDefault();
-                                 bool IsCData = false;
-                                 string name = null;
-                                 if (xmlAttr != null)
-                                 {
-                                     name = xmlAttr.Name ?? x.Name;
-                                     IsCData = xmlAttr.IsCData;
-                                 }
+                                      .Select(x =>
+                                      {
+                                          var xmlAttr = (XmlAttribute)x.GetCustomAttributes(typeof(XmlAttribute), false)
+                                                                       .FirstOrDefault();
+                                          bool IsCData = false;
+                                          string name = null;
+                                          if (xmlAttr != null)
+                                          {
+                                              name = xmlAttr.Name ?? x.Name;
+                                              IsCData = xmlAttr.IsCData;
+                                          }
 
-                                 object value = null;
-                                 if (!IsCData)
-                                 {
-                                     switch (x)
-                                     {
-                                         case FieldInfo fieldInfo:
-                                             value = fieldInfo.GetValue(obj);
-                                             break;
-                                         case PropertyInfo propertyInfo:
-                                             value = propertyInfo.GetValue(obj, emptyArgs);
-                                             break;
-                                     }
-                                 }
+                                          object value = null;
+                                          if (!IsCData)
+                                          {
+                                              switch (x)
+                                              {
+                                                  case FieldInfo fieldInfo:
+                                                      value = fieldInfo.GetValue(obj);
+                                                      break;
 
-                                 return new
-                                 {
-                                     Name = name,
-                                     Value = value
-                                 };
-                             })
-                            .Where(x => x.Name != null && x.Value != null)
-                            .ToArray();
+                                                  case PropertyInfo propertyInfo:
+                                                      value = propertyInfo.GetValue(obj, emptyArgs);
+                                                      break;
+                                              }
+                                          }
+
+                                          return new
+                                          {
+                                              Name = name,
+                                              Value = value
+                                          };
+                                      })
+                                      .Where(x => x.Name != null && x.Value != null)
+                                      .ToArray();
 
             foreach (var item in items)
             {
@@ -2881,6 +2882,7 @@ namespace WixSharp
                             case FieldInfo fieldInfo:
                                 value = fieldInfo.GetValue(obj);
                                 break;
+
                             case PropertyInfo propertyInfo:
                                 value = propertyInfo.GetValue(obj, emptyArgs);
                                 break;
@@ -2964,20 +2966,36 @@ namespace WixSharp
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class XmlAttribute : Attribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlAttribute"/> class.
+        /// </summary>
         public XmlAttribute()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlAttribute"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
         public XmlAttribute(string name)
         {
             Name = name;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlAttribute"/> class.
+        /// </summary>
+        /// <param name="isCData">if set to <c>true</c> [is c data].</param>
         public XmlAttribute(bool isCData)
         {
             IsCData = isCData;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlAttribute"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="isCData">if set to <c>true</c> [is c data].</param>
         public XmlAttribute(string name, bool isCData)
         {
             Name = name;

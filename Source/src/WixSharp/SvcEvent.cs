@@ -92,6 +92,9 @@
         [Xml]
         public SvcEventType? Stop;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SvcEvent"/> class.
+        /// </summary>
         public SvcEvent()
         {
         }

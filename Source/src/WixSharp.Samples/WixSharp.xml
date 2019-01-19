@@ -3408,7 +3408,7 @@
              <code>
              var project = new Project();
              ...
-             Compiler.BuildWxsCmd(project);
+             Compiler.BuildMsiCmd(project);
              </code>
              </description>
              </item>
@@ -3797,6 +3797,37 @@
             </summary>
             <param name="pattern">The wildcard pattern to convert.</param>
             <returns>A regex equivalent of the given wildcard.</returns>
+        </member>
+        <member name="T:WixSharp.Error">
+            <summary>
+            Implements `Error` element that can be used to define and customize runtime error messages.
+            </summary>
+            <seealso cref="T:WixSharp.WixEntity" />
+            <seealso cref="T:WixSharp.IGenericEntity" />
+        </member>
+        <member name="M:WixSharp.Error.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Error"/> class.
+            </summary>
+            <param name="id">The identifier.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="P:WixSharp.Error.Id">
+            <summary>
+            Number of the error for which a message is being provided.
+            </summary>
+        </member>
+        <member name="P:WixSharp.Error.Message">
+            <summary>
+            Error message.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Error.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project"/>.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.FileSearch">
             <summary>
@@ -6642,6 +6673,11 @@
             For 'install', the service will be stopped only when the parent component is being installed (msiInstallStateLocal or msiInstallStateSource);
             for 'uninstall', the service will be stopped only when the parent component is being removed (msiInstallStateAbsent);
             for 'both', the service will be stopped in both cases.
+            </summary>
+        </member>
+        <member name="M:WixSharp.SvcEvent.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.SvcEvent"/> class.
             </summary>
         </member>
         <member name="F:WixSharp.SvcEvent.Wait">
@@ -9670,14 +9706,12 @@
         </member>
         <member name="F:WixSharp.WixProject.LightOptions">
             <summary>
-            WiX linker <c>Light.exe</c> options (e.g. -sice:ICE30).
-            <para>The default value is "-sw1076 -sw1079" (disable warning 1076 and 1079). </para>
+            WiX linker <c>Light.exe</c> options (e.g. "-sice:ICE30 -sw1076" (disable warning 1076 and ICE warning 30).
             </summary>
         </member>
         <member name="F:WixSharp.WixProject.CandleOptions">
             <summary>
-            WiX compiler <c>Candle.exe</c> options.
-            <para>The default value is "-sw1076" (disable warning 1026).</para>
+            WiX compiler <c>Candle.exe</c> options (e.g. "-sw1076" to disable warning 1026).
             </summary>
         </member>
         <member name="E:WixSharp.WixProject.WixSourceGenerated">
@@ -12509,12 +12543,12 @@
             String representation of the <c>UILevel &lt; 4</c> condition of the WiX <c>Condition</c>.
             </summary>
         </member>
-        <member name="F:WixSharp.Condition.BeingRemoved">
+        <member name="F:WixSharp.Condition.BeingUninstalled">
             <summary>
             String representation of the <c>REMOVE="ALL"</c> condition of the WiX <c>Condition</c>.
             </summary>
         </member>
-        <member name="F:WixSharp.Condition.UninstallCondition">
+        <member name="F:WixSharp.Condition.BeingUninstalledAndNotBeingUpgraded">
             <summary>
             Software is being removed and no newer version is being installed.
             </summary>
@@ -12562,6 +12596,16 @@
         <member name="F:WixSharp.Condition.Net47_Installed">
             <summary>
             The .NET4.7 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Condition.Net471_Installed">
+            <summary>
+            The .NET4.7.1 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Condition.Net472_Installed">
+            <summary>
+            The .NET4.7.2 installed. This condition is to be used in Project.SetNetFxPrerequisite.
             </summary>
         </member>
         <member name="F:WixSharp.Condition.Net30_SP_Installed">
@@ -13034,6 +13078,14 @@
              </code>
              </summary>
         </member>
+        <member name="M:WixSharp.XmlMapping.ToXElement(WixSharp.WixObject)">
+            <summary>
+            Serializes the <see cref="T:WixSharp.WixObject"/> into XML based on the members marked with
+            <see cref="T:WixSharp.XmlAttribute"/> and <see cref="P:WixSharp.WixObject.Attributes"/>.
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.XmlMapping.ToXElement(WixSharp.WixObject,System.Xml.Linq.XName)">
             <summary>
             Serializes the <see cref="T:WixSharp.WixObject"/> into XML based on the members marked with
@@ -13041,6 +13093,15 @@
             </summary>
             <param name="obj"></param>
             <param name="elementName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.XmlMapping.ToXElement(WixSharp.WixObject,WixSharp.WixExtension)">
+            <summary>
+            Serializes the <see cref="T:WixSharp.WixObject"/> into XML based on the members marked with
+            <see cref="T:WixSharp.XmlAttribute"/> and <see cref="P:WixSharp.WixObject.Attributes"/>.
+            </summary>
+            <param name="obj">The obj.</param>
+            <param name="extension">The extension.</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.XmlMapping.ToXElement(WixSharp.WixObject,WixSharp.WixExtension,System.String)">
@@ -13079,6 +13140,30 @@
             <summary>
             The attribute indicating the type member being mapped to XML element. Used by Wix# compiler to emit XML base on CLR types.
             </summary>
+        </member>
+        <member name="M:WixSharp.XmlAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.XmlAttribute"/> class.
+            </summary>
+        </member>
+        <member name="M:WixSharp.XmlAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.XmlAttribute"/> class.
+            </summary>
+            <param name="name">The name.</param>
+        </member>
+        <member name="M:WixSharp.XmlAttribute.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.XmlAttribute"/> class.
+            </summary>
+            <param name="isCData">if set to <c>true</c> [is c data].</param>
+        </member>
+        <member name="M:WixSharp.XmlAttribute.#ctor(System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.XmlAttribute"/> class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="isCData">if set to <c>true</c> [is c data].</param>
         </member>
         <member name="P:WixSharp.XmlAttribute.Name">
             <summary>
@@ -17151,13 +17236,13 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.WixGuid.SequentialGuid"/> class.
             </summary>
-            <param name="previousGuid">The previous GUID.</param>
+            <param name="initialGuid">The initial GUID.</param>
         </member>
         <member name="M:WixSharp.WixGuid.SequentialGuid.#ctor(System.Nullable{System.Guid})">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.WixGuid.SequentialGuid"/> class.
             </summary>
-            <param name="previousGuid">The previous GUID.</param>
+            <param name="initialGuid">The previous GUID.</param>
         </member>
         <member name="M:WixSharp.WixGuid.SequentialGuid.op_Implicit(WixSharp.WixGuid.SequentialGuid)~System.Guid">
             <summary>
@@ -17367,6 +17452,14 @@
             <summary>
             Base class for all Wix# types representing WiX XML elements (entities)
             </summary>
+        </member>
+        <member name="P:WixSharp.WixEntity.ComponentId">
+            <summary>
+            Gets or sets the id of the Component element that is to contain XML equivalent of the <see cref="T:WixSharp.WixEntity"/>.
+            </summary>
+            <value>
+            The component identifier.
+            </value>
         </member>
         <member name="F:WixSharp.WixEntity.Name">
             <summary>
