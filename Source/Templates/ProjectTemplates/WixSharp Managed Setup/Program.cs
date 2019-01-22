@@ -3,6 +3,10 @@ using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Forms;
 
+// DON'T FORGET to update NuGet package "WixSharp".
+// NuGet console: Update-Package WixSharp
+// NuGet Manager UI: updates tab
+
 namespace $safeprojectname$
 {
     class Program

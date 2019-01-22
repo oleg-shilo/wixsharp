@@ -15,6 +15,7 @@
   </TemplateData>
   <TemplateContent>
     <Project TargetFileName="WixSharp Setup.csproj" File="WixSharp Setup.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">packages.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="CustomDialog.cs">CustomDialog.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="CustomDialog.Designer.cs">CustomDialog.Designer.cs</ProjectItem>
