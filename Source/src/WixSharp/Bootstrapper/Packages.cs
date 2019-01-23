@@ -19,7 +19,7 @@ namespace WixSharp.Bootstrapper
         public string DisplayName;
 
         /// <summary>
-        /// Specifies whether the package can be uninstalled.
+        /// Specifies whether the package can be uninstalled. The default is "no".
         /// </summary>
         [Xml]
         public bool? Permanent;
@@ -62,11 +62,11 @@ namespace WixSharp.Bootstrapper
         public bool? Compressed;
 
         /// <summary>
-        /// Whether to cache the package. 
+        /// Whether to cache the package. The default is "yes".
         /// </summary>
         [Xml]
-        public bool? Cache = true;
-        
+        public bool? Cache;
+
         /// <summary>
         /// Name of a Variable that will hold the path to the log file.
         /// An empty value will cause the variable to not be set.
@@ -193,7 +193,7 @@ namespace WixSharp.Bootstrapper
         public string UninstallCommand;
 
         /// <summary>
-        /// Indicates the package must be executed elevated.
+        /// Indicates the package must be executed elevated. The default is "no".
         /// </summary>
         [Xml]
         public bool? PerMachine;
@@ -384,7 +384,7 @@ namespace WixSharp.Bootstrapper
         {
             SourceFile = path;
         }
-        
+
         /// <summary>
         /// A condition that determines if the package is present on the target system.
         /// This condition can use built-in variables and variables returned by searches.

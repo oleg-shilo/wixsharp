@@ -6,15 +6,15 @@ using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
-using Xunit;
+using Microsoft.Win32;
 using WixSharp;
-using io = System.IO;
+using WixSharp.CommonTasks;
 using WixSharp.UI;
+using Xunit;
+using static WixSharp.SetupEventArgs;
+using io = System.IO;
 
 using WixMsi = WixSharpMsi::WixSharp;
-using WixSharp.CommonTasks;
-using static WixSharp.SetupEventArgs;
-using Microsoft.Win32;
 
 namespace WixSharp.Test
 {
@@ -246,7 +246,10 @@ namespace WixSharp.Test
             Assert.True(isValid(desktopFolder, "Desktop"));
             Assert.True(isValid(favoritesFolder, "Favorites"));
             Assert.True(isValid(programFiles64Folder, "Program Files"));
-            Assert.True(isValid(programFilesFolder, "Program Files (x86)"));
+            if (Environment.Is64BitProcess)
+                Assert.True(isValid(programFilesFolder, "Program Files"));
+            else
+                Assert.True(isValid(programFilesFolder, "Program Files (x86)"));
             Assert.True(isValid(myPicturesFolder, "Pictures"));
             Assert.True(isValid(sendToFolder, "SendTo"));
             Assert.True(isValid(localAppDataFolder, "Local"));
