@@ -11,6 +11,14 @@ namespace WixSharp.Bootstrapper
     public abstract class Package : ChainItem
     {
         /// <summary>
+        /// Specifies the display name to place in the bootstrapper application data manifest for the package.
+        /// By default, ExePackages use the ProductName field from the version information, MsiPackages use the ProductName property, and MspPackages use the DisplayName patch metadata property.
+        /// Other package types must use this attribute to define a display name in the bootstrapper application data manifest.
+        /// </summary>
+        [Xml]
+        public string DisplayName;
+
+        /// <summary>
         /// Specifies whether the package can be uninstalled.
         /// </summary>
         [Xml]
@@ -52,6 +60,28 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         [Xml]
         public bool? Compressed;
+
+        /// <summary>
+        /// Whether to cache the package. 
+        /// </summary>
+        [Xml]
+        public bool? Cache = true;
+        
+        /// <summary>
+        /// Name of a Variable that will hold the path to the log file.
+        /// An empty value will cause the variable to not be set.
+        /// The default is "WixBundleLog_[PackageId]" except for MSU packages which default to no logging.
+        /// </summary>
+        [Xml]
+        public string LogPathVariable;
+
+        /// <summary>
+        /// Name of a Variable that will hold the path to the log file used during rollback.
+        /// An empty value will cause the variable to not be set.
+        /// The default is "WixBundleRollbackLog_[PackageId]" except for MSU packages which default to no logging.
+        /// </summary>
+        [Xml]
+        public string RollbackLogPathVariable;
 
         /// <summary>
         /// Collection of Payloads (the package dependencies).
@@ -329,6 +359,69 @@ namespace WixSharp.Bootstrapper
                 {
                     root.Add(new XElement("MsiProperty").AddAttributes("Name={0};Value={1}".FormatWith(p.Key, p.Value)));
                 });
+
+            return new[] { root };
+        }
+    }
+
+    /// <summary>
+    /// Standard WiX MsuPackage.
+    /// </summary>
+    public class MsuPackage : Package
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MsuPackage"/> class.
+        /// </summary>
+        public MsuPackage()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MsuPackage"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        public MsuPackage(string path)
+        {
+            SourceFile = path;
+        }
+        
+        /// <summary>
+        /// A condition that determines if the package is present on the target system.
+        /// This condition can use built-in variables and variables returned by searches.
+        /// This condition is necessary because Windows doesn't provide a method to detect the presence of an ExePackage.
+        /// Burn uses this condition to determine how to treat this package during a bundle action;
+        /// for example, if this condition is false or omitted and the bundle is being installed, Burn will install this package.
+        /// </summary>
+        [Xml]
+        public string DetectCondition;
+
+        /// <summary>
+        /// The knowledge base identifier for the MSU.
+        /// The KB attribute must be specified to enable the MSU package to be uninstalled.
+        /// Even then MSU uninstallation is only supported on Windows 7 and later.
+        /// When the KB attribute is specified, the Permanent attribute will the control whether the package is uninstalled.
+        /// </summary>
+        [Xml]
+        public string KB;
+
+        /// <summary>
+        /// Emits WiX XML.
+        /// </summary>
+        /// <returns></returns>
+        public override XContainer[] ToXml()
+        {
+            var root = new XElement("MsuPackage");
+
+            root.SetAttribute("Name", Name); //will respect null
+
+            if (this.IsIdSet())
+                root.SetAttribute("Id", Id);
+
+            root.AddAttributes(this.Attributes)
+                .Add(this.MapToXmlAttributes());
+
+            if (Payloads.Any())
+                Payloads.ForEach(p => root.Add(p.ToXElement("Payload")));
 
             return new[] { root };
         }
