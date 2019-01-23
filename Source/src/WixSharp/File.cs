@@ -138,7 +138,7 @@ namespace WixSharp
             IISVirtualDirs = items.OfType<IISVirtualDir>().ToArray();
             ServiceInstaller = items.OfType<ServiceInstaller>().FirstOrDefault();
             Permissions = items.OfType<FilePermission>().ToArray();
-            GenericItems = items.OfType<IGenericEntity>().ToArray();
+            GenericItems = items.OfType<IGenericEntity>().Where(val => val.GetType() != typeof(ServiceInstaller)).ToArray();
 
             FirewallExceptions = items.OfType<FirewallException>().ToArray();
 
