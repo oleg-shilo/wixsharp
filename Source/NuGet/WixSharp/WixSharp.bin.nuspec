@@ -16,7 +16,24 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes></releaseNotes>
+    <releaseNotes>Release v1.9.4
+
+* VS project templates - added packages.config files
+* Added Condition-s for .NET Frameworks 4.7.1 and 4.7.2
+* Issue #569: Updating WixSharp leads to malfuncion of SetEvVar
+* Added support for `UI.Error` WiX element
+* Issue #552: Question: Install 2 windows services in same installer
+* Issue #541: Installing 2 Services in the same installer results in �
+* Samples update
+* Issue #560: Semantic difference between UninstallCondition and IsUninstalling
+* Issue #564: Correct variable name of SequentialGuid initialization.
+* Issue #562: Typo in Compiler.cs comments
+* Issue #561: Typo in WixProject.cs
+* Added missing namespace in custom dialog template, fixed comment.
+* Added explicit `WixEntity.ComponentId` property
+* Issue #551: Cannot include extra .wxs as part of a bundle
+* Issue #542: ServiceInstaller.StartOn/StopOn/RemoveOn - Documentation bug
+* Issue #544: Failed while processing WebSites; added support for `IISVirtualDir.AttributesDefinition`</releaseNotes>
     <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
