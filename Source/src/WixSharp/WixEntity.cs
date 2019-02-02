@@ -470,15 +470,22 @@ namespace WixSharp
         {
             if (!DoNotResetIdGenerator)
             {
-                if (idMaps.Count > 0 && !supressWarning)
+                // ServiceInstaller and SvcEvent are the only types that are expected to be allocated before
+                // the BuildMsi calls. This is because they are triggered on setting `ServiceInstaller.StartOn`
+                // and other similar service actions.
+                bool anyAlreadyAllocatedIds = idMaps.Keys.Any(x => x != typeof(ServiceInstaller) && x != typeof(SvcEvent));
+
+                if (anyAlreadyAllocatedIds && !supressWarning)
                 {
-                    Compiler.OutputWriteLine("----------------------------");
-                    Compiler.OutputWriteLine("Warning: Wix# compiler detected that some IDs has been auto-generated before the build started. " +
-                                             "This can lead to the WiX ID duplications. To prevent this from happening either:\n" +
-                                             "   - Avoid evaluating the auto-generated IDs values before the call to Build*\n" +
-                                             "   - Set the IDs (to be evaluated) explicitly\n" +
-                                             "   - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true");
-                    Compiler.OutputWriteLine("----------------------------");
+                    var message = "----------------------------\n" +
+                    "Warning: Wix# compiler detected that some IDs has been auto-generated before the build started. " +
+                    "This can lead to the WiX ID duplications on consecutive 'Build*' calls.\n" +
+                    "To prevent this from happening either:\n" +
+                    "   - Avoid evaluating the auto-generated IDs values before the call to Build*\n" +
+                    "   - Set the IDs (to be evaluated) explicitly\n" +
+                    "   - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true\n" +
+                    "----------------------------";
+                    Compiler.OutputWriteLine(message);
                 }
                 ResetIdGenerator();
             }
