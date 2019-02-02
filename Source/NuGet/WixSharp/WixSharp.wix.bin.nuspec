@@ -21,7 +21,6 @@ WiX - Copyright (C) .NET Foundation and contributors</copyright>
         <tags>C# scripting msi install setup wix</tags>
     </metadata>
     <files>
-        <file src="build\Wixsharp.wix.bin.targets" target="build\Wixsharp.wix.bin.targets" />
         <file src="..\..\src\WixSharp.Samples\Wix_bin\bin\x86\burn.exe" target="tools\bin\x86\burn.exe" />
         <file src="..\..\src\WixSharp.Samples\Wix_bin\bin\candle.exe" target="tools\bin\candle.exe" />
         <file src="..\..\src\WixSharp.Samples\Wix_bin\bin\candle.exe.config" target="tools\bin\candle.exe.config" />
