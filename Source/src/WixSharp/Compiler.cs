@@ -290,7 +290,6 @@ namespace WixSharp
 
         static Compiler()
         {
-            //Debug.Assert(false);
             EnsureVSIntegration();
         }
 
@@ -298,12 +297,11 @@ namespace WixSharp
         {
             try
             {
-                //Debug.Assert(false);
                 string projectName = Environment.GetCommandLineArgs().FirstPrefixedValue("/MSBUILD:", "/MBSBUILD:");
 
                 if (projectName.IsNotEmpty())
                 {
-                    //MSBuild always sets currdir to the project directory
+                    //MSBuild always sets curdir to the project directory
                     string projFile = Environment.CurrentDirectory.PathJoin(projectName + ".csproj");
 
                     Environment.SetEnvironmentVariable("MSBUILD", "true");
@@ -324,7 +322,10 @@ namespace WixSharp
 
                         if (!injected)
                         {
-                            var itemGroup = doc.Root.Descendants().Where(e => e.Name.LocalName == "Compile").First().Parent;
+                            var itemGroup = doc.Root.Descendants()
+                                                    .First(e => e.Name.LocalName == "Compile")
+                                                    .Parent;
+
                             itemGroup.Add(new XElement(ns + "None", new XAttribute("Include", autogenItem)));
                             doc.Save(projFile);
                         }
@@ -348,8 +349,6 @@ namespace WixSharp
                 // Even a complete failure of EnsureVSIntegration does not affect the MSI authoring outcome.
             }
         }
-
-
 
         /// <summary>
         /// Gets or sets the location of WiX binaries (compiler/linker/dlls).
@@ -488,10 +487,8 @@ namespace WixSharp
         {
             string outFile = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, project.OutFileName) + "." + type.ToString().ToLower());
 
-            Utils.EnsureFileDir(outFile);
-
-            if (IO.File.Exists(outFile))
-                IO.File.Delete(outFile);
+            outFile.EnsureFileDir();
+            outFile.DeleteIfExists();
 
             Build(project, outFile, type);
 
@@ -513,8 +510,7 @@ namespace WixSharp
 
             string cmdFile = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, "Build_" + project.OutFileName) + ".cmd");
 
-            if (IO.File.Exists(cmdFile))
-                IO.File.Delete(cmdFile);
+            cmdFile.DeleteIfExists();
 
             BuildMsiCmd(project, cmdFile);
             return cmdFile;
@@ -535,8 +531,8 @@ namespace WixSharp
 
             string cmdFile = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, "Build_" + project.OutFileName) + ".cmd");
 
-            if (IO.File.Exists(cmdFile))
-                IO.File.Delete(cmdFile);
+            cmdFile.DeleteIfExists();
+
             BuildMsmCmd(project, cmdFile);
             return cmdFile;
         }
@@ -585,8 +581,8 @@ namespace WixSharp
                 ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
 
             string wixLocationEnvVar = $"set WixLocation={WixLocation}";
-            string compiler = Utils.PathCombine(WixLocation, "candle.exe");
-            string linker = Utils.PathCombine(WixLocation, "light.exe");
+            string compiler = Extensions.PathCombine(WixLocation, "candle.exe");
+            string linker = Extensions.PathCombine(WixLocation, "light.exe");
             string batchFile = path;
 
             if (!IO.File.Exists(compiler) && !IO.File.Exists(linker))
@@ -598,8 +594,8 @@ namespace WixSharp
             {
                 string wxsFile = BuildWxs(project, type);
 
-                string outDir = IO.Path.GetDirectoryName(wxsFile);
-                string msiFile = IO.Path.ChangeExtension(wxsFile, "." + type.ToString().ToLower());
+                string outDir = wxsFile.PathGetDirName();
+                string msiFile = wxsFile.PathChangeExtension("." + type.ToString().ToLower());
 
                 string candleCmd = GenerateCandleCommand(project, wxsFile, outDir, out string objFile, out string extensionDlls);
                 string lightCmd = GenerateLightCommand(project, msiFile, outDir, objFile, extensionDlls);
@@ -702,10 +698,7 @@ namespace WixSharp
             var content = new List<string>(IO.File.ReadAllLines(source));
             content.InsertRange(1, header); //first line must be an XML declaration
 
-            var dir = IO.Path.GetDirectoryName(dest);
-
-            if (!IO.Directory.Exists(dir))
-                IO.Directory.CreateDirectory(dir);
+            dest.EnsureFileDir();
 
             if (IO.File.Exists(dest))
                 IO.File.SetAttributes(dest, IO.FileAttributes.Normal); //just in case if it was set read-only
@@ -715,7 +708,7 @@ namespace WixSharp
 
         static string GenerateCandleCommand(Project project, string wxsFile, string outDir, out string objFile, out string extensionDlls)
         {
-            objFile = IO.Path.ChangeExtension(wxsFile, ".wixobj");
+            objFile = wxsFile.PathChangeExtension(".wixobj");
 
             extensionDlls = project.WixExtensions
                                    .Select(x => x.ExpandEnvVars())
@@ -793,8 +786,8 @@ namespace WixSharp
             {
                 // System.Diagnostics.Debug.Assert(false);
                 Compiler.TempFiles.Clear();
-                string compiler = Utils.PathCombine(WixLocation, @"candle.exe");
-                string linker = Utils.PathCombine(WixLocation, @"light.exe");
+                string compiler = WixLocation.PathCombine("candle.exe");
+                string linker = WixLocation.PathCombine("light.exe");
 
                 if (!IO.File.Exists(compiler) || !IO.File.Exists(linker))
                 {
@@ -813,7 +806,7 @@ namespace WixSharp
 
                     string extensionDlls, objFile;
 
-                    string outDir = IO.Path.GetDirectoryName(wxsFile);
+                    string outDir = wxsFile.PathGetDirName();
 
                     string candleCmd = GenerateCandleCommand(project, wxsFile, outDir, out objFile, out extensionDlls);
 
@@ -832,8 +825,7 @@ namespace WixSharp
                         if (path.IsNotEmpty())
                             outFile = IO.Path.GetFullPath(path);
 
-                        if (IO.File.Exists(outFile))
-                            IO.File.Delete(outFile);
+                        outFile.DeleteIfExists();
 
                         string lightCmd = GenerateLightCommand(project, outFile, outDir, objFile, extensionDlls);
 #if DEBUG
@@ -856,7 +848,6 @@ namespace WixSharp
                                 Compiler.OutputWriteLine(" Version    : " + project.Version);
                             else
                                 Compiler.OutputWriteLine($" Version    : {project.ExtractVersionFrom(project.SetVersionFromIdValue)} (overwritten from {project.SetVersionFromIdValue} file)");
-                            //Compiler.OutputWriteLine($" Version    : {project.Version} (will be overwritten from {project.SetVersionFromIdValue} file)");
 
                             Compiler.OutputWriteLine(" ProductId  : {" + project.ProductId + "}");
                             Compiler.OutputWriteLine(" UpgradeCode: {" + project.UpgradeCode + "}\n");
@@ -931,10 +922,11 @@ namespace WixSharp
 
                     AutoGeneration.CustomIdAlgorithm = project.CustomIdAlgorithm ?? AutoGeneration.CustomIdAlgorithm;
 
-                    string file = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, project.OutFileName) + ".wxs");
+                    string file = project.OutDir
+                                         .PathCombine(project.OutFileName + ".wxs")
+                                         .PathGetFullPath();
 
-                    if (IO.File.Exists(file))
-                        IO.File.Delete(file);
+                    file.DeleteIfExists();
 
                     BuildWxs(project, file, type);
                     return file;
@@ -997,7 +989,9 @@ namespace WixSharp
             WixSourceFormated?.Invoke(ref xml);
 
             using (var sw = new IO.StreamWriter(path, false, project.Encoding))
+            {
                 sw.WriteLine(xml);
+            }
 
             Compiler.OutputWriteLine("\n----------------------------------------------------------\n");
             Compiler.OutputWriteLine("Wix project file has been built: " + path + "\n");
@@ -1018,7 +1012,7 @@ namespace WixSharp
 
             Encoding encoding = Encoding.Default;
 
-            public override Encoding Encoding { get { return encoding; } }
+            public override Encoding Encoding => encoding;
         }
 
         static void IndjectCustomUI(Controls.CustomUI customUI, XDocument doc)
@@ -1037,21 +1031,21 @@ namespace WixSharp
                 name => doc.Root.Select("Product")
                                 .Elements()
                                 .Where(e =>
-                                    {
-                                        if (name.StartsWith("*"))
-                                            return e.Name.LocalName.EndsWith(name.Substring(1));
-                                        else
-                                            return e.Name.LocalName == name;
-                                    })
+                                       {
+                                           if (name.StartsWith("*"))
+                                               return e.Name.LocalName.EndsWith(name.Substring(1));
+                                           else
+                                               return e.Name.LocalName == name;
+                                       })
                                 .ToArray();
 
             //order references to Product.Elements()
             var orderedElements = extract("CustomAction")
-                                 .Concat(extract("Binary"))
-                                 .Concat(extract("UIRef"))
-                                 .Concat(extract("Property"))
-                                 .Concat(extract("Feature"))
-                                 .Concat(extract("*Sequence"));
+                                      .Concat(extract("Binary"))
+                                      .Concat(extract("UIRef"))
+                                      .Concat(extract("Property"))
+                                      .Concat(extract("Feature"))
+                                      .Concat(extract("*Sequence"));
 
             //move elements to be ordered to the end of the doc
             foreach (var e in orderedElements)
@@ -1063,10 +1057,9 @@ namespace WixSharp
 
         static void ConvertMsiToMsm(XDocument doc)
         {
-            Func<string, XElement[]> extract =
-               name => (from e in doc.Root.Select("Product").Elements()
-                        where e.Name.LocalName == name
-                        select e).ToArray();
+            Func<string, XElement[]> extract = name => (from e in doc.Root.Select("Product").Elements()
+                                                        where e.Name.LocalName == name
+                                                        select e).ToArray();
 
             var elementsToRemove = extract("Feature")
                                    .Concat(
@@ -1080,12 +1073,14 @@ namespace WixSharp
             product.Remove();
 
             XElement module = doc.Root.AddElement(new XElement("Module", product.Elements()));
+
             module.CopyAttributeFrom("Id", product, "Name")
                   .CopyAttributeFrom(product, "Codepage")
                   .CopyAttributeFrom(product, "Language")
                   .CopyAttributeFrom(product, "Version");
 
             XElement package = module.Select("Package");
+
             package.CopyAttributeFrom(product, "Id")
                    .CopyAttributeFrom(product, "Manufacturer")
                    .Attribute("Compressed").Remove();
@@ -1186,7 +1181,7 @@ namespace WixSharp
             var wixNamespace = Compiler.IsWix4 ? wix4Namespace : wix3Namespace;
 
             XDocument doc = XDocument.Parse(
-                    @"<?xml version=""1.0"" encoding=""utf-8""?>
+                      @"<?xml version=""1.0"" encoding=""utf-8""?>
                       <Wix " + $"xmlns=\"{wixNamespace}\" {extraNamespaces}" + @">
                           <Product>
                               <Package " + $"InstallerVersion=\"{project.InstallerVersion}\"" + @" Compressed=""yes""/>
@@ -1196,16 +1191,18 @@ namespace WixSharp
 
 
             XElement product = doc.Root.Select("Product");
+
             product.SetAttribute("Id", project.ProductId)
                    .SetAttribute("Name", project.Name)
                    .SetAttribute("Language", project.Language.FirstLcid())
                    .SetAttribute("Codepage", project.Codepage)
                    .SetAttribute("Version", project.Version)
-                   .SetAttribute("UpgradeCode", project.UpgradeCode);
+                   .SetAttribute("UpgradeCode", project.UpgradeCode)
+                   .AddAttributes(project.Attributes);
 
             if (project.ControlPanelInfo != null && project.ControlPanelInfo.Manufacturer.IsNotEmpty())
                 product.SetAttribute("Manufacturer", project.ControlPanelInfo.Manufacturer);
-            product.AddAttributes(project.Attributes);
+
 
             XElement package = product.Select("Package");
 
@@ -1214,12 +1211,13 @@ namespace WixSharp
                    .SetAttribute("SummaryCodepage", project.Codepage)
                    .SetAttribute("Languages", project.Language.ToLcidList())
                    .SetAttribute("InstallPrivileges", project.InstallPrivileges)
-                   .SetAttribute("InstallScope", project.InstallScope);
+                   .SetAttribute("InstallScope", project.InstallScope)
+                   .AddAttributes(project.Package.Attributes);
 
             if (project.EmitConsistentPackageId)
                 package.CopyAttributeFrom(product, "Id");
 
-            package.AddAttributes(project.Package.Attributes);
+
             foreach (Media item in project.Media)
                 product.Add(item.ToXml((project as WixEntity).Id));
 
@@ -1228,9 +1226,9 @@ namespace WixSharp
 
             //extend wDir
             XElement dirs = product.AddElement(
-                        new XElement("Directory",
-                            new XAttribute("Id", "TARGETDIR"),
-                            new XAttribute("Name", "SourceDir")));
+                         new XElement("Directory",
+                             new XAttribute("Id", "TARGETDIR"),
+                             new XAttribute("Name", "SourceDir")));
 
             var featureComponents = new Dictionary<Feature, List<string>>(); //feature vs. component IDs
             var autoGeneratedComponents = new List<string>(); //component IDs
@@ -1322,34 +1320,34 @@ namespace WixSharp
                                 new XAttribute("Id", project.EmbeddedUI.Id),
                                 new XAttribute("SourceFile", bynaryPath)));
 
-                product.Select("UIRef")
-                      ?.With(el => el.Remove());
+                product.Select("UIRef")?
+                       .With(el => el.Remove());
             }
 
             if (!project.BannerImage.IsEmpty())
             {
                 product.Add(new XElement("WixVariable",
-                    new XAttribute("Id", "WixUIBannerBmp"),
-                    new XAttribute("Value", Utils.PathCombine(project.SourceBaseDir, project.BannerImage))));
+                                new XAttribute("Id", "WixUIBannerBmp"),
+                                new XAttribute("Value", project.SourceBaseDir.PathCombine(project.BannerImage))));
             }
 
             if (!project.BackgroundImage.IsEmpty())
             {
                 product.Add(new XElement("WixVariable",
-                    new XAttribute("Id", "WixUIDialogBmp"),
-                    new XAttribute("Value", Utils.PathCombine(project.SourceBaseDir, project.BackgroundImage))));
+                                new XAttribute("Id", "WixUIDialogBmp"),
+                                new XAttribute("Value", project.SourceBaseDir.PathCombine(project.BackgroundImage))));
             }
 
             if (!project.LicenceFile.IsEmpty())
             {
                 if (!AllowNonRtfLicense && !project.LicenceFile.EndsWith(".rtf", StringComparison.OrdinalIgnoreCase))
-                    throw new ApplicationException("License file must have 'rtf' file extension. Specify 'Compiler.AllowNonRtfLicense=true' to overcome this constraint.");
+                    throw new ApplicationException("License file must have 'rtf' file extension. Specify " +
+                                                   "'Compiler.AllowNonRtfLicense=true' to overcome this constraint.");
 
-                product.Add(
-                       new XElement("WixVariable",
-                       new XAttribute("Id", "WixUILicenseRtf"),
-                       new XAttribute("Value", Utils.PathCombine(project.SourceBaseDir, project.LicenceFile)),
-                       new XAttribute("xmlns", "")));
+                product.Add(new XElement("WixVariable",
+                                new XAttribute("Id", "WixUILicenseRtf"),
+                                new XAttribute("Value", project.SourceBaseDir.PathCombine(project.LicenceFile)),
+                                new XAttribute("xmlns", "")));
             }
 
             PostProcessMsm(project, product);
@@ -1384,10 +1382,13 @@ namespace WixSharp
                     !dirId.IsEmpty())
                 {
                     if (firstDirWithItems.Id.IsWixConstant())
-                        Compiler.OutputWriteLine($"WARNING: Special folder directory ID '{firstDirWithItems.Id}' has been reset to '{dirId}'.\n" +
-                                                  "If it was not intended disable auto assignment by setting 'Compiler.AutoGeneration.InstallDirDefaultId' to null.\n" +
+                        Compiler.OutputWriteLine($"WARNING: Special folder directory ID '{firstDirWithItems.Id}' has " +
+                                                 $"been reset to '{dirId}'.\n" +
+                                                  "If it was not intended disable auto assignment by setting 'Compiler" +
+                                                  ".AutoGeneration.InstallDirDefaultId' to null.\n" +
                                                   "Or set  'Dir.IsInstallDir = true' for the installation directory.\r" +
-                                                  "Or instead of 'new Dir(...' use 'new InstallDir(...' for the installation directory.");
+                                                  "Or instead of 'new Dir(...' use 'new InstallDir(...' for the " +
+                                                  "installation directory.");
 
                     firstDirWithItems.Id = dirId;
                     return logicalPath;
@@ -1403,7 +1404,7 @@ namespace WixSharp
             while (dir != null)
             {
                 prevDir = dir;
-                if (dir.Elements("Component").Count() == 0) //just a subdirectory without any installable items
+                if (dir.Elements("Component").None()) //just a subdirectory without any installable items
                     dir = dir.Elements("Directory").FirstOrDefault();
                 else
                     return dir; //dir containing installable items (e.g. files or shortcuts)
@@ -1450,7 +1451,8 @@ namespace WixSharp
                                                     .ToArray();
 
             // featuresWithComponents may still have parents that are not associated with any component
-            allFeatures = allFeatures.Concat(allFeatures.Select(x => x.Parent).Where(x => x != null))
+            allFeatures = allFeatures.Concat(allFeatures.Select(x => x.Parent))
+                                     .Where(x => x != null)
                                      .Distinct()
                                      .ToArray();
 
@@ -1466,11 +1468,11 @@ namespace WixSharp
 
                 foreach (string componentId in featureComponents[wFeature])
                     xFeature.Add(new XElement("ComponentRef",
-                                    new XAttribute("Id", componentId)));
+                                     new XAttribute("Id", componentId)));
 
                 foreach (string componentId in autoGeneratedComponents)
                     xFeature.Add(new XElement("ComponentRef",
-                                    new XAttribute("Id", componentId)));
+                                     new XAttribute("Id", componentId)));
 
                 feature2XML.Add(wFeature, xFeature);
             });
@@ -1544,9 +1546,13 @@ namespace WixSharp
                 };
 
                 if (project.ScheduleReboot.InstallSequence == RebootInstallSequence.InstallExecute)
+                {
                     addToExecute();
+                }
                 else if (project.ScheduleReboot.InstallSequence == RebootInstallSequence.InstallUI)
+                {
                     addToUi();
+                }
                 else if (project.ScheduleReboot.InstallSequence == RebootInstallSequence.Both)
                 {
                     addToUi();
@@ -1566,9 +1572,8 @@ namespace WixSharp
             {
                 Func<string, string> ExpandVersion = (version) => version == "%this%" ? project.Version.ToString() : version;
 
-                var upgradeElement = product.AddElement(
-                    new XElement("Upgrade",
-                       new XAttribute("Id", project.UpgradeCode)));
+                var upgradeElement = product.AddElement(new XElement("Upgrade",
+                                                            new XAttribute("Id", project.UpgradeCode)));
 
                 if (project.MajorUpgradeStrategy.UpgradeVersions != null)
                 {
@@ -1678,10 +1683,9 @@ namespace WixSharp
                     string compId = wDir.GenerateComponentId(wProject);
 
                     featureComponents.Map(wDir.ActualFeatures, compId);
-                    dirItem.AddElement(
-                            new XElement("Component",
-                                new XAttribute("Id", compId),
-                                new XAttribute("Guid", WixGuid.NewGuid(compId))));
+                    dirItem.AddElement(new XElement("Component",
+                                           new XAttribute("Id", compId),
+                                           new XAttribute("Guid", WixGuid.NewGuid(compId))));
                 }
 
                 ProcessDirectoryFiles(wDir, wProject, featureComponents, defaultFeatureComponents, dirItem);
@@ -1733,20 +1737,18 @@ namespace WixSharp
                     defaultFeatureComponents.Add(compId);
                 }
 
-                XElement comp = dirItem.AddElement(
-                    new XElement("Component",
-                        new XAttribute("Id", compId),
-                        new XAttribute("Guid", WixGuid.NewGuid(compId))));
+                XElement comp = dirItem.AddElement(new XElement("Component",
+                                                       new XAttribute("Id", compId),
+                                                       new XAttribute("Guid", WixGuid.NewGuid(compId))));
 
                 if (wFile.Condition != null)
-                    comp.AddElement(
-                        new XElement("Condition", wFile.Condition.ToXValue())
-                            .AddAttributes(wFile.Condition.Attributes));
+                    comp.AddElement(new XElement("Condition", wFile.Condition.ToXValue())
+                        .AddAttributes(wFile.Condition.Attributes));
 
                 XElement file = comp.AddElement(
                     new XElement("File",
                         new XAttribute("Id", fileId),
-                        new XAttribute("Source", Utils.PathCombine(wProject.SourceBaseDir, wFile.Name)))
+                        new XAttribute("Source", Extensions.PathCombine(wProject.SourceBaseDir, wFile.Name)))
                         .AddAttributes(wFile.Attributes));
 
                 if (wFile.OverwriteOnInstall)
@@ -1795,8 +1797,8 @@ namespace WixSharp
                                               new XAttribute("ContentType", wFileAssociation.ContentType),
                                               new XElement("Verb",
                                                   wFileAssociation.Advertise ?
-                                                     new XAttribute("Sequence", wFileAssociation.SequenceNo) :
-                                                     new XAttribute("TargetFile", fileId),
+                                                      new XAttribute("Sequence", wFileAssociation.SequenceNo) :
+                                                      new XAttribute("TargetFile", fileId),
                                                   new XAttribute("Id", wFileAssociation.Command),
                                                   new XAttribute("Command", wFileAssociation.Command),
                                                   new XAttribute("Argument", wFileAssociation.Arguments)))));
@@ -1814,9 +1816,8 @@ namespace WixSharp
                         }
                         else
                         {
-                            progId.Add(
-                                new XAttribute("Icon", wFileAssociation.Icon != "" ? wFileAssociation.Icon : fileId),
-                                new XAttribute("IconIndex", wFileAssociation.IconIndex));
+                            progId.Add(new XAttribute("Icon", wFileAssociation.Icon != "" ? wFileAssociation.Icon : fileId),
+                                           new XAttribute("IconIndex", wFileAssociation.IconIndex));
                         }
                     }
                 }
@@ -1862,13 +1863,14 @@ namespace WixSharp
                     if (wShortcut.isAutoId)
                         shortcutId = "Shortcut." + wFile.Id + "." + shortcutId; // to show the file parent
 
-                    var shortcutElement =
-                        new XElement("Shortcut",
-                            new XAttribute("Id", shortcutId),
-                            new XAttribute("WorkingDirectory", workingDir),
-                            new XAttribute("Arguments", wShortcut.Arguments),
-                            new XAttribute("Directory", locationDirId),
-                            new XAttribute("Name", wShortcut.Name.IsNullOrEmpty() ? IO.Path.GetFileNameWithoutExtension(wFile.Name) : wShortcut.Name + ".lnk"));
+                    var shortcutElement = new XElement("Shortcut",
+                                              new XAttribute("Id", shortcutId),
+                                              new XAttribute("WorkingDirectory", workingDir),
+                                              new XAttribute("Arguments", wShortcut.Arguments),
+                                              new XAttribute("Directory", locationDirId),
+                                              new XAttribute("Name", wShortcut.Name.IsNullOrEmpty()
+                                                             ? IO.Path.GetFileNameWithoutExtension(wFile.Name)
+                                                             : wShortcut.Name + ".lnk"));
 
                     wShortcut.EmitAttributes(shortcutElement);
 
@@ -1898,9 +1900,9 @@ namespace WixSharp
                     defaultFeatureComponents.Add(compId);
 
                 XElement comp = dirItem.AddElement(
-                   new XElement("Component",
-                       new XAttribute("Id", compId),
-                       new XAttribute("Guid", WixGuid.NewGuid(compId))));
+                    new XElement("Component",
+                        new XAttribute("Id", compId),
+                        new XAttribute("Guid", WixGuid.NewGuid(compId))));
 
                 if (wShortcut.Condition != null)
                     comp.AddElement(
@@ -1913,14 +1915,13 @@ namespace WixSharp
                 if (wShortcut.isAutoId)
                     shortcutId = wDir.Id + "." + shortcutId;
 
-                XElement sc = comp.AddElement(
-                   new XElement("Shortcut",
-                       new XAttribute("Id", wDir.Id + "." + wShortcut.Id),
-                       //new XAttribute("Directory", wDir.Id), //not needed for Wix# as this attributed is required only if the shortcut is not nested under a Component element.
-                       new XAttribute("WorkingDirectory", workingDir),
-                       new XAttribute("Target", wShortcut.Target),
-                       new XAttribute("Arguments", wShortcut.Arguments),
-                       new XAttribute("Name", wShortcut.Name + ".lnk")));
+                XElement sc = comp.AddElement(new XElement("Shortcut",
+                                                  new XAttribute("Id", wDir.Id + "." + wShortcut.Id),
+                                                  //new XAttribute("Directory", wDir.Id), //not needed for Wix# as this attributed is required only if the shortcut is not nested under a Component element.
+                                                  new XAttribute("WorkingDirectory", workingDir),
+                                                  new XAttribute("Target", wShortcut.Target),
+                                                  new XAttribute("Arguments", wShortcut.Arguments),
+                                                  new XAttribute("Name", wShortcut.Name + ".lnk")));
 
                 wShortcut.EmitAttributes(sc);
             }
@@ -1938,10 +1939,9 @@ namespace WixSharp
                 else
                     defaultFeatureComponents.Add(compId);
 
-                XElement comp = dirItem.AddElement(
-                   new XElement("Component",
-                       new XAttribute("Id", compId),
-                       new XAttribute("Guid", WixGuid.NewGuid(compId))));
+                XElement comp = dirItem.AddElement(new XElement("Component",
+                                                       new XAttribute("Id", compId),
+                                                       new XAttribute("Guid", WixGuid.NewGuid(compId))));
 
                 XElement dsn = comp.AddElement(
                     new XElement("ODBCDataSource",
@@ -1955,10 +1955,9 @@ namespace WixSharp
 
                 foreach (Property prop in wODBCDataSource.Properties)
                 {
-                    dsn.AddElement(
-                        new XElement("Property",
-                                    new XAttribute("Id", prop.Name),
-                                    new XAttribute("Value", prop.Value)));
+                    dsn.AddElement(new XElement("Property",
+                                       new XAttribute("Id", prop.Name),
+                                       new XAttribute("Value", prop.Value)));
                 }
             }
         }
@@ -2006,12 +2005,10 @@ namespace WixSharp
 
                     var permissionElement = new XElement(utilExtension.ToXNamespace() + "PermissionEx");
                     permission.EmitAttributes(permissionElement);
-                    dirItem.Add(
-                        new XElement("Component",
-                            new XAttribute("Id", compId),
-                            new XAttribute("Guid", WixGuid.NewGuid(compId)),
-                            new XElement("CreateFolder",
-                                permissionElement)));
+                    dirItem.Add(new XElement("Component",
+                                    new XAttribute("Id", compId),
+                                    new XAttribute("Guid", WixGuid.NewGuid(compId)),
+                                    new XElement("CreateFolder", permissionElement)));
                 }
             }
         }
@@ -2089,15 +2086,13 @@ namespace WixSharp
                 string language = product.Select("Package").Attribute("Languages").Value;
                 string diskId = product.Select("Media")?.Attribute("Id")?.Value ?? "1"; // see Issue #362 (Merge Modules cause NullRefException when MediaTemplate is used) discussion
 
-                XElement merge = dirItem.AddElement(
-                    new XElement("Merge",
-                        new XAttribute("Id", msm.Id),
-                        new XAttribute("FileCompression", msm.FileCompression.ToYesNo()),
-                        new XAttribute("Language", language),
-                        new XAttribute("SourceFile", msm.SourceFile),
-                        new XAttribute("DiskId", diskId)
-                        )
-                        .AddAttributes(msm.Attributes));
+                XElement merge = dirItem.AddElement(new XElement("Merge",
+                                                        new XAttribute("Id", msm.Id),
+                                                        new XAttribute("FileCompression", msm.FileCompression.ToYesNo()),
+                                                        new XAttribute("Language", language),
+                                                        new XAttribute("SourceFile", msm.SourceFile),
+                                                        new XAttribute("DiskId", diskId))
+                                                        .AddAttributes(msm.Attributes));
 
                 //MSM features are very different as they are not associated with the component but with the merge module thus
                 //it's not possible to add the feature 'child' MergeRef neither to featureComponents nor defaultFeatureComponents.
@@ -2151,7 +2146,7 @@ namespace WixSharp
                 }
 
                 xFeature?.Add(new XElement("MergeRef",
-                                 new XAttribute("Id", item.MsmId)));
+                                  new XAttribute("Id", item.MsmId)));
             }
         }
 
@@ -2296,26 +2291,23 @@ namespace WixSharp
                     // This technique is only used to satisfy WiX/MSI constraint for `Component.RegistryKey` to belong to the directory.
                     XElement topLevelDir = GetTopLevelPermanentDir(product, regVal.Win64);
 
-                    XElement comp = topLevelDir.AddElement(
-                                                   new XElement("Component",
-                                                       new XAttribute("Id", compId),
-                                                       new XAttribute("Guid", WixGuid.NewGuid(compId))));
+                    XElement comp = topLevelDir.AddElement(new XElement("Component",
+                                                               new XAttribute("Id", compId),
+                                                               new XAttribute("Guid", WixGuid.NewGuid(compId))));
 
                     if (regVal.Condition != null)
-                        comp.AddElement(
-                            new XElement("Condition", regVal.Condition.ToXValue())
-                                .AddAttributes(regVal.Condition.Attributes));
+                        comp.AddElement(new XElement("Condition", regVal.Condition.ToXValue())
+                                            .AddAttributes(regVal.Condition.Attributes));
 
                     XElement regValEl;
                     XElement regKeyEl;
-                    regKeyEl = comp.AddElement(
-                            new XElement("RegistryKey",
-                                new XAttribute("Root", regVal.Root),
-                                regValEl = new XElement("RegistryValue")
-                                               .SetAttribute("Id", regVal.Id)
-                                               .SetAttribute("Type", regVal.RegTypeString)
-                                               .SetAttribute("KeyPath", keyPathSet)
-                                               .AddAttributes(regVal.Attributes)));
+                    regKeyEl = comp.AddElement(new XElement("RegistryKey",
+                                                   new XAttribute("Root", regVal.Root),
+                                                   regValEl = new XElement("RegistryValue")
+                                                                  .SetAttribute("Id", regVal.Id)
+                                                                  .SetAttribute("Type", regVal.RegTypeString)
+                                                                  .SetAttribute("KeyPath", keyPathSet)
+                                                                  .AddAttributes(regVal.Attributes)));
                     if (!regVal.Key.IsEmpty())
                         regKeyEl.Add(new XAttribute("Key", regVal.Key));
 
@@ -2326,7 +2318,9 @@ namespace WixSharp
                             regValEl.Add(new XElement("MultiStringValue", line));
                     }
                     else
+                    {
                         regValEl.Add(new XAttribute("Value", stringValue));
+                    }
 
                     if (regVal.RegistryKeyAction != RegistryKeyAction.none)
                     {
@@ -2341,7 +2335,9 @@ namespace WixSharp
                         regKeyEl.Add(new XAttribute("ForceDeleteOnUninstall", regVal.ForceDeleteOnUninstall.ToYesNo()));
                     }
                     if (regVal.Name != "")
+                    {
                         regValEl.Add(new XAttribute("Name", regVal.Name));
+                    }
 
                     keyPathSet = true;
                 }
@@ -2509,17 +2505,16 @@ namespace WixSharp
                 {
                     var rvProp = (prop as RegValueProperty);
 
-                    XElement RegistrySearchElement;
-                    XElement xProp = product.AddElement(
-                                new XElement("Property",
-                                    new XAttribute("Id", rvProp.Name),
-                                    RegistrySearchElement = new XElement("RegistrySearch",
-                                        new XAttribute("Id", rvProp.Name + "_RegSearch"),
-                                        new XAttribute("Root", rvProp.Root),
-                                        new XAttribute("Key", rvProp.Key),
-                                        new XAttribute("Type", "raw")
-                                        ))
-                                    .AddAttributes(rvProp.Attributes));
+                    XElement RegistrySearchElement = new XElement("RegistrySearch",
+                                                                new XAttribute("Id", rvProp.Name + "_RegSearch"),
+                                                                new XAttribute("Root", rvProp.Root),
+                                                                new XAttribute("Key", rvProp.Key),
+                                                                new XAttribute("Type", "raw"));
+
+                    XElement xProp = product.AddElement(new XElement("Property",
+                                                            new XAttribute("Id", rvProp.Name),
+                                                            RegistrySearchElement)
+                                                       .AddAttributes(rvProp.Attributes));
 
                     if (!rvProp.Value.IsEmpty())
                         xProp.Add(new XAttribute("Value", rvProp.Value));
@@ -2566,7 +2561,7 @@ namespace WixSharp
             foreach (var bin in wProject.Binaries)
             {
                 string bynaryKey = bin.Id;
-                string bynaryPath = Utils.PathCombine(wProject.SourceBaseDir, bin.Name);
+                string bynaryPath = Extensions.PathCombine(wProject.SourceBaseDir, bin.Name);
 
                 if (bin is EmbeddedAssembly)
                 {
@@ -2628,9 +2623,9 @@ namespace WixSharp
                 List<XElement> uis = new List<XElement>();
                 uis.Add(product.SelectOrCreate("UI"));
 
-                XAttribute sequenceNumberAttr = wAction.SequenceNumber.HasValue ?
-                                                    new XAttribute("Sequence", wAction.SequenceNumber.Value) :
-                                                    new XAttribute(wAction.When.ToString(), step);
+                XAttribute sequenceNumberAttr = wAction.SequenceNumber.HasValue
+                                                ? new XAttribute("Sequence", wAction.SequenceNumber.Value)
+                                                : new XAttribute(wAction.When.ToString(), step);
 
                 if (wAction.ProgressText.IsNotEmpty())
                 {
@@ -2651,15 +2646,14 @@ namespace WixSharp
 
                     var actionId = wSetPropAction.Id;
 
-                    product.AddElement(
-                        new XElement("CustomAction",
-                            new XAttribute("Id", actionId),
-                            new XAttribute("Property", wSetPropAction.PropName),
-                            new XAttribute("Value", wSetPropAction.Value))
-                            .SetAttribute("Return", wAction.Return)
-                            .SetAttribute("Impersonate", wAction.Impersonate)
-                            .SetAttribute("Execute", wAction.Execute)
-                            .AddAttributes(wAction.Attributes));
+                    product.AddElement(new XElement("CustomAction",
+                                           new XAttribute("Id", actionId),
+                                           new XAttribute("Property", wSetPropAction.PropName),
+                                           new XAttribute("Value", wSetPropAction.Value))
+                                           .SetAttribute("Return", wAction.Return)
+                                           .SetAttribute("Impersonate", wAction.Impersonate)
+                                           .SetAttribute("Execute", wAction.Execute)
+                                           .AddAttributes(wAction.Attributes));
 
                     sequences.ForEach(sequence =>
                         sequence.Add(new XElement("Custom", wAction.Condition.ToXValue(),
@@ -2671,13 +2665,13 @@ namespace WixSharp
                     var wScriptAction = (ScriptFileAction)wAction;
 
                     sequences.ForEach(sequence =>
-                         sequence.Add(new XElement("Custom", wAction.Condition.ToXValue(),
-                                          new XAttribute("Action", wAction.Id),
-                                          sequenceNumberAttr)));
+                        sequence.Add(new XElement("Custom", wAction.Condition.ToXValue(),
+                                         new XAttribute("Action", wAction.Id),
+                                         sequenceNumberAttr)));
 
                     product.Add(new XElement("Binary",
                                     new XAttribute("Id", wAction.Name.Expand() + "_File"),
-                                    new XAttribute("SourceFile", Utils.PathCombine(wProject.SourceBaseDir, wScriptAction.ScriptFile))));
+                                    new XAttribute("SourceFile", Extensions.PathCombine(wProject.SourceBaseDir, wScriptAction.ScriptFile))));
 
                     product.Add(new XElement("CustomAction",
                                     new XAttribute("Id", wAction.Id),
@@ -2711,8 +2705,8 @@ namespace WixSharp
 
                     sequences.ForEach(sequence =>
                         sequence.Add(new XElement("Custom", wAction.Condition.ToXValue(),
-                                       new XAttribute("Action", wAction.Id),
-                                       sequenceNumberAttr)));
+                                         new XAttribute("Action", wAction.Id),
+                                         sequenceNumberAttr)));
 
                     product.Add(new XElement("CustomAction",
                                     new XCData(wScriptAction.Code),
@@ -2742,7 +2736,7 @@ namespace WixSharp
                 else if (wAction is ManagedAction)
                 {
                     var wManagedAction = (ManagedAction)wAction;
-                    var asmFile = Utils.PathCombine(wProject.SourceBaseDir, wManagedAction.ActionAssembly);
+                    var asmFile = Extensions.PathCombine(wProject.SourceBaseDir, wManagedAction.ActionAssembly);
                     var packageFile = asmFile.PathChangeDirectory(wProject.OutDir.PathGetFullPath())
                                              .PathChangeExtension(".CA.dll");
 
@@ -2788,8 +2782,8 @@ namespace WixSharp
                                             new XAttribute("Value", mapping)));
 
                             var stepAttr = wAction.SequenceNumber.HasValue ?
-                                                    new XAttribute("Sequence", wAction.SequenceNumber.Value) :
-                                                    new XAttribute("After", "InstallInitialize");
+                                                   new XAttribute("Sequence", wAction.SequenceNumber.Value) :
+                                                   new XAttribute("After", "InstallInitialize");
 
 
                             if (AutoElements.ScheduleDeferredActionsAfterTunnellingTheirProperties || wAction.RawId == nameof(ManagedProjectActions.WixSharp_AfterInstall_Action))
@@ -2803,10 +2797,9 @@ namespace WixSharp
                                 sequenceNumberAttr = new XAttribute("After", setPropValuesId);
                             }
 
-                            sequences.ForEach(sequence =>
-                                sequence.Add(new XElement("Custom",
-                                                 new XAttribute("Action", setPropValuesId),
-                                                 stepAttr)));
+                            sequences.ForEach(sequence => sequence.Add(new XElement("Custom",
+                                                                           new XAttribute("Action", setPropValuesId),
+                                                                           stepAttr)));
                         }
                     }
 
@@ -2828,13 +2821,14 @@ namespace WixSharp
                         string mapping = wManagedAction.RollbackArg == null
                             ? wManagedAction.ExpandAllUsedProperties()
                             : wManagedAction.RollbackExpandAllUsedProperties();
+
                         if (!mapping.IsEmpty())
                         {
-                            product.Add(new XElement("SetProperty",
-                                new XAttribute("Id", roollbackActionId),
-                                new XAttribute("Before", roollbackActionId),
-                                new XAttribute("Sequence", "execute"),
-                                new XAttribute("Value", mapping)));
+                            product.AddElement("SetProperty", $@"
+                                                Id={roollbackActionId};
+                                                Before={roollbackActionId};
+                                                Sequence=execute;
+                                                Value={mapping}");
                         }
 
                         sequences.ForEach(sequence =>
@@ -2847,10 +2841,10 @@ namespace WixSharp
                                     new XAttribute("Id", roollbackActionId),
                                     new XAttribute("BinaryKey", bynaryKey),
                                     new XAttribute("DllEntry", wManagedAction.Rollback))
-                                .SetAttribute("Return", wAction.Return)
-                                .SetAttribute("Impersonate", wAction.Impersonate)
-                                .SetAttribute("Execute", Execute.rollback)
-                                .AddAttributes(wAction.Attributes));
+                               .SetAttribute("Return", wAction.Return)
+                               .SetAttribute("Impersonate", wAction.Impersonate)
+                               .SetAttribute("Execute", Execute.rollback)
+                               .AddAttributes(wAction.Attributes));
                     }
                 }
                 else if (wAction is CustomActionRef)
@@ -2872,20 +2866,20 @@ namespace WixSharp
 
                     product.AddElement(
                         new XElement("CustomAction")
-                            .SetAttribute("Id", setCmdLineActionId)
-                            .SetAttribute("Property", wAction.Execute == Execute.immediate ? quietExecAction.CommandLineProperty : wAction.Id)
-                            .SetAttribute("Value", "\"" + quietExecAction.AppPath.ExpandCommandPath() + "\" " + quietExecAction.Args.ExpandCommandPath())
-                            .AddAttributes(quietExecAction.Attributes));
+                           .SetAttribute("Id", setCmdLineActionId)
+                           .SetAttribute("Property", wAction.Execute == Execute.immediate ? quietExecAction.CommandLineProperty : wAction.Id)
+                           .SetAttribute("Value", "\"" + quietExecAction.AppPath.ExpandCommandPath() + "\" " + quietExecAction.Args.ExpandCommandPath())
+                           .AddAttributes(quietExecAction.Attributes));
 
                     product.AddElement(
                         new XElement("CustomAction")
-                            .SetAttribute("Id", cmdLineActionId)
-                            .SetAttribute("BinaryKey", "WixCA")
-                            .SetAttribute("DllEntry", quietExecAction.ActionName)
-                            .SetAttribute("Return", wAction.Return)
-                            .SetAttribute("Impersonate", wAction.Impersonate)
-                            .SetAttribute("Execute", wAction.Execute)
-                            .AddAttributes(wAction.Attributes));
+                           .SetAttribute("Id", cmdLineActionId)
+                           .SetAttribute("BinaryKey", "WixCA")
+                           .SetAttribute("DllEntry", quietExecAction.ActionName)
+                           .SetAttribute("Return", wAction.Return)
+                           .SetAttribute("Impersonate", wAction.Impersonate)
+                           .SetAttribute("Execute", wAction.Execute)
+                           .AddAttributes(wAction.Attributes));
 
                     sequences.ForEach(sequence =>
                         sequence.Add(
@@ -2914,13 +2908,13 @@ namespace WixSharp
 
                         product.AddElement(
                             new XElement("CustomAction")
-                                .SetAttribute("Id", roollbackActionId)
-                                .SetAttribute("BinaryKey", "WixCA")
-                                .SetAttribute("DllEntry", quietExecAction.ActionName)
-                                .SetAttribute("Return", wAction.Return)
-                                .SetAttribute("Impersonate", wAction.Impersonate)
-                                .SetAttribute("Execute", Execute.rollback)
-                                .AddAttributes(wAction.Attributes));
+                               .SetAttribute("Id", roollbackActionId)
+                               .SetAttribute("BinaryKey", "WixCA")
+                               .SetAttribute("DllEntry", quietExecAction.ActionName)
+                               .SetAttribute("Return", wAction.Return)
+                               .SetAttribute("Impersonate", wAction.Impersonate)
+                               .SetAttribute("Execute", Execute.rollback)
+                               .AddAttributes(wAction.Attributes));
                     }
 
                     wProject.Include(WixExtension.Util);
@@ -2940,10 +2934,10 @@ namespace WixSharp
                                 new XAttribute("Id", wAction.Id),
                                 new XAttribute("ExeCommand", fileAction.Args.ExpandCommandPath()),
                                 new XAttribute("FileKey", fileAction.Key))
-                            .SetAttribute("Return", wAction.Return)
-                            .SetAttribute("Impersonate", wAction.Impersonate)
-                            .SetAttribute("Execute", wAction.Execute)
-                            .AddAttributes(wAction.Attributes));
+                           .SetAttribute("Return", wAction.Return)
+                           .SetAttribute("Impersonate", wAction.Impersonate)
+                           .SetAttribute("Execute", wAction.Execute)
+                           .AddAttributes(wAction.Attributes));
 
                     if ((fileAction.Execute == Execute.deferred) && fileAction.Rollback.IsNotEmpty())
                     {
@@ -2959,10 +2953,10 @@ namespace WixSharp
                                         ? fileAction.Args.ExpandCommandPath()
                                         : fileAction.RollbackArg.ExpandCommandPath()),
                                     new XAttribute("FileKey", fileAction.Rollback))
-                                .SetAttribute("Return", wAction.Return)
-                                .SetAttribute("Impersonate", wAction.Impersonate)
-                                .SetAttribute("Execute", Execute.rollback)
-                                .AddAttributes(wAction.Attributes));
+                               .SetAttribute("Return", wAction.Return)
+                               .SetAttribute("Impersonate", wAction.Impersonate)
+                               .SetAttribute("Execute", Execute.rollback)
+                               .AddAttributes(wAction.Attributes));
                     }
                 }
                 else if (wAction is BinaryFileAction)
@@ -2980,10 +2974,10 @@ namespace WixSharp
                                 new XAttribute("Id", wAction.Id),
                                 new XAttribute("ExeCommand", binaryAction.Args.ExpandCommandPath()),
                                 new XAttribute("BinaryKey", binaryAction.Key))
-                            .SetAttribute("Return", wAction.Return)
-                            .SetAttribute("Impersonate", wAction.Impersonate)
-                            .SetAttribute("Execute", wAction.Execute)
-                            .AddAttributes(wAction.Attributes));
+                           .SetAttribute("Return", wAction.Return)
+                           .SetAttribute("Impersonate", wAction.Impersonate)
+                           .SetAttribute("Execute", wAction.Execute)
+                           .AddAttributes(wAction.Attributes));
 
                     if ((binaryAction.Execute == Execute.deferred) && binaryAction.Rollback.IsNotEmpty())
                     {
@@ -2999,10 +2993,10 @@ namespace WixSharp
                                         ? binaryAction.Args.ExpandCommandPath()
                                         : binaryAction.RollbackArg.ExpandCommandPath()),
                                 new XAttribute("BinaryKey", binaryAction.Rollback))
-                                .SetAttribute("Return", wAction.Return)
-                                .SetAttribute("Impersonate", wAction.Impersonate)
-                                .SetAttribute("Execute", Execute.rollback)
-                                .AddAttributes(wAction.Attributes));
+                               .SetAttribute("Return", wAction.Return)
+                               .SetAttribute("Impersonate", wAction.Impersonate)
+                               .SetAttribute("Execute", Execute.rollback)
+                               .AddAttributes(wAction.Attributes));
                     }
                 }
                 else if (wAction is PathFileAction)
@@ -3174,8 +3168,8 @@ namespace WixSharp
             if (platform.HasValue && platform.Value == Platform.x64)
                 platformDir = "x64";
 
-            var makeSfxCA = Utils.PathCombine(WixSdkLocation, @"MakeSfxCA.exe");
-            var sfxcaDll = Utils.PathCombine(WixSdkLocation, platformDir + "\\sfxca.dll");
+            var makeSfxCA = Extensions.PathCombine(WixSdkLocation, @"MakeSfxCA.exe");
+            var sfxcaDll = Extensions.PathCombine(WixSdkLocation, platformDir + "\\sfxca.dll");
 
             outDir = IO.Path.GetFullPath(outDir);
 
@@ -3259,11 +3253,11 @@ namespace WixSharp
                 IO.File.Delete(outDll);
 
             string makeSfxCA_args = "\"" + outDll + "\" " +
-                        "\"" + sfxcaDll + "\" " +
-                        "\"" + asmFile + "\" " +
-                        "\"" + configFile + "\" " +
-                        (pdbFileArgument ?? " ") +
-                        referencedAssemblies;
+                                    "\"" + sfxcaDll + "\" " +
+                                    "\"" + asmFile + "\" " +
+                                    "\"" + configFile + "\" " +
+                                    (pdbFileArgument ?? " ") +
+                                     referencedAssemblies;
 
             if (IsWix4)
                 makeSfxCA_args += $" \"{WixSdkLocation.PathCombine("WixToolset.Dtf.WindowsInstaller.dll")}\"";
@@ -3272,9 +3266,9 @@ namespace WixSharp
 
             ProjectValidator.ValidateCAAssembly(asmFile);
 #if DEBUG
-            Compiler.OutputWriteLine("<- Packing managed CA:");
-            Compiler.OutputWriteLine(makeSfxCA + " " + makeSfxCA_args);
-            Compiler.OutputWriteLine("->");
+            Compiler.OutputWriteLine("<- Packing managed CA:\n"+
+                                     makeSfxCA + " " + makeSfxCA_args+"\n"+
+                                     "->");
 #endif
             if (batchFile == null)
             {
@@ -3537,8 +3531,8 @@ namespace WixSharp
             public static string WildcardToRegex(string pattern)
             {
                 return "^" + Regex.Escape(pattern).
-                 Replace("\\*", ".*").
-                 Replace("\\?", ".") + "$";
+                Replace("\\*", ".*").
+                Replace("\\?", ".") + "$";
             }
         }
 

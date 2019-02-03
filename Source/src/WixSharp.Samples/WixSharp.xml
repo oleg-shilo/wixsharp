@@ -2378,9 +2378,16 @@
             Container class for common members of the Bootstrapper packages
             </summary>
         </member>
+        <member name="F:WixSharp.Bootstrapper.Package.DisplayName">
+            <summary>
+            Specifies the display name to place in the bootstrapper application data manifest for the package.
+            By default, ExePackages use the ProductName field from the version information, MsiPackages use the ProductName property, and MspPackages use the DisplayName patch metadata property.
+            Other package types must use this attribute to define a display name in the bootstrapper application data manifest.
+            </summary>
+        </member>
         <member name="F:WixSharp.Bootstrapper.Package.Permanent">
             <summary>
-            Specifies whether the package can be uninstalled.
+            Specifies whether the package can be uninstalled. The default is "no".
             </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.Package.SourceFile">
@@ -2413,6 +2420,25 @@
         <member name="F:WixSharp.Bootstrapper.Package.Compressed">
             <summary>
             Whether the package payload should be embedded in a container or left as an external payload.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.Package.Cache">
+            <summary>
+            Whether to cache the package. The default is "yes".
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.Package.LogPathVariable">
+            <summary>
+            Name of a Variable that will hold the path to the log file.
+            An empty value will cause the variable to not be set.
+            The default is "WixBundleLog_[PackageId]" except for MSU packages which default to no logging.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.Package.RollbackLogPathVariable">
+            <summary>
+            Name of a Variable that will hold the path to the log file used during rollback.
+            An empty value will cause the variable to not be set.
+            The default is "WixBundleRollbackLog_[PackageId]" except for MSU packages which default to no logging.
             </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.Package.Payloads">
@@ -2489,7 +2515,7 @@
         </member>
         <member name="F:WixSharp.Bootstrapper.ExePackage.PerMachine">
             <summary>
-            Indicates the package must be executed elevated.
+            Indicates the package must be executed elevated. The default is "no".
             </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.ExePackage.DetectCondition">
@@ -2595,6 +2621,45 @@
             </summary>
         </member>
         <member name="M:WixSharp.Bootstrapper.MsiPackage.ToXml">
+            <summary>
+            Emits WiX XML.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:WixSharp.Bootstrapper.MsuPackage">
+            <summary>
+            Standard WiX MsuPackage.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.MsuPackage.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.MsuPackage"/> class.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.MsuPackage.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.MsuPackage"/> class.
+            </summary>
+            <param name="path">The path.</param>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.MsuPackage.DetectCondition">
+            <summary>
+            A condition that determines if the package is present on the target system.
+            This condition can use built-in variables and variables returned by searches.
+            This condition is necessary because Windows doesn't provide a method to detect the presence of an ExePackage.
+            Burn uses this condition to determine how to treat this package during a bundle action;
+            for example, if this condition is false or omitted and the bundle is being installed, Burn will install this package.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.MsuPackage.KB">
+            <summary>
+            The knowledge base identifier for the MSU.
+            The KB attribute must be specified to enable the MSU package to be uninstalled.
+            Even then MSU uninstallation is only supported on Windows 7 and later.
+            When the KB attribute is specified, the Permanent attribute will the control whether the package is uninstalled.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.MsuPackage.ToXml">
             <summary>
             Emits WiX XML.
             </summary>
@@ -7314,7 +7379,10 @@
         </member>
         <member name="M:WixSharp.Extensions.PathCombine(System.String,System.String)">
             <summary>
-            Combines path parts. Encapsulates <see cref="M:System.IO.Path.Combine(System.String,System.String)"/>
+            Combines two path strings.
+            <para>
+            It is a fix for unexpected behavior of System.IO.Path.Combine: Path.Combine(@"C:\Test", @"\Docs\readme.txt") return @"\Docs\readme.txt";
+            </para>
             </summary>
             <param name="path1">The path1.</param>
             <param name="path2">The path2.</param>

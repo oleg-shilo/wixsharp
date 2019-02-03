@@ -20,7 +20,7 @@ namespace WixSharp.Test
                                                ASP.NETApp,
                                                EnvVariables,
                                                WixBootstrapper"
-                                              .Split(',').Select(x=>x.Trim());
+                                .Split(',').Select(x => x.Trim());
 
         int completedSamples = 0;
         int samplesTotal = 0;
@@ -38,6 +38,7 @@ namespace WixSharp.Test
             var failedSamples = new List<string>();
             int startStep = 0;
             int? howManyToRun = null; //null - all
+            // howManyToRun = 10;
             int sampleDirIndex = 0;
 
             var files = Directory.GetFiles(@"..\..\..\WixSharp.Samples\Wix# Samples", "build*.cmd", SearchOption.AllDirectories);
@@ -59,9 +60,17 @@ namespace WixSharp.Test
 
             var allSamples = samples.Select(g => new { Category = g.Key, Items = g, Index = ++sampleDirIndex });
 
+            var activeBuilds = 0;
             Parallel.ForEach(allSamples, (group) =>
             {
+                activeBuilds++;
+                Debug.WriteLine($">>>>>>>>>>> {activeBuilds} >>>>>>>>>>>>");
                 string sampleDir = group.Category;
+
+                var tempFiles = Directory.GetFiles(sampleDir, "*.dll")
+                                         .Select(x => new { dll = x, pdb = x.PathChangeExtension(".pdb") })
+                                         .Where(x => IO.File.Exists(x.pdb))
+                                         .ToArray();
 
                 var sampleFiles = Directory.GetFiles(sampleDir, "build*.cmd")
                                            .Select(x => Path.GetFullPath(x))
@@ -69,8 +78,17 @@ namespace WixSharp.Test
 
                 foreach (string batchFile in sampleFiles)
                 {
-                    BuildSample(batchFile, group.Index, failedSamples);
+                    foreach (var item in tempFiles)
+                    {
+                        item.dll.DeleteIfExists();
+                        item.pdb.DeleteIfExists();
+                    }
+
+                    if (!BuildSample(batchFile, group.Index, failedSamples))
+                        BuildSample(batchFile, group.Index, failedSamples); // just in case try again. MSI builds are flake
                 }
+                activeBuilds--;
+                Debug.WriteLine($"<<<<<<<<<<<< {activeBuilds} <<<<<<<<<<<<");
             });
 
             while (completedSamples < samplesTotal)
@@ -86,8 +104,12 @@ namespace WixSharp.Test
             }
         }
 
-        void BuildSample(string batchFile, int currentStep, List<string> failedSamples)
+        bool BuildSample(string batchFile, int currentStep, List<string> failedSamples)
         {
+            var result = true;
+
+            string errorOutput = "";
+
             try
             {
                 var dir = Path.GetDirectoryName(batchFile);
@@ -106,6 +128,9 @@ namespace WixSharp.Test
 
                 if (output.Contains(" : error") || output.Contains("Error: ") || (!nonMsi && !HasAnyMsis(dir)))
                 {
+                    result = false;
+                    errorOutput = output;
+
                     if (batchFile.EndsWith(@"Signing\Build.cmd") && output.Contains("SignTool Error:"))
                     {
                         //just ignore as the certificate is just a demo certificate
@@ -113,7 +138,9 @@ namespace WixSharp.Test
                     else
                         lock (failedSamples)
                         {
-                            failedSamples.Add(currentStep + ":" + batchFile);
+                            var prefix = $"{currentStep}:";
+                            failedSamples.RemoveAll(x => x.StartsWith(prefix));
+                            failedSamples.Add(prefix + batchFile);
                         }
                 }
 
@@ -130,18 +157,26 @@ namespace WixSharp.Test
             finally
             {
                 completedSamples++;
-                Log(currentStep, failedSamples);
+                Log(currentStep, failedSamples, errorOutput);
                 RestorePause(batchFile);
             }
+
+            return result;
         }
 
-        void Log(int currentStep, List<string> failedSamples)
+        void Log(int currentStep, List<string> failedSamples, string output)
         {
             lock (failedSamples)
             {
+                var items = failedSamples.Distinct().ToList();
+
                 var logFile = @"..\..\..\WixSharp.Samples\test_progress.txt";
-                var content = string.Format("Failed-{0}; Completed-{1}; Total-{2}; Time-{3}\r\n", failedSamples.Count, completedSamples, samplesTotal, testTime.Elapsed) + string.Join(Environment.NewLine, failedSamples.ToArray());
+                var content = string.Format("Failed-{0}; Completed-{1}; Total-{2}; Time-{3}\r\n",
+                    items.Count, completedSamples, samplesTotal, testTime.Elapsed) + string.Join(Environment.NewLine, items.ToArray());
                 IO.File.WriteAllText(logFile, content);
+
+                if (output.IsNotEmpty())
+                    IO.File.AppendAllText(logFile.PathChangeExtension(".log"), $"\r\n{currentStep}: {output}");
             }
         }
 

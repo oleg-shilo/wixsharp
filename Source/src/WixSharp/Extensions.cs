@@ -28,6 +28,19 @@ namespace WixSharp
     /// </summary>
     public static partial class Extensions
     {
+        internal static void EnsureFileDir(this string file)
+        {
+            var dir = IO.Path.GetDirectoryName(file);
+            if (!IO.Directory.Exists(dir))
+                IO.Directory.CreateDirectory(dir);
+        }
+
+        internal static void EnsureDir(this string dir)
+        {
+            if (!IO.Directory.Exists(dir))
+                IO.Directory.CreateDirectory(dir);
+        }
+
         /// <summary>
         /// Sets the parent component attribute 'Permanent'.
         /// </summary>
@@ -1018,14 +1031,34 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Combines path parts. Encapsulates <see cref="System.IO.Path.Combine"/>
+        /// Combines two path strings.
+        /// <para>
+        /// It is a fix for unexpected behavior of System.IO.Path.Combine: Path.Combine(@"C:\Test", @"\Docs\readme.txt") return @"\Docs\readme.txt";
+        /// </para>
         /// </summary>
         /// <param name="path1">The path1.</param>
         /// <param name="path2">The path2.</param>
         /// <returns></returns>
         public static string PathCombine(this string path1, string path2)
         {
-            return IO.Path.Combine(path1, path2);
+            var p1 = (path1 ?? "").ExpandEnvVars();
+            var p2 = (path2 ?? "").ExpandEnvVars();
+
+            if (p2.Length == 0)
+            {
+                return p1;
+            }
+            else if (p2.Length == 1 && p2[0] == IO.Path.DirectorySeparatorChar)
+            {
+                return p1;
+            }
+            else if (p2[0] == IO.Path.DirectorySeparatorChar)
+            {
+                if (p2[0] != p2[1])
+                    return IO.Path.Combine(p1, p2.Substring(1));
+            }
+
+            return IO.Path.Combine(p1, p2);
         }
 
         /// <summary>

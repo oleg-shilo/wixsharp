@@ -224,13 +224,6 @@ namespace WixSharp
             return AppDomain.CreateDomain(name ?? Guid.NewGuid().ToString(), null, setup);
         }
 
-        internal static void EnsureFileDir(string file)
-        {
-            var dir = IO.Path.GetDirectoryName(file);
-            if (!IO.Directory.Exists(dir))
-                IO.Directory.CreateDirectory(dir);
-        }
-
         /// <summary>
         /// Gets the program files directory.
         /// </summary>

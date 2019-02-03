@@ -27,7 +27,6 @@ THE SOFTWARE.
 
 #endregion Licence...
 
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,6 +37,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.Bootstrapper;
 using IO = System.IO;
 
@@ -292,7 +292,7 @@ namespace WixSharp
                         var wixNamespace = Compiler.IsWix4 ? wix4Namespace : wix3Namespace;
 
                         var doc = XDocument.Parse(
-                               @"<?xml version=""1.0"" encoding=""utf-8""?>
+                                @"<?xml version=""1.0"" encoding=""utf-8""?>
                              " + $"<Wix xmlns=\"{wixNamespace}\" {extraNamespaces} " + @" >
                         </Wix>");
 
@@ -356,7 +356,7 @@ namespace WixSharp
 
             string outFile = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, project.OutFileName) + ".exe");
 
-            Utils.EnsureFileDir(outFile);
+            Extensions.EnsureFileDir(outFile);
 
             if (IO.File.Exists(outFile))
                 IO.File.Delete(outFile);

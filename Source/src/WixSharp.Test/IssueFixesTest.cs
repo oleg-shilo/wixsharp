@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Xml.Linq;
 using WixSharp.CommonTasks;
 using Xunit;
@@ -125,14 +126,14 @@ namespace WixSharp.Test
         {
             var project = new Project("TestProject",
 
-                           new Dir(@"%ProgramFiles%\My Company\My Product",
-                               new File(@"Files\notepad.exe")),
+                          new Dir(@"%ProgramFiles%\My Company\My Product",
+                              new File(@"Files\notepad.exe")),
 
-                           new Dir(@"%CommonAppDataFolder%\Test Project",
-                               new File(@"Files\TextFile.txt")),
+                          new Dir(@"%CommonAppDataFolder%\Test Project",
+                              new File(@"Files\TextFile.txt")),
 
-                           new Dir(@"%PersonalFolder%\Test Project",
-                               new File(@"Files\Baskets.bbd")));
+                          new Dir(@"%PersonalFolder%\Test Project",
+                              new File(@"Files\Baskets.bbd")));
 
             string wxs = project.BuildWxs();
 
@@ -145,14 +146,14 @@ namespace WixSharp.Test
         {
             var project = new Project("TestProject",
 
-                           new Dir(@"%ProgramFiles%\My Company\My Product",
-                               new File(@"Files\notepad.exe")),
+                          new Dir(@"%ProgramFiles%\My Company\My Product",
+                              new File(@"Files\notepad.exe")),
 
-                           new Dir(@"%CommonAppDataFolder%\Test Project",
-                               new File(@"Files\TextFile.txt")),
+                          new Dir(@"%CommonAppDataFolder%\Test Project",
+                              new File(@"Files\TextFile.txt")),
 
-                           new Dir(@"%PersonalFolder%\Test Project",
-                               new File(@"Files\Baskets.bbd")));
+                          new Dir(@"%PersonalFolder%\Test Project",
+                              new File(@"Files\Baskets.bbd")));
 
             project.WixSourceGenerated += xml =>
             {
@@ -174,14 +175,14 @@ namespace WixSharp.Test
         {
             var project = new Project("TestProject",
 
-                           new Dir(@"%ProgramFiles%\My Company\My Product",
-                               new File(@"Files\notepad.exe")),
+                          new Dir(@"%ProgramFiles%\My Company\My Product",
+                              new File(@"Files\notepad.exe")),
 
-                           new Dir(@"%CommonAppDataFolder%\Test Project",
-                               new File(@"Files\TextFile.txt")),
+                          new Dir(@"%CommonAppDataFolder%\Test Project",
+                              new File(@"Files\TextFile.txt")),
 
-                           new Dir(@"%PersonalFolder%\Test Project",
-                               new File(@"Files\Baskets.bbd")));
+                          new Dir(@"%PersonalFolder%\Test Project",
+                              new File(@"Files\Baskets.bbd")));
 
             project.WixSourceGenerated += Project_WixSourceGenerated;
             string wxs = project.BuildWxs();
@@ -207,8 +208,8 @@ namespace WixSharp.Test
             Project project = new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(this.GetType().Assembly.Location)
-                )
-            );
+                       )
+                                         );
 
             project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
             project.Version = new Version("2014.1.26.0");
@@ -239,9 +240,9 @@ namespace WixSharp.Test
                         new File(docs_01, @"Files\Docs\Manual_01.txt"),
                         new File(docs_02, @"Files\Docs\Manual_02.txt"),
                         new File(docs_03, @"Files\Docs\Manual_03.txt")
-                    )
-                )
-            );
+                           )
+                       )
+                                         );
 
             project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
@@ -256,22 +257,22 @@ namespace WixSharp.Test
 
             var docsFeature = rootFeature.Elements()
                                          .FirstOrDefault(e => e.HasLocalName("Feature")
-                                                           && e.HasAttribute("Title", value => value == "MyApp Documentation"));
+                                                         && e.HasAttribute("Title", value => value == "MyApp Documentation"));
             Assert.NotNull(docsFeature);
 
             var doc1Feature = docsFeature.Elements()
                                          .FirstOrDefault(e => e.HasLocalName("Feature")
-                                                           && e.HasAttribute("Title", value => value == "Documentation 01"));
+                                                         && e.HasAttribute("Title", value => value == "Documentation 01"));
             Assert.NotNull(doc1Feature);
 
             var doc2Feature = docsFeature.Elements()
                                          .FirstOrDefault(e => e.HasLocalName("Feature")
-                                                           && e.HasAttribute("Title", value => value == "Documentation 02"));
+                                                         && e.HasAttribute("Title", value => value == "Documentation 02"));
             Assert.NotNull(doc2Feature);
 
             var doc3Feature = docsFeature.Elements()
                                          .FirstOrDefault(e => e.HasLocalName("Feature")
-                                                           && e.HasAttribute("Title", value => value == "Documentation 03"));
+                                                         && e.HasAttribute("Title", value => value == "Documentation 03"));
             Assert.NotNull(doc3Feature);
         }
 
@@ -290,6 +291,7 @@ namespace WixSharp.Test
                 project.UI = WUI.WixUI_InstallDir;
 
                 var msi = project.BuildMsi();
+                Thread.Sleep(1000);
             }
 
             {
@@ -303,7 +305,7 @@ namespace WixSharp.Test
                 project.UI = WUI.WixUI_InstallDir;
 
                 var msi = project.BuildMsi();
-
+                Thread.Sleep(1000);
                 //var msi = project.BuildWxs();
             }
             {
@@ -316,6 +318,7 @@ namespace WixSharp.Test
                 project.Dirs = new[] { rootDir };
 
                 project.BuildMsi();
+                Thread.Sleep(1000);
             }
         }
     }
