@@ -5,14 +5,14 @@
 //css_ref System.Xml.dll;
 
 using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Security.Principal;
 
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
-using System.Diagnostics;
-using System.Linq;
 
 public class Script
 {
@@ -25,28 +25,28 @@ public class Script
 
         var project =
             new ManagedProject("ManagedSetup",
-                 //one of possible ways of setting custom INSTALLDIR (disabled for demo purposes)
-                 new ManagedAction(Script.SetInstallDir,
-                                   Return.check,
-                                   When.Before,
-                                   Step.LaunchConditions,
-                                   Condition.NOT_Installed,
-                                   Sequence.InstallUISequence),
+                //one of possible ways of setting custom INSTALLDIR (disabled for demo purposes)
+                new ManagedAction(Script.SetInstallDir,
+                                  Return.check,
+                                  When.Before,
+                                  Step.LaunchConditions,
+                                  Condition.NOT_Installed,
+                                  Sequence.InstallUISequence),
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(bin, @"..\Files\bin\MyApp.exe"),
                     new Dir(bin, "Docs",
                         new File(bin, "readme.txt"))),
 
-               new Dir(new Id("TOOLSDIR"), tools, "Tools",
-                   new File(tools, "setup.cs")),
+                new Dir(new Id("TOOLSDIR"), tools, "Tools",
+                    new File(tools, "setup.cs")),
 
-               //reading TOOLSDIR from registry; the alternative ways is project_UIInit
-               new RegValueProperty("TOOLSDIR",
-                                    RegistryHive.CurrentUser,
-                                    @"SOFTWARE\7-Zip",
-                                    "Path",
-                                    defaultValue: @"C:\My Company\tools")
-               );
+                //reading TOOLSDIR from registry; the alternative ways is project_UIInit
+                new RegValueProperty("TOOLSDIR",
+                                     RegistryHive.CurrentUser,
+                                     @"SOFTWARE\7-Zip",
+                                     "Path",
+                                     defaultValue: @"C:\My Company\tools")
+                              );
 
         //project.ManagedUI = ManagedUI.Empty;
         project.ManagedUI = ManagedUI.Default; //Wix# ManagedUI
@@ -72,14 +72,14 @@ public class Script
         };
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project);
     }
 
     static void Project_UIInitialized(SetupEventArgs e)
     {
-        // just an example of restarting the setup UI elevated. Old fashioned but... convenient and reliable.  
+        // just an example of restarting the setup UI elevated. Old fashioned but... convenient and reliable.
         if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
         {
             MessageBox.Show(e.Session.GetMainWindow(), "You must start the msi file as admin");
@@ -133,6 +133,7 @@ public class Script
         MessageBox.Show(e.Session.GetMainWindow(), "Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - Load");
 
         var msi = e.MsiFile;
+
         if (!e.IsInstalling && !e.IsUpgrading)
             SetEnvVersion(e.Session);
 
@@ -143,7 +144,7 @@ public class Script
         //SetupEventArgs.Data values can be set and accesses at any time from any custom action including deferred one.
         var conn = @"Data Source=.\SQLEXPRESS;Initial Catalog=RequestManagement;Integrated Security=SSPI";
         e.Data["persisted_data"] = conn;
-        
+
         MessageBox.Show(e.Session.GetMainWindow(), e.ToString(), "Load " + e.Session["EnvVersion"]);
     }
 
