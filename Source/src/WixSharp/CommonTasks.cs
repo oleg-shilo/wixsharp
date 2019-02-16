@@ -27,15 +27,15 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.Controls;
 using IO = System.IO;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace WixSharp.CommonTasks
 {
@@ -220,13 +220,14 @@ namespace WixSharp.CommonTasks
 
             var tool = new ExternalTool
             {
-                WellKnownLocations = wellKnownLocations ?? @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin;" +
-                                                           @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin;" +
-                                                           @"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool;" +
-                                                           @"C:\Program Files (x86)\Windows Kits\8.0\bin\x86;" +
-                                                           @"C:\Program Files (x86)\Windows Kits\8.1\bin\x86;" +
-                                                           @"C:\Program Files (x86)\Windows Kits\10\bin\x86;" +
-                                                           @"C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x86",
+                WellKnownLocations = wellKnownLocations ??
+                                     @"C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x86;" +
+                                     @"C:\Program Files (x86)\Windows Kits\10\bin\x86;" +
+                                     @"C:\Program Files (x86)\Windows Kits\8.1\bin\x86;" +
+                                     @"C:\Program Files (x86)\Windows Kits\8.0\bin\x86;" +
+                                     @"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool;" +
+                                     @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin;" +
+                                     @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin",
                 ExePath = "signtool.exe",
                 Arguments = sha1
             };
@@ -1224,7 +1225,7 @@ namespace WixSharp.CommonTasks
 
             //disconnect prev and next dialogs
             project.CustomUI.UISequence.RemoveAll(x => (x.Dialog == prevDialog && x.Control == Buttons.Next) ||
-                                                 (x.Dialog == nextDialog && x.Control == Buttons.Back));
+                                                  (x.Dialog == nextDialog && x.Control == Buttons.Back));
 
             //create new dialogs connection with showAction in between
             project.CustomUI.On(prevDialog, Buttons.Next, new ExecuteCustomAction(showClrDialog))
@@ -1619,7 +1620,8 @@ namespace WixSharp.CommonTasks
         /// <summary>
         /// Gets or sets the well known locations for probing the exe file.
         /// <para>
-        /// By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>. By settin <c>WellKnownLocations</c>
+        /// By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>.
+        /// By setting <c>WellKnownLocations</c>
         /// you can add some extra probing locations. The directories must be separated by the ';' character.
         /// </para>
         /// </summary>
