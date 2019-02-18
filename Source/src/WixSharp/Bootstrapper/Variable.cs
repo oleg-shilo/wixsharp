@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Xml.Linq;
 
 namespace WixSharp.Bootstrapper
 {
@@ -36,6 +37,14 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         [Xml]
         public VariableType? Type;
+
+        /// <summary>
+        /// When set to "yes", lets the user override the variable's default value by specifying another value on the
+        /// command line, in the form Variable=Value. Otherwise, WixStdBA won't overwrite the default value and will
+        /// log "Ignoring attempt to set non-overridable variable: 'BAR'." (http://schemas.microsoft.com/wix/BalExtension)
+        /// </summary>
+        [Xml(Namespace = WixExtension.BalNamespace)]
+        public bool? Overridable;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Variable"/> class.
@@ -172,6 +181,7 @@ namespace WixSharp.Bootstrapper
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
+            context.Project.Include(WixExtension.Bal);
             context.XParent.Add(this.ToXElement("Variable"));
         }
     }

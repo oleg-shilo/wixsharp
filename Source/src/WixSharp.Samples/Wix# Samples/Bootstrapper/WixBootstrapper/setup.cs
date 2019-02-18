@@ -4,11 +4,11 @@
 //css_ref System.Xml.Linq.dll;
 //css_ref ..\..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 using System;
-using io = System.IO;
+using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
-using System.Windows.Forms;
+using io = System.IO;
 
 public class InstallScript
 {
@@ -84,21 +84,21 @@ public class InstallScript
         // The code below sets WiX variables 'Netfx4FullVersion' and 'AdobeInstalled'. Note it has no affect on
         //the runtime behaviour and 'FileSearch' and "RegistrySearch" are only provided as an example.
         bootstrapper.AddWixFragment("Wix/Bundle",
-                                     new UtilRegistrySearch
-                                     {
-                                         Root = RegistryHive.LocalMachine,
-                                         Key = @"SOFTWARE\Microsoft\Net Framework Setup\NDP\v4\Full",
-                                         Value = "Version",
-                                         Variable = "Netfx4FullVersion"
-                                     },
-                                     new UtilFileSearch
-                                     {
-                                         Path = @"[ProgramFilesFolder]Adobe\adobe.exe",
-                                         Result = SearchResult.exists,
-                                         Variable = "AdobeInstalled"
-                                     });
+                                    new UtilRegistrySearch
+                                    {
+                                        Root = RegistryHive.LocalMachine,
+                                        Key = @"SOFTWARE\Microsoft\Net Framework Setup\NDP\v4\Full",
+                                        Value = "Version",
+                                        Variable = "Netfx4FullVersion"
+                                    },
+                                    new UtilFileSearch
+                                    {
+                                        Path = @"[ProgramFilesFolder]Adobe\adobe.exe",
+                                        Result = SearchResult.exists,
+                                        Variable = "AdobeInstalled"
+                                    });
 
-        bootstrapper.Variables = new[] { new Variable("BundleVariable", "333"), };
+        bootstrapper.Variables = new[] { new Variable("BundleVariable", "333") { Overridable = true } };
         // or
         // bootstrapper.Variables = "BundleVariable=333".ToStringVariables();
         // bootstrapper.Variables = Variables.ToStringVariables("BundleVariable=333");
@@ -127,11 +127,11 @@ public class InstallScript
     static public string BuildMainMsi()
     {
         var productProj =
-           new Project("My Product",
+            new Project("My Product",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("readme.txt"),
                     new File("logo.png")))
-           { InstallScope = InstallScope.perMachine };
+            { InstallScope = InstallScope.perMachine };
 
         productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         productProj.Version = new Version("2.0.0.0");

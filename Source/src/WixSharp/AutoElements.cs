@@ -84,8 +84,7 @@ namespace WixSharp
         /// is detected in the project definition.</para>
         /// </summary>
         [Obsolete(message: "This property is defaulted to `CompilerSupportState.Enabled`. Due to the fact that " +
-            "`CompilerSupportState.Automatic` brings some ambiguity while no longer yielding any benefits",
-            error: false)]
+            "`CompilerSupportState.Automatic` brings some ambiguity while no longer yielding any benefits", error: false)]
         public static CompilerSupportState SupportEmptyDirectories = CompilerSupportState.Enabled;
 
         /// <summary>
@@ -127,8 +126,8 @@ namespace WixSharp
         /// User Experience that sometimes has undesirable practical implications.
         /// </remarks>
         /// </summary>
-        public static string UACWarning = "Please wait for UAC prompt to appear.\r\n\r\nIf it appears minimized then activate it" +
-    " from the taskbar.";
+        public static string UACWarning = "Please wait for UAC prompt to appear.\r\n\r\nIf it appears minimized then" +
+            " activate it from the taskbar.";
 
         /// <summary>
         /// Forces all <see cref="T:WixSharp.Condition"/> values to be always encoded as CDATA.
@@ -444,10 +443,22 @@ namespace WixSharp
         static bool DefaultExpandCustomAttribute(XElement source, string item, WixProject project)
         {
             var attrParts = item.Split('=');
-            // {dep}ProductKey=12345 vs Component:{dep}ProductKey=12345
+
+            // {dep}ProductKey=12345 vs
+            // Component:{dep}ProductKey=12345 vs
+            // {http://schemas.microsoft.com/wix/BalExtension}Overridable=yes"
+
+            string[] keyParts;
+
             if (item.StartsWith("{"))
                 item = ":" + item;
-            var keyParts = attrParts.First().Split(':');
+
+            var nameSpec = attrParts.First();
+
+            if (nameSpec.StartsWith("{"))
+                keyParts = new[] { nameSpec };  // name specification does not have any `parent prefix`
+            else
+                keyParts = nameSpec.Split(':'); // here it does
 
             string element = keyParts.First();
             string key = keyParts.Last();
@@ -657,14 +668,14 @@ namespace WixSharp
                                 new XAttribute("Value", absolutePath)));
 
                     product.SelectOrCreate("InstallExecuteSequence").Add(
-                           new XElement("Custom", $"(NOT Installed) AND (UILevel < 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
-                               new XAttribute("Action", customAction),
-                               new XAttribute("Before", "AppSearch")));
+                            new XElement("Custom", $"(NOT Installed) AND (UILevel < 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
+                                new XAttribute("Action", customAction),
+                                new XAttribute("Before", "AppSearch")));
 
                     product.SelectOrCreate("InstallUISequence").Add(
-                           new XElement("Custom", $"(NOT Installed) AND (UILevel = 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
-                               new XAttribute("Action", customAction),
-                               new XAttribute("Before", "AppSearch")));
+                            new XElement("Custom", $"(NOT Installed) AND (UILevel = 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
+                                new XAttribute("Action", customAction),
+                                new XAttribute("Before", "AppSearch")));
 
                     if (absPathCount == null)
                         absPathCount = 0;

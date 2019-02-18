@@ -328,6 +328,29 @@ namespace WixSharp
             return obj;
         }
 
+        public static XElement SetAttribute(this XElement obj, XName name, object value)
+        {
+            if (value is string && (value as string).IsEmpty())
+            {
+                obj.SetAttributeValue(name, null);
+            }
+            else if (value is bool?)
+            {
+                var attrValue = (bool?)value;
+                obj.SetAttributeValue(name, attrValue.ToNullOrYesNo());
+            }
+            else if (value is bool)
+            {
+                var attrValue = (bool)value;
+                obj.SetAttributeValue(name, attrValue.ToYesNo());
+            }
+            else
+            {
+                obj.SetAttributeValue(name, value);
+            }
+            return obj;
+        }
+
         /// <summary>
         /// Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue.
         /// <para>Note <c>name</c> can include xml namespace prefix:
@@ -349,31 +372,11 @@ namespace WixSharp
                 var tokens = name.Substring(1).Split(new[] { '}' }, 2);
                 var xml_namespace = tokens.First();
                 var prefix = obj.GetNamespaceOfPrefix(xml_namespace);
-                if (prefix == null)
-                    throw new Exception($"Cannot find XML namespace prefix '{xml_namespace}'");
-
-                x_name = obj.GetNamespaceOfPrefix(xml_namespace) + tokens.Last();
+                if (prefix != null)
+                    x_name = obj.GetNamespaceOfPrefix(xml_namespace) + tokens.Last();
             }
 
-            if (value is string && (value as string).IsEmpty())
-            {
-                obj.SetAttributeValue(x_name, null);
-            }
-            else if (value is bool?)
-            {
-                var attrValue = (bool?)value;
-                obj.SetAttributeValue(x_name, attrValue.ToNullOrYesNo());
-            }
-            else if (value is bool)
-            {
-                var attrValue = (bool)value;
-                obj.SetAttributeValue(x_name, attrValue.ToYesNo());
-            }
-            else
-            {
-                obj.SetAttributeValue(x_name, value);
-            }
-            return obj;
+            return SetAttribute(obj, x_name, value);
         }
 
         /// <summary>
@@ -2804,6 +2807,11 @@ namespace WixSharp
                                       {
                                           var xmlAttr = (XmlAttribute)x.GetCustomAttributes(typeof(XmlAttribute), false)
                                                                        .FirstOrDefault();
+
+                                          string @namespace = null;
+                                          if (xmlAttr != null)
+                                              @namespace = xmlAttr.Namespace;
+
                                           bool IsCData = false;
                                           string name = null;
                                           if (xmlAttr != null)
@@ -2830,7 +2838,8 @@ namespace WixSharp
                                           return new
                                           {
                                               Name = name,
-                                              Value = value
+                                              Value = value,
+                                              Namespace = @namespace
                                           };
                                       })
                                       .Where(x => x.Name != null && x.Value != null)
@@ -2853,7 +2862,8 @@ namespace WixSharp
                     xmlValue = ((bool)item.Value).ToYesNo();
                 }
 
-                result.Add(new XAttribute(item.Name, xmlValue));
+                XNamespace ns = item.Namespace ?? "";
+                result.Add(new XAttribute(ns + item.Name, xmlValue));
             }
 
             return result.ToArray();
@@ -2869,6 +2879,7 @@ namespace WixSharp
                 .Select(x =>
                 {
                     var xmlAttr = (XmlAttribute)x.GetCustomAttributes(typeof(XmlAttribute), false).FirstOrDefault();
+
                     bool IsCData = false;
                     if (xmlAttr != null)
                         IsCData = xmlAttr.IsCData;
@@ -3010,6 +3021,12 @@ namespace WixSharp
 
         internal bool IsCData { get; set; }
 
-        // public string Value { get; set; }
+        /// <summary>
+        /// Gets or sets the namespace.
+        /// </summary>
+        /// <value>
+        /// The namespace.
+        /// </value>
+        public string Namespace { get; set; }
     }
 }
