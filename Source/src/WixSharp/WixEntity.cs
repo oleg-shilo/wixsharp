@@ -309,6 +309,19 @@ namespace WixSharp
             set => SetAttributeDefinition("Component:Id", value);
         }
 
+        /// <summary>
+        /// Gets or sets the Condition attribute of the Component element that is to contain XML equivalent of the
+        /// <see cref="WixEntity"/>.
+        /// </summary>
+        /// <value>
+        /// The component condition.
+        /// </value>
+        public string ComponentCondition
+        {
+            get => GetAttributeDefinition("Component:Condition");
+            set => SetAttributeDefinition("Component:Condition", value);
+        }
+
         internal void AddInclude(string xmlFile, string parentElement)
         {
             SetAttributeDefinition("WixSharpCustomAttributes:xml_include", parentElement + "|" + xmlFile, append: true);
