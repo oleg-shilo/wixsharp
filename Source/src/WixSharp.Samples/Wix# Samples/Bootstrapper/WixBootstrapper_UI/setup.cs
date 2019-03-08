@@ -32,9 +32,9 @@ public class Script
                        new PackageGroupRef("NetFx40Web"),
                        new MsiPackage(productMsi)
                        {
-                       Id = "MyProductPackageId",
-                       DisplayInternalUI = true,
-                       MsiProperties = "USERINPUT=[UserInput]"
+                           Id = "MyProductPackageId",
+                           DisplayInternalUI = true,
+                           MsiProperties = "USERINPUT=[UserInput]"
                        });
 
         bootstrapper.Variables = new[] { new Variable("UserInput", "<none>"), };

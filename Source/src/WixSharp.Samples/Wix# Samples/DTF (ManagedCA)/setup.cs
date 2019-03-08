@@ -3,9 +3,9 @@
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 using System;
 using System.Linq;
-using System.Xml.Linq;
-using System.Xml;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
 
 #if Wix4
 using WixToolset.Dtf.WindowsInstaller;

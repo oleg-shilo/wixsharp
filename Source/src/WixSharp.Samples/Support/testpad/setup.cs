@@ -1,10 +1,10 @@
 //css_ref ..\..\WixSharp.dll;
 //css_ref System.Core.dll;
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Windows.Forms;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
@@ -69,7 +69,7 @@ static class Script
         var project =
             new ManagedProject("ElevatedSetup",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                     new File(@"Files\bin\MyApp.exe")));
+                    new File(@"Files\bin\MyApp.exe")));
 
         project.ManagedUI = ManagedUI.Default;
         project.AddAction(new ManagedAction(CustomActions.CheckIfAdmin,
@@ -116,8 +116,8 @@ static class Script
             UI = WUI.WixUI_ProgressOnly,
             Dirs = new[]
             {
-                 new Dir(@"temp", new Dir(@"wixIn", new WixSharp.File(file, new FileShortcut("MyShortcut", inDir))))
-             }
+                new Dir(@"temp", new Dir(@"wixIn", new WixSharp.File(file, new FileShortcut("MyShortcut", inDir))))
+            }
         };
 
         Compiler.BuildMsi(project);
@@ -133,11 +133,28 @@ static class Script
                         Icon = "someFile.ico",
                         Advertise = true
                     }
-                    )));
+                        )));
 
         project.ControlPanelInfo.ProductIcon = "someProduct.ico";
 
         Compiler.BuildMsi(project);
+    }
+
+    static void Issue_599()
+    {
+        // var project = new Project("someProject",
+        //     new Dir("someDirPath",
+        //         Files(feature, "..\SomeFolder\*.ext")
+        //             , new FileAssociation("someExt")
+        //             {
+        //                 Icon = "someFile.ico",
+        //                 Advertise = true
+        //             }
+        //            )));
+
+        // project.ControlPanelInfo.ProductIcon = "someProduct.ico";
+
+        // Compiler.BuildMsi(project);
     }
 
     static void Issue_440()
@@ -152,7 +169,7 @@ static class Script
             UI = WUI.WixUI_ProgressOnly,
             Dirs = new[]
             {
-                 new Dir(@"temp", new Dir(@"wixIn", new WixSharp.File(@"E:\Projects\WixSharp\Source\src\WixSharp.Samples\Support\testpad\setup.cs")))
+                new Dir(@"temp", new Dir(@"wixIn", new WixSharp.File(@"E:\Projects\WixSharp\Source\src\WixSharp.Samples\Support\testpad\setup.cs")))
             }
         };
 
@@ -181,7 +198,7 @@ static class Script
             new Dir(@"%ProgramFiles%\My Company\My Product",
                 new File("setup.cs"),
                 new File("setup.cs")
-                ))
+                   ))
         {
             Platform = Platform.x64,
             GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b")
@@ -218,6 +235,7 @@ static class Script
     static public void Main()
     {
         // HiTeach_MSI.Program.Main1(); return;
+        Issue_599(); return;
         Issue_377(); return;
         Issue_440(); return;
         Issue_386(); return;
@@ -238,7 +256,7 @@ static class Script
                     new Dir(serverFeature,
                     @"%CommonAppDataFolder%\TaxPacc\Server",
                         new DirPermission("serviceaccountusername", "serviceaccountdomain", GenericPermission.All)
-                ));
+                           ));
         project.UI = WUI.WixUI_FeatureTree;
         project.PreserveTempFiles = true;
         project.BuildMsiCmd();
@@ -247,8 +265,8 @@ static class Script
     static public void Main1()
     {
         var project = new ManagedProject("IsUninstallTest",
-                            new Dir(@"%ProgramFiles%\UninstallTest",
-                                new File(@"files\setup.cs")));
+                              new Dir(@"%ProgramFiles%\UninstallTest",
+                                  new File(@"files\setup.cs")));
 
         project.AfterInstall += Project_AfterInstall;
         project.PreserveTempFiles = true;
@@ -268,15 +286,15 @@ static class Script
     static public void Main2()
     {
         var project = new ManagedProject("MyProduct",
-                            new Dir(@"C:\My Company\My Product",
-                                new File("setup.cs")));
+                              new Dir(@"C:\My Company\My Product",
+                                  new File("setup.cs")));
 
         project.ManagedUI = new ManagedUI();
         project.ManagedUI.InstallDialogs.Add(Dialogs.Progress)
                                         .Add(Dialogs.Exit);
 
         project.ManagedUI.ModifyDialogs.Add(Dialogs.Progress)
-                                        .Add(Dialogs.Exit);
+                                       .Add(Dialogs.Exit);
 
         project.UIInitialized += (SetupEventArgs e) =>
             {

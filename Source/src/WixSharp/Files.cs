@@ -35,7 +35,6 @@ using IO = System.IO;
 
 namespace WixSharp
 {
-
     /// <summary>
     /// Defines all files of a given source directory and all subdirectories to be installed on target system.
     /// <para>
@@ -46,6 +45,8 @@ namespace WixSharp
     /// This class is a logical equivalent of <see cref="DirFiles"/> except it also analyses all files in all subdirectories.
     /// <see cref="DirFiles"/> excludes files in subdirectories.
     /// </para>
+    /// <para>You can control inclusion of empty directories during wild card resolving by adjusting the compiler setting
+    /// <c>Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories.</c></para>
     /// </summary>
     /// <remarks>
     /// Note that all files matching wildcard are resolved into absolute path thus it may not always be suitable
@@ -179,14 +180,14 @@ namespace WixSharp
 
                     subDir.AddFeatures(this.ActualFeatures);
                     subDir.AddDirFileCollection(
-                                        new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
-                                        {
-                                            Feature = this.Feature,
-                                            Features = this.Features,
-                                            AttributesDefinition = this.AttributesDefinition,
-                                            Attributes = this.Attributes,
-                                            Filter = this.Filter
-                                        });
+                                                new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
+                                                {
+                                                    Feature = this.Feature,
+                                                    Features = this.Features,
+                                                    AttributesDefinition = this.AttributesDefinition,
+                                                    Attributes = this.Attributes,
+                                                    Filter = this.Filter
+                                                });
 
                     AgregateSubDirs(subDir, subDirPath);
                 }
@@ -221,14 +222,14 @@ namespace WixSharp
 
                 subDir.AddFeatures(this.ActualFeatures);
                 subDir.AddDirFileCollection(
-                                    new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
-                                    {
-                                        Feature = this.Feature,
-                                        Features = this.Features,
-                                        AttributesDefinition = this.AttributesDefinition,
-                                        Attributes = this.Attributes,
-                                        Filter = this.Filter
-                                    });
+                                            new DirFiles(IO.Path.Combine(subDirPath, this.IncludeMask))
+                                            {
+                                                Feature = this.Feature,
+                                                Features = this.Features,
+                                                AttributesDefinition = this.AttributesDefinition,
+                                                Attributes = this.Attributes,
+                                                Filter = this.Filter
+                                            });
 
                 AgregateSubDirs(subDir, subDirPath);
             }

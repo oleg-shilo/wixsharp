@@ -5,6 +5,7 @@
 //css_ref ..\..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 using System;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
@@ -98,7 +99,8 @@ public class InstallScript
                                         Variable = "AdobeInstalled"
                                     });
 
-        bootstrapper.Variables = new[] { new Variable("BundleVariable", "333") { Overridable = true } };
+        bootstrapper.AddWixFragment("Wix/Bundle", XElement.Parse(@"<Log PathVariable=""LogFileLocation""/>"));
+        bootstrapper.Variables = new[] { new Variable("LogFileLocation", "333") { Overridable = true } };
         // or
         // bootstrapper.Variables = "BundleVariable=333".ToStringVariables();
         // bootstrapper.Variables = Variables.ToStringVariables("BundleVariable=333");
