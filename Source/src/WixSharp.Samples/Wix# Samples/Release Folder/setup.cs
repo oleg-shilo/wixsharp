@@ -14,11 +14,13 @@ class Script
 
     static void SimpleScenario()
     {
+        Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories = false;
+
         var project =
-           new Project("MyProduct",
-               new Dir(@"%ProgramFiles%\My Company\My Product",
-                   new Files(@"..\Release Folder\Release\*.*"),
-                   new ExeFileShortcut("Uninstall My Product", "[System64Folder]msiexec.exe", "/x [ProductCode]")));
+            new Project("MyProduct",
+                new Dir(@"%ProgramFiles%\My Company\My Product",
+                    new Files(@"..\Release Folder\Release\*.*"),
+                    new ExeFileShortcut("Uninstall My Product", "[System64Folder]msiexec.exe", "/x [ProductCode]")));
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1561ba25889b");
 
@@ -46,10 +48,11 @@ class Script
 
         project.ResolveWildCards(ignoreEmptyDirectories: true)
                .FindFirstFile("MyApp.exe")
-               .Shortcuts = new[] {
-                                       new FileShortcut("MyApp.exe", "INSTALLDIR"),
-                                       new FileShortcut("MyApp.exe", "%Desktop%")
-                                  };
+               .Shortcuts = new[]
+               {
+                   new FileShortcut("MyApp.exe", "INSTALLDIR"),
+                   new FileShortcut("MyApp.exe", "%Desktop%")
+               };
 
         Compiler.PreserveTempFiles = true;
         Compiler.EmitRelativePaths = false;
