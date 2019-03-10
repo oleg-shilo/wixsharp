@@ -702,9 +702,11 @@ namespace WixSharp
 
             if (ignoreEmptyDirectories)
             {
+                IEnumerable<Dir> getEmptyDirs() => AllDirs.Where(d => !d.Files.Any() && !d.Dirs.Any());
+
                 IEnumerable<Dir> emptyDirs;
 
-                while ((emptyDirs = AllDirs.Where(d => !d.Files.Any() && !d.Dirs.Any())).Any())
+                while ((emptyDirs = getEmptyDirs()).Any())
                 {
                     emptyDirs.ForEach(emptyDir => AllDirs.ForEach(d =>
                                                   {

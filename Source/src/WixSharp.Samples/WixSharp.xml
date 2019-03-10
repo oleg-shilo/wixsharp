@@ -1188,7 +1188,8 @@
             <summary>
             Gets or sets the well known locations for probing the exe file.
             <para>
-            By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>. By settin <c>WellKnownLocations</c>
+            By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>.
+            By setting <c>WellKnownLocations</c>
             you can add some extra probing locations. The directories must be separated by the ';' character.
             </para>
             </summary>
@@ -1698,6 +1699,13 @@
         <member name="F:WixSharp.Bootstrapper.Variable.Type">
             <summary>
             Type of the variable, inferred from the value if not specified.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.Variable.Overridable">
+            <summary>
+            When set to "yes", lets the user override the variable's default value by specifying another value on the
+            command line, in the form Variable=Value. Otherwise, WixStdBA won't overwrite the default value and will
+            log "Ignoring attempt to set non-overridable variable: 'BAR'." (http://schemas.microsoft.com/wix/BalExtension)
             </summary>
         </member>
         <member name="M:WixSharp.Bootstrapper.Variable.#ctor(System.String)">
@@ -2378,9 +2386,16 @@
             Container class for common members of the Bootstrapper packages
             </summary>
         </member>
+        <member name="F:WixSharp.Bootstrapper.Package.DisplayName">
+            <summary>
+            Specifies the display name to place in the bootstrapper application data manifest for the package.
+            By default, ExePackages use the ProductName field from the version information, MsiPackages use the ProductName property, and MspPackages use the DisplayName patch metadata property.
+            Other package types must use this attribute to define a display name in the bootstrapper application data manifest.
+            </summary>
+        </member>
         <member name="F:WixSharp.Bootstrapper.Package.Permanent">
             <summary>
-            Specifies whether the package can be uninstalled.
+            Specifies whether the package can be uninstalled. The default is "no".
             </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.Package.SourceFile">
@@ -2413,6 +2428,25 @@
         <member name="F:WixSharp.Bootstrapper.Package.Compressed">
             <summary>
             Whether the package payload should be embedded in a container or left as an external payload.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.Package.Cache">
+            <summary>
+            Whether to cache the package. The default is "yes".
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.Package.LogPathVariable">
+            <summary>
+            Name of a Variable that will hold the path to the log file.
+            An empty value will cause the variable to not be set.
+            The default is "WixBundleLog_[PackageId]" except for MSU packages which default to no logging.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.Package.RollbackLogPathVariable">
+            <summary>
+            Name of a Variable that will hold the path to the log file used during rollback.
+            An empty value will cause the variable to not be set.
+            The default is "WixBundleRollbackLog_[PackageId]" except for MSU packages which default to no logging.
             </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.Package.Payloads">
@@ -2489,7 +2523,7 @@
         </member>
         <member name="F:WixSharp.Bootstrapper.ExePackage.PerMachine">
             <summary>
-            Indicates the package must be executed elevated.
+            Indicates the package must be executed elevated. The default is "no".
             </summary>
         </member>
         <member name="F:WixSharp.Bootstrapper.ExePackage.DetectCondition">
@@ -2595,6 +2629,45 @@
             </summary>
         </member>
         <member name="M:WixSharp.Bootstrapper.MsiPackage.ToXml">
+            <summary>
+            Emits WiX XML.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:WixSharp.Bootstrapper.MsuPackage">
+            <summary>
+            Standard WiX MsuPackage.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.MsuPackage.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.MsuPackage"/> class.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.MsuPackage.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.MsuPackage"/> class.
+            </summary>
+            <param name="path">The path.</param>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.MsuPackage.DetectCondition">
+            <summary>
+            A condition that determines if the package is present on the target system.
+            This condition can use built-in variables and variables returned by searches.
+            This condition is necessary because Windows doesn't provide a method to detect the presence of an ExePackage.
+            Burn uses this condition to determine how to treat this package during a bundle action;
+            for example, if this condition is false or omitted and the bundle is being installed, Burn will install this package.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.MsuPackage.KB">
+            <summary>
+            The knowledge base identifier for the MSU.
+            The KB attribute must be specified to enable the MSU package to be uninstalled.
+            Even then MSU uninstallation is only supported on Windows 7 and later.
+            When the KB attribute is specified, the Permanent attribute will the control whether the package is uninstalled.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.MsuPackage.ToXml">
             <summary>
             Emits WiX XML.
             </summary>
@@ -9556,6 +9629,14 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.WixExtension.ToString">
+            <summary>
+            Returns a <see cref="T:System.String" /> that represents this instance.
+            </summary>
+            <returns>
+            A <see cref="T:System.String" /> that represents this instance.
+            </returns>
+        </member>
         <member name="M:WixSharp.WixExtension.XElement(System.String,System.String)">
             <summary>
             Creates XElement based on XName (XNamespace and specified name) and specified attributes.
@@ -9583,9 +9664,19 @@
             Well-known Wix Extension: difx
             </summary>
         </member>
+        <member name="F:WixSharp.WixExtension.DifxNamespace">
+            <summary>
+            The `Difx` extension namespace
+            </summary>
+        </member>
         <member name="F:WixSharp.WixExtension.Fire">
             <summary>
             Well-known Wix Extension: Fire (Firewall)
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixExtension.FireNamespace">
+            <summary>
+            The `Firewall` extension namespace
             </summary>
         </member>
         <member name="F:WixSharp.WixExtension.Util">
@@ -9593,9 +9684,19 @@
             Well-known Wix Extension: Util
             </summary>
         </member>
+        <member name="F:WixSharp.WixExtension.UtilNamespace">
+            <summary>
+            The `Util` extension namespace
+            </summary>
+        </member>
         <member name="F:WixSharp.WixExtension.Bal">
             <summary>
             Well-known Wix Extension: Bal
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixExtension.BalNamespace">
+            <summary>
+            The `Bal` extension namespace
             </summary>
         </member>
         <member name="F:WixSharp.WixExtension.IIs">
@@ -9603,9 +9704,19 @@
             Well-known Wix Extension IIs
             </summary>
         </member>
+        <member name="F:WixSharp.WixExtension.IisNamespace">
+            <summary>
+            The `Iis` extension namespace
+            </summary>
+        </member>
         <member name="F:WixSharp.WixExtension.Sql">
             <summary>
             Well-known Wix Extension Sql
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixExtension.SqlNamespace">
+            <summary>
+            The `Sql` extension namespace
             </summary>
         </member>
         <member name="F:WixSharp.WixExtension.NetFx">
@@ -9613,9 +9724,19 @@
             Well-known Wix Extension NetFx
             </summary>
         </member>
+        <member name="F:WixSharp.WixExtension.NetFxNamespace">
+            <summary>
+            The `NetFx` extension namespace
+            </summary>
+        </member>
         <member name="F:WixSharp.WixExtension.Http">
             <summary>
             Well-known Wix Extension Http
+            </summary>
+        </member>
+        <member name="F:WixSharp.WixExtension.HttpNamespace">
+            <summary>
+            The `Http` extension namespace
             </summary>
         </member>
         <member name="F:WixSharp.WixExtension.UI">
@@ -12335,6 +12456,11 @@
             Force Component ID uniqueness.
             </summary>
         </member>
+        <member name="F:WixSharp.AutoGenerationOptions.IgnoreWildCardEmptyDirectories">
+            <summary>
+            The ignore empty directories during wild card resolution
+            </summary>
+        </member>
         <member name="F:WixSharp.AutoGenerationOptions.ValidateCAAssemblies">
             <summary>
             Enable validating CA assemblies for all CA methods to be public instance method.
@@ -12946,6 +13072,8 @@
             This class is a logical equivalent of <see cref="T:WixSharp.DirFiles"/> except it also analyses all files in all subdirectories.
             <see cref="T:WixSharp.DirFiles"/> excludes files in subdirectories.
             </para>
+            <para>You can control inclusion of empty directories during wild card resolving by adjusting the compiler setting
+            <c>Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories.</c></para>
             </summary>
             <remarks>
             Note that all files matching wildcard are resolved into absolute path thus it may not always be suitable
@@ -13170,6 +13298,14 @@
             Gets or sets the name of the mapped XML element.
             </summary>
             <value>The name.</value>
+        </member>
+        <member name="P:WixSharp.XmlAttribute.Namespace">
+            <summary>
+            Gets or sets the namespace.
+            </summary>
+            <value>
+            The namespace.
+            </value>
         </member>
         <member name="T:WixSharp.FeatureSet">
              <summary>
@@ -17459,6 +17595,15 @@
             </summary>
             <value>
             The component identifier.
+            </value>
+        </member>
+        <member name="P:WixSharp.WixEntity.ComponentCondition">
+            <summary>
+            Gets or sets the Condition attribute of the Component element that is to contain XML equivalent of the
+            <see cref="T:WixSharp.WixEntity"/>.
+            </summary>
+            <value>
+            The component condition.
             </value>
         </member>
         <member name="F:WixSharp.WixEntity.Name">

@@ -14,7 +14,7 @@ class Script
 
     static void SimpleScenario()
     {
-        Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories = false;
+        Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories = true;
 
         var project =
             new Project("MyProduct",
