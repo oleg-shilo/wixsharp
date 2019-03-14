@@ -29,7 +29,7 @@ class Script
         project.PreserveTempFiles = true;
 
         // uncomment this line if you want to make the build of the x64 vs x86 controlled by the external condition.
-        // if (Environment.GetEnvironmentVariable("buid_as_64") != null) 
+        // if (Environment.GetEnvironmentVariable("buid_as_64") != null)
         project.Platform = Platform.x64;
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
@@ -52,7 +52,7 @@ class Script
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         //Alternatively you can set Component Attribute for all files together (do not forget to remove "Component:Win64=yes" from file's AttributesDefinition)
-        
+
         //either before XML generation
         //foreach (var file in project.AllFiles)
         //    file.Attributes.Add("Component:Win64", "yes");

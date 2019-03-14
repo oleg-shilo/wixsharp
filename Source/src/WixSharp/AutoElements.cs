@@ -632,7 +632,6 @@ namespace WixSharp
             ExpandCustomAttributes(doc, project);
             InjectShortcutIcons(doc);
             HandleEmptyDirectories(doc);
-            InjectPlatformAttributes(doc);
 
             XElement product = doc.Root.Select("Product");
 
@@ -766,8 +765,8 @@ namespace WixSharp
                     {
                         string workinDirPath = workingDirectory.ReplaceWixSharpEnvConsts();
                         XElement existingProperty = product.Descendants("Property")
-                                                           .Where(p => p.HasAttribute("Value", workingDirectory))
-                                                           .FirstOrDefault();
+                                                           .FirstOrDefault(p => p.HasAttribute("Value", workingDirectory));
+
                         if (existingProperty != null)
                         {
                             xShortcut.SetAttributeValue("WorkingDirectory", existingProperty.Attribute("Id").Value);
@@ -781,6 +780,8 @@ namespace WixSharp
                     }
                 }
             }
+
+            InjectPlatformAttributes(doc);
         }
 
         internal static void NormalizeFilePaths(XDocument doc, string sourceBaseDir, bool emitRelativePaths)

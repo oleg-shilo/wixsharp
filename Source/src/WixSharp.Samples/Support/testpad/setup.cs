@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixSharp.Controls;
 using WixSharp.Forms;
 
 // Truly a throw away project for dev testing
@@ -140,6 +141,45 @@ static class Script
         Compiler.BuildMsi(project);
     }
 
+    static void Issue_606()
+    {
+        var aisFeature = new Feature("AIS", "Allied Information Services")
+        {
+            Display = FeatureDisplay.expand
+        };
+
+        var webFeature = new Feature("Website", "Manager")
+        {
+            IsEnabled = false,
+            Condition = new FeatureCondition("WEBSITE_FEATURE = 1", level: 1)
+        };
+
+        aisFeature.Add(webFeature);
+
+        var project = new ManagedProject("AIS Manager",
+                        // Base directory
+                        new Dir(@"%ProgramFiles%\Allied\AIS Manager",
+                             // ABS
+                             new Dir(new Id("WEBSITEDIR"), webFeature, "Website",
+                                new File(webFeature, @"setup.cs")
+                            )
+                         )
+                        {
+                            // AttributesDefinition = "Component:Win64=yes"
+                        }
+                    )
+        {
+            GUID = new Guid("E535C39D-5FE8-4C19-802D-8033E7A15B5C"),
+            UI = WUI.WixUI_FeatureTree,
+            PreserveTempFiles = true,
+            Platform = Platform.x64,
+            OutFileName = "AIS Manager x64"
+        };
+
+        // Tasks.RemoveDialogsBetween(project, NativeDialogs.WelcomeDlg, NativeDialogs.CustomizeDlg);
+        project.BuildMsi();
+    }
+
     static void Issue_599()
     {
         // var project = new Project("someProject",
@@ -235,6 +275,7 @@ static class Script
     static public void Main()
     {
         // HiTeach_MSI.Program.Main1(); return;
+        Issue_606(); return;
         Issue_599(); return;
         Issue_377(); return;
         Issue_440(); return;
