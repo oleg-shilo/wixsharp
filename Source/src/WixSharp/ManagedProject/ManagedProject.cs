@@ -333,8 +333,7 @@ namespace WixSharp
                     if (AutoElements.EnableUACRevealer)
                         this.AddProperty(new Property("UAC_REVEALER_ENABLED", "true"));
 
-                    if (!AutoElements.UACWarning.IsEmpty())
-                        this.AddProperty(new Property("UAC_WARNING", AutoElements.UACWarning));
+                    this.AddProperty(new Property("UAC_WARNING", AutoElements.UACWarning??""));
 
                     ManagedUI.BeforeBuild(this);
 

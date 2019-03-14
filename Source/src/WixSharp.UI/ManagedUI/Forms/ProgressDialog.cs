@@ -3,6 +3,7 @@ using Microsoft.Deployment.WindowsInstaller;
 using System.Diagnostics;
 using System.Threading;
 using System.Drawing;
+using System.Security.Principal;
 using System.Windows.Forms;
 using WixSharp.CommonTasks;
 
@@ -26,7 +27,12 @@ namespace WixSharp.UI.Forms
         {
             banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
 
-            this.waitPrompt.Text = Runtime.Session.Property("UAC_WARNING");
+
+            if (!WindowsIdentity.GetCurrent().IsAdmin() && Uac.IsEnabled())
+            {
+                this.waitPrompt.Text = Runtime.Session.Property("UAC_WARNING");
+                this.waitPrompt.Visible = true;
+            }
 
             ResetLayout();
 

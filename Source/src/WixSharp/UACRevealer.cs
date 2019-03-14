@@ -131,6 +131,18 @@ namespace WixSharp.CommonTasks
         static System.Diagnostics.Process UAC_revealer;
     }
 
+    public static class Uac
+    {
+        public static bool IsEnabled()
+        {
+            return Registry.GetValue(
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",
+                 "EnableInstallerDetection",
+                 -1).Equals(1);
+        }
+
+    }
+
     static class Win32
     {
         [DllImport("user32.dll", SetLastError = true)]

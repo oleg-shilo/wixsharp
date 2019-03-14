@@ -12,6 +12,7 @@ using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
 using System.Diagnostics;
+using Microsoft.Win32;
 using WixSharp.UI.Forms;
 
 public class Script
@@ -41,8 +42,7 @@ public class Script
                                     new File(docs, "readme.txt"),
                                     new File(tuts, @"..\Files\Docs\tutorial.txt"),
                                     new File(user_manuals, @"..\Files\Docs\Manual.txt"),
-                                    new File(dev_manuals, @"..\Files\Docs\DevManual.txt")
-                                    )));
+                                    new File(dev_manuals, @"..\Files\Docs\DevManual.txt"))));
 
         project.ManagedUI = new ManagedUI();
 
