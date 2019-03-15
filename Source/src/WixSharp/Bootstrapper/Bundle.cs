@@ -448,6 +448,12 @@ namespace WixSharp.Bootstrapper
                 catch { }
             }
         }
+
+        internal void ResetAutoIdGeneration(bool supressWarning)
+        {
+            WixGuid.ConsistentGenerationStartValue = this.UpgradeCode;
+            WixEntity.ResetIdGenerator(supressWarning);
+        }
     }
 
     /// <summary>

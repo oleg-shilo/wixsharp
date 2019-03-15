@@ -274,7 +274,8 @@ namespace WixSharp
                     var oldAlgorithm = AutoGeneration.CustomIdAlgorithm;
                     try
                     {
-                        WixEntity.ResetIdGenerator(false);
+                        project.ResetAutoIdGeneration(supressWarning: false);
+
                         AutoGeneration.CustomIdAlgorithm = project.CustomIdAlgorithm ?? AutoGeneration.CustomIdAlgorithm;
 
                         string file = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, project.OutFileName) + ".wxs");
@@ -339,6 +340,7 @@ namespace WixSharp
                     finally
                     {
                         AutoGeneration.CustomIdAlgorithm = oldAlgorithm;
+                        project.ResetAutoIdGeneration(supressWarning: true);
                     }
                 }
             }
