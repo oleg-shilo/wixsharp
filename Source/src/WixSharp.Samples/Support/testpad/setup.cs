@@ -6,6 +6,7 @@ using System.Security.Principal;
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
+using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
 using WixSharp.Controls;
 using WixSharp.Forms;
@@ -180,21 +181,21 @@ static class Script
         project.BuildMsi();
     }
 
-    static void Issue_599()
+    static void Issue_551()
     {
-        // var project = new Project("someProject",
-        //     new Dir("someDirPath",
-        //         Files(feature, "..\SomeFolder\*.ext")
-        //             , new FileAssociation("someExt")
-        //             {
-        //                 Icon = "someFile.ico",
-        //                 Advertise = true
-        //             }
-        //            )));
+        var bundle = new Bundle("MyBundle", new PackageGroupRef("NetFx471Web"))
+        {
+            OutFileName = "MyBundle",
+            Version = new Version("1.0")
+        };
+        bundle.Include(WixExtension.Util);
+        bundle.WxsFiles.Add(@"E:\PrivateData\Galos\Projects\Support\MultiWxsBundle\MultiWxsBundle\NetFx471.wxs");
 
-        // project.ControlPanelInfo.ProductIcon = "someProduct.ico";
+        // uncomment this line for the build to succeed - this should happen automatically
+        // bundle.LightOptions = "NetFx471.wixobj";
 
-        // Compiler.BuildMsi(project);
+        bundle.OutDir = @"E:\PrivateData\Galos\Projects\Support\MultiWxsBundle\MultiWxsBundle";
+        bundle.BuildCmd();
     }
 
     static void Issue_440()
@@ -275,8 +276,8 @@ static class Script
     static public void Main()
     {
         // HiTeach_MSI.Program.Main1(); return;
+        Issue_551(); return;
         Issue_606(); return;
-        Issue_599(); return;
         Issue_377(); return;
         Issue_440(); return;
         Issue_386(); return;

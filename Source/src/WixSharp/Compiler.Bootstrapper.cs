@@ -94,10 +94,11 @@ namespace WixSharp
                     var candleOptions = CandleOptions + " " + project.CandleOptions;
                     string command = candleOptions + " " + extensionDlls + " \"" + wxsFile + "\" ";
 
+                    string outDir = null;
                     if (wxsFiles.IsNotEmpty())
                     {
                         command += wxsFiles;
-                        string outDir = IO.Path.GetDirectoryName(wxsFile);
+                        outDir = IO.Path.GetDirectoryName(wxsFile);
                         // if multiple files are specified candle expect a path for the -out switch
                         // or no path at all (use current directory)
                         // note the '\' character must be escaped twice: as a C# string and as a CMD char
@@ -121,10 +122,14 @@ namespace WixSharp
                         if (IO.File.Exists(outFile))
                             IO.File.Delete(outFile);
 
-                        //if (project.IsLocalized && IO.File.Exists(project.LocalizationFile))
-                        //    Run(linker, LightOptions + " \"" + objFile + "\" -out \"" + msiFile + "\"" + extensionDlls + " -cultures:" + project.Language + " -loc \"" + project.LocalizationFile + "\"");
-                        //else
+                        string fragmentObjectFiles = project.WxsFiles
+                                            .Distinct()
+                                            .Join(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"");
+
                         string lightOptions = LightOptions + " " + project.LightOptions;
+
+                        if (fragmentObjectFiles.IsNotEmpty())
+                            lightOptions += " " + fragmentObjectFiles;
 
                         Run(linker, lightOptions + " \"" + objFile + "\" -out \"" + outFile + "\"" + extensionDlls + " -cultures:" + project.Language);
 
@@ -222,10 +227,11 @@ namespace WixSharp
                 string batchFileContent = wixLocationEnvVar + "\"" + compiler + "\" " + candleOptions + " " + extensionDlls +
                                           " \"" + IO.Path.GetFileName(wxsFile) + "\" ";
 
+                string outDir = null;
                 if (wxsFiles.IsNotEmpty())
                 {
                     batchFileContent += wxsFiles;
-                    string outDir = IO.Path.GetDirectoryName(wxsFile);
+                    outDir = IO.Path.GetDirectoryName(wxsFile);
                     // if multiple files are specified candle expect a path for the -out switch
                     // or no path at all (use current directory)
                     // note the '\' character must be escaped twice: as a C# string and as a CMD char
@@ -237,7 +243,14 @@ namespace WixSharp
 
                 batchFileContent += "\r\n";
 
+                string fragmentObjectFiles = project.WxsFiles
+                                            .Distinct()
+                                            .Join(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"");
+
                 string lightOptions = LightOptions + " " + project.LightOptions;
+
+                if (fragmentObjectFiles.IsNotEmpty())
+                    lightOptions += " " + fragmentObjectFiles;
 
                 if (path.IsNotEmpty())
                     lightOptions += " -out \"" + IO.Path.ChangeExtension(objFile, ".exe") + "\"";
