@@ -1217,6 +1217,43 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Normalizes the wix environment constants and custom properties.
+        /// <para>This method is not the same as `ExpandWixEnvConsts`. The key difference is
+        /// that it handles custom properties and also normalizes directory separators.
+        /// Normalization is critical for string values that are used as `ExeFileShortcut.Target`:</para>
+        /// <para>
+        /// <example>
+        /// <code>
+        /// @"%INSTALL_DIR%\my_app.exe".NormalizeWixString() -> "[INSTALL_DIR]my_app.exe"
+        /// @"%INSTALL_DIR%my_app.exe".NormalizeWixString()  -> "[INSTALL_DIR]my_app.exe"
+        /// @"[INSTALL_DIR]my_app.exe".NormalizeWixString()  -> "[INSTALL_DIR]my_app.exe"
+        /// </code>
+        /// </example>
+        /// </para>
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static string NormalizeWixString(this string path)
+        {
+            // ensure `%System64Folder%msiexec.exe` and `%System64Folder%\msiexec.exe` are converted in
+            // `[System64Folder]msiexec.exe`
+            var chars = path.Replace(@"%\", "%")
+                            .ToArray();
+
+            // Handle `%MY_CUSTOM_PROPERTY%MyApp.exe`
+            bool leftToken = true;
+            for (int i = 0; i < chars.Length; i++)
+                if (chars[i] == '%')
+                {
+                    chars[i] = leftToken ? '[' : ']';
+                    leftToken = !leftToken;
+                }
+            var result = new string(chars);
+
+            return result;
+        }
+
+        /// <summary>
         /// Unescape '\%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product").
         /// <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent
         /// "%ProgramFiles%\My Product" being later converted into "ProgramFilesFolder\My Product"</para>

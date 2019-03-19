@@ -1923,7 +1923,7 @@ namespace WixSharp
                        new XAttribute("Id", wDir.Id + "." + wShortcut.Id),
                        //new XAttribute("Directory", wDir.Id), //not needed for Wix# as this attributed is required only if the shortcut is not nested under a Component element.
                        new XAttribute("WorkingDirectory", workingDir),
-                       new XAttribute("Target", wShortcut.Target),
+                       new XAttribute("Target", wShortcut.Target.NormalizeWixString()),
                        new XAttribute("Arguments", wShortcut.Arguments),
                        new XAttribute("Name", wShortcut.Name + ".lnk")));
 
@@ -2295,11 +2295,17 @@ namespace WixSharp
                         defaultFeatureComponents.Add(compId);
 
                     // WiX/MSI requires the registry to belong to directory
-                    // (either by nesting XML element or bu having Directory attribute in the registry key component)
+                    // (either by nesting XML element or by having Directory attribute in the registry key component)
                     // Instead of placing the reg component into the user dir element place it in the ProgramFiles
                     // dir element. This dir is not going to be created nor deleted during the installation.
-                    // This technique is only used to satisfy WiX/MSI constraint for `Component.RegistryKey` to belong to the directory.
+                    // This technique is only used to satisfy WiX/MSI constraint for `Component.RegistryKey` to belong
+                    // to the directory.
+                    // GetTopLevelPermanentDir works slightly better than GetTopLevelDir because the registry key in this
+                    // case belongs to a permanent dir but not to the user dir. It is still shocking to enclose an entity
+                    // that is a system wide to the directory. But the containment is slightly better in this case.
+
                     XElement topLevelDir = GetTopLevelPermanentDir(product, regVal.Win64);
+                    // topLevelDir = GetTopLevelDir(product); // the old way
 
                     XElement comp = topLevelDir.AddElement(
                                                    new XElement("Component",
