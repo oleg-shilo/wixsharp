@@ -99,8 +99,10 @@ public class InstallScript
                                         Variable = "AdobeInstalled"
                                     });
 
-        bootstrapper.AddWixFragment("Wix/Bundle", XElement.Parse(@"<Log PathVariable=""LogFileLocation""/>"));
-        bootstrapper.Variables = new[] { new Variable("LogFileLocation", "333") { Overridable = true } };
+        // bootstrapper.AddXml("Wix/Bundle", "<Log PathVariable=\"LogFileLocation\"/>");
+
+        bootstrapper.AddXmlElement("Wix/Bundle", "Log", "PathVariable=LogFileLocation");
+        bootstrapper.Variables = new[] { new Variable("LogFileLocation", @"C:\temp\setup.log") { Overridable = true } };
         // or
         // bootstrapper.Variables = "BundleVariable=333".ToStringVariables();
         // bootstrapper.Variables = Variables.ToStringVariables("BundleVariable=333");

@@ -1284,6 +1284,53 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Adds the XML fragment to the element specified by <c>placementPath</c>.
+        /// <para>Note <c>placementPath</c> can only contain forward slashes.</para>
+        /// <example>
+        /// The following is an example of adding `Log` element to the `Wix/Bundle` element of the
+        /// bootstrapper project.
+        /// <code>
+        /// bootstrapper.AddXml("Wix/Bundle", "&lt;Log PathVariable=\"LogFileLocation\"/&gt;");
+        /// </code>
+        /// </example>
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="placementPath">The placement path.</param>
+        /// <param name="xml">The XML.</param>
+        /// <returns></returns>
+        static public WixProject AddXml(this WixProject project, string placementPath, string xml)
+        {
+            project.WixSourceGenerated += doc => doc.Select(placementPath)
+                                                    .Add(XElement.Parse(xml));
+
+            return project;
+        }
+
+        /// <summary>
+        /// Adds the XML fragment to the element specified by <c>placementPath</c> and the element name with the
+        /// attribute definition.
+        /// <para>Note <c>placementPath</c> can only contain forward slashes.</para>
+        /// <example>The following is an example of adding `Log` element to the `Wix/Bundle` element of the
+        /// bootstrapper project.
+        /// <code>
+        /// bootstrapper.AddXmlElement("Wix/Bundle", "Log", "PathVariable=LogFileLocation");
+        /// </code>
+        /// </example>
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="placementPath">The placement path.</param>
+        /// <param name="elementName">Name of the element.</param>
+        /// <param name="attributesDefinition">The attributes definition.</param>
+        /// <returns></returns>
+        static public WixProject AddXmlElement(this WixProject project, string placementPath, string elementName, string attributesDefinition)
+        {
+            project.WixSourceGenerated += doc => doc.Select(placementPath)
+                                                    .AddElement(elementName, attributesDefinition);
+
+            return project;
+        }
+
+        /// <summary>
         /// Sets the value of the attribute value in the .NET application configuration file according
         /// the specified XPath expression.
         /// <para>

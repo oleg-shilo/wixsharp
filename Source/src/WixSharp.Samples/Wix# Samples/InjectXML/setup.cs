@@ -44,6 +44,10 @@ class Script
         // project specific build event
         project.WixSourceGenerated += InjectImages;
 
+        project.AddXml("Wix/Product", "<Property Id=\"Title\" Value=\"Properties Test\" />");
+
+        project.AddXmlElement("Wix/Product", "Property", "Id=Gritting; Value=Hello World!");
+
         project.Media.Clear(); // clear default media as we will add it via MediaTemplate
         project.WixSourceGenerated += document =>
         {
