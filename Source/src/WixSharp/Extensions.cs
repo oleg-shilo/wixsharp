@@ -1219,7 +1219,7 @@ namespace WixSharp
         /// <summary>
         /// Normalizes the wix environment constants and custom properties.
         /// <para>This method is not the same as `ExpandWixEnvConsts`. The key difference is
-        /// that it handles custom properties and also normalizes directory separators.
+        /// that it handles custom properties, leaves square brackets unchanged and also normalizes directory separators.
         /// Normalization is critical for string values that are used as `ExeFileShortcut.Target`:</para>
         /// <para>
         /// <example>
@@ -1235,6 +1235,11 @@ namespace WixSharp
         /// <returns></returns>
         public static string NormalizeWixString(this string path)
         {
+            // EnvironmentConstantsMapping.Keys include '%' chars:
+            //   { "%ProgramFiles%", "ProgramFilesFolder" },
+            foreach (string key in Compiler.EnvironmentConstantsMapping.Keys)
+                path = path.Replace(key.Trim('%'), Compiler.EnvironmentConstantsMapping[key]);
+
             // ensure `%System64Folder%msiexec.exe` and `%System64Folder%\msiexec.exe` are converted in
             // `[System64Folder]msiexec.exe`
             var chars = path.Replace(@"%\", "%")
