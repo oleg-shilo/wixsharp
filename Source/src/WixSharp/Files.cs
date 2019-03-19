@@ -72,6 +72,11 @@ namespace WixSharp
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Files"/> class with properties/fields initialized with specified parameters.
+        /// <para>You can control inclusion of empty folders (if picked by the wild card patter) by setting
+        /// <see cref="Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
+        /// <para>If more specific control is required you can always use a flat list of <c>Dirs</c> of the
+        /// Project.<see cref="Project.AllDirs"/> to remove the undesired folder from its parent collection.
+        /// </para>
         /// </summary>
         /// <param name="sourcePath">The relative path to source directory. It must include wildcard pattern for files to be included
         /// into MSI (e.g. <c>new Files(@"Release\Bin\*.*")</c>).</param>
@@ -83,6 +88,11 @@ namespace WixSharp
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Files"/> class with properties/fields initialized with specified parameters.
+        /// <para>You can control inclusion of empty folders (if picked by the wild card patter) by setting
+        /// <see cref="Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
+        /// <para>If more specific control is required you can always use a flat list of <c>Dirs</c> of the
+        /// Project.<see cref="Project.AllDirs"/> to remove the undesired folder from its parent collection.
+        /// </para>
         /// </summary>
         /// <param name="sourcePath">The relative path to source directory. It must include wildcard pattern for files to be included
         /// into MSI (e.g. <c>new Files(@"Release\Bin\*.*")</c>).</param>
@@ -97,6 +107,11 @@ namespace WixSharp
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Files"/> class with properties/fields initialized with specified parameters.
+        /// <para>You can control inclusion of empty folders (if picked by the wild card patter) by setting
+        /// <see cref="Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
+        /// <para>If more specific control is required you can always use a flat list of <c>Dirs</c> of the
+        /// Project.<see cref="Project.AllDirs"/> to remove the undesired folder from its parent collection.
+        /// </para>
         /// </summary>
         /// <param name="feature"><see cref="Feature"></see> the directory files should be included in.</param>
         /// <param name="sourcePath">The relative path to source directory. It must include wildcard pattern for files to be included
@@ -110,6 +125,11 @@ namespace WixSharp
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Files"/> class with properties/fields initialized with specified parameters.
+        /// <para>You can control inclusion of empty folders (if picked by the wild card patter) by setting
+        /// <see cref="Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
+        /// <para>If more specific control is required you can always use a flat list of <c>Dirs</c> of the
+        /// Project.<see cref="Project.AllDirs"/> to remove the undesired folder from its parent collection.
+        /// </para>
         /// </summary>
         /// <param name="feature"><see cref="Feature"></see> the directory files should be included in.</param>
         /// <param name="sourcePath">The relative path to source directory. It must include wildcard pattern for files to be included
