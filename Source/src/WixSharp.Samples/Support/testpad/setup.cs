@@ -125,6 +125,18 @@ static class Script
         Compiler.BuildMsi(project);
     }
 
+    static void Issue_609()
+    {
+        // AutoElements.DisableAutoKeyPath = true;
+
+        var project = new Project("MyProduct",
+               new Dir(@"%LocalAppDataFolder%\My Company\My Product", new File("setup.cs")),
+               new RegValue(RegistryHive.CurrentUser, @"Software\My Company\My Product", "LICENSE_KEY", "123456"));
+
+        project.PreserveTempFiles = true;
+        project.BuildMsi();
+    }
+
     static void Issue_377()
     {
         var project = new Project("someProject",
@@ -276,6 +288,7 @@ static class Script
     static public void Main()
     {
         // HiTeach_MSI.Program.Main1(); return;
+        Issue_609(); return;
         Issue_551(); return;
         Issue_606(); return;
         Issue_377(); return;

@@ -19,7 +19,7 @@ class Script
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new Files(@"..\Release Folder\Release\*.*"),
+                    new Files(@"..\Release Folder\test\*.exe"),
                     new ExeFileShortcut("Uninstall My Product", "[System64Folder]msiexec.exe", "/x [ProductCode]")));
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1561ba25889b");

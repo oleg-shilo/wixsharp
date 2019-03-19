@@ -964,6 +964,41 @@
             <param name="errorMessage">The error message to be displayed if .NET version is not present.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddXml(WixSharp.WixProject,System.String,System.String)">
+            <summary>
+            Adds the XML fragment to the element specified by <c>placementPath</c>.
+            <para>Note <c>placementPath</c> can only contain forward slashes.</para>
+            <example>
+            The following is an example of adding `Log` element to the `Wix/Bundle` element of the
+            bootstrapper project.
+            <code>
+            bootstrapper.AddXml("Wix/Bundle", "&lt;Log PathVariable=\"LogFileLocation\"/&gt;");
+            </code>
+            </example>
+            </summary>
+            <param name="project">The project.</param>
+            <param name="placementPath">The placement path.</param>
+            <param name="xml">The XML.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddXmlElement(WixSharp.WixProject,System.String,System.String,System.String)">
+            <summary>
+            Adds the XML fragment to the element specified by <c>placementPath</c> and the element name with the
+            attribute definition.
+            <para>Note <c>placementPath</c> can only contain forward slashes.</para>
+            <example>The following is an example of adding `Log` element to the `Wix/Bundle` element of the
+            bootstrapper project.
+            <code>
+            bootstrapper.AddXmlElement("Wix/Bundle", "Log", "PathVariable=LogFileLocation");
+            </code>
+            </example>
+            </summary>
+            <param name="project">The project.</param>
+            <param name="placementPath">The placement path.</param>
+            <param name="elementName">Name of the element.</param>
+            <param name="attributesDefinition">The attributes definition.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.CommonTasks.Tasks.SetConfigAttribute(System.String,System.String,System.String)">
              <summary>
              Sets the value of the attribute value in the .NET application configuration file according
@@ -7517,6 +7552,25 @@
             </summary>
             <param name="path">The Wix# directory path.</param>
             <returns>Replacement result.</returns>
+        </member>
+        <member name="M:WixSharp.Extensions.NormalizeWixString(System.String)">
+            <summary>
+            Normalizes the wix environment constants and custom properties.
+            <para>This method is not the same as `ExpandWixEnvConsts`. The key difference is
+            that it handles custom properties, leaves square brackets unchanged and also normalizes directory separators.
+            Normalization is critical for string values that are used as `ExeFileShortcut.Target`:</para>
+            <para>
+            <example>
+            <code>
+            @"%INSTALL_DIR%\my_app.exe".NormalizeWixString() -> "[INSTALL_DIR]my_app.exe"
+            @"%INSTALL_DIR%my_app.exe".NormalizeWixString()  -> "[INSTALL_DIR]my_app.exe"
+            @"[INSTALL_DIR]my_app.exe".NormalizeWixString()  -> "[INSTALL_DIR]my_app.exe"
+            </code>
+            </example>
+            </para>
+            </summary>
+            <param name="path">The path.</param>
+            <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.UnEscapeEnvars(System.String)">
             <summary>

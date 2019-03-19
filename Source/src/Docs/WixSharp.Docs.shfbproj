@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <!-- The configuration and platform will be used to determine which
+         assemblies to include from solution and project documentation
+         sources -->
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{12f7a748-f685-43df-bc03-1591a76df1ab}</ProjectGuid>
+    <SHFBSchemaVersion>1.9.9.0</SHFBSchemaVersion>
+    <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
+         Studio adds them anyway -->
+    <AssemblyName>Documentation</AssemblyName>
+    <RootNamespace>Documentation</RootNamespace>
+    <Name>WixSharp.Docs</Name>
+    <!-- SHFB properties -->
+    <OutputPath>Build\</OutputPath>
+    <HtmlHelpName>WixSharp.Reference</HtmlHelpName>
+    <ProjectSummary>
+    </ProjectSummary>
+    <MissingTags>Parameter, Returns, AutoDocumentCtors, TypeParameter</MissingTags>
+    <VisibleItems>None</VisibleItems>
+    <HtmlHelp1xCompilerPath>C:\Program Files (x86)\HTML Help Workshop\</HtmlHelp1xCompilerPath>
+    <HtmlHelp2xCompilerPath>
+    </HtmlHelp2xCompilerPath>
+    <SandcastlePath>
+    </SandcastlePath>
+    <WorkingPath>
+    </WorkingPath>
+    <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
+    <PresentationStyle>VS2010</PresentationStyle>
+    <DocumentationSources>
+      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.dll" />
+<DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.Msi.dll" />
+<DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.Msi.xml" />
+<DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.UI.dll" />
+<DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.UI.xml" />
+<DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.xml" /></DocumentationSources>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="(global)" isDocumented="True">Namespace Summary: N/A</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="csscript" isDocumented="True">Namespace Summary: N/A</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="CSScriptLibrary" isDocumented="True">Namespace Summary: N/A</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="CSScriptLibrary.ThirdpartyLibraries.Rubenhak.Utils" isDocumented="True">Namespace Summary: N/A</NamespaceSummaryItem>
+    </NamespaceSummaries>
+    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
+    <SyntaxFilters>CSharp, VisualBasic</SyntaxFilters>
+    <SdkLinkTarget>Blank</SdkLinkTarget>
+    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <Preliminary>False</Preliminary>
+    <NamingMethod>Guid</NamingMethod>
+    <Language>en-US</Language>
+    <HelpTitle>A Wix# Documented Class Library</HelpTitle>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <IndentHtml>True</IndentHtml>
+    <KeepLogFile>True</KeepLogFile>
+    <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
+    <CppCommentsFixup>False</CppCommentsFixup>
+    <CleanIntermediates>True</CleanIntermediates>
+    <ApiFilter>
+      <Filter entryType="Namespace" fullName="WindowsInstaller" isExposed="False" />
+      <Filter entryType="Namespace" fullName="WixSharp" isExposed="True">
+        <Filter entryType="Class" fullName="WixSharp.Buttons" filterName="Buttons" isExposed="False" />
+        <Filter entryType="Class" fullName="WixSharp.CommonDialogs" filterName="CommonDialogs" isExposed="False" />
+      </Filter>
+    </ApiFilter>
+  </PropertyGroup>
+  <!-- There are no properties for these two groups but they need to appear in
+       order for Visual Studio to perform the build. -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BootstrapperCore">
+      <HintPath>..\WixSharp.Samples\Wix_bin\SDK\BootstrapperCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Deployment.WindowsInstaller, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad">
+      <HintPath>..\WixSharp.Samples\Wix_bin\bin\Microsoft.Deployment.WindowsInstaller.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <!-- Import the SHFB build targets -->
+  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
+</Project>

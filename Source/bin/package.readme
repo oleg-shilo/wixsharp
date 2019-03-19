@@ -1,0 +1,15 @@
+1. Rebuild Release configuration       (Just to verify Release code correctness)
+
+2.1 Execute src\build.cmd              (Builds all solutions)
+2.2 Execute src\aggregate.cmd          Gatherers binaries and builds the help file)
+
+3. Run bin\package.cs                  (Packages release in the 7zip file)
+
+4. Update NuGet						   (NuGet\WixSharp\UpdatePackage.cs)
+
+5. Commit the code
+
+6. Update GitHub                       (Make release)
+
+7. Update VS Gallery
+
