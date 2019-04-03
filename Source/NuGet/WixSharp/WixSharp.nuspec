@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>1.9.5.0</version>
+    <version>1.9.5.1</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -43,11 +43,10 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.9.5.0" />
+      <dependency id="WixSharp.bin" version="1.9.5.1" />
     </dependencies>
   </metadata>
   <files>
-    <file src="build\SetEnvVar.dll" target="build\SetEnvVar.dll" />
     <file src="build\WixSharp.targets" target="build\WixSharp.targets" />
     <file src="tools\Install.bin.ps1" target="tools\Install.ps1" />
     <file src="readme.txt" target="readme.txt" />
