@@ -1,2 +1,3 @@
-v1.7.0.0
-* Migrated to the packages.config based NuGet package referencing
+v1.8.0.0
+* Project templetes now include all WixSharp references to work smoothly on NuGet restore
+* Removed SetEnvVar.dll target from the project templete
