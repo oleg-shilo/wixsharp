@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
+
+using System.Diagnostics;
+
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
+
 using IO = System.IO;
-
-using System.IO;
-
-using System.Diagnostics;
 
 namespace WixSharp
 {
@@ -310,11 +311,11 @@ namespace WixSharp
                 string dllEntry = "WixSharp_InitRuntime_Action";
 
                 bool needInvokeInitRuntime = (IsHandlerSet(() => UIInitialized)
-                                           || IsHandlerSet(() => Load)
-                                           || IsHandlerSet(() => UILoaded)
-                                           || IsHandlerSet(() => BeforeInstall)
-                                           || IsHandlerSet(() => AfterInstall)
-                                           || AlwaysScheduleInitRuntime);
+                                              || IsHandlerSet(() => Load)
+                                              || IsHandlerSet(() => UILoaded)
+                                              || IsHandlerSet(() => BeforeInstall)
+                                              || IsHandlerSet(() => AfterInstall)
+                                              || AlwaysScheduleInitRuntime);
                 if (needInvokeInitRuntime)
                     this.AddAction(new ManagedAction(dllEntry)
                     {
@@ -333,7 +334,8 @@ namespace WixSharp
                     if (AutoElements.EnableUACRevealer)
                         this.AddProperty(new Property("UAC_REVEALER_ENABLED", "true"));
 
-                    this.AddProperty(new Property("UAC_WARNING", AutoElements.UACWarning??""));
+                    if (AutoElements.UACWarning.IsNotEmpty())
+                        this.AddProperty(new Property("UAC_WARNING", AutoElements.UACWarning));
 
                     ManagedUI.BeforeBuild(this);
 
@@ -406,8 +408,8 @@ namespace WixSharp
         static string GetDialogInfo(Type dialog)
         {
             var info = "{0}|{1}".FormatWith(
-                                dialog.Assembly.FullName,
-                                dialog.FullName);
+                                 dialog.Assembly.FullName,
+                                 dialog.FullName);
             return info;
         }
 
@@ -448,9 +450,9 @@ namespace WixSharp
             foreach (Delegate action in handlers.GetInvocationList())
             {
                 var handlerInfo = "{0}|{1}|{2}".FormatWith(
-                                     action.Method.DeclaringType.Assembly.FullName,
-                                     action.Method.DeclaringType.FullName,
-                                     action.Method.Name);
+                                                action.Method.DeclaringType.Assembly.FullName,
+                                                action.Method.DeclaringType.FullName,
+                                                action.Method.Name);
 
                 ValidateHandlerInfo(handlerInfo);
 
