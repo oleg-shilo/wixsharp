@@ -1720,7 +1720,6 @@ namespace WixSharp
                 InsertIISElements(dirItem, comp, wDir.IISVirtualDirs, wProject);
             }
         }
-
         static void ProcessDirectoryFiles(Dir wDir, Project wProject, Dictionary<Feature, List<string>> featureComponents, List<string> defaultFeatureComponents, XElement dirItem)
         {
             //insert files in the last leaf directory node

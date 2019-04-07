@@ -1238,7 +1238,31 @@ namespace WixSharp
             // EnvironmentConstantsMapping.Keys include '%' chars:
             //   { "%ProgramFiles%", "ProgramFilesFolder" },
             foreach (string key in Compiler.EnvironmentConstantsMapping.Keys)
-                path = path.Replace(key.Trim('%'), Compiler.EnvironmentConstantsMapping[key]);
+                path = path
+                           // if the constant came to this method already extended/normalized then the
+                           // call `.Replace(key.Trim('%'), Compiler.EnvironmentConstantsMapping[key]` would
+                           // insert suffix `Folder` one extra time (e.g. SystemFolder64Folder->SystemFolder64FolderFolder)
+
+                           // Another problem is that *64Folder/*FilesFolder can be ruined by * replacement
+                           // ProgramFiles64Folder/ProgramFilesFolder <- ProgramFiles
+                           // System64Folder, SystemFolder <- System
+
+                           // The solution is not elegant in terms of performance but adequate. We don't need
+                           // performance during the compilation.
+
+                           // protect `System` and `ProgramFiles`
+                           .Replace("System64Folder", "Sys64Folder")
+                           .Replace("SystemFolder", "SysFolder")
+                           .Replace("ProgramFiles64Folder", "ProgFiles64Folder")
+                           .Replace("ProgramFilesFolder", "ProgFilesFolder")
+
+                           .Replace(key.Trim('%'), Compiler.EnvironmentConstantsMapping[key])
+
+                           // restore `System` and `ProgramFiles`
+                           .Replace("Sys64Folder", "System64Folder")
+                           .Replace("SysFolder", "SystemFolder")
+                           .Replace("ProgFiles64Folder", "ProgramFiles64Folder")
+                           .Replace("ProgFilesFolder", "ProgramFilesFolder");
 
             // ensure `%System64Folder%msiexec.exe` and `%System64Folder%\msiexec.exe` are converted in
             // `[System64Folder]msiexec.exe`
