@@ -1,20 +1,20 @@
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using WixSharp;
 using WixSharp.Controls;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Windows.Forms;
-using System.Drawing;
-using System.Drawing.Imaging;
 
 namespace WixSharp.CommonTasks
 {
@@ -131,16 +131,24 @@ namespace WixSharp.CommonTasks
         static System.Diagnostics.Process UAC_revealer;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     public static class Uac
     {
+        /// <summary>
+        /// Determines whether this instance is enabled.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance is enabled; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsEnabled()
         {
             return Registry.GetValue(
                 @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",
-                 "EnableInstallerDetection",
-                 -1).Equals(1);
+                "EnableInstallerDetection",
+                -1).Equals(1);
         }
-
     }
 
     static class Win32

@@ -1,0 +1,1 @@
+This sample demonstrates how to deployCOM server on the target system.Execute corresponding .cmd file to build desired msi.Note the demo assembly file `MyApp.exe` is not a real COM server thus if you execute the .msi most likely the installation will fail.

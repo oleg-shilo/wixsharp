@@ -83,7 +83,7 @@ namespace WixSharp
         /// <para>If set to <c>Automatic</c> then the compiler will enable this feature only if any empty directory
         /// is detected in the project definition.</para>
         /// </summary>
-        [Obsolete(message: "This property is defaulted to `CompilerSupportState.Enabled`. Due to the fact that " +
+        [Obsolete(message: "This property is defaulted to `CompilerSupportState.Enabled`. It is due to the fact that " +
             "`CompilerSupportState.Automatic` brings some ambiguity while no longer yielding any benefits", error: false)]
         public static CompilerSupportState SupportEmptyDirectories = CompilerSupportState.Enabled;
 

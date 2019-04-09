@@ -3,6 +3,8 @@ using System.Xml.Linq;
 
 namespace WixSharp
 {
+#pragma warning disable 1591
+
     /// <summary>
     ///  Threading model for the CLSID.
     /// </summary>
@@ -15,6 +17,8 @@ namespace WixSharp
         single,
         rental
     }
+
+#pragma warning restore 1591
 
     /// <summary>
     /// COM Class registration.
