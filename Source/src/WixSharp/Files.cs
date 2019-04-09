@@ -108,7 +108,7 @@ namespace WixSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="Files"/> class with properties/fields initialized with specified parameters.
         /// <para>You can control inclusion of empty folders (if picked by the wild card patter) by setting
-        /// <see cref="Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
+        /// <see cref="AutoGenerationOptions.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
         /// <para>If more specific control is required you can always use a flat list of <c>Dirs</c> of the
         /// Project.<see cref="Project.AllDirs"/> to remove the undesired folder from its parent collection.
         /// </para>

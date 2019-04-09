@@ -233,6 +233,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rollback", "WixSharp.Sample
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloseApplication", "WixSharp.Samples\VSProjects\CloseApplication.csproj", "{8824182C-C5DC-491E-91F5-84363D692680}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComServer", "WixSharp.Samples\VSProjects\ComServer.csproj", "{DB2BA6A9-8A48-4DE9-A72E-55840473AD6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1275,6 +1277,18 @@ Global
 		{8824182C-C5DC-491E-91F5-84363D692680}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8824182C-C5DC-491E-91F5-84363D692680}.Release|x86.ActiveCfg = Release|Any CPU
 		{8824182C-C5DC-491E-91F5-84363D692680}.Release|x86.Build.0 = Release|Any CPU
+		{DB2BA6A9-8A48-4DE9-A72E-55840473AD6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB2BA6A9-8A48-4DE9-A72E-55840473AD6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB2BA6A9-8A48-4DE9-A72E-55840473AD6B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DB2BA6A9-8A48-4DE9-A72E-55840473AD6B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DB2BA6A9-8A48-4DE9-A72E-55840473AD6B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DB2BA6A9-8A48-4DE9-A72E-55840473AD6B}.Debug|x86.Build.0 = Debug|Any CPU
+		{DB2BA6A9-8A48-4DE9-A72E-55840473AD6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB2BA6A9-8A48-4DE9-A72E-55840473AD6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB2BA6A9-8A48-4DE9-A72E-55840473AD6B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DB2BA6A9-8A48-4DE9-A72E-55840473AD6B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DB2BA6A9-8A48-4DE9-A72E-55840473AD6B}.Release|x86.ActiveCfg = Release|Any CPU
+		{DB2BA6A9-8A48-4DE9-A72E-55840473AD6B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1378,6 +1392,7 @@ Global
 		{505A71A3-39A8-424C-8D9A-6E9F7A2C860C} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
 		{6879D785-C6BE-41D5-93DD-946F89723582} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
 		{8824182C-C5DC-491E-91F5-84363D692680} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
+		{DB2BA6A9-8A48-4DE9-A72E-55840473AD6B} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {559711D5-4429-4577-BBC9-F0D973972079}

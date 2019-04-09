@@ -2942,6 +2942,206 @@
             </summary>
             <param name="context">The context.</param>
         </member>
+        <member name="T:WixSharp.ThreadingModel">
+            <summary>
+             Threading model for the CLSID.
+            </summary>
+        </member>
+        <member name="T:WixSharp.ComRegistration">
+            <summary>
+            COM Class registration.
+            </summary>
+            <seealso cref="T:WixSharp.WixEntity" />
+            <seealso cref="T:WixSharp.IGenericEntity" />
+        </member>
+        <member name="F:WixSharp.ComRegistration.Id">
+            <summary>
+            The Class identifier (CLSID) of a COM server.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.Advertise">
+            <summary>
+            Set this value to "true" in order to create a normal Class table row. Set this value to "false" in order to
+            generate Registry rows that perform similar registration (without the often problematic Windows Installer
+            advertising behavior).
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.AppId">
+            <summary>
+            This attribute is only allowed when a Class is advertised. Using this attribute will reference an
+            Application ID containing DCOM information for the associated application GUID. The value must correspond
+            to an AppId/@Id of an AppId element nested under a Fragment, Module, or Product element. To associate an
+            AppId with a non-advertised class, nest the class within a parent AppId element.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.Argument">
+            <summary>
+            This column is optional only when the Context column is set to "LocalServer" or "LocalServer32" server
+            context. The text is registered as the argument against the OLE server and is used by OLE for invoking
+            the server. Note that the resolution of properties in the Argument field is limited. A property formatted
+            as [Property] in this field can only be resolved if the property already has the intended value when the
+            component owning the class is installed. For example, for the argument "[#MyDoc.doc]" to resolve to the
+            correct value, the same process must be installing the file MyDoc.doc and the component that owns the
+            class.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.Context">
+            <summary>
+            The server context(s) for this COM server. This attribute is optional for VB6 libraries that are marked
+            "PublicNotCreateable". Class elements marked Advertised must specify at least one server context. It is
+            most common for there to be a single value for the Context attribute. This attribute's value should be a
+            space-delimited list congaing one or more of the following:
+            <list type="bullet">
+            <item> <term>LocalServer</term>  <description>A 16-bit local server application.</description></item>
+            <item><term>LocalServer32</term><description>A 32-bit local server application.</description></item>
+            <item><term>InprocServer</term><description>A 16-bit in-process server DLL.</description></item>
+            <item><term>InprocServer32</term><description>A 32-bit in-process server DLL.</description></item>
+            </list>
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.Control">
+            <summary>
+            Set this attribute's value to 'true' to identify an object as an ActiveX Control. The default value is 'false'.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.ThreadingModel">
+            <summary>
+            The threading model
+            <list type="bullet">
+            <item><term>apartment</term></item>
+            <item><term>free     </term></item>
+            <item><term>both     </term></item>
+            <item><term>neutral  </term></item>
+            <item><term>single   </term></item>
+            <item><term>rental   </term></item>
+            </list>
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.Description">
+            <summary>
+            Localized description associated with the Class ID and Program ID.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.ForeignServer">
+            <summary>
+            The default inproc handler. May be optionally provided only for Context = LocalServer or LocalServer32.
+            Value of "1" creates a 16-bit InprocHandler (appearing as the InprocHandler value). Value of "2" creates a
+            32-bit InprocHandler (appearing as the InprocHandler32 value). Value of "3" creates 16-bit as well as
+            32-bit InprocHandlers. A non-numeric value is treated as a system file that serves as the 32-bit
+            InprocHandler (appearing as the InprocHandler32 value).
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.Icon">
+            <summary>
+            The file providing the icon associated with this CLSID. Reference to an Icon element (should match the Id
+            attribute of an Icon element). This is currently not supported if the value of the Advertise attribute
+            is "false".
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.IconIndex">
+            <summary>
+            Icon index into the icon file.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.Insertable">
+            <summary>
+            Specifies the CLSID may be insertable.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.Programmable">
+            <summary>
+            Specifies the CLSID may be programmable.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.RelativePath">
+            <summary>
+            When the value is "yes", the bare file name can be used for COM servers. The installer registers the file name only instead of the complete path. This enables the server in the current directory to take precedence and allows multiple copies of the same component.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.SafeForInitializing">
+            <summary>
+            The safe for initializing. May only be specified if the value of the Advertise attribute is "false".
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.SafeForScripting">
+            <summary>
+            May only be specified if the value of the Advertise attribute is "no".
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.ShortPath">
+            <summary>
+            Specifies whether or not to use the short path for the COM server. This can only apply when Advertise is set to 'no'. The default is 'no' meaning that it will use the long file name for the COM server.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.Server">
+            <summary>
+            May only be specified if the value of the Advertise attribute is "no" and the ForeignServer attribute is not specified. File Id of the COM server file. If this element is nested under a File element, this value defaults to the value of the parent File/@Id.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ComRegistration.ProgIds">
+            <summary>
+            ProgId(s) associated with Class must be a child element of the ClassRegistration instance.
+            </summary>
+        </member>
+        <member name="M:WixSharp.ComRegistration.Process(WixSharp.ProcessingContext)">
+            <summary>
+            The method demonstrates the correct way of integrating RemoveFolderEx.
+            <para>
+            The sample also shows various XML manipulation techniques available with Fluent XElement extensions:
+            <para>- Auto XML serialization of CLR object with serializable members marked with XMLAttribute.</para>
+            <para>- XML namespace-transparent lookup method FindSingle.</para>
+            </para>
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:WixSharp.ProgId">
+            <summary>
+            ProgId registration. If ProgId has an associated Class, it must be a child of that element.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ProgId.Id">
+            <summary>
+            Not available from WiX documentation.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ProgId.Advertise">
+            <summary>
+            Not available from WiX documentation.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ProgId.Description">
+            <summary>
+            Not available in WiX documentation.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ProgId.Icon">
+            <summary>
+            For an advertised ProgId, the Id of an Icon element. For a non-advertised ProgId, this is the Id of a file
+            containing an icon resource.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ProgId.IconIndex">
+            <summary>
+            Icon index into the icon file.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ProgId.NoOpen">
+            <summary>
+            Specifies that the associated ProgId should not be opened by users. The value is presented as a warning to
+            users. An empty string is also valid for this attribute.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ProgId.ProgIds">
+            <summary>
+            Child ProgId(s) associated with the instance of <c>ProgId</c>.
+            </summary>
+        </member>
+        <member name="M:WixSharp.ProgId.ToXElement">
+            <summary>
+            Serializes the class instance into XML element.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:WixSharp.CustomActionRef">
             <summary>
             This will cause the entire contents of the Fragment containing the referenced CustomAction to be included in the installer database.
@@ -13151,6 +13351,11 @@
         <member name="M:WixSharp.Files.#ctor(System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.Files"/> class with properties/fields initialized with specified parameters.
+            <para>You can control inclusion of empty folders (if picked by the wild card patter) by setting
+            <see cref="!:Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
+            <para>If more specific control is required you can always use a flat list of <c>Dirs</c> of the
+            Project.<see cref="P:WixSharp.Project.AllDirs"/> to remove the undesired folder from its parent collection.
+            </para>
             </summary>
             <param name="sourcePath">The relative path to source directory. It must include wildcard pattern for files to be included
             into MSI (e.g. <c>new Files(@"Release\Bin\*.*")</c>).</param>
@@ -13158,6 +13363,11 @@
         <member name="M:WixSharp.Files.#ctor(System.String,System.Predicate{System.String})">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.Files"/> class with properties/fields initialized with specified parameters.
+            <para>You can control inclusion of empty folders (if picked by the wild card patter) by setting
+            <see cref="!:Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
+            <para>If more specific control is required you can always use a flat list of <c>Dirs</c> of the
+            Project.<see cref="P:WixSharp.Project.AllDirs"/> to remove the undesired folder from its parent collection.
+            </para>
             </summary>
             <param name="sourcePath">The relative path to source directory. It must include wildcard pattern for files to be included
             into MSI (e.g. <c>new Files(@"Release\Bin\*.*")</c>).</param>
@@ -13167,6 +13377,11 @@
         <member name="M:WixSharp.Files.#ctor(WixSharp.Feature,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.Files"/> class with properties/fields initialized with specified parameters.
+            <para>You can control inclusion of empty folders (if picked by the wild card patter) by setting
+            <see cref="F:WixSharp.AutoGenerationOptions.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
+            <para>If more specific control is required you can always use a flat list of <c>Dirs</c> of the
+            Project.<see cref="P:WixSharp.Project.AllDirs"/> to remove the undesired folder from its parent collection.
+            </para>
             </summary>
             <param name="feature"><see cref="T:WixSharp.Feature"></see> the directory files should be included in.</param>
             <param name="sourcePath">The relative path to source directory. It must include wildcard pattern for files to be included
@@ -13175,6 +13390,11 @@
         <member name="M:WixSharp.Files.#ctor(WixSharp.Feature,System.String,System.Predicate{System.String})">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.Files"/> class with properties/fields initialized with specified parameters.
+            <para>You can control inclusion of empty folders (if picked by the wild card patter) by setting
+            <see cref="!:Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
+            <para>If more specific control is required you can always use a flat list of <c>Dirs</c> of the
+            Project.<see cref="P:WixSharp.Project.AllDirs"/> to remove the undesired folder from its parent collection.
+            </para>
             </summary>
             <param name="feature"><see cref="T:WixSharp.Feature"></see> the directory files should be included in.</param>
             <param name="sourcePath">The relative path to source directory. It must include wildcard pattern for files to be included

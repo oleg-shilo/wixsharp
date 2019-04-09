@@ -7,9 +7,9 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
+using Microsoft.Win32;
 using WixSharp;
 using io = System.IO;
-using Microsoft.Win32;
 
 public class Script
 {
