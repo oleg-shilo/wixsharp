@@ -1293,6 +1293,19 @@
             If it appears minimized then activate it from the taskbar.".
             </summary>
         </member>
+        <member name="T:WixSharp.CommonTasks.Uac">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Uac.IsEnabled">
+            <summary>
+            Determines whether this instance is enabled.
+            </summary>
+            <returns>
+              <c>true</c> if this instance is enabled; otherwise, <c>false</c>.
+            </returns>
+        </member>
         <member name="T:WixSharp.Assembly">
              <summary>
              Defines assembly file to be installed.
@@ -2951,6 +2964,36 @@
             <summary>
             COM Class registration.
             </summary>
+            <example>The following is an example of deploying and registering  a COM server.
+            <code>
+            var project =  new Project("MyProduct",
+                new Dir(@"%ProgramFiles%\My Company\My Product",
+                    new File(@"Files\Bin\MyApp.exe",
+                            new ComRegistration
+                            {
+                                Id = new Guid("6f330b47-2577-43ad-9095-1861ba25889b"),
+                                Description = "MY DESCRIPTION",
+                                ThreadingModel = ThreadingModel.apartment,
+                                Context = "InprocServer32",
+                                ProgIds = new[]
+                                {
+                                    new ProgId
+                                    {
+                                        Id = "PROG.ID.1",
+                                        Description ="Version independent ProgID ",
+                                        ProgIds = new[]
+                                        {
+                                            new ProgId
+                                            {
+                                                Id = "prog.id",
+                                                Description="some description"
+                                            }
+                                        }
+                                    }
+                                }
+                            })));
+            </code>
+            </example>
             <seealso cref="T:WixSharp.WixEntity" />
             <seealso cref="T:WixSharp.IGenericEntity" />
         </member>
@@ -13352,7 +13395,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.Files"/> class with properties/fields initialized with specified parameters.
             <para>You can control inclusion of empty folders (if picked by the wild card patter) by setting
-            <see cref="!:Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
+            <see cref="F:WixSharp.AutoGenerationOptions.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
             <para>If more specific control is required you can always use a flat list of <c>Dirs</c> of the
             Project.<see cref="P:WixSharp.Project.AllDirs"/> to remove the undesired folder from its parent collection.
             </para>
@@ -13364,7 +13407,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.Files"/> class with properties/fields initialized with specified parameters.
             <para>You can control inclusion of empty folders (if picked by the wild card patter) by setting
-            <see cref="!:Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
+            <see cref="F:WixSharp.AutoGenerationOptions.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
             <para>If more specific control is required you can always use a flat list of <c>Dirs</c> of the
             Project.<see cref="P:WixSharp.Project.AllDirs"/> to remove the undesired folder from its parent collection.
             </para>
@@ -13391,7 +13434,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.Files"/> class with properties/fields initialized with specified parameters.
             <para>You can control inclusion of empty folders (if picked by the wild card patter) by setting
-            <see cref="!:Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
+            <see cref="F:WixSharp.AutoGenerationOptions.IgnoreWildCardEmptyDirectories"/> to <c>true</c>.</para>
             <para>If more specific control is required you can always use a flat list of <c>Dirs</c> of the
             Project.<see cref="P:WixSharp.Project.AllDirs"/> to remove the undesired folder from its parent collection.
             </para>
