@@ -20,6 +20,7 @@ using Microsoft.Win32;
 using WixSharp.CommonTasks;
 using static WixSharp.SetupEventArgs;
 using IO = System.IO;
+using sys = System.Reflection;
 
 namespace WixSharp
 {
@@ -1767,6 +1768,22 @@ namespace WixSharp
                     project.WixNamespaces.Add(namespaceDeclaration);
             }
             return project;
+        }
+
+        /// <summary>
+        /// Adds paths to the assemblies referenced by <see cref="ManagedAction" />s.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="assemblyNames">The assembly names to add.</param>
+        public static void AddDefaultRefAssemblies(this Project project, params string[] assemblyNames)
+        {
+            var referencedAssemblyNames = sys.Assembly.GetExecutingAssembly().GetReferencedAssemblies();
+            var externalAssemblyNames = referencedAssemblyNames
+                .Where(an => assemblyNames.Contains(an.Name));
+            var externalAssemblies = externalAssemblyNames.Select(sys.Assembly.Load);
+            var externalAssemblyLocations = externalAssemblies.Select(ea => ea.Location);
+
+            project.DefaultRefAssemblies.AddRange(externalAssemblyLocations);
         }
 
         /// <summary>
