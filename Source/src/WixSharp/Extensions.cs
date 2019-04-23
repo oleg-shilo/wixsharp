@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -15,8 +13,6 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-using Microsoft.Win32;
 using WixSharp.CommonTasks;
 using static WixSharp.SetupEventArgs;
 using IO = System.IO;
@@ -1777,13 +1773,7 @@ namespace WixSharp
         /// <param name="assemblyNames">The assembly names to add.</param>
         public static void AddDefaultRefAssemblies(this Project project, params string[] assemblyNames)
         {
-            var referencedAssemblyNames = sys.Assembly.GetExecutingAssembly().GetReferencedAssemblies();
-            var externalAssemblyNames = referencedAssemblyNames
-                .Where(an => assemblyNames.Contains(an.Name));
-            var externalAssemblies = externalAssemblyNames.Select(sys.Assembly.Load);
-            var externalAssemblyLocations = externalAssemblies.Select(ea => ea.Location);
-
-            project.DefaultRefAssemblies.AddRange(externalAssemblyLocations);
+            project.DefaultRefAssemblies.AddRange(assemblyNames.Select(an => sys.Assembly.Load(an).Location));
         }
 
         /// <summary>
