@@ -11,6 +11,6 @@ WiX binaries can be brought to the build environment by either installing WiX To
                                             
 Because of the excessive size of the WiX Toolset the WixSharp.wix.bin NuGet package isn't a direct dependency of the WixSharp package and it needs to be added to the project explicitly:
 
-Compiler.WixLocation = @"..\packages\WixSharp.wix.bin.<version>\bin";
+Compiler.WixLocation = @"..\packages\WixSharp.wix.bin.<version>\tools\bin";
 
 Wix# suite contains WIX v3.10 (v3.10.2103.0) as well as the set of samples for all major deployment scenarios. 
