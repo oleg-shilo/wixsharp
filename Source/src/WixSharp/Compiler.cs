@@ -2503,6 +2503,11 @@ namespace WixSharp
                 properties.Add(new Property("REBOOT", wProject.RebootSupressing.ToString()));
             }
 
+            if (wProject.MajorUpgrade != null && wProject.ReinstallMode.IsNotEmpty())
+            {
+                properties.Add(new Property("REINSTALLMODE", wProject.ReinstallMode));
+            }
+
             foreach (var prop in properties)
             {
                 if (prop is PropertyRef)
@@ -3238,7 +3243,7 @@ namespace WixSharp
 
             if (configFilePath.IsNotEmpty())
             {
-                if (configFile != configFilePath)
+                if (configFile.PathGetFullPath() != configFilePath.PathGetFullPath())
                 {
                     IO.File.Copy(configFilePath, configFile, true);
                     Compiler.TempFiles.Add(configFile);

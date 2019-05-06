@@ -269,6 +269,15 @@ namespace WixSharp
         public List<Media> Media = new List<Media>(new[] { new Media() });
 
         /// <summary>
+        /// The REINSTALLMODE property is a string that contains letters specifying the type of reinstall to perform.
+        /// Options are case-insensitive and order-independent. This property should normally always be used in
+        /// conjunction with the REINSTALL property.
+        /// <para>Note, REINSTALLMODE property will be created only in the automatically produced WiX definition file
+        /// only if <see cref="WixSharp.Project.MajorUpgrade"/> is set.</para>
+        /// </summary>
+        public string ReinstallMode = "amus";
+
+        /// <summary>
         /// Relative path to RTF file with the custom licence agreement to be displayed in the Licence dialog.
         /// If this value is not specified the default WiX licence agreement will be used.
         /// </summary>
