@@ -26,14 +26,13 @@ class Script
                 new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "LICENSE_KEY", "01020304")
                 {
                     AttributesDefinition = "Type=binary"
-                }
-                ,
+                },
                 // HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\My Company\My Product
                 new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "Message", "Hello"),
                 new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "Count", 777),
                 new RegValue(fullSetup, RegistryHive.ClassesRoot, @"test\shell\open\command", "", "\"[INSTALLDIR]test.exe\" \"%1\""),
-                new RemoveRegistryValue(fullSetup, @"Software\My Company\My Product"),
-                new RemoveRegistryKey(fullSetup, @"Software\My Company\My Product"));
+                // new RemoveRegistryValue(fullSetup, @"Software\My Company\My Product"), // remove "My Product" value on install
+                new RemoveRegistryKey(fullSetup, @"Software\My Company\My Product")); // remove the whole "My Product" on uninstall
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.UI = WUI.WixUI_ProgressOnly;

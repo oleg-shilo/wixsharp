@@ -70,9 +70,9 @@ namespace WixSharp
                 PrepareOptionalArguments(), WellKnownLocations, UseCertificateStore, false, OutputLevel);
 
             Console.WriteLine(retValue != 0
-                ? $"Could not sign the {fileToSign} file."
+                ? $"Error: Could not sign the {fileToSign} file."
                 : $"The file {fileToSign} was signed successfully.");
-            
+
             return retValue;
         }
 
