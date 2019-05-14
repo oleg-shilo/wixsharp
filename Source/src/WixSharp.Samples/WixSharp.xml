@@ -14961,6 +14961,16 @@
              </example>
              </summary>
         </member>
+        <member name="F:WixSharp.Project.ReinstallMode">
+            <summary>
+            The REINSTALLMODE property is a string that contains letters specifying the type of reinstall to perform.
+            Options are case-insensitive and order-independent. This property should normally always be used in
+            conjunction with the REINSTALL property.
+            <para>Note, REINSTALLMODE property will be created only in the automatically produced WiX definition file
+            only if <see cref="F:WixSharp.Project.MajorUpgrade"/> is set.</para>
+            <para>Read more: https://docs.microsoft.com/en-us/windows/desktop/msi/reinstallmode </para>
+            </summary>
+        </member>
         <member name="F:WixSharp.Project.LicenceFile">
             <summary>
             Relative path to RTF file with the custom licence agreement to be displayed in the Licence dialog.

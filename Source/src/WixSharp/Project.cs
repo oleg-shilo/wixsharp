@@ -274,6 +274,7 @@ namespace WixSharp
         /// conjunction with the REINSTALL property.
         /// <para>Note, REINSTALLMODE property will be created only in the automatically produced WiX definition file
         /// only if <see cref="WixSharp.Project.MajorUpgrade"/> is set.</para>
+        /// <para>Read more: https://docs.microsoft.com/en-us/windows/desktop/msi/reinstallmode </para>
         /// </summary>
         public string ReinstallMode = "amus";
 
