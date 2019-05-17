@@ -853,7 +853,7 @@ namespace WixSharp
             return (IntPtr)result;
         }
 
-        static char[] xmlDelimiters = "<>".ToCharArray();
+        static char[] xmlDelimiters = "<>&".ToCharArray();
 
         /// <summary>
         /// Returns the string data as a <see cref="T:System.Xml.Linq.XCData"/> if the value contains
