@@ -1,7 +1,12 @@
 using System;
 using System.IO;
 
+#if WIXSHARP_MSI
+
+namespace WixSharp.Msi
+#else
 namespace WixSharp
+#endif
 {
     /// <summary>
     /// Collection of generic WixSharp extension methods

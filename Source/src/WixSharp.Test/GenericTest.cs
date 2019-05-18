@@ -208,7 +208,7 @@ namespace WixSharp.Test
         [Fact]
         public void Shoud_Resolve_WixVars()
         {
-            Func<string, string> asWixVarToPath = name => WixSharpMsi.WixSharp.Extensions.AsWixVarToPath(name);
+            Func<string, string> asWixVarToPath = name => name.AsWixVarToPath();
 
             var adminToolsFolder = asWixVarToPath("AdminToolsFolder");
             var appDataFolder = asWixVarToPath("AppDataFolder");

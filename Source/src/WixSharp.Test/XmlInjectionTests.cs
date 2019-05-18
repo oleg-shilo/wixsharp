@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 using System.IO;
-using File = WixSharp.File;
+using System.Xml.Linq;
 using Xunit;
+using File = WixSharp.File;
 
 namespace WixSharp.Test
 {
@@ -26,14 +26,14 @@ namespace WixSharp.Test
             var ex = Assert.Throws<ApplicationException>(() =>
             {
                 var project = new Project("SetupLettersDiagnostics",
-                                           new Dir(@"%ProgramFiles%\test",
-                                                   new File(featureA, Path.Combine("", "nunit.exe")),
-                                                   new File(featureA, Path.Combine("", "Lib", "nunit-console-runner.dll"),
-                                                            new Merge(featureB, "MyMergeModule.msm"))));
+                                          new Dir(@"%ProgramFiles%\test",
+                                                  new File(featureA, Path.Combine("", "nunit.exe")),
+                                                  new File(featureA, Path.Combine("", "Lib", "nunit-console-runner.dll"),
+                                                           new Merge(featureB, "MyMergeModule.msm"))));
             });
 
             Assert.True(ex.Message.StartsWith("WixSharp.Merge is unexpected."));
-         }
+        }
     }
 
     public class XmlInjectionTests

@@ -11,7 +11,7 @@ class Script
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File("readme.txt")),
+                    new File("readme.txt") { ComponentId = "asm" }),
                 new Dir("%Fonts%",
                     new FontFile("FreeSansBold.ttf")));
 
@@ -25,6 +25,3 @@ class Script
         project.BuildMsi();
     }
 }
-
-
-
