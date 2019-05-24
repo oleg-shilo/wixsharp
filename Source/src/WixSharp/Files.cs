@@ -154,6 +154,8 @@ namespace WixSharp
         /// </summary>
         public Predicate<string> Filter = (file => true);
 
+        public Action<File> OnProcess = null;
+
         /// <summary>
         /// Wildcard pattern for files to be included into MSI.
         /// <para>Default value is <c>*.*</c>.</para>
@@ -206,7 +208,8 @@ namespace WixSharp
                                                     Features = this.Features,
                                                     AttributesDefinition = this.AttributesDefinition,
                                                     Attributes = this.Attributes,
-                                                    Filter = this.Filter
+                                                    Filter = this.Filter,
+                                                    OnProcess = this.OnProcess
                                                 });
 
                     AgregateSubDirs(subDir, subDirPath);
@@ -221,7 +224,8 @@ namespace WixSharp
                     Features = this.Features,
                     AttributesDefinition = this.AttributesDefinition,
                     Attributes = this.Attributes.Clone(),
-                    Filter = this.Filter
+                    Filter = this.Filter,
+                    OnProcess = this.OnProcess
                 }
             };
 
@@ -248,7 +252,8 @@ namespace WixSharp
                                                 Features = this.Features,
                                                 AttributesDefinition = this.AttributesDefinition,
                                                 Attributes = this.Attributes,
-                                                Filter = this.Filter
+                                                Filter = this.Filter,
+                                                OnProcess = this.OnProcess
                                             });
 
                 AgregateSubDirs(subDir, subDirPath);

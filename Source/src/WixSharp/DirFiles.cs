@@ -130,6 +130,8 @@ namespace WixSharp
         /// </summary>
         public Predicate<string> Filter = (file => true);
 
+        public Action<File> OnProcess = null;
+
         /// <summary>
         /// Analyses <paramref name="baseDirectory"/> and returns all files matching <see cref="DirFiles.IncludeMask"/>.
         /// </summary>
@@ -163,13 +165,17 @@ namespace WixSharp
                 {
                     var filePath = IO.Path.GetFullPath(file);
 
-                    files.Add(new File(filePath)
+                    var item = new File(filePath)
                     {
                         Feature = this.Feature,
                         Features = this.Features,
                         AttributesDefinition = this.AttributesDefinition,
                         Attributes = this.Attributes.Clone()
-                    });
+                    };
+
+                    OnProcess?.Invoke(item);
+
+                    files.Add(item);
                 }
             }
             return files.ToArray();
