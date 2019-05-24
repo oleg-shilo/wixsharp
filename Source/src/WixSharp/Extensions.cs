@@ -2410,6 +2410,65 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Determines whether the specified session is cancelled.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified session is cancelled; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsCancelled(this Session session)
+        {
+            try
+            {
+                session.Message(Microsoft.Deployment.WindowsInstaller.InstallMessage.ActionData, new Record());
+            }
+            catch (InstallCanceledException)
+            {
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the specified session is cancelled.
+        /// <para>It is identical to <see cref="WixSharp.Extensions.IsCancelled(Session)"/> except
+        /// it does not throw/handle internal exception This helps if it is preferred to keep MSI log clean from any
+        /// messages triggered by handled exceptions.</para>
+        /// <para>Though this method relies on <see cref="Microsoft.Deployment.WindowsInstaller"/> internal (non-public)
+        /// implementation thus is not warranteed to stay unchanged in the future WiX releases.</para>
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified session is cancelled; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsCancelledRaw(this Session session)
+        {
+            // does not throw but will become broken if WiX team changes the implementation
+            long ActionData = 0x09000000;
+            var RemotableNativeMethods = typeof(Session).Assembly
+                                                .GetTypes()
+                                                .FirstOrDefault(x => x.Name == "RemotableNativeMethods");
+
+            var MsiProcessMessage = RemotableNativeMethods.GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
+                                                          .FirstOrDefault(x => x.Name == "MsiProcessMessage");
+
+            var ret = (int)MsiProcessMessage.Invoke(null, new object[]
+                                                    {
+                                                        (int)session.Handle,
+                                                        (uint)ActionData,
+                                                        (int)new Record().Handle
+                                                    });
+
+            return (ret == (int)MessageResult.Cancel);
+        }
+
+        //============================
+
+        /// <summary>
         /// Queries MSI database directly for the table 'Property' value. This method is particularly useful for the stages when WiX session
         /// object is not fully initialized. For example properties are not discovered yet during EmbeddedUI loading event.
         /// </summary>
