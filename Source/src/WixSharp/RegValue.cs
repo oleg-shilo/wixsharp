@@ -264,6 +264,11 @@ namespace WixSharp
         public object Value = null;
 
         /// <summary>
+        /// The permissions associated with the registry value
+        /// </summary>
+        public Permission[] Permissions = null;
+
+        /// <summary>
         /// Defines the installation <see cref="Condition"/>, which is to be checked during the installation to
         /// determine if the registry value should be created on the target system.
         /// </summary>

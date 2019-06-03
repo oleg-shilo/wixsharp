@@ -2326,6 +2326,11 @@ namespace WixSharp
                                                .SetAttribute("Type", regVal.RegTypeString)
                                                .SetAttribute("KeyPath", keyPathSet)
                                                .AddAttributes(regVal.Attributes)));
+
+                    if(regVal.Permissions != null)
+                        foreach (Permission permission in  regVal.Permissions)
+                            regValEl.AddElement(permission.ToXElement("Permission"));
+
                     if (!regVal.Key.IsEmpty())
                         regKeyEl.Add(new XAttribute("Key", regVal.Key));
 

@@ -25,7 +25,8 @@ class Script
                 // new RegFile(fullSetup, "_MyProduct.reg"), //RegFile does the same as Tasks.ImportRegFile
                 new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "LICENSE_KEY", "01020304")
                 {
-                    AttributesDefinition = "Type=binary"
+                    AttributesDefinition = "Type=binary",
+                    Permissions = new[] { new Permission { User = "usr", Read = true } }
                 },
                 // HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\My Company\My Product
                 new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "Message", "Hello"),

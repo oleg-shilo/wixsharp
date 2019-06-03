@@ -3,9 +3,9 @@
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using System.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
 
@@ -42,22 +42,22 @@ class Script
                                             WebSite = new WebSite("NewSite3", "*:8083") { InstallWebSite = true },
                                             WebAppPool = new WebAppPool("MyWebApp3", "Identity=applicationPoolIdentity")
                                         }
-                                    )
-                                ),
+                                            )
+                                       ),
                             new File(@"MyWebApp\Default.aspx",
-                                 new IISVirtualDir
-                                 {
-                                     Alias = "MyWebApp",
-                                     AppName = "Test",
-                                     WebSite = myWebSite
-                                 },
-                                 new IISVirtualDir
-                                 {
-                                     Alias = "MyWebApp1",
-                                     AppName = "Test1",
-                                     WebSite = myWebSite
-                                 }
-                                ),
+                                new IISVirtualDir
+                                {
+                                    Alias = "MyWebApp",
+                                    AppName = "Test",
+                                    WebSite = myWebSite
+                                },
+                                new IISVirtualDir
+                                {
+                                    Alias = "MyWebApp1",
+                                    AppName = "Test1",
+                                    WebSite = myWebSite
+                                }
+                                    ),
                             new File(@"MyWebApp\Default.aspx.cs"),
                             new File(@"MyWebApp\Default.aspx.designer.cs"),
                             new File(@"MyWebApp\Web.config"))));

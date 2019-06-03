@@ -36,6 +36,119 @@ namespace WixSharp
     }
 
     /// <summary>
+    /// Equivalent of https://wixtoolset.org/documentation/manual/v3/xsd/wix/permission.html
+    /// </summary>
+    public class Permission : WixObject
+    {
+        [Xml]
+        public bool? Append;
+
+        [Xml]
+        public bool? ChangePermission;
+
+        /// <summary>
+        /// For a directory, the right to create a subdirectory. Only valid under a 'CreateFolder' parent.
+        /// </summary>
+        [Xml]
+        public bool? CreateChild;
+
+        /// <summary>
+        /// For a directory, the right to create a file in the directory. Only valid under a 'CreateFolder' parent.
+        /// </summary>
+        [Xml]
+        public bool? CreateFile;
+
+        [Xml]
+        public bool? CreateLink;
+
+        [Xml]
+        public bool? CreateSubkeys;
+
+        [Xml]
+        public bool? Delete;
+
+        /// <summary>
+        /// For a directory, the right to delete a directory and all the files it contains, including read-only files. Only valid under a 'CreateFolder' parent.
+        /// </summary>
+        [Xml]
+        public bool? DeleteChild;
+
+        [Xml]
+        public string Domain;
+
+        [Xml]
+        public bool? EnumerateSubkeys;
+
+        [Xml]
+        public bool? Execute;
+
+        /// <summary>
+        /// Bit mask for FILE_ALL_ACCESS from WinNT.h (0x001F01FF).
+        /// </summary>
+        [Xml]
+        public bool? FileAllRights;
+
+        [Xml]
+        public bool? GenericAll;
+
+        public bool? GenericExecute;
+
+        /// <summary>
+        /// specifying this will fail to grant read access
+        /// </summary>
+        [Xml]
+        public bool? GenericRead;
+
+        [Xml]
+        public bool? GenericWrite;
+
+        [Xml]
+        public bool? Notify;
+
+        [Xml]
+        public bool? Read;
+
+        [Xml]
+        public bool? ReadAttributes;
+
+        [Xml]
+        public bool? ReadExtendedAttributes;
+
+        [Xml]
+        public bool? ReadPermission;
+
+        /// <summary>
+        /// Bit mask for SPECIFIC_RIGHTS_ALL from WinNT.h (0x0000FFFF).
+        /// </summary>
+        [Xml]
+        public bool? SpecificRightsAll;
+
+        [Xml]
+        public bool? Synchronize;
+
+        [Xml]
+        public bool? TakeOwnership;
+
+        /// <summary>
+        /// For a directory, the right to traverse the directory. By default, users are assigned the BYPASS_TRAVERSE_CHECKING privilege, which ignores the FILE_TRAVERSE access right. Only valid under a 'CreateFolder' parent.
+        /// </summary>
+        [Xml]
+        public bool? Traverse;
+
+        [Xml]
+        public string User;
+
+        [Xml]
+        public bool? Write;
+
+        [Xml]
+        public bool? WriteAttributes;
+
+        [Xml]
+        public bool? WriteExtendedAttributes;
+    }
+
+    /// <summary>
     /// Represents applying permission(s) to the containing File entity
     /// </summary>
     /// <remarks>
@@ -43,6 +156,13 @@ namespace WixSharp
     /// </remarks>
     public class DirPermission : WixEntity
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DirPermission"/> class.
+        /// </summary>
+        public DirPermission()
+        {
+        }
+
         /// <summary>
         /// Creates a FilePermission instance for <paramref name="user"/>.
         /// <para>Note that <see cref="DirPermission"/> inherits its parent <see cref="Dir"/> features unless

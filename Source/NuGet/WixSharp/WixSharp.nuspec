@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>1.9.8.0</version>
+    <version>1.9.8.1</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,20 +18,14 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.9.8
-- Issue #645: Add ampersand character (&amp;) as xml delimiter
-- `WixSharp.Extensions` class that is implemented in both _WixSharp.dll_ and _WixSharp.Msi.dll_ is refactored to
-`WixSharp.Msi.Extensions` for the _WixSharp.Msi.dll_ assembly. This is done in order to avoid ambiguity when using both assemblies at the same time.
-  While it is a breaking change it is very easy to handle one and requires only an update in the _using_ clause:
-  ```C#
-  using WixSharp.Msi;
-  // instead of old "using WixSharp;"
-  ```</releaseNotes>
+    <releaseNotes>Release v1.9.8.1
+- How to add permissions to regkey #649
+- Fixed NuGet packaging and dependencies</releaseNotes>
     <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.9.8.0" />
+      <dependency id="WixSharp.bin" version="1.9.8.1" />
     </dependencies>
   </metadata>
   <files>

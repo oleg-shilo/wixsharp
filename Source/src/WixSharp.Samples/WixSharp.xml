@@ -5861,6 +5861,46 @@
             Maps to GenericAll='yes' of PermissionEx
             </summary>
         </member>
+        <member name="T:WixSharp.Permission">
+            <summary>
+            Equivalent of https://wixtoolset.org/documentation/manual/v3/xsd/wix/permission.html
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.CreateChild">
+            <summary>
+            For a directory, the right to create a subdirectory. Only valid under a 'CreateFolder' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.CreateFile">
+            <summary>
+            For a directory, the right to create a file in the directory. Only valid under a 'CreateFolder' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.DeleteChild">
+            <summary>
+            For a directory, the right to delete a directory and all the files it contains, including read-only files. Only valid under a 'CreateFolder' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.FileAllRights">
+            <summary>
+            Bit mask for FILE_ALL_ACCESS from WinNT.h (0x001F01FF).
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.GenericRead">
+            <summary>
+            specifying this will fail to grant read access
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.SpecificRightsAll">
+            <summary>
+            Bit mask for SPECIFIC_RIGHTS_ALL from WinNT.h (0x0000FFFF).
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.Traverse">
+            <summary>
+            For a directory, the right to traverse the directory. By default, users are assigned the BYPASS_TRAVERSE_CHECKING privilege, which ignores the FILE_TRAVERSE access right. Only valid under a 'CreateFolder' parent.
+            </summary>
+        </member>
         <member name="T:WixSharp.DirPermission">
             <summary>
             Represents applying permission(s) to the containing File entity
@@ -5868,6 +5908,11 @@
             <remarks>
             DirPermission is a Wix# representation of WiX Util:PermissionEx
             </remarks>
+        </member>
+        <member name="M:WixSharp.DirPermission.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.DirPermission"/> class.
+            </summary>
         </member>
         <member name="M:WixSharp.DirPermission.#ctor(System.String)">
             <summary>
@@ -8391,6 +8436,29 @@
             <param name="session">The session.</param>
             <param name="name">The name.</param>
             <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.IsCancelled(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Determines whether the specified session is cancelled.
+            </summary>
+            <param name="session">The session.</param>
+            <returns>
+              <c>true</c> if the specified session is cancelled; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:WixSharp.Extensions.IsCancelledRaw(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Determines whether the specified session is cancelled.
+            <para>It is identical to <see cref="M:WixSharp.Extensions.IsCancelled(Microsoft.Deployment.WindowsInstaller.Session)"/> except
+            it does not throw/handle internal exception This helps if it is preferred to keep MSI log clean from any
+            messages triggered by handled exceptions.</para>
+            <para>Though this method relies on <see cref="N:Microsoft.Deployment.WindowsInstaller"/> internal (non-public)
+            implementation thus is not warranteed to stay unchanged in the future WiX releases.</para>
+            </summary>
+            <param name="session">The session.</param>
+            <returns>
+              <c>true</c> if the specified session is cancelled; otherwise, <c>false</c>.
+            </returns>
         </member>
         <member name="M:WixSharp.Extensions.QueryProperty(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
             <summary>
@@ -13455,6 +13523,13 @@
             The filter delegate. It is applied for every file to be evaluated for the inclusion into MSI.
             </summary>
         </member>
+        <member name="F:WixSharp.Files.OnProcess">
+            <summary>
+            The delegate that is called when a file matching the wildcard of the sourcePath is rocessed
+            and a <see cref="T:WixSharp.File"/> item is added to the project. It is the most convelient way of
+            adjusting the <see cref="T:WixSharp.File"/> item properties.
+            </summary>
+        </member>
         <member name="F:WixSharp.Files.IncludeMask">
             <summary>
             Wildcard pattern for files to be included into MSI.
@@ -14070,6 +14145,13 @@
         <member name="F:WixSharp.DirFiles.Filter">
             <summary>
             The filter delegate. It is applied for every file to be evaluated for the inclusion into MSI.
+            </summary>
+        </member>
+        <member name="F:WixSharp.DirFiles.OnProcess">
+            <summary>
+            The delegate that is called when a file matching the wildcard of the sourcePath is rocessed
+            and a <see cref="T:WixSharp.File"/> item is added to the project. It is the most convelient way of
+            adjusting the <see cref="T:WixSharp.File"/> item properties.
             </summary>
         </member>
         <member name="M:WixSharp.DirFiles.GetFiles(System.String)">
@@ -16011,6 +16093,11 @@
         <member name="F:WixSharp.RegValue.Value">
             <summary>
             The registry entry value.
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegValue.Permissions">
+            <summary>
+            The permissions associated with the registry value
             </summary>
         </member>
         <member name="F:WixSharp.RegValue.Condition">

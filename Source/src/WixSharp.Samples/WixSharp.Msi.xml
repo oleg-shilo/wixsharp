@@ -4,25 +4,25 @@
         <name>WixSharp.Msi</name>
     </assembly>
     <members>
-        <member name="T:WixSharp.Extensions">
+        <member name="T:WixSharp.Msi.Extensions">
             <summary>
             Collection of generic WixSharp extension methods
             </summary>
         </member>
-        <member name="M:WixSharp.Extensions.Is64OS">
+        <member name="M:WixSharp.Msi.Extensions.Is64OS">
             <summary>
             Returns <c>true</c> if the OS (this routine is executed on) has an x64 CPU architecture.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.ToPath(System.Environment.SpecialFolder)">
+        <member name="M:WixSharp.Msi.Extensions.ToPath(System.Environment.SpecialFolder)">
             <summary>
             Returns full path of the <see cref="T:System.Environment.SpecialFolder"/>
             </summary>
             <param name="folder"></param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.AsWixVarToPath(System.String)">
+        <member name="M:WixSharp.Msi.Extensions.AsWixVarToPath(System.String)">
              <summary>
              'Interprets' a string as a WiX constant and expands into a proper File System path. For example "DesktopFolder"
              will be expanded into "[SysDrive]:\Users\[user]\Desktop". This method is a logical equivalent of C# Environment.GetFolderPath.
@@ -36,7 +36,7 @@
              <param name="path">The path.</param>
              <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.PathJoin(System.String,System.String[])">
+        <member name="M:WixSharp.Msi.Extensions.PathJoin(System.String,System.String[])">
             <summary>
             Equivalent of <see cref="M:System.IO.Path.Combine(System.String,System.String)"/>.
             </summary>
@@ -44,7 +44,7 @@
             <param name="items"></param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.Extensions.PathGetDirName(System.String)">
+        <member name="M:WixSharp.Msi.Extensions.PathGetDirName(System.String)">
             <summary>
             Identical to <see cref="M:System.IO.Path.GetDirectoryName(System.String)"/>. It is useful for Wix# consuming code as it allows avoiding
             "using System.IO;" directive, which interferes with Wix# types.
