@@ -40,9 +40,15 @@ namespace WixSharp
     /// </summary>
     public class Permission : WixObject
     {
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? Append;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? ChangePermission;
 
@@ -58,12 +64,21 @@ namespace WixSharp
         [Xml]
         public bool? CreateFile;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? CreateLink;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? CreateSubkeys;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? Delete;
 
@@ -73,12 +88,21 @@ namespace WixSharp
         [Xml]
         public bool? DeleteChild;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public string Domain;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? EnumerateSubkeys;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? Execute;
 
@@ -88,9 +112,15 @@ namespace WixSharp
         [Xml]
         public bool? FileAllRights;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? GenericAll;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         public bool? GenericExecute;
 
         /// <summary>
@@ -99,21 +129,39 @@ namespace WixSharp
         [Xml]
         public bool? GenericRead;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? GenericWrite;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? Notify;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? Read;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? ReadAttributes;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? ReadExtendedAttributes;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? ReadPermission;
 
@@ -123,9 +171,15 @@ namespace WixSharp
         [Xml]
         public bool? SpecificRightsAll;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? Synchronize;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? TakeOwnership;
 
@@ -135,15 +189,27 @@ namespace WixSharp
         [Xml]
         public bool? Traverse;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public string User;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? Write;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? WriteAttributes;
 
+        /// <summary>
+        /// The documentation is unavailable on WiX
+        /// </summary>
         [Xml]
         public bool? WriteExtendedAttributes;
     }

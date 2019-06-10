@@ -328,6 +328,13 @@ namespace WixSharp
             return obj;
         }
 
+        /// <summary>
+        /// Sets the attribute.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         public static XElement SetAttribute(this XElement obj, XName name, object value)
         {
             if (value is string && (value as string).IsEmpty())
@@ -1256,7 +1263,9 @@ namespace WixSharp
                            .Replace("ProgramFiles64Folder", "ProgFiles64Folder")
                            .Replace("ProgramFilesFolder", "ProgFilesFolder")
 
-                           .Replace(key.Trim('%'), Compiler.EnvironmentConstantsMapping[key])
+                           .Replace(key, Compiler.EnvironmentConstantsMapping[key])
+                           // .Replace(key.Trim('%'), Compiler.EnvironmentConstantsMapping[key])
+                           .Replace($"[{key.Trim('%')}]", Compiler.EnvironmentConstantsMapping[key])
 
                            // restore `System` and `ProgramFiles`
                            .Replace("Sys64Folder", "System64Folder")
