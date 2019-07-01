@@ -519,6 +519,12 @@ namespace WixSharp.CommonTasks
             return project;
         }
 
+        static internal Project AddGenericItem(this Project project, params IGenericEntity[] items)
+        {
+            project.GenericItems = project.GenericItems.Combine(items).Distinct().ToArray();
+            return project;
+        }
+
         /// <summary>
         /// Adds the action to the Project.
         /// </summary>

@@ -2,6 +2,17 @@
 {
     /// <summary>
     /// Closes applications or schedules a reboot if application cannot be closed.
+    /// <example>The following is an example of closing <c>MyApp.exe</c> application.
+    /// The example also illustrates the use of a condition for the <c>CloseApplication</c> entry..
+    /// <code>
+    /// var project =
+    ///     new Project("My Product",
+    ///         new CustomActionRef("WixCloseApplications", When.Before, Step.CostFinalize, new Condition("VersionNT > 400"),
+    ///         new CloseApplication("MyApp.exe", true, false)),
+    ///         ...
+    /// Compiler.BuildMsi(project);
+    /// </code>
+    /// </example>
     /// </summary>
     public class CloseApplication : WixEntity, IGenericEntity
     {

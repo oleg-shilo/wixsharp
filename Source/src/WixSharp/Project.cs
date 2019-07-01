@@ -218,6 +218,11 @@ namespace WixSharp
                     action.AppPath = action.AppPath.Map64Dirs();
                 }
             }
+
+            foreach (File f in this.AllFiles.Where(f => f.AddCloseAction == true))
+            {
+                this.AddGenericItem(new CloseApplication(f.Name.PathGetFileName(), true, false));
+            }
         }
 
         /// <summary>

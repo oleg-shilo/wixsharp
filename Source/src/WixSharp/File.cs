@@ -27,11 +27,11 @@ THE SOFTWARE.
 
 #endregion Licence...
 
-using IO = System.IO;
-using System.Linq;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
+using IO = System.IO;
 
 namespace WixSharp
 {
@@ -153,14 +153,14 @@ namespace WixSharp
 
             if (firstUnExpectedItem.Any())
                 throw new ApplicationException("{0} is unexpected. Only {2}, {3}, {4}, {5}, {6} and {7} items can be added to {1}".FormatWith(
-                                                firstUnExpectedItem.First().GetType(),
-                                                this.GetType(),
-                                                typeof(FileShortcut),
-                                                typeof(FileAssociation),
-                                                typeof(ServiceInstaller),
-                                                typeof(FilePermission),
-                                                typeof(FirewallException),
-                                                typeof(IGenericEntity)));
+                                               firstUnExpectedItem.First().GetType(),
+                                               this.GetType(),
+                                               typeof(FileShortcut),
+                                               typeof(FileAssociation),
+                                               typeof(ServiceInstaller),
+                                               typeof(FilePermission),
+                                               typeof(FirewallException),
+                                               typeof(IGenericEntity)));
         }
 
         /// <summary>
@@ -233,6 +233,27 @@ namespace WixSharp
 
             set => attributesBag.Set("Component:NeverOverwrite", value.ToNullOrYesNo());
         }
+
+        /// <summary>
+        /// The flag that indicates if <c>CloseApplication</c> needs to be added for the specified file.
+        /// <example>
+        /// <code>
+        /// new Project("MyProduct",
+        ///     new Dir(@"%ProgramFiles%\My Company\My Product",
+        ///         new File(@"..\Install Files\Files\Bin\MyApp.exe") { AddCloseAction = true }),
+        ///     ...
+        ///
+        /// // the code above is equivalent of code below
+        ///
+        /// new Project("MyProduct",
+        ///     new Dir(@"%ProgramFiles%\My Company\My Product",
+        ///         new File(@"..\Install Files\Files\Bin\MyApp.exe"),
+        ///     new CloseApplication("MyApp.exe", true, false)),
+        ///     ...
+        /// </code>
+        /// </example>
+        /// </summary>
+        public bool? AddCloseAction;
 
         /// <summary>
         /// Gets or sets the custom name of the target file. By default the name is
