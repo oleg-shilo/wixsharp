@@ -1656,7 +1656,6 @@ namespace WixSharp
                 // addresses the issue. Though, in turn, effectively disables auto mode and requires explicit declaration
                 // of `AutoElements.SupportEmptyDirectories = CompilerSupportState.Enabled` for empty dir scenarios.
                 // Restoring the original approach for now... (15/09/2018)
-
                 if (existingCompElement.Count() == 0 && AutoElements.SupportEmptyDirectories != CompilerSupportState.Disabled)
                 {
                     string compId = wDir.GenerateComponentId(wProject, ".EmptyDirectory");

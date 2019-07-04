@@ -3,7 +3,7 @@
     /// <summary>
     /// Closes applications or schedules a reboot if application cannot be closed.
     /// <example>The following is an example of closing <c>MyApp.exe</c> application.
-    /// The example also illustrates the use of a condition for the <c>CloseApplication</c> entry..
+    /// The example also illustrates the use of a condition for the <c>CloseApplication</c> entry.
     /// <code>
     /// var project =
     ///     new Project("My Product",
@@ -22,6 +22,12 @@
         /// </summary>
         [Xml]
         public new string Id;
+
+        /// <summary>
+        /// asAdsa
+        /// </summary>
+        /// <value>The Name property gets/sets the value of the string field, _name.</value>
+        public int MyProperty { get; set; } = 9;
 
         /// <summary>
         /// Property to be set if application is still running. Useful for launch conditions or

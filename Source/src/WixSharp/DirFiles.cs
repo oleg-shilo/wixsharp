@@ -131,8 +131,8 @@ namespace WixSharp
         public Predicate<string> Filter = (file => true);
 
         /// <summary>
-        /// The delegate that is called when a file matching the wildcard of the sourcePath is rocessed
-        /// and a <see cref="WixSharp.File"/> item is added to the project. It is the most convelient way of
+        /// The delegate that is called when a file matching the wildcard of the sourcePath is processed
+        /// and a <see cref="WixSharp.File"/> item is added to the project. It is the most convenient way of
         /// adjusting the <see cref="WixSharp.File"/> item properties.
         /// </summary>
         public Action<File> OnProcess = null;

@@ -1475,8 +1475,6 @@
             Controls automatic insertion of CreateFolder and RemoveFolder for the directories containing no files.
             Required for: NativeBootstrapper, EmbeddedMultipleActions,  EmptyDirectories, InstallDir, Properties,
             ReleaseFolder, Shortcuts and WildCardFiles samples.
-            <para>If set to <c>Automatic</c> then the compiler will enable this feature only if any empty directory
-            is detected in the project definition.</para>
             </summary>
         </member>
         <member name="F:WixSharp.AutoElements.DisableAutoKeyPath">
@@ -2825,6 +2823,17 @@
         <member name="T:WixSharp.CloseApplication">
             <summary>
             Closes applications or schedules a reboot if application cannot be closed.
+            <example>The following is an example of closing <c>MyApp.exe</c> application.
+            The example also illustrates the use of a condition for the <c>CloseApplication</c> entry.
+            <code>
+            var project =
+                new Project("My Product",
+                    new CustomActionRef("WixCloseApplications", When.Before, Step.CostFinalize, new Condition("VersionNT > 400"),
+                    new CloseApplication("MyApp.exe", true, false)),
+                    ...
+            Compiler.BuildMsi(project);
+            </code>
+            </example>
             </summary>
         </member>
         <member name="F:WixSharp.CloseApplication.Id">
@@ -2832,6 +2841,12 @@
             Identifier for the close application (primary key).
             If the Id is not specified, one will be generated.
             </summary>
+        </member>
+        <member name="P:WixSharp.CloseApplication.MyProperty">
+            <summary>
+            asAdsa
+            </summary>
+            <value>The Name property gets/sets the value of the string field, _name.</value>
         </member>
         <member name="F:WixSharp.CloseApplication.Property">
             <summary>
@@ -5866,6 +5881,16 @@
             Equivalent of https://wixtoolset.org/documentation/manual/v3/xsd/wix/permission.html
             </summary>
         </member>
+        <member name="F:WixSharp.Permission.Append">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.ChangePermission">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
         <member name="F:WixSharp.Permission.CreateChild">
             <summary>
             For a directory, the right to create a subdirectory. Only valid under a 'CreateFolder' parent.
@@ -5876,9 +5901,39 @@
             For a directory, the right to create a file in the directory. Only valid under a 'CreateFolder' parent.
             </summary>
         </member>
+        <member name="F:WixSharp.Permission.CreateLink">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.CreateSubkeys">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.Delete">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
         <member name="F:WixSharp.Permission.DeleteChild">
             <summary>
             For a directory, the right to delete a directory and all the files it contains, including read-only files. Only valid under a 'CreateFolder' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.Domain">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.EnumerateSubkeys">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.Execute">
+            <summary>
+            The documentation is unavailable on WiX
             </summary>
         </member>
         <member name="F:WixSharp.Permission.FileAllRights">
@@ -5886,9 +5941,49 @@
             Bit mask for FILE_ALL_ACCESS from WinNT.h (0x001F01FF).
             </summary>
         </member>
+        <member name="F:WixSharp.Permission.GenericAll">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.GenericExecute">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
         <member name="F:WixSharp.Permission.GenericRead">
             <summary>
             specifying this will fail to grant read access
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.GenericWrite">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.Notify">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.Read">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.ReadAttributes">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.ReadExtendedAttributes">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.ReadPermission">
+            <summary>
+            The documentation is unavailable on WiX
             </summary>
         </member>
         <member name="F:WixSharp.Permission.SpecificRightsAll">
@@ -5896,9 +5991,39 @@
             Bit mask for SPECIFIC_RIGHTS_ALL from WinNT.h (0x0000FFFF).
             </summary>
         </member>
+        <member name="F:WixSharp.Permission.Synchronize">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.TakeOwnership">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
         <member name="F:WixSharp.Permission.Traverse">
             <summary>
             For a directory, the right to traverse the directory. By default, users are assigned the BYPASS_TRAVERSE_CHECKING privilege, which ignores the FILE_TRAVERSE access right. Only valid under a 'CreateFolder' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.User">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.Write">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.WriteAttributes">
+            <summary>
+            The documentation is unavailable on WiX
+            </summary>
+        </member>
+        <member name="F:WixSharp.Permission.WriteExtendedAttributes">
+            <summary>
+            The documentation is unavailable on WiX
             </summary>
         </member>
         <member name="T:WixSharp.DirPermission">
@@ -7330,6 +7455,15 @@
             definition are the same as for <see cref="P:WixSharp.WixObject.AttributesDefinition"/>
             </summary>
             <param name="attributesDefinition">The attributes definition.</param>
+        </member>
+        <member name="M:WixSharp.Extensions.SetAttribute(System.Xml.Linq.XElement,System.Xml.Linq.XName,System.Object)">
+            <summary>
+            Sets the attribute.
+            </summary>
+            <param name="obj">The object.</param>
+            <param name="name">The name.</param>
+            <param name="value">The value.</param>
+            <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.SetAttribute(System.Xml.Linq.XElement,System.String,System.Object)">
             <summary>
@@ -13525,8 +13659,8 @@
         </member>
         <member name="F:WixSharp.Files.OnProcess">
             <summary>
-            The delegate that is called when a file matching the wildcard of the sourcePath is rocessed
-            and a <see cref="T:WixSharp.File"/> item is added to the project. It is the most convelient way of
+            The delegate that is called when a file matching the wildcard of the sourcePath is processed
+            and a <see cref="T:WixSharp.File"/> item is added to the project. It is the most convenient way of
             adjusting the <see cref="T:WixSharp.File"/> item properties.
             </summary>
         </member>
@@ -14058,6 +14192,27 @@
             The never overwrite.
             </value>
         </member>
+        <member name="F:WixSharp.File.AddCloseAction">
+             <summary>
+             The flag that indicates if <c>CloseApplication</c> needs to be added for the specified file.
+             <example>
+             <code>
+             new Project("MyProduct",
+                 new Dir(@"%ProgramFiles%\My Company\My Product",
+                     new File(@"..\Install Files\Files\Bin\MyApp.exe") { AddCloseAction = true }),
+                 ...
+            
+             // the code above is equivalent of code below
+            
+             new Project("MyProduct",
+                 new Dir(@"%ProgramFiles%\My Company\My Product",
+                     new File(@"..\Install Files\Files\Bin\MyApp.exe"),
+                 new CloseApplication("MyApp.exe", true, false)),
+                 ...
+             </code>
+             </example>
+             </summary>
+        </member>
         <member name="P:WixSharp.File.TargetFileName">
             <summary>
             Gets or sets the custom name of the target file. By default the name is
@@ -14149,8 +14304,8 @@
         </member>
         <member name="F:WixSharp.DirFiles.OnProcess">
             <summary>
-            The delegate that is called when a file matching the wildcard of the sourcePath is rocessed
-            and a <see cref="T:WixSharp.File"/> item is added to the project. It is the most convelient way of
+            The delegate that is called when a file matching the wildcard of the sourcePath is processed
+            and a <see cref="T:WixSharp.File"/> item is added to the project. It is the most convenient way of
             adjusting the <see cref="T:WixSharp.File"/> item properties.
             </summary>
         </member>

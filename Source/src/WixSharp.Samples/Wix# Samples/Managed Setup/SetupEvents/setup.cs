@@ -137,11 +137,11 @@ public class Script
         if (!e.IsInstalling && !e.IsUpgrading)
             SetEnvVersion(e.Session);
 
-        //MSI doesn't preserve any e.Session properties if they are accessed from deferred actions (e.g. project_AfterInstall)
-        //Wix# forces some of the properties to be persisted (via CustomActionData) by using user defined
-        //project.DefaultDeferredProperties ("INSTALLDIR,UILevel" by default).
-        //Alternatively you can save any data to the Wix# specific fully persisted data properties "bag" SetupEventArgs.Data.
-        //SetupEventArgs.Data values can be set and accesses at any time from any custom action including deferred one.
+        // MSI doesn't preserve any e.Session properties if they are accessed from deferred actions (e.g. project_AfterInstall)
+        // Wix# forces some of the properties to be persisted (via CustomActionData) by using user defined
+        // project.DefaultDeferredProperties ("INSTALLDIR,UILevel" by default).
+        // Alternatively you can save any data to the Wix# specific fully persisted data properties "bag" SetupEventArgs.Data.
+        // SetupEventArgs.Data values can be set and accesses at any time from any custom action including deferred one.
         var conn = @"Data Source=.\SQLEXPRESS;Initial Catalog=RequestManagement;Integrated Security=SSPI";
         e.Data["persisted_data"] = conn;
 

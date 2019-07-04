@@ -44,17 +44,19 @@ namespace WixSharp
         /// <summary>
         /// The feature will be enabled automatically when needed
         /// </summary>
-        Automatic,
+        [Obsolete(message: "This value is no longer used by any of the compiler features. " +
+                  "Use `CompilerSupportState.Enabled` instead.", error: false)]
+        Automatic = 0,
 
         /// <summary>
         /// The feature will be enabled
         /// </summary>
-        Enabled,
+        Enabled = 0,
 
         /// <summary>
         /// The feature will be disabled
         /// </summary>
-        Disabled
+        Disabled = 1
     }
 
     /// <summary>
@@ -80,11 +82,7 @@ namespace WixSharp
         /// Controls automatic insertion of CreateFolder and RemoveFolder for the directories containing no files.
         /// Required for: NativeBootstrapper, EmbeddedMultipleActions,  EmptyDirectories, InstallDir, Properties,
         /// ReleaseFolder, Shortcuts and WildCardFiles samples.
-        /// <para>If set to <c>Automatic</c> then the compiler will enable this feature only if any empty directory
-        /// is detected in the project definition.</para>
         /// </summary>
-        [Obsolete(message: "This property is defaulted to `CompilerSupportState.Enabled`. It is due to the fact that " +
-            "`CompilerSupportState.Automatic` brings some ambiguity while no longer yielding any benefits", error: false)]
         public static CompilerSupportState SupportEmptyDirectories = CompilerSupportState.Enabled;
 
         /// <summary>
@@ -565,12 +563,6 @@ namespace WixSharp
                                    .SelectMany(x => x.Elements("Component"))
                                    .Where(e => e.HasAttribute("Id", v => v.EndsWith(".EmptyDirectory")))
                                    .Select(x => x.Parent("Directory")).ToArray();
-
-            if (SupportEmptyDirectories == CompilerSupportState.Automatic)
-            {
-                SupportEmptyDirectories = dummyDirs.Any() ? CompilerSupportState.Enabled : CompilerSupportState.Disabled; //it wasn't set by user so set it if any empty dir is detected
-                Compiler.OutputWriteLine("Wix# support for EmptyDirectories is automatically " + SupportEmptyDirectories.ToString().ToLower());
-            }
 
             if (SupportEmptyDirectories == CompilerSupportState.Enabled)
             {
