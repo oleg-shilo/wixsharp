@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>1.9.8.1</version>
+    <version>1.10.0.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,14 +18,29 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.9.8.1
-- How to add permissions to regkey #649
-- Fixed NuGet packaging and dependencies</releaseNotes>
+    <releaseNotes>Release v1.10.0.0
+- Issue #658: Question: how to close running application or wait until user close application manually
+- Issue #656: ExeFileShortcut changing folder name
+- Issue #649: How to add permissions to regkey
+- Issue #647: Interrupt CA execution #647; 
+- Implemented `Session.IsCanceled`
+- Added `File.OnProcess` and `DirFiles.OnProcess` to provide custom handling on processing wildcards:
+  ```
+  new Files(@"..\Release Folder\test\*.exe")
+  {
+      OnProcess = file =&gt;
+      {
+          file.OverwriteOnInstall = true;
+      }
+  }, . . .
+  ```
+
+</releaseNotes>
     <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.9.8.1" />
+      <dependency id="WixSharp.bin" version="1.10.0.0" />
     </dependencies>
   </metadata>
   <files>
