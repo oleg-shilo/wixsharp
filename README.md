@@ -25,7 +25,7 @@ same language (C#). This also allows homogeneous, simplified and more consistent
 
 **_Overview_**
 
-If you are planing to use Wix# on Linux you my find this [article](https://wixsharp.codeplex.com/wikipage?title=Using%20WixSharp%20On%20Linux) being useful.
+If you are planing to use Wix# on Linux you my find this [article](https://github.com/oleg-shilo/wixsharp/wiki/WixShap-on-Linux) being useful. Please note that Wix# builds MSI deployment packages and while MSI can be build on Linux it cannot be run on Linux as MSI is a pure Windows technology.   
 
 You can find the instructions on how to author MSI setups with WixSharp in the [Documentation](https://github.com/oleg-shilo/wixsharp/wiki) section. And this section only highlights 
 some of the available features.
