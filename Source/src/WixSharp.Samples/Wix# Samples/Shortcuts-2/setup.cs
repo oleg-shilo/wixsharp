@@ -23,7 +23,7 @@ class Script
                             new FileShortcut("MyApp") { WorkingDirectory = "[INSTALL_DIR]" }),
                         new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")),
 
-                    new Dir(@"%ProgramMenu%\My Company\1My Product",
+                    new Dir(@"%ProgramMenu%\My Company\My Product",
                         new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]"),
                         new ExeFileShortcut("MyApp", "[INSTALL_DIR]MyApp.exe", arguments: "")),
 
