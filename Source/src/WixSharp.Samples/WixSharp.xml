@@ -13347,7 +13347,7 @@
         </member>
         <member name="F:WixSharp.Dir.lastDir">
             <summary>
-            The last child <see cref="T:WixSharp.Dir"/> that was created by <see cref="M:WixSharp.Dir.ProcessTargetPath(System.String)"/>.
+            The last child <see cref="T:WixSharp.Dir"/> that was created by <see cref="!:Dir.ProcessTargetPath(string)"/>.
             </summary>
         </member>
         <member name="M:WixSharp.Dir.#ctor">
@@ -13468,7 +13468,7 @@
             </summary>
             <returns>A string representing the directory.</returns>
         </member>
-        <member name="M:WixSharp.Dir.ProcessTargetPath(System.String)">
+        <member name="M:WixSharp.Dir.ProcessTargetPath(System.String,WixSharp.Feature)">
             <summary>
             Processes the target path by splitting path creating nested <see cref="T:WixSharp.Dir"/>s on-fly.
             </summary>

@@ -96,7 +96,7 @@ namespace WixSharp
         /// <param name="items">Any <see cref="WixEntity"/> which can be contained by directory (e.g. file, subdirectory).</param>
         public Dir(Id id, string targetPath, params WixEntity[] items)
         {
-            lastDir = ProcessTargetPath(targetPath);
+            lastDir = ProcessTargetPath(targetPath, null);
             lastDir.AddItems(items);
             lastDir.Id = id;
         }
@@ -109,7 +109,7 @@ namespace WixSharp
         /// <param name="items">Any <see cref="WixEntity"/> which can be contained by directory (e.g. file, subdirectory).</param>
         public Dir(string targetPath, params WixEntity[] items)
         {
-            lastDir = ProcessTargetPath(targetPath);
+            lastDir = ProcessTargetPath(targetPath, null);
             lastDir.AddItems(items);
         }
 
@@ -122,13 +122,17 @@ namespace WixSharp
         /// <param name="items">Any <see cref="WixEntity"/> which can be contained by directory (e.g. file, subdirectory).</param>
         public Dir(Feature feature, string targetPath, params WixEntity[] items)
         {
-            lastDir = ProcessTargetPath(targetPath);
+            this.Feature = feature;
+
+            lastDir = ProcessTargetPath(targetPath, feature);
             lastDir.AddItems(items);
             lastDir.Feature = feature;
         }
 
         internal Dir(Feature feature, string targetPath, Project project)
         {
+            this.Feature = feature;
+
             //create nested Dirs on-fly but reuse already existing ones in the project
             var nestedDirs = targetPath.Split("\\/".ToCharArray());
 
@@ -153,7 +157,7 @@ namespace WixSharp
                         string[] newSubDirs = targetPath.Substring(lastMatching.Length + 1).Split("\\/".ToCharArray());
                         for (int i = 0; i < newSubDirs.Length; i++)
                         {
-                            Dir nextSubDir = new Dir(newSubDirs[i]);
+                            Dir nextSubDir = new Dir(feature, newSubDirs[i]);
                             currDir.Dirs = new Dir[] { nextSubDir };
                             currDir = nextSubDir;
                         }
@@ -162,7 +166,7 @@ namespace WixSharp
                     }
                     else
                     {
-                        lastDir = ProcessTargetPath(targetPath);
+                        lastDir = ProcessTargetPath(targetPath, feature);
                         lastDir.Feature = feature;
                     }
                     break;
@@ -202,7 +206,7 @@ namespace WixSharp
         public Dir(Id id, Feature feature, string targetPath, params WixEntity[] items)
         {
             this.Feature = feature;
-            lastDir = ProcessTargetPath(targetPath);
+            lastDir = ProcessTargetPath(targetPath, feature);
             lastDir.AddItems(items);
             lastDir.Id = id;
             lastDir.Feature = feature;
@@ -335,7 +339,7 @@ namespace WixSharp
         /// </summary>
         /// <param name="targetPath">The target path.</param>
         /// <returns></returns>
-        protected Dir ProcessTargetPath(string targetPath)
+        protected Dir ProcessTargetPath(string targetPath, Feature feature)
         {
             Dir currDir = this;
 
@@ -350,7 +354,7 @@ namespace WixSharp
                 this.Name = nestedDirs.First();
                 for (int i = 1; i < nestedDirs.Length; i++)
                 {
-                    Dir nextSubDir = new Dir(nestedDirs[i]);
+                    Dir nextSubDir = new Dir(feature, nestedDirs[i]);
                     nextSubDir.AutoParent = currDir;
                     //currDir.MoveAttributesTo(nextSubDir); //attributes may not be set at this stage
                     currDir.Dirs = new Dir[] { nextSubDir };
@@ -476,7 +480,7 @@ namespace WixSharp
         /// <param name="items">Any <see cref="WixEntity"/> which can be contained by directory (e.g. file, subdirectory).</param>
         public InstallDir(Id id, string targetPath, params WixEntity[] items)
         {
-            lastDir = ProcessTargetPath(targetPath);
+            lastDir = ProcessTargetPath(targetPath, null);
             lastDir.AddItems(items);
             lastDir.Id = id;
             lastDir.IsInstallDir = true;
@@ -493,7 +497,7 @@ namespace WixSharp
         /// <param name="items">Any <see cref="WixEntity"/> which can be contained by directory (e.g. file, subdirectory).</param>
         public InstallDir(string targetPath, params WixEntity[] items)
         {
-            lastDir = ProcessTargetPath(targetPath);
+            lastDir = ProcessTargetPath(targetPath, null);
             lastDir.AddItems(items);
             lastDir.IsInstallDir = true;
         }
@@ -510,7 +514,7 @@ namespace WixSharp
         /// <param name="items">Any <see cref="WixEntity"/> which can be contained by directory (e.g. file, subdirectory).</param>
         public InstallDir(Feature feature, string targetPath, params WixEntity[] items)
         {
-            lastDir = ProcessTargetPath(targetPath);
+            lastDir = ProcessTargetPath(targetPath, feature);
             lastDir.AddItems(items);
             lastDir.Feature = feature;
             lastDir.IsInstallDir = true;
