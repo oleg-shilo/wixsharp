@@ -3119,7 +3119,7 @@ namespace WixSharp
             //restore the original assembly name as MakeSfxCA does not like renamed assemblies
             string newName = Utils.OriginalAssemblyFile(ClientAssembly);
             newName = newName.PathChangeDirectory(outDir);
-
+            IO.Directory.CreateDirectory(outDir);
 
             if (!ClientAssembly.SamePathAs(newName))
             {
