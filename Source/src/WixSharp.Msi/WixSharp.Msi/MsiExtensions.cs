@@ -56,7 +56,7 @@ namespace WixSharp.UI
             }
 
             if (close)
-                view.Close();
+                view.CloseView();
 
             return data;
         }
@@ -97,9 +97,15 @@ namespace WixSharp.UI
             return MsiInterop.MsiRecordGetInteger(record, fieldIndex);
         }
 
-        public static void Close(this IntPtr view)
+        public static void Close(this IntPtr handle)
         {
-            MsiInterop.MsiViewClose(view);
+            Invoke(() => MsiInterop.MsiCloseHandle(handle));
+        }
+
+        public static void CloseView(this IntPtr view)
+        {
+            Invoke(() => MsiInterop.MsiViewClose(view));
+            Close(view);
         }
 
         public static int ToInt(this string obj)
