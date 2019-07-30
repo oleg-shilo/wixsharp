@@ -38,13 +38,14 @@ namespace WixSharp.UI
 
         void UpdateStatus()
         {
-            var msi = new MsiParser(MsiFile);
+            using (var msi = new MsiParser(MsiFile))
+            {
+                IsCurrentlyInstalled = msi.IsInstalled();
+                ProductName = msi.GetProductName();
+                ProductVersion = msi.GetProductVersion();
 
-            IsCurrentlyInstalled = msi.IsInstalled();
-            ProductName = msi.GetProductName();
-            ProductVersion = msi.GetProductVersion();
-
-            ProductStatus = string.Format("The product is {0}INSTALLED\n\n", IsCurrentlyInstalled ? "" : "NOT ");
+                ProductStatus = string.Format("The product is {0}INSTALLED\n\n", IsCurrentlyInstalled ? "" : "NOT ");
+            }
         }
 
         /// <summary>

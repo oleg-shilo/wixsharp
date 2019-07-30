@@ -275,13 +275,24 @@ namespace WixSharp.UI
             try
             {
                 view = this.db.View(select);
-                return view.NextRecord().GetString(1);
+
+                IntPtr nextRecord = view.NextRecord();
+                if (nextRecord.Equals(IntPtr.Zero))
+                    return null;
+                try
+                {
+                    return nextRecord.GetString(1);
+                }
+                finally
+                {
+                    nextRecord.Close();
+                }
             }
             finally
             {
                 if (!view.Equals(IntPtr.Zero))
                 {
-                    view.Close();
+                    view.CloseView();
                 }
             }
         }
