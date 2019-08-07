@@ -467,6 +467,7 @@ namespace WixSharp
         /// <returns></returns>
         public MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, MessageButtons buttons, MessageIcon icon, MessageDefaultButton defaultButton)
         {
+            var result = MessageResult.OK;
             try
             {
                 UACRevealer.Exit();
@@ -486,13 +487,29 @@ namespace WixSharp
                         {
                             if (messageType.IsOneOf(InstallMessage.Error, InstallMessage.Warning, InstallMessage.User))
                             {
-                                MessageBox.Show(
+                               var dialogResult = MessageBox.Show(
                                     this.shellView,
                                     messageRecord.ToString(),
                                     "[ErrorDlg_Title]".LocalizeWith(Runtime.Localize),
                                     (MessageBoxButtons)(int)buttons,
                                     (MessageBoxIcon)(int)icon,
                                     (MessageBoxDefaultButton)(int)defaultButton);
+
+                                switch (dialogResult)
+                                {
+                                    case DialogResult.OK:
+                                        result = MessageResult.OK;
+                                        break;
+                                    case DialogResult.Ignore:
+                                        result = MessageResult.Ignore;
+                                        break;
+                                    case DialogResult.Abort:
+                                        result = MessageResult.Abort;
+                                        break;
+                                    default:
+                                        result = MessageResult.Cancel;
+                                        break;
+                                }
                             }
 
                             if (messageType == InstallMessage.Info)
@@ -537,7 +554,6 @@ namespace WixSharp
                 this.LogMessage(ex.StackTrace);
             }
 
-            var result = MessageResult.OK;
             InUIThread(() =>
             {
                 if (CurrentDialog != null)
