@@ -495,21 +495,7 @@ namespace WixSharp
                                     (MessageBoxIcon)(int)icon,
                                     (MessageBoxDefaultButton)(int)defaultButton);
 
-                                switch (dialogResult)
-                                {
-                                    case DialogResult.OK:
-                                        result = MessageResult.OK;
-                                        break;
-                                    case DialogResult.Ignore:
-                                        result = MessageResult.Ignore;
-                                        break;
-                                    case DialogResult.Abort:
-                                        result = MessageResult.Abort;
-                                        break;
-                                    default:
-                                        result = MessageResult.Cancel;
-                                        break;
-                                }
+                                result = (MessageResult)dialogResult;
                             }
 
                             if (messageType == InstallMessage.Info)
