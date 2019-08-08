@@ -467,7 +467,6 @@ namespace WixSharp
         /// <returns></returns>
         public MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, MessageButtons buttons, MessageIcon icon, MessageDefaultButton defaultButton)
         {
-            var result = MessageResult.OK;
             try
             {
                 UACRevealer.Exit();
@@ -495,7 +494,7 @@ namespace WixSharp
                                     (MessageBoxIcon)(int)icon,
                                     (MessageBoxDefaultButton)(int)defaultButton);
 
-                                result = (MessageResult)dialogResult;
+                                return (MessageResult)dialogResult;
                             }
 
                             if (messageType == InstallMessage.Info)
@@ -540,6 +539,7 @@ namespace WixSharp
                 this.LogMessage(ex.StackTrace);
             }
 
+            var result = MessageResult.OK;
             InUIThread(() =>
             {
                 if (CurrentDialog != null)
