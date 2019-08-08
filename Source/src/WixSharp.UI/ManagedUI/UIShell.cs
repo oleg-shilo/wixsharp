@@ -486,13 +486,15 @@ namespace WixSharp
                         {
                             if (messageType.IsOneOf(InstallMessage.Error, InstallMessage.Warning, InstallMessage.User))
                             {
-                                MessageBox.Show(
+                               var dialogResult = MessageBox.Show(
                                     this.shellView,
                                     messageRecord.ToString(),
                                     "[ErrorDlg_Title]".LocalizeWith(Runtime.Localize),
                                     (MessageBoxButtons)(int)buttons,
                                     (MessageBoxIcon)(int)icon,
                                     (MessageBoxDefaultButton)(int)defaultButton);
+
+                                return (MessageResult)dialogResult;
                             }
 
                             if (messageType == InstallMessage.Info)
