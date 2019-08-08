@@ -7,7 +7,7 @@
     /// <code>
     /// var project =
     ///     new Project("My Product",
-    ///         new CustomActionRef("WixCloseApplications", When.Before, Step.CostFinalize, new Condition("VersionNT > 400"),
+    ///         new CustomActionRef("WixCloseApplications", When.Before, Step.CostFinalize, new Condition("VersionNT > 400")),
     ///         new CloseApplication("MyApp.exe", true, false)),
     ///         ...
     /// Compiler.BuildMsi(project);
