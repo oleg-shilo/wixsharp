@@ -150,6 +150,7 @@
     <Compile Include="Properties\AssemblyInfo.version.cs" />
     <Compile Include="Reboot.cs" />
     <Compile Include="RegistrySearch.cs" />
+    <Compile Include="RegKey.cs" />
     <Compile Include="RemoveRegistryValue.cs" />
     <Compile Include="RemoveRegistryKey.cs" />
     <Compile Include="ResilientPackage.cs" />

@@ -153,6 +153,17 @@ namespace WixSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="RegValue"/> class with properties initialized with specified parameters.
         /// </summary>
+        /// <param name="name">The registry entry name.</param>
+        /// <param name="value">The registry entry value.</param>
+        public RegValue(string name, object value)
+        {
+            Name = name;
+            Value = value;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegValue"/> class with properties initialized with specified parameters.
+        /// </summary>
         /// <param name="key">The registry key name.</param>
         /// <param name="name">The registry entry name.</param>
         /// <param name="value">The registry entry value.</param>
