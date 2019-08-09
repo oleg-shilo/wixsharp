@@ -1,11 +1,10 @@
 ﻿namespace WixSharp
 {
-    public class RegKey
+    /// <summary>
+    /// Aggregate class for multiple <see cref="RegValue"/> with the same root key
+    /// </summary>
+    public class RegKey : WixObject
     {
-        /// <summary>
-        /// <see cref="Feature"></see> the registry value should be included in.
-        /// </summary>
-        public Feature Feature;
 
         /// <summary>
         /// The registry hive name.

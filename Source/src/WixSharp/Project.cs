@@ -140,6 +140,8 @@ namespace WixSharp
                         actions.Add(item as Action);
                     else if (item is RegValue)
                         regs.Add(item as RegValue);
+                    else if (item is RegKey regkey)
+                        regs.AddRange(regkey.GetValues());
                     else if (item is RegFile)
                     {
                         var file = item as RegFile;
