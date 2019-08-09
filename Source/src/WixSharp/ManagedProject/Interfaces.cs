@@ -151,6 +151,9 @@ namespace WixSharp
         /// </value>
         ManagedDialogs Dialogs { get; }
 
+
+        IManagedDialog MessageDialog { get; set; }
+
         /// <summary>
         /// Proceeds to the next UI dialog.
         /// </summary>

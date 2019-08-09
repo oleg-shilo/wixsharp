@@ -455,6 +455,49 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Message dialog handler.
+        /// </summary>
+        public IManagedDialog MessageDialog { get; set; }
+
+        internal class DefaultErrorDialog : IManagedDialog
+        {
+            public IManagedUIShell Shell { get; set; }
+
+            private UIShell _shell;
+
+            public DefaultErrorDialog(UIShell shell)
+            {
+                _shell = shell;
+            }
+
+            public void OnExecuteComplete()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void OnExecuteStarted()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void OnProgress(int progressPercentage)
+            {
+                throw new NotImplementedException();
+            }
+
+            public MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, MessageButtons buttons, MessageIcon icon, MessageDefaultButton defaultButton)
+            {
+                return (MessageResult)MessageBox.Show(
+                    _shell.shellView,
+                    messageRecord.ToString(),
+                    "[ErrorDlg_Title]".LocalizeWith(_shell.Runtime.Localize),
+                    (MessageBoxButtons)(int)buttons,
+                    (MessageBoxIcon)(int)icon,
+                    (MessageBoxDefaultButton)(int)defaultButton);
+            }
+        }
+
+        /// <summary>
         /// Processes information and progress messages sent to the user interface.
         /// <para> This method directly mapped to the
         /// <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI.ProcessMessage" />.</para>
@@ -467,6 +510,7 @@ namespace WixSharp
         /// <returns></returns>
         public MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, MessageButtons buttons, MessageIcon icon, MessageDefaultButton defaultButton)
         {
+            var result = MessageResult.OK;
             try
             {
                 UACRevealer.Exit();
@@ -486,15 +530,14 @@ namespace WixSharp
                         {
                             if (messageType.IsOneOf(InstallMessage.Error, InstallMessage.Warning, InstallMessage.User))
                             {
-                               var dialogResult = MessageBox.Show(
-                                    this.shellView,
-                                    messageRecord.ToString(),
-                                    "[ErrorDlg_Title]".LocalizeWith(Runtime.Localize),
-                                    (MessageBoxButtons)(int)buttons,
-                                    (MessageBoxIcon)(int)icon,
-                                    (MessageBoxDefaultButton)(int)defaultButton);
+                                InUIThread(() =>
+                                {
+                                    if (MessageDialog == null)
+                                         MessageDialog = new DefaultErrorDialog(this);
 
-                                return (MessageResult)dialogResult;
+                                    result = MessageDialog.ProcessMessage(messageType, messageRecord, buttons, icon, defaultButton);
+                                });
+                                return result;
                             }
 
                             if (messageType == InstallMessage.Info)
@@ -539,7 +582,6 @@ namespace WixSharp
                 this.LogMessage(ex.StackTrace);
             }
 
-            var result = MessageResult.OK;
             InUIThread(() =>
             {
                 if (CurrentDialog != null)
