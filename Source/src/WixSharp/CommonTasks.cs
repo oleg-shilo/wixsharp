@@ -571,6 +571,16 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Adds the registry key to the Project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="key">The key.</param>
+        public static void AddRegKey(this Project project, RegKey key)
+        {
+            project.AddRegValues(key.GetValues());
+        }
+
+        /// <summary>
         /// Adds the registry values to the Project.
         /// </summary>
         /// <param name="project">The project.</param>
