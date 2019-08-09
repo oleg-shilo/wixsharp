@@ -385,6 +385,19 @@ namespace WixSharp
         localMachine
     }
 
+    public enum StoreType
+    {
+        file,
+        commonName,
+        sha1Hash
+    }
+
+    public enum HashAlgorithmType
+    {
+        sha1,
+        sha256
+    }
+
 #pragma warning restore 1591
 
     /// <summary>

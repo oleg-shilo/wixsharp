@@ -13,7 +13,21 @@ namespace WixSharp
         /// <summary>Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
         /// with the <see cref="Password"/> property.
         /// </summary>
-        public string PfxFilePath { get; set; }
+        public string PfxFilePath
+        {
+            get => CertificateId;
+            set => CertificateId = value;
+        }
+
+        /// <summary>
+        /// The identifier used to locate the certificate
+        /// </summary>
+        public string CertificateId { get; set; }
+
+        /// <summary>
+        /// Selects the hash algorithm to apply. Default sha1
+        /// </summary>
+        public HashAlgorithmType HashAlgorithm { get; set; } = HashAlgorithmType.sha1;
 
         /// <summary>The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
         /// A warning is generated if timestamping fails.
@@ -52,7 +66,16 @@ namespace WixSharp
         /// A flag indicating if the value of <see cref="WixSharp.DigitalSignature.PfxFilePath"/> is a name of the subject of the signing certificate
         /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.
         /// </summary>
-        public bool UseCertificateStore { get; set; }
+        public bool UseCertificateStore
+        {
+            get => CertificateStore == StoreType.commonName || CertificateStore == StoreType.sha1Hash;
+            set => CertificateStore = value ? StoreType.commonName : StoreType.file;
+        }
+
+        /// <summary>
+        /// Where to read the certificate from.
+        /// </summary>
+        public StoreType CertificateStore { get; set; } = StoreType.file;
 
         /// <summary>
         /// A flag indicating the output level of the <c>SignTool.exe</c> utility.
@@ -66,8 +89,8 @@ namespace WixSharp
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         public virtual int Apply(string fileToSign)
         {
-            var retValue = CommonTasks.Tasks.DigitalySign(fileToSign, PfxFilePath, TimeUrl?.AbsoluteUri, Password,
-                PrepareOptionalArguments(), WellKnownLocations, UseCertificateStore, false, OutputLevel);
+            var retValue = CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
+                PrepareOptionalArguments(), WellKnownLocations, CertificateStore, false, OutputLevel, HashAlgorithm);
 
             Console.WriteLine(retValue != 0
                 ? $"Error: Could not sign the {fileToSign} file."
