@@ -29,8 +29,9 @@ class Script
                     Permissions = new[] { new Permission { User = "usr", Read = true } }
                 },
                 // HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\My Company\My Product
-                new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "Message", "Hello"),
-                new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "Count", 777),
+                new RegKey(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product",
+                    new RegValue("Message", "Hello"),
+                    new RegValue("Count", 777)),
                 new RegValue(fullSetup, RegistryHive.ClassesRoot, @"test\shell\open\command", "", "\"[INSTALLDIR]test.exe\" \"%1\""),
                 // new RemoveRegistryValue(fullSetup, @"Software\My Company\My Product"), // remove "My Product" value on install
                 new RemoveRegistryKey(fullSetup, @"Software\My Company\My Product")); // remove the whole "My Product" on uninstall
