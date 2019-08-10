@@ -323,6 +323,26 @@ namespace WixSharp
         /// </summary>
         public IGenericEntity[] UrlReservations = new IGenericEntity[0];
 
+
+        private bool RequiresConfig()
+        {
+            return DelayedAutoStart != null ||
+                   PreShutdownDelay != null ||
+                   ServiceSid != null ||
+                   ConfigureServiceTrigger != ConfigureServiceTrigger.None;
+        }
+
+        private bool RequiresConfigUtil()
+        {
+            return FirstFailureActionType != FailureActionType.none ||
+                   SecondFailureActionType != FailureActionType.none ||
+                   ThirdFailureActionType != FailureActionType.none ||
+                   !string.IsNullOrEmpty(ProgramCommandLine) ||
+                   !string.IsNullOrEmpty(RebootMessage) ||
+                   ResetPeriodInDays != null ||
+                   RestartServiceDelayInSeconds != null;
+        }
+
         /// <summary>
         /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
         /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
@@ -330,24 +350,30 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            Config = new ServiceConfig
+            if (RequiresConfig())
             {
-                DelayedAutoStart = DelayedAutoStart,
-                PreShutdownDelay = PreShutdownDelay,
-                ServiceSid = ServiceSid,
-                ConfigureServiceTrigger = ConfigureServiceTrigger,
-            };
+                Config = new ServiceConfig
+                {
+                    DelayedAutoStart = DelayedAutoStart,
+                    PreShutdownDelay = PreShutdownDelay,
+                    ServiceSid = ServiceSid,
+                    ConfigureServiceTrigger = ConfigureServiceTrigger,
+                };
+            }
 
-            ConfigUtil = new ServiceConfigUtil
+            if (RequiresConfigUtil())
             {
-                FirstFailureActionType = FirstFailureActionType,
-                SecondFailureActionType = SecondFailureActionType,
-                ThirdFailureActionType = ThirdFailureActionType,
-                ProgramCommandLine = ProgramCommandLine,
-                RebootMessage = RebootMessage,
-                ResetPeriodInDays = ResetPeriodInDays,
-                RestartServiceDelayInSeconds = RestartServiceDelayInSeconds,
-            };
+                ConfigUtil = new ServiceConfigUtil
+                {
+                    FirstFailureActionType = FirstFailureActionType,
+                    SecondFailureActionType = SecondFailureActionType,
+                    ThirdFailureActionType = ThirdFailureActionType,
+                    ProgramCommandLine = ProgramCommandLine,
+                    RebootMessage = RebootMessage,
+                    ResetPeriodInDays = ResetPeriodInDays,
+                    RestartServiceDelayInSeconds = RestartServiceDelayInSeconds,
+                };
+            }
 
             XElement ServiceInstaller = this.ToXElement("ServiceInstall");
             context.XParent.Add(ServiceInstaller);
