@@ -152,7 +152,7 @@ namespace WixSharp.CommonTasks
         /// Please use <see cref="DigitalySignBootstrapper"/> for signing a bootstrapper.
         /// </summary>
         /// <param name="fileToSign">The file to sign.</param>
-        /// <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
+        /// <param name="certificateId">Specify the signing certificate in a file common name or sha1 hash. If this file is a PFX with a password, the password may be supplied
         /// with the <c>password</c> parameter.</param>
         /// <param name="timeURL">The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
         /// A warning is generated if timestamping fails.</param>
@@ -160,10 +160,11 @@ namespace WixSharp.CommonTasks
         /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
         /// <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
         /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
-        /// <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
+        /// <param name="certificateStore">Where to load the certificate from.
         /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
         /// <param name="dualSign">A flag indicating if the file should be signed with both SHA1 and SHA256.</param>
         /// <param name="outputLevel">A flag indicating the output level</param>
+        /// <param name="hashAlgorithm">the hash algorithm to use</param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
         /// <example>The following is an example of signing <c>Setup.msi</c> file.
@@ -177,15 +178,27 @@ namespace WixSharp.CommonTasks
         ///     false);
         /// </code>
         /// </example>
-        static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password,
-            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false,
-            bool dualSign = false, SignOutputLevel outputLevel = SignOutputLevel.Verbose)
+        static public int DigitalySign(string fileToSign, string certificateId, string timeURL, string password,
+            string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file,
+            bool dualSign = false, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
             //SHA1: "C:\Program Files\\Microsoft SDKs\Windows\v6.0A\bin\signtool.exe" sign /f "pfxFile" /p password /v "fileToSign" /t timeURL
             //SHA256: "C:\Program Files\\Microsoft SDKs\Windows\v6.0A\bin\signtool.exe" sign /f "pfxFile" /p password /v "fileToSign" /tr timeURL /td sha256 /fd sha256 /as
             //string args = "sign /v /f \"" + pfxFile + "\" \"" + fileToSign + "\"";
 
-            string certPlace = useCertificateStore ? "/n" : "/f";
+            string certPlace;
+            switch (certificateStore)
+            {
+                case StoreType.commonName:
+                    certPlace = "/n";
+                    break;
+                case StoreType.sha1Hash:
+                    certPlace = "/sha1";
+                    break;
+                default:
+                    certPlace = "/f";
+                    break;
+            }
 
             string outputLevelArg = string.Empty;
             switch (outputLevel)
@@ -206,17 +219,20 @@ namespace WixSharp.CommonTasks
                     break;
             }
 
-            string args = $"sign {outputLevelArg}{certPlace} \"{pfxFile}\"";
+            string args = $"sign {outputLevelArg}{certPlace} \"{certificateId}\"";
             if (password.IsNotEmpty())
                 args += $" /p \"{password}\"";
 
-            string sha1 = args;
-            if (timeURL != null)
-                sha1 += $" /t \"{timeURL}\"";
-            if (!optionalArguments.IsEmpty())
-                sha1 += " " + optionalArguments;
+            string hash = args;
+            if (hashAlgorithm == HashAlgorithmType.sha256)
+                hash += " /fd sha256 ";
 
-            sha1 += $" \"{fileToSign}\"";
+            if (timeURL != null)
+                hash += $" /t \"{timeURL}\"";
+            if (!optionalArguments.IsEmpty())
+                hash += " " + optionalArguments;
+
+            hash += $" \"{fileToSign}\"";
 
             var tool = new ExternalTool
             {
@@ -229,7 +245,7 @@ namespace WixSharp.CommonTasks
                                      @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin;" +
                                      @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin",
                 ExePath = "signtool.exe",
-                Arguments = sha1
+                Arguments = hash
             };
 
             if (password.IsNotEmpty())
@@ -288,7 +304,7 @@ namespace WixSharp.CommonTasks
             if (retval != 0)
                 return retval;
 
-            return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore, dualSign, outputLevel);
+            return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore ? StoreType.commonName : StoreType.file, dualSign, outputLevel);
         }
 
         /// <summary>
@@ -340,7 +356,7 @@ namespace WixSharp.CommonTasks
                 if (retval != 0)
                     return retval;
 
-                retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore, dualSign, outputLevel);
+                retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore ? StoreType.commonName : StoreType.file, dualSign, outputLevel);
                 if (retval != 0)
                     return retval;
 
