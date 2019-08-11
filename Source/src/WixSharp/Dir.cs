@@ -76,7 +76,7 @@ namespace WixSharp
     public class Dir : WixEntity
     {
         /// <summary>
-        /// The last child <see cref="Dir"/> that was created by <see cref="Dir.ProcessTargetPath(string)"/>.
+        /// The last child <see cref="Dir"/> that was created by <see cref="Dir.ProcessTargetPath(string, Feature)"/>.
         /// </summary>
         protected Dir lastDir;
 
@@ -338,6 +338,7 @@ namespace WixSharp
         /// Processes the target path by splitting path creating nested <see cref="Dir"/>s on-fly.
         /// </summary>
         /// <param name="targetPath">The target path.</param>
+        /// <param name="feature">The feature associated with the <see cref="Dir"/>.</param>
         /// <returns></returns>
         protected Dir ProcessTargetPath(string targetPath, Feature feature)
         {

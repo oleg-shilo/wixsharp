@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>1.10.0.0</version>
+    <version>1.11.0.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,23 +16,20 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.10.0.0
-- Issue #658: Question: how to close running application or wait until user close application manually
-- Issue #656: ExeFileShortcut changing folder name
-- Issue #649: How to add permissions to regkey
-- Issue #647: Interrupt CA execution #647; 
-- Implemented `Session.IsCanceled`
-- Added `File.OnProcess` and `DirFiles.OnProcess` to provide custom handling on processing wildcards:
+    <releaseNotes>Release v1.11.0.0
+* Added registry values aggregator (`RegKey`):
   ```
-  new Files(@"..\Release Folder\test\*.exe")
-  {
-      OnProcess = file =&gt;
-      {
-          file.OverwriteOnInstall = true;
-      }
-  }, . . .
+  new RegKey(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product",
+      new RegValue("Message", "Hello"),
+      new RegValue("Count", 777)),
   ```
-
+* Issue #699: Wix Error for ServiceInstaller if at least one ServiceConfig parameter is not specified
+* Improvements to DigitalSignature to allow loading cert by sha1hash
+* Implemented custom message dialog instead (of the default MessageBox.Show) for displaying error message (if any detected) during the MSI session.
+* Issue #688: Adding prompt to CloseApplication prevents installer from completing.
+* Issue #683. Close MSI Interop handles when getting data from MSI
+* Issue #672: outdir and BuildMsiCmd fails because the outdir is not created
+* Issue #670: msi is always creating root folder, even if feature is disabled
 </releaseNotes>
     <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
     <language>en-AU</language>

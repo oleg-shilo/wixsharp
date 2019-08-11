@@ -345,13 +345,13 @@
             Thus bootstrapper will execute <c>PrimaryFile</c> without launching <c>PrerequisiteFile</c> first.</param>
             <returns>Path to the built bootstrapper file. Returns <c>null</c> if bootstrapper cannot be built.</returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySign(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,WixSharp.SignOutputLevel)">
+        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySign(System.String,System.String,System.String,System.String,System.String,System.String,WixSharp.StoreType,System.Boolean,WixSharp.SignOutputLevel,WixSharp.HashAlgorithmType)">
              <summary>
              Applies digital signature to a file (e.g. msi, exe, dll) with MS <c>SignTool.exe</c> utility.
              Please use <see cref="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,WixSharp.SignOutputLevel)"/> for signing a bootstrapper.
              </summary>
              <param name="fileToSign">The file to sign.</param>
-             <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
+             <param name="certificateId">Specify the signing certificate in a file common name or sha1 hash. If this file is a PFX with a password, the password may be supplied
              with the <c>password</c> parameter.</param>
              <param name="timeURL">The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
              A warning is generated if timestamping fails.</param>
@@ -359,10 +359,11 @@
              <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
              <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
              If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
-             <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
+             <param name="certificateStore">Where to load the certificate from.
              from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
              <param name="dualSign">A flag indicating if the file should be signed with both SHA1 and SHA256.</param>
              <param name="outputLevel">A flag indicating the output level</param>
+             <param name="hashAlgorithm">the hash algorithm to use</param>
              <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
             
              <example>The following is an example of signing <c>Setup.msi</c> file.
@@ -560,6 +561,13 @@
             <param name="project">The project.</param>
             <param name="item">The item.</param>
             <returns></returns>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.AddRegKey(WixSharp.Project,WixSharp.RegKey)">
+            <summary>
+            Adds the registry key to the Project.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="key">The key.</param>
         </member>
         <member name="M:WixSharp.CommonTasks.Tasks.AddRegValues(WixSharp.Project,WixSharp.RegValue[])">
             <summary>
@@ -2828,7 +2836,7 @@
             <code>
             var project =
                 new Project("My Product",
-                    new CustomActionRef("WixCloseApplications", When.Before, Step.CostFinalize, new Condition("VersionNT > 400"),
+                    new CustomActionRef("WixCloseApplications", When.Before, Step.CostFinalize, new Condition("VersionNT > 400")),
                     new CloseApplication("MyApp.exe", true, false)),
                     ...
             Compiler.BuildMsi(project);
@@ -3249,6 +3257,16 @@
             with the <see cref="P:WixSharp.DigitalSignature.Password"/> property.
             </summary>
         </member>
+        <member name="P:WixSharp.DigitalSignature.CertificateId">
+            <summary>
+            The identifier used to locate the certificate
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalSignature.HashAlgorithm">
+            <summary>
+            Selects the hash algorithm to apply. Default sha1
+            </summary>
+        </member>
         <member name="P:WixSharp.DigitalSignature.TimeUrl">
             <summary>The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
             A warning is generated if timestamping fails.
@@ -3282,6 +3300,11 @@
             <summary>
             A flag indicating if the value of <see cref="P:WixSharp.DigitalSignature.PfxFilePath"/> is a name of the subject of the signing certificate
             from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.
+            </summary>
+        </member>
+        <member name="P:WixSharp.DigitalSignature.CertificateStore">
+            <summary>
+            Where to read the certificate from.
             </summary>
         </member>
         <member name="P:WixSharp.DigitalSignature.OutputLevel">
@@ -6596,6 +6619,36 @@
             See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
             </summary>
             <param name="context">The context.</param>
+        </member>
+        <member name="T:WixSharp.RegKey">
+            <summary>
+            Aggregate class for multiple <see cref="T:WixSharp.RegValue"/> with the same root key
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegKey.Root">
+            <summary>
+            The registry hive name.
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegKey.Key">
+            <summary>
+            The registry key name.
+            </summary>
+        </member>
+        <member name="F:WixSharp.RegKey.Win64">
+            <summary>
+            Facilitates the installation of packages that include both 32-bit and 64-bit components.
+            Set this attribute to 'yes' to mark the corresponding RegValue as a 64-bit component.
+            </summary>
+        </member>
+        <member name="M:WixSharp.RegKey.#ctor(WixSharp.Feature,WixSharp.RegistryHive,System.String,WixSharp.RegValue[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.RegKey"/> class with properties initialized with specified parameters.
+            </summary>
+            <param name="feature"><see cref="T:WixSharp.Feature"></see> the registry value should be included in.</param>
+            <param name="root">The registry hive name.</param>
+            <param name="key">The registry key name.</param>
+            <param name="values">The registry entry values.</param>
         </member>
         <member name="T:WixSharp.RemoveRegistryValue">
             <summary>
@@ -13347,7 +13400,7 @@
         </member>
         <member name="F:WixSharp.Dir.lastDir">
             <summary>
-            The last child <see cref="T:WixSharp.Dir"/> that was created by <see cref="!:Dir.ProcessTargetPath(string)"/>.
+            The last child <see cref="T:WixSharp.Dir"/> that was created by <see cref="M:WixSharp.Dir.ProcessTargetPath(System.String,WixSharp.Feature)"/>.
             </summary>
         </member>
         <member name="M:WixSharp.Dir.#ctor">
@@ -13473,6 +13526,7 @@
             Processes the target path by splitting path creating nested <see cref="T:WixSharp.Dir"/>s on-fly.
             </summary>
             <param name="targetPath">The target path.</param>
+            <param name="feature">The feature associated with the <see cref="T:WixSharp.Dir"/>.</param>
             <returns></returns>
         </member>
         <member name="T:WixSharp.InstallDir">
@@ -16175,6 +16229,13 @@
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.RegValue"/> class.
             </summary>
+        </member>
+        <member name="M:WixSharp.RegValue.#ctor(System.String,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.RegValue"/> class with properties initialized with specified parameters.
+            </summary>
+            <param name="name">The registry entry name.</param>
+            <param name="value">The registry entry value.</param>
         </member>
         <member name="M:WixSharp.RegValue.#ctor(System.String,System.String,System.Object)">
             <summary>

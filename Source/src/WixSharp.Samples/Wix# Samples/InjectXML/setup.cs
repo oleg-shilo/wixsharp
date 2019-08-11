@@ -51,15 +51,15 @@ class Script
         project.Media.Clear(); // clear default media as we will add it via MediaTemplate
         project.WixSourceGenerated += document =>
         {
-            document.Root.Select("Product")
-                         .AddElement("MediaTemplate", "CabinetTemplate=cab{0}.cab; CompressionLevel=mszip");
+            document.Select("Wix/Product")
+                    .AddElement("MediaTemplate", "CabinetTemplate=cab{0}.cab; CompressionLevel=mszip");
         };
 
         // global build event
         Compiler.WixSourceGenerated += document =>
             {
-                document.Root.Select("Product/Package")
-                             .SetAttributeValue("Platform", "x64");
+                document.Select("Wix/Product/Package")
+                        .SetAttributeValue("Platform", "x64");
 
                 document.FindAll("Component")
                         .ForEach(e => e.SetAttributeValue("Win64", "yes"));
