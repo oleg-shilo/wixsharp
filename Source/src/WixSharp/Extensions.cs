@@ -2363,6 +2363,22 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Creates a condition that checks if the feature shall be installed
+        /// regardless of whether it already is intalled
+        /// </summary>
+        /// <param name="feature">The feature to check</param>
+        public static Condition ShallInstall(this Feature feature) =>
+            new Condition($"&{feature.Id}=3");
+
+        /// <summary>
+        /// Creates a condition that checks if the feature shall be uninstalled
+        /// regardless of whether it already is intalled
+        /// </summary>
+        /// <param name="feature">The feature to check</param>
+        public static Condition ShallUninstall(this Feature feature) =>
+            new Condition($"&{feature.Id}=2");
+
+        /// <summary>
         /// Agregate all <see cref="Feature"/> items.
         /// </summary>
         /// <param name="feature">The feature.</param>
