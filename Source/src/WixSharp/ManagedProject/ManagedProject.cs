@@ -396,7 +396,7 @@ namespace WixSharp
         {
             try
             {
-                GetDialog(info, true);
+                GetDialog(info);
             }
             catch (Exception)
             {
@@ -415,17 +415,9 @@ namespace WixSharp
 
         internal static Type GetDialog(string info)
         {
-            return GetDialog(info, false);
-        }
-
-        internal static Type GetDialog(string info, bool validate)
-        {
             string[] parts = info.Split('|');
 
             var assembly = System.Reflection.Assembly.Load(parts[0]);
-
-            if (validate)
-                ProjectValidator.ValidateAssemblyCompatibility(assembly);
 
             return assembly.GetType(parts[1]);
         }

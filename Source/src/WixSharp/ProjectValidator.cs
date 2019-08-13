@@ -30,17 +30,17 @@ THE SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using Microsoft.Deployment.WindowsInstaller;
+using WixSharp.CommonTasks;
 
 using IO = System.IO;
 using Reflection = System.Reflection;
-
-using System.Drawing;
-using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
@@ -130,17 +130,17 @@ namespace WixSharp
                                                       "For the list of supported constants analyze WixSharp.Compiler.EnvironmentConstantsMapping.Keys.");
 
             var incosnistentRefAsmActions =
-                      project.Actions.OfType<ManagedAction>()
-                                     .GroupBy(a => a.ActionAssembly)
-                                     .Where(g => g.Count() > 1)
-                                     .Select(g => new
-                                     {
-                                         Assembly = g.Key,
-                                         Info = g.Select(a => new { Name = a.MethodName, RefAsms = a.RefAssemblies.Select(r => Path.GetFileName(r)).ToArray() }).ToArray(),
-                                         IsInconsistent = g.Select(action => action.GetRefAssembliesHashCode(project.DefaultRefAssemblies)).Distinct().Count() > 1,
-                                     })
-                                     .Where(x => x.IsInconsistent)
-                                     .FirstOrDefault();
+                    project.Actions.OfType<ManagedAction>()
+                                   .GroupBy(a => a.ActionAssembly)
+                                       .Where(g => g.Count() > 1)
+                                       .Select(g => new
+                                    {
+                                        Assembly = g.Key,
+                                        Info = g.Select(a => new { Name = a.MethodName, RefAsms = a.RefAssemblies.Select(r => Path.GetFileName(r)).ToArray() }).ToArray(),
+                                        IsInconsistent = g.Select(action => action.GetRefAssembliesHashCode(project.DefaultRefAssemblies)).Distinct().Count() > 1,
+                                    })
+                                   .Where(x => x.IsInconsistent)
+                                       .FirstOrDefault();
 
             if (incosnistentRefAsmActions != null)
             {
@@ -184,7 +184,7 @@ namespace WixSharp
         {
             string dtfAssembly = typeof(CustomActionAttribute).Assembly.Location;
 
-            // need to do it in a separate domain as we do not want to lock the assembly and 
+            // need to do it in a separate domain as we do not want to lock the assembly and
             // `ReflectionOnlyLoadFrom` is incompatible with the task
 
             if (Compiler.AutoGeneration.ValidateCAAssemblies == CAValidation.InRemoteAppDomain)
@@ -205,22 +205,6 @@ namespace WixSharp
                 // disabled
             }
         }
-
-        public static void ValidateAssemblyCompatibility(Reflection.Assembly assembly)
-        {
-            //this validation is no longer critical as Wix# MAnagedSetup now fully supports .NET4.0
-            //if (!assembly.ImageRuntimeVersion.StartsWith("v2."))
-            //    try
-            //    {
-            //        var msg = string.Format("Warning: assembly '{0}' is compiled for {1} runtime, which may not be compatible with the CLR version hosted by MSI. "+
-            //                                "The incompatibility is particularly possible for the Embedded UI scenarios. " +
-            //                                "The safest way to solve the problem is to compile the assembly for v3.5 Target Framework.",
-            //                                assembly.GetName().Name, assembly.ImageRuntimeVersion);
-            //        Debug.WriteLine(msg);
-            //        Console.WriteLine(msg);
-            //    }
-            //    catch { }
-        }
     }
 
     class AsmReflector : MarshalByRefObject
@@ -232,7 +216,7 @@ namespace WixSharp
 
         public void ValidateCAAssembly(string file, string dtfAsm)
         {
-            // `ValidateCAAssemblyImpl` will load assembly from `file` for validation. Though for this to happen 
+            // `ValidateCAAssemblyImpl` will load assembly from `file` for validation. Though for this to happen
             // the AppDomain will need to be able resolve the only dependence assembly `file` has - dtfAsm.
             // Thus always resolve it to dtfAsm (regardless of `args.Name` value) when AssemblyResolve is fired.
             ResolveEventHandler resolver = (sender, args) =>
@@ -257,24 +241,24 @@ namespace WixSharp
             {
                 var bf = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Static;
 
-                // `ReflectionOnlyLoadFrom` cannot preload all required assemblies and triggers 
-                // "System.InvalidOperationException: 'It is illegal to reflect on the custom attributes 
-                // of a Type loaded via ReflectionOnlyGetType (see Assembly.ReflectionOnly) -- use CustomAttributeData 
+                // `ReflectionOnlyLoadFrom` cannot preload all required assemblies and triggers
+                // "System.InvalidOperationException: 'It is illegal to reflect on the custom attributes
+                // of a Type loaded via ReflectionOnlyGetType (see Assembly.ReflectionOnly) -- use CustomAttributeData
                 // instead.'" exception. Thus need to use `LoadFrom`, which locks the assembly unless the operation is
-                // performed in the temp AppDomain, which is unloaded after at the end.  
+                // performed in the temp AppDomain, which is unloaded after at the end.
                 // Unfortunately `AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve` does not help (does not get fired).
 
-                // var assembly = System.Reflection.Assembly.ReflectionOnlyLoadFrom(file); 
+                // var assembly = System.Reflection.Assembly.ReflectionOnlyLoadFrom(file);
                 var assembly = loadFromMemory ?
-                     Reflection.Assembly.Load(System.IO.File.ReadAllBytes(file)) :
-                     Reflection.Assembly.LoadFrom(file);
+                    Reflection.Assembly.Load(System.IO.File.ReadAllBytes(file)) :
+                    Reflection.Assembly.LoadFrom(file);
 
                 var caMembers = assembly.GetTypes()
                                         .SelectMany(t => t.GetMembers(bf)
                                                           .Where(mem => mem.GetCustomAttributes(false)
                                                           .Where(x => x.ToString() == "Microsoft.Deployment.WindowsInstaller.CustomActionAttribute")
                                                           .Any()))
-                                         .ToArray();
+                                        .ToArray();
 
                 var invalidMembers = new List<string>();
                 foreach (MemberInfo mi in caMembers)
