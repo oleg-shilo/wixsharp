@@ -228,6 +228,7 @@ namespace WixSharpSetup.Dialogs
             this.waitPrompt.TabStop = true;
             this.waitPrompt.Text = "Please wait for UAC prompt to appear.\r\n\r\nIf it appears minimized then activate it" +
     " from the taskbar.";
+            this.waitPrompt.Visible = false;
             // 
             // ProgressDialog
             // 
