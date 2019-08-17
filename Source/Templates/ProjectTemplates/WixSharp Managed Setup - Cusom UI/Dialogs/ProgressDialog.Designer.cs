@@ -3,7 +3,7 @@ using WixSharp.UI.Forms;
 
 namespace WixSharpSetup.Dialogs
 {
-    partial class ProgressDialog 
+    partial class ProgressDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -51,38 +51,38 @@ namespace WixSharpSetup.Dialogs
             this.bottomPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // topBorder
-            // 
-            this.topBorder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.topBorder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.topBorder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.topBorder.Location = new System.Drawing.Point(0, 58);
             this.topBorder.Name = "topBorder";
             this.topBorder.Size = new System.Drawing.Size(494, 1);
             this.topBorder.TabIndex = 22;
-            // 
+            //
             // progress
-            // 
-            this.progress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.progress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progress.Location = new System.Drawing.Point(32, 165);
             this.progress.Name = "progress";
             this.progress.Size = new System.Drawing.Size(434, 13);
             this.progress.Step = 1;
             this.progress.TabIndex = 20;
-            // 
+            //
             // currentAction
-            // 
+            //
             this.currentAction.AutoSize = true;
             this.currentAction.Location = new System.Drawing.Point(34, 144);
             this.currentAction.Name = "currentAction";
             this.currentAction.Size = new System.Drawing.Size(0, 13);
             this.currentAction.TabIndex = 19;
-            // 
+            //
             // topPanel
-            // 
-            this.topPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.topPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.topPanel.BackColor = System.Drawing.SystemColors.Control;
             this.topPanel.Controls.Add(this.dialogText);
@@ -91,9 +91,9 @@ namespace WixSharpSetup.Dialogs
             this.topPanel.Name = "topPanel";
             this.topPanel.Size = new System.Drawing.Size(494, 58);
             this.topPanel.TabIndex = 15;
-            // 
+            //
             // dialogText
-            // 
+            //
             this.dialogText.AutoSize = true;
             this.dialogText.BackColor = System.Drawing.Color.Transparent;
             this.dialogText.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -102,11 +102,11 @@ namespace WixSharpSetup.Dialogs
             this.dialogText.Size = new System.Drawing.Size(159, 13);
             this.dialogText.TabIndex = 1;
             this.dialogText.Text = "[ProgressDlgTitleInstalling]";
-            // 
+            //
             // banner
-            // 
-            this.banner.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.banner.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.banner.BackColor = System.Drawing.Color.White;
             this.banner.Location = new System.Drawing.Point(0, 0);
@@ -115,10 +115,10 @@ namespace WixSharpSetup.Dialogs
             this.banner.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.banner.TabIndex = 0;
             this.banner.TabStop = false;
-            // 
+            //
             // bottomPanel
-            // 
-            this.bottomPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.bottomPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bottomPanel.BackColor = System.Drawing.SystemColors.Control;
             this.bottomPanel.Controls.Add(this.tableLayoutPanel1);
@@ -127,9 +127,9 @@ namespace WixSharpSetup.Dialogs
             this.bottomPanel.Name = "bottomPanel";
             this.bottomPanel.Size = new System.Drawing.Size(494, 49);
             this.bottomPanel.TabIndex = 14;
-            // 
+            //
             // tableLayoutPanel1
-            // 
+            //
             this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.ColumnCount = 5;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -146,9 +146,9 @@ namespace WixSharpSetup.Dialogs
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(491, 43);
             this.tableLayoutPanel1.TabIndex = 7;
-            // 
+            //
             // back
-            // 
+            //
             this.back.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.back.AutoSize = true;
             this.back.Enabled = false;
@@ -159,9 +159,9 @@ namespace WixSharpSetup.Dialogs
             this.back.TabIndex = 0;
             this.back.Text = "[WixUIBack]";
             this.back.UseVisualStyleBackColor = true;
-            // 
+            //
             // next
-            // 
+            //
             this.next.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.next.AutoSize = true;
             this.next.Enabled = false;
@@ -172,9 +172,9 @@ namespace WixSharpSetup.Dialogs
             this.next.TabIndex = 0;
             this.next.Text = "[WixUINext]";
             this.next.UseVisualStyleBackColor = true;
-            // 
+            //
             // cancel
-            // 
+            //
             this.cancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.cancel.AutoSize = true;
             this.cancel.Location = new System.Drawing.Point(402, 10);
@@ -185,19 +185,19 @@ namespace WixSharpSetup.Dialogs
             this.cancel.Text = "[WixUICancel]";
             this.cancel.UseVisualStyleBackColor = true;
             this.cancel.Click += new System.EventHandler(this.cancel_Click);
-            // 
+            //
             // bottomBorder
-            // 
-            this.bottomBorder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.bottomBorder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bottomBorder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.bottomBorder.Location = new System.Drawing.Point(0, 0);
             this.bottomBorder.Name = "bottomBorder";
             this.bottomBorder.Size = new System.Drawing.Size(494, 1);
             this.bottomBorder.TabIndex = 21;
-            // 
+            //
             // description
-            // 
+            //
             this.description.AutoSize = true;
             this.description.BackColor = System.Drawing.Color.Transparent;
             this.description.Location = new System.Drawing.Point(29, 95);
@@ -205,9 +205,9 @@ namespace WixSharpSetup.Dialogs
             this.description.Size = new System.Drawing.Size(132, 13);
             this.description.TabIndex = 16;
             this.description.Text = "[ProgressDlgTextInstalling]";
-            // 
+            //
             // currentActionLabel
-            // 
+            //
             this.currentActionLabel.BackColor = System.Drawing.Color.Transparent;
             this.currentActionLabel.Location = new System.Drawing.Point(29, 144);
             this.currentActionLabel.Name = "currentActionLabel";
@@ -215,9 +215,9 @@ namespace WixSharpSetup.Dialogs
             this.currentActionLabel.TabIndex = 19;
             this.currentActionLabel.Text = "[ProgressDlgStatusLabel]";
             this.currentActionLabel.Visible = false;
-            // 
+            //
             // waitPrompt
-            // 
+            //
             this.waitPrompt.AutoSize = true;
             this.waitPrompt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.waitPrompt.ForeColor = System.Drawing.Color.Blue;
@@ -229,9 +229,9 @@ namespace WixSharpSetup.Dialogs
             this.waitPrompt.Text = "Please wait for UAC prompt to appear.\r\n\r\nIf it appears minimized then activate it" +
     " from the taskbar.";
             this.waitPrompt.Visible = false;
-            // 
+            //
             // ProgressDialog
-            // 
+            //
             this.ClientSize = new System.Drawing.Size(494, 361);
             this.ControlBox = false;
             this.Controls.Add(this.waitPrompt);
