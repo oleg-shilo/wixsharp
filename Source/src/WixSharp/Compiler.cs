@@ -2561,9 +2561,8 @@ namespace WixSharp
                     var parentElement = product.AddElement(new XElement("Property")
                                                .SetAttribute("Id", prop.Name)
                                                .SetAttribute("Value", prop.Value)
+                                               .SetAttribute("Secure", prop.Secure)
                                                .AddAttributes(prop.Attributes));
-                    if (prop.Secure.HasValue)
-                        parentElement.SetAttribute("Secure", prop.Secure.Value.ToYesNo());
 
                     if (prop.GenericItems.Any())
                     {
