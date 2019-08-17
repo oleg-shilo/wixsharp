@@ -1,10 +1,10 @@
 using System;
-using Microsoft.Deployment.WindowsInstaller;
 using System.Diagnostics;
-using System.Threading;
 using System.Drawing;
 using System.Security.Principal;
+using System.Threading;
 using System.Windows.Forms;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 
 namespace WixSharp.UI.Forms
@@ -26,7 +26,6 @@ namespace WixSharp.UI.Forms
         void ProgressDialog_Load(object sender, EventArgs e)
         {
             banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
-
 
             if (!WindowsIdentity.GetCurrent().IsAdmin() && Uac.IsEnabled())
             {
@@ -116,9 +115,25 @@ namespace WixSharp.UI.Forms
                             bool simple = true;
                             if (simple)
                             {
-                                for (int i = messageRecord.FieldCount - 1; i > 0; i--)
+                                /*
+                                messageRecird[2] unconditionally contains the string to display
+
+                                Examples:
+
+                                   messageRecord[0]    "Action 23:14:50: [1]. [2]"
+                                   messageRecord[1]    "InstallFiles"
+                                   messageRecord[2]    "Copying new files"
+                                   messageRecord[3]    "File: [1],  Directory: [9],  Size: [6]"
+
+                                   messageRecord[0]    "Action 23:15:21: [1]. [2]"
+                                   messageRecord[1]    "RegisterUser"
+                                   messageRecord[2]    "Registering user"
+                                   messageRecord[3]    "[1]"
+
+                                */
+                                if (messageRecord.FieldCount >= 3)
                                 {
-                                    message = messageRecord[i].ToString();
+                                    message = messageRecord[2].ToString();
                                 }
                             }
                             else
