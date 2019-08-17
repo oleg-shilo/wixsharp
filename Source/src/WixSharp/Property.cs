@@ -192,6 +192,11 @@ namespace WixSharp
         public bool IsDeferred = false;
 
         /// <summary>
+        /// The flag indicating if the property can be passed to the server side when doing a managed installation with elevated privileges.
+        /// </summary>
+        public bool? Secure;
+
+        /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
         /// <returns>
