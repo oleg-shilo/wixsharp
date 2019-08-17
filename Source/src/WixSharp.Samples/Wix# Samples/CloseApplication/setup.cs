@@ -17,8 +17,7 @@ class Script
                 new ManagedAction(CustonActions.MyAction, Return.ignore, When.After, Step.InstallFinalize, Condition.NOT_Installed),
                 new CloseApplication(new Id("notepad"), "notepad.exe", true, false)
                 {
-                    Timeout = 15,
-                    Condition = new Condition("&ChromeFeature=3")
+                    Timeout = 15
                 });
 
         project.GUID = new Guid("99EF6ABA-14C4-47A8-903E-1AE82BF052CA");
