@@ -18,6 +18,7 @@ class Script
                 new CloseApplication(new Id("notepad"), "notepad.exe", true, false)
                 {
                     Timeout = 15,
+                    Condition = new Condition("&ChromeFeature=3")
                 });
 
         project.GUID = new Guid("99EF6ABA-14C4-47A8-903E-1AE82BF052CA");

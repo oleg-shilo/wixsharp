@@ -312,6 +312,8 @@ namespace WixSharp
         /// <summary>
         /// Gets or sets the Condition attribute of the Component element that is to contain XML equivalent of the
         /// <see cref="WixEntity"/>.
+        /// <para>Note, some WiW elements may not be contained by Component elements (e.g. 'CloseApplication').
+        /// Thus attempt to set parent component Condition attribute will always fail.</para>
         /// </summary>
         /// <value>
         /// The component condition.

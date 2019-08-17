@@ -27,7 +27,7 @@
         /// asAdsa
         /// </summary>
         /// <value>The Name property gets/sets the value of the string field, _name.</value>
-        public int MyProperty { get; set; } = 9;
+        public Condition Condition;
 
         /// <summary>
         /// Property to be set if application is still running. Useful for launch conditions or
@@ -191,9 +191,13 @@
         public void Process(ProcessingContext context)
         {
             context.Project.Include(WixExtension.Util);
+            var element = this.ToXElement(WixExtension.Util, "CloseApplication");
+
+            if (Condition != null)
+                element.SetValue(Condition);
 
             context.XParent
-                   .Add(this.ToXElement(WixExtension.Util, "CloseApplication"));
+                   .Add(element);
         }
     }
 }

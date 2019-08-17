@@ -429,7 +429,14 @@ namespace WixSharp
                     if (item.IsNotEmpty())
                     {
                         if (!ExpandCustomAttribute(sourceElement, item, project))
-                            throw new ApplicationException("Cannot resolve custom attribute definition:" + item);
+                        {
+                            var message = "Cannot resolve custom attribute definition:" + item;
+                            if (item.StartsWith("Component:"))
+                                message += "\nNote, some Wix elements may not be contained by 'Component' elements (e.g. 'CloseApplication'). " +
+                                    "Thus attempt to set parent component attribute will always fail.\n";
+
+                            throw new ApplicationException(message);
+                        }
                     }
 
                 instructionAttr.Remove();

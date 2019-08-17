@@ -386,6 +386,12 @@ namespace WixSharp
             return SetAttribute(obj, x_name, value);
         }
 
+        public static XElement SetValue(this XElement obj, object value)
+        {
+            obj.Value = value?.ToString();
+            return obj;
+        }
+
         /// <summary>
         /// Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue that takes the Name/Value
         /// string definition as a single input parameter.
