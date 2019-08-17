@@ -386,6 +386,12 @@ namespace WixSharp
             return SetAttribute(obj, x_name, value);
         }
 
+        /// <summary>
+        /// Sets the value of the <see cref="System.Xml.Linq.XElement"/> object.
+        /// </summary>
+        /// <param name="obj">The object <see cref="System.Xml.Linq.XElement"/>.</param>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         public static XElement SetValue(this XElement obj, object value)
         {
             obj.Value = value?.ToString();

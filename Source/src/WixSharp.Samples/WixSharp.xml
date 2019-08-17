@@ -2850,7 +2850,7 @@
             If the Id is not specified, one will be generated.
             </summary>
         </member>
-        <member name="P:WixSharp.CloseApplication.MyProperty">
+        <member name="F:WixSharp.CloseApplication.Condition">
             <summary>
             asAdsa
             </summary>
@@ -7532,6 +7532,14 @@
             <param name="value">The value.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.SetValue(System.Xml.Linq.XElement,System.Object)">
+            <summary>
+            Sets the value of the <see cref="T:System.Xml.Linq.XElement"/> object.
+            </summary>
+            <param name="obj">The object <see cref="T:System.Xml.Linq.XElement"/>.</param>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.SetAttribute(System.Xml.Linq.XElement,System.String)">
             <summary>
             Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue that takes the Name/Value
@@ -8590,6 +8598,20 @@
             </summary>
             <param name="feature">The feature.</param>
             <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.ShallInstall(WixSharp.Feature)">
+            <summary>
+            Creates a condition that checks if the feature shall be installed
+            regardless of whether it already is intalled
+            </summary>
+            <param name="feature">The feature to check</param>
+        </member>
+        <member name="M:WixSharp.Extensions.ShallUninstall(WixSharp.Feature)">
+            <summary>
+            Creates a condition that checks if the feature shall be uninstalled
+            regardless of whether it already is intalled
+            </summary>
+            <param name="feature">The feature to check</param>
         </member>
         <member name="M:WixSharp.Extensions.ToItems(WixSharp.Feature)">
             <summary>
@@ -15878,6 +15900,11 @@
             </para>
             </summary>
         </member>
+        <member name="F:WixSharp.Property.Secure">
+            <summary>
+            The flag indicating if the property can be passed to the server side when doing a managed installation with elevated privileges.
+            </summary>
+        </member>
         <member name="M:WixSharp.Property.ToString">
             <summary>
             Returns a <see cref="T:System.String" /> that represents this instance.
@@ -18231,6 +18258,8 @@
             <summary>
             Gets or sets the Condition attribute of the Component element that is to contain XML equivalent of the
             <see cref="T:WixSharp.WixEntity"/>.
+            <para>Note, some WiW elements may not be contained by Component elements (e.g. 'CloseApplication').
+            Thus attempt to set parent component Condition attribute will always fail.</para>
             </summary>
             <value>
             The component condition.
