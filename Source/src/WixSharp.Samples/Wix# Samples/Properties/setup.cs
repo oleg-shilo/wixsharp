@@ -29,7 +29,7 @@ class Script
             {
                 new Property("Gritting", "Hello World!"),
                 new Property("Title", "Properties Test"),
-                new Property("NOTEPAD_FILE", @"C:\boot.ini")
+                new PublicProperty("NOTEPAD_FILE", @"C:\boot.ini")
             }
         };
 
