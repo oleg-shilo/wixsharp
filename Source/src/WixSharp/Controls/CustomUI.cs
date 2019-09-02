@@ -373,7 +373,9 @@ namespace WixSharp.Controls
                 var font = TextStyles[key];
                 var style = ui.AddElement(new XElement("TextStyle",
                                               new XAttribute("Id", key),
-                                              new XAttribute("FaceName", font.FontFamily.Name),
+                                              // font.FontFamily.Name may be substituted by OS with the compatible font name
+                                              // font.OriginalFontName on the other hand warranties no substitution
+                                              new XAttribute("FaceName", font.OriginalFontName),
                                               new XAttribute("Size", font.Size),
                                               new XAttribute("Bold", font.Bold.ToYesNo()),
                                               new XAttribute("Italic", font.Italic.ToYesNo()),
