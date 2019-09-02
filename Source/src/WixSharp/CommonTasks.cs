@@ -192,9 +192,11 @@ namespace WixSharp.CommonTasks
                 case StoreType.commonName:
                     certPlace = "/n";
                     break;
+
                 case StoreType.sha1Hash:
                     certPlace = "/sha1";
                     break;
+
                 default:
                     certPlace = "/f";
                     break;
@@ -1779,30 +1781,32 @@ namespace WixSharp.CommonTasks
                 if (EchoOn)
                     onConsoleOut("Execute:\n\"" + this.ExePath + "\" " + this.Arguments);
 
-                var process = new Process();
-                process.StartInfo.FileName = exePath;
-                process.StartInfo.Arguments = this.Arguments;
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.StartInfo.StandardOutputEncoding = this.Encoding ?? DefaultEncoding;
-                process.StartInfo.CreateNoWindow = true;
-                process.Start();
-
-                if (onConsoleOut != null)
+                using (var process = new Process())
                 {
-                    string line = null;
-                    while (null != (line = process.StandardOutput.ReadLine()))
-                    {
-                        onConsoleOut(line);
-                    }
+                    process.StartInfo.FileName = exePath;
+                    process.StartInfo.Arguments = this.Arguments;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.RedirectStandardError = true;
+                    process.StartInfo.StandardOutputEncoding = this.Encoding ?? DefaultEncoding;
+                    process.StartInfo.CreateNoWindow = true;
+                    process.Start();
 
-                    string error = process.StandardError.ReadToEnd();
-                    if (!error.IsEmpty())
-                        onConsoleOut(error);
+                    if (onConsoleOut != null)
+                    {
+                        string line = null;
+                        while (null != (line = process.StandardOutput.ReadLine()))
+                        {
+                            onConsoleOut(line);
+                        }
+
+                        string error = process.StandardError.ReadToEnd();
+                        if (!error.IsEmpty())
+                            onConsoleOut(error);
+                    }
+                    process.WaitForExit();
+                    return process.ExitCode;
                 }
-                process.WaitForExit();
-                return process.ExitCode;
             }
             finally
             {

@@ -299,7 +299,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Sets/adds the attributes to the to a given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
+        /// Sets/adds the attributes to the given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="attributesDefinition">The attributes definition. Rules of the composing the
@@ -308,6 +308,18 @@ namespace WixSharp
         public static XElement SetAttributes(this XElement obj, string attributesDefinition)
         {
             return obj.AddAttributes(attributesDefinition.ToDictionary());
+        }
+
+        /// <summary>
+        /// Gets the attribute of the given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="defaultValue">The default value to return if the attribute is not present.</param>
+        /// <returns></returns>
+        public static string GetAttribute(this XElement obj, XName name, string defaultValue = null)
+        {
+            return obj.Attribute(name)?.Value ?? defaultValue;
         }
 
         /// <summary>

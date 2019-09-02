@@ -2,13 +2,13 @@
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 //css_ref System.Core;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using WixSharp;
-using System.Collections.Generic;
-
-using Wix = WixSharp;
 
 using WixSharp.CommonTasks;
+
+using Wix = WixSharp;
 
 class Script
 {
@@ -36,10 +36,11 @@ class Script
 
         var exeFile = project.AllFiles.Single(f => f.Name.EndsWith("some.exe"));
 
-        exeFile.Shortcuts = new[] {
-                                    new FileShortcut("some.exe", "INSTALLDIR"),
-                                    new FileShortcut("some.exe", @"%Desktop%")
-                                  };
+        exeFile.Shortcuts = new[]
+        {
+            new FileShortcut("some.exe", "INSTALLDIR"),
+            new FileShortcut("some.exe", @"%Desktop%")
+        };
 
         project.PreserveTempFiles = true;
 
