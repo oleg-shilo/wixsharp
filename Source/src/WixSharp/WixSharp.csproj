@@ -131,6 +131,7 @@
     <Compile Include="Error.cs" />
     <Compile Include="FileSearch.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Heat\Harvester.cs" />
     <Compile Include="IconFile.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="NativeImage.cs" />

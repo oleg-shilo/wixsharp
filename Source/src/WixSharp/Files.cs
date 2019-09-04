@@ -35,6 +35,16 @@ using IO = System.IO;
 
 namespace WixSharp
 {
+    public class ProjectOutputFiles : Files
+    {
+        public ProjectOutputFiles(string projectDir)
+            : base(projectDir.PathJoin("*.*"),
+                   f => f.EndsWith(".exe", ignoreCase: true) ||
+                        f.EndsWith(".dll", ignoreCase: true) ||
+                        f.EndsWith(".config", ignoreCase: true))
+        { }
+    }
+
     /// <summary>
     /// Defines all files of a given source directory and all subdirectories to be installed on target system.
     /// <para>
@@ -63,6 +73,21 @@ namespace WixSharp
     /// </example>
     public partial class Files : WixEntity
     {
+        /// <summary>
+        /// Aggregates the files from the build directory. It is nothing else but a simplified creation of the
+        /// <see cref="WixSharp.Files"/> as below:
+        /// <code>
+        ///     new Files(buildDir.PathJoin("*.*"),
+        ///               f => f.EndsWithAny(ignoreCase: true, new[]{".exe",".dll,".xml",".config", ".json"}))
+        /// </code>
+        /// </summary>
+        /// <param name="buildDir">The build dir.</param>
+        /// <param name="fileExtensions">The file extensions to match the files that need to be included in the deployment.</param>
+        /// <returns></returns>
+        public static Files FromBuildDir(string buildDir, string fileExtensions = ".exe|.dll|.xml|.config|.json")
+            => new Files(buildDir.PathJoin("*.*"),
+                         f => f.EndsWithAny(ignoreCase: true, fileExtensions.Split('|')));
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Files"/> class.
         /// </summary>
