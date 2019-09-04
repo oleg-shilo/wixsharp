@@ -797,6 +797,9 @@ namespace WixSharp
             return string.Join(Environment.NewLine, lines);
         }
 
+        public static bool EndsWithAny(this string text, bool ignoreCase, params string[] patterns)
+            => patterns.Any(item => text.EndsWith(item, ignoreCase));
+
         /// <summary>
         /// Tests if the text ends with the specified pattern.
         /// </summary>
