@@ -86,7 +86,7 @@ namespace WixSharp
         /// <returns></returns>
         public static Files FromBuildDir(string buildDir, string fileExtensions = ".exe|.dll|.xml|.config|.json")
             => new Files(buildDir.PathJoin("*.*"),
-                         f => f.EndsWithAny(ignoreCase: true, fileExtensions.Split('|')));
+                         f => f.EndsWithAny(true, fileExtensions.Split('|')));
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Files"/> class.
