@@ -797,6 +797,13 @@ namespace WixSharp
             return string.Join(Environment.NewLine, lines);
         }
 
+        /// <summary>
+        /// Checks if the given text ends with any provided string patterns (suffixes).
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
+        /// <param name="patterns">The patterns.</param>
+        /// <returns></returns>
         public static bool EndsWithAny(this string text, bool ignoreCase, params string[] patterns)
             => patterns.Any(item => text.EndsWith(item, ignoreCase));
 

@@ -130,8 +130,8 @@ static class Script
         // AutoElements.DisableAutoKeyPath = true;
 
         var project = new Project("MyProduct",
-               new Dir(@"%LocalAppDataFolder%\My Company\My Product", new File("setup.cs")),
-               new RegValue(RegistryHive.CurrentUser, @"Software\My Company\My Product", "LICENSE_KEY", "123456"));
+                new Dir(@"%LocalAppDataFolder%\My Company\My Product", new File("setup.cs")),
+                new RegValue(RegistryHive.CurrentUser, @"Software\My Company\My Product", "LICENSE_KEY", "123456"));
 
         project.PreserveTempFiles = true;
         project.BuildMsi();
@@ -170,17 +170,17 @@ static class Script
         aisFeature.Add(webFeature);
 
         var project = new ManagedProject("AIS Manager",
-                        // Base directory
-                        new Dir(@"%ProgramFiles%\Allied\AIS Manager",
-                             // ABS
-                             new Dir(new Id("WEBSITEDIR"), webFeature, "Website",
-                                new File(webFeature, @"setup.cs")
-                            )
-                         )
-                        {
-                            // AttributesDefinition = "Component:Win64=yes"
-                        }
-                    )
+                          // Base directory
+                          new Dir(@"%ProgramFiles%\Allied\AIS Manager",
+                              // ABS
+                              new Dir(new Id("WEBSITEDIR"), webFeature, "Website",
+                                  new File(webFeature, @"setup.cs")
+                                     )
+                                 )
+                          {
+                          // AttributesDefinition = "Component:Win64=yes"
+                          }
+                                        )
         {
             GUID = new Guid("E535C39D-5FE8-4C19-802D-8033E7A15B5C"),
             UI = WUI.WixUI_FeatureTree,
@@ -284,6 +284,8 @@ static class Script
         // // Compiler.LightOptions += " -sice:ICE80";
         // project.BuildMsiCmd();
     }
+
+#pragma warning disable
 
     static public void Main()
     {

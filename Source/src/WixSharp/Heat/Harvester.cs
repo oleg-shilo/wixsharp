@@ -48,8 +48,29 @@ namespace WixSharp
         /// </summary>
         public string TargetDir;
 
+        /// <summary>
+        /// Include primary output of the project, e.g. the assembly exe or dll.
+        /// </summary>
         public bool Binaries = true;
+
+        /// <summary>
+        /// Include debug symbol files, e.g. pdb.
+        /// </summary>
+        public bool Symbols = false;
+
+        /// <summary>
+        /// Include documentation files.
+        /// </summary>
+        public bool Documents = false;
+
+        /// <summary>
+        /// Include content files.
+        /// </summary>
         public bool Content = true;
+
+        /// <summary>
+        /// Include the localized resource assemblies.
+        /// </summary>
         public bool Satellites = true;
 
         /// <summary>
@@ -117,6 +138,12 @@ namespace WixSharp
     /// <para>You may find using <see cref="WixSharp.Files"/> being more beneficial if you need very precise control
     /// over the aggregation. But otherwise this very simple and easy to use class can be an excellent alternative.
     /// </para>
+    /// <para>If you want to minimize dependencies (e.g. heat.exe) you can use <see cref="WixSharp.Files.FromBuildDir(string, string)"/>
+    /// to achieve the same effect:</para>
+    /// <code>
+    /// new Dir(@"%ProgramFiles%\My Company\My Product",
+    ///     Files.FromBuildDir(@"TestApps\TestApp2\bin\Release")
+    ///     </code>
     /// </summary>
     /// <example>The following is an example of adding TestApp1 and TestApp2 VS projects build output to the
     /// installation directory.
@@ -224,8 +251,10 @@ namespace WixSharp
                             {
                                 $"project \"{project.ProjectPath}\"",
                                 project.Binaries ? "-pog Binaries" : "",
-                                project.Content ? "-pog Content" : "",
+                                project.Symbols ? "-pog Symbols" : "",
+                                project.Documents  ? "-pog Documents" : "",
                                 project.Satellites ? "-pog Satellites" : "",
+                                project.Content ? "-pog Content" : "",
                                 "-ag","-sfrag",
                                 $"-directoryid \"{targetDir}\"",
                                 "-template fragment",

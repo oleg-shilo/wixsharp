@@ -4322,6 +4322,182 @@
             </summary>
             <param name="context">The context.</param>
         </member>
+        <member name="T:WixSharp.VsProject">
+            <summary>
+            Class representing Visual Studio project, which build output is to be imported into the WiX
+            setup definition (WXS file) with WiX Heat utility.
+            </summary>
+        </member>
+        <member name="P:WixSharp.VsProject.Name">
+            <summary>
+            Gets the XML element name to be used in WXS code.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="P:WixSharp.VsProject.ProjectPath">
+            <summary>
+            Gets the project path.
+            </summary>
+            <value>
+            The project path.
+            </value>
+        </member>
+        <member name="P:WixSharp.VsProject.BuildPath">
+            <summary>
+            Gets the path to the build output of the project.
+            </summary>
+            <value>
+            The build path.
+            </value>
+        </member>
+        <member name="F:WixSharp.VsProject.BuildDir">
+            <summary>
+            The build output sub-directory of the VS project. By default it is  <c>"bin\Release"</c>
+            </summary>
+        </member>
+        <member name="F:WixSharp.VsProject.TargetDir">
+            <summary>
+            The target directory id from the WXS definition.
+            </summary>
+        </member>
+        <member name="F:WixSharp.VsProject.Binaries">
+            <summary>
+            Include primary output of the project, e.g. the assembly exe or dll.
+            </summary>
+        </member>
+        <member name="F:WixSharp.VsProject.Symbols">
+            <summary>
+            Include debug symbol files, e.g. pdb.
+            </summary>
+        </member>
+        <member name="F:WixSharp.VsProject.Documents">
+            <summary>
+            Include documentation files.
+            </summary>
+        </member>
+        <member name="F:WixSharp.VsProject.Content">
+            <summary>
+            Include content files.
+            </summary>
+        </member>
+        <member name="F:WixSharp.VsProject.Satellites">
+            <summary>
+            Include the localized resource assemblies.
+            </summary>
+        </member>
+        <member name="M:WixSharp.VsProject.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.VsProject"/> class.
+            </summary>
+            <param name="projectPath">The project path.</param>
+            <param name="buildDir">The build directory.</param>
+        </member>
+        <member name="T:WixSharp.HarvesterExtensions">
+             <summary>
+             Extension methods for more convenient use of <see cref="T:WixSharp.Harvester"/> class.
+             </summary>
+             <example>The following is an example of adding TestApp1 and TestApp2 VS projects build output to the
+             installation directory.
+             <code>
+             var project =
+                 new ManagedProject("HeatAggregatedMsi",
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+                         new File("readme.txt")));
+            
+             project.AddVsProjectOutput(
+                 @"TestApps\TestApp1\TestApp1.csproj",
+                 @"TestApps\TestApp2\TestApp2.csproj");
+             </code>
+             </example>
+        </member>
+        <member name="M:WixSharp.HarvesterExtensions.AddVsProjectOutput(WixSharp.Project,System.String[])">
+            <summary>
+            Adds the Visual Studio project output.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="vsProjects">The vs projects.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.HarvesterExtensions.AddVsProjectOutput(WixSharp.Project,WixSharp.VsProject[])">
+            <summary>
+            Adds the Visual Studio project output.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="vsProjects">The vs projects.</param>
+            <returns></returns>
+        </member>
+        <member name="T:WixSharp.Harvester">
+             <summary>
+             This class uses WiX Heat utility to aggregate the Visual Studio project build output and inject it in the
+             WixSharp project. This class serves the same objective as <see cref="T:WixSharp.Files"/> except it passes the
+             full control over what and how to include the aggregated deployment assets to the WiX Heat utility.
+             <para>You may find using <see cref="T:WixSharp.Files"/> being more beneficial if you need very precise control
+             over the aggregation. But otherwise this very simple and easy to use class can be an excellent alternative.
+             </para>
+             <para>If you want to minimize dependencies (e.g. heat.exe) you can use <see cref="M:WixSharp.Files.FromBuildDir(System.String,System.String)"/>
+             to achieve the same effect:</para>
+             <code>
+             new Dir(@"%ProgramFiles%\My Company\My Product",
+                 Files.FromBuildDir(@"TestApps\TestApp2\bin\Release")
+                 </code>
+             </summary>
+             <example>The following is an example of adding TestApp1 and TestApp2 VS projects build output to the
+             installation directory.
+             <code>
+             var project =
+                 new ManagedProject("HeatAggregatedMsi",
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+                         new File("readme.txt")));
+            
+             var harvester = new Harvester(project);
+             harvester.AddProjects(
+                 @"TestApps\TestApp1\TestApp1.csproj",
+                 @"TestApps\TestApp2\TestApp2.csproj");
+             </code>
+             </example>
+        </member>
+        <member name="M:WixSharp.Harvester.#ctor(WixSharp.Project,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Harvester"/> class.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="targetDir">The target directory.</param>
+        </member>
+        <member name="M:WixSharp.Harvester.AddProjects(WixSharp.VsProject[])">
+            <summary>
+            Adds the references to the Visual Studio projects.
+            </summary>
+            <param name="projects">Multiple project paths.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Harvester.AddProjects(System.String[])">
+            <summary>
+            Adds the references to the Visual Studio projects.
+            </summary>
+            <param name="projects">Multiple project paths.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Harvester.AddProject(System.String)">
+            <summary>
+            Adds the reference to the Visual Studio project.
+            </summary>
+            <param name="projectPath">The project path.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Harvester.AddProject(WixSharp.VsProject)">
+            <summary>
+            Adds the reference to the Visual Studio project.
+            </summary>
+            <param name="project">The project.</param>
+            <returns></returns>
+            <exception cref="T:System.Exception">
+            Project '{project.ProjectPath}' not found.
+            or
+            'Heat' failure...
+            </exception>
+        </member>
         <member name="T:WixSharp.IconFile">
             <summary>
             Icon used for Shortcut, ProgId, or Class elements (but not UI controls)
@@ -7495,11 +7671,20 @@
         </member>
         <member name="M:WixSharp.Extensions.SetAttributes(System.Xml.Linq.XElement,System.String)">
             <summary>
-            Sets/adds the attributes to the to a given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
+            Sets/adds the attributes to the given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
             </summary>
             <param name="obj">The object.</param>
             <param name="attributesDefinition">The attributes definition. Rules of the composing the
             definition are the same as for <see cref="P:WixSharp.WixObject.AttributesDefinition"/>.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.GetAttribute(System.Xml.Linq.XElement,System.Xml.Linq.XName,System.String)">
+            <summary>
+            Gets the attribute of the given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
+            </summary>
+            <param name="obj">The object.</param>
+            <param name="name">The name.</param>
+            <param name="defaultValue">The default value to return if the attribute is not present.</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.ToXAttributes(System.String)">
@@ -7766,6 +7951,15 @@
             </para>
             </summary>
             <param name="ex">The ex.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.EndsWithAny(System.String,System.Boolean,System.String[])">
+            <summary>
+            Checks if the given text ends with any provided string patterns (suffixes).
+            </summary>
+            <param name="text">The text.</param>
+            <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
+            <param name="patterns">The patterns.</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.EndsWith(System.String,System.String,System.Boolean)">
@@ -13664,6 +13858,19 @@
             </code>
             </example>
         </member>
+        <member name="M:WixSharp.Files.FromBuildDir(System.String,System.String)">
+            <summary>
+            Aggregates the files from the build directory. It is nothing else but a simplified creation of the
+            <see cref="T:WixSharp.Files"/> as below:
+            <code>
+                new Files(buildDir.PathJoin("*.*"),
+                          f => f.EndsWithAny(ignoreCase: true, new[]{".exe",".dll,".xml",".config", ".json"}))
+            </code>
+            </summary>
+            <param name="buildDir">The build dir.</param>
+            <param name="fileExtensions">The file extensions to match the files that need to be included in the deployment.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Files.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.Files"/> class.
@@ -15912,6 +16119,28 @@
             <returns>
             A <see cref="T:System.String" /> that represents this instance.
             </returns>
+        </member>
+        <member name="T:WixSharp.PublicProperty">
+            <summary>
+            Public properties are exposed on the msiexec commandline and can be overridden
+            i.e. msiexec /i myProduct.msi MYPROPERTY=true
+            They must be upper-case as this is part of the msi specification.
+            </summary>
+        </member>
+        <member name="M:WixSharp.PublicProperty.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.PublicProperty"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="name">The name of the property.</param>
+            <param name="value">The initial value of the property.</param>
+        </member>
+        <member name="M:WixSharp.PublicProperty.#ctor(WixSharp.Id,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.PublicProperty"/> class with properties/fields initialized with specified parameters.
+            </summary>
+            <param name="id">The explicit <see cref="T:WixSharp.Id"></see> to be associated with <see cref="T:WixSharp.PublicProperty"/> instance.</param>
+            <param name="name">The name of the property.</param>
+            <param name="value">The initial value of the property.</param>
         </member>
         <member name="T:WixSharp.XmlFile">
             <summary>

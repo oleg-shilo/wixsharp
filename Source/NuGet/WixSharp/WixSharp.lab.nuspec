@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.Lab</id>
-    <version>1.11.0.0</version>
+    <version>1.12.0.0</version>
     <title>Wix# (WixSharp) - Experimantal features</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -14,20 +14,14 @@
 The package contains the sample code for building a simple MSI with the CLR WinForm dialog inserted into UI sequence between InsallDirDlg and VerifyReadyDlg native MSI dialogs. In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# binaries containing experimental features (e.g. native WiX UI support).</summary>
-    <releaseNotes>Release v1.11.0.0
-* Added registry values aggregator (`RegKey`):
-  ```
-  new RegKey(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product",
-      new RegValue("Message", "Hello"),
-      new RegValue("Count", 777)),
-  ```
-* Issue #699: Wix Error for ServiceInstaller if at least one ServiceConfig parameter is not specified
-* Improvements to DigitalSignature to allow loading cert by sha1hash
-* Implemented custom message dialog instead (of the default MessageBox.Show) for displaying error message (if any detected) during the MSI session.
-* Issue #688: Adding prompt to CloseApplication prevents installer from completing.
-* Issue #683. Close MSI Interop handles when getting data from MSI
-* Issue #672: outdir and BuildMsiCmd fails because the outdir is not created
-* Issue #670: msi is always creating root folder, even if feature is disabled
+    <releaseNotes>Release v1.12.0
+
+* Issue #695: FR - Implement Harvester using wix heat.
+* Issue #714: Incorrect fonts when building on Windows Server Core
+* Added `XElement.GetAttribute` extension method.
+* New class `PublicProperty` to encapsulate a public property which must be uppercase
+
+
 </releaseNotes>
     <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
     <language>en-AU</language>
@@ -37,7 +31,7 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
       <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
     </frameworkAssemblies>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.11.0.0" />
+      <dependency id="WixSharp.bin" version="1.12.0.0" />
     </dependencies>
   </metadata>
   <files>

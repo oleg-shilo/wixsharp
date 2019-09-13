@@ -35,16 +35,6 @@ using IO = System.IO;
 
 namespace WixSharp
 {
-    public class ProjectOutputFiles : Files
-    {
-        public ProjectOutputFiles(string projectDir)
-            : base(projectDir.PathJoin("*.*"),
-                   f => f.EndsWith(".exe", ignoreCase: true) ||
-                        f.EndsWith(".dll", ignoreCase: true) ||
-                        f.EndsWith(".config", ignoreCase: true))
-        { }
-    }
-
     /// <summary>
     /// Defines all files of a given source directory and all subdirectories to be installed on target system.
     /// <para>
