@@ -400,6 +400,8 @@ namespace WixSharp
                     odbcSources.Add(item as ODBCDataSource);
                 else if (item is IISVirtualDir)
                     iisVirtualDirs.Add(item as IISVirtualDir);
+                else if (item is null)
+                    continue;
                 else
                     throw new Exception(item.GetType().Name + " is not expected to be a child of WixSharp.Dir");
 
