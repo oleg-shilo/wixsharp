@@ -14455,7 +14455,7 @@
             Collection of <see cref="T:WixSharp.FilePermission" /> to be applied to the file.
             </summary>
         </member>
-        <member name="F:WixSharp.File.FirewallExceptions">
+        <member name="P:WixSharp.File.FirewallExceptions">
             <summary>
             Collection of <see cref="T:WixSharp.FirewallException" /> to be applied to the file.
             </summary>
@@ -16105,6 +16105,11 @@
             <para>
             Setting this flag to 'true' has the same effect as adding the property name to <see cref="F:WixSharp.ManagedAction.UsesProperties"/>.
             </para>
+            </summary>
+        </member>
+        <member name="F:WixSharp.Property.Hidden">
+            <summary>
+            Denotes that the Property is not logged during installation. See the MsiHiddenProperties Property for more information.
             </summary>
         </member>
         <member name="F:WixSharp.Property.Secure">
