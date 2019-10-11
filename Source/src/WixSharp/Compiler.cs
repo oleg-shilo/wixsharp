@@ -2561,6 +2561,7 @@ namespace WixSharp
                     var parentElement = product.AddElement(new XElement("Property")
                                                .SetAttribute("Id", prop.Name)
                                                .SetAttribute("Value", prop.Value)
+                                               .SetAttribute("Hidden", prop.Hidden)
                                                .SetAttribute("Secure", prop.Secure)
                                                .AddAttributes(prop.Attributes));
 
