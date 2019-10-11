@@ -28,7 +28,7 @@ class Script
             Properties = new[]
             {
                 new Property("Gritting", "Hello World!"),
-                new Property("Title", "Properties Test"),
+                new Property("Title", "Properties Test") { Hidden = true },
                 new PublicProperty("NOTEPAD_FILE", @"C:\boot.ini")
             }
         };

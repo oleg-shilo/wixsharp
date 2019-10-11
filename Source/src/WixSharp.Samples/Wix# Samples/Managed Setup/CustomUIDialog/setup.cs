@@ -72,7 +72,7 @@ public class Script
 
         //e.ManagedUIShell.SetSize(700, 500);
         //e.ManagedUIShell.OnCurrentDialogChanged += ManagedUIShell_OnCurrentDialogChanged;
-        //(e.ManagedUIShell.CurrentDialog asForm).Controls....
+        //(e.ManagedUIShell.CurrentDialog as Form).Controls....
     }
 
     //private static void ManagedUIShell_OnCurrentDialogChanged(IManagedDialog dialog)
