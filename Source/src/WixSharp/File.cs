@@ -212,7 +212,11 @@ namespace WixSharp
         /// <summary>
         /// Collection of <see cref="T:WixSharp.FirewallException" /> to be applied to the file.
         /// </summary>
-        public FirewallException[] FirewallExceptions = new FirewallException[0];
+        public FirewallException[] FirewallExceptions
+        {
+            get => GenericItems.OfType<FirewallException>().ToArray();
+            set => GenericItems = GenericItems.Concat(value).Distinct().ToArray();
+        }
 
         /// <summary>
         /// Collection of <see cref="T:WixSharp.IGenericEntity" /> to be applied to the file.
