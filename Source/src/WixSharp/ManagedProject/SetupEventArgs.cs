@@ -292,7 +292,7 @@ namespace WixSharp
         /// Gets or sets the Data.
         /// <para>Data is a free form data storage for custom user defined and Wix# generated settings. In a way it's an
         /// alternative to the MSI session properties. The Data is similar to Session as its interface is identical to
-        /// the Session properties - string dictionary. Though a very important difference is that Data (as opposite to
+        /// the Session properties, which is a string dictionary. Though a very important difference is that Data (as opposite to
         /// session) does maintain the all entries during the whole MSI session. Even for the deferred action.</para>
         /// <para>Do not confuse `Data` and `Session`. Fist one (Data) keeps user defined custom properties that are available
         /// at any stage of setup. Second one (Session) keeps the current MSI session properties and only available
@@ -300,12 +300,8 @@ namespace WixSharp
         ///
         /// Usage:
         /// <list type="bulet">
-        /// <item>
-        /// Use e.Data for custom action data, so properties are available in both deferred and non-deferred actions
-        ///
-        /// </item>
-        /// <item>
-        ///  Use e.Session for MSI session properties </item>
+        /// <item> Use e.Data for custom action data and copies of MSI properties, so they are available in both deferred and non-deferred actions.</item>
+        /// <item> Use e.Session for MSI session properties </item>
         /// </list>
         /// </summary>
         /// <value>
