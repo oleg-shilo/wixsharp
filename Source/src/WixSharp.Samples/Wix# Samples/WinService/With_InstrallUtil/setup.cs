@@ -41,20 +41,20 @@ public class CustomActions
     [CustomAction]
     public static ActionResult InstallService(Session session)
     {
-        return session.HandleErrors(() =>
+        return session.HandleErrors(s =>
         {
-            Tasks.InstallService(session.Property("INSTALLDIR") + "MyApp.exe", true);
+            Tasks.InstallService(s.Property("INSTALLDIR") + "MyApp.exe", true);
             Tasks.StartService("WixSharp.SimpleService", false);
-        });
+        }, session);
     }
 
     [CustomAction]
     public static ActionResult UnInstallService(Session session)
     {
-        return session.HandleErrors(() =>
+        return session.HandleErrors((s) =>
         {
             //Tasks.StopService("WixSharp.SimpleService", false); //no need to call as system stop the service on uninstall anyway
-            Tasks.InstallService(session.Property("INSTALLDIR") + "MyApp.exe", false);
-        });
+            Tasks.InstallService(s.Property("INSTALLDIR") + "MyApp.exe", false);
+        }, session);
     }
 }

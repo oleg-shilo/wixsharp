@@ -2801,6 +2801,78 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Handles the errors in the specified action being executed. The all exceptions are caught and logged to the msi log.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="action">The action.</param>
+        /// <param name="arg">The action argument.</param>
+        /// <returns><see cref="T:Microsoft.Deployment.WindowsInstaller.ActionResult.Success"/> if no errors detected, otherwise
+        /// it returns <see cref="T:Microsoft.Deployment.WindowsInstaller.ActionResult.Failure"/>.
+        /// </returns>
+        public static ActionResult HandleErrors<TArg>(this Session session, System.Action<TArg> action, TArg arg)
+        {
+            try
+            {
+                action(arg);
+            }
+            catch (Exception e)
+            {
+                session.Log(e.ToString());
+                return ActionResult.Failure;
+            }
+            return ActionResult.Success;
+        }
+
+        /// <summary>
+        /// Handles the errors in the specified action being executed. The all exceptions are caught and logged to the msi log.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="action">The action.</param>
+        /// <param name="arg1">The action argument.</param>
+        /// <param name="arg2">The action argument.</param>
+        /// <returns><see cref="T:Microsoft.Deployment.WindowsInstaller.ActionResult.Success"/> if no errors detected, otherwise
+        /// it returns <see cref="T:Microsoft.Deployment.WindowsInstaller.ActionResult.Failure"/>.
+        /// </returns>
+        public static ActionResult HandleErrors<TArg1, TArg2>(this Session session, System.Action<TArg1, TArg2> action, TArg1 arg1, TArg2 arg2)
+        {
+            try
+            {
+                action(arg1, arg2);
+            }
+            catch (Exception e)
+            {
+                session.Log(e.ToString());
+                return ActionResult.Failure;
+            }
+            return ActionResult.Success;
+        }
+
+        /// <summary>
+        /// Handles the errors in the specified action being executed. The all exceptions are caught and logged to the msi log.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="action">The action.</param>
+        /// <param name="arg1">The action argument.</param>
+        /// <param name="arg2">The action argument.</param>
+        /// <param name="arg3">The action argument.</param>
+        /// <returns><see cref="T:Microsoft.Deployment.WindowsInstaller.ActionResult.Success"/> if no errors detected, otherwise
+        /// it returns <see cref="T:Microsoft.Deployment.WindowsInstaller.ActionResult.Failure"/>.
+        /// </returns>
+        public static ActionResult HandleErrors<TArg1, TArg2, TArg3>(this Session session, System.Action<TArg1, TArg2, TArg3> action, TArg1 arg1, TArg2 arg2, TArg3 arg3)
+        {
+            try
+            {
+                action(arg1, arg2, arg3);
+            }
+            catch (Exception e)
+            {
+                session.Log(e.ToString());
+                return ActionResult.Failure;
+            }
+            return ActionResult.Success;
+        }
+
+        /// <summary>
         /// To a collection into WixObject that can be passed in the Project constructor.
         /// </summary>
         /// <typeparam name="T"></typeparam>

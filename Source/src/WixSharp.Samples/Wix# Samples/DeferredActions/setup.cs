@@ -81,13 +81,13 @@ public class CustomActions
         session.Log("------------- " + session.Property("CONFIG_FILE"));
         session.Log("------------- " + session.Property("APP_FILE"));
 
-        return session.HandleErrors(() =>
+        return session.HandleErrors(s =>
         {
-            string configFile = session.Property("INSTALLDIR") + "MyApp.exe.config";
+            var configFile = s.Property("INSTALLDIR") + "MyApp.exe.config";
 
             //alternative ways of extracting 'deferred' properties
-            //configFile = session.Property("APP_FILE") + ".config";
-            //configFile = session.Property("CONFIG_FILE");
+            //configFile = s.Property("APP_FILE") + ".config";
+            //configFile = s.Property("CONFIG_FILE");
 
             UpdateAsAppConfig(configFile);
 
@@ -97,7 +97,7 @@ public class CustomActions
             UpdateWithWixSharp(configFile);
 
             MessageBox.Show(GetContext());
-        });
+        }, session);
     }
 
     static string GetContext()

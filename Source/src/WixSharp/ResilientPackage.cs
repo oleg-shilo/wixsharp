@@ -104,9 +104,9 @@ namespace WixSharp
         [CustomAction]
         public static ActionResult WixSharp_SetPackageName_Action(Session session)
         {
-            return session.HandleErrors(() =>
+            return session.HandleErrors(s =>
             {
-                var productCode = session.Property("ProductCode");
+                var productCode = s.Property("ProductCode");
 
                 string packageName = null;
                 try
@@ -115,7 +115,7 @@ namespace WixSharp
                 }
                 catch (Exception e)
                 {
-                    session.Log(e.ToString());
+                    s.Log(e.ToString());
                 }
 
                 if (packageName.IsEmpty())
@@ -123,8 +123,8 @@ namespace WixSharp
                     packageName = GetPackageNameFromRegistry(productCode);
                 }
 
-                session[WIXSHARP_PACKAGENAME] = packageName;
-            });
+                s[WIXSHARP_PACKAGENAME] = packageName;
+            }, session);
         }
 
         /// <summary>
@@ -135,14 +135,14 @@ namespace WixSharp
         [CustomAction]
         public static ActionResult WixSharp_RemoveResilientPackage_Action(Session session)
         {
-            return session.HandleErrors(() =>
+            return session.HandleErrors(s =>
             {
-                var packageName = session.Property(WIXSHARP_PACKAGENAME);
-                var resilientLocation = session.Property(WIXSHARP_RESILIENT_SOURCE_DIR);
+                var packageName = s.Property(WIXSHARP_PACKAGENAME);
+                var resilientLocation = s.Property(WIXSHARP_RESILIENT_SOURCE_DIR);
                 var resilientPackage = IO.Path.Combine(resilientLocation, packageName);
 
                 IO.File.Delete(resilientPackage);
-            });
+            }, session);
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace WixSharp
         [CustomAction]
         public static ActionResult WixSharp_CreateResilientPackage_Action(Session session)
         {
-            return session.HandleErrors(() => CreateResilientPackage(session));
+            return session.HandleErrors(CreateResilientPackage, session);
         }
 
         [Flags]
