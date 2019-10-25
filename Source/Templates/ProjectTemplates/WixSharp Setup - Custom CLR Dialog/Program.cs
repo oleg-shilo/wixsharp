@@ -4,9 +4,9 @@ using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Controls;
 
-// DON'T FORGET to update NuGet package "WixSharp".
-// NuGet console: Update-Package WixSharp
-// NuGet Manager UI: updates tab
+#error "DON'T FORGET to install NuGet package 'WixSharp' and remove this `#error` statement."
+// NuGet console: Install-Package WixSharp
+// NuGet Manager UI: browse tabb
 
 namespace $safeprojectname$
 {
