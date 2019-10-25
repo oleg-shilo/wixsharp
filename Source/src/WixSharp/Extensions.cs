@@ -2193,13 +2193,14 @@ namespace WixSharp
         /// <returns>A combined <see cref="T:System.Collections.Generic.List"/>.</returns>
         public static List<T> Combine<T>(this List<T> obj, List<T> items)
         {
-            if (items != null && items.Count != 0)
+            if (items == null || items.Count == 0)
             {
-                var retval = new List<T>();
-                retval.AddRange(items);
-                return retval;
+                return obj;
             }
-            return obj;
+
+            var retval = new List<T>(obj);
+            retval.AddRange(items);
+            return retval;
         }
 
         /// <summary>
