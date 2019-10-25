@@ -2061,12 +2061,7 @@ namespace WixSharp
         /// <param name="collection">The collection.</param>
         /// <returns></returns>
         public static Dictionary<string, string> Clone(this Dictionary<string, string> collection)
-        {
-            var result = new Dictionary<string, string>();
-            foreach (var item in collection)
-                result[item.Key] = item.Value;
-            return result;
-        }
+            => new Dictionary<string, string>(collection);
 
         /// <summary>
         /// Converts the string into the <see cref="T:WixSharp.Condition"/> instance.
