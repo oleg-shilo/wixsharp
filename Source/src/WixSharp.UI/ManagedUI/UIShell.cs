@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,11 +15,6 @@ using WixSharp.CommonTasks;
 using WixSharp.Forms;
 
 using forms = System.Windows.Forms;
-
-using System.Diagnostics;
-using System.Drawing;
-using System.Collections.Generic;
-using System.Globalization;
 
 namespace WixSharp
 {
@@ -132,9 +132,9 @@ namespace WixSharp
         }
 
         InstallProgressCounter progressCounter = new InstallProgressCounter(0.5);
-        bool started = false;
-        bool canceled = false;
-        bool finished = false;
+        volatile bool started = false;
+        volatile bool canceled = false;
+        volatile bool finished = false;
 
         /// <summary>
         /// Gets the sequence of the UI dialogs specific for the current setup type (e.g. install vs. modify).
@@ -363,7 +363,7 @@ namespace WixSharp
                     Directory.CreateDirectory(dir);
 
                 var project = new Project("Demo_UIPlayer",
-                                new Dir(@"%ProgramFiles%\WixSharp\Demo_UIPlayer"));
+                                  new Dir(@"%ProgramFiles%\WixSharp\Demo_UIPlayer"));
 
                 project.OutDir = dir;
 
@@ -533,7 +533,7 @@ namespace WixSharp
                                 InUIThread(() =>
                                 {
                                     if (MessageDialog == null)
-                                         MessageDialog = new DefaultErrorDialog(this);
+                                        MessageDialog = new DefaultErrorDialog(this);
 
                                     result = MessageDialog.ProcessMessage(messageType, messageRecord, buttons, icon, defaultButton);
                                 });

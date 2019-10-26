@@ -451,7 +451,9 @@ namespace WixSharp
         {
             if (attributes.Any())
             {
-                var optimizedAttributes = attributes.Where(x => !x.Key.Contains(":") && !x.Key.Contains(":{") && !x.Key.StartsWith("{"));
+                var optimizedAttributes = attributes.Where(x => !x.Key.Contains(":") &&
+                                                                // !x.Key.Contains(":{") &&
+                                                                !x.Key.StartsWith("{"));
 
                 var optimizedAttributesMap = optimizedAttributes.ToDictionary(t => t.Key, t => t.Value);
 
@@ -2128,9 +2130,8 @@ namespace WixSharp
                     foreach (var i in obj)
                         retval.Add(i);
 
-                if (items != null)
-                    foreach (var i in items)
-                        retval.Add(i);
+                foreach (var i in items)
+                    retval.Add(i);
 
                 return (T1[])retval.ToArray(typeof(T1));
             }
@@ -2170,9 +2171,8 @@ namespace WixSharp
                     foreach (var i in obj)
                         retval.Add(i);
 
-                if (items != null)
-                    foreach (var i in items)
-                        retval.Add(i);
+                foreach (var i in items)
+                    retval.Add(i);
 
                 return (T1[])retval.ToArray(typeof(T1));
             }

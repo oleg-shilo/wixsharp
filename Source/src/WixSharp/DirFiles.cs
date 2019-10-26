@@ -152,7 +152,6 @@ namespace WixSharp
 
             baseDirectory = IO.Path.GetFullPath(baseDirectory);
 
-            IO.Path.GetFullPath(baseDirectory);
             string rootDirPath;
             if (IO.Path.IsPathRooted(Directory))
                 rootDirPath = Directory;

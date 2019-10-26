@@ -1208,8 +1208,9 @@ namespace WixSharp
                    .SetAttribute("Version", project.Version)
                    .SetAttribute("UpgradeCode", project.UpgradeCode);
 
-            if (project.ControlPanelInfo != null && project.ControlPanelInfo.Manufacturer.IsNotEmpty())
+            if (project.ControlPanelInfo.Manufacturer.IsNotEmpty())
                 product.SetAttribute("Manufacturer", project.ControlPanelInfo.Manufacturer);
+
             product.AddAttributes(project.Attributes);
 
             XElement package = product.Select("Package");

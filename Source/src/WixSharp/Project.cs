@@ -369,7 +369,7 @@ namespace WixSharp
         /// <summary>
         ///  Set of values in 'Add/Remove Programs' of Control Panel.
         /// </summary>
-        public ProductInfo ControlPanelInfo = new ProductInfo();
+        public ProductInfo ControlPanelInfo => new ProductInfo();
 
         /// <summary>
         /// Provides fine control over rebooting at the end of installation.
@@ -386,7 +386,7 @@ namespace WixSharp
         public ScheduleReboot ScheduleReboot;
 
         /// <summary>
-        /// Provideds fine control over rebooting at the end of installation.
+        /// Provides fine control over rebooting at the end of installation.
         /// <para>If set it creates <c>ForceReboot</c> element in the <c>InstallExecuteSequence</c>.</para>
         /// </summary>
         /// <example>
