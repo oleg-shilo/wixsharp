@@ -453,6 +453,13 @@ namespace WixSharp
             // Component:{dep}ProductKey=12345 vs
             // {http://schemas.microsoft.com/wix/BalExtension}Overridable=yes"
 
+            // Note the syntax below is not supported:
+            // Component:{http://schemas.microsoft.com/wix/BalExtension}Overridable=yes"
+            if (item.Contains(":{http:") || item.Contains(":{https:"))
+                throw new Exception("Syntax `" + item + "` is not supported.\n" +
+                    "Use `parent:{alias}attribute=value` instead and add XML namespace with the alias.\n" +
+                    "For example: `project.IncludeWixExtension(\"WixDependencyExtension.dll\", \"dep\", expectedNamespace);`");
+
             string[] keyParts;
 
             if (item.StartsWith("{"))

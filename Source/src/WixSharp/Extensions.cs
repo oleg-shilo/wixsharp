@@ -451,8 +451,10 @@ namespace WixSharp
         {
             if (attributes.Any())
             {
+                // "Component:ProviderKey=12345
+                // {dep}ProductKey=12345
+                // Component:{dep}ProductKey=12345
                 var optimizedAttributes = attributes.Where(x => !x.Key.Contains(":") &&
-                                                                // !x.Key.Contains(":{") &&
                                                                 !x.Key.StartsWith("{"));
 
                 var optimizedAttributesMap = optimizedAttributes.ToDictionary(t => t.Key, t => t.Value);

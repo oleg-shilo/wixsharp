@@ -56,6 +56,122 @@ namespace WixSharp.Test
             Assert.Equal(expected, original);
         }
 
+        [Fact]
+        public void AttributesInjection()
+        {
+            var expectedNamespace = "http://schemas.microsoft.com/wix/DependencyExtension";
+            var expectedName = "TTT";
+            var expectedValue = "33333";
+
+            var project =
+                new Project("MyProduct",
+                    new Dir(@"%ProgramFiles%\My Product",
+                        new File("MyApp.exe") { AttributesDefinition = "{dep}" + $"{expectedName}={expectedValue}" }));
+            project.IncludeWixExtension(@"WixDependencyExtension.dll", "dep", expectedNamespace);
+
+            project.WixSourceGenerated += (XDocument doc) =>
+            {
+                var attr = doc.FindAll("File")
+                              .SelectMany(x => x.Attributes())
+                              .FirstOrDefault(a => a.Value == expectedValue);
+
+                Assert.NotNull(attr);
+                Assert.Equal(expectedName, attr.Name.LocalName);
+                Assert.Equal(expectedNamespace, attr.Name.Namespace);
+            };
+
+            var wxsFile = project.BuildWxs();
+        }
+
+        [Fact]
+        public void AttributesInjection2()
+        {
+            var expectedNamespace = "http://schemas.microsoft.com/wix/DependencyExtension";
+            var expectedName = "TTT";
+            var expectedValue = "33333";
+
+            var project =
+                new Project("MyProduct",
+                    new Dir(@"%ProgramFiles%\My Product",
+                        new File("MyApp.exe") { AttributesDefinition = "Component:{dep}" + $"{expectedName}={expectedValue}" }));
+
+            project.IncludeWixExtension(@"WixDependencyExtension.dll", "dep", expectedNamespace);
+
+            project.WixSourceGenerated += (XDocument doc) =>
+            {
+                var attr = doc.FindAll("Component")
+                              .SelectMany(x => x.Attributes())
+                              .FirstOrDefault(a => a.Value == expectedValue);
+
+                Assert.NotNull(attr);
+                Assert.Equal(expectedName, attr.Name.LocalName);
+                Assert.Equal(expectedNamespace, attr.Name.Namespace);
+            };
+
+            var wxsFile = project.BuildWxs();
+        }
+
+        [Fact]
+        public void AttributesInjection3()
+        {
+            var expectedNamespace = "http://schemas.microsoft.com/wix/DependencyExtension";
+            var expectedName = "TTT";
+            var expectedValue = "33333";
+
+            var project =
+                new Project("MyProduct",
+                    new Dir(@"%ProgramFiles%\My Product",
+                        new File("MyApp.exe") { AttributesDefinition = "{" + expectedNamespace + "}" + $"{expectedName}={expectedValue}" }));
+
+            project.WixSourceGenerated += (XDocument doc) =>
+            {
+                var attr = doc.FindAll("File")
+                              .SelectMany(x => x.Attributes())
+                              .FirstOrDefault(a => a.Value == expectedValue);
+
+                Assert.NotNull(attr);
+                Assert.Equal(expectedName, attr.Name.LocalName);
+                Assert.Equal(expectedNamespace, attr.Name.Namespace);
+            };
+
+            var wxsFile = project.BuildWxs();
+        }
+
+        [Fact]
+        public void AttributesInjection4()
+        {
+            var expectedName = "TTT";
+            var expectedValue = "33333";
+
+            var project =
+                new Project("MyProduct",
+                    new Dir(@"%ProgramFiles%\My Product",
+                        new File("MyApp.exe") { AttributesDefinition = $"Component:{expectedName}={expectedValue}" }));
+
+            project.WixSourceGenerated += (XDocument doc) =>
+            {
+                var attr = doc.FindAll("Component")
+                              .SelectMany(x => x.Attributes())
+                              .FirstOrDefault(a => a.Value == expectedValue);
+
+                Assert.NotNull(attr);
+                Assert.Equal(expectedName, attr.Name.LocalName);
+            };
+
+            var wxsFile = project.BuildWxs();
+        }
+
+        [Fact]
+        public void AttributesInjection5()
+        {
+            var project =
+                new Project("MyProduct",
+                    new Dir(@"%ProgramFiles%\My Product",
+                        new File("MyApp.exe") { AttributesDefinition = "Component:{http://schemas.microsoft.com/wix/DependencyExtension}NNN=vvv" }));
+
+            Assert.Throws<Exception>(() => project.BuildWxs());
+        }
+
         //[Fact] //xUnit/VSTest runtime doesn't play nice with MSI interop
         public void AppSearchTest()
         {
