@@ -41,7 +41,7 @@ public class Script
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         //project.LocalizationFile = "MyProduct.en-us.wxl";
         project.LocalizationFile = "WixUI_de-de.wxl";
-        project.Language = "de-de";
+        project.Language = "de-de;en-US"; // wix searches for the missing strings in the en-US culture.
         project.SetNetFxPrerequisite("NETFRAMEWORK35='#1'", "Please install .NET 3.5 first.");
         project.ManagedUI = new ManagedUI();
         project.ManagedUI.InstallDialogs.Add<WelcomeDialog>()
