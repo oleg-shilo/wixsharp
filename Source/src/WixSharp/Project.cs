@@ -369,7 +369,7 @@ namespace WixSharp
         /// <summary>
         ///  Set of values in 'Add/Remove Programs' of Control Panel.
         /// </summary>
-        public ProductInfo ControlPanelInfo => new ProductInfo();
+        public ProductInfo ControlPanelInfo = new ProductInfo();
 
         /// <summary>
         /// Provides fine control over rebooting at the end of installation.

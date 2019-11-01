@@ -15617,7 +15617,7 @@
             </remarks>
             </summary>
         </member>
-        <member name="P:WixSharp.Project.ControlPanelInfo">
+        <member name="F:WixSharp.Project.ControlPanelInfo">
             <summary>
              Set of values in 'Add/Remove Programs' of Control Panel.
             </summary>
