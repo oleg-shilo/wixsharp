@@ -2604,18 +2604,9 @@ namespace WixSharp
             {
                 sql.Execute();
 
-                System.IO.Stream stream = sql.Fetch().GetStream(1);
-
-                using (var fs = new System.IO.FileStream(file, System.IO.FileMode.Create))
+                using (var record = sql.Fetch())
                 {
-                    int Length = 256;
-                    var buffer = new Byte[Length];
-                    int bytesRead = stream.Read(buffer, 0, Length);
-                    while (bytesRead > 0)
-                    {
-                        fs.Write(buffer, 0, bytesRead);
-                        bytesRead = stream.Read(buffer, 0, Length);
-                    }
+                    record.GetStream(1, file);
                 }
             }
         }
