@@ -4,16 +4,16 @@
 //css_ref System.Xml.dll;
 using System;
 using System.Configuration;
+using System.Diagnostics;
+using System.Linq;
 using System.Security.Principal;
 using System.Windows.Forms;
-using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 using IO = System.IO;
-using System.Diagnostics;
 
 class Script
 {

@@ -4,7 +4,9 @@
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
