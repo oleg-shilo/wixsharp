@@ -2362,20 +2362,27 @@ namespace WixSharp
             return session.Property("REMOVE").SameAs("All", true);
         }
 
+        static public string IfEmptyUse(this string value1, string value2)
+            => value1.IsEmpty() ? value2 : value1;
+
         /// <summary>
         /// Determines whether the feature is selected in the feature tree of the Features dialog
-        /// and will be installed.
-        /// <para>
-        /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
-        /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
-        /// </para>
+        /// and will be installed. The "selected" state of the feature is determined by analysing the
+        /// `ADDLOCAL` session property, which has the required information either feature selected via UI
+        /// or via msiexec.exe CLI arguments. If none of this selections is made by the user the method will
+        /// return the default state of the feature (from session property "ADDFEATURES").
         /// </summary>
         /// <param name="session">The session.</param>
         /// <param name="featureName">Name of the feature.</param>
         /// <returns></returns>
         static public bool IsFeatureEnabled(this Session session, string featureName)
         {
-            return (session.Property("ADDLOCAL") ?? "").Split(',').Where(x => x.SameAs(featureName)).Any();
+            string defaultAddedFeatures = session.Property("ADDFEATURES");
+            string requestedAddedFeatures = session.Property("ADDLOCAL");
+
+            return requestedAddedFeatures.IfEmptyUse(defaultAddedFeatures)
+                .Split(',')
+                .Any(x => x.SameAs(featureName));
         }
 
         /// <summary>
@@ -2586,18 +2593,6 @@ namespace WixSharp
         {
             //If binary is accessed the way as below it will raise "stream handle is not valid" exception
             //object result = session.Database.ExecuteScalar("select Data from Binary where Name = 'Fake_CRT.msi'");
-            //Stream s = (Stream)result;
-            //using (FileStream fs = new FileStream(@"....\Wix# Samples\Simplified Bootstrapper\Fake CRT1.msi", FileMode.Create))
-            //{
-            //    int Length = 256;
-            //    var buffer = new Byte[Length];
-            //    int bytesRead = s.Read(buffer, 0, Length);
-            //    while (bytesRead > 0)
-            //    {
-            //        fs.Write(buffer, 0, bytesRead);
-            //        bytesRead = s.Read(buffer, 0, Length);
-            //    }
-            //}
 
             //however View approach is OK
             using (var sql = session.Database.OpenView("select Data from Binary where Name = '" + binary + "'"))
