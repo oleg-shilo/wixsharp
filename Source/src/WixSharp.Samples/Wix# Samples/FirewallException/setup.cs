@@ -31,9 +31,9 @@ class Script
         project.PreserveTempFiles = true;
 
         // Localization technique from the #748 "error for FirewallException"
-        project.Codepage = "1251";
-        project.Language = "ru-ru;en-US"; // wix searches for the missing strings in the en-US culture.
-        project.Encoding = Encoding.UTF8;
+        // project.Codepage = "1251";
+        // project.Language = "ru-ru;en-US"; // wix searches for the missing strings in the en-US culture.
+        // project.Encoding = Encoding.UTF8;
 
         project.BuildMsi();
     }

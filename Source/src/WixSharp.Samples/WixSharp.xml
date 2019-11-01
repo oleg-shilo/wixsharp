@@ -3149,6 +3149,11 @@
             ProgId(s) associated with Class must be a child element of the ClassRegistration instance.
             </summary>
         </member>
+        <member name="F:WixSharp.ComRegistration.Interfaces">
+            <summary>
+            Interface(s) associated with Class must be a child element of the ClassRegistration instance.
+            </summary>
+        </member>
         <member name="M:WixSharp.ComRegistration.Process(WixSharp.ProcessingContext)">
             <summary>
             The method demonstrates the correct way of integrating RemoveFolderEx.
@@ -3203,6 +3208,52 @@
             </summary>
         </member>
         <member name="M:WixSharp.ProgId.ToXElement">
+            <summary>
+            Serializes the class instance into XML element.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:WixSharp.Interface">
+            <summary>
+            COM Interface registration for parent Class.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Interface.Id">
+            <summary>
+            GUID identifier for COM Interface.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Interface.BaseInterface">
+            <summary>
+            Identifies the interface from which the current interface is derived.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Interface.Name">
+            <summary>
+            Name for COM Interface.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Interface.NumMethods">
+            <summary>
+            Number of methods implemented on COM Interface.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Interface.ProxyStubClassId">
+            <summary>
+            GUID CLSID for proxy stub to COM Interface.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Interface.ProxyStubClassId32">
+            <summary>
+            GUID CLSID for 32-bit proxy stub to COM Interface.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Interface.Versioned">
+            <summary>
+            Determines whether a Typelib version entry should be created with the other COM Interface registry keys. Default is 'yes'.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Interface.ToXElement">
             <summary>
             Serializes the class instance into XML element.
             </summary>
@@ -8772,14 +8823,21 @@
             <param name="session">The session.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.IfEmptyUse(System.String,System.String)">
+            <summary>
+            Returns the first string `value1` if it is not empty. Otherwise returns `value2`.
+            </summary>
+            <param name="value1">The value1.</param>
+            <param name="value2">The value2.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.IsFeatureEnabled(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
             <summary>
             Determines whether the feature is selected in the feature tree of the Features dialog
-            and will be installed.
-            <para>
-            This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
-            that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
-            </para>
+            and will be installed. The "selected" state of the feature is determined by analysing the
+            `ADDLOCAL` session property, which has the required information either feature selected via UI
+            or via msiexec.exe CLI arguments. If none of this selections is made by the user the method will
+            return the default state of the feature (from session property "ADDFEATURES").
             </summary>
             <param name="session">The session.</param>
             <param name="featureName">Name of the feature.</param>
@@ -12589,7 +12647,7 @@
         </member>
         <member name="P:WixSharp.SetupEventArgs.Session">
             <summary>
-            Gets or sets the session.
+            Gets or sets the MSI session object.
             </summary>
             <value>
             The session.
@@ -12769,16 +12827,24 @@
             </value>
         </member>
         <member name="P:WixSharp.SetupEventArgs.Data">
-            <summary>
-            Gets or sets the Data.
-            <para>Data is a free form data storage for custom user defined and Wix# generated settings. In a way it's an
-            alternative to the MSI session properties. The Data interface is identical to the Session properties -
-            string dictionary. Though a very important difference is that Data (as opposite to session) does maintain
-            the all entries during the whole MSI session. Even for the deferred action.</para>
-            </summary>
-            <value>
-            The data.
-            </value>
+             <summary>
+             Gets or sets the Data.
+             <para>Data is a free form data storage for custom user defined and Wix# generated settings. In a way it's an
+             alternative to the MSI session properties. The Data is similar to Session as its interface is identical to
+             the Session properties, which is a string dictionary. Though a very important difference is that Data (as opposite to
+             session) does maintain the all entries during the whole MSI session. Even for the deferred action.</para>
+             <para>Do not confuse `Data` and `Session`. Fist one (Data) keeps user defined custom properties that are available
+             at any stage of setup. Second one (Session) keeps the current MSI session properties and only available
+             for from non-deferred custom actions.</para>
+            
+             Usage:
+             <list type="bulet">
+             <item> Use e.Data for custom action data and copies of MSI properties, so they are available in both deferred and non-deferred actions.</item>
+             <item> Use e.Session for MSI session properties </item>
+             </list>
+             </summary>
+             <value>
+             </value>
         </member>
         <member name="M:WixSharp.SetupEventArgs.#ctor">
             <summary>
@@ -15189,7 +15255,7 @@
         <member name="F:WixSharp.ManagedAction.DefaultUsesProperties">
             <summary>
             The default properties mapped for use with the 'deferred' (as well as 'rollback'  and 'commit') custom actions. See <see cref="F:WixSharp.ManagedAction.UsesProperties"/> for the details.
-            <para>The default value is "INSTALLDIR,UILevel,ProductCode"</para>
+            <para>The default value is "INSTALLDIR,UILevel,ProductCode,ADDLOCAL,ADDFEATURES"</para>
             </summary>
         </member>
         <member name="T:WixSharp.PathFileAction">
@@ -15551,7 +15617,7 @@
             </remarks>
             </summary>
         </member>
-        <member name="F:WixSharp.Project.ControlPanelInfo">
+        <member name="P:WixSharp.Project.ControlPanelInfo">
             <summary>
              Set of values in 'Add/Remove Programs' of Control Panel.
             </summary>
@@ -15572,7 +15638,7 @@
         </member>
         <member name="F:WixSharp.Project.ForceReboot">
             <summary>
-            Provideds fine control over rebooting at the end of installation.
+            Provides fine control over rebooting at the end of installation.
             <para>If set it creates <c>ForceReboot</c> element in the <c>InstallExecuteSequence</c>.</para>
             </summary>
             <example>

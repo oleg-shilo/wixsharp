@@ -2362,6 +2362,12 @@ namespace WixSharp
             return session.Property("REMOVE").SameAs("All", true);
         }
 
+        /// <summary>
+        /// Returns the first string `value1` if it is not empty. Otherwise returns `value2`.
+        /// </summary>
+        /// <param name="value1">The value1.</param>
+        /// <param name="value2">The value2.</param>
+        /// <returns></returns>
         static public string IfEmptyUse(this string value1, string value2)
             => value1.IsEmpty() ? value2 : value1;
 

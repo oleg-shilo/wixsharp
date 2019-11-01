@@ -90,6 +90,9 @@ namespace WixSharp.UI.Forms
         /// </summary>
         public static List<string> UserSelectedItems;
 
+        /// <summary>
+        /// The initial/default set of selected items (features) before user made any selection(s).
+        /// </summary>
         public static List<string> InitialUserSelectedItems;
 
         void BuildFeaturesHierarchy()
