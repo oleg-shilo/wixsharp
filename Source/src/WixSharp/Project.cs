@@ -283,7 +283,7 @@ namespace WixSharp
         /// only if <see cref="WixSharp.Project.MajorUpgrade"/> is set.</para>
         /// <para>Read more: https://docs.microsoft.com/en-us/windows/desktop/msi/reinstallmode </para>
         /// </summary>
-        public string ReinstallMode = "amus";
+        public string ReinstallMode = "omus";
 
         /// <summary>
         /// Relative path to RTF file with the custom licence agreement to be displayed in the Licence dialog.
