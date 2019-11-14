@@ -21,7 +21,7 @@ class Script
 
             Actions = new WixSharp.Action[]
             {
-                new ManagedAction(CustonActions.ShowGritting),
+                new ManagedAction(CustomActions.ShowGritting),
                 new WixQuietExecAction("notepad.exe", "[NOTEPAD_FILE]"),
             },
 
@@ -38,7 +38,7 @@ class Script
     }
 }
 
-public class CustonActions
+public class CustomActions
 {
     [CustomAction]
     public static ActionResult ShowGritting(Session session)
