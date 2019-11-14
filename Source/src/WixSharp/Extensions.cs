@@ -1209,7 +1209,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Determines whether the value is a WiX constant (e.g. 'SystenFolder').
+        /// Determines whether the value is a WiX constant (e.g. 'SystemFolder').
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>
