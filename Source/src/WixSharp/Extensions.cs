@@ -958,6 +958,26 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Determines whether this path is a file.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified path is file; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsFile(this string path)
+            => IO.File.Exists(path);
+
+        /// <summary>
+        /// Determines whether this instance is directory.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified path is directory; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsDirectory(this string path)
+            => IO.Directory.Exists(path);
+
+        /// <summary>
         /// Deletes File/Directory from by the specified path if it exists.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -965,17 +985,52 @@ namespace WixSharp
         /// <returns></returns>
         public static string DeleteIfExists(this string path, bool @throw = false)
         {
-            try
+            void deleteFile(string file)
             {
-                var fullPath = IO.Path.GetFullPath(path);
-                if (IO.File.Exists(fullPath))
-                    IO.File.Delete(fullPath);
+                try
+                {
+                    var fullPath = IO.Path.GetFullPath(file);
+                    if (IO.File.Exists(fullPath))
+                        IO.File.Delete(fullPath);
+                }
+                catch
+                {
+                    if (@throw)
+                        throw;
+                }
             }
-            catch
+
+            void deleteDir(string file)
             {
-                if (@throw)
-                    throw;
+                try
+                {
+                    var fullPath = IO.Path.GetFullPath(file);
+                    if (IO.Directory.Exists(fullPath))
+                        IO.Directory.Delete(fullPath);
+                }
+                catch
+                {
+                    if (@throw)
+                        throw;
+                }
             }
+
+            if (path.IsDirectory())
+            {
+                IO.Directory.GetFiles(path, "*", IO.SearchOption.AllDirectories)
+                            .ForEach(deleteFile);
+
+                IO.Directory.GetDirectories(path, "*", IO.SearchOption.AllDirectories)
+                            .OrderByDescending(x => x)
+                            .ForEach(deleteDir);
+
+                deleteDir(path);
+            }
+            else
+            {
+                deleteDir(path);
+            }
+
             return path;
         }
 
