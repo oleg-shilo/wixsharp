@@ -2334,7 +2334,10 @@ namespace WixSharp
                     if (!regVal.Key.IsEmpty())
                         regKeyEl.Add(new XAttribute("Key", regVal.Key));
 
-                    string stringValue = regVal.RegValueString.ExpandWixEnvConsts().UnEscapeEnvars();
+                    string stringValue = regVal.RegValueString;
+                    if (AutoElements.ExpandindWixEnvInRegValue)
+                        stringValue = regVal.RegValueString.ExpandWixEnvConsts().UnEscapeEnvars();
+
                     if (regValEl.Attribute("Type").Value == "multiString")
                     {
                         foreach (string line in stringValue.GetLines())

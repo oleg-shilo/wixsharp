@@ -101,6 +101,13 @@ namespace WixSharp
         public static bool DisableAutoKeyPath = false;
 
         /// <summary>
+        /// Enables expanding Wix environment constants in <see cref="WixSharp.RegValue.Value"/>.
+        /// <para>This flag was introduced as a fall back mechanism for legacy action of expanding Wix
+        /// constants in registry values. This work around was triggered by issue #774.</para>
+        /// </summary>
+        public static bool ExpandindWixEnvInRegValue = false;
+
+        /// <summary>
         /// Enables UAC revealer, which is a work around for the MSI limitation/problem around EmbeddedUI UAC prompt.
         /// <para> The symptom of the problem is the UAC prompt not being displayed during elevation but rather minimized
         /// on the taskbar. This is caused by the fact the all background applications (including MSI runtime) supposed to
