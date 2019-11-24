@@ -2335,7 +2335,7 @@ namespace WixSharp
                         regKeyEl.Add(new XAttribute("Key", regVal.Key));
 
                     string stringValue = regVal.RegValueString;
-                    if (AutoElements.ExpandindWixEnvInRegValue)
+                    if (AutoElements.ExpandWixConstsInRegValue)
                         stringValue = regVal.RegValueString.ExpandWixEnvConsts().UnEscapeEnvars();
 
                     if (regValEl.Attribute("Type").Value == "multiString")

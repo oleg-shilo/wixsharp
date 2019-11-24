@@ -105,7 +105,7 @@ namespace WixSharp
         /// <para>This flag was introduced as a fall back mechanism for legacy action of expanding Wix
         /// constants in registry values. This work around was triggered by issue #774.</para>
         /// </summary>
-        public static bool ExpandWixEnvInRegValue = false;
+        public static bool ExpandWixConstsInRegValue = false;
 
         /// <summary>
         /// Enables UAC revealer, which is a work around for the MSI limitation/problem around EmbeddedUI UAC prompt.
