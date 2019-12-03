@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using WindowsInstaller;
@@ -134,6 +135,35 @@ namespace WixSharp.UI
             //}
             else
                 throw new Exception("Only Int32, String and Boolean conversion is supported");
+        }
+    }
+}
+
+namespace WixSharp
+{
+    public static class EmbedTransform
+    {
+        static void check(this MsiError result, string errorContext = "")
+        {
+            if (result != MsiError.NoError) throw new ApplicationException("Error: EmbedTransform.Embed->" + errorContext);
+        }
+
+        public static void Do(string msi, string mst)
+        {
+            MsiInterop.MsiOpenDatabase(msi, MsiDbPersistMode.ReadWrite, out IntPtr db).check(nameof(MsiInterop.MsiOpenDatabase));
+            MsiInterop.MsiDatabaseOpenView(db, "SELECT `Name`,`Data` FROM _Storages", out IntPtr view).check(nameof(MsiInterop.MsiDatabaseOpenView));
+
+            var record = MsiInterop.MsiCreateRecord(2);
+
+            MsiInterop.MsiRecordSetString(record, 1, Path.GetFileName(mst)).check(nameof(MsiInterop.MsiRecordSetString));
+            MsiInterop.MsiRecordSetStream(record, 2, mst).check(nameof(MsiInterop.MsiRecordSetStream));
+
+            MsiInterop.MsiViewExecute(view, record).check(nameof(MsiInterop.MsiViewExecute));
+            MsiInterop.MsiViewModify(view, MsiModifyMode.ModifyAssign, record).check(nameof(MsiInterop.MsiViewModify));
+            MsiInterop.MsiDatabaseCommit(db).check(nameof(MsiInterop.MsiDatabaseCommit));
+
+            MsiInterop.MsiCloseHandle(view).check(nameof(MsiInterop.MsiCloseHandle));
+            MsiInterop.MsiCloseHandle(db).check(nameof(MsiInterop.MsiCloseHandle));
         }
     }
 }

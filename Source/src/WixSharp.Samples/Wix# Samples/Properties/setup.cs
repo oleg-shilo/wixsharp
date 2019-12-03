@@ -21,14 +21,14 @@ class Script
 
             Actions = new WixSharp.Action[]
             {
-                new ManagedAction(CustonActions.ShowGritting),
+                new ManagedAction(CustomActions.ShowGritting),
                 new WixQuietExecAction("notepad.exe", "[NOTEPAD_FILE]"),
             },
 
             Properties = new[]
             {
                 new Property("Gritting", "Hello World!"),
-                new Property("Title", "Properties Test"),
+                new Property("Title", "Properties Test") { Hidden = true },
                 new PublicProperty("NOTEPAD_FILE", @"C:\boot.ini")
             }
         };
@@ -38,7 +38,7 @@ class Script
     }
 }
 
-public class CustonActions
+public class CustomActions
 {
     [CustomAction]
     public static ActionResult ShowGritting(Session session)

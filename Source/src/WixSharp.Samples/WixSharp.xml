@@ -1500,6 +1500,13 @@
             </para>
             </summary>
         </member>
+        <member name="F:WixSharp.AutoElements.ExpandWixConstsInRegValue">
+            <summary>
+            Enables expanding Wix environment constants in <see cref="F:WixSharp.RegValue.Value"/>.
+            <para>This flag was introduced as a fall back mechanism for legacy action of expanding Wix
+            constants in registry values. This work around was triggered by issue #774.</para>
+            </summary>
+        </member>
         <member name="F:WixSharp.AutoElements.EnableUACRevealer">
             <summary>
             Enables UAC revealer, which is a work around for the MSI limitation/problem around EmbeddedUI UAC prompt.
@@ -3149,6 +3156,11 @@
             ProgId(s) associated with Class must be a child element of the ClassRegistration instance.
             </summary>
         </member>
+        <member name="F:WixSharp.ComRegistration.Interfaces">
+            <summary>
+            Interface(s) associated with Class must be a child element of the ClassRegistration instance.
+            </summary>
+        </member>
         <member name="M:WixSharp.ComRegistration.Process(WixSharp.ProcessingContext)">
             <summary>
             The method demonstrates the correct way of integrating RemoveFolderEx.
@@ -3203,6 +3215,52 @@
             </summary>
         </member>
         <member name="M:WixSharp.ProgId.ToXElement">
+            <summary>
+            Serializes the class instance into XML element.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:WixSharp.Interface">
+            <summary>
+            COM Interface registration for parent Class.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Interface.Id">
+            <summary>
+            GUID identifier for COM Interface.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Interface.BaseInterface">
+            <summary>
+            Identifies the interface from which the current interface is derived.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Interface.Name">
+            <summary>
+            Name for COM Interface.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Interface.NumMethods">
+            <summary>
+            Number of methods implemented on COM Interface.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Interface.ProxyStubClassId">
+            <summary>
+            GUID CLSID for proxy stub to COM Interface.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Interface.ProxyStubClassId32">
+            <summary>
+            GUID CLSID for 32-bit proxy stub to COM Interface.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Interface.Versioned">
+            <summary>
+            Determines whether a Typelib version entry should be created with the other COM Interface registry keys. Default is 'yes'.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Interface.ToXElement">
             <summary>
             Serializes the class instance into XML element.
             </summary>
@@ -8039,6 +8097,24 @@
             <param name="languages">The languages.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.IsFile(System.String)">
+            <summary>
+            Determines whether this path is a file.
+            </summary>
+            <param name="path">The path.</param>
+            <returns>
+              <c>true</c> if the specified path is file; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:WixSharp.Extensions.IsDirectory(System.String)">
+            <summary>
+            Determines whether this instance is directory.
+            </summary>
+            <param name="path">The path.</param>
+            <returns>
+              <c>true</c> if the specified path is directory; otherwise, <c>false</c>.
+            </returns>
+        </member>
         <member name="M:WixSharp.Extensions.DeleteIfExists(System.String,System.Boolean)">
             <summary>
             Deletes File/Directory from by the specified path if it exists.
@@ -8198,7 +8274,7 @@
         </member>
         <member name="M:WixSharp.Extensions.IsWixConstant(System.String)">
             <summary>
-            Determines whether the value is a WiX constant (e.g. 'SystenFolder').
+            Determines whether the value is a WiX constant (e.g. 'SystemFolder').
             </summary>
             <param name="value">The value.</param>
             <returns>
@@ -8772,14 +8848,21 @@
             <param name="session">The session.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.IfEmptyUse(System.String,System.String)">
+            <summary>
+            Returns the first string `value1` if it is not empty. Otherwise returns `value2`.
+            </summary>
+            <param name="value1">The value1.</param>
+            <param name="value2">The value2.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.IsFeatureEnabled(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
             <summary>
             Determines whether the feature is selected in the feature tree of the Features dialog
-            and will be installed.
-            <para>
-            This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
-            that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
-            </para>
+            and will be installed. The "selected" state of the feature is determined by analysing the
+            `ADDLOCAL` session property, which has the required information either feature selected via UI
+            or via msiexec.exe CLI arguments. If none of this selections is made by the user the method will
+            return the default state of the feature (from session property "ADDFEATURES").
             </summary>
             <param name="session">The session.</param>
             <param name="featureName">Name of the feature.</param>
@@ -12589,7 +12672,7 @@
         </member>
         <member name="P:WixSharp.SetupEventArgs.Session">
             <summary>
-            Gets or sets the session.
+            Gets or sets the MSI session object.
             </summary>
             <value>
             The session.
@@ -12769,16 +12852,24 @@
             </value>
         </member>
         <member name="P:WixSharp.SetupEventArgs.Data">
-            <summary>
-            Gets or sets the Data.
-            <para>Data is a free form data storage for custom user defined and Wix# generated settings. In a way it's an
-            alternative to the MSI session properties. The Data interface is identical to the Session properties -
-            string dictionary. Though a very important difference is that Data (as opposite to session) does maintain
-            the all entries during the whole MSI session. Even for the deferred action.</para>
-            </summary>
-            <value>
-            The data.
-            </value>
+             <summary>
+             Gets or sets the Data.
+             <para>Data is a free form data storage for custom user defined and Wix# generated settings. In a way it's an
+             alternative to the MSI session properties. The Data is similar to Session as its interface is identical to
+             the Session properties, which is a string dictionary. Though a very important difference is that Data (as opposite to
+             session) does maintain the all entries during the whole MSI session. Even for the deferred action.</para>
+             <para>Do not confuse `Data` and `Session`. Fist one (Data) keeps user defined custom properties that are available
+             at any stage of setup. Second one (Session) keeps the current MSI session properties and only available
+             for from non-deferred custom actions.</para>
+            
+             Usage:
+             <list type="bulet">
+             <item> Use e.Data for custom action data and copies of MSI properties, so they are available in both deferred and non-deferred actions.</item>
+             <item> Use e.Session for MSI session properties </item>
+             </list>
+             </summary>
+             <value>
+             </value>
         </member>
         <member name="M:WixSharp.SetupEventArgs.#ctor">
             <summary>
@@ -13583,7 +13674,7 @@
               You can use predefined Wix# environment constants for well-known installation locations. They are directly mapped
               to the corresponding WiX constants:
               <para>For the full list of the constants consult WiX documentation or use <c>Compiler.GetMappedWixConstants</c>
-              to explore them programatically./</para>
+              to explore them programmatically./</para>
               <para>
               <para><c>Wix#</c> - <c>WiX</c></para>
               <para>%WindowsFolder% - [WindowsFolder]</para>
@@ -13961,6 +14052,38 @@
             relative <see cref="F:WixSharp.Files.Directory"/>. Though <see cref="F:WixSharp.Files.Directory"/> takes precedence if it is an absolute path.</param>
             <returns>Array of <see cref="T:WixSharp.WixEntity"/> instances, which are either <see cref="T:WixSharp.File"/> or/and <see cref="T:WixSharp.Dir"/> objects.</returns>
             <param name="parentWixDir">Parent Wix# directory</param>
+        </member>
+        <member name="M:WixSharp.LocalizationExtensions.BuildLocalizedMsi(WixSharp.Project,System.String)">
+             <summary>
+             Builds the localized msi.
+            
+             <para>This method builds the msi with the default language support according `project.Language`
+             setting. The additional languages can also be embedded into the resulting msi during the build.</para>
+             <para>Invoking specific language UI is triggered either automatically based on the OS default language
+             or by passing special MSI properties arguments to the <c>msiexec.exe</c>:</para>
+             <list type="bullet">
+             <item><description><i>English</i><para><c>msiexec /i setup.msi</c></para></description></item>
+             <item><description><i>German</i><para><c>msiexec /i setup.msi TRANSFORMS=:de-DE.mst</c></para></description></item>
+             <item><description><i>Russian</i> <para><c>msiexec /i setup.msi TRANSFORMS=:ru-RU.mst</c></para></description></item>
+             </list>
+             </summary>
+              <example>The following is an example of building <c>English</c> msi, which can also support <c>German</c>
+              and <c>Russian</c> UI.
+             <code>
+             var project =
+                 new ManagedProject("My Product",
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+                         new File("readme.txt")));
+            
+             project.Language = "en-US";
+             project.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
+            
+             project.BuildLocalizedMsi(additionalLanguages: "ru-RU, de-DE");
+             </code>
+             </example>
+             <param name="project">The project.</param>
+             <param name="additionalLanguages">Add extra languages support (e.g. "de-DE, ru-RU")</param>
+             <returns></returns>
         </member>
         <member name="T:WixSharp.SerializingExtensions">
             <summary>
@@ -14455,7 +14578,7 @@
             Collection of <see cref="T:WixSharp.FilePermission" /> to be applied to the file.
             </summary>
         </member>
-        <member name="F:WixSharp.File.FirewallExceptions">
+        <member name="P:WixSharp.File.FirewallExceptions">
             <summary>
             Collection of <see cref="T:WixSharp.FirewallException" /> to be applied to the file.
             </summary>
@@ -15189,7 +15312,7 @@
         <member name="F:WixSharp.ManagedAction.DefaultUsesProperties">
             <summary>
             The default properties mapped for use with the 'deferred' (as well as 'rollback'  and 'commit') custom actions. See <see cref="F:WixSharp.ManagedAction.UsesProperties"/> for the details.
-            <para>The default value is "INSTALLDIR,UILevel,ProductCode"</para>
+            <para>The default value is "INSTALLDIR,UILevel,ProductCode,ADDLOCAL,ADDFEATURES"</para>
             </summary>
         </member>
         <member name="T:WixSharp.PathFileAction">
@@ -15572,7 +15695,7 @@
         </member>
         <member name="F:WixSharp.Project.ForceReboot">
             <summary>
-            Provideds fine control over rebooting at the end of installation.
+            Provides fine control over rebooting at the end of installation.
             <para>If set it creates <c>ForceReboot</c> element in the <c>InstallExecuteSequence</c>.</para>
             </summary>
             <example>
@@ -16105,6 +16228,11 @@
             <para>
             Setting this flag to 'true' has the same effect as adding the property name to <see cref="F:WixSharp.ManagedAction.UsesProperties"/>.
             </para>
+            </summary>
+        </member>
+        <member name="F:WixSharp.Property.Hidden">
+            <summary>
+            Denotes that the Property is not logged during installation. See the MsiHiddenProperties Property for more information.
             </summary>
         </member>
         <member name="F:WixSharp.Property.Secure">

@@ -24,7 +24,7 @@ class Script
                 new LaunchCondition("NET20=\"#1\"", "Please install .NET 2.0 first."),
 
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                     new File(@"Files\MyApp.exe")),
+                    new File(@"Files\MyApp.exe")),
 
                 new RegValueProperty("NET20", RegistryHive.LocalMachine, @"Software\Microsoft\NET Framework Setup\NDP\v2.0.50727", "Install", "0"));
 
@@ -34,7 +34,7 @@ class Script
     static public void CheckDotNetWithBuildinTask()
     {
         var project = new Project("Setup",
-           new Dir(@"%ProgramFiles%\My Company\My Product",
+            new Dir(@"%ProgramFiles%\My Company\My Product",
                 new File(@"Files\MyApp.exe")));
 
         project.SetNetFxPrerequisite("NETFRAMEWORK20='#1'", "Please install .NET 2.0 first.");

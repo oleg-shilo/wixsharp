@@ -93,6 +93,8 @@ namespace WixSharpSetup.Dialogs
         /// </summary>
         public static List<string> UserSelectedItems;
 
+        public static List<string> InitialUserSelectedItems;
+
         void BuildFeaturesHierarchy()
         {
             features = Runtime.Session.Features;
@@ -146,6 +148,11 @@ namespace WixSharpSetup.Dialogs
                      .Cast<TreeNode>()
                      .ForEach(node => featuresTree.Nodes.Add(node));
 
+            InitialUserSelectedItems = features.Where(x => x.IsViewChecked())
+                                               .Select(x => x.Name)
+                                               .OrderBy(x => x)
+                                               .ToList();
+
             isAutoCheckingActive = true;
         }
 
@@ -153,6 +160,7 @@ namespace WixSharpSetup.Dialogs
         {
             UserSelectedItems = features.Where(x => x.IsViewChecked())
                                         .Select(x => x.Name)
+                                        .OrderBy(x => x)
                                         .ToList();
         }
 
@@ -164,19 +172,29 @@ namespace WixSharpSetup.Dialogs
 
         void next_Click(object sender, System.EventArgs e)
         {
-            string itemsToInstall = features.Where(x => x.IsViewChecked())
-                                        .Select(x => x.Name)
-                                        .Join(",");
+            bool userChangedFeatures = InitialUserSelectedItems.Join(",") != InitialUserSelectedItems.Join(",");
 
-            string itemsToRemove = features.Where(x => !x.IsViewChecked())
-                                           .Select(x => x.Name)
-                                           .Join(",");
+            if (userChangedFeatures)
+            {
+                string itemsToInstall = features.Where(x => x.IsViewChecked())
+                                                .Select(x => x.Name)
+                                                .Join(",");
 
-            if (itemsToRemove.Any())
-                Runtime.Session["REMOVE"] = itemsToRemove;
+                string itemsToRemove = features.Where(x => !x.IsViewChecked())
+                                               .Select(x => x.Name)
+                                               .Join(",");
 
-            if (itemsToInstall.Any())
-                Runtime.Session["ADDLOCAL"] = itemsToInstall;
+                if (itemsToRemove.Any())
+                    Runtime.Session["REMOVE"] = itemsToRemove;
+
+                if (itemsToInstall.Any())
+                    Runtime.Session["ADDLOCAL"] = itemsToInstall;
+            }
+            else
+            {
+                Runtime.Session["REMOVE"] = "";
+                Runtime.Session["ADDLOCAL"] = "";
+            }
 
             SaveUserSelection();
             Shell.GoNext();

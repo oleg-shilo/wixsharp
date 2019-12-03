@@ -192,6 +192,11 @@ namespace WixSharp
         public bool IsDeferred = false;
 
         /// <summary>
+        /// Denotes that the Property is not logged during installation. See the MsiHiddenProperties Property for more information.
+        /// </summary>
+        public bool? Hidden;
+
+        /// <summary>
         /// The flag indicating if the property can be passed to the server side when doing a managed installation with elevated privileges.
         /// </summary>
         public bool? Secure;

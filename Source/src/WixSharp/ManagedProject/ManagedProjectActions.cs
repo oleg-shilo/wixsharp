@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
-using Microsoft.Deployment.WindowsInstaller;
 using System.Windows.Forms;
+using Microsoft.Deployment.WindowsInstaller;
 
 namespace WixSharp
 {
@@ -46,6 +46,11 @@ namespace WixSharp
         public static ActionResult WixSharp_BeforeInstall_Action(Session session)
         {
             // Debugger.Launch();
+            session["ADDFEATURES"] = session.Features
+                                            .Where(x => x.RequestState != InstallState.Absent)
+                                            .Select(x => x.Name)
+                                            .Join(",");
+
             return ManagedProject.InvokeClientHandlers(session, "BeforeInstall");
         }
 

@@ -101,6 +101,13 @@ namespace WixSharp
         public static bool DisableAutoKeyPath = false;
 
         /// <summary>
+        /// Enables expanding Wix environment constants in <see cref="WixSharp.RegValue.Value"/>.
+        /// <para>This flag was introduced as a fall back mechanism for legacy action of expanding Wix
+        /// constants in registry values. This work around was triggered by issue #774.</para>
+        /// </summary>
+        public static bool ExpandWixConstsInRegValue = false;
+
+        /// <summary>
         /// Enables UAC revealer, which is a work around for the MSI limitation/problem around EmbeddedUI UAC prompt.
         /// <para> The symptom of the problem is the UAC prompt not being displayed during elevation but rather minimized
         /// on the taskbar. This is caused by the fact the all background applications (including MSI runtime) supposed to
@@ -452,6 +459,13 @@ namespace WixSharp
             // {dep}ProductKey=12345 vs
             // Component:{dep}ProductKey=12345 vs
             // {http://schemas.microsoft.com/wix/BalExtension}Overridable=yes"
+
+            // Note the syntax below is not supported:
+            // Component:{http://schemas.microsoft.com/wix/BalExtension}Overridable=yes"
+            if (item.Contains(":{http:") || item.Contains(":{https:"))
+                throw new Exception("Syntax `" + item + "` is not supported.\n" +
+                    "Use `parent:{alias}attribute=value` instead and add XML namespace with the alias.\n" +
+                    "For example: `project.IncludeWixExtension(\"WixDependencyExtension.dll\", \"dep\", expectedNamespace);`");
 
             string[] keyParts;
 

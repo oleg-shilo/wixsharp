@@ -119,7 +119,7 @@ namespace WixSharpSetup.Dialogs
                             if (simple)
                             {
                                 /*
-                                messageRecird[2] unconditionally contains the string to display
+                                messageRecord[2] unconditionally contains the string to display
 
                                 Examples:
 

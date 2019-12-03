@@ -26,6 +26,12 @@ namespace WindowsInstaller
     public enum MsiDbPersistMode
     {
         ReadOnly = 0,
+        ReadWrite = 1,
+    }
+
+    public enum MsiModifyMode
+    {
+        ModifyAssign = 3
     }
 
     [Flags]
@@ -104,7 +110,13 @@ namespace WindowsInstaller
         extern static public MsiError MsiDatabaseOpenView(IntPtr database, string query, out IntPtr view);
 
         [DllImport("msi", CharSet = CharSet.Auto)]
+        extern static public IntPtr MsiCreateRecord(uint numOfFields);
+
+        [DllImport("msi", CharSet = CharSet.Auto)]
         extern static public MsiError MsiOpenDatabase(string path, MsiDbPersistMode mode, out IntPtr handle);
+
+        [DllImport("msi", CharSet = CharSet.Auto)]
+        extern static public MsiError MsiDatabaseCommit(IntPtr database);
 
         [DllImport("msi")]
         extern static public MsiError MsiCloseHandle(IntPtr handle);
@@ -120,6 +132,15 @@ namespace WindowsInstaller
 
         [DllImport("msi", CharSet = CharSet.Auto)]
         extern static public MsiError MsiRecordGetString(IntPtr record, UInt32 field, StringBuilder value, ref UInt32 valueSize);
+
+        [DllImport("msi", CharSet = CharSet.Auto)]
+        extern static public MsiError MsiRecordSetString(IntPtr record, uint field, string value);
+
+        [DllImport("msi", CharSet = CharSet.Auto)]
+        extern static public MsiError MsiViewModify(IntPtr view, MsiModifyMode modifyMode, IntPtr record);
+
+        [DllImport("msi", CharSet = CharSet.Auto)]
+        extern static public MsiError MsiRecordSetStream(IntPtr record, uint field, string filePath);
 
         [DllImport("msi", CharSet = CharSet.Auto)]
         extern static public MsiError MsiViewClose(IntPtr view);

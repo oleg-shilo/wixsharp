@@ -1,8 +1,8 @@
-﻿using Microsoft.Deployment.WindowsInstaller;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 
 namespace WixSharp
@@ -44,7 +44,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Gets or sets the session.
+        /// Gets or sets the MSI session object.
         /// </summary>
         /// <value>
         /// The session.
@@ -177,7 +177,7 @@ namespace WixSharp
         /// <value>
         /// The msi file.
         /// </value>
-        public string MsiFile { get { return Data["MsiFile"] ?? Session.Property("OriginalDatabase"); } } // Data may not be initializaed it 
+        public string MsiFile { get { return Data["MsiFile"] ?? Session.Property("OriginalDatabase"); } } // Data may not be initializaed it
 
         /// <summary>
         /// Gets the setup mode.
@@ -291,12 +291,20 @@ namespace WixSharp
         /// <summary>
         /// Gets or sets the Data.
         /// <para>Data is a free form data storage for custom user defined and Wix# generated settings. In a way it's an
-        /// alternative to the MSI session properties. The Data interface is identical to the Session properties -
-        /// string dictionary. Though a very important difference is that Data (as opposite to session) does maintain
-        /// the all entries during the whole MSI session. Even for the deferred action.</para>
+        /// alternative to the MSI session properties. The Data is similar to Session as its interface is identical to
+        /// the Session properties, which is a string dictionary. Though a very important difference is that Data (as opposite to
+        /// session) does maintain the all entries during the whole MSI session. Even for the deferred action.</para>
+        /// <para>Do not confuse `Data` and `Session`. Fist one (Data) keeps user defined custom properties that are available
+        /// at any stage of setup. Second one (Session) keeps the current MSI session properties and only available
+        /// for from non-deferred custom actions.</para>
+        ///
+        /// Usage:
+        /// <list type="bulet">
+        /// <item> Use e.Data for custom action data and copies of MSI properties, so they are available in both deferred and non-deferred actions.</item>
+        /// <item> Use e.Session for MSI session properties </item>
+        /// </list>
         /// </summary>
         /// <value>
-        /// The data.
         /// </value>
         public AppData Data { get; set; }
 

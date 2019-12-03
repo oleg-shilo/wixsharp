@@ -451,7 +451,11 @@ namespace WixSharp
         {
             if (attributes.Any())
             {
-                var optimizedAttributes = attributes.Where(x => !x.Key.Contains(":") && !x.Key.Contains(":{") && !x.Key.StartsWith("{"));
+                // "Component:ProviderKey=12345
+                // {dep}ProductKey=12345
+                // Component:{dep}ProductKey=12345
+                var optimizedAttributes = attributes.Where(x => !x.Key.Contains(":") &&
+                                                                !x.Key.StartsWith("{"));
 
                 var optimizedAttributesMap = optimizedAttributes.ToDictionary(t => t.Key, t => t.Value);
 
@@ -954,6 +958,26 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Determines whether this path is a file.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified path is file; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsFile(this string path)
+            => IO.File.Exists(path);
+
+        /// <summary>
+        /// Determines whether this instance is directory.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified path is directory; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsDirectory(this string path)
+            => IO.Directory.Exists(path);
+
+        /// <summary>
         /// Deletes File/Directory from by the specified path if it exists.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -961,17 +985,52 @@ namespace WixSharp
         /// <returns></returns>
         public static string DeleteIfExists(this string path, bool @throw = false)
         {
-            try
+            void deleteFile(string file)
             {
-                var fullPath = IO.Path.GetFullPath(path);
-                if (IO.File.Exists(fullPath))
-                    IO.File.Delete(fullPath);
+                try
+                {
+                    var fullPath = IO.Path.GetFullPath(file);
+                    if (IO.File.Exists(fullPath))
+                        IO.File.Delete(fullPath);
+                }
+                catch
+                {
+                    if (@throw)
+                        throw;
+                }
             }
-            catch
+
+            void deleteDir(string file)
             {
-                if (@throw)
-                    throw;
+                try
+                {
+                    var fullPath = IO.Path.GetFullPath(file);
+                    if (IO.Directory.Exists(fullPath))
+                        IO.Directory.Delete(fullPath);
+                }
+                catch
+                {
+                    if (@throw)
+                        throw;
+                }
             }
+
+            if (path.IsDirectory())
+            {
+                IO.Directory.GetFiles(path, "*", IO.SearchOption.AllDirectories)
+                            .ForEach(deleteFile);
+
+                IO.Directory.GetDirectories(path, "*", IO.SearchOption.AllDirectories)
+                            .OrderByDescending(x => x)
+                            .ForEach(deleteDir);
+
+                deleteDir(path);
+            }
+            else
+            {
+                deleteDir(path);
+            }
+
             return path;
         }
 
@@ -1205,7 +1264,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Determines whether the value is a WiX constant (e.g. 'SystenFolder').
+        /// Determines whether the value is a WiX constant (e.g. 'SystemFolder').
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>
@@ -2061,12 +2120,7 @@ namespace WixSharp
         /// <param name="collection">The collection.</param>
         /// <returns></returns>
         public static Dictionary<string, string> Clone(this Dictionary<string, string> collection)
-        {
-            var result = new Dictionary<string, string>();
-            foreach (var item in collection)
-                result[item.Key] = item.Value;
-            return result;
-        }
+            => new Dictionary<string, string>(collection);
 
         /// <summary>
         /// Converts the string into the <see cref="T:WixSharp.Condition"/> instance.
@@ -2133,9 +2187,8 @@ namespace WixSharp
                     foreach (var i in obj)
                         retval.Add(i);
 
-                if (items != null)
-                    foreach (var i in items)
-                        retval.Add(i);
+                foreach (var i in items)
+                    retval.Add(i);
 
                 return (T1[])retval.ToArray(typeof(T1));
             }
@@ -2175,9 +2228,8 @@ namespace WixSharp
                     foreach (var i in obj)
                         retval.Add(i);
 
-                if (items != null)
-                    foreach (var i in items)
-                        retval.Add(i);
+                foreach (var i in items)
+                    retval.Add(i);
 
                 return (T1[])retval.ToArray(typeof(T1));
             }
@@ -2193,12 +2245,8 @@ namespace WixSharp
         /// <returns>A combined <see cref="T:System.Collections.Generic.List"/>.</returns>
         public static List<T> Combine<T>(this List<T> obj, List<T> items)
         {
-            if (items != null && items.Count != 0)
-            {
-                var retval = new List<T>();
-                retval.AddRange(items);
-                return retval;
-            }
+            if (items?.Count > 0)
+                obj.AddRange(items);
             return obj;
         }
 
@@ -2370,19 +2418,32 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Returns the first string `value1` if it is not empty. Otherwise returns `value2`.
+        /// </summary>
+        /// <param name="value1">The value1.</param>
+        /// <param name="value2">The value2.</param>
+        /// <returns></returns>
+        static public string IfEmptyUse(this string value1, string value2)
+            => value1.IsEmpty() ? value2 : value1;
+
+        /// <summary>
         /// Determines whether the feature is selected in the feature tree of the Features dialog
-        /// and will be installed.
-        /// <para>
-        /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
-        /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
-        /// </para>
+        /// and will be installed. The "selected" state of the feature is determined by analysing the
+        /// `ADDLOCAL` session property, which has the required information either feature selected via UI
+        /// or via msiexec.exe CLI arguments. If none of this selections is made by the user the method will
+        /// return the default state of the feature (from session property "ADDFEATURES").
         /// </summary>
         /// <param name="session">The session.</param>
         /// <param name="featureName">Name of the feature.</param>
         /// <returns></returns>
         static public bool IsFeatureEnabled(this Session session, string featureName)
         {
-            return (session.Property("ADDLOCAL") ?? "").Split(',').Where(x => x.SameAs(featureName)).Any();
+            string defaultAddedFeatures = session.Property("ADDFEATURES");
+            string requestedAddedFeatures = session.Property("ADDLOCAL");
+
+            return requestedAddedFeatures.IfEmptyUse(defaultAddedFeatures)
+                .Split(',')
+                .Any(x => x.SameAs(featureName));
         }
 
         /// <summary>
@@ -2593,36 +2654,15 @@ namespace WixSharp
         {
             //If binary is accessed the way as below it will raise "stream handle is not valid" exception
             //object result = session.Database.ExecuteScalar("select Data from Binary where Name = 'Fake_CRT.msi'");
-            //Stream s = (Stream)result;
-            //using (FileStream fs = new FileStream(@"....\Wix# Samples\Simplified Bootstrapper\Fake CRT1.msi", FileMode.Create))
-            //{
-            //    int Length = 256;
-            //    var buffer = new Byte[Length];
-            //    int bytesRead = s.Read(buffer, 0, Length);
-            //    while (bytesRead > 0)
-            //    {
-            //        fs.Write(buffer, 0, bytesRead);
-            //        bytesRead = s.Read(buffer, 0, Length);
-            //    }
-            //}
 
             //however View approach is OK
             using (var sql = session.Database.OpenView("select Data from Binary where Name = '" + binary + "'"))
             {
                 sql.Execute();
 
-                System.IO.Stream stream = sql.Fetch().GetStream(1);
-
-                using (var fs = new System.IO.FileStream(file, System.IO.FileMode.Create))
+                using (var record = sql.Fetch())
                 {
-                    int Length = 256;
-                    var buffer = new Byte[Length];
-                    int bytesRead = stream.Read(buffer, 0, Length);
-                    while (bytesRead > 0)
-                    {
-                        fs.Write(buffer, 0, bytesRead);
-                        bytesRead = stream.Read(buffer, 0, Length);
-                    }
+                    record.GetStream(1, file);
                 }
             }
         }
@@ -2810,6 +2850,67 @@ namespace WixSharp
         {
             return new WixItems(items.Cast<WixObject>());
         }
+    }
+
+    public static class LocalizationExtensions
+    {
+        /// <summary>
+        /// Builds the localized msi.
+        ///
+        /// <para>This method builds the msi with the default language support according `project.Language`
+        /// setting. The additional languages can also be embedded into the resulting msi during the build.</para>
+        /// <para>Invoking specific language UI is triggered either automatically based on the OS default language
+        /// or by passing special MSI properties arguments to the <c>msiexec.exe</c>:</para>
+        /// <list type="bullet">
+        /// <item><description><i>English</i><para><c>msiexec /i setup.msi</c></para></description></item>
+        /// <item><description><i>German</i><para><c>msiexec /i setup.msi TRANSFORMS=:de-DE.mst</c></para></description></item>
+        /// <item><description><i>Russian</i> <para><c>msiexec /i setup.msi TRANSFORMS=:ru-RU.mst</c></para></description></item>
+        /// </list>
+        /// </summary>
+        ///  <example>The following is an example of building <c>English</c> msi, which can also support <c>German</c>
+        ///  and <c>Russian</c> UI.
+        /// <code>
+        /// var project =
+        ///     new ManagedProject("My Product",
+        ///         new Dir(@"%ProgramFiles%\My Company\My Product",
+        ///             new File("readme.txt")));
+        ///
+        /// project.Language = "en-US";
+        /// project.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
+        ///
+        /// project.BuildLocalizedMsi(additionalLanguages: "ru-RU, de-DE");
+        /// </code>
+        /// </example>
+        /// <param name="project">The project.</param>
+        /// <param name="additionalLanguages">Add extra languages support (e.g. "de-DE, ru-RU")</param>
+        /// <returns></returns>
+        static public string BuildLocalizedMsi(this WixSharp.Project project, string additionalLanguages)
+        {
+            if (Compiler.ClientAssembly.IsEmpty())
+                Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
+
+            string productMsi = project.BuildMsi();
+
+            var torch = Compiler.WixLocation.PathCombine("torch.exe");
+
+            foreach (string lang in additionalLanguages.Split(',', ';').Select(x => x.Trim()))
+            {
+                project.Language =
+                project.OutFileName = lang;
+
+                string langMsi = project.BuildMsi();
+                string langMst = langMsi.PathChangeExtension(".mst");
+
+                torch.Run($"-p -t language \"{productMsi}\" \"{langMsi}\" -out \"{langMst}\"");
+
+                EmbedTransform.Do(productMsi, langMst);
+            }
+
+            return productMsi;
+        }
+
+        static int Run(this string exe, string args)
+            => new ExternalTool { ExePath = exe, Arguments = args }.ConsoleRun();
     }
 
     /// <summary>

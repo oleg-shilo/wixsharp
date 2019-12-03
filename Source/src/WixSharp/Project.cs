@@ -283,7 +283,7 @@ namespace WixSharp
         /// only if <see cref="WixSharp.Project.MajorUpgrade"/> is set.</para>
         /// <para>Read more: https://docs.microsoft.com/en-us/windows/desktop/msi/reinstallmode </para>
         /// </summary>
-        public string ReinstallMode = "amus";
+        public string ReinstallMode = "omus";
 
         /// <summary>
         /// Relative path to RTF file with the custom licence agreement to be displayed in the Licence dialog.
@@ -386,7 +386,7 @@ namespace WixSharp
         public ScheduleReboot ScheduleReboot;
 
         /// <summary>
-        /// Provideds fine control over rebooting at the end of installation.
+        /// Provides fine control over rebooting at the end of installation.
         /// <para>If set it creates <c>ForceReboot</c> element in the <c>InstallExecuteSequence</c>.</para>
         /// </summary>
         /// <example>

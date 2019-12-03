@@ -1,3 +1,6 @@
+v1.9.0.0
+* Removed packages.config as after recent VS updates it stopped invoking *.ps1 install scripts correctly
+
 v1.8.0.0
-* Project templetes now include all WixSharp references to work smoothly on NuGet restore
-* Removed SetEnvVar.dll target from the project templete
+* Project templates now include all WixSharp references to work smoothly on NuGet restore
+

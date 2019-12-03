@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Principal;
 
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
@@ -162,8 +163,8 @@ public class Script
         MessageBox.Show(e.Session.GetMainWindow(),
                         e.ToString() +
                         "\npersisted_data = " + e.Data["persisted_data"] +
-                        "\nEnvVar('INSTALLDIR') -> " + Environment.ExpandEnvironmentVariables("%INSTALLDIR%My App.exe") +
-                        "\nADDLOCAL = " + e.Session.Property("ADDLOCAL"),
+                        "\nADDFEATURES = " + e.Session.Property("ADDFEATURES") +
+                        "\nEnvVar('INSTALLDIR') -> " + Environment.ExpandEnvironmentVariables("%INSTALLDIR%My App.exe"),
                         caption: "AfterInstall ");
         try
         {

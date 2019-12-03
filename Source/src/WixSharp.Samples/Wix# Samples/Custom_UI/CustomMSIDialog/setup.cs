@@ -1,7 +1,7 @@
-﻿using ConsoleApplication1;
-using Microsoft.Deployment.WindowsInstaller;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows.Forms;
+using Microsoft.Deployment.WindowsInstaller;
+using ConsoleApplication1;
 using WixSharp;
 using WixSharp.Controls;
 
@@ -10,7 +10,7 @@ class Script
     static public void Main()
     {
         //Support for building native MSI UI is an experimental feature and no longer supported.
-        //It has been superseded by the "Managed UI" feature available in v1.0.22.0 and higher. 
+        //It has been superseded by the "Managed UI" feature available in v1.0.22.0 and higher.
 
         Dialog productActivationDialog = new ProductActivationForm().ToWDialog();
 
@@ -32,13 +32,14 @@ class Script
 
         project.UI = WUI.WixUI_Common;
         project.CustomUI = CustomUIBuilder.BuildPostLicenseDialogUI(customDialog: productActivationDialog,
-                                                                    onNextActions: new DialogAction[]{
-                                                                                       new ExecuteCustomAction ("ValidateLicenceKey"),
-                                                                                       new ShowDialog(NativeDialogs.InstallDirDlg, "SERIALNUMBER_VALIDATED = \"TRUE\"")});
-        
+                                                                    onNextActions: new DialogAction[]
+                                                                    {
+                                                                        new ExecuteCustomAction ("ValidateLicenceKey"),
+                                                                        new ShowDialog(NativeDialogs.InstallDirDlg, "SERIALNUMBER_VALIDATED = \"TRUE\"")});
+
         //In this sample we are using built-in BuildPostLicenseDialogUI but if it is not suitable for
         //you can define you own routine for building UI definition.
-        //CustomUIHelper.cs is an example of such an alternative. In this case it does the same job 
+        //CustomUIHelper.cs is an example of such an alternative. In this case it does the same job
         //as built-in BuildPostLicenseDialogUI but you can modify it to suite your needs better.
         //
         //alternatively you can call CustoUIHelper with the local implementation of the CustomUI sequence

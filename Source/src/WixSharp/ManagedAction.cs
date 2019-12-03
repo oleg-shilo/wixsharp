@@ -635,9 +635,9 @@ namespace WixSharp
 
         /// <summary>
         /// The default properties mapped for use with the 'deferred' (as well as 'rollback'  and 'commit') custom actions. See <see cref="ManagedAction.UsesProperties"/> for the details.
-        /// <para>The default value is "INSTALLDIR,UILevel,ProductCode"</para>
+        /// <para>The default value is "INSTALLDIR,UILevel,ProductCode,ADDLOCAL,ADDFEATURES"</para>
         /// </summary>
-        public static string DefaultUsesProperties = "INSTALLDIR,UILevel,ProductCode";
+        public static string DefaultUsesProperties = "INSTALLDIR,UILevel,ProductCode,ADDLOCAL,ADDFEATURES";
 
         internal string RollbackExpandAllUsedProperties()
         {

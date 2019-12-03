@@ -4,15 +4,15 @@
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
+using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
-using System.Diagnostics;
-using Microsoft.Win32;
 using WixSharp.UI.Forms;
 
 public class Script
@@ -36,13 +36,13 @@ public class Script
         manuals.Children.Add(dev_manuals);
 
         var project = new ManagedProject("ManagedSetup",
-                            new Dir(@"%ProgramFiles%\My Company\My Product",
-                                new File(binaries, @"..\Files\bin\MyApp.exe"),
-                                new Dir("Docs",
-                                    new File(docs, "readme.txt"),
-                                    new File(tuts, @"..\Files\Docs\tutorial.txt"),
-                                    new File(user_manuals, @"..\Files\Docs\Manual.txt"),
-                                    new File(dev_manuals, @"..\Files\Docs\DevManual.txt"))));
+                              new Dir(@"%ProgramFiles%\My Company\My Product",
+                                  new File(binaries, @"..\Files\bin\MyApp.exe"),
+                                  new Dir("Docs",
+                                      new File(docs, "readme.txt"),
+                                      new File(tuts, @"..\Files\Docs\tutorial.txt"),
+                                      new File(user_manuals, @"..\Files\Docs\Manual.txt"),
+                                      new File(dev_manuals, @"..\Files\Docs\DevManual.txt"))));
 
         project.ManagedUI = new ManagedUI();
 
@@ -53,10 +53,10 @@ public class Script
 
         //removing all entry dialogs and installdir
         project.ManagedUI.InstallDialogs.Add(Dialogs.Welcome)
-                                        //.Add(Dialogs.Licence) // decide if to show (or not) this dialog at runtime
-                                        //.Add(Dialogs.Features)
-                                        //.Add(Dialogs.SetupType)
-                                        //.Add(Dialogs.InstallDir)
+                                        // .Add(Dialogs.Licence) // decide if to show (or not) this dialog at runtime
+                                        // .Add(Dialogs.Features)
+                                        // .Add(Dialogs.SetupType)
+                                        // .Add(Dialogs.InstallDir)
                                         .Add(Dialogs.Progress)
                                         .Add(Dialogs.Exit);
 

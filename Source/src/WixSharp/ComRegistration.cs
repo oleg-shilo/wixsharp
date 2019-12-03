@@ -205,6 +205,11 @@ namespace WixSharp
         public ProgId[] ProgIds;
 
         /// <summary>
+        /// Interface(s) associated with Class must be a child element of the ClassRegistration instance.
+        /// </summary>
+        public Interface[] Interfaces;
+
+        /// <summary>
         /// The method demonstrates the correct way of integrating RemoveFolderEx.
         /// <para>
         /// The sample also shows various XML manipulation techniques available with Fluent XElement extensions:
@@ -218,6 +223,8 @@ namespace WixSharp
             XElement element = this.ToXElement("Class");
 
             ProgIds?.ForEach(progIdChild => element.Add(progIdChild.ToXElement()));
+
+            Interfaces?.ForEach(interfaceChild => element.Add(interfaceChild.ToXElement()));
 
             context.XParent.Add(element);
         }
@@ -282,6 +289,66 @@ namespace WixSharp
             root.Add(this.MapToXmlAttributes());
 
             ProgIds?.ForEach(progIdChild => root.Add(progIdChild.ToXElement()));
+
+            return root;
+        }
+    }
+
+    /// <summary>
+    /// COM Interface registration for parent Class.
+    /// </summary>
+    public class Interface
+    {
+        /// <summary>
+        /// GUID identifier for COM Interface.
+        /// </summary>
+        [Xml]
+        public string Id;
+
+        /// <summary>
+        /// Identifies the interface from which the current interface is derived.
+        /// </summary>
+        [Xml]
+        public string BaseInterface;
+
+        /// <summary>
+        /// Name for COM Interface.
+        /// </summary>
+        [Xml]
+        public string Name;
+
+        /// <summary>
+        /// Number of methods implemented on COM Interface.
+        /// </summary>
+        [Xml]
+        public int NumMethods;
+
+        /// <summary>
+        /// GUID CLSID for proxy stub to COM Interface.
+        /// </summary>
+        [Xml]
+        public string ProxyStubClassId;
+
+        /// <summary>
+        /// GUID CLSID for 32-bit proxy stub to COM Interface.
+        /// </summary>
+        [Xml]
+        public string ProxyStubClassId32;
+
+        /// <summary>
+        /// Determines whether a Typelib version entry should be created with the other COM Interface registry keys. Default is 'yes'.
+        /// </summary>
+        public bool? Versioned;
+
+        /// <summary>
+        /// Serializes the class instance into XML element.
+        /// </summary>
+        /// <returns></returns>
+        public XElement ToXElement()
+        {
+            var root = new XElement("Interface");
+
+            root.Add(this.MapToXmlAttributes());
 
             return root;
         }

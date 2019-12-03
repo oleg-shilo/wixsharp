@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>1.12.0.0</version>
+    <version>1.13.2.1</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,20 +18,15 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.12.0
-
-* Issue #695: FR - Implement Harvester using wix heat.
-* Issue #714: Incorrect fonts when building on Windows Server Core
-* Added `XElement.GetAttribute` extension method.
-* New class `PublicProperty` to encapsulate a public property which must be uppercase
-
-
+    <releaseNotes>Release v1.13.2.1-pre
+- Issue #765: Dynamic localization (first cut)
+- Some samples cleanup
 </releaseNotes>
     <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.12.0.0" />
+      <dependency id="WixSharp.bin" version="1.13.2.1" />
     </dependencies>
   </metadata>
   <files>

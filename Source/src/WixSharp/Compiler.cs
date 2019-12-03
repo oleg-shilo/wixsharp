@@ -1208,8 +1208,9 @@ namespace WixSharp
                    .SetAttribute("Version", project.Version)
                    .SetAttribute("UpgradeCode", project.UpgradeCode);
 
-            if (project.ControlPanelInfo != null && project.ControlPanelInfo.Manufacturer.IsNotEmpty())
+            if (project.ControlPanelInfo.Manufacturer.IsNotEmpty())
                 product.SetAttribute("Manufacturer", project.ControlPanelInfo.Manufacturer);
+
             product.AddAttributes(project.Attributes);
 
             XElement package = product.Select("Package");
@@ -2333,7 +2334,10 @@ namespace WixSharp
                     if (!regVal.Key.IsEmpty())
                         regKeyEl.Add(new XAttribute("Key", regVal.Key));
 
-                    string stringValue = regVal.RegValueString.ExpandWixEnvConsts().UnEscapeEnvars();
+                    string stringValue = regVal.RegValueString;
+                    if (AutoElements.ExpandWixConstsInRegValue)
+                        stringValue = regVal.RegValueString.ExpandWixEnvConsts().UnEscapeEnvars();
+
                     if (regValEl.Attribute("Type").Value == "multiString")
                     {
                         foreach (string line in stringValue.GetLines())
@@ -2561,6 +2565,7 @@ namespace WixSharp
                     var parentElement = product.AddElement(new XElement("Property")
                                                .SetAttribute("Id", prop.Name)
                                                .SetAttribute("Value", prop.Value)
+                                               .SetAttribute("Hidden", prop.Hidden)
                                                .SetAttribute("Secure", prop.Secure)
                                                .AddAttributes(prop.Attributes));
 

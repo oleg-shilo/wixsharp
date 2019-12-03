@@ -194,6 +194,11 @@
             The collection of the features selected by user as the features to be installed.
             </summary>
         </member>
+        <member name="F:WixSharp.UI.Forms.FeaturesDialog.InitialUserSelectedItems">
+            <summary>
+            The initial/default set of selected items (features) before user made any selection(s).
+            </summary>
+        </member>
         <member name="F:WixSharp.UI.Forms.FeaturesDialog.components">
             <summary>
             Required designer variable.

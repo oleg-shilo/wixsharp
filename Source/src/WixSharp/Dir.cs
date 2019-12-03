@@ -43,7 +43,7 @@ namespace WixSharp
     ///  You can use predefined Wix# environment constants for well-known installation locations. They are directly mapped
     ///  to the corresponding WiX constants:
     ///  <para>For the full list of the constants consult WiX documentation or use <c>Compiler.GetMappedWixConstants</c>
-    ///  to explore them programatically./</para>
+    ///  to explore them programmatically./</para>
     ///  <para>
     ///  <para><c>Wix#</c> - <c>WiX</c></para>
     ///  <para>%WindowsFolder% - [WindowsFolder]</para>
@@ -400,6 +400,8 @@ namespace WixSharp
                     odbcSources.Add(item as ODBCDataSource);
                 else if (item is IISVirtualDir)
                     iisVirtualDirs.Add(item as IISVirtualDir);
+                else if (item is null)
+                    continue;
                 else
                     throw new Exception(item.GetType().Name + " is not expected to be a child of WixSharp.Dir");
 

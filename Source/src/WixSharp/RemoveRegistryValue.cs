@@ -19,7 +19,7 @@ namespace WixSharp
         public new string Id
         {
             get { return base.Id; }
-            set { Id = value; }
+            set { base.Id = value; }
         }
 
         /// <summary>
