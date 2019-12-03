@@ -14082,7 +14082,7 @@
              </code>
              </example>
              <param name="project">The project.</param>
-             <param name="additionalLanguages">Add extra languages support (e.g. `"de-DE, ru-RU"`)</param>
+             <param name="additionalLanguages">Add extra languages support (e.g. "de-DE, ru-RU")</param>
              <returns></returns>
         </member>
         <member name="T:WixSharp.SerializingExtensions">
