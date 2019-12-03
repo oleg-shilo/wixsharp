@@ -1875,6 +1875,7 @@ namespace WixSharp
                             new XAttribute("Name", wShortcut.Name.IsNullOrEmpty() ? IO.Path.GetFileNameWithoutExtension(wFile.Name) : wShortcut.Name + ".lnk"));
 
                     wShortcut.EmitAttributes(shortcutElement);
+                    wShortcut.EmitShortcutProperties(shortcutElement);
 
                     file.Add(shortcutElement);
                 }
@@ -1927,6 +1928,7 @@ namespace WixSharp
                        new XAttribute("Name", wShortcut.Name + ".lnk")));
 
                 wShortcut.EmitAttributes(sc);
+                wShortcut.EmitShortcutProperties(sc);
             }
         }
 
