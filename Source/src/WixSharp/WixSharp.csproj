@@ -250,7 +250,12 @@
   <ItemGroup>
     <None Include="WixSharpStrongName.snk" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\WixSharp.Msi\WixSharp.Msi\WixSharp.Msi.csproj">
+      <Project>{611d8893-7d39-4f3c-92d5-0554f780a914}</Project>
+      <Name>WixSharp.Msi</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -94,6 +94,9 @@ namespace WixSharp.CommonTasks
             return nbs.Build();
         }
 
+        static internal int ConsoleRun(this string exe, string args)
+            => new ExternalTool { ExePath = exe, Arguments = args }.ConsoleRun();
+
         /// <summary>
         /// Builds the bootstrapper.
         /// </summary>

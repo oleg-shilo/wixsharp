@@ -33,6 +33,7 @@ class Script
                     new RegValue("Message", "Hello"),
                     new RegValue("Count", 777)),
                 new RegValue(fullSetup, RegistryHive.ClassesRoot, @"test\shell\open\command", "", "\"[INSTALLDIR]test.exe\" \"%1\""),
+                new RegValue(fullSetup, RegistryHive.ClassesRoot, @"test\shell\open\command2", "", "\"[CommonAppDataFolder]test.exe\" \"%1\""),
                 // new RemoveRegistryValue(fullSetup, @"Software\My Company\My Product"), // remove "My Product" value on install
                 new RemoveRegistryKey(fullSetup, @"Software\My Company\My Product")); // remove the whole "My Product" on uninstall
 

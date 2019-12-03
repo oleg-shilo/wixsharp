@@ -2852,6 +2852,67 @@ namespace WixSharp
         }
     }
 
+    public static class LocalizationExtensions
+    {
+        /// <summary>
+        /// Builds the localized msi.
+        ///
+        /// <para>This method builds the msi with the default language support according `project.Language`
+        /// setting. The additional languages can also be embedded into the resulting msi during the build.</para>
+        /// <para>Invoking specific language UI is triggered either automatically based on the OS default language
+        /// or by passing special MSI properties arguments to the <c>msiexec.exe</c>:</para>
+        /// <list type="bullet">
+        /// <item><description><i>English</i><para><c>msiexec /i setup.msi</c></para></description></item>
+        /// <item><description><i>German</i><para><c>msiexec /i setup.msi TRANSFORMS=:de-DE.mst</c></para></description></item>
+        /// <item><description><i>Russian</i> <para><c>msiexec /i setup.msi TRANSFORMS=:ru-RU.mst</c></para></description></item>
+        /// </list>
+        /// </summary>
+        ///  <example>The following is an example of building <c>English</c> msi, which can also support <c>German</c>
+        ///  and <c>Russian</c> UI.
+        /// <code>
+        /// var project =
+        ///     new ManagedProject("My Product",
+        ///         new Dir(@"%ProgramFiles%\My Company\My Product",
+        ///             new File("readme.txt")));
+        ///
+        /// project.Language = "en-US";
+        /// project.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
+        ///
+        /// project.BuildLocalizedMsi(additionalLanguages: "ru-RU, de-DE");
+        /// </code>
+        /// </example>
+        /// <param name="project">The project.</param>
+        /// <param name="additionalLanguages">Add extra languages support (e.g. "de-DE, ru-RU")</param>
+        /// <returns></returns>
+        static public string BuildLocalizedMsi(this WixSharp.Project project, string additionalLanguages)
+        {
+            if (Compiler.ClientAssembly.IsEmpty())
+                Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
+
+            string productMsi = project.BuildMsi();
+
+            var torch = Compiler.WixLocation.PathCombine("torch.exe");
+
+            foreach (string lang in additionalLanguages.Split(',', ';').Select(x => x.Trim()))
+            {
+                project.Language =
+                project.OutFileName = lang;
+
+                string langMsi = project.BuildMsi();
+                string langMst = langMsi.PathChangeExtension(".mst");
+
+                torch.Run($"-p -t language \"{productMsi}\" \"{langMsi}\" -out \"{langMst}\"");
+
+                EmbedTransform.Do(productMsi, langMst);
+            }
+
+            return productMsi;
+        }
+
+        static int Run(this string exe, string args)
+            => new ExternalTool { ExePath = exe, Arguments = args }.ConsoleRun();
+    }
+
     /// <summary>
     /// 'Byte array to string' serialization methods.
     /// </summary>

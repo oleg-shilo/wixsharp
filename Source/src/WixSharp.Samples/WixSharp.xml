@@ -1500,6 +1500,13 @@
             </para>
             </summary>
         </member>
+        <member name="F:WixSharp.AutoElements.ExpandWixConstsInRegValue">
+            <summary>
+            Enables expanding Wix environment constants in <see cref="F:WixSharp.RegValue.Value"/>.
+            <para>This flag was introduced as a fall back mechanism for legacy action of expanding Wix
+            constants in registry values. This work around was triggered by issue #774.</para>
+            </summary>
+        </member>
         <member name="F:WixSharp.AutoElements.EnableUACRevealer">
             <summary>
             Enables UAC revealer, which is a work around for the MSI limitation/problem around EmbeddedUI UAC prompt.
@@ -8090,6 +8097,24 @@
             <param name="languages">The languages.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.IsFile(System.String)">
+            <summary>
+            Determines whether this path is a file.
+            </summary>
+            <param name="path">The path.</param>
+            <returns>
+              <c>true</c> if the specified path is file; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:WixSharp.Extensions.IsDirectory(System.String)">
+            <summary>
+            Determines whether this instance is directory.
+            </summary>
+            <param name="path">The path.</param>
+            <returns>
+              <c>true</c> if the specified path is directory; otherwise, <c>false</c>.
+            </returns>
+        </member>
         <member name="M:WixSharp.Extensions.DeleteIfExists(System.String,System.Boolean)">
             <summary>
             Deletes File/Directory from by the specified path if it exists.
@@ -8249,7 +8274,7 @@
         </member>
         <member name="M:WixSharp.Extensions.IsWixConstant(System.String)">
             <summary>
-            Determines whether the value is a WiX constant (e.g. 'SystenFolder').
+            Determines whether the value is a WiX constant (e.g. 'SystemFolder').
             </summary>
             <param name="value">The value.</param>
             <returns>
@@ -13649,7 +13674,7 @@
               You can use predefined Wix# environment constants for well-known installation locations. They are directly mapped
               to the corresponding WiX constants:
               <para>For the full list of the constants consult WiX documentation or use <c>Compiler.GetMappedWixConstants</c>
-              to explore them programatically./</para>
+              to explore them programmatically./</para>
               <para>
               <para><c>Wix#</c> - <c>WiX</c></para>
               <para>%WindowsFolder% - [WindowsFolder]</para>
@@ -14027,6 +14052,38 @@
             relative <see cref="F:WixSharp.Files.Directory"/>. Though <see cref="F:WixSharp.Files.Directory"/> takes precedence if it is an absolute path.</param>
             <returns>Array of <see cref="T:WixSharp.WixEntity"/> instances, which are either <see cref="T:WixSharp.File"/> or/and <see cref="T:WixSharp.Dir"/> objects.</returns>
             <param name="parentWixDir">Parent Wix# directory</param>
+        </member>
+        <member name="M:WixSharp.LocalizationExtensions.BuildLocalizedMsi(WixSharp.Project,System.String)">
+             <summary>
+             Builds the localized msi.
+            
+             <para>This method builds the msi with the default language support according `project.Language`
+             setting. The additional languages can also be embedded into the resulting msi during the build.</para>
+             <para>Invoking specific language UI is triggered either automatically based on the OS default language
+             or by passing special MSI properties arguments to the <c>msiexec.exe</c>:</para>
+             <list type="bullet">
+             <item><description><i>English</i><para><c>msiexec /i setup.msi</c></para></description></item>
+             <item><description><i>German</i><para><c>msiexec /i setup.msi TRANSFORMS=:de-DE.mst</c></para></description></item>
+             <item><description><i>Russian</i> <para><c>msiexec /i setup.msi TRANSFORMS=:ru-RU.mst</c></para></description></item>
+             </list>
+             </summary>
+              <example>The following is an example of building <c>English</c> msi, which can also support <c>German</c>
+              and <c>Russian</c> UI.
+             <code>
+             var project =
+                 new ManagedProject("My Product",
+                     new Dir(@"%ProgramFiles%\My Company\My Product",
+                         new File("readme.txt")));
+            
+             project.Language = "en-US";
+             project.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
+            
+             project.BuildLocalizedMsi(additionalLanguages: "ru-RU, de-DE");
+             </code>
+             </example>
+             <param name="project">The project.</param>
+             <param name="additionalLanguages">Add extra languages support (e.g. `"de-DE, ru-RU"`)</param>
+             <returns></returns>
         </member>
         <member name="T:WixSharp.SerializingExtensions">
             <summary>
