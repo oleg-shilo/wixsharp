@@ -14053,7 +14053,7 @@
             <returns>Array of <see cref="T:WixSharp.WixEntity"/> instances, which are either <see cref="T:WixSharp.File"/> or/and <see cref="T:WixSharp.Dir"/> objects.</returns>
             <param name="parentWixDir">Parent Wix# directory</param>
         </member>
-        <member name="M:WixSharp.LocalizationExtensions.BuildLocalizedMsi(WixSharp.Project,System.String)">
+        <member name="M:WixSharp.LocalizationExtensions.BuildLocalizedMsi(WixSharp.Project)">
              <summary>
              Builds the localized msi.
             
@@ -14082,7 +14082,6 @@
              </code>
              </example>
              <param name="project">The project.</param>
-             <param name="additionalLanguages">Add extra languages support (e.g. "de-DE, ru-RU")</param>
              <returns></returns>
         </member>
         <member name="T:WixSharp.SerializingExtensions">

@@ -940,6 +940,7 @@ namespace WixSharp
         {
             var result = string.Join(",", languages.Split(',', ';')
                                                    .Select(x => new CultureInfo(x.Trim()).LCID.ToString())
+                                                   .Distinct()
                                                    .ToArray());
             return result;
         }
@@ -2852,6 +2853,9 @@ namespace WixSharp
         }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     public static class LocalizationExtensions
     {
         /// <summary>
@@ -2882,18 +2886,20 @@ namespace WixSharp
         /// </code>
         /// </example>
         /// <param name="project">The project.</param>
-        /// <param name="additionalLanguages">Add extra languages support (e.g. "de-DE, ru-RU")</param>
         /// <returns></returns>
-        static public string BuildLocalizedMsi(this WixSharp.Project project, string additionalLanguages)
+        static public string BuildLocalizedMsi(this WixSharp.Project project)
         {
             if (Compiler.ClientAssembly.IsEmpty())
                 Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
 
+            project.Package.AttributesDefinition = $"Languages={project.Language.ToLcidList()}";
             string productMsi = project.BuildMsi();
 
             var torch = Compiler.WixLocation.PathCombine("torch.exe");
 
-            foreach (string lang in additionalLanguages.Split(',', ';').Select(x => x.Trim()))
+            var additionalLanguages = project.Language.Split(',', ';').Select(x => x.Trim()).Skip(1);
+
+            foreach (string lang in additionalLanguages)
             {
                 project.Language =
                 project.OutFileName = lang;

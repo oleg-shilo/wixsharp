@@ -17,10 +17,11 @@ public class Script
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("readme.txt")));
 
-        product.Language = "en-US";
+        product.Language = "en-US,de-DE,ru-RU";
         product.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
 
-        product.BuildLocalizedMsi("de-DE, ru-RU");
+        product.PreserveTempFiles = true;
+        product.BuildLocalizedMsi();
 
         // bootstrapper is yet to be added
     }

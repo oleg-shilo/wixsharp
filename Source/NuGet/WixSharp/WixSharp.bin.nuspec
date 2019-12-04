@@ -2,12 +2,12 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>1.13.2.1</version>
+    <version>1.13.2.2-pre</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
-    <licenseUrl>https://wixsharp.codeplex.com/license</licenseUrl>
-    <projectUrl>https://wixsharp.codeplex.com/</projectUrl>
+    <licenseUrl>https://github.com/oleg-shilo/wixsharp/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/oleg-shilo/wixsharp</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/oleg-shilo/wixsharp/master/Documentation/wiki_images/wixsharp_logo.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
@@ -16,11 +16,10 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.13.2.1-pre
-- Issue #765: Dynamic localization (first cut)
-- Some samples cleanup
+    <releaseNotes>Release v1.13.2.2-pre
+- Issue #765: Dynamic localization (wip)
 </releaseNotes>
-    <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
+    <copyright>Copyright (C) 2008-2019 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <references>

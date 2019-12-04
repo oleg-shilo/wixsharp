@@ -2,23 +2,22 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.Lab</id>
-    <version>1.13.2.1</version>
+    <version>1.13.2.2-pre</version>
     <title>Wix# (WixSharp) - Experimantal features</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
-    <licenseUrl>https://wixsharp.codeplex.com/license</licenseUrl>
-    <projectUrl>https://wixsharp.codeplex.com/</projectUrl>
+    <licenseUrl>https://github.com/oleg-shilo/wixsharp/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/oleg-shilo/wixsharp</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/oleg-shilo/wixsharp/master/Documentation/wiki_images/wixsharp_logo.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
 The package contains the sample code for building a simple MSI with the CLR WinForm dialog inserted into UI sequence between InsallDirDlg and VerifyReadyDlg native MSI dialogs. In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# binaries containing experimental features (e.g. native WiX UI support).</summary>
-    <releaseNotes>Release v1.13.2.1-pre
-- Issue #765: Dynamic localization (first cut)
-- Some samples cleanup
+    <releaseNotes>Release v1.13.2.2-pre
+- Issue #765: Dynamic localization (wip)
 </releaseNotes>
-    <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
+    <copyright>Copyright (C) 2008-2019 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# Scripting msi install setup</tags>
     <frameworkAssemblies>
@@ -26,7 +25,7 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
       <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
     </frameworkAssemblies>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.13.2.1" />
+      <dependency id="WixSharp.bin" version="1.13.2.2-pre" />
     </dependencies>
   </metadata>
   <files>

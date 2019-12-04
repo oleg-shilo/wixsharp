@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -141,6 +142,9 @@ namespace WixSharp.UI
 
 namespace WixSharp
 {
+    /// <summary>
+    ///
+    /// </summary>
     public static class EmbedTransform
     {
         static void check(this MsiError result, string errorContext = "")
@@ -150,12 +154,14 @@ namespace WixSharp
 
         public static void Do(string msi, string mst)
         {
+            // var lngId = new CultureInfo(Path.GetFileNameWithoutExtension(mst)).IetfLanguageTag;
+            var lngId = new CultureInfo(Path.GetFileNameWithoutExtension(mst)).LCID.ToString();
+
             MsiInterop.MsiOpenDatabase(msi, MsiDbPersistMode.ReadWrite, out IntPtr db).check(nameof(MsiInterop.MsiOpenDatabase));
             MsiInterop.MsiDatabaseOpenView(db, "SELECT `Name`,`Data` FROM _Storages", out IntPtr view).check(nameof(MsiInterop.MsiDatabaseOpenView));
 
             var record = MsiInterop.MsiCreateRecord(2);
-
-            MsiInterop.MsiRecordSetString(record, 1, Path.GetFileName(mst)).check(nameof(MsiInterop.MsiRecordSetString));
+            MsiInterop.MsiRecordSetString(record, 1, lngId).check(nameof(MsiInterop.MsiRecordSetString));
             MsiInterop.MsiRecordSetStream(record, 2, mst).check(nameof(MsiInterop.MsiRecordSetStream));
 
             MsiInterop.MsiViewExecute(view, record).check(nameof(MsiInterop.MsiViewExecute));
