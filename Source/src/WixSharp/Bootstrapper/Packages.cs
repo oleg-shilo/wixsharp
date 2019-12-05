@@ -569,5 +569,31 @@ namespace WixSharp.Bootstrapper
         compatible
     }
 
+    /// <summary>
+    /// The search result type to use for a <see cref="UtilProductSearch"/>
+    /// </summary>
+    public enum ProductSearchResultType
+    {
+        /// <summary>
+        /// Saves the version of a matching product if found; 0.0.0.0 otherwise. This is the default.
+        /// </summary>
+        version,
+
+        /// <summary>
+        /// Saves the language of a matching product if found; empty otherwise.
+        /// </summary>
+        language,
+
+        /// <summary>
+        /// Saves the state of the product: advertised (1), absent (2), or locally installed (5).
+        /// </summary>
+        state,
+
+        /// <summary>
+        /// Saves the assignment type of the product: per-user (0), or per-machine (1).
+        /// </summary>
+        assignment
+    }
+
 #pragma warning restore 1591
 }
