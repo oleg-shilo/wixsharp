@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 #endregion Licence...
 
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace WixSharp
@@ -87,6 +88,11 @@ namespace WixSharp
         /// Whether this shortcut is to be advertised. The default is <c>false</c>.
         /// </summary>
         public bool Advertise = false;
+
+        /// <summary>
+        /// Shortcut properties
+        /// </summary>
+        public Dictionary<string, string> ShortcutProperties = new Dictionary<string, string>();
     }
 
     internal static class ShortcutExtensions
@@ -105,6 +111,17 @@ namespace WixSharp
             {
                 shortcutElement.Add(new XAttribute("Icon", shortcut.IconFile)); //note the IconFile will be converted into Icon (ID) in the AutoElements.InjectAutoElementsHandler(...)
                 shortcutElement.Add(new XAttribute("IconIndex", shortcut.IconIndex));
+            }
+        }
+
+        static public void EmitShortcutProperties(this Shortcut shortcut, XElement shortcutElement)
+        {
+            foreach (var prop in shortcut.ShortcutProperties)
+            {
+                var propElement = new XElement("ShortcutProperty");
+                propElement.Add(new XAttribute("Key", prop.Key));
+                propElement.Add(new XAttribute("Value", prop.Value));
+                shortcutElement.Add(propElement);
             }
         }
     }
