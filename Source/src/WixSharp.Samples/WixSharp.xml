@@ -14053,6 +14053,11 @@
             <returns>Array of <see cref="T:WixSharp.WixEntity"/> instances, which are either <see cref="T:WixSharp.File"/> or/and <see cref="T:WixSharp.Dir"/> objects.</returns>
             <param name="parentWixDir">Parent Wix# directory</param>
         </member>
+        <member name="T:WixSharp.LocalizationExtensions">
+             <summary>
+            
+             </summary>
+        </member>
         <member name="M:WixSharp.LocalizationExtensions.BuildLocalizedMsi(WixSharp.Project)">
              <summary>
              Builds the localized msi.
@@ -17434,6 +17439,11 @@
         <member name="F:WixSharp.Shortcut.Advertise">
             <summary>
             Whether this shortcut is to be advertised. The default is <c>false</c>.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Shortcut.ShortcutProperties">
+            <summary>
+            Shortcut properties
             </summary>
         </member>
         <member name="T:WixSharp.Step">

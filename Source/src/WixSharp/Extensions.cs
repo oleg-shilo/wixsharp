@@ -2892,7 +2892,10 @@ namespace WixSharp
             if (Compiler.ClientAssembly.IsEmpty())
                 Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
 
-            project.Package.AttributesDefinition = $"Languages={project.Language.ToLcidList()}";
+            var packageLanguages = project.Language.ToLcidList();
+
+            project.SuppressSettingLanguages = true;
+
             string productMsi = project.BuildMsi();
 
             var torch = Compiler.WixLocation.PathCombine("torch.exe");
@@ -2910,6 +2913,12 @@ namespace WixSharp
                 torch.Run($"-p -t language \"{productMsi}\" \"{langMsi}\" -out \"{langMst}\"");
 
                 EmbedTransform.Do(productMsi, langMst);
+            }
+
+            using (var database = new Database(productMsi, DatabaseOpenMode.Direct))
+            {
+                // sample: "Intel;1033,1031,1049"
+                database.SummaryInfo.Template = "Intel;" + packageLanguages;
             }
 
             return productMsi;

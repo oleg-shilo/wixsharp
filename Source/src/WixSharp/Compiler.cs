@@ -1218,9 +1218,11 @@ namespace WixSharp
             package.SetAttribute("Description", project.Description)
                    .SetAttribute("Platform", project.Platform)
                    .SetAttribute("SummaryCodepage", project.Codepage)
-                   .SetAttribute("Languages", project.Language.ToLcidList())
                    .SetAttribute("InstallPrivileges", project.InstallPrivileges)
                    .SetAttribute("InstallScope", project.InstallScope);
+
+            if (!project.SuppressSettingLanguages)
+                package.SetAttribute("Languages", project.Language.ToLcidList());
 
             if (project.EmitConsistentPackageId)
                 package.CopyAttributeFrom(product, "Id");

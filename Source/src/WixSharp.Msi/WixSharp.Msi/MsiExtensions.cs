@@ -154,7 +154,6 @@ namespace WixSharp
 
         public static void Do(string msi, string mst)
         {
-            // var lngId = new CultureInfo(Path.GetFileNameWithoutExtension(mst)).IetfLanguageTag;
             var lngId = new CultureInfo(Path.GetFileNameWithoutExtension(mst)).LCID.ToString();
 
             MsiInterop.MsiOpenDatabase(msi, MsiDbPersistMode.ReadWrite, out IntPtr db).check(nameof(MsiInterop.MsiOpenDatabase));

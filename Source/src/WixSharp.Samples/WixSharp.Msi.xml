@@ -476,5 +476,61 @@
               <c>true</c> if the log file created; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="T:WixSharp.EmbedTransform">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.Codepage">
+            <summary>Codepage</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.Title">
+            <summary>Title</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.Subject">
+            <summary>Subject</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.Author">
+            <summary>Author</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.Keywords">
+            <summary>Keywords</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.Comments">
+            <summary>Comments</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.Template">
+            <summary>Template</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.LastSavedBy">
+            <summary>LastSavedBy</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.RevisionNumber">
+            <summary>RevisionNumber</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.LastPrinted">
+            <summary>LastPrinted</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.CreateTime">
+            <summary>CreateTime</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.LastSaveTime">
+            <summary>LastSaveTime</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.PageCount">
+            <summary>PageCount</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.WordCount">
+            <summary>WordCount</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.CharacterCount">
+            <summary>CharacterCount</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.CreatingApplication">
+            <summary>CreatingApplication</summary>
+        </member>
+        <member name="F:WindowsInstaller.SummaryInformationStreamProperty.Security">
+            <summary>Security</summary>
+        </member>
     </members>
 </doc>

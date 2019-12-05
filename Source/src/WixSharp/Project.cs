@@ -564,6 +564,8 @@ namespace WixSharp
         /// </summary>
         public bool EmitConsistentPackageId = false;
 
+        internal bool SuppressSettingLanguages = false;
+
         /// <summary>
         /// Collection of WiX/MSI <see cref="Binary"/> objects to be embedded into MSI database.
         /// Normally you doe not need to deal with this property as <see cref="Compiler"/> will populate
