@@ -18,6 +18,60 @@ namespace WindowsInstaller
         UnknownProduct = 1605
     }
 
+    internal enum SummaryInformationStreamProperty : int
+    {
+        /// <summary>Codepage</summary>
+        Codepage = 1,
+
+        /// <summary>Title</summary>
+        Title = 2,
+
+        /// <summary>Subject</summary>
+        Subject = 3,
+
+        /// <summary>Author</summary>
+        Author = 4,
+
+        /// <summary>Keywords</summary>
+        Keywords = 5,
+
+        /// <summary>Comments</summary>
+        Comments = 6,
+
+        /// <summary>Template</summary>
+        Template = 7,
+
+        /// <summary>LastSavedBy</summary>
+        LastSavedBy = 8,
+
+        /// <summary>RevisionNumber</summary>
+        RevisionNumber = 9,
+
+        /// <summary>LastPrinted</summary>
+        LastPrinted = 11,
+
+        /// <summary>CreateTime</summary>
+        CreateTime = 12,
+
+        /// <summary>LastSaveTime</summary>
+        LastSaveTime = 13,
+
+        /// <summary>PageCount</summary>
+        PageCount = 14,
+
+        /// <summary>WordCount</summary>
+        WordCount = 15,
+
+        /// <summary>CharacterCount</summary>
+        CharacterCount = 16,
+
+        /// <summary>CreatingApplication</summary>
+        CreatingApplication = 18,
+
+        /// <summary>Security</summary>
+        Security = 19,
+    }
+
     public enum MsiColInfoType
     {
         Names = 0,

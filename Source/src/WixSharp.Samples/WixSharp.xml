@@ -1081,6 +1081,27 @@
             <param name="context">The context.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.SetPackageLanguagesFrom(System.String,WixSharp.Project)">
+            <summary>
+            Sets the package languages for a specified msi file from the value of the `project.Languages`.
+            </summary>
+            <param name="msiPath">The msi path.</param>
+            <param name="project">The project.</param>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.SetPackageLanguages(System.String,System.String)">
+            <summary>
+            Sets the package languages for a specified msi file.
+            </summary>
+            <param name="msiPath">The msi path.</param>
+            <param name="languages">The languages.</param>
+        </member>
+        <member name="M:WixSharp.CommonTasks.Tasks.EmbedTransform(System.String,System.String)">
+            <summary>
+            Embeds a language transformation (mst file) in the specified msi file.
+            </summary>
+            <param name="msi">The msi.</param>
+            <param name="mst">The MST.</param>
+        </member>
         <member name="M:WixSharp.CommonTasks.Tasks.FirstProgramFilesDir(System.Xml.Linq.XElement)">
             <summary>
             Finds the first descendant 'ProgramFiles' or 'ProgramFiles64Folder' directory element.
@@ -1646,6 +1667,66 @@
             </summary>
         </member>
         <member name="M:WixSharp.Bootstrapper.UtilFileSearch.ToXml">
+            <summary>
+            Emits WiX XML.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:WixSharp.Bootstrapper.UtilProductSearch">
+            <summary>
+            Defines a product search based on the Wix ProductSearch element (Util extension)
+            </summary>
+            <example>
+            <code>
+            new ExePackage()
+            {
+                DisplayName = "Microsoft Visual C++ 2015 Redistributable (x64) - 14.0.24215",
+                DownloadUrl = "https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC-ED5963AEAD48/vc_redist.x64.exe",
+                DetectCondition = "VCPlusPlus2015_64 >= VCPlusPlus2015_64_RequiredVersion",
+                InstallCommand = "/install /quiet /norestart /ChainingPackage \"[WixBundleName]\""
+            };
+            
+            new Variable()
+            {
+                Name: "VCPlusPlus2015_64_RequiredVersion",
+                Type: WixSharp.VariableType.version,
+                Value: "14.0.24215")
+            };
+            
+            bootstrapper.AddWixFragment("Wix/Bundle",
+                                        new UtilProductSearch
+                                        {
+                                            UpgradeCode = "{36F68A90-239C-34DF-B58C-64B30153CE35}",
+                                            Variable = "VCPlusPlus2015_64"
+                                        });
+            </code>
+            Produces a util:ProductSearch and corresponding ExePackage and Variable to bypass the install of MSVC++ 2015 x64
+            when it is already installed on the system.
+            </example>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.UtilProductSearch.Result">
+            <summary>
+            The search result type
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.UtilProductSearch.ProductCode">
+            <summary>
+            The ProductCode to use for the search. This attribute must be omitted if UpgradeCode is specified.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.UtilProductSearch.UpgradeCode">
+            <summary>
+            The UpgradeCode to use for the search.
+            This attribute must be omitted if ProductCode is specified.
+            Note that if multiple products are found, the highest versioned product will be used for the result.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.UtilProductSearch.Variable">
+            <summary>
+            Name of the variable in which to place the result of the search.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.UtilProductSearch.ToXml">
             <summary>
             Emits WiX XML.
             </summary>
@@ -2833,6 +2914,31 @@
         <member name="F:WixSharp.Bootstrapper.SearchFormat.compatible">
             <summary>
             Returns the value formatted as Windows Installer would. For example, a REG_DWORD value of '1' is returned as '#1', not '1'.
+            </summary>
+        </member>
+        <member name="T:WixSharp.Bootstrapper.ProductSearchResultType">
+            <summary>
+            The search result type to use for a <see cref="T:WixSharp.Bootstrapper.UtilProductSearch"/>
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.ProductSearchResultType.version">
+            <summary>
+            Saves the version of a matching product if found; 0.0.0.0 otherwise. This is the default.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.ProductSearchResultType.language">
+            <summary>
+            Saves the language of a matching product if found; empty otherwise.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.ProductSearchResultType.state">
+            <summary>
+            Saves the state of the product: advertised (1), absent (2), or locally installed (5).
+            </summary>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.ProductSearchResultType.assignment">
+            <summary>
+            Saves the assignment type of the product: per-user (0), or per-machine (1).
             </summary>
         </member>
         <member name="T:WixSharp.CloseApplication">
@@ -14058,7 +14164,7 @@
             
              </summary>
         </member>
-        <member name="M:WixSharp.LocalizationExtensions.BuildLocalizedMsi(WixSharp.Project)">
+        <member name="M:WixSharp.LocalizationExtensions.BuildMultilanguageMsi(WixSharp.Project,System.String)">
              <summary>
              Builds the localized msi.
             
@@ -14080,13 +14186,14 @@
                      new Dir(@"%ProgramFiles%\My Company\My Product",
                          new File("readme.txt")));
             
-             project.Language = "en-US";
+             project.Language = "en-US,ru-RU,de-DE";
              project.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
             
-             project.BuildLocalizedMsi(additionalLanguages: "ru-RU, de-DE");
+             project.BuildLocalizedMsi();
              </code>
              </example>
              <param name="project">The project.</param>
+             <param name="path">The path.</param>
              <returns></returns>
         </member>
         <member name="T:WixSharp.SerializingExtensions">

@@ -482,10 +482,6 @@ namespace WixSharp
         static public string BuildMsi(Project project)
         {
             //Debugger.Launch();
-            //very important to keep "ClientAssembly = " in all "public Build*" methods to ensure GetCallingAssembly
-            //returns the build script assembly but not just another method of Compiler.
-            if (ClientAssembly.IsEmpty())
-                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
             return Build(project, OutputType.MSI);
         }
 
@@ -511,10 +507,6 @@ namespace WixSharp
         /// <returns>Path to the batch file.</returns>
         static public string BuildMsiCmd(Project project)
         {
-            //very important to keep "ClientAssembly = " in all "public Build*" methods to ensure GetCallingAssembly
-            //returns the build script assembly but not just another method of Compiler.
-            if (ClientAssembly.IsEmpty())
-                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
 
             string cmdFile = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, "Build_" + project.OutFileName) + ".cmd");
 
@@ -533,16 +525,13 @@ namespace WixSharp
         /// <returns>Path to the batch file.</returns>
         static public string BuildMsmCmd(Project project)
         {
-            //very important to keep "ClientAssembly = " in all "public Build*" methods to ensure GetCallingAssembly
-            //returns the build script assembly but not just another method of Compiler.
-            if (ClientAssembly.IsEmpty())
-                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
-
             string cmdFile = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, "Build_" + project.OutFileName) + ".cmd");
 
             if (IO.File.Exists(cmdFile))
                 IO.File.Delete(cmdFile);
+
             BuildMsmCmd(project, cmdFile);
+
             return cmdFile;
         }
 
@@ -555,9 +544,6 @@ namespace WixSharp
         /// <returns>Path to the batch file.</returns>
         static public string BuildMsiCmd(Project project, string path)
         {
-            //very important to keep "ClientAssembly = " in all "public Build*" methods to ensure GetCallingAssembly
-            //returns the build script assembly but not just another method of Compiler.
-            if (ClientAssembly.IsEmpty())
                 ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
             BuildCmd(project, path, OutputType.MSI);
             return path;
@@ -573,10 +559,6 @@ namespace WixSharp
         /// <returns>Path to the batch file.</returns>
         static public string BuildMsmCmd(Project project, string path)
         {
-            //very important to keep "ClientAssembly = " in all "public Build*" methods to ensure GetCallingAssembly
-            //returns the build script assembly but not just another method of Compiler.
-            if (ClientAssembly.IsEmpty())
-                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
             BuildCmd(project, path, OutputType.MSM);
             return path;
         }
@@ -584,10 +566,6 @@ namespace WixSharp
         static void BuildCmd(Project project, string path, OutputType type)
         {
             path = path.ExpandEnvVars();
-            //very important to keep "ClientAssembly = " in all "public Build*" methods to ensure GetCallingAssembly
-            //returns the build script assembly but not just another method of Compiler.
-            if (ClientAssembly.IsEmpty())
-                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
 
             string wixLocationEnvVar = $"set WixLocation={WixLocation}";
             string compiler = Utils.PathCombine(WixLocation, "candle.exe");
@@ -637,10 +615,6 @@ namespace WixSharp
         {
             path = path.ExpandEnvVars();
 
-            //very important to keep "ClientAssembly = " in all "public Build*" methods to ensure GetCallingAssembly
-            //returns the build script assembly but not just another method of Compiler.
-            if (ClientAssembly.IsEmpty())
-                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
             Build(project, path, OutputType.MSI);
             return path;
         }
@@ -652,10 +626,6 @@ namespace WixSharp
         /// <returns>Path to the built MSM file. Returns <c>null</c> if <c>msm</c> cannot be built.</returns>
         static public string BuildMsm(Project project)
         {
-            //very important to keep "ClientAssembly = " in all "public Build*" methods to ensure GetCallingAssembly
-            //returns the build script assembly but not just another method of Compiler.
-            if (ClientAssembly.IsEmpty())
-                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
             return Build(project, OutputType.MSM);
         }
 
@@ -668,10 +638,6 @@ namespace WixSharp
         static public string BuildMsm(Project project, string path)
         {
             path = path.ExpandEnvVars();
-            //very important to keep "ClientAssembly = " in all "public Build*" methods to ensure GetCallingAssembly
-            //returns the build script assembly but not just another method of Compiler.
-            if (ClientAssembly.IsEmpty())
-                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
 
             Build(project, path, OutputType.MSM);
 
@@ -906,11 +872,6 @@ namespace WixSharp
         /// <returns>Path to the built WXS file.</returns>
         public static string BuildWxs(Project project)
         {
-            //very important to keep "ClientAssembly = " in all "public Build*" methods to ensure GetCallingAssembly
-            //returns the build script assembly but not just another method of Compiler.
-            if (ClientAssembly.IsEmpty())
-                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
-
             return BuildWxs(project, OutputType.MSI);
         }
 
@@ -922,11 +883,6 @@ namespace WixSharp
         /// <returns>Path to the built WXS file.</returns>
         public static string BuildWxs(Project project, OutputType type)
         {
-            //very important to keep "ClientAssembly = " in all "public Build*" methods to ensure GetCallingAssembly
-            //returns the build script assembly but not just another method of Compiler.
-            if (ClientAssembly.IsEmpty())
-                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
-
             lock (AutoGeneration.WxsGenerationSynchObject)
             {
                 var oldAlgorithm = AutoGeneration.CustomIdAlgorithm;
@@ -962,11 +918,10 @@ namespace WixSharp
         /// <returns>Path to the built WXS file.</returns>
         public static string BuildWxs(Project project, string path, OutputType type)
         {
-            //very important to keep "ClientAssembly = " in all "public Build*" methods to ensure GetCallingAssembly
-            //returns the build script assembly but not just another method of Compiler.
-            if (ClientAssembly.IsEmpty())
-                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
-
+            if (Compiler.ClientAssembly.IsEmpty())
+            {
+                Compiler.ClientAssembly = Compiler.FindClientAssemblyInCallStack();
+            }
             XDocument doc = GenerateWixProj(project);
 
             IndjectCustomUI(project.CustomUI, doc);
@@ -1221,7 +1176,7 @@ namespace WixSharp
                    .SetAttribute("InstallPrivileges", project.InstallPrivileges)
                    .SetAttribute("InstallScope", project.InstallScope);
 
-            if (!project.SuppressSettingLanguages)
+            if (!project.SuppressSettingPackageLanguages)
                 package.SetAttribute("Languages", project.Language.ToLcidList());
 
             if (project.EmitConsistentPackageId)
@@ -3084,6 +3039,24 @@ namespace WixSharp
             }
         }
 
+        internal static string FindClientAssemblyInCallStack()
+        {
+            var st = new StackTrace(false);
+            for (int i = 0; i < st.FrameCount; i++)
+            {
+                var asm = st.GetFrame(i).GetMethod().DeclaringType.Assembly;
+                if (asm != System.Reflection.Assembly.GetExecutingAssembly())
+                {
+                    if (asm == "".GetType().Assembly || asm.FullName.StartsWith("mscorlib."))
+                        // being executed as a release-compiled script
+                        return Environment.GetEnvironmentVariable("EntryScriptAssembly");
+                    else
+                        return asm.GetLocation();
+                }
+            }
+            return null;
+        }
+
         static string clientAssembly;
 
         /// <summary>
@@ -3126,6 +3099,9 @@ namespace WixSharp
 
         internal static string ResolveClientAsm(string outDir)
         {
+            if (Compiler.ClientAssembly.IsEmpty())
+                Compiler.ClientAssembly = Compiler.FindClientAssemblyInCallStack();
+
             //restore the original assembly name as MakeSfxCA does not like renamed assemblies
             string newName = Utils.OriginalAssemblyFile(ClientAssembly);
             newName = newName.PathChangeDirectory(outDir);
@@ -3160,9 +3136,6 @@ namespace WixSharp
         /// <returns>Batch file path.</returns>
         static public string BuildPackageAsmCmd(string asm, string nativeDll = null, string[] refAssemblies = null, string outDir = null, string configFilePath = null, Platform? platform = null, bool embeddedUI = false)
         {
-            if (ClientAssembly.IsEmpty())
-                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
-
             string batchFile = IO.Path.Combine(outDir, "Build_CA_DLL.cmd");
 
             PackageManagedAsm(asm,
@@ -3188,9 +3161,6 @@ namespace WixSharp
         /// <returns>Package file path.</returns>
         static public string BuildPackageAsm(string asm, string nativeDll = null, string[] refAssemblies = null, string outDir = null, string configFilePath = null, Platform? platform = null, bool embeddedUI = false)
         {
-            if (ClientAssembly.IsEmpty())
-                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
-
             nativeDll = nativeDll ?? IO.Path.ChangeExtension(asm, ".CA.dll");
 
             PackageManagedAsm(asm, nativeDll ?? IO.Path.ChangeExtension(asm, ".CA.dll"), refAssemblies ?? new string[0], outDir ?? Environment.CurrentDirectory, configFilePath, platform, embeddedUI);

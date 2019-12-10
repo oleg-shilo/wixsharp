@@ -2879,49 +2879,58 @@ namespace WixSharp
         ///         new Dir(@"%ProgramFiles%\My Company\My Product",
         ///             new File("readme.txt")));
         ///
-        /// project.Language = "en-US";
+        /// project.Language = "en-US,ru-RU,de-DE";
         /// project.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
         ///
-        /// project.BuildLocalizedMsi(additionalLanguages: "ru-RU, de-DE");
+        /// project.BuildLocalizedMsi();
         /// </code>
         /// </example>
         /// <param name="project">The project.</param>
+        /// <param name="path">The path.</param>
         /// <returns></returns>
-        static public string BuildLocalizedMsi(this WixSharp.Project project)
+        static public string BuildMultilanguageMsi(this WixSharp.Project project, string path = null)
         {
-            if (Compiler.ClientAssembly.IsEmpty())
-                Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
+            project.SuppressSettingPackageLanguages = true;
 
-            var packageLanguages = project.Language.ToLcidList();
+            string productMsi = project.BuildMsi(path);
 
-            project.SuppressSettingLanguages = true;
+            Compiler.OutputWriteLine("> Preparing language transformations...");
 
-            string productMsi = project.BuildMsi();
-
-            var torch = Compiler.WixLocation.PathCombine("torch.exe");
-
-            var additionalLanguages = project.Language.Split(',', ';').Select(x => x.Trim()).Skip(1);
+            var additionalLanguages = project.Language.Split(',', ';')
+                                             .Skip(1)
+                                             .Select(x => x.Trim());
 
             foreach (string lang in additionalLanguages)
             {
-                project.Language =
-                project.OutFileName = lang;
-
-                string langMsi = project.BuildMsi();
-                string langMst = langMsi.PathChangeExtension(".mst");
-
-                torch.Run($"-p -t language \"{productMsi}\" \"{langMsi}\" -out \"{langMst}\"");
-
-                EmbedTransform.Do(productMsi, langMst);
+                string mstFile = project.BuildLanguageTransform(productMsi, lang);
+                productMsi.EmbedTransform(mstFile);
             }
 
-            using (var database = new Database(productMsi, DatabaseOpenMode.Direct))
-            {
-                // sample: "Intel;1033,1031,1049"
-                database.SummaryInfo.Template = "Intel;" + packageLanguages;
-            }
+            productMsi.SetPackageLanguagesFrom(project);
 
+            Compiler.OutputWriteLine("> Multi-language setup {productMsi} is completed.");
             return productMsi;
+        }
+
+        static string BuildLanguageTransform(this Project project, string originalMsi, string language)
+        {
+            var torch = Compiler.WixLocation.PathCombine("torch.exe");
+            var originalLng = project.Language;
+            try
+            {
+                project.Language = language;
+
+                string localizedMsi
+                    = project.BuildMsi(language);
+                string langMst = localizedMsi.PathChangeExtension(".mst");
+
+                torch.Run($"-p -t language \"{originalMsi}\" \"{localizedMsi}\" -out \"{langMst}\"");
+                return langMst;
+            }
+            finally
+            {
+                project.Language = originalLng;
+            }
         }
 
         static int Run(this string exe, string args)

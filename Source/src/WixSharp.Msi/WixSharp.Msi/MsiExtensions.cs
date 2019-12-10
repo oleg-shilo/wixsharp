@@ -140,7 +140,7 @@ namespace WixSharp.UI
     }
 }
 
-namespace WixSharp
+namespace WixSharp.Msi
 {
     /// <summary>
     ///
@@ -152,6 +152,11 @@ namespace WixSharp
             if (result != MsiError.NoError) throw new ApplicationException("Error: EmbedTransform.Embed->" + errorContext);
         }
 
+        /// <summary>
+        /// Embeds a language transformation (mst file) in the specified msi file.
+        /// </summary>
+        /// <param name="msi">The MSI file.</param>
+        /// <param name="mst">The MST file.</param>
         public static void Do(string msi, string mst)
         {
             var lngId = new CultureInfo(Path.GetFileNameWithoutExtension(mst)).LCID.ToString();

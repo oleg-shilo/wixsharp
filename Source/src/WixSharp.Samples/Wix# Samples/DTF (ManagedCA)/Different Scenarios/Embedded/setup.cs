@@ -3,6 +3,7 @@
 //css_ref ..\..\..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
@@ -22,6 +23,8 @@ class Script
                 new ManagedAction(CustomActions.MyAction, "%this%")
             }
         };
+
+        // Debug.Assert(false);
 
         Compiler.BuildMsi(project);
     }

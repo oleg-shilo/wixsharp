@@ -564,7 +564,7 @@ namespace WixSharp
         /// </summary>
         public bool EmitConsistentPackageId = false;
 
-        internal bool SuppressSettingLanguages = false;
+        internal bool SuppressSettingPackageLanguages = false;
 
         /// <summary>
         /// Collection of WiX/MSI <see cref="Binary"/> objects to be embedded into MSI database.
@@ -967,9 +967,6 @@ namespace WixSharp
         /// <returns>Path to the built MSI file.</returns>
         public string BuildMsi(string path = null)
         {
-            if (Compiler.ClientAssembly.IsEmpty())
-                Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
-
             if (path == null)
                 return Compiler.BuildMsi(this);
             else
@@ -984,9 +981,6 @@ namespace WixSharp
         /// <returns>Path to the batch file.</returns>
         public string BuildMsiCmd(string path = null)
         {
-            if (Compiler.ClientAssembly.IsEmpty())
-                Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
-
             if (path == null)
                 return Compiler.BuildMsiCmd(this);
             else
@@ -1001,9 +995,6 @@ namespace WixSharp
         /// <returns>Path to the built WXS file.</returns>
         public string BuildWxs(Compiler.OutputType type = Compiler.OutputType.MSI, string path = null)
         {
-            if (Compiler.ClientAssembly.IsEmpty())
-                Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
-
             if (path == null)
                 return Compiler.BuildWxs(this, type);
             else
@@ -1017,9 +1008,6 @@ namespace WixSharp
         /// <returns>Path to the built MSM file.</returns>
         public string BuildMsm(string path = null)
         {
-            if (Compiler.ClientAssembly.IsEmpty())
-                Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
-
             if (path == null)
                 return Compiler.BuildMsm(this);
             else
@@ -1034,9 +1022,6 @@ namespace WixSharp
         /// <returns>Path to the batch file.</returns>
         public string BuildMsmCmd(string path = null)
         {
-            if (Compiler.ClientAssembly.IsEmpty())
-                Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
-
             if (path == null)
                 return Compiler.BuildMsmCmd(this);
             else

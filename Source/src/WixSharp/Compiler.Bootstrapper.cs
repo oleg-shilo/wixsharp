@@ -27,7 +27,6 @@ THE SOFTWARE.
 
 #endregion Licence...
 
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,6 +37,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.Bootstrapper;
 using IO = System.IO;
 
@@ -55,9 +55,6 @@ namespace WixSharp
         public static string Build(Bundle project, string path)
         {
             path = path.ExpandEnvVars();
-
-            if (Compiler.ClientAssembly.IsEmpty())
-                Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
 
             string oldCurrDir = Environment.CurrentDirectory;
 
@@ -123,8 +120,8 @@ namespace WixSharp
                             IO.File.Delete(outFile);
 
                         string fragmentObjectFiles = project.WxsFiles
-                                            .Distinct()
-                                            .Join(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"");
+                                                     .Distinct()
+                                                     .Join(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"");
 
                         string lightOptions = LightOptions + " " + project.LightOptions;
 
@@ -185,9 +182,6 @@ namespace WixSharp
         /// <exception cref="System.ApplicationException">Wix compiler/linker cannot be found</exception>
         public static string BuildCmd(Bundle project, string path = null)
         {
-            if (Compiler.ClientAssembly.IsEmpty())
-                Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
-
             if (path == null)
                 path = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, "Build_" + project.OutFileName) + ".cmd");
 
@@ -244,8 +238,8 @@ namespace WixSharp
                 batchFileContent += "\r\n";
 
                 string fragmentObjectFiles = project.WxsFiles
-                                            .Distinct()
-                                            .Join(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"");
+                                             .Distinct()
+                                             .Join(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"");
 
                 string lightOptions = LightOptions + " " + project.LightOptions;
 
@@ -275,10 +269,8 @@ namespace WixSharp
         {
             lock (typeof(Compiler))
             {
-                //very important to keep "ClientAssembly = " in all "public Build*" methods to ensure GetCallingAssembly
-                //returns the build script assembly but not just another method of Compiler.
-                if (ClientAssembly.IsEmpty())
-                    ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
+                if (Compiler.ClientAssembly.IsEmpty())
+                    Compiler.ClientAssembly = Compiler.FindClientAssemblyInCallStack();
 
                 project.Validate();
 
@@ -306,7 +298,7 @@ namespace WixSharp
                         var wixNamespace = Compiler.IsWix4 ? wix4Namespace : wix3Namespace;
 
                         var doc = XDocument.Parse(
-                               @"<?xml version=""1.0"" encoding=""utf-8""?>
+                                @"<?xml version=""1.0"" encoding=""utf-8""?>
                              " + $"<Wix xmlns=\"{wixNamespace}\" {extraNamespaces} " + @" >
                         </Wix>");
 
@@ -366,9 +358,6 @@ namespace WixSharp
         /// <returns></returns>
         public static string Build(Bundle project)
         {
-            if (Compiler.ClientAssembly.IsEmpty())
-                Compiler.ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
-
             string outFile = IO.Path.GetFullPath(IO.Path.Combine(project.OutDir, project.OutFileName) + ".exe");
 
             Utils.EnsureFileDir(outFile);

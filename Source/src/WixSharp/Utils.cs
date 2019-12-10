@@ -27,6 +27,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using IO = System.IO;
+using Reflection = System.Reflection;
 
 namespace WixSharp
 {
@@ -122,20 +123,12 @@ namespace WixSharp
             //need to do it in a separate domain as we do not want to lock the assembly
             string dir = IO.Path.GetDirectoryName(IO.Path.GetFullPath(file));
 
-            System.Reflection.Assembly asm = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a =>
-            {
-                try
-                {
-                    return a.Location.SamePathAs(file); //some domain assemblies may throw when accessing .Locatioon
-                }
-                catch
-                {
-                    return false;
-                }
-            });
+            var asm = AppDomain.CurrentDomain
+                               .GetAssemblies()
+                               .FirstOrDefault(a => a.GetLocation().SamePathAs(file));
 
             if (asm == null)
-                asm = System.Reflection.Assembly.ReflectionOnlyLoadFrom(file);
+                asm = Reflection.Assembly.ReflectionOnlyLoadFrom(file);
 
             // for example 'setup.cs.dll' vs 'setup.cs.compiled'
             var name = asm.ManifestModule.ScopeName;

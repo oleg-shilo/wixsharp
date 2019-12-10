@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -21,7 +22,8 @@ public class Script
         product.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
 
         product.PreserveTempFiles = true;
-        product.BuildLocalizedMsi();
+        product.OutFileName = $"{product.Name}.ml.v{product.Version}";
+        product.BuildMultilanguageMsi();
 
         // bootstrapper is yet to be added
     }

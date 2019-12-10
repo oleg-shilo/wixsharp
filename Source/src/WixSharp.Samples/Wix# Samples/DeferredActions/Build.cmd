@@ -1,3 +1,3 @@
-..\..\cscs.exe /dbg setup.cs
+..\..\cscs.exe setup.cs
 
 pause

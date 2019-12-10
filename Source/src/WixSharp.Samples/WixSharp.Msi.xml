@@ -51,6 +51,18 @@
             </summary>
             <param name="path">The path.</param>
         </member>
+        <member name="T:WixSharp.Msi.EmbedTransform">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:WixSharp.Msi.EmbedTransform.Do(System.String,System.String)">
+            <summary>
+            Embeds a language transformation (mst file) in the specified msi file.
+            </summary>
+            <param name="msi">The MSI file.</param>
+            <param name="mst">The MST file.</param>
+        </member>
         <member name="T:WixSharp.UI.MsiParser">
             <summary>
             Utility class for simplifying MSI interpreting tasks DB querying, message data parsing
@@ -475,11 +487,6 @@
             <value>
               <c>true</c> if the log file created; otherwise, <c>false</c>.
             </value>
-        </member>
-        <member name="T:WixSharp.EmbedTransform">
-             <summary>
-            
-             </summary>
         </member>
         <member name="F:WindowsInstaller.SummaryInformationStreamProperty.Codepage">
             <summary>Codepage</summary>

@@ -20,7 +20,7 @@ namespace WixSharp.Test
                                                ASP.NETApp,
                                                EnvVariables,
                                                WixBootstrapper"
-                                              .Split(',').Select(x=>x.Trim());
+                                .Split(',').Select(x => x.Trim());
 
         int completedSamples = 0;
         int samplesTotal = 0;
@@ -41,6 +41,9 @@ namespace WixSharp.Test
             int sampleDirIndex = 0;
 
             var files = Directory.GetFiles(@"..\..\..\WixSharp.Samples\Wix# Samples", "build*.cmd", SearchOption.AllDirectories);
+            var compiled_scripts = Directory.GetFiles(@"..\..\..\WixSharp.Samples\Wix# Samples", "setup*.cs.dll", SearchOption.AllDirectories);
+
+            compiled_scripts.ForEach(x => System.IO.File.Delete(x));
 
             files = files.Where(f => !exclude.Any(y => f.EndsWith(y))).ToArray();
 

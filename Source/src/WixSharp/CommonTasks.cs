@@ -1475,6 +1475,36 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Sets the package languages for a specified msi file from the value of the `project.Languages`.
+        /// </summary>
+        /// <param name="msiPath">The msi path.</param>
+        /// <param name="project">The project.</param>
+        static public void SetPackageLanguagesFrom(this string msiPath, Project project)
+            => msiPath.SetPackageLanguages(project.Language.ToLcidList());
+
+        /// <summary>
+        /// Sets the package languages for a specified msi file.
+        /// </summary>
+        /// <param name="msiPath">The msi path.</param>
+        /// <param name="languages">The languages.</param>
+        static public void SetPackageLanguages(this string msiPath, string languages)
+        {
+            using (var database = new Database(msiPath, DatabaseOpenMode.Direct))
+            {
+                // sample: "Intel;1033,1031,1049"
+                database.SummaryInfo.Template = "Intel;" + languages;
+            }
+        }
+
+        /// <summary>
+        /// Embeds a language transformation (mst file) in the specified msi file.
+        /// </summary>
+        /// <param name="msi">The msi.</param>
+        /// <param name="mst">The MST.</param>
+        public static void EmbedTransform(this string msi, string mst)
+            => Msi.EmbedTransform.Do(msi, mst);
+
+        /// <summary>
         /// Finds the first descendant 'ProgramFiles' or 'ProgramFiles64Folder' directory element.
         /// </summary>
         /// <param name="element">The element.</param>
