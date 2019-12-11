@@ -1029,7 +1029,7 @@ namespace WixSharp
             }
             else
             {
-                deleteDir(path);
+                deleteFile(path);
             }
 
             return path;
