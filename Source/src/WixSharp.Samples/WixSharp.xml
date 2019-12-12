@@ -14174,8 +14174,8 @@
              or by passing special MSI properties arguments to the <c>msiexec.exe</c>:</para>
              <list type="bullet">
              <item><description><i>English</i><para><c>msiexec /i setup.msi</c></para></description></item>
-             <item><description><i>German</i><para><c>msiexec /i setup.msi TRANSFORMS=:de-DE.mst</c></para></description></item>
-             <item><description><i>Russian</i> <para><c>msiexec /i setup.msi TRANSFORMS=:ru-RU.mst</c></para></description></item>
+             <item><description><i>German</i><para><c>msiexec /i setup.msi TRANSFORMS=:1031</c></para></description></item>
+             <item><description><i>Russian</i> <para><c>msiexec /i setup.msi TRANSFORMS=:1049</c></para></description></item>
              </list>
              </summary>
               <example>The following is an example of building <c>English</c> msi, which can also support <c>German</c>

@@ -3,6 +3,7 @@
 //css_ref ..\..\..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
@@ -13,6 +14,15 @@ class Script
 {
     static public void Main()
     {
+        List<string> UserSelectedItems = null;
+        List<string> InitialUserSelectedItems = "1,2".Split(',').ToList();
+
+        bool userChangedFeatures = UserSelectedItems?.Join(",") != InitialUserSelectedItems.Join(",");
+
+        UserSelectedItems = "1,2".Split(',').ToList();
+
+        userChangedFeatures = UserSelectedItems?.Join(",") != InitialUserSelectedItems.Join(",");
+
         var project = new Project()
         {
             UI = WUI.WixUI_ProgressOnly,

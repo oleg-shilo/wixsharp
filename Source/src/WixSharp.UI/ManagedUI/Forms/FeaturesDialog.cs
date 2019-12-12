@@ -172,7 +172,7 @@ namespace WixSharp.UI.Forms
 
         void next_Click(object sender, System.EventArgs e)
         {
-            bool userChangedFeatures = InitialUserSelectedItems.Join(",") != InitialUserSelectedItems.Join(",");
+            bool userChangedFeatures = UserSelectedItems?.Join(",") != InitialUserSelectedItems.Join(",");
 
             if (userChangedFeatures)
             {
