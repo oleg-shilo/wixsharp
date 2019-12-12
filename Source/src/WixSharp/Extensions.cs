@@ -2867,8 +2867,8 @@ namespace WixSharp
         /// or by passing special MSI properties arguments to the <c>msiexec.exe</c>:</para>
         /// <list type="bullet">
         /// <item><description><i>English</i><para><c>msiexec /i setup.msi</c></para></description></item>
-        /// <item><description><i>German</i><para><c>msiexec /i setup.msi TRANSFORMS=:de-DE.mst</c></para></description></item>
-        /// <item><description><i>Russian</i> <para><c>msiexec /i setup.msi TRANSFORMS=:ru-RU.mst</c></para></description></item>
+        /// <item><description><i>German</i><para><c>msiexec /i setup.msi TRANSFORMS=:1031</c></para></description></item>
+        /// <item><description><i>Russian</i> <para><c>msiexec /i setup.msi TRANSFORMS=:1049</c></para></description></item>
         /// </list>
         /// </summary>
         ///  <example>The following is an example of building <c>English</c> msi, which can also support <c>German</c>
@@ -2912,16 +2912,17 @@ namespace WixSharp
             return productMsi;
         }
 
-        static string BuildLanguageTransform(this Project project, string originalMsi, string language)
+        static string BuildLanguageTransform(this Project project, string originalMsi, string language, string localizationFile = "")
         {
             var torch = Compiler.WixLocation.PathCombine("torch.exe");
             var originalLng = project.Language;
+            var originalLocalizationFile = project.LocalizationFile;
             try
             {
                 project.Language = language;
+                project.LocalizationFile = localizationFile;
 
-                string localizedMsi
-                    = project.BuildMsi(language);
+                string localizedMsi = project.BuildMsi(language);
                 string langMst = localizedMsi.PathChangeExtension(".mst");
 
                 torch.Run($"-p -t language \"{originalMsi}\" \"{localizedMsi}\" -out \"{langMst}\"");
@@ -2929,6 +2930,7 @@ namespace WixSharp
             }
             finally
             {
+                project.LocalizationFile = originalLocalizationFile;
                 project.Language = originalLng;
             }
         }
