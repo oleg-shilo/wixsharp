@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>1.14.0.0</version>
+    <version>1.14.1.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,14 +16,9 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.14.0.0
-- Issue #765: Dynamic localization 
-- Added WiXUtil ProductSearch element. Used in the same way as the RegistrySearch. The product search is used to determine installation state of other products based on ProductCode or UpgradeCode by Burn bootstrappers. Useful for bypassing the plan phase of redistributable exe packages that may already be on the system.
-- Add support for ShortcutProperties (Refs: #218). ShortcutProperty is a simple child element on Shortcuts which has a key and a value. A simple dictionary object has been added to the Shortcut base class and processed later during compilation to emit child XML on the parent Shortcut.
-- Issue #774: Using CommonAppDataFolder in project.AddRegValue(RegValue) generates wrong XML
-- Issue #748: error for FirewallException. Added localization sample
-- Issue #772: `Extensions.DeleteIfExists` does not delete folders
-- Issue #771: default REINSTALLMODE</releaseNotes>
+    <releaseNotes>Release v1.14.1.0
+* Issue #784: WixSharp Managed Setup - Custom UI - FeaturesDialog does not propagate user selection
+* Issue #783: Temporary Files Not Deleted After Successful Build</releaseNotes>
     <copyright>Copyright (C) 2008-2019 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
