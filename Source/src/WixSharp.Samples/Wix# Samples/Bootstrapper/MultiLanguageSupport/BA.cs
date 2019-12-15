@@ -95,11 +95,14 @@ public class BA : BootstrapperApplication
         }
         else
         {
-            Engine.Plan(launchAction);
-            Engine.Apply(IntPtr.Zero);
+            if (MessageBox.Show("Do you want to uninstall?", "My Product", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                Engine.Plan(launchAction);
+                Engine.Apply(IntPtr.Zero);
 
-            Dispatcher.CurrentDispatcher.VerifyAccess();
-            Dispatcher.Run();
+                Dispatcher.CurrentDispatcher.VerifyAccess();
+                Dispatcher.Run();
+            }
         }
 
         Engine.Quit(0);
