@@ -613,10 +613,7 @@ namespace WixSharp
         /// <returns>Path to the built MSI file.</returns>
         static public string BuildMsi(Project project, string path)
         {
-            path = path.ExpandEnvVars();
-
-            Build(project, path, OutputType.MSI);
-            return path;
+            return Build(project, path.ExpandEnvVars(), OutputType.MSI);
         }
 
         /// <summary>
@@ -637,11 +634,7 @@ namespace WixSharp
         /// <returns>Path to the built MSM file.</returns>
         static public string BuildMsm(Project project, string path)
         {
-            path = path.ExpandEnvVars();
-
-            Build(project, path, OutputType.MSM);
-
-            return path;
+            return Build(project, path.ExpandEnvVars(), OutputType.MSM);
         }
 
         /// <summary>
@@ -748,7 +741,7 @@ namespace WixSharp
             return lightCmdLineParams.ToString().ExpandEnvVars();
         }
 
-        static void Build(Project project, string path, OutputType type)
+        static string Build(Project project, string path, OutputType type)
         {
             path = path.ExpandEnvVars();
             if (path.IsNotEmpty())
@@ -863,6 +856,8 @@ namespace WixSharp
             {
                 Environment.CurrentDirectory = oldCurrDir;
             }
+
+            return path;
         }
 
         /// <summary>
