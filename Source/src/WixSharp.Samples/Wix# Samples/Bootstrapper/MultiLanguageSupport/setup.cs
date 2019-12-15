@@ -14,17 +14,40 @@ public class Script
     static public void Main()
     {
         var product =
-            new ManagedProject("My Product",
+            new Project("My Product",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("readme.txt")));
 
-        product.Language = "en-US,de-DE,ru-RU";
-        product.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
+        product.InstallScope = InstallScope.perMachine;
+
+        product.Version = new Version("1.0.0.0");
+        product.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258771");
+        product.Language = BA.Languages; // "en-US,de-DE,ru-RU";
 
         product.PreserveTempFiles = true;
         product.OutFileName = $"{product.Name}.ml.v{product.Version}";
-        product.BuildMultilanguageMsi();
 
-        // bootstrapper is yet to be added
+        // var msiFile = $"{product.OutFileName}.msi".PathGetFullPath();
+        var msiFile = product.BuildMultilanguageMsi();
+
+        var bootstrapper =
+                new Bundle("My Product",
+                    new PackageGroupRef("NetFx40Web"),
+                    new MsiPackage(msiFile)
+                    {
+                        Id = BA.MainPackageId,
+                        DisplayInternalUI = true,
+                        Visible = true,
+                        MsiProperties = "TRANSFORMS=[TRANSFORMS]"
+                    });
+
+        bootstrapper.SetVersionFromFile(msiFile);
+        bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
+        bootstrapper.Application = new ManagedBootstrapperApplication("%this%", "BootstrapperCore.config");
+
+        bootstrapper.SuppressWixMbaPrereqVars = true;
+        bootstrapper.PreserveTempFiles = true;
+
+        bootstrapper.Build(msiFile.PathChangeExtension(".exe"));
     }
 }

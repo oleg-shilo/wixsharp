@@ -1185,6 +1185,20 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Adds the extension to the file path unless it already has the same extension.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="extension">The extension.</param>
+        /// <returns></returns>
+        public static string PathEnsureExtension(this string path, string extension)
+        {
+            if (path.PathGetExtension().SameAs(extension, ignoreCase: true))
+                return path;
+            else
+                return path + extension;
+        }
+
+        /// <summary>
         /// Gets the full path.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -2908,7 +2922,7 @@ namespace WixSharp
 
             productMsi.SetPackageLanguagesFrom(project);
 
-            Compiler.OutputWriteLine("> Multi-language setup {productMsi} is completed.");
+            Compiler.OutputWriteLine($"> Multi-language setup {productMsi} is completed.");
             return productMsi;
         }
 
@@ -2922,7 +2936,7 @@ namespace WixSharp
                 project.Language = language;
                 project.LocalizationFile = localizationFile;
 
-                string localizedMsi = project.BuildMsi(language);
+                string localizedMsi = project.BuildMsi(language).PathGetFullPath();
                 string langMst = localizedMsi.PathChangeExtension(".mst");
 
                 torch.Run($"-p -t language \"{originalMsi}\" \"{localizedMsi}\" -out \"{langMst}\"");

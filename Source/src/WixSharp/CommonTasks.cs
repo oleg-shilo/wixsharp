@@ -34,6 +34,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
+using WixSharp.Bootstrapper;
 using WixSharp.Controls;
 using IO = System.IO;
 
@@ -1109,6 +1110,12 @@ namespace WixSharp.CommonTasks
         static public Project SetVersionFromFileId(this Project project, string fileId)
         {
             project.Version = project.ExtractVersionFrom(fileId).ToRawVersion();
+            return project;
+        }
+
+        static public Bundle SetVersionFromFile(this Bundle project, string filePath)
+        {
+            project.Version = Tasks.GetVersionFromFile(filePath);
             return project;
         }
 

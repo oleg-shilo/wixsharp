@@ -4,11 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="My Ugly Bootstrapper Application"
-    Width="400"
-    Height="200"
-    MinWidth="400"
-    MinHeight="200"
+    Title="My Product"
+    Width="220"
+    Height="150"
+    MinWidth="220"
+    MinHeight="150"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
@@ -19,75 +19,28 @@
     <Grid>
         <TextBlock
             Margin="10"
-            HorizontalAlignment="Center"
+            HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            FontSize="18"
-            Foreground="Red"
-            Text="Welcome to my test bootstrapper application." />
-        <TextBox
-            Margin="10,40"
+            Text="Language" />
+        <ComboBox
+            Margin="10,35"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top"
-            FontSize="12"
-            Text="{Binding UserInput, Mode=TwoWay}" />
-        <Ellipse
-            Width="50"
-            Height="50"
-            Margin="10"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            StrokeThickness="6"
-            Visibility="{Binding Path=IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Ellipse.Stroke>
-                <LinearGradientBrush>
-                    <GradientStop Offset="0.0" Color="Red" />
-                    <GradientStop Offset="0.9" Color="White" />
-                </LinearGradientBrush>
-            </Ellipse.Stroke>
-            <Ellipse.RenderTransform>
-                <RotateTransform x:Name="Rotator" Angle="0" CenterX="25" CenterY="25" />
-            </Ellipse.RenderTransform>
-            <Ellipse.Triggers>
-                <EventTrigger RoutedEvent="Ellipse.Loaded">
-                    <BeginStoryboard>
-                        <Storyboard TargetProperty="Angle" TargetName="Rotator">
-                            <DoubleAnimation
-                                By="360"
-                                RepeatBehavior="Forever"
-                                Duration="0:0:2" />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Ellipse.Triggers>
-        </Ellipse>
+            DisplayMemberPath="DisplayName"
+            ItemsSource="{Binding SupportedLanguages}"
+            SelectedItem="{Binding SelectedLanguage}"
+            SelectedValuePath="Id" />
         <StackPanel
-            HorizontalAlignment="Right"
+            HorizontalAlignment="Center"
             VerticalAlignment="Bottom"
             Orientation="Horizontal">
             <Button
                 Width="80"
                 Height="20"
                 Margin="10"
-                Click="Install_Click"
-                Visibility="{Binding InstallEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                Click="Install_Click">
                 Install
-            </Button>
-            <Button
-                Width="80"
-                Height="20"
-                Margin="10"
-                Click="Uninstall_Click"
-                Visibility="{Binding UninstallEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
-                Uninstall
-            </Button>
-            <Button
-                Width="80"
-                Height="20"
-                Margin="10"
-                Click="Exit_Click">
-                Exit
             </Button>
         </StackPanel>
     </Grid>
-
 </Window>

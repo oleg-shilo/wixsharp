@@ -31,7 +31,7 @@ public class CustomSilentBA : BootstrapperApplication
             {
                 //Presence or absence of MyProductPackageId product will be a deciding factor
                 //for initializing BA in Install, Uninstall or Modify mode.
-                if (e.PackageId == "MyProductPackageId")
+                if (e.PackageId == "")
                 {
                     switch (e.State)
                     {

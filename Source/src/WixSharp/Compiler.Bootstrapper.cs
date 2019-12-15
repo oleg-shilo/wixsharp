@@ -114,10 +114,9 @@ namespace WixSharp
                         string outFile = wxsFile.PathChangeExtension(".exe");
 
                         if (path.IsNotEmpty())
-                            outFile = IO.Path.GetFullPath(path);
+                            outFile = path.PathGetFullPath().PathEnsureExtension(".exe");
 
-                        if (IO.File.Exists(outFile))
-                            IO.File.Delete(outFile);
+                        outFile.DeleteIfExists();
 
                         string fragmentObjectFiles = project.WxsFiles
                                                      .Distinct()
@@ -135,7 +134,7 @@ namespace WixSharp
                             Compiler.TempFiles.Add(wxsFile);
 
                             Compiler.OutputWriteLine("\n----------------------------------------------------------\n");
-                            Compiler.OutputWriteLine("Bootstrapper file has been built: " + path + "\n");
+                            Compiler.OutputWriteLine("Bootstrapper file has been built: " + outFile + "\n");
                             Compiler.OutputWriteLine(" Name       : " + project.Name);
                             Compiler.OutputWriteLine(" Version    : " + project.Version);
                             Compiler.OutputWriteLine(" UpgradeCode: {" + project.UpgradeCode + "}\n");

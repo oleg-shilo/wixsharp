@@ -33,7 +33,7 @@ namespace WixSharp.Bootstrapper
         {
             AppAssembly = appAssembly;
             Payloads = Payloads.Combine(AppAssembly.ToPayload())
-                               .Combine(dependencies.Select(x=>x.ToPayload()));
+                               .Combine(dependencies.Select(x => x.ToPayload()));
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace WixSharp.Bootstrapper
                 bootstrapperCoreConfig = Path.Combine(outDir, "BootstrapperCore.config");
 
                 sys.File.WriteAllText(bootstrapperCoreConfig,
-                                      DefaultBootstrapperCoreConfigContent.Replace("{asmName}",asmName));
+                                      DefaultBootstrapperCoreConfigContent.Replace("{asmName}", asmName));
 
                 Compiler.TempFiles.Add(bootstrapperCoreConfig);
             }
@@ -130,6 +130,12 @@ namespace WixSharp.Bootstrapper
         /// <para>This ID is used by the application to detect the presence of the package on the target system
         /// and trigger either install or uninstall action.</para>
         /// <para>If it is not set then it is the Id of the last package in th bundle.</para>
+        /// <para>The purpose of this property to express what package in the multi-package bundle represents
+        /// the product. A typical use-case of this is a scenario when bundle contains prerequisite packages
+        /// (e.g. runtime dependencies, third party editors) and the product msi. Thus regardless of the
+        /// prerequisite presence the bundle should be considered as installed only if the product msi is installed.
+        /// Otherwise the bundle is not installed even though some of the prerequisites can be present on the
+        /// target system (e.g. installed individually or by other products).</para>
         /// </summary>
         /// <value>
         /// The primary package identifier.

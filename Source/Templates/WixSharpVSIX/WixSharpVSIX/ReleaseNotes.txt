@@ -1,3 +1,6 @@
+v1.9.1.0
+* Issue #784: WixSharp Managed Setup - Custom UI - FeaturesDialog does not propagate user selection
+
 v1.9.0.0
 * Removed packages.config as after recent VS updates it stopped invoking *.ps1 install scripts correctly
 

@@ -2267,6 +2267,12 @@
             <para>This ID is used by the application to detect the presence of the package on the target system
             and trigger either install or uninstall action.</para>
             <para>If it is not set then it is the Id of the last package in th bundle.</para>
+            <para>The purpose of this property to express what package in the multi-package bundle represents
+            the product. A typical use-case of this is a scenario when bundle contains prerequisite packages
+            (e.g. runtime dependencies, third party editors) and the product msi. Thus regardless of the
+            prerequisite presence the bundle should be considered as installed only if the product msi is installed.
+            Otherwise the bundle is not installed even though some of the prerequisites can be present on the
+            target system (e.g. installed individually or by other products).</para>
             </summary>
             <value>
             The primary package identifier.
@@ -8319,6 +8325,14 @@
         <member name="M:WixSharp.Extensions.PathChangeExtension(System.String,System.String)">
             <summary>
             Change extension of the file path.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="extension">The extension.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.PathEnsureExtension(System.String,System.String)">
+            <summary>
+            Adds the extension to the file path unless it already has the same extension.
             </summary>
             <param name="path">The path.</param>
             <param name="extension">The extension.</param>
@@ -18754,7 +18768,7 @@
              Note: The ID auto-generation is triggered on the first access (evaluation) and in order to make the id
              allocation deterministic the compiler resets ID generator just before the build starts. However if you
              accessing any auto-id before the Build*() is called you can it interferes with the ID auto generation and eventually
-             lead to the WiX ID duplications. To prevent this from happening either:"
+             lead to the WiX ID duplications. To prevent this from happening either:
              <para> - Avoid evaluating the auto-generated IDs values before the call to Build*()</para>
              <para> - Set the IDs (to be evaluated) explicitly</para>
              <para> - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";</para>

@@ -344,7 +344,7 @@ namespace WixSharp
         ///  Note: The ID auto-generation is triggered on the first access (evaluation) and in order to make the id
         ///  allocation deterministic the compiler resets ID generator just before the build starts. However if you
         ///  accessing any auto-id before the Build*() is called you can it interferes with the ID auto generation and eventually
-        ///  lead to the WiX ID duplications. To prevent this from happening either:"
+        ///  lead to the WiX ID duplications. To prevent this from happening either:
         ///  <para> - Avoid evaluating the auto-generated IDs values before the call to Build*()</para>
         ///  <para> - Set the IDs (to be evaluated) explicitly</para>
         ///  <para> - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";</para>
