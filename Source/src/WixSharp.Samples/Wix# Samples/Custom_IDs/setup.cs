@@ -132,7 +132,7 @@ class Script
 
                 // WiX does not allow '-' char in ID. So need to use `Math.Abs`
 
-                var dir_hash = Math.Abs(target_path.PathGetDirName().GetHashCode32());
+                var dir_hash = (uint) target_path.PathGetDirName().GetHashCode32();
                 var file_name = target_path.PathGetFileName().EscapeIllegalCharacters();
 
                 return "File.{0}.{1}".FormatWith(dir_hash, file_name);
