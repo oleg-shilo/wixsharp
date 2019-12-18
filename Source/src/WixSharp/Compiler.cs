@@ -3039,7 +3039,7 @@ namespace WixSharp
             var st = new StackTrace(false);
             for (int i = 0; i < st.FrameCount; i++)
             {
-                var asm = st.GetFrame(i).GetMethod().DeclaringType.Assembly;
+                var asm = st.GetFrame(i).GetMethod().DeclaringType?.Assembly;
                 if (asm != System.Reflection.Assembly.GetExecutingAssembly())
                 {
                     if (asm == "".GetType().Assembly || asm.FullName.StartsWith("mscorlib."))
