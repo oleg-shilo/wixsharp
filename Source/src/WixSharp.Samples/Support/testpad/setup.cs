@@ -178,7 +178,7 @@ static class Script
                                      )
                                  )
                           {
-                          // AttributesDefinition = "Component:Win64=yes"
+                              // AttributesDefinition = "Component:Win64=yes"
                           }
                                         )
         {
@@ -265,7 +265,7 @@ static class Script
 
         // Compiler.LightOptions += " -sice:ICE80";
         project.PreserveTempFiles = true;
-        var ttt = project.BuildMsi();
+        project.BuildMsi();
     }
 
     static void Issue_298b()

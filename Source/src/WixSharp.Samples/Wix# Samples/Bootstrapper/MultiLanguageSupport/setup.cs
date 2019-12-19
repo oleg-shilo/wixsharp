@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -9,7 +10,7 @@ using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
 using io = System.IO;
 
-public class Script
+public static class Script
 {
     static public void Main()
     {
@@ -27,8 +28,8 @@ public class Script
         product.PreserveTempFiles = true;
         product.OutFileName = $"{product.Name}.ml.v{product.Version}";
 
-        // var msiFile = $"{product.OutFileName}.msi".PathGetFullPath();
-        var msiFile = product.BuildMultilanguageMsi();
+        var msiFile = $"{product.OutFileName}.msi".PathGetFullPath();
+        //var msiFile = product.BuildMultilanguageMsi();
 
         var bootstrapper =
                 new Bundle("My Product",

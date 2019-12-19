@@ -907,7 +907,7 @@ namespace WixSharp
                 if (!codepage.IsEmpty())
                     return codepage;
                 else
-                    return Encoding.GetEncoding(new CultureInfo(Language.Split(',', ';').FirstOrDefault()).TextInfo.ANSICodePage).WebName;
+                    return Encoding.GetEncoding(this.DefaultLanguage.TextInfo.ANSICodePage).WebName;
             }
             set
             {

@@ -80,6 +80,8 @@ namespace WixSharp.Test
                 Assert.Equal(expectedNamespace, attr.Name.Namespace);
             };
 
+            project.OutFileName = nameof(AttributesInjection);
+
             var wxsFile = project.BuildWxs();
         }
 
@@ -108,6 +110,8 @@ namespace WixSharp.Test
                 Assert.Equal(expectedNamespace, attr.Name.Namespace);
             };
 
+            project.OutFileName = nameof(AttributesInjection2);
+
             var wxsFile = project.BuildWxs();
         }
 
@@ -134,6 +138,7 @@ namespace WixSharp.Test
                 Assert.Equal(expectedNamespace, attr.Name.Namespace);
             };
 
+            project.OutFileName = nameof(AttributesInjection3);
             var wxsFile = project.BuildWxs();
         }
 
@@ -158,6 +163,7 @@ namespace WixSharp.Test
                 Assert.Equal(expectedName, attr.Name.LocalName);
             };
 
+            project.OutFileName = nameof(AttributesInjection4);
             var wxsFile = project.BuildWxs();
         }
 
@@ -168,6 +174,8 @@ namespace WixSharp.Test
                 new Project("MyProduct",
                     new Dir(@"%ProgramFiles%\My Product",
                         new File("MyApp.exe") { AttributesDefinition = "Component:{http://schemas.microsoft.com/wix/DependencyExtension}NNN=vvv" }));
+
+            project.OutFileName = nameof(AttributesInjection5);
 
             Assert.Throws<Exception>(() => project.BuildWxs());
         }

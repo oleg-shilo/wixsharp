@@ -1113,6 +1113,18 @@ namespace WixSharp.CommonTasks
             return project;
         }
 
+        /// <summary>
+        /// Sets the version of the project to the version value retrieved from the file.
+        /// <para>If the file is an assembly then the assembly version is returned.</para>
+        /// <para>If the file is a native binary then file version is returned.</para>
+        /// </summary>
+        /// <remarks>
+        /// Attempt to extract the assembly version may fail because the dll/exe file may not be an assembly
+        /// or because it can be in the wrong assembly format (x64 vs x86). In any case the method will fall back to
+        /// the file version.</remarks>
+        /// <param name="project">The project.</param>
+        /// <param name="filePath">The file path.</param>
+        /// <returns></returns>
         static public Bundle SetVersionFromFile(this Bundle project, string filePath)
         {
             project.Version = Tasks.GetVersionFromFile(filePath);

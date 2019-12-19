@@ -106,6 +106,32 @@ namespace WixSharp
         /// </summary>
         public List<string> LibFiles = new List<string>();
 
+        /// <summary>
+        /// Gets a value indicating whether this project supports multiple languages.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this project is multi language; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsMultiLanguage => Language.Split(',', ';').Count() > 1;
+
+        /// <summary>
+        /// Gets the default language
+        /// </summary>
+        /// <value>
+        /// The default language.
+        /// </value>
+        public CultureInfo DefaultLanguage
+        {
+            get
+            {
+                var lng = Language.Split(',', ';').FirstOrDefault();
+                if (lng == null)
+                    return null;
+                else
+                    return new CultureInfo(lng);
+            }
+        }
+
         string language = "en-US";
 
         /// <summary>

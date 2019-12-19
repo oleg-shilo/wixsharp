@@ -68,6 +68,23 @@ namespace WixSharp.Bootstrapper
 
                 Compiler.TempFiles.Add(bootstrapperCoreConfig);
             }
+
+            // WiX does not check the validity of the BootstrapperCore.config so we need to do it
+            try
+            {
+                var expectedAssemblyName = XDocument.Load(bootstrapperCoreConfig)
+                                                    .FindFirst("host")
+                                                    .Attribute("assemblyName")
+                                                    .Value;
+
+                if (asmName != expectedAssemblyName)
+                {
+                    Compiler.OutputWriteLine(
+                        $"WARNING: It looks like your configured BA assembly name (<host assemblyName=\"{expectedAssemblyName}\">) " +
+                        $"from `BootstrapperCore.config` file is not matching the actual assembly name (\"{asmName}\").");
+                }
+            }
+            catch { }
         }
 
         /// <summary>

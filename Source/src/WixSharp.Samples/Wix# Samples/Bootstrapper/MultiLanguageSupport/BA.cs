@@ -41,8 +41,9 @@ public class BA : BootstrapperApplication
 
     LaunchAction Detect()
     {
+        var done = new AutoResetEvent(false);
+
         var launchAction = LaunchAction.Unknown;
-        var detectInProgress = true;
 
         this.DetectPackageComplete += (object sender, DetectPackageCompleteEventArgs e) =>
         {
@@ -53,14 +54,13 @@ public class BA : BootstrapperApplication
                 else if (e.State == PackageState.Present)
                     launchAction = LaunchAction.Uninstall;
 
-                detectInProgress = false;
+                done.Set();
             }
         };
 
         this.Engine.Detect();
 
-        while (detectInProgress) // you may want to improve waiting algorithm so we do not wait forever
-            Thread.Sleep(1000);
+        done.WaitOne();
 
         return launchAction;
     }
@@ -70,7 +70,7 @@ public class BA : BootstrapperApplication
     /// </summary>
     protected override void Run()
     {
-        Debug.Assert(false);
+        // Debug.Assert(false);
 
         var launchAction = this.Detect();
 
@@ -95,6 +95,7 @@ public class BA : BootstrapperApplication
         }
         else
         {
+            // You can also show a small form with selection of the next action "Modify/Repair" vs "Uninstall"
             if (MessageBox.Show("Do you want to uninstall?", "My Product", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 Engine.Plan(launchAction);

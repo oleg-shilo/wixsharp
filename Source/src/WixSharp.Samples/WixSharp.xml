@@ -10789,6 +10789,22 @@
             Collection of paths to the external wsxlib files to be passed to the Light linker.
             </summary>
         </member>
+        <member name="P:WixSharp.WixProject.IsMultiLanguage">
+            <summary>
+            Gets a value indicating whether this project supports multiple languages.
+            </summary>
+            <value>
+              <c>true</c> if this project is multi language; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:WixSharp.WixProject.DefaultLanguage">
+            <summary>
+            Gets the default language
+            </summary>
+            <value>
+            The default language.
+            </value>
+        </member>
         <member name="P:WixSharp.WixProject.Language">
             <summary>
             Installation UI Language. If not specified <c>"en-US"</c> will be used.

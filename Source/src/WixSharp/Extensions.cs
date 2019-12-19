@@ -2904,6 +2904,7 @@ namespace WixSharp
         /// <returns></returns>
         static public string BuildMultilanguageMsi(this WixSharp.Project project, string path = null)
         {
+            project.VerifyLanguage();
             project.SuppressSettingPackageLanguages = true;
 
             string productMsi = project.BuildMsi(path);
@@ -2924,6 +2925,35 @@ namespace WixSharp
 
             Compiler.OutputWriteLine($"> Multi-language setup {productMsi} is completed.");
             return productMsi;
+        }
+
+        /// <summary>
+        /// Determines whether two cultures are compatible based on the same neutral culture (e.g. en-US is compatible with en-AU).
+        /// </summary>
+        /// <param name="info1">The info1.</param>
+        /// <param name="info2">The info2.</param>
+        /// <returns>
+        ///   <c>true</c> if [is compatible with] [the specified info2]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsCompatibleWith(this CultureInfo info1, CultureInfo info2)
+            => info1.TwoLetterISOLanguageName == info2.TwoLetterISOLanguageName;
+
+        /// <summary>
+        /// Verifies the language of the multi-language project being compatible with the language of the operating system
+        /// the project is being built on. The compatibility is important in this case as the wrong choice of the default
+        /// language can lead to the problems when building bootstrapper with the language selection.
+        /// See "&lt;root>\Source\src\WixSharp.Samples\Wix# Samples\Bootstrapper\MultiLanguageSupport\setup.cs&gt;
+        /// sample.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        public static void VerifyLanguage(this Project project)
+        {
+            if (project.IsMultiLanguage && !project.DefaultLanguage.IsCompatibleWith(CultureInfo.InstalledUICulture))
+                Console.WriteLine(
+                    $"Warning: Your project default language ({project.DefaultLanguage.IetfLanguageTag}) " +
+                    $"does not match the OS language ({CultureInfo.InstalledUICulture.IetfLanguageTag}). " +
+                    $"This may lead to unexpected behavior when building multi-language packages (see Wiki-Localization article).\n" +
+                    $"Normally you would prefer your project default language to be the same as your OS language.");
         }
 
         static string BuildLanguageTransform(this Project project, string originalMsi, string language, string localizationFile = "")
