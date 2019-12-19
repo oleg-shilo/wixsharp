@@ -840,7 +840,7 @@ namespace WixSharp
                 var hash = target_path.GetHashCode32();
 
                 // WiX does not allow '-' char in ID. So need to use `Math.Abs`
-                return $"{target_path.PathGetFileName()}_{Math.Abs(hash)}";
+                return $"{target_path.PathGetFileName()}_{(uint) hash}";
             }
             return null; // next two lines produce the same result
                          // return WixEntity.DefaultIdAlgorithm(entity);
@@ -1045,7 +1045,7 @@ namespace WixSharp
             {
                 var target_path = this.GetTargetPathOf(file);
 
-                var dir_hash = Math.Abs(target_path.GetHashCode32());
+                var dir_hash = (uint) target_path.GetHashCode32();
                 var file_name = target_path.PathGetFileName().EscapeIllegalCharacters();
 
                 if (Compiler.AutoGeneration.HashedTargetPathIdAlgorithm_FileIdMask != null)
