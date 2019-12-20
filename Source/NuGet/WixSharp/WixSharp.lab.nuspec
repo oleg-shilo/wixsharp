@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.Lab</id>
-    <version>1.14.1.0</version>
+    <version>1.14.2.0</version>
     <title>Wix# (WixSharp) - Experimantal features</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -14,9 +14,14 @@
 The package contains the sample code for building a simple MSI with the CLR WinForm dialog inserted into UI sequence between InsallDirDlg and VerifyReadyDlg native MSI dialogs. In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# binaries containing experimental features (e.g. native WiX UI support).</summary>
-    <releaseNotes>Release v1.14.1.0
-* Issue #784: WixSharp Managed Setup - Custom UI - FeaturesDialog does not propagate user selection
-* Issue #783: Temporary Files Not Deleted After Successful Build</releaseNotes>
+    <releaseNotes>Release v1.14.2.0
+* Fix collision possibility for GetHashCode32(): use (uint) instead of Math.Abs()
+* Issue #786: NullReferenceException on FindClientAssemblyInCallStack
+* Dynamic Localization - bootstrapper support
+* Modified `Compiler.BuildMsi(string path)` to return potentially modified input path
+
+
+</releaseNotes>
     <copyright>Copyright (C) 2008-2019 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# Scripting msi install setup</tags>
@@ -25,7 +30,7 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
       <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
     </frameworkAssemblies>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.14.1.0" />
+      <dependency id="WixSharp.bin" version="1.14.2.0" />
     </dependencies>
   </metadata>
   <files>
