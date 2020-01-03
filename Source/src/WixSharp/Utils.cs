@@ -128,7 +128,7 @@ namespace WixSharp
                                .FirstOrDefault(a => a.GetLocation().SamePathAs(file));
 
             if (asm == null)
-                asm = Reflection.Assembly.ReflectionOnlyLoadFrom(file);
+                asm = Reflection.Assembly.ReflectionOnlyLoad(System.IO.File.ReadAllBytes(file));
 
             // for example 'setup.cs.dll' vs 'setup.cs.compiled'
             var name = asm.ManifestModule.ScopeName;

@@ -457,12 +457,20 @@ namespace WixSharp
         {
             string[] parts = info.Split('|');
 
-            var assembly = System.Reflection.Assembly.Load(parts[0]);
+            // Try to see if it's already loaded. `Assembly.Load(name)` still loads from the file
+            // if found. Even though the file-less (or renamed) assembly is loaded.
+            // Yep, it's not what one would expect.
+            //
+            // If not done this way it might locks the asm file, which in turn leads
+            // to the problems if host is a cs-script app.
+
+            var assembly = System.AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.FullName.StartsWith(parts[0]))
+                           ?? System.Reflection.Assembly.Load(parts[0]);
 
             Type type = null;
 
-            //Ideally need to iterate through the all types in order to find even private ones
-            //Though loading some internal (irrelevant) types can fail because of the dependencies.
+            // Ideally need to iterate through the all types in order to find even private ones
+            // Though loading some internal (irrelevant) types can fail because of the dependencies.
             try
             {
                 assembly.GetTypes().Single(t => t.FullName == parts[1]);
