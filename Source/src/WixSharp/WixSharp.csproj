@@ -134,6 +134,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Heat\Harvester.cs" />
     <Compile Include="IconFile.cs" />
+    <Compile Include="IISWebSite.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="NativeImage.cs" />
     <Compile Include="EventSource.cs" />

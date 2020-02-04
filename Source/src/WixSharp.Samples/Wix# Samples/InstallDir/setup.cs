@@ -3,12 +3,14 @@
 //css_ref System.Core.dll;
 
 using System;
+using System.Diagnostics;
 using System.Linq;
-using System.Xml.Linq;
+using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
-using System.Windows.Forms;
+using WixSharp.CommonTasks;
 
 class Script
 {

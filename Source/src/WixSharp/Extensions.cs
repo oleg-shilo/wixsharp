@@ -2462,6 +2462,29 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Sets `ADDLOCAL` session property to the coma-delimited values of the all features currently installed.
+        /// This method is useful if you want to initialize current session with the specific features enabled according
+        /// the previous installation if found. Applicable only for Major Upgrade scenarios.
+        /// <para>Managed UI does this automatically but if you suppress UI then you may want to do this manually.
+        /// Then this method is to do the heavy lifting.</para>
+        /// </summary>
+        /// <param name="session"></param>
+        static void InitFeaturesFromCurrentInstallation(this Session session)
+        {
+            var productCode = session["ProductCode"];
+
+            var installedPackage = new Microsoft.Deployment.WindowsInstaller.ProductInstallation(productCode);
+            if (installedPackage.IsInstalled)
+            {
+                var installedFeatures = installedPackage.Features
+                                                        .Where(x => x.State == InstallState.Local)
+                                                        .Select(x => x.FeatureName)
+                                                        .Join(",");
+                session["ADDLOCAL"] = installedFeatures;
+            }
+        }
+
+        /// <summary>
         /// Builds an MSI condition expression for the given <see cref="WixSharp.Feature"/>, which evaluates
         /// as <c>true</c> if the feature is being installed.
         /// </summary>

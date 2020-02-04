@@ -315,6 +315,7 @@ namespace WixSharp
         {
             base.Name = "VirtDir"; //to become a prffix of the auto-generated Id
         }
+
         /// <summary>
         /// WebSite in which this virtual directory belongs.
         /// </summary>

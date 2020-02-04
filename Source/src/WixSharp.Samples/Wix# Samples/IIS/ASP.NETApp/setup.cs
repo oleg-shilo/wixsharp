@@ -19,11 +19,14 @@ class Script
             InstallWebSite = true
         };
 
+        // if you wan to create an IIS Website without using IISVirtualDir then you can use IISWebSite class instead.
+
         var project =
                 new Project("My Product",
                     new Dir(@"%ProgramFiles%\MyCompany",
                         new Dir("MyWebApp",
                             new Dir("AdminWeb2",
+                                    new IISWebSite("MyWebAppDefault", "8088"),
                                     new IISVirtualDir
                                     {
                                         Name = "MyWebApp2",

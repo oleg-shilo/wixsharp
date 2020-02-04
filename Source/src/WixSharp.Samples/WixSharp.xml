@@ -4734,6 +4734,43 @@
             </summary>
             <param name="context">The context.</param>
         </member>
+        <member name="T:WixSharp.IISWebSite">
+            <summary>
+             This class allows creating an IIS Website without using IISVirtualDir.
+            </summary>
+            <seealso cref="T:WixSharp.WixEntity" />
+            <seealso cref="T:WixSharp.IGenericEntity" />
+        </member>
+        <member name="P:WixSharp.IISWebSite.Description">
+            <summary>
+            Gets the description.
+            </summary>
+            <value>
+            The description.
+            </value>
+        </member>
+        <member name="P:WixSharp.IISWebSite.Port">
+            <summary>
+            Gets the port.
+            </summary>
+            <value>
+            The port.
+            </value>
+        </member>
+        <member name="M:WixSharp.IISWebSite.#ctor(System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.IISWebSite"/> class.
+            </summary>
+            <param name="description">The description.</param>
+            <param name="port">The port.</param>
+        </member>
+        <member name="M:WixSharp.IISWebSite.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Adds itself as an XML content into the WiX source being generated from the <see cref="T:WixSharp.Project" />.
+            See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
         <member name="T:WixSharp.IniFileAction">
             <summary>
             The type of modification to be made.
