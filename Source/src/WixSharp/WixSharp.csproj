@@ -118,6 +118,7 @@
     <Compile Include="Bootstrapper\Variable.cs" />
     <Compile Include="CloseApplication.cs" />
     <Compile Include="ComRegistration.cs" />
+    <Compile Include="CopyFile.cs" />
     <Compile Include="CustomActionRef.cs" />
     <Compile Include="DigitalSignature.cs" />
     <Compile Include="DigitalSignatureBootstrapper.cs" />

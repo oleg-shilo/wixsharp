@@ -2471,15 +2471,15 @@ namespace WixSharp
         /// <param name="session"></param>
         static void InitFeaturesFromCurrentInstallation(this Session session)
         {
-            var productCode = session["ProductCode"];
-
-            var installedPackage = new Microsoft.Deployment.WindowsInstaller.ProductInstallation(productCode);
-            if (installedPackage.IsInstalled)
+            var upgradeCode = session["UpgradeCode"];
+            var installedPackage = ProductInstallation.GetRelatedProducts(upgradeCode).FirstOrDefault();
+            if (installedPackage != null)
             {
                 var installedFeatures = installedPackage.Features
-                                                        .Where(x => x.State == InstallState.Local)
-                                                        .Select(x => x.FeatureName)
-                                                        .Join(",");
+                        .Where(x => x.State == InstallState.Local)
+                    .Select(x => x.FeatureName)
+                    .Join(",");
+
                 session["ADDLOCAL"] = installedFeatures;
             }
         }
