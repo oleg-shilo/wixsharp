@@ -200,43 +200,43 @@ namespace WixSharp.Bootstrapper
         /// If set to "true", WixStdBA will launch the application specified by the LaunchTarget attribute with the SW_HIDE flag. This attribute is ignored when the LaunchTargetElevatedId attribute is specified.
         /// </summary>
         [Xml]
-        bool? LaunchHidden;
+        public bool? LaunchHidden;
 
         /// <summary>
         /// If set to "true", WixStdBA will show a page allowing the user to restart applications when files are in use.
         /// </summary>
         [Xml]
-        bool? ShowFilesInUse;
+        public bool? ShowFilesInUse;
 
         /// <summary>
         /// If set to "true", the application version will be displayed on the UI.
         /// </summary>
         [Xml]
-        bool? ShowVersion;
+        public bool? ShowVersion;
 
         /// <summary>
         /// If set to "true", the bundle can be pre-cached using the /cache command line argument.
         /// </summary>
         [Xml]
-        bool? SupportCacheOnly;
+        public bool? SupportCacheOnly;
 
         /// <summary>
         /// If set to "true", attempting to installer a downgraded version of a bundle will be treated as a successful do-nothing operation. The default behavior (or when explicitly set to "false") is to treat downgrade attempts as failures.
         /// </summary>
         [Xml]
-        bool? SuppressDowngradeFailure;
+        public bool? SuppressDowngradeFailure;
 
         /// <summary>
         /// If set to "true", the Options button will not be shown and the user will not be able to choose an installation directory.
         /// </summary>
         [Xml]
-        bool? SuppressOptionsUI;
+        public bool? SuppressOptionsUI;
 
         /// <summary>
         /// If set to "true", the Repair button will not be shown in the maintenance-mode UI.
         /// </summary>
         [Xml]
-        bool? SuppressRepair;
+        public bool? SuppressRepair;
 
         /// <summary>
         /// Source file of the theme XML.

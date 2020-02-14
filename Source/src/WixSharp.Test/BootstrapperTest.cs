@@ -51,9 +51,9 @@ namespace WixSharp.Test
 
             var xml = entity.ToXml().First().ToString();
             var expected = "<ExePackage Name=\"Setup1\" Id=\"package1\" InstallCommand=\"/q /norestart\" Permanent=\"yes\" SourceFile=\"Samples\\Setup1.exe\">\r\n" +
-                           "  <Payload SourceFile=\"Samples\\setup1.dll\" />\r\n" +
-                           "  <Payload SourceFile=\"Samples\\setup2.dll\" />\r\n" +
-                           "</ExePackage>";
+                    "  <Payload SourceFile=\"Samples\\setup1.dll\" />\r\n" +
+                        "  <Payload SourceFile=\"Samples\\setup2.dll\" />\r\n" +
+                            "</ExePackage>";
 
             Assert.Equal(expected, xml);
         }
@@ -70,12 +70,12 @@ namespace WixSharp.Test
 
             var xml = entity.ToXml().First().ToString();
             var expected = "<MsiPackage Permanent=\"yes\" SourceFile=\"Samples\\SetupA.msi\">\r\n" +
-                           "  <Payload SourceFile=\"Samples\\setup1.dll\" />\r\n" +
-                           "  <Payload SourceFile=\"Samples\\setup2.dll\" />\r\n" +
-                           "  <MsiProperty Name=\"TRANSFORMS\" Value=\"[CommandArgs]\" />\r\n" +
-                           "  <MsiProperty Name=\"GLOBAL\" Value=\"yes\" />\r\n" +
-                           "  <MsiProperty Name=\"WIXBUNDLEORIGINALSOURCE\" Value=\"[WixBundleOriginalSource]\" />\r\n" +
-                           "</MsiPackage>";
+                    "  <Payload SourceFile=\"Samples\\setup1.dll\" />\r\n" +
+                        "  <Payload SourceFile=\"Samples\\setup2.dll\" />\r\n" +
+                            "  <MsiProperty Name=\"TRANSFORMS\" Value=\"[CommandArgs]\" />\r\n" +
+                            "  <MsiProperty Name=\"GLOBAL\" Value=\"yes\" />\r\n" +
+                            "  <MsiProperty Name=\"WIXBUNDLEORIGINALSOURCE\" Value=\"[WixBundleOriginalSource]\" />\r\n" +
+                            "</MsiPackage>";
 
             Assert.Equal(expected, xml);
         }

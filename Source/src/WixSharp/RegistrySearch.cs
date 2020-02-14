@@ -75,6 +75,7 @@ namespace WixSharp
         /// </summary>
         public RegistryHive Root;
 
+        // note string vs. RegistryHive. To support WiX values that are not available in RegistryHive
         [Xml(Name = "Root")]
         internal string root { get => Root; }
 

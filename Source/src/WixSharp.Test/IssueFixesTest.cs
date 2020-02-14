@@ -2,7 +2,9 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
+using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
 using Xunit;
 
@@ -10,6 +12,33 @@ namespace WixSharp.Test
 {
     public class IssueFixesTest
     {
+        /// <summary>
+        /// Fixes the issue 803.
+        /// </summary>
+        [Fact]
+        [Description("Issue #803")]
+        public void Fix_Issue_803()
+        {
+            // ensure all types that expose their properties for serialization with [XML] have these properties public
+            // "SqlDb" and "root" are serializable but not assignable by user
+            var classesWithFaultsFields =
+                    typeof(Project).Assembly.GetTypes()
+                        .SelectMany(t => t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                                          .Where(p => p.Name != "SqlDb")
+                                          .Where(p => p.GetCustomAttribute<WixSharp.XmlAttribute>() != null)
+                                          .Select(x => $"{x.DeclaringType.Name}.{x.Name}"))
+                .Concat(
+                    typeof(Project).Assembly.GetTypes()
+                        .Where(t => t != typeof(Error))
+                        .SelectMany(t => t.GetProperties(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                                          .Where(p => p.Name != "root")
+                                          .Where(p => p.GetCustomAttribute<WixSharp.XmlAttribute>() != null)
+                                          .Select(x => $"{x.DeclaringType.Name}.{x.Name}")))
+                .ToArray();
+
+            Assert.Empty(classesWithFaultsFields);
+        }
+
         [Fact]
         [Description("Issue #67")]
         public void Fix_Issue_67()
