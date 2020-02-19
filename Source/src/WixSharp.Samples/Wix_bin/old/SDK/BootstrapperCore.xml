@@ -1,0 +1,2982 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BootstrapperCore</name>
+    </assembly>
+    <members>
+        <member name="T:WixToolset.Bootstrapper.BootstrapperApplication">
+            <summary>
+            The default bootstrapper application.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.BootstrapperApplication"/> class.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.Startup">
+            <summary>
+            Fired when the engine is starting up the bootstrapper application.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.Shutdown">
+            <summary>
+            Fired when the engine is shutting down the bootstrapper application.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.SystemShutdown">
+            <summary>
+            Fired when the system is shutting down or user is logging off.
+            </summary>
+            <remarks>
+            <para>To prevent shutting down or logging off, set <see cref="P:WixToolset.Bootstrapper.CancellableHResultEventArgs.Cancel"/> to
+            true; otherwise, set it to false.</para>
+            <para>By default setup will prevent shutting down or logging off between
+            <see cref="E:WixToolset.Bootstrapper.BootstrapperApplication.ApplyBegin"/> and <see cref="E:WixToolset.Bootstrapper.BootstrapperApplication.ApplyComplete"/>.
+            Derivatives can change this behavior by overriding <see cref="M:WixToolset.Bootstrapper.BootstrapperApplication.OnSystemShutdown(WixToolset.Bootstrapper.SystemShutdownEventArgs)"/>
+            or handling <see cref="E:WixToolset.Bootstrapper.BootstrapperApplication.SystemShutdown"/>.</para>
+            <para>If <see cref="P:WixToolset.Bootstrapper.SystemShutdownEventArgs.Reasons"/> contains <see cref="F:WixToolset.Bootstrapper.EndSessionReasons.Critical"/>
+            the bootstrapper cannot prevent the shutdown and only has a few seconds to save state or perform any other
+            critical operations before being closed by the operating system.</para>
+            <para>This event may be fired on a different thread.</para>
+            </remarks>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.DetectBegin">
+            <summary>
+            Fired when the overall detection phase has begun.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.DetectForwardCompatibleBundle">
+            <summary>
+            Fired when a forward compatible bundle is detected.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.DetectUpdateBegin">
+            <summary>
+            Fired when the update detection phase has begun.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.DetectUpdate">
+            <summary>
+            Fired when the update detection has found a potential update candidate.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.DetectUpdateComplete">
+            <summary>
+            Fired when the update detection phase has completed.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.DetectRelatedBundle">
+            <summary>
+            Fired when a related bundle has been detected for a bundle.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.DetectPackageBegin">
+            <summary>
+            Fired when the detection for a specific package has begun.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.DetectCompatibleMsiPackage">
+            <summary>
+            Fired when a package was not detected but a package using the same provider key was.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.DetectRelatedMsiPackage">
+            <summary>
+            Fired when a related MSI package has been detected for a package.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.DetectTargetMsiPackage">
+            <summary>
+            Fired when an MSP package detects a target MSI has been detected.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.DetectMsiFeature">
+            <summary>
+            Fired when a feature in an MSI package has been detected.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.DetectPackageComplete">
+            <summary>
+            Fired when the detection for a specific package has completed.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.DetectComplete">
+            <summary>
+            Fired when the detection phase has completed.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.PlanBegin">
+            <summary>
+            Fired when the engine has begun planning the installation.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.PlanRelatedBundle">
+            <summary>
+            Fired when the engine has begun planning for a related bundle.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.PlanPackageBegin">
+            <summary>
+            Fired when the engine has begun planning the installation of a specific package.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.PlanCompatibleMsiPackageBegin">
+            <summary>
+            Fired when the engine plans a new, compatible package using the same provider key.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.PlanCompatibleMsiPackageComplete">
+            <summary>
+            Fired when the engine has completed planning the installation of a specific package.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.PlanTargetMsiPackage">
+            <summary>
+            Fired when the engine is about to plan the target MSI of a MSP package.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.PlanMsiFeature">
+            <summary>
+            Fired when the engine is about to plan a feature in an MSI package.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.PlanPackageComplete">
+            <summary>
+            Fired when the engine has completed planning the installation of a specific package.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.PlanComplete">
+            <summary>
+            Fired when the engine has completed planning the installation.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.ApplyBegin">
+            <summary>
+            Fired when the engine has begun installing the bundle.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.ElevateBegin">
+            <summary>
+            Fired when the engine is about to start the elevated process.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.ElevateComplete">
+            <summary>
+            Fired when the engine has completed starting the elevated process.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.Progress">
+            <summary>
+            Fired when the engine has changed progress for the bundle installation.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.Error">
+            <summary>
+            Fired when the engine has encountered an error.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.RegisterBegin">
+            <summary>
+            Fired when the engine has begun registering the location and visibility of the bundle.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.RegisterComplete">
+            <summary>
+            Fired when the engine has completed registering the location and visibility of the bundle.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.UnregisterBegin">
+            <summary>
+            Fired when the engine has begun removing the registration for the location and visibility of the bundle.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.UnregisterComplete">
+            <summary>
+            Fired when the engine has completed removing the registration for the location and visibility of the bundle.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.CacheBegin">
+            <summary>
+            Fired when the engine has begun caching the installation sources.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.CachePackageBegin">
+            <summary>
+            Fired when the engine has begun caching a specific package.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.CacheAcquireBegin">
+            <summary>
+            Fired when the engine has begun acquiring the installation sources.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.CacheAcquireProgress">
+            <summary>
+            Fired when the engine has progress acquiring the installation sources.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.ResolveSource">
+            <summary>
+            Fired by the engine to allow the user experience to change the source
+            using <see cref="M:Engine.SetLocalSource"/> or <see cref="M:Engine.SetDownloadSource"/>.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.CacheAcquireComplete">
+            <summary>
+            Fired when the engine has completed the acquisition of the installation sources.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.CacheVerifyBegin">
+            <summary>
+            Fired when the engine begins the verification of the acquired installation sources.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.CacheVerifyComplete">
+            <summary>
+            Fired when the engine complete the verification of the acquired installation sources.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.CachePackageComplete">
+            <summary>
+            Fired when the engine has completed caching a specific package.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.CacheComplete">
+            <summary>
+            Fired after the engine has cached the installation sources.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.ExecuteBegin">
+            <summary>
+            Fired when the engine has begun installing packages.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.ExecutePackageBegin">
+            <summary>
+            Fired when the engine has begun installing a specific package.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.ExecutePatchTarget">
+            <summary>
+            Fired when the engine executes one or more patches targeting a product.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.ExecuteMsiMessage">
+            <summary>
+            Fired when Windows Installer sends an installation message.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.ExecuteFilesInUse">
+            <summary>
+            Fired when Windows Installer sends a files in use installation message.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.ExecutePackageComplete">
+            <summary>
+            Fired when the engine has completed installing a specific package.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.ExecuteComplete">
+            <summary>
+            Fired when the engine has completed installing packages.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.ApplyComplete">
+            <summary>
+            Fired when the engine has completed installing the bundle.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.ExecuteProgress">
+            <summary>
+            Fired by the engine while executing on payload.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.LaunchApprovedExeBegin">
+            <summary>
+            Fired when the engine is about to launch the preapproved executable.
+            </summary>
+        </member>
+        <member name="E:WixToolset.Bootstrapper.BootstrapperApplication.LaunchApprovedExeComplete">
+            <summary>
+            Fired when the engine has completed launching the preapproved executable.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.BootstrapperApplication.AsyncExecution">
+            <summary>
+            Specifies whether this bootstrapper should run asynchronously. The default is true.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.BootstrapperApplication.BAManifest">
+            <summary>
+            Gets the BA manifest.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.BootstrapperApplication.Command">
+            <summary>
+            Gets the <see cref="P:WixToolset.Bootstrapper.BootstrapperApplication.Command"/> information for how the UX should be started.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.BootstrapperApplication.Engine">
+            <summary>
+            Gets the <see cref="P:WixToolset.Bootstrapper.BootstrapperApplication.Engine"/> for interaction with the Engine.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.Run">
+            <summary>
+            Entry point that is called when the bootstrapper application is ready to run.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnStartup(WixToolset.Bootstrapper.StartupEventArgs)">
+            <summary>
+            Called by the engine on startup of the bootstrapper application.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnShutdown(WixToolset.Bootstrapper.ShutdownEventArgs)">
+            <summary>
+            Called by the engine to uninitialize the user experience.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnSystemShutdown(WixToolset.Bootstrapper.SystemShutdownEventArgs)">
+            <summary>
+            Called when the system is shutting down or the user is logging off.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+            <remarks>
+            <para>To prevent shutting down or logging off, set <see cref="P:WixToolset.Bootstrapper.CancellableHResultEventArgs.Cancel"/> to
+            true; otherwise, set it to false.</para>
+            <para>By default setup will prevent shutting down or logging off between
+            <see cref="E:WixToolset.Bootstrapper.BootstrapperApplication.ApplyBegin"/> and <see cref="E:WixToolset.Bootstrapper.BootstrapperApplication.ApplyComplete"/>.
+            Derivatives can change this behavior by overriding <see cref="M:WixToolset.Bootstrapper.BootstrapperApplication.OnSystemShutdown(WixToolset.Bootstrapper.SystemShutdownEventArgs)"/>
+            or handling <see cref="E:WixToolset.Bootstrapper.BootstrapperApplication.SystemShutdown"/>.</para>
+            <para>If <see cref="P:WixToolset.Bootstrapper.SystemShutdownEventArgs.Reasons"/> contains <see cref="F:WixToolset.Bootstrapper.EndSessionReasons.Critical"/>
+            the bootstrapper cannot prevent the shutdown and only has a few seconds to save state or perform any other
+            critical operations before being closed by the operating system.</para>
+            <para>This method may be called on a different thread.</para>
+            </remarks>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnDetectBegin(WixToolset.Bootstrapper.DetectBeginEventArgs)">
+            <summary>
+            Called when the overall detection phase has begun.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnDetectForwardCompatibleBundle(WixToolset.Bootstrapper.DetectForwardCompatibleBundleEventArgs)">
+            <summary>
+            Called when the update detection phase has begun.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnDetectUpdateBegin(WixToolset.Bootstrapper.DetectUpdateBeginEventArgs)">
+            <summary>
+            Called when the update detection phase has begun.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnDetectUpdate(WixToolset.Bootstrapper.DetectUpdateEventArgs)">
+            <summary>
+            Fired when the update detection has found a potential update candidate.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnDetectUpdateComplete(WixToolset.Bootstrapper.DetectUpdateCompleteEventArgs)">
+            <summary>
+            Called when the update detection phase has completed.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnDetectRelatedBundle(WixToolset.Bootstrapper.DetectRelatedBundleEventArgs)">
+            <summary>
+            Called when a related bundle has been detected for a bundle.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnDetectPackageBegin(WixToolset.Bootstrapper.DetectPackageBeginEventArgs)">
+            <summary>
+            Called when the detection for a specific package has begun.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnDetectCompatibleMsiPackage(WixToolset.Bootstrapper.DetectCompatibleMsiPackageEventArgs)">
+            <summary>
+            Called when a package was not detected but a package using the same provider key was.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnDetectRelatedMsiPackage(WixToolset.Bootstrapper.DetectRelatedMsiPackageEventArgs)">
+            <summary>
+            Called when a related MSI package has been detected for a package.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnDetectTargetMsiPackage(WixToolset.Bootstrapper.DetectTargetMsiPackageEventArgs)">
+            <summary>
+            Called when an MSP package detects a target MSI has been detected.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnDetectMsiFeature(WixToolset.Bootstrapper.DetectMsiFeatureEventArgs)">
+            <summary>
+            Called when an MSI feature has been detected for a package.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnDetectPackageComplete(WixToolset.Bootstrapper.DetectPackageCompleteEventArgs)">
+            <summary>
+            Called when the detection for a specific package has completed.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnDetectComplete(WixToolset.Bootstrapper.DetectCompleteEventArgs)">
+            <summary>
+            Called when the detection phase has completed.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnPlanBegin(WixToolset.Bootstrapper.PlanBeginEventArgs)">
+            <summary>
+            Called when the engine has begun planning the installation.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnPlanRelatedBundle(WixToolset.Bootstrapper.PlanRelatedBundleEventArgs)">
+            <summary>
+            Called when the engine has begun planning for a prior bundle.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnPlanPackageBegin(WixToolset.Bootstrapper.PlanPackageBeginEventArgs)">
+            <summary>
+            Called when the engine has begun planning the installation of a specific package.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnPlanCompatibleMsiPackageBegin(WixToolset.Bootstrapper.PlanCompatibleMsiPackageBeginEventArgs)">
+            <summary>
+            Called when the engine plans a new, compatible package using the same provider key.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnPlanCompatibleMsiPackageComplete(WixToolset.Bootstrapper.PlanCompatibleMsiPackageCompleteEventArgs)">
+            <summary>
+            Called when the engine has completed planning the installation of a specific package.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnPlanTargetMsiPackage(WixToolset.Bootstrapper.PlanTargetMsiPackageEventArgs)">
+            <summary>
+            Called when the engine is about to plan the target MSI of a MSP package.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnPlanMsiFeature(WixToolset.Bootstrapper.PlanMsiFeatureEventArgs)">
+            <summary>
+            Called when the engine is about to plan an MSI feature of a specific package.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnPlanPackageComplete(WixToolset.Bootstrapper.PlanPackageCompleteEventArgs)">
+            <summary>
+            Called when then engine has completed planning the installation of a specific package.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnPlanComplete(WixToolset.Bootstrapper.PlanCompleteEventArgs)">
+            <summary>
+            Called when the engine has completed planning the installation.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnApplyBegin(WixToolset.Bootstrapper.ApplyBeginEventArgs)">
+            <summary>
+            Called when the engine has begun installing the bundle.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnElevateBegin(WixToolset.Bootstrapper.ElevateBeginEventArgs)">
+            <summary>
+            Called when the engine is about to start the elevated process.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnElevateComplete(WixToolset.Bootstrapper.ElevateCompleteEventArgs)">
+            <summary>
+            Called when the engine has completed starting the elevated process.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnProgress(WixToolset.Bootstrapper.ProgressEventArgs)">
+            <summary>
+            Called when the engine has changed progress for the bundle installation.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnError(WixToolset.Bootstrapper.ErrorEventArgs)">
+            <summary>
+            Called when the engine has encountered an error.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnRegisterBegin(WixToolset.Bootstrapper.RegisterBeginEventArgs)">
+            <summary>
+            Called when the engine has begun registering the location and visibility of the bundle.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnRegisterComplete(WixToolset.Bootstrapper.RegisterCompleteEventArgs)">
+            <summary>
+            Called when the engine has completed registering the location and visilibity of the bundle.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnUnregisterBegin(WixToolset.Bootstrapper.UnregisterBeginEventArgs)">
+            <summary>
+            Called when the engine has begun removing the registration for the location and visibility of the bundle.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnUnregisterComplete(WixToolset.Bootstrapper.UnregisterCompleteEventArgs)">
+            <summary>
+            Called when the engine has completed removing the registration for the location and visibility of the bundle.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnCacheBegin(WixToolset.Bootstrapper.CacheBeginEventArgs)">
+            <summary>
+            Called when the engine begins to cache the installation sources.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnCachePackageBegin(WixToolset.Bootstrapper.CachePackageBeginEventArgs)">
+            <summary>
+            Called by the engine when it begins to cache a specific package.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnCacheAcquireBegin(WixToolset.Bootstrapper.CacheAcquireBeginEventArgs)">
+            <summary>
+            Called when the engine begins to cache the container or payload.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnCacheAcquireProgress(WixToolset.Bootstrapper.CacheAcquireProgressEventArgs)">
+            <summary>
+            Called when the engine has progressed on caching the container or payload.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnResolveSource(WixToolset.Bootstrapper.ResolveSourceEventArgs)">
+            <summary>
+            Called by the engine to allow the user experience to change the source
+            using <see cref="M:Engine.SetLocalSource"/> or <see cref="M:Engine.SetDownloadSource"/>.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnCacheAcquireComplete(WixToolset.Bootstrapper.CacheAcquireCompleteEventArgs)">
+            <summary>
+            Called when the engine completes caching of the container or payload.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnCacheVerifyBegin(WixToolset.Bootstrapper.CacheVerifyBeginEventArgs)">
+            <summary>
+            Called when the engine has started verify the payload.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnCacheVerifyComplete(WixToolset.Bootstrapper.CacheVerifyCompleteEventArgs)">
+            <summary>
+            Called when the engine completes verification of the payload.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnCachePackageComplete(WixToolset.Bootstrapper.CachePackageCompleteEventArgs)">
+            <summary>
+            Called when the engine completes caching a specific package.
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnCacheComplete(WixToolset.Bootstrapper.CacheCompleteEventArgs)">
+            <summary>
+            Called after the engine has cached the installation sources.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnExecuteBegin(WixToolset.Bootstrapper.ExecuteBeginEventArgs)">
+            <summary>
+            Called when the engine has begun installing packages.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnExecutePackageBegin(WixToolset.Bootstrapper.ExecutePackageBeginEventArgs)">
+            <summary>
+            Called when the engine has begun installing a specific package.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnExecutePatchTarget(WixToolset.Bootstrapper.ExecutePatchTargetEventArgs)">
+            <summary>
+            Called when the engine executes one or more patches targeting a product.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnExecuteMsiMessage(WixToolset.Bootstrapper.ExecuteMsiMessageEventArgs)">
+            <summary>
+            Called when Windows Installer sends an installation message.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnExecuteFilesInUse(WixToolset.Bootstrapper.ExecuteFilesInUseEventArgs)">
+            <summary>
+            Called when Windows Installer sends a file in use installation message.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnExecutePackageComplete(WixToolset.Bootstrapper.ExecutePackageCompleteEventArgs)">
+            <summary>
+            Called when the engine has completed installing a specific package.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnExecuteComplete(WixToolset.Bootstrapper.ExecuteCompleteEventArgs)">
+            <summary>
+            Called when the engine has completed installing packages.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnApplyComplete(WixToolset.Bootstrapper.ApplyCompleteEventArgs)">
+            <summary>
+            Called when the engine has completed installing the bundle.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnExecuteProgress(WixToolset.Bootstrapper.ExecuteProgressEventArgs)">
+            <summary>
+            Called by the engine while executing on payload.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnLaunchApprovedExeBegin(WixToolset.Bootstrapper.LaunchApprovedExeBeginArgs)">
+            <summary>
+            Called by the engine before trying to launch the preapproved executable.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplication.OnLaunchApprovedExeComplete(WixToolset.Bootstrapper.LaunchApprovedExeCompleteArgs)">
+            <summary>
+            Called by the engine after trying to launch the preapproved executable.
+            </summary>
+            <param name="args">Additional arguments for this event.</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.BootstrapperApplicationAttribute">
+            <summary>
+            Identifies the bootstrapper application class.
+            </summary>
+            <remarks>
+            This required assembly attribute identifies the bootstrapper application class.
+            </remarks>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplicationAttribute.#ctor(System.Type)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.BootstrapperApplicationAttribute"/> class.
+            </summary>
+            <param name="bootstrapperApplicationType">The <see cref="T:System.Type"/> of the user experience, or null for the default user experience.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.BootstrapperApplicationAttribute.BootstrapperApplicationType">
+            <summary>
+            Gets the type of the bootstrapper application class to create.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.BootstrapperApplicationFactory">
+            <summary>
+            Class used by the MUX host to create and return the IBootstrapperApplication implementation to the engine.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplicationFactory.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.BootstrapperApplicationFactory"/> class.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplicationFactory.Create(WixToolset.Bootstrapper.IBootstrapperEngine,WixToolset.Bootstrapper.Command@)">
+            <summary>
+            Loads the bootstrapper application assembly and creates an instance of the IBootstrapperApplication.
+            </summary>
+            <param name="pEngine">IBootstrapperEngine provided for the bootstrapper application.</param>
+            <param name="command">Command line for the bootstrapper application.</param>
+            <returns>Bootstrapper application via <see cref="T:WixToolset.Bootstrapper.IBootstrapperApplication"/> interface.</returns>
+            <exception cref="T:WixToolset.Bootstrapper.MissingAttributeException">The bootstrapper application assembly
+            does not define the <see cref="T:WixToolset.Bootstrapper.BootstrapperApplicationAttribute"/>.</exception>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperApplicationFactory.GetBootstrapperApplicationTypeFromAssembly(System.String)">
+            <summary>
+            Locates the <see cref="T:WixToolset.Bootstrapper.BootstrapperApplicationAttribute"/> and returns the specified type.
+            </summary>
+            <param name="assemblyName">The assembly that defines the user experience class.</param>
+            <returns>The bootstrapper application <see cref="T:System.Type"/>.</returns>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.BootstrapperSectionGroup">
+            <summary>
+            Handler for the wix.bootstrapper configuration section group.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperSectionGroup.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.BootstrapperSectionGroup"/> class.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.BootstrapperSectionGroup.Host">
+            <summary>
+            Gets the <see cref="T:WixToolset.Bootstrapper.HostSection"/> handler for the mux configuration section.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.SupportedFrameworkElementCollection">
+            <summary>
+            Handler for the supportedFramework collection.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.SupportedFrameworkElement">
+            <summary>
+            Handler for the supportedFramework configuration section.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.SupportedFrameworkElement.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.SupportedFrameworkElement"/> class.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.SupportedFrameworkElement.Version">
+            <summary>
+            Gets the version of the supported framework.
+            </summary>
+            <remarks>
+            The assembly specified by this name must contain a value matching the NETFX version registry key under
+            "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP".
+            </remarks>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.SupportedFrameworkElement.RuntimeVersion">
+            <summary>
+            Gets the runtime version required by this supported framework.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.Engine">
+            <summary>
+            Container class for the <see cref="T:WixToolset.Bootstrapper.IBootstrapperEngine"/> interface.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.#ctor(WixToolset.Bootstrapper.IBootstrapperEngine)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.Engine"/> container class.
+            </summary>
+            <param name="engine">The <see cref="T:WixToolset.Bootstrapper.IBootstrapperEngine"/> to contain.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Engine.NumericVariables">
+            <summary>
+            Gets or sets numeric variables for the engine.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Engine.PackageCount">
+            <summary>
+            Gets the number of packages in the bundle.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Engine.SecureStringVariables">
+            <summary>
+            Gets or sets string variables for the engine using SecureStrings.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Engine.StringVariables">
+            <summary>
+            Gets or sets string variables for the engine.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Engine.VersionVariables">
+            <summary>
+            Gets or sets <see cref="T:System.Version"/> variables for the engine.
+            
+            The <see cref="T:System.Version"/> class can keep track of when the build and revision fields are undefined, but the engine can't.
+            Therefore, the build and revision fields must be defined when setting a <see cref="T:System.Version"/> variable.
+            Use the NormalizeVersion method to make sure the engine can accept the Version.
+            
+            To keep track of versions without build or revision fields, use StringVariables instead.
+            </summary>
+            <exception cref="T:System.OverflowException">The given <see cref="T:System.Version"/> was invalid.</exception>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.Apply(System.IntPtr)">
+            <summary>
+            Install the packages.
+            </summary>
+            <param name="hwndParent">The parent window for the installation user interface.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.CloseSplashScreen">
+            <summary>
+            Close the splash screen if it is still open. Does nothing if the splash screen is not or
+            never was opened.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.Detect">
+            <summary>
+            Determine if all installation conditions are fulfilled.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.Detect(System.IntPtr)">
+            <summary>
+            Determine if all installation conditions are fulfilled.
+            </summary>
+            <param name="hwndParent">The parent window for the installation user interface.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.Elevate(System.IntPtr)">
+            <summary>
+            Elevate the install.
+            </summary>
+            <param name="hwndParent">The parent window of the elevation dialog.</param>
+            <returns>true if elevation succeeded; otherwise, false if the user cancelled.</returns>
+            <exception cref="T:System.ComponentModel.Win32Exception">A Win32 error occurred.</exception>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.EscapeString(System.String)">
+            <summary>
+            Escapes the input string.
+            </summary>
+            <param name="input">The string to escape.</param>
+            <returns>The escaped string.</returns>
+            <exception cref="T:System.ComponentModel.Win32Exception">A Win32 error occurred.</exception>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.EvaluateCondition(System.String)">
+            <summary>
+            Evaluates the <paramref name="condition"/> string.
+            </summary>
+            <param name="condition">The string representing the condition to evaluate.</param>
+            <returns>Whether the condition evaluated to true or false.</returns>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.FormatString(System.String)">
+            <summary>
+            Formats the input string.
+            </summary>
+            <param name="format">The string to format.</param>
+            <returns>The formatted string.</returns>
+            <exception cref="T:System.ComponentModel.Win32Exception">A Win32 error occurred.</exception>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.LaunchApprovedExe(System.IntPtr,System.String,System.String)">
+            <summary>
+            Launches a preapproved executable elevated.  As long as the engine already elevated, there will be no UAC prompt.
+            </summary>
+            <param name="hwndParent">The parent window of the elevation dialog (if the engine hasn't elevated yet).</param>
+            <param name="approvedExeForElevationId">Id of the ApprovedExeForElevation element specified when the bundle was authored.</param>
+            <param name="arguments">Optional arguments.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.LaunchApprovedExe(System.IntPtr,System.String,System.String,System.Int32)">
+            <summary>
+            Launches a preapproved executable elevated.  As long as the engine already elevated, there will be no UAC prompt.
+            </summary>
+            <param name="hwndParent">The parent window of the elevation dialog (if the engine hasn't elevated yet).</param>
+            <param name="approvedExeForElevationId">Id of the ApprovedExeForElevation element specified when the bundle was authored.</param>
+            <param name="arguments">Optional arguments.</param>
+            <param name="waitForInputIdleTimeout">Timeout in milliseconds. When set to something other than zero, the engine will call WaitForInputIdle for the new process with this timeout before calling OnLaunchApprovedExeComplete.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.Log(WixToolset.Bootstrapper.LogLevel,System.String)">
+            <summary>
+            Logs the <paramref name="message"/>.
+            </summary>
+            <param name="level">The logging level.</param>
+            <param name="message">The message to log.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.Plan(WixToolset.Bootstrapper.LaunchAction)">
+            <summary>
+            Determine the installation sequencing and costing.
+            </summary>
+            <param name="action">The action to perform when planning.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.SetUpdate(System.String,System.String,System.Int64,WixToolset.Bootstrapper.UpdateHashType,System.Byte[])">
+            <summary>
+            Set the update information for a bundle.
+            </summary>
+            <param name="localSource">Optional local source path for the update. Default is "update\[OriginalNameOfBundle].exe".</param>
+            <param name="downloadSource">Optional download source for the update.</param>
+            <param name="size">Size of the expected update.</param>
+            <param name="hashType">Type of the hash expected on the update.</param>
+            <param name="hash">Optional hash expected for the update.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.SetLocalSource(System.String,System.String,System.String)">
+            <summary>
+            Set the local source for a package or container.
+            </summary>
+            <param name="packageOrContainerId">The id that uniquely identifies the package or container.</param>
+            <param name="payloadId">The id that uniquely identifies the payload.</param>
+            <param name="path">The new source path.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.SetDownloadSource(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Set the new download URL for a package or container.
+            </summary>
+            <param name="packageOrContainerId">The id that uniquely identifies the package or container.</param>
+            <param name="payloadId">The id that uniquely identifies the payload.</param>
+            <param name="url">The new url.</param>
+            <param name="user">The user name for proxy authentication.</param>
+            <param name="password">The password for proxy authentication.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.SendEmbeddedError(System.Int32,System.String,System.Int32)">
+            <summary>
+            Sends error message when embedded.
+            </summary>
+            <param name="errorCode">Error code.</param>
+            <param name="message">Error message.</param>
+            <param name="uiHint">UI buttons to show on error dialog.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.SendEmbeddedProgress(System.Int32,System.Int32)">
+            <summary>
+            Sends progress percentages when embedded.
+            </summary>
+            <param name="progressPercentage">Percentage completed thus far.</param>
+            <param name="overallPercentage">Overall percentage completed.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.Quit(System.Int32)">
+            <summary>
+            Shuts down the engine.
+            </summary>
+            <param name="exitCode">Exit code indicating reason for shut down.</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.Engine.Variables`1">
+            <summary>
+            An accessor for numeric, string, and version variables for the engine.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Engine.Variables`1.Item(System.String)">
+            <summary>
+            Gets or sets the variable given by <paramref name="name"/>.
+            </summary>
+            <param name="name">The name of the variable to get/set.</param>
+            <returns>The value of the given variable.</returns>
+            <exception cref="T:System.Exception">An error occurred getting the variable.</exception>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.Variables`1.Contains(System.String)">
+            <summary>
+            Gets whether the variable given by <paramref name="name"/> exists.
+            </summary>
+            <param name="name">The name of the variable to check.</param>
+            <returns>True if the variable given by <paramref name="name"/> exists; otherwise, false.</returns>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.containsVariable(System.String)">
+            <summary>
+            Gets whether the variable given by <paramref name="name"/> exists.
+            </summary>
+            <param name="name">The name of the variable to check.</param>
+            <returns>True if the variable given by <paramref name="name"/> exists; otherwise, false.</returns>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.getStringVariable(System.String,System.Int32@)">
+            <summary>
+            Gets the variable given by <paramref name="name"/> as a string.
+            </summary>
+            <param name="name">The name of the variable to get.</param>
+            <param name="length">The length of the Unicode string.</param>
+            <returns>The value by a pointer to a Unicode string.  Must be freed by Marshal.FreeCoTaskMem.</returns>
+            <exception cref="T:System.Exception">An error occurred getting the variable.</exception>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.convertToSecureString(System.IntPtr,System.Int32)">
+            <summary>
+            Initialize a SecureString with the given Unicode string.
+            </summary>
+            <param name="pUniString">Pointer to Unicode string.</param>
+            <param name="length">The string's length.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Engine.NormalizeVersion(System.Version)">
+            <summary>
+            Verifies that VersionVariables can pass on the given Version to the engine.
+            If the Build or Revision fields are undefined, they are set to zero.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.HResultEventArgs">
+            <summary>
+            Base class for BA <see cref="T:System.EventArgs"/> classes.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.HResultEventArgs.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.HResultEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.HResultEventArgs.HResult">
+            <summary>
+            Gets or sets the <see cref="P:WixToolset.Bootstrapper.HResultEventArgs.HResult"/> of the operation. This is passed back to the engine.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.CancellableHResultEventArgs">
+            <summary>
+            Base class for cancellable BA <see cref="T:System.EventArgs"/> classes.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.CancellableHResultEventArgs.#ctor(System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.CancellableHResultEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CancellableHResultEventArgs.Cancel">
+            <summary>
+            Gets or sets whether to cancel the operation. This is passed back to the engine.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ResultEventArgs">
+            <summary>
+            Base class for <see cref="T:System.EventArgs"/> classes that must return a <see cref="P:WixToolset.Bootstrapper.ResultEventArgs.Result"/>.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ResultEventArgs.#ctor(WixToolset.Bootstrapper.Result,WixToolset.Bootstrapper.Result)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ResultEventArgs"/> class.
+            </summary>
+            <param name="recommendation">Recommended result from engine.</param>
+            <param name="result">The result to return to the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ResultEventArgs.Recommendation">
+            <summary>
+            Gets the recommended <see cref="P:WixToolset.Bootstrapper.ResultEventArgs.Result"/> of the operation.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ResultEventArgs.Result">
+            <summary>
+            Gets or sets the <see cref="P:WixToolset.Bootstrapper.ResultEventArgs.Result"/> of the operation. This is passed back to the engine.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.StatusEventArgs">
+            <summary>
+            Base class for <see cref="T:System.EventArgs"/> classes that receive status from the engine.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.StatusEventArgs.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.StatusEventArgs"/> class.
+            </summary>
+            <param name="hrStatus">The return code of the operation.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.StatusEventArgs.Status">
+            <summary>
+            Gets the return code of the operation.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ActionEventArgs`1">
+            <summary>
+            Base class for <see cref="T:System.EventArgs"/> classes that receive status from the engine and return an action.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ActionEventArgs`1.#ctor(System.Int32,`0,`0)">
+            <summary>
+            </summary>
+            <param name="hrStatus">The return code of the operation.</param>
+            <param name="recommendation">Recommended action from engine.</param>
+            <param name="action">The action to perform.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ActionEventArgs`1.Recommendation">
+            <summary>
+            Gets the recommended action from the engine.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ActionEventArgs`1.Action">
+            <summary>
+            Gets or sets the action to be performed. This is passed back to the engine.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.StartupEventArgs">
+            <summary>
+            Additional arguments used when startup has begun.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.StartupEventArgs.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.StartupEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ShutdownEventArgs">
+            <summary>
+            Additional arguments used when shutdown has begun.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ShutdownEventArgs.#ctor(WixToolset.Bootstrapper.BOOTSTRAPPER_SHUTDOWN_ACTION)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ShutdownEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ShutdownEventArgs.Action">
+            <summary>
+            The action for OnShutdown.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.SystemShutdownEventArgs">
+            <summary>
+            Additional arguments used when the system is shutting down or the user is logging off.
+            </summary>
+            <remarks>
+            <para>To prevent shutting down or logging off, set <see cref="P:WixToolset.Bootstrapper.CancellableHResultEventArgs.Cancel"/> to
+            true; otherwise, set it to false.</para>
+            <para>By default setup will prevent shutting down or logging off between
+            <see cref="E:WixToolset.Bootstrapper.BootstrapperApplication.ApplyBegin"/> and <see cref="E:WixToolset.Bootstrapper.BootstrapperApplication.ApplyComplete"/>.</para>
+            <para>If <see cref="P:WixToolset.Bootstrapper.SystemShutdownEventArgs.Reasons"/> contains <see cref="F:WixToolset.Bootstrapper.EndSessionReasons.Critical"/>
+            the bootstrapper cannot prevent the shutdown and only has a few seconds to save state or perform any other
+            critical operations before being closed by the operating system.</para>
+            </remarks>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.SystemShutdownEventArgs.#ctor(WixToolset.Bootstrapper.EndSessionReasons,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.SystemShutdownEventArgs"/> class.
+            </summary>
+            <param name="reasons">The reason the application is requested to close or being closed.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.SystemShutdownEventArgs.Reasons">
+            <summary>
+            Gets the reason the application is requested to close or being closed.
+            </summary>
+            <remarks>
+            <para>To prevent shutting down or logging off, set <see cref="P:WixToolset.Bootstrapper.CancellableHResultEventArgs.Cancel"/> to
+            true; otherwise, set it to false.</para>
+            <para>If <see cref="P:WixToolset.Bootstrapper.SystemShutdownEventArgs.Reasons"/> contains <see cref="F:WixToolset.Bootstrapper.EndSessionReasons.Critical"/>
+            the bootstrapper cannot prevent the shutdown and only has a few seconds to save state or perform any other
+            critical operations before being closed by the operating system.</para>
+            </remarks>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.DetectBeginEventArgs">
+            <summary>
+            Additional arguments used when the overall detection phase has begun.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.DetectBeginEventArgs.#ctor(System.Boolean,System.Int32,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.DetectBeginEventArgs"/> class.
+            </summary>
+            <param name="installed">Specifies whether the bundle is installed.</param>
+            <param name="packageCount">The number of packages to detect.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectBeginEventArgs.Installed">
+            <summary>
+            Gets whether the bundle is installed.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectBeginEventArgs.PackageCount">
+            <summary>
+            Gets the number of packages to detect.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.DetectForwardCompatibleBundleEventArgs">
+            <summary>
+            Additional arguments used when detected a forward compatible bundle.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.DetectForwardCompatibleBundleEventArgs.#ctor(System.String,WixToolset.Bootstrapper.RelationType,System.String,System.Boolean,System.Int64,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.DetectUpdateBeginEventArgs"/> class.
+            </summary>
+            <param name="bundleId">The identity of the forward compatible bundle.</param>
+            <param name="relationType">Relationship type for this forward compatible bundle.</param>
+            <param name="bundleTag">The tag of the forward compatible bundle.</param>
+            <param name="perMachine">Whether the detected forward compatible bundle is per machine.</param>
+            <param name="version">The version of the forward compatible bundle detected.</param>
+            <param name="cancelRecommendation">The cancel recommendation from the engine.</param>
+            <param name="ignoreBundleRecommendation">The ignore recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectForwardCompatibleBundleEventArgs.BundleId">
+            <summary>
+            Gets the identity of the forward compatible bundle detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectForwardCompatibleBundleEventArgs.RelationType">
+            <summary>
+            Gets the relationship type of the forward compatible bundle.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectForwardCompatibleBundleEventArgs.BundleTag">
+            <summary>
+            Gets the tag of the forward compatible bundle.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectForwardCompatibleBundleEventArgs.PerMachine">
+            <summary>
+            Gets whether the detected forward compatible bundle is per machine.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectForwardCompatibleBundleEventArgs.Version">
+            <summary>
+            Gets the version of the forward compatible bundle detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectForwardCompatibleBundleEventArgs.IgnoreBundle">
+            <summary>
+            Instructs the engine whether to use the forward compatible bundle.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.DetectUpdateBeginEventArgs">
+            <summary>
+            Additional arguments used when the detection for an update has begun.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.DetectUpdateBeginEventArgs.#ctor(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.DetectUpdateBeginEventArgs"/> class.
+            </summary>
+            <param name="updateLocation">The location to check for an updated bundle.</param>
+            <param name="cancelRecommendation">The cancel recommendation from the engine.</param>
+            <param name="skipRecommendation">The skip recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectUpdateBeginEventArgs.UpdateLocation">
+            <summary>
+            Gets the identity of the bundle to detect.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectUpdateBeginEventArgs.Skip">
+            <summary>
+            Whether to skip checking for bundle updates.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.DetectUpdateEventArgs">
+            <summary>
+            Additional arguments used when the detection for an update has begun.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.DetectUpdateEventArgs.#ctor(System.String,System.Int64,System.Int64,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.DetectUpdateBeginEventArgs"/> class.
+            </summary>
+            <param name="updateLocation">The location to check for an updated bundle.</param>
+            <param name="size">The expected size of the updated bundle.</param>
+            <param name="version">The expected version of the updated bundle.</param>
+            <param name="title">The title of the updated bundle.</param>
+            <param name="summary">The summary of the updated bundle.</param>
+            <param name="contentType">The content type of the content of the updated bundle.</param>
+            <param name="content">The content of the updated bundle.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+            <param name="stopRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectUpdateEventArgs.UpdateLocation">
+            <summary>
+            Gets the identity of the bundle to detect.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectUpdateEventArgs.Size">
+            <summary>
+            Gets the size of the updated bundle.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectUpdateEventArgs.Version">
+            <summary>
+            Gets the version of the updated bundle.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectUpdateEventArgs.Title">
+            <summary>
+            Gets the title of the the updated bundle.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectUpdateEventArgs.Summary">
+            <summary>
+            Gets the summary of the updated bundle.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectUpdateEventArgs.ContentType">
+            <summary>
+            Gets the content type of the content of the updated bundle.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectUpdateEventArgs.Content">
+            <summary>
+            Gets the content of the updated bundle.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectUpdateEventArgs.StopProcessingUpdates">
+            <summary>
+            Tells the engine to stop giving the rest of the updates found in the feed.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.DetectUpdateCompleteEventArgs">
+            <summary>
+            Additional arguments used when the detection for an update has completed.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.DetectUpdateCompleteEventArgs.#ctor(System.Int32,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.DetectUpdateCompleteEventArgs"/> class.
+            </summary>
+            <param name="hrStatus">The return code of the operation.</param>
+            <param name="ignoreRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectUpdateCompleteEventArgs.IgnoreError">
+            <summary>
+            If Status is an error, then set this to true to ignore it and continue detecting.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.DetectRelatedBundleEventArgs">
+            <summary>
+            Additional arguments used when a related bundle has been detected for a bundle.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.DetectRelatedBundleEventArgs.#ctor(System.String,WixToolset.Bootstrapper.RelationType,System.String,System.Boolean,System.Int64,WixToolset.Bootstrapper.RelatedOperation,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.DetectRelatedBundleEventArgs"/> class.
+            </summary>
+            <param name="productCode">The identity of the related package bundle.</param>
+            <param name="relationType">Relationship type for this related bundle.</param>
+            <param name="bundleTag">The tag of the related package bundle.</param>
+            <param name="perMachine">Whether the detected bundle is per machine.</param>
+            <param name="version">The version of the related bundle detected.</param>
+            <param name="operation">The operation that will be taken on the detected bundle.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectRelatedBundleEventArgs.ProductCode">
+            <summary>
+            Gets the identity of the related bundle detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectRelatedBundleEventArgs.RelationType">
+            <summary>
+            Gets the relationship type of the related bundle.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectRelatedBundleEventArgs.BundleTag">
+            <summary>
+            Gets the tag of the related package bundle.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectRelatedBundleEventArgs.PerMachine">
+            <summary>
+            Gets whether the detected bundle is per machine.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectRelatedBundleEventArgs.Version">
+            <summary>
+            Gets the version of the related bundle detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectRelatedBundleEventArgs.Operation">
+            <summary>
+            Gets the operation that will be taken on the detected bundle.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.DetectPackageBeginEventArgs">
+            <summary>
+            Additional arguments used when the detection for a specific package has begun.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.DetectPackageBeginEventArgs.#ctor(System.String,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.DetectPackageBeginEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package to detect.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectPackageBeginEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package to detect.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.DetectCompatibleMsiPackageEventArgs">
+            <summary>
+            Additional arguments used when a package was not found but a newer package using the same provider key was.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.DetectCompatibleMsiPackageEventArgs.#ctor(System.String,System.String,System.Int64,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.DetectCompatibleMsiPackageEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package that was not detected.</param>
+            <param name="compatiblePackageId">The identity of the compatible package that was detected.</param>
+            <param name="compatiblePackageVersion">The version of the compatible package that was detected.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectCompatibleMsiPackageEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package that was not detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectCompatibleMsiPackageEventArgs.CompatiblePackageId">
+            <summary>
+            Gets the identity of the compatible package that was detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectCompatibleMsiPackageEventArgs.CompatiblePackageVersion">
+            <summary>
+            Gets the version of the compatible package that was detected.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.DetectRelatedMsiPackageEventArgs">
+            <summary>
+            Additional arguments used when a related MSI package has been detected for a package.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.DetectRelatedMsiPackageEventArgs.#ctor(System.String,System.String,System.String,System.Boolean,System.Int64,WixToolset.Bootstrapper.RelatedOperation,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.DetectRelatedMsiPackageEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package detecting.</param>
+            <param name="upgradeCode">The upgrade code of the related package detected.</param>
+            <param name="productCode">The identity of the related package detected.</param>
+            <param name="perMachine">Whether the detected package is per machine.</param>
+            <param name="version">The version of the related package detected.</param>
+            <param name="operation">The operation that will be taken on the detected package.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectRelatedMsiPackageEventArgs.PackageId">
+            <summary>
+            Gets the identity of the product's package detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectRelatedMsiPackageEventArgs.UpgradeCode">
+            <summary>
+            Gets the upgrade code of the related package detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectRelatedMsiPackageEventArgs.ProductCode">
+            <summary>
+            Gets the identity of the related package detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectRelatedMsiPackageEventArgs.PerMachine">
+            <summary>
+            Gets whether the detected package is per machine.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectRelatedMsiPackageEventArgs.Version">
+            <summary>
+            Gets the version of the related package detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectRelatedMsiPackageEventArgs.Operation">
+            <summary>
+            Gets the operation that will be taken on the detected package.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.DetectTargetMsiPackageEventArgs">
+            <summary>
+            Additional arguments used when a target MSI package has been detected.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.DetectTargetMsiPackageEventArgs.#ctor(System.String,System.String,WixToolset.Bootstrapper.PackageState,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.DetectMsiFeatureEventArgs"/> class.
+            </summary>
+            <param name="packageId">Detected package identifier.</param>
+            <param name="productCode">Detected product code.</param>
+            <param name="state">Package state detected.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectTargetMsiPackageEventArgs.PackageId">
+            <summary>
+            Gets the identity of the target's package detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectTargetMsiPackageEventArgs.ProductCode">
+            <summary>
+            Gets the product code of the target MSI detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectTargetMsiPackageEventArgs.State">
+            <summary>
+            Gets the detected patch package state.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.DetectMsiFeatureEventArgs">
+            <summary>
+            Additional arguments used when a feature in an MSI package has been detected.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.DetectMsiFeatureEventArgs.#ctor(System.String,System.String,WixToolset.Bootstrapper.FeatureState,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.DetectMsiFeatureEventArgs"/> class.
+            </summary>
+            <param name="packageId">Detected package identifier.</param>
+            <param name="featureId">Detected feature identifier.</param>
+            <param name="state">Feature state detected.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectMsiFeatureEventArgs.PackageId">
+            <summary>
+            Gets the identity of the feature's package detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectMsiFeatureEventArgs.FeatureId">
+            <summary>
+            Gets the identity of the feature detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectMsiFeatureEventArgs.State">
+            <summary>
+            Gets the detected feature state.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.DetectPackageCompleteEventArgs">
+            <summary>
+            Additional arguments used when the detection for a specific package has completed.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.DetectPackageCompleteEventArgs.#ctor(System.String,System.Int32,WixToolset.Bootstrapper.PackageState)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.DetectPackageCompleteEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package detected.</param>
+            <param name="hrStatus">The return code of the operation.</param>
+            <param name="state">The state of the specified package.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectPackageCompleteEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.DetectPackageCompleteEventArgs.State">
+            <summary>
+            Gets the state of the specified package.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.DetectCompleteEventArgs">
+            <summary>
+            Additional arguments used when the detection phase has completed.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.DetectCompleteEventArgs.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.DetectCompleteEventArgs"/> class.
+            </summary>
+            <param name="hrStatus">The return code of the operation.</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.PlanBeginEventArgs">
+            <summary>
+            Additional arguments used when the engine has begun planning the installation.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.PlanBeginEventArgs.#ctor(System.Int32,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.PlanBeginEventArgs"/> class.
+            </summary>
+            <param name="packageCount">The number of packages to plan for.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanBeginEventArgs.PackageCount">
+            <summary>
+            Gets the number of packages to plan for.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.PlanRelatedBundleEventArgs">
+            <summary>
+            Additional arguments used when the engine has begun planning for a related bundle.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.PlanRelatedBundleEventArgs.#ctor(System.String,WixToolset.Bootstrapper.RequestState,WixToolset.Bootstrapper.RequestState,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.PlanRelatedBundleEventArgs"/> class.
+            </summary>
+            <param name="bundleId">The identity of the bundle to plan for.</param>
+            <param name="recommendedState">The recommended requested state for the bundle.</param>
+            <param name="state">The requested state for the bundle.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanRelatedBundleEventArgs.BundleId">
+            <summary>
+            Gets the identity of the bundle to plan for.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanRelatedBundleEventArgs.RecommendedState">
+            <summary>
+            Gets the recommended requested state for the bundle.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanRelatedBundleEventArgs.State">
+            <summary>
+            Gets or sets the requested state for the bundle.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.PlanPackageBeginEventArgs">
+            <summary>
+            Additional arguments used when the engine has begun planning the installation of a specific package.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.PlanPackageBeginEventArgs.#ctor(System.String,WixToolset.Bootstrapper.RequestState,WixToolset.Bootstrapper.RequestState,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.PlanPackageBeginEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package to plan for.</param>
+            <param name="recommendedState">The recommended requested state for the package.</param>
+            <param name="state">The requested state for the package.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanPackageBeginEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package to plan for.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanPackageBeginEventArgs.RecommendedState">
+            <summary>
+            Gets the recommended requested state for the package.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanPackageBeginEventArgs.State">
+            <summary>
+            Gets or sets the requested state for the package.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.PlanCompatibleMsiPackageBeginEventArgs">
+            <summary>
+            Additional arguments used when the engine is about to plan a newer package using the same provider key.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.PlanCompatibleMsiPackageBeginEventArgs.#ctor(System.String,System.String,System.Int64,WixToolset.Bootstrapper.RequestState,WixToolset.Bootstrapper.RequestState,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.PlanCompatibleMsiPackageBeginEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package that was not detected.</param>
+            <param name="compatiblePackageId">The identity of the compatible package that was detected.</param>
+            <param name="compatiblePackageVersion">The version of the compatible package that was detected.</param>
+            <param name="recommendedState">The recommended request state for the compatible package.</param>
+            <param name="state">The requested state for the compatible package.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanCompatibleMsiPackageBeginEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package that was not detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanCompatibleMsiPackageBeginEventArgs.CompatiblePackageId">
+            <summary>
+            Gets the identity of the compatible package detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanCompatibleMsiPackageBeginEventArgs.CompatiblePackageVersion">
+            <summary>
+            Gets the version of the compatible package detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanCompatibleMsiPackageBeginEventArgs.RecommendedState">
+            <summary>
+            Gets the recommended state to use for the compatible package for planning.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanCompatibleMsiPackageBeginEventArgs.State">
+            <summary>
+            Gets or sets the state to use for the compatible package for planning.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.PlanCompatibleMsiPackageCompleteEventArgs">
+            <summary>
+            Additional arguments used when the engine has completed planning the installation of a specific package.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.PlanCompatibleMsiPackageCompleteEventArgs.#ctor(System.String,System.String,System.Int32,WixToolset.Bootstrapper.PackageState,WixToolset.Bootstrapper.RequestState,WixToolset.Bootstrapper.ActionState,WixToolset.Bootstrapper.ActionState)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.PlanCompatibleMsiPackageCompleteEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package planned for.</param>
+            <param name="compatiblePackageId">The identity of the compatible package that was detected.</param>
+            <param name="hrStatus">The return code of the operation.</param>
+            <param name="state">The current state of the package.</param>
+            <param name="requested">The requested state for the package</param>
+            <param name="execute">The execution action to take.</param>
+            <param name="rollback">The rollback action to take.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanCompatibleMsiPackageCompleteEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package planned for.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanCompatibleMsiPackageCompleteEventArgs.CompatiblePackageId">
+            <summary>
+            Gets the identity of the compatible package detected.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanCompatibleMsiPackageCompleteEventArgs.State">
+            <summary>
+            Gets the current state of the package.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanCompatibleMsiPackageCompleteEventArgs.Requested">
+            <summary>
+            Gets the requested state for the package.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanCompatibleMsiPackageCompleteEventArgs.Execute">
+            <summary>
+            Gets the execution action to take.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanCompatibleMsiPackageCompleteEventArgs.Rollback">
+            <summary>
+            Gets the rollback action to take.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.PlanTargetMsiPackageEventArgs">
+            <summary>
+            Additional arguments used when engine is about to plan a MSP applied to a target MSI package.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.PlanTargetMsiPackageEventArgs.#ctor(System.String,System.String,WixToolset.Bootstrapper.RequestState,WixToolset.Bootstrapper.RequestState,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.PlanMsiFeatureEventArgs"/> class.
+            </summary>
+            <param name="packageId">Package identifier of the patch being planned.</param>
+            <param name="productCode">Product code identifier being planned.</param>
+            <param name="recommendedState">Recommended package state of the patch being planned.</param>
+            <param name="state">Package state of the patch being planned.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanTargetMsiPackageEventArgs.PackageId">
+            <summary>
+            Gets the identity of the patch package to plan.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanTargetMsiPackageEventArgs.ProductCode">
+            <summary>
+            Gets the identity of the patch's target MSI to plan.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanTargetMsiPackageEventArgs.RecommendedState">
+            <summary>
+            Gets the recommended state of the patch to use by planning.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanTargetMsiPackageEventArgs.State">
+            <summary>
+            Gets or sets the state of the patch to use by planning.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.PlanMsiFeatureEventArgs">
+            <summary>
+            Additional arguments used when engine is about to plan a feature in an MSI package.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.PlanMsiFeatureEventArgs.#ctor(System.String,System.String,WixToolset.Bootstrapper.FeatureState,WixToolset.Bootstrapper.FeatureState,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.PlanMsiFeatureEventArgs"/> class.
+            </summary>
+            <param name="packageId">Package identifier being planned.</param>
+            <param name="featureId">Feature identifier being planned.</param>
+            <param name="recommendedState">Recommended feature state being planned.</param>
+            <param name="state">Feature state being planned.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanMsiFeatureEventArgs.PackageId">
+            <summary>
+            Gets the identity of the feature's package to plan.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanMsiFeatureEventArgs.FeatureId">
+            <summary>
+            Gets the identity of the feature to plan.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanMsiFeatureEventArgs.RecommendedState">
+            <summary>
+            Gets the recommended feature state to use by planning.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanMsiFeatureEventArgs.State">
+            <summary>
+            Gets or sets the feature state to use by planning.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.PlanPackageCompleteEventArgs">
+            <summary>
+            Additional arguments used when then engine has completed planning the installation of a specific package.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.PlanPackageCompleteEventArgs.#ctor(System.String,System.Int32,WixToolset.Bootstrapper.PackageState,WixToolset.Bootstrapper.RequestState,WixToolset.Bootstrapper.ActionState,WixToolset.Bootstrapper.ActionState)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.PlanPackageCompleteEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package planned for.</param>
+            <param name="hrStatus">The return code of the operation.</param>
+            <param name="state">The current state of the package.</param>
+            <param name="requested">The requested state for the package</param>
+            <param name="execute">The execution action to take.</param>
+            <param name="rollback">The rollback action to take.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanPackageCompleteEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package planned for.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanPackageCompleteEventArgs.State">
+            <summary>
+            Gets the current state of the package.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanPackageCompleteEventArgs.Requested">
+            <summary>
+            Gets the requested state for the package.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanPackageCompleteEventArgs.Execute">
+            <summary>
+            Gets the execution action to take.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.PlanPackageCompleteEventArgs.Rollback">
+            <summary>
+            Gets the rollback action to take.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.PlanCompleteEventArgs">
+            <summary>
+            Additional arguments used when the engine has completed planning the installation.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.PlanCompleteEventArgs.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.PlanCompleteEventArgs"/> class.
+            </summary>
+            <param name="hrStatus">The return code of the operation.</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ApplyBeginEventArgs">
+            <summary>
+            Additional arguments used when the engine has begun installing the bundle.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ApplyBeginEventArgs.#ctor(System.Int32,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ApplyBeginEventArgs"/> class.
+            </summary>
+            <param name="phaseCount">The number of phases during apply.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ApplyBeginEventArgs.PhaseCount">
+            <summary>
+            Gets the number of phases that the engine will go through in apply.
+            There are currently two possible phases: cache and execute.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ElevateBeginEventArgs">
+            <summary>
+            Additional arguments used when the engine is about to start the elevated process.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ElevateBeginEventArgs.#ctor(System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ElevateBeginEventArgs"/> class.
+            </summary>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ElevateCompleteEventArgs">
+            <summary>
+            Additional arguments used when the engine has completed starting the elevated process.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ElevateCompleteEventArgs.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ElevateCompleteEventArgs"/> class.
+            </summary>
+            <param name="hrStatus">The return code of the operation.</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ProgressEventArgs">
+            <summary>
+            Additional arguments used when the engine has changed progress for the bundle installation.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ProgressEventArgs.#ctor(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Creates an new instance of the <see cref="T:WixToolset.Bootstrapper.ProgressEventArgs"/> class.
+            </summary>
+            <param name="progressPercentage">The percentage from 0 to 100 completed for a package.</param>
+            <param name="overallPercentage">The percentage from 0 to 100 completed for the bundle.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ProgressEventArgs.ProgressPercentage">
+            <summary>
+            Gets the percentage from 0 to 100 completed for a package.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ProgressEventArgs.OverallPercentage">
+            <summary>
+            Gets the percentage from 0 to 100 completed for the bundle.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ErrorEventArgs">
+            <summary>
+            Additional arguments used when the engine has encountered an error.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ErrorEventArgs.#ctor(WixToolset.Bootstrapper.ErrorType,System.String,System.Int32,System.String,System.Int32,System.String[],WixToolset.Bootstrapper.Result,WixToolset.Bootstrapper.Result)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ErrorEventArgs"/> class.
+            </summary>
+            <param name="errorType">The error type.</param>
+            <param name="packageId">The identity of the package that yielded the error.</param>
+            <param name="errorCode">The error code.</param>
+            <param name="errorMessage">The error message.</param>
+            <param name="dwUIHint">Recommended display flags for an error dialog.</param>
+            <param name="data">The exteded data for the error.</param>
+            <param name="recommendation">Recommended result from engine.</param>
+            <param name="result">The result to return to the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ErrorEventArgs.ErrorType">
+            <summary>
+            Gets the type of error that occurred.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ErrorEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package that yielded the error.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ErrorEventArgs.ErrorCode">
+            <summary>
+            Gets the error code.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ErrorEventArgs.ErrorMessage">
+            <summary>
+            Gets the error message.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ErrorEventArgs.UIHint">
+            <summary>
+            Gets the recommended display flags for an error dialog.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ErrorEventArgs.Data">
+            <summary>
+            Gets the extended data for the error.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.RegisterBeginEventArgs">
+            <summary>
+            Additional arguments used when the engine has begun registering the location and visibility of the bundle.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.RegisterBeginEventArgs.#ctor(System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.RegisterBeginEventArgs"/> class.
+            </summary>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.RegisterCompleteEventArgs">
+            <summary>
+            Additional arguments used when the engine has completed registering the location and visilibity of the bundle.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.RegisterCompleteEventArgs.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.RegisterCompleteEventArgs"/> class.
+            </summary>
+            <param name="hrStatus">The return code of the operation.</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.UnregisterBeginEventArgs">
+            <summary>
+            Additional arguments used when the engine has begun removing the registration for the location and visibility of the bundle.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.UnregisterBeginEventArgs.#ctor(System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.UnregisterBeginEventArgs"/> class.
+            </summary>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.UnregisterCompleteEventArgs">
+            <summary>
+            Additional arguments used when the engine has completed removing the registration for the location and visibility of the bundle.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.UnregisterCompleteEventArgs.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.UnregisterCompleteEventArgs"/> class.
+            </summary>
+            <param name="hrStatus">The return code of the operation.</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.CacheBeginEventArgs">
+            <summary>
+            Additional arguments used when the engine has begun caching the installation sources.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.CacheBeginEventArgs.#ctor(System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.CacheBeginEventArgs"/> class.
+            </summary>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.CacheAcquireBeginEventArgs">
+            <summary>
+            Additional arguments used when the engine begins to acquire containers or payloads.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.CacheAcquireBeginEventArgs.#ctor(System.String,System.String,WixToolset.Bootstrapper.CacheOperation,System.String,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.CacheAcquireBeginEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheAcquireBeginEventArgs.PackageOrContainerId">
+            <summary>
+            Gets the identifier of the container or package.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheAcquireBeginEventArgs.PayloadId">
+            <summary>
+            Gets the identifier of the payload (if acquiring a payload).
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheAcquireBeginEventArgs.Operation">
+            <summary>
+            Gets the cache acquire operation.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheAcquireBeginEventArgs.Source">
+            <summary>
+            Gets the source of the container or payload.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.CacheAcquireProgressEventArgs">
+            <summary>
+            Additional arguments used when the engine acquires some part of a container or payload.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.CacheAcquireProgressEventArgs.#ctor(System.String,System.String,System.Int64,System.Int64,System.Int32,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.CacheAcquireBeginEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheAcquireProgressEventArgs.PackageOrContainerId">
+            <summary>
+            Gets the identifier of the container or package.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheAcquireProgressEventArgs.PayloadId">
+            <summary>
+            Gets the identifier of the payload (if acquiring a payload).
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheAcquireProgressEventArgs.Progress">
+            <summary>
+            Gets the number of bytes cached thus far.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheAcquireProgressEventArgs.Total">
+            <summary>
+            Gets the total bytes to cache.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheAcquireProgressEventArgs.OverallPercentage">
+            <summary>
+            Gets the overall percentage of progress of caching.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.CacheAcquireCompleteEventArgs">
+            <summary>
+            Additional arguments used when the engine completes the acquisition of a container or payload.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.CacheAcquireCompleteEventArgs.#ctor(System.String,System.String,System.Int32,WixToolset.Bootstrapper.BOOTSTRAPPER_CACHEACQUIRECOMPLETE_ACTION,WixToolset.Bootstrapper.BOOTSTRAPPER_CACHEACQUIRECOMPLETE_ACTION)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.CacheAcquireCompleteEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheAcquireCompleteEventArgs.PackageOrContainerId">
+            <summary>
+            Gets the identifier of the container or package.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheAcquireCompleteEventArgs.PayloadId">
+            <summary>
+            Gets the identifier of the payload (if acquiring a payload).
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.CacheVerifyBeginEventArgs">
+            <summary>
+            Additional arguments used when the engine starts the verification of a payload.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.CacheVerifyBeginEventArgs.#ctor(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.CacheVerifyBeginEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheVerifyBeginEventArgs.PackageId">
+            <summary>
+            Gets the identifier of the package.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheVerifyBeginEventArgs.PayloadId">
+            <summary>
+            Gets the identifier of the payload.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.CacheVerifyCompleteEventArgs">
+            <summary>
+            Additional arguments used when the engine completes the verification of a payload.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.CacheVerifyCompleteEventArgs.#ctor(System.String,System.String,System.Int32,WixToolset.Bootstrapper.BOOTSTRAPPER_CACHEVERIFYCOMPLETE_ACTION,WixToolset.Bootstrapper.BOOTSTRAPPER_CACHEVERIFYCOMPLETE_ACTION)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.CacheVerifyCompleteEventArgs"/> class.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheVerifyCompleteEventArgs.PackageId">
+            <summary>
+            Gets the identifier of the package.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CacheVerifyCompleteEventArgs.PayloadId">
+            <summary>
+            Gets the identifier of the payload.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.CacheCompleteEventArgs">
+            <summary>
+            Additional arguments used after the engine has cached the installation sources.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.CacheCompleteEventArgs.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.CacheCompleteEventArgs"/> class.
+            </summary>
+            <param name="hrStatus">The return code of the operation.</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ExecuteBeginEventArgs">
+            <summary>
+            Additional arguments used when the engine has begun installing packages.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ExecuteBeginEventArgs.#ctor(System.Int32,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ExecuteBeginEventArgs"/> class.
+            </summary>
+            <param name="packageCount">The number of packages to act on.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecuteBeginEventArgs.PackageCount">
+            <summary>
+            Gets the number of packages to act on.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ExecutePackageBeginEventArgs">
+            <summary>
+            Additional arguments used when the engine has begun installing a specific package.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ExecutePackageBeginEventArgs.#ctor(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ExecutePackageBeginEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package to act on.</param>
+            <param name="shouldExecute">Whether the package should really be acted on.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecutePackageBeginEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package to act on.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecutePackageBeginEventArgs.ShouldExecute">
+            <summary>
+            Gets whether the package should really be acted on.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ExecutePatchTargetEventArgs">
+            <summary>
+            Additional arguments used when the engine executes one or more patches targeting a product.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ExecutePatchTargetEventArgs.#ctor(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ExecutePatchTargetEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package to act on.</param>
+            <param name="targetProductCode">The product code of the target of the patch.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecutePatchTargetEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package to act on.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecutePatchTargetEventArgs.TargetProductCode">
+            <summary>
+            Gets the product code being targeted.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ExecuteMsiMessageEventArgs">
+            <summary>
+            Additional arguments used when Windows Installer sends an installation message.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ExecuteMsiMessageEventArgs.#ctor(System.String,WixToolset.Bootstrapper.InstallMessage,System.Int32,System.String,System.String[],WixToolset.Bootstrapper.Result,WixToolset.Bootstrapper.Result)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ExecuteMsiMessageEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package that yielded this message.</param>
+            <param name="messageType">The type of this message.</param>
+            <param name="dwUIHint">Recommended display flags for this message.</param>
+            <param name="message">The message.</param>
+            <param name="data">The extended data for the message.</param>
+            <param name="recommendation">Recommended result from engine.</param>
+            <param name="result">The result to return to the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecuteMsiMessageEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package that yielded this message.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecuteMsiMessageEventArgs.MessageType">
+            <summary>
+            Gets the type of this message.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecuteMsiMessageEventArgs.UIHint">
+            <summary>
+            Gets the recommended display flags for this message.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecuteMsiMessageEventArgs.Message">
+            <summary>
+            Gets the message.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecuteMsiMessageEventArgs.Data">
+            <summary>
+            Gets the extended data for the message.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ExecuteFilesInUseEventArgs">
+            <summary>
+            Additional arugments used for file in use installation messages.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ExecuteFilesInUseEventArgs.#ctor(System.String,System.String[],WixToolset.Bootstrapper.Result,WixToolset.Bootstrapper.Result)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ExecuteFilesInUseEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package that yielded the files in use message.</param>
+            <param name="files">The list of files in use.</param>
+            <param name="recommendation">Recommended result from engine.</param>
+            <param name="result">The result to return to the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecuteFilesInUseEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package that yielded the files in use message.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecuteFilesInUseEventArgs.Files">
+            <summary>
+            Gets the list of files in use.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ExecutePackageCompleteEventArgs">
+            <summary>
+            Additional arguments used when the engine has completed installing a specific package.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ExecutePackageCompleteEventArgs.#ctor(System.String,System.Int32,WixToolset.Bootstrapper.ApplyRestart,WixToolset.Bootstrapper.BOOTSTRAPPER_EXECUTEPACKAGECOMPLETE_ACTION,WixToolset.Bootstrapper.BOOTSTRAPPER_EXECUTEPACKAGECOMPLETE_ACTION)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ExecutePackageCompleteEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package that was acted on.</param>
+            <param name="hrStatus">The return code of the operation.</param>
+            <param name="restart">Whether a restart is required.</param>
+            <param name="recommendation">Recommended action from engine.</param>
+            <param name="action">The action to perform.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecutePackageCompleteEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package that was acted on.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecutePackageCompleteEventArgs.Restart">
+            <summary>
+            Gets the package restart state after being applied.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ExecuteCompleteEventArgs">
+            <summary>
+            Additional arguments used when the engine has completed installing packages.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ExecuteCompleteEventArgs.#ctor(System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ExecuteCompleteEventArgs"/> class.
+            </summary>
+            <param name="hrStatus">The return code of the operation.</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ApplyCompleteEventArgs">
+            <summary>
+            Additional arguments used when the engine has completed installing the bundle.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ApplyCompleteEventArgs.#ctor(System.Int32,WixToolset.Bootstrapper.ApplyRestart,WixToolset.Bootstrapper.BOOTSTRAPPER_APPLYCOMPLETE_ACTION,WixToolset.Bootstrapper.BOOTSTRAPPER_APPLYCOMPLETE_ACTION)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ApplyCompleteEventArgs"/> clas.
+            </summary>
+            <param name="hrStatus">The return code of the operation.</param>
+            <param name="restart">Whether a restart is required.</param>
+            <param name="recommendation">Recommended action from engine.</param>
+            <param name="action">The action to perform.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ApplyCompleteEventArgs.Restart">
+            <summary>
+            Gets the apply restart state when complete.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ResolveSourceEventArgs">
+            <summary>
+            Additional arguments used by the engine to allow the user experience to change the source
+            using <see cref="M:WixToolset.Bootstrapper.Engine.SetLocalSource(System.String,System.String,System.String)"/> or <see cref="M:WixToolset.Bootstrapper.Engine.SetDownloadSource(System.String,System.String,System.String,System.String,System.String)"/>.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ResolveSourceEventArgs.#ctor(System.String,System.String,System.String,System.String,WixToolset.Bootstrapper.BOOTSTRAPPER_RESOLVESOURCE_ACTION,WixToolset.Bootstrapper.BOOTSTRAPPER_RESOLVESOURCE_ACTION,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ResolveSourceEventArgs"/> class.
+            </summary>
+            <param name="packageOrContainerId">The identity of the package or container that requires source.</param>
+            <param name="payloadId">The identity of the payload that requires source.</param>
+            <param name="localSource">The current path used for source resolution.</param>
+            <param name="downloadSource">Optional URL to download container or payload.</param>
+            <param name="recommendation">The recommended action from the engine.</param>
+            <param name="action">The action to perform.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ResolveSourceEventArgs.PackageOrContainerId">
+            <summary>
+            Gets the identity of the package or container that requires source.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ResolveSourceEventArgs.PayloadId">
+            <summary>
+            Gets the identity of the payload that requires source.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ResolveSourceEventArgs.LocalSource">
+            <summary>
+            Gets the current path used for source resolution.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ResolveSourceEventArgs.DownloadSource">
+            <summary>
+            Gets the optional URL to download container or payload.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ResolveSourceEventArgs.Recommendation">
+            <summary>
+            Gets the recommended action from the engine.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ResolveSourceEventArgs.Action">
+            <summary>
+            Gets or sets the action to perform.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.CachePackageBeginEventArgs">
+            <summary>
+            Additional arguments used by the engine when it has begun caching a specific package.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.CachePackageBeginEventArgs.#ctor(System.String,System.Int32,System.Int64,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.CachePackageBeginEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package that is being cached.</param>
+            <param name="cachePayloads">Number of payloads to be cached.</param>
+            <param name="packageCacheSize">The size on disk required by the specific package.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CachePackageBeginEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package that is being cached.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CachePackageBeginEventArgs.CachePayloads">
+            <summary>
+            Gets number of payloads to be cached.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CachePackageBeginEventArgs.PackageCacheSize">
+            <summary>
+            Gets the size on disk required by the specific package.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.CachePackageCompleteEventArgs">
+            <summary>
+            Additional arguments passed by the engine when it has completed caching a specific package.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.CachePackageCompleteEventArgs.#ctor(System.String,System.Int32,WixToolset.Bootstrapper.BOOTSTRAPPER_CACHEPACKAGECOMPLETE_ACTION,WixToolset.Bootstrapper.BOOTSTRAPPER_CACHEPACKAGECOMPLETE_ACTION)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.CachePackageCompleteEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identity of the package that was cached.</param>
+            <param name="hrStatus">The return code of the operation.</param>
+            <param name="recommendation">Recommended action from engine.</param>
+            <param name="action">The action to perform.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.CachePackageCompleteEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package that was cached.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ExecuteProgressEventArgs">
+            <summary>
+            Additional arguments passed by the engine while executing on payload.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.ExecuteProgressEventArgs.#ctor(System.String,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.ExecuteProgressEventArgs"/> class.
+            </summary>
+            <param name="packageId">The identifier of the package being executed.</param>
+            <param name="progressPercentage">The percentage from 0 to 100 of the execution progress for a single payload.</param>
+            <param name="overallPercentage">The percentage from 0 to 100 of the execution progress for all payload.</param>
+            <param name="cancelRecommendation">The recommendation from the engine.</param>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecuteProgressEventArgs.PackageId">
+            <summary>
+            Gets the identity of the package that was executed.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecuteProgressEventArgs.ProgressPercentage">
+            <summary>
+            Gets the percentage from 0 to 100 of the execution progress for a single payload.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.ExecuteProgressEventArgs.OverallPercentage">
+            <summary>
+            Gets the percentage from 0 to 100 of the execution progress for all payloads.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.LaunchApprovedExeBeginArgs">
+            <summary>
+            Additional arguments passed by the engine before it tries to launch the preapproved executable.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.LaunchApprovedExeCompleteArgs">
+            <summary>
+            Additional arguments passed by the engine after it finished trying to launch the preapproved executable.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.LaunchApprovedExeCompleteArgs.ProcessId">
+            <summary>
+            Gets the ProcessId of the process that was launched.
+            This is only valid if the status reports success.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.BootstrapperException">
+            <summary>
+            Base class for exception returned to the bootstrapper application host.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperException.#ctor(System.Int32)">
+            <summary>
+            Creates an instance of the <see cref="T:WixToolset.Bootstrapper.BootstrapperException"/> base class with the given HRESULT.
+            </summary>
+            <param name="hr">The HRESULT for the exception that is used by the bootstrapper application host.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixToolset.Bootstrapper.BootstrapperException"/> class.
+            </summary>
+            <param name="message">Exception message.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixToolset.Bootstrapper.BootstrapperException"/> class.
+            </summary>
+            <param name="message">Exception message</param>
+            <param name="innerException">Inner exception associated with this one</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.BootstrapperException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixToolset.Bootstrapper.BootstrapperException"/> class.
+            </summary>
+            <param name="info">Serialization information for this exception</param>
+            <param name="context">Streaming context to serialize to</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.MissingAttributeException">
+            <summary>
+            The bootstrapper application loaded by the host does not contain exactly one instance of the
+            <see cref="T:WixToolset.Bootstrapper.BootstrapperApplicationAttribute"/> class.
+            </summary>
+            <seealso cref="T:WixToolset.Bootstrapper.BootstrapperApplicationAttribute"/>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.MissingAttributeException.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.MissingAttributeException"/> class.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.MissingAttributeException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixToolset.Bootstrapper.MissingAttributeException"/> class.
+            </summary>
+            <param name="message">Exception message.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.MissingAttributeException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixToolset.Bootstrapper.MissingAttributeException"/> class.
+            </summary>
+            <param name="message">Exception message</param>
+            <param name="innerException">Inner exception associated with this one</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.MissingAttributeException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixToolset.Bootstrapper.MissingAttributeException"/> class.
+            </summary>
+            <param name="info">Serialization information for this exception</param>
+            <param name="context">Streaming context to serialize to</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.InvalidBootstrapperApplicationException">
+            <summary>
+            The bootstrapper application specified by the <see cref="T:WixToolset.Bootstrapper.BootstrapperApplicationAttribute"/>
+             does not extend the <see cref="T:WixToolset.Bootstrapper.BootstrapperApplication"/> base class.
+            </summary>
+            <seealso cref="T:WixToolset.Bootstrapper.BootstrapperApplication"/>
+            <seealso cref="T:WixToolset.Bootstrapper.BootstrapperApplicationAttribute"/>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.InvalidBootstrapperApplicationException.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.InvalidBootstrapperApplicationException"/> class.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.InvalidBootstrapperApplicationException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixToolset.Bootstrapper.InvalidBootstrapperApplicationException"/> class.
+            </summary>
+            <param name="message">Exception message.</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.InvalidBootstrapperApplicationException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixToolset.Bootstrapper.InvalidBootstrapperApplicationException"/> class.
+            </summary>
+            <param name="message">Exception message</param>
+            <param name="innerException">Inner exception associated with this one</param>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.InvalidBootstrapperApplicationException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixToolset.Bootstrapper.InvalidBootstrapperApplicationException"/> class.
+            </summary>
+            <param name="info">Serialization information for this exception</param>
+            <param name="context">Streaming context to serialize to</param>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.HostSection">
+            <summary>
+            Handler for the Host configuration section.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.HostSection.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:WixToolset.Bootstrapper.HostSection"/> class.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.HostSection.AssemblyName">
+            <summary>
+            Gets the name of the assembly that contians the <see cref="T:WixToolset.Bootstrapper.BootstrapperApplication"/> child class.
+            </summary>
+            <remarks>
+            The assembly specified by this name must contain the <see cref="T:WixToolset.Bootstrapper.BootstrapperApplicationAttribute"/> to identify
+            the type of the <see cref="T:WixToolset.Bootstrapper.BootstrapperApplication"/> child class.
+            </remarks>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.HostSection.SupportedFrameworks">
+            <summary>
+            Gets the <see cref="T:WixToolset.Bootstrapper.SupportedFrameworkElementCollection"/> of supported frameworks for the host configuration.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.IBootstrapperApplication">
+            <summary>
+            Allows customization of the bootstrapper application.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.Display">
+            <summary>
+            The display level for the UX.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.InstallMessage">
+            <summary>
+            Messages from Windows Installer.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.Restart">
+            <summary>
+            The action to perform when a reboot is necessary.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.Result">
+            <summary>
+            Result codes.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ResumeType">
+            <summary>
+            Describes why a bundle or packaged is being resumed.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ResumeType.Invalid">
+            <summary>
+            Resume information exists but is invalid.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ResumeType.Interrupted">
+            <summary>
+            The bundle was re-launched after an unexpected interruption.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ResumeType.RebootPending">
+            <summary>
+            A reboot is pending.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ResumeType.Reboot">
+            <summary>
+            The bundle was re-launched after a reboot.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ResumeType.Suspend">
+            <summary>
+            The bundle was re-launched after being suspended.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ResumeType.Arp">
+            <summary>
+            The bundle was launched from Add/Remove Programs.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ErrorType">
+            <summary>
+            Indicates what caused the error.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ErrorType.Elevate">
+            <summary>
+            The error occurred trying to elevate.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ErrorType.WindowsInstaller">
+            <summary>
+            The error came from the Windows Installer.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ErrorType.ExePackage">
+            <summary>
+            The error came from an EXE Package.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ErrorType.HttpServerAuthentication">
+            <summary>
+            The error came while trying to authenticate with an HTTP server.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ErrorType.HttpProxyAuthentication">
+            <summary>
+            The error came while trying to authenticate with an HTTP proxy.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ErrorType.Apply">
+            <summary>
+            The error occurred during apply.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.RelatedOperation.Downgrade">
+            <summary>
+            The related bundle or package will be downgraded.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.RelatedOperation.MinorUpdate">
+            <summary>
+            The related package will be upgraded as a minor revision.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.RelatedOperation.MajorUpgrade">
+            <summary>
+            The related bundle or package will be upgraded as a major revision.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.RelatedOperation.Remove">
+            <summary>
+            The related bundle will be removed.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.RelatedOperation.Install">
+            <summary>
+            The related bundle will be installed.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.RelatedOperation.Repair">
+            <summary>
+            The related bundle will be repaired.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.CacheOperation">
+            <summary>
+            The cache operation used to acquire a container or payload.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.CacheOperation.Copy">
+            <summary>
+            Container or payload is being copied.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.CacheOperation.Download">
+            <summary>
+            Container or payload is being downloaded.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.CacheOperation.Extract">
+            <summary>
+            Container or payload is being extracted.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ApplyRestart">
+            <summary>
+            The restart state after a package or all packages were applied.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ApplyRestart.None">
+            <summary>
+            Package or chain does not require a restart.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ApplyRestart.RestartRequired">
+            <summary>
+            Package or chain requires a restart but it has not been initiated yet.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.ApplyRestart.RestartInitiated">
+            <summary>
+            Package or chain has already initiated the restart.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.RelationType">
+            <summary>
+            The relation type for related bundles.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.EndSessionReasons">
+            <summary>
+            One or more reasons why the application is requested to be closed or is being closed.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.EndSessionReasons.Unknown">
+            <summary>
+            The system is shutting down or restarting (it is not possible to determine which event is occurring).
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.EndSessionReasons.CloseApplication">
+            <summary>
+            The application is using a file that must be replaced, the system is being serviced, or system resources are exhausted.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.EndSessionReasons.Critical">
+            <summary>
+            The application is forced to shut down.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.EndSessionReasons.Logoff">
+            <summary>
+            The user is logging off.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.BOOTSTRAPPER_APPLICATION_MESSAGE">
+            <summary>
+            The message code.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.BOOTSTRAPPER_APPLYCOMPLETE_ACTION">
+            <summary>
+            The available actions for OnApplyComplete.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.BOOTSTRAPPER_CACHEACQUIRECOMPLETE_ACTION">
+            <summary>
+            The available actions for OnCacheAcquireComplete.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.BOOTSTRAPPER_CACHEPACKAGECOMPLETE_ACTION">
+            <summary>
+            The available actions for OnCachePackageComplete.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.BOOTSTRAPPER_CACHEVERIFYCOMPLETE_ACTION">
+            <summary>
+            The available actions for OnCacheVerifyComplete.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.BOOTSTRAPPER_EXECUTEPACKAGECOMPLETE_ACTION">
+            <summary>
+            The available actions for OnExecutePackageComplete.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.BOOTSTRAPPER_RESOLVESOURCE_ACTION">
+            <summary>
+            The available actions for OnResolveSource.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.BOOTSTRAPPER_SHUTDOWN_ACTION">
+            <summary>
+            The available actions for OnShutdown.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.Command">
+            <summary>
+            Command information passed from the engine for the user experience to perform.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Command.Action">
+            <summary>
+            Gets the action for the user experience to perform.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Command.Display">
+            <summary>
+            Gets the display level for the user experience.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Command.Restart">
+            <summary>
+            Gets the action to perform if a reboot is required.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Command.CommandLine">
+            <summary>
+            Gets command line arguments that weren't processed by the engine. Can be null.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Command.LayoutDirectory">
+            <summary>
+            Gets layout directory.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Command.Resume">
+            <summary>
+            Gets the method of how the engine was resumed from a previous installation step.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Command.SplashScreen">
+            <summary>
+            Gets the handle to the splash screen window. If no splash screen was displayed this value will be IntPtr.Zero.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Command.Relation">
+            <summary>
+            If this was run from a related bundle, specifies the relation type.
+            </summary>
+        </member>
+        <member name="P:WixToolset.Bootstrapper.Command.Passthrough">
+            <summary>
+            If this was run from a backward compatible bundle.
+            </summary>
+        </member>
+        <member name="M:WixToolset.Bootstrapper.Command.GetCommandLineArgs">
+            <summary>
+            Gets the command line arguments as a string array.
+            </summary>
+            <returns>
+            Array of command line arguments not handled by the engine.
+            </returns>
+            <exception type="Win32Exception">The command line could not be parsed into an array.</exception>
+            <remarks>
+            This method uses the same parsing as the operating system which handles quotes and spaces correctly.
+            </remarks>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.IBootstrapperEngine">
+            <summary>
+            Allows calls into the bootstrapper engine.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.ActionState">
+            <summary>
+            The installation action for the bundle or current package.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.LaunchAction">
+            <summary>
+            The action for the BA to perform.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.LogLevel">
+            <summary>
+            The message log level.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.LogLevel.None">
+            <summary>
+            No logging level (generic).
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.LogLevel.Standard">
+            <summary>
+            User messages.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.LogLevel.Verbose">
+            <summary>
+            Verbose messages.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.LogLevel.Debug">
+            <summary>
+            Messages for debugging.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.LogLevel.Error">
+            <summary>
+            Error messages.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.UpdateHashType">
+            <summary>
+            Type of hash used for update bundle.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.UpdateHashType.None">
+            <summary>
+            No hash provided.
+            </summary>
+        </member>
+        <member name="F:WixToolset.Bootstrapper.UpdateHashType.Sha1">
+            <summary>
+            SHA-1 based hash provided.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.PackageState">
+            <summary>
+            Describes the state of an installation package.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.RequestState">
+            <summary>
+            Indicates the state desired for an installation package.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.FeatureState">
+            <summary>
+            Indicates the state of a feature.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.FeatureAction">
+            <summary>
+            Indicates the action for a feature.
+            </summary>
+        </member>
+        <member name="T:WixToolset.Bootstrapper.NativeMethods">
+            <summary>
+            Contains native constants, functions, and structures for this assembly.
+            </summary>
+        </member>
+        <member name="T:WixToolset.WixDistribution">
+            <summary>
+            Distribution specific strings.
+            </summary>
+        </member>
+        <member name="F:WixToolset.WixDistribution.NewsUrl">
+            <summary>
+            News URL for the distribution.
+            </summary>
+        </member>
+        <member name="F:WixToolset.WixDistribution.ShortProduct">
+            <summary>
+            Short product name for the distribution.
+            </summary>
+        </member>
+        <member name="F:WixToolset.WixDistribution.SupportUrl">
+            <summary>
+            Support URL for the distribution.
+            </summary>
+        </member>
+        <member name="F:WixToolset.WixDistribution.TelemetryUrlFormat">
+            <summary>
+            Telemetry URL format for the distribution.
+            </summary>
+        </member>
+        <member name="F:WixToolset.WixDistribution.VSExtensionsLandingUrl">
+            <summary>
+            VS Extensions Landing page Url for the distribution.
+            </summary>
+        </member>
+    </members>
+</doc>

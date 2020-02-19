@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright (c) .NET Foundation and contributors. All rights reserved. Licensed under the Microsoft Reciprocal License. See LICENSE.TXT file in the project root for full license information. -->
+
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+  <Import Project="$(CustomBeforeWixCATargets)" Condition=" '$(CustomBeforeWixCATargets)' != '' and Exists('$(CustomBeforeWixCATargets)')" />
+
+  <PropertyGroup>
+    <WixCATargetsImported>true</WixCATargetsImported>
+
+    <TargetCAFileName Condition=" '$(TargetCAFileName)' == '' ">$(TargetName).CA$(TargetExt)</TargetCAFileName>
+
+    <WixSdkPath Condition=" '$(WixSdkPath)' == '' ">$(MSBuildThisFileDirectory)</WixSdkPath>
+    <WixSdkX86Path Condition=" '$(WixSdkX86Path)' == '' ">$(WixSdkPath)x86\</WixSdkX86Path>
+    <WixSdkX64Path Condition=" '$(WixSdkX64Path)' == '' ">$(WixSdkPath)x64\</WixSdkX64Path>
+
+    <MakeSfxCA Condition=" '$(MakeSfxCA)' == '' ">$(WixSdkPath)MakeSfxCA.exe</MakeSfxCA>
+    <SfxCADll Condition=" '$(SfxCADll)' == '' and '$(Platform)' == 'x64' ">$(WixSdkX64Path)SfxCA.dll</SfxCADll>
+    <SfxCADll Condition=" '$(SfxCADll)' == '' ">$(WixSdkX86Path)SfxCA.dll</SfxCADll>
+  </PropertyGroup>
+
+  <!--
+  ==================================================================================================
+  PackCustomAction
+
+    Creates an MSI managed custom action package that includes the custom action assembly,
+    local assembly dependencies, and project content files.
+
+    [IN]
+    @(IntermediateAssembly) - Managed custom action assembly.
+    @(Content) - Project items of type Content will be included in the package.
+    $(CustomActionContents) - Optional space-delimited list of additional files to include.
+    
+    [OUT]
+    $(IntermediateOutputPath)$(TargetCAFileName) - Managed custom action package with unmanaged stub.
+  ==================================================================================================
+  -->
+  <Target Name="PackCustomAction"
+          Inputs="@(IntermediateAssembly);@(Content);$(CustomActionContents)"
+          Outputs="$(IntermediateOutputPath)$(TargetCAFileName)">
+
+    <!-- Find all referenced items marked CopyLocal, but exclude non-binary files. -->
+    <ItemGroup>
+      <CustomActionReferenceContents Include="@(ReferenceCopyLocalPaths)"
+                                     Condition=" '%(Extension)' == '.dll' or '%(Extension)' == '.exe' " />
+      <CustomActionReferenceContents Include="@(ReferenceComWrappersToCopyLocal)"
+                                     Condition=" '%(Extension)' == '.dll' or '%(Extension)' == '.exe' " />
+    
+      <!-- include PDBs for Debug only -->
+      <CustomActionReferenceContents Include="@(IntermediateAssembly->'%(RootDir)%(Directory)%(Filename).pdb')"
+                                     Condition=" Exists('%(RootDir)%(Directory)%(Filename).pdb') and '$(Configuration)' == 'Debug' " />
+      <CustomActionReferenceContents Include="@(ReferenceCopyLocalPaths)"
+                                     Condition=" '%(Extension)' == '.pdb' and '$(Configuration)' == 'Debug' " />
+      <CustomActionReferenceContents Include="@(ReferenceComWrappersToCopyLocal)"
+                                     Condition=" '%(Extension)' == '.pdb' and '$(Configuration)' == 'Debug' " />
+    </ItemGroup>
+
+    <!--
+      Items to include in the CA package:
+         - Reference assemblies marked CopyLocal
+         - Project items of type Content
+         - Additional items in the CustomActionContents property
+    -->
+    <PropertyGroup>
+      <CustomActionContents>@(CustomActionReferenceContents);@(Content->'%(FullPath)');$(CustomActionContents)</CustomActionContents>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <IntermediateCAAssembly Include="@(IntermediateAssembly->'%(FullPath)')" />
+      <IntermediateCAPackage Include="@(IntermediateAssembly->'%(RootDir)%(Directory)$(TargetCAFileName)')" />
+    </ItemGroup>
+
+    <!-- Run the MakeSfxCA.exe CA packaging tool. -->
+    <Exec Command='"$(MakeSfxCA)" "@(IntermediateCAPackage)" "$(SfxCADll)" "@(IntermediateCAAssembly)" "$(CustomActionContents)"'
+          WorkingDirectory="$(ProjectDir)" />
+  
+    <!-- Add modules to be copied to output dir. -->
+    <ItemGroup>
+      <AddModules Include="@(IntermediateCAPackage)" />
+    </ItemGroup>
+  </Target>
+
+  <!--
+  ==================================================================================================
+  CleanCustomAction
+
+    Cleans the .CA.dll binary created by the PackCustomAction target.
+
+  ==================================================================================================
+  -->
+  <Target Name="CleanCustomAction">
+    <Delete Files="$(IntermediateOutputPath)$(TargetCAFileName)"
+            TreatErrorsAsWarnings="true" />
+  </Target>
+
+  <!--
+  ==================================================================================================
+  AfterCompile (redefinition)
+
+    Calls the PackCustomAction target after compiling.
+    Overrides the empty AfterCompile target from Microsoft.Common.targets.
+
+  ==================================================================================================
+  -->
+  <Target Name="AfterCompile"
+          DependsOnTargets="PackCustomAction" />
+
+  <!--
+  ==================================================================================================
+  BeforeClean (redefinition)
+
+    Calls the CleanCustomAction target before cleaning.
+    Overrides the empty AfterCompile target from Microsoft.Common.targets.
+
+  ==================================================================================================
+  -->
+  <Target Name="BeforeClean"
+          DependsOnTargets="CleanCustomAction" />
+
+  <Import Project="$(CustomAfterWixCATargets)" Condition=" '$(CustomAfterWixCATargets)' != '' and Exists('$(CustomAfterWixCATargets)')" />
+
+</Project>
