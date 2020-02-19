@@ -1,8 +1,6 @@
 //css_dir ..\..\;
 //css_ref Wix_bin\SDK\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
-using System.Xml.Linq;
-using System.Xml;
 using WixSharp;
 using WixSharp.CommonTasks;
 

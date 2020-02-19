@@ -1020,7 +1020,9 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Combines path parts. Encapsulates <see cref="System.IO.Path.Combine"/>
+        /// Combines path parts. Encapsulates <see>
+        ///     <cref>System.IO.Path.Combine</cref>
+        /// </see>
         /// </summary>
         /// <param name="path1">The path1.</param>
         /// <param name="path2">The path2.</param>

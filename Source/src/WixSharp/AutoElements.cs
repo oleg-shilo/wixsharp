@@ -44,17 +44,19 @@ namespace WixSharp
         /// <summary>
         /// The feature will be enabled automatically when needed
         /// </summary>
-        Automatic,
+        [Obsolete(message: "This value is no longer used by any of the compiler features. " +
+                  "Use `CompilerSupportState.Enabled` instead.", error: false)]
+        Automatic = 0,
 
         /// <summary>
         /// The feature will be enabled
         /// </summary>
-        Enabled,
+        Enabled = 0,
 
         /// <summary>
         /// The feature will be disabled
         /// </summary>
-        Disabled
+        Disabled = 1
     }
 
     /// <summary>
@@ -80,11 +82,7 @@ namespace WixSharp
         /// Controls automatic insertion of CreateFolder and RemoveFolder for the directories containing no files.
         /// Required for: NativeBootstrapper, EmbeddedMultipleActions,  EmptyDirectories, InstallDir, Properties,
         /// ReleaseFolder, Shortcuts and WildCardFiles samples.
-        /// <para>If set to <c>Automatic</c> then the compiler will enable this feature only if any empty directory
-        /// is detected in the project definition.</para>
         /// </summary>
-        [Obsolete(message: "This property will is defaulted to `Enabled`. Due to the fact that `Automatic` " +
-            "brings some ambiguity while no longer yielding any benefits", error: false)]
         public static CompilerSupportState SupportEmptyDirectories = CompilerSupportState.Enabled;
 
         /// <summary>
@@ -101,6 +99,13 @@ namespace WixSharp
         /// </para>
         /// </summary>
         public static bool DisableAutoKeyPath = false;
+
+        /// <summary>
+        /// Enables expanding Wix environment constants in <see cref="WixSharp.RegValue.Value"/>.
+        /// <para>This flag was introduced as a fall back mechanism for legacy action of expanding Wix
+        /// constants in registry values. This work around was triggered by issue #774.</para>
+        /// </summary>
+        public static bool ExpandWixConstsInRegValue = false;
 
         /// <summary>
         /// Enables UAC revealer, which is a work around for the MSI limitation/problem around EmbeddedUI UAC prompt.
@@ -126,8 +131,8 @@ namespace WixSharp
         /// User Experience that sometimes has undesirable practical implications.
         /// </remarks>
         /// </summary>
-        public static string UACWarning = "Please wait for UAC prompt to appear.\r\n\r\nIf it appears minimized then activate it" +
-    " from the taskbar.";
+        public static string UACWarning = "Please wait for UAC prompt to appear.\r\n\r\nIf it appears minimized then" +
+            " activate it from the taskbar.";
 
         /// <summary>
         /// Forces all <see cref="T:WixSharp.Condition"/> values to be always encoded as CDATA.
@@ -171,8 +176,8 @@ namespace WixSharp
                                                 .Any();
                 if (!alreadyPresent)
                     xComponent.Add(new XElement("RemoveFolder",
-                                       new XAttribute("Id", xDir.Attribute("Id").Value),
-                                       new XAttribute("On", when)));
+                                                new XAttribute("Id", xDir.Attribute("Id").Value),
+                                                new XAttribute("On", when)));
             }
         }
 
@@ -181,8 +186,8 @@ namespace WixSharp
             var xDir = xComponent.Parent("Directory");
             if (!xDir.Descendants("RemoveFolder").Any() && !xDir.IsUserProfileRoot())
                 xComponent.Add(new XElement("RemoveFolder",
-                                   new XAttribute("Id", xDir.Attribute("Id").Value),
-                                   new XAttribute("On", "uninstall")));
+                                            new XAttribute("Id", xDir.Attribute("Id").Value),
+                                            new XAttribute("On", "uninstall")));
 
             return xComponent;
         }
@@ -245,13 +250,13 @@ namespace WixSharp
             xComponent.ClearKeyPath();
 
             xComponent.Add(
-                        new XElement("RegistryKey",
-                            new XAttribute("Root", "HKCU"),
-                            new XAttribute("Key", @"Software\WixSharp\Used"),
-                            new XElement("RegistryValue",
-                                new XAttribute("Value", "0"),
-                                new XAttribute("Type", "string"),
-                                new XAttribute("KeyPath", "yes"))));
+                           new XElement("RegistryKey",
+                           new XAttribute("Root", "HKCU"),
+                           new XAttribute("Key", @"Software\WixSharp\Used"),
+                           new XElement("RegistryValue",
+                               new XAttribute("Value", "0"),
+                               new XAttribute("Type", "string"),
+                               new XAttribute("KeyPath", "yes"))));
             return xComponent;
         }
 
@@ -321,7 +326,7 @@ namespace WixSharp
         {
             string compId = xDir.Attribute("Id").Value;
             XElement xComponent = xDir.AddElement(
-                              new XElement("Component",
+                                  new XElement("Component",
                                   new XAttribute("Id", compId),
                                   new XAttribute("Guid", WixGuid.NewGuid(compId))));
 
@@ -335,15 +340,15 @@ namespace WixSharp
         private static string[] GetUserProfileFolders()
         {
             return new[]
-                    {
-                        "ProgramMenuFolder",
-                        "AppDataFolder",
-                        "LocalAppDataFolder",
-                        "TempFolder",
-                        "PersonalFolder",
-                        "DesktopFolder",
-                        "StartupFolder"
-                    };
+                   {
+                       "ProgramMenuFolder",
+                       "AppDataFolder",
+                       "LocalAppDataFolder",
+                       "TempFolder",
+                       "PersonalFolder",
+                       "DesktopFolder",
+                       "StartupFolder"
+                   };
         }
 
         static bool InUserProfile(this XElement xDir)
@@ -431,7 +436,14 @@ namespace WixSharp
                     if (item.IsNotEmpty())
                     {
                         if (!ExpandCustomAttribute(sourceElement, item, project))
-                            throw new ApplicationException("Cannot resolve custom attribute definition:" + item);
+                        {
+                            var message = "Cannot resolve custom attribute definition:" + item;
+                            if (item.StartsWith("Component:"))
+                                message += "\nNote, some Wix elements may not be contained by 'Component' elements (e.g. 'CloseApplication'). " +
+                                    "Thus attempt to set parent component attribute will always fail.\n";
+
+                            throw new ApplicationException(message);
+                        }
                     }
 
                 instructionAttr.Remove();
@@ -443,10 +455,29 @@ namespace WixSharp
         static bool DefaultExpandCustomAttribute(XElement source, string item, WixProject project)
         {
             var attrParts = item.Split('=');
-            // {dep}ProductKey=12345 vs Component:{dep}ProductKey=12345
+
+            // {dep}ProductKey=12345 vs
+            // Component:{dep}ProductKey=12345 vs
+            // {http://schemas.microsoft.com/wix/BalExtension}Overridable=yes"
+
+            // Note the syntax below is not supported:
+            // Component:{http://schemas.microsoft.com/wix/BalExtension}Overridable=yes"
+            if (item.Contains(":{http:") || item.Contains(":{https:"))
+                throw new Exception("Syntax `" + item + "` is not supported.\n" +
+                    "Use `parent:{alias}attribute=value` instead and add XML namespace with the alias.\n" +
+                    "For example: `project.IncludeWixExtension(\"WixDependencyExtension.dll\", \"dep\", expectedNamespace);`");
+
+            string[] keyParts;
+
             if (item.StartsWith("{"))
                 item = ":" + item;
-            var keyParts = attrParts.First().Split(':');
+
+            var nameSpec = attrParts.First();
+
+            if (nameSpec.StartsWith("{"))
+                keyParts = new[] { nameSpec };  // name specification does not have any `parent prefix`
+            else
+                keyParts = nameSpec.Split(':'); // here it does
 
             string element = keyParts.First();
             string key = keyParts.Last();
@@ -554,12 +585,6 @@ namespace WixSharp
                                    .Where(e => e.HasAttribute("Id", v => v.EndsWith(".EmptyDirectory")))
                                    .Select(x => x.Parent("Directory")).ToArray();
 
-            if (SupportEmptyDirectories == CompilerSupportState.Automatic)
-            {
-                SupportEmptyDirectories = dummyDirs.Any() ? CompilerSupportState.Enabled : CompilerSupportState.Disabled; //it wasn't set by user so set it if any empty dir is detected
-                Compiler.OutputWriteLine("Wix# support for EmptyDirectories is automatically " + SupportEmptyDirectories.ToString().ToLower());
-            }
-
             if (SupportEmptyDirectories == CompilerSupportState.Enabled)
             {
                 if (dummyDirs.Any())
@@ -620,7 +645,6 @@ namespace WixSharp
             ExpandCustomAttributes(doc, project);
             InjectShortcutIcons(doc);
             HandleEmptyDirectories(doc);
-            InjectPlatformAttributes(doc);
 
             XElement product = doc.Root.Select("Product");
 
@@ -651,19 +675,19 @@ namespace WixSharp
                     string customAction = $"Set_DirAbsolutePath{absPathCount}";
 
                     product.Add(new XElement("CustomAction",
-                                 new XAttribute("Id", customAction),
-                                 new XAttribute("Property", actualDirName),
-                                 new XAttribute("Value", absolutePath)));
+                                new XAttribute("Id", customAction),
+                                new XAttribute("Property", actualDirName),
+                                new XAttribute("Value", absolutePath)));
 
                     product.SelectOrCreate("InstallExecuteSequence").Add(
-                           new XElement("Custom", $"(NOT Installed) AND (UILevel < 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
-                               new XAttribute("Action", customAction),
-                               new XAttribute("Before", "AppSearch")));
+                            new XElement("Custom", $"(NOT Installed) AND (UILevel < 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
+                                new XAttribute("Action", customAction),
+                                new XAttribute("Before", "AppSearch")));
 
                     product.SelectOrCreate("InstallUISequence").Add(
-                          new XElement("Custom", $"(NOT Installed) AND (UILevel = 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
-                              new XAttribute("Action", customAction),
-                              new XAttribute("Before", "AppSearch")));
+                            new XElement("Custom", $"(NOT Installed) AND (UILevel = 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
+                                new XAttribute("Action", customAction),
+                                new XAttribute("Before", "AppSearch")));
 
                     if (absPathCount == null)
                         absPathCount = 0;
@@ -754,8 +778,8 @@ namespace WixSharp
                     {
                         string workinDirPath = workingDirectory.ReplaceWixSharpEnvConsts();
                         XElement existingProperty = product.Descendants("Property")
-                                                           .Where(p => p.HasAttribute("Value", workingDirectory))
-                                                           .FirstOrDefault();
+                                                           .FirstOrDefault(p => p.HasAttribute("Value", workingDirectory));
+
                         if (existingProperty != null)
                         {
                             xShortcut.SetAttributeValue("WorkingDirectory", existingProperty.Attribute("Id").Value);
@@ -769,6 +793,8 @@ namespace WixSharp
                     }
                 }
             }
+
+            InjectPlatformAttributes(doc);
         }
 
         internal static void NormalizeFilePaths(XDocument doc, string sourceBaseDir, bool emitRelativePaths)
@@ -780,17 +806,17 @@ namespace WixSharp
             rootDir = IO.Path.GetFullPath(rootDir);
 
             Action<IEnumerable<XElement>, string> normalize = (elements, attributeName) =>
-                {
-                    elements.Where(e => e.HasAttribute(attributeName))
-                            .ForEach(e =>
-                                {
-                                    var attr = e.Attribute(attributeName);
-                                    if (emitRelativePaths)
-                                        attr.Value = Utils.MakeRelative(attr.Value, rootDir);
-                                    else
-                                        attr.Value = Path.GetFullPath(attr.Value);
-                                });
-                };
+            {
+                elements.Where(e => e.HasAttribute(attributeName))
+                        .ForEach(e =>
+                        {
+                            var attr = e.Attribute(attributeName);
+                            if (emitRelativePaths)
+                                attr.Value = Utils.MakeRelative(attr.Value, rootDir);
+                            else
+                                attr.Value = Path.GetFullPath(attr.Value);
+                        });
+            };
 
             normalize(doc.Root.FindAll("Icon"), "SourceFile");
             normalize(doc.Root.FindAll("File"), "Source");

@@ -252,13 +252,13 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>md "$(ProjectDir)..\..\bin\WixSharp"
-copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\bin\WixSharp\$(TargetFileName)"
-copy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\bin\WixSharp\$(TargetName).xml"
-copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\src\WixSharp.Samples\$(TargetFileName)"
-copy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\src\WixSharp.Samples\$(TargetName).xml"
+xcopy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\bin\WixSharp\$(TargetFileName)" /Y
+xcopy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\bin\WixSharp\$(TargetName).xml" /Y
+xcopy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\src\WixSharp.Samples\$(TargetFileName)" /Y
+xcopy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\src\WixSharp.Samples\$(TargetName).xml" /Y
 </PostBuildEvent>
     <PreBuildEvent>rem echo preparing VS project reeferences
-rem copy "$(SolutionDir)WixSharp.Samples\Wix_bin\SDK\BootstrapperCore.dll" "$(SolutionDir)WixSharp.Samples\VSProjects\bin\$(ConfigurationName)\BootstrapperCore.dll"
-rem copy "$(SolutionDir)WixSharp.Samples\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll" "$(SolutionDir)WixSharp.Samples\VSProjects\bin\$(ConfigurationName)\Microsoft.Deployment.WindowsInstaller.dll"</PreBuildEvent>
+rem xcopy "$(SolutionDir)WixSharp.Samples\Wix_bin\SDK\BootstrapperCore.dll" "$(SolutionDir)WixSharp.Samples\VSProjects\bin\$(ConfigurationName)\BootstrapperCore.dll" /Y
+rem xcopy "$(SolutionDir)WixSharp.Samples\Wix_bin\SDK\WixToolset.Dtf.WindowsInstaller.dll" "$(SolutionDir)WixSharp.Samples\VSProjects\bin\$(ConfigurationName)\WixToolset.Dtf.WindowsInstaller.dll" /Y</PreBuildEvent>
   </PropertyGroup>
 </Project>

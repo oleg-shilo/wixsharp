@@ -28,7 +28,6 @@ THE SOFTWARE.
 #endregion Licence...
 
 using System;
-using System.Linq;
 
 namespace WixSharp
 {
@@ -38,26 +37,37 @@ namespace WixSharp
     public class UpgradeStrategyValidationException : ApplicationException
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpgradeStrategyValidationException"/> class.
+        /// Initializes a new instance of the <see>
+        ///     <cref>UpgradeStrategyValidationException</cref>
+        /// </see>
+        /// class.
         /// </summary>
         /// <param name="message">The exception message.</param>
-        public UpgradeStrategyValidationException(string message) : base(message)
+        public UpgradeStrategyValidationException(string message) 
+            : base(message)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpgradeStrategyValidationException"/> class.
+        /// Initializes a new instance of the <see>
+        ///     <cref>UpgradeStrategyValidationException</cref>
+        /// </see>
+        /// class.
         /// </summary>
-        public UpgradeStrategyValidationException() : base()
+        public UpgradeStrategyValidationException()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpgradeStrategyValidationException"/> class.
+        /// Initializes a new instance of the <see>
+        ///     <cref>UpgradeStrategyValidationException</cref>
+        /// </see>
+        /// class.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception. If the <paramref name="innerException" /> parameter is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
-        public UpgradeStrategyValidationException(string message, Exception innerException) : base(message, innerException)
+        public UpgradeStrategyValidationException(string message, Exception innerException) 
+            : base(message, innerException)
         {
         }
     }
@@ -68,9 +78,13 @@ namespace WixSharp
     public class ValidationException : ApplicationException
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValidationException"/> class.
+        /// Initializes a new instance of the <see>
+        ///     <cref>ValidationException</cref>
+        /// </see>
+        /// class.
         /// </summary>
         /// <param name="message">The exception message.</param>
-        public ValidationException(string message) : base(message) { }
+        public ValidationException(string message) 
+            : base(message) { }
     }
 }

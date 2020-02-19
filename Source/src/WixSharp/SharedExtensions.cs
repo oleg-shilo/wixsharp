@@ -12,7 +12,7 @@ namespace WixSharp
         /// Returns <c>true</c> if the OS (this routine is executed on) has an x64 CPU architecture.
         /// </summary>
         /// <returns></returns>
-        public static bool Is64OS()
+        public static bool Is64Os()
         {
             //cannot use Environment.Is64BitOperatingSystem class as it is v3.5
             string progFiles = Environment.SpecialFolder.ProgramFiles.ToPath();
@@ -74,7 +74,7 @@ namespace WixSharp
 
                 case "System16Folder": return Path.Combine("WindowsFolder".AsWixVarToPath(), "System");
                 case "System64Folder": return Environment.SpecialFolder.System.ToPath();
-                case "SystemFolder": return Is64OS() ? Path.Combine("WindowsFolder".AsWixVarToPath(), "SysWow64") : Environment.SpecialFolder.System.ToPath();
+                case "SystemFolder": return Is64Os() ? Path.Combine("WindowsFolder".AsWixVarToPath(), "SysWow64") : Environment.SpecialFolder.System.ToPath();
 
                 case "TemplateFolder": return Environment.SpecialFolder.Templates.ToPath();
                 case "WindowsVolume": return Path.GetPathRoot(Environment.SpecialFolder.Programs.ToPath());
@@ -88,7 +88,10 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Equivalent of <see cref="System.IO.Path.Combine"/>.
+        /// Equivalent of <see>
+        ///     <cref>System.IO.Path.Combine</cref>
+        /// </see>
+        /// .
         /// </summary>
         /// <param name="path"></param>
         /// <param name="items"></param>
@@ -101,7 +104,10 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Identical to <see cref="System.IO.Path.GetDirectoryName(string)"/>. It is useful for Wix# consuming code as it allows avoiding
+        /// Identical to <see>
+        ///     <cref>System.IO.Path.GetDirectoryName(string)</cref>
+        /// </see>
+        /// . It is useful for Wix# consuming code as it allows avoiding
         /// "using System.IO;" directive, which interferes with Wix# types.
         /// </summary>
         /// <param name="path">The path.</param>

@@ -9,7 +9,7 @@
             Collection of generic WixSharp extension methods
             </summary>
         </member>
-        <member name="M:WixSharp.Extensions.Is64OS">
+        <member name="M:WixSharp.Extensions.Is64Os">
             <summary>
             Returns <c>true</c> if the OS (this routine is executed on) has an x64 CPU architecture.
             </summary>
@@ -38,7 +38,10 @@
         </member>
         <member name="M:WixSharp.Extensions.PathJoin(System.String,System.String[])">
             <summary>
-            Equivalent of <see cref="M:System.IO.Path.Combine(System.String,System.String)"/>.
+            Equivalent of <see>
+                <cref>System.IO.Path.Combine</cref>
+            </see>
+            .
             </summary>
             <param name="path"></param>
             <param name="items"></param>
@@ -46,7 +49,10 @@
         </member>
         <member name="M:WixSharp.Extensions.PathGetDirName(System.String)">
             <summary>
-            Identical to <see cref="M:System.IO.Path.GetDirectoryName(System.String)"/>. It is useful for Wix# consuming code as it allows avoiding
+            Identical to <see>
+                <cref>System.IO.Path.GetDirectoryName(string)</cref>
+            </see>
+            . It is useful for Wix# consuming code as it allows avoiding
             "using System.IO;" directive, which interferes with Wix# types.
             </summary>
             <param name="path">The path.</param>

@@ -1426,8 +1426,6 @@
             Controls automatic insertion of CreateFolder and RemoveFolder for the directories containing no files.
             Required for: NativeBootstrapper, EmbeddedMultipleActions,  EmptyDirectories, InstallDir, Properties,
             ReleaseFolder, Shortcuts and WildCardFiles samples.
-            <para>If set to <c>Automatic</c> then the compiler will enable this feature only if any empty directory
-            is detected in the project definition.</para>
             </summary>
         </member>
         <member name="F:WixSharp.AutoElements.DisableAutoKeyPath">
@@ -1443,6 +1441,13 @@
             </para>
             for some background info.
             </para>
+            </summary>
+        </member>
+        <member name="F:WixSharp.AutoElements.ExpandWixConstsInRegValue">
+            <summary>
+            Enables expanding Wix environment constants in <see cref="F:WixSharp.RegValue.Value"/>.
+            <para>This flag was introduced as a fall back mechanism for legacy action of expanding Wix
+            constants in registry values. This work around was triggered by issue #774.</para>
             </summary>
         </member>
         <member name="F:WixSharp.AutoElements.EnableUACRevealer">
@@ -6703,7 +6708,7 @@
             
              </summary>
         </member>
-        <member name="M:WixSharp.Extensions.Is64OS">
+        <member name="M:WixSharp.Extensions.Is64Os">
             <summary>
             Returns <c>true</c> if the OS (this routine is executed on) has an x64 CPU architecture.
             </summary>
@@ -6732,7 +6737,10 @@
         </member>
         <member name="M:WixSharp.Extensions.PathJoin(System.String,System.String[])">
             <summary>
-            Equivalent of <see cref="M:System.IO.Path.Combine(System.String,System.String)"/>.
+            Equivalent of <see>
+                <cref>System.IO.Path.Combine</cref>
+            </see>
+            .
             </summary>
             <param name="path"></param>
             <param name="items"></param>
@@ -6740,7 +6748,10 @@
         </member>
         <member name="M:WixSharp.Extensions.PathGetDirName(System.String)">
             <summary>
-            Identical to <see cref="M:System.IO.Path.GetDirectoryName(System.String)"/>. It is useful for Wix# consuming code as it allows avoiding
+            Identical to <see>
+                <cref>System.IO.Path.GetDirectoryName(string)</cref>
+            </see>
+            . It is useful for Wix# consuming code as it allows avoiding
             "using System.IO;" directive, which interferes with Wix# types.
             </summary>
             <param name="path">The path.</param>
@@ -7280,7 +7291,9 @@
         </member>
         <member name="M:WixSharp.Extensions.PathCombine(System.String,System.String)">
             <summary>
-            Combines path parts. Encapsulates <see cref="M:System.IO.Path.Combine(System.String,System.String)"/>
+            Combines path parts. Encapsulates <see>
+                <cref>System.IO.Path.Combine</cref>
+            </see>
             </summary>
             <param name="path1">The path1.</param>
             <param name="path2">The path2.</param>
@@ -16769,18 +16782,27 @@
         </member>
         <member name="M:WixSharp.UpgradeStrategyValidationException.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:WixSharp.UpgradeStrategyValidationException"/> class.
+            Initializes a new instance of the <see>
+                <cref>UpgradeStrategyValidationException</cref>
+            </see>
+            class.
             </summary>
             <param name="message">The exception message.</param>
         </member>
         <member name="M:WixSharp.UpgradeStrategyValidationException.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:WixSharp.UpgradeStrategyValidationException"/> class.
+            Initializes a new instance of the <see>
+                <cref>UpgradeStrategyValidationException</cref>
+            </see>
+            class.
             </summary>
         </member>
         <member name="M:WixSharp.UpgradeStrategyValidationException.#ctor(System.String,System.Exception)">
             <summary>
-            Initializes a new instance of the <see cref="T:WixSharp.UpgradeStrategyValidationException"/> class.
+            Initializes a new instance of the <see>
+                <cref>UpgradeStrategyValidationException</cref>
+            </see>
+            class.
             </summary>
             <param name="message">The error message that explains the reason for the exception.</param>
             <param name="innerException">The exception that is the cause of the current exception. If the <paramref name="innerException" /> parameter is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
@@ -16792,7 +16814,10 @@
         </member>
         <member name="M:WixSharp.ValidationException.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:WixSharp.ValidationException"/> class.
+            Initializes a new instance of the <see>
+                <cref>ValidationException</cref>
+            </see>
+            class.
             </summary>
             <param name="message">The exception message.</param>
         </member>
