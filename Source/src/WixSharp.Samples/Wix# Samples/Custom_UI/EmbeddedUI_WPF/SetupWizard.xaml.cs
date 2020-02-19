@@ -12,11 +12,12 @@
 
 namespace Microsoft.Deployment.Samples.EmbeddedUI
 {
-    using Microsoft.Deployment.WindowsInstaller;
+    
     using System.Linq;
     using System;
     using System.Threading;
     using System.Windows;
+    using WixToolset.Dtf.WindowsInstaller;
 
     /// <summary>
     /// Interaction logic for SetupWizard.xaml

@@ -14,9 +14,10 @@ using EmbeddedUI;
 
 namespace Microsoft.Deployment.Samples.EmbeddedUI
 {
-    using Microsoft.Deployment.WindowsInstaller;
+    
     using System;
     using System.Threading;
+    using WixToolset.Dtf.WindowsInstaller;
 
     public class SampleEmbeddedUI : IEmbeddedUI
     {

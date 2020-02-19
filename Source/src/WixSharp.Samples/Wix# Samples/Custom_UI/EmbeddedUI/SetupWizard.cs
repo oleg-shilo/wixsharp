@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Microsoft.Deployment.Samples.EmbeddedUI;
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Threading;
 using System.Windows.Forms;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace EmbeddedUI
 {

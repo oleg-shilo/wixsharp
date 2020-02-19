@@ -12,8 +12,9 @@
 
 namespace Microsoft.Deployment.Samples.EmbeddedUI
 {
-    using Microsoft.Deployment.WindowsInstaller;
+    
     using System;
+    using WixToolset.Dtf.WindowsInstaller;
 
     /// <summary>
     /// Tracks MSI progress messages and converts them to usable progress.

@@ -1,5 +1,4 @@
 ﻿extern alias WixSharpMsi;
-using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -7,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 using Xunit;
 using static WixSharp.SetupEventArgs;
 using io = System.IO;

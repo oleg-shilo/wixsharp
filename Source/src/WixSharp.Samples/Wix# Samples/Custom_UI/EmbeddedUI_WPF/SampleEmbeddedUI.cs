@@ -12,10 +12,11 @@
 
 namespace Microsoft.Deployment.Samples.EmbeddedUI
 {
-    using Microsoft.Deployment.WindowsInstaller;
+    
     using System;
     using System.Threading;
     using System.Windows.Threading;
+    using WixToolset.Dtf.WindowsInstaller;
     using Application = System.Windows.Application;
 
     public class SampleEmbeddedUI : IEmbeddedUI
