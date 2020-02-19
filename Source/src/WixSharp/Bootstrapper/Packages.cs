@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -11,7 +10,15 @@ namespace WixSharp.Bootstrapper
     public abstract class Package : ChainItem
     {
         /// <summary>
-        /// Specifies whether the package can be uninstalled.
+        /// Specifies the display name to place in the bootstrapper application data manifest for the package.
+        /// By default, ExePackages use the ProductName field from the version information, MsiPackages use the ProductName property, and MspPackages use the DisplayName patch metadata property.
+        /// Other package types must use this attribute to define a display name in the bootstrapper application data manifest.
+        /// </summary>
+        [Xml]
+        public string DisplayName;
+
+        /// <summary>
+        /// Specifies whether the package can be uninstalled. The default is "no".
         /// </summary>
         [Xml]
         public bool? Permanent;
@@ -52,6 +59,28 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         [Xml]
         public bool? Compressed;
+
+        /// <summary>
+        /// Whether to cache the package. The default is "yes".
+        /// </summary>
+        [Xml]
+        public bool? Cache;
+
+        /// <summary>
+        /// Name of a Variable that will hold the path to the log file.
+        /// An empty value will cause the variable to not be set.
+        /// The default is "WixBundleLog_[PackageId]" except for MSU packages which default to no logging.
+        /// </summary>
+        [Xml]
+        public string LogPathVariable;
+
+        /// <summary>
+        /// Name of a Variable that will hold the path to the log file used during rollback.
+        /// An empty value will cause the variable to not be set.
+        /// The default is "WixBundleRollbackLog_[PackageId]" except for MSU packages which default to no logging.
+        /// </summary>
+        [Xml]
+        public string RollbackLogPathVariable;
 
         /// <summary>
         /// Collection of Payloads (the package dependencies).
@@ -163,7 +192,7 @@ namespace WixSharp.Bootstrapper
         public string UninstallCommand;
 
         /// <summary>
-        /// Indicates the package must be executed elevated.
+        /// Indicates the package must be executed elevated. The default is "no".
         /// </summary>
         [Xml]
         public bool? PerMachine;
@@ -326,9 +355,72 @@ namespace WixSharp.Bootstrapper
             string props = MsiProperties + ";" + DefaultMsiProperties;
 
             props.ToDictionary().ForEach(p =>
-                {
-                    root.Add(new XElement("MsiProperty").AddAttributes("Name={0};Value={1}".FormatWith(p.Key, p.Value)));
-                });
+            {
+                root.Add(new XElement("MsiProperty").AddAttributes("Name={0};Value={1}".FormatWith(p.Key, p.Value)));
+            });
+
+            return new[] { root };
+        }
+    }
+
+    /// <summary>
+    /// Standard WiX MsuPackage.
+    /// </summary>
+    public class MsuPackage : Package
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MsuPackage"/> class.
+        /// </summary>
+        public MsuPackage()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MsuPackage"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        public MsuPackage(string path)
+        {
+            SourceFile = path;
+        }
+
+        /// <summary>
+        /// A condition that determines if the package is present on the target system.
+        /// This condition can use built-in variables and variables returned by searches.
+        /// This condition is necessary because Windows doesn't provide a method to detect the presence of an ExePackage.
+        /// Burn uses this condition to determine how to treat this package during a bundle action;
+        /// for example, if this condition is false or omitted and the bundle is being installed, Burn will install this package.
+        /// </summary>
+        [Xml]
+        public string DetectCondition;
+
+        /// <summary>
+        /// The knowledge base identifier for the MSU.
+        /// The KB attribute must be specified to enable the MSU package to be uninstalled.
+        /// Even then MSU uninstallation is only supported on Windows 7 and later.
+        /// When the KB attribute is specified, the Permanent attribute will the control whether the package is uninstalled.
+        /// </summary>
+        [Xml]
+        public string KB;
+
+        /// <summary>
+        /// Emits WiX XML.
+        /// </summary>
+        /// <returns></returns>
+        public override XContainer[] ToXml()
+        {
+            var root = new XElement("MsuPackage");
+
+            root.SetAttribute("Name", Name); //will respect null
+
+            if (this.IsIdSet())
+                root.SetAttribute("Id", Id);
+
+            root.AddAttributes(this.Attributes)
+                .Add(this.MapToXmlAttributes());
+
+            if (Payloads.Any())
+                Payloads.ForEach(p => root.Add(p.ToXElement("Payload")));
 
             return new[] { root };
         }
@@ -474,6 +566,32 @@ namespace WixSharp.Bootstrapper
         /// Returns the value formatted as Windows Installer would. For example, a REG_DWORD value of '1' is returned as '#1', not '1'.
         /// </summary>
         compatible
+    }
+
+    /// <summary>
+    /// The search result type to use for a <see cref="UtilProductSearch"/>
+    /// </summary>
+    public enum ProductSearchResultType
+    {
+        /// <summary>
+        /// Saves the version of a matching product if found; 0.0.0.0 otherwise. This is the default.
+        /// </summary>
+        version,
+
+        /// <summary>
+        /// Saves the language of a matching product if found; empty otherwise.
+        /// </summary>
+        language,
+
+        /// <summary>
+        /// Saves the state of the product: advertised (1), absent (2), or locally installed (5).
+        /// </summary>
+        state,
+
+        /// <summary>
+        /// Saves the assignment type of the product: per-user (0), or per-machine (1).
+        /// </summary>
+        assignment
     }
 
 #pragma warning restore 1591

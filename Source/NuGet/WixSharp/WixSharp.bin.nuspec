@@ -14,15 +14,15 @@
 The package contains Wix# binaries only.
 
 In order to use this package you need have WiX Toolset installed.
-The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
+The package is tested against WIX (Windows Installer Xml) Toolset v4.0 (v4.0.0.5918)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright (C) 2004-2018 Oleg Shilo</copyright>
+    <copyright>Copyright (C) 2004-2020 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <references>
       <reference file="BootstrapperCore.dll" />
-      <reference file="Microsoft.Deployment.WindowsInstaller.dll" />
+      <reference file="WixToolset.Dtf.WindowsInstaller.dll" />
       <reference file="WixSharp.dll" />
       <reference file="WixSharp.Msi.dll" />
       <reference file="WixSharp.UI.dll" />
@@ -32,8 +32,8 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
     <file src="build\WixSharp.bin.targets" target="build\WixSharp.bin.targets" />
     <file src="lib\BootstrapperCore.dll" target="lib\BootstrapperCore.dll" />
     <file src="lib\BootstrapperCore.xml" target="lib\BootstrapperCore.xml" />
-    <file src="lib\Microsoft.Deployment.WindowsInstaller.dll" target="lib\Microsoft.Deployment.WindowsInstaller.dll" />
-    <file src="lib\Microsoft.Deployment.WindowsInstaller.xml" target="lib\Microsoft.Deployment.WindowsInstaller.xml" />
+    <file src="lib\WixToolset.Dtf.WindowsInstaller.dll" target="lib\WixToolset.Dtf.WindowsInstaller.dll" />
+    <file src="lib\WixToolset.Dtf.WindowsInstaller.xml" target="lib\WixToolset.Dtf.WindowsInstaller.xml" />
     <file src="lib\nbsbuilder.exe" target="lib\nbsbuilder.exe" />
     <file src="lib\WixSharp.dll" target="lib\WixSharp.dll" />
     <file src="lib\WixSharp.Msi.dll" target="lib\WixSharp.Msi.dll" />

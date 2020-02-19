@@ -219,12 +219,12 @@ namespace WixSharp
         /// <summary>
         /// String representation of the <c>REMOVE="ALL"</c> condition of the WiX <c>Condition</c>.
         /// </summary>
-        public readonly static Condition BeingRemoved = new Condition(" (REMOVE=\"ALL\") ");
+        public readonly static Condition BeingUninstalled = new Condition(" (REMOVE=\"ALL\") ");
 
         /// <summary>
         /// Software is being removed and no newer version is being installed.
         /// </summary>
-        public static readonly Condition UninstallCondition = new Condition("(NOT UPGRADINGPRODUCTCODE) AND (REMOVE=\"ALL\")");
+        public static readonly Condition BeingUninstalledAndNotBeingUpgraded = new Condition("(NOT UPGRADINGPRODUCTCODE) AND (REMOVE=\"ALL\")");
 
         /// <summary>
         /// The .NET2.0 installed. This condition is to be used in Project.SetNetFxPrerequisite.
@@ -264,12 +264,22 @@ namespace WixSharp
         /// <summary>
         /// The .NET4.6.2 installed. This condition is to be used in Project.SetNetFxPrerequisite.
         /// </summary>
-        public readonly static Condition Net462_Installed = new Condition(" (NETFRAMEWORK45 >= '#394802 ') ");
+        public readonly static Condition Net462_Installed = new Condition(" (NETFRAMEWORK45 >= '#394802') ");
 
         /// <summary>
         /// The .NET4.7 installed. This condition is to be used in Project.SetNetFxPrerequisite.
         /// </summary>
-        public readonly static Condition Net47_Installed = new Condition(" (NETFRAMEWORK45 >= '#460798 ') ");
+        public readonly static Condition Net47_Installed = new Condition(" (NETFRAMEWORK45 >= '#460798') ");
+
+        /// <summary>
+        /// The .NET4.7.1 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+        /// </summary>
+        public readonly static Condition Net471_Installed = new Condition(" (NETFRAMEWORK45 >= '#461308') ");
+
+        /// <summary>
+        /// The .NET4.7.2 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+        /// </summary>
+        public readonly static Condition Net472_Installed = new Condition(" (NETFRAMEWORK45 >= '#461808') ");
 
         /// <summary>
         /// The .NET3.0 SP installed. This condition is to be used in Project.SetNetFxPrerequisite.
