@@ -12,8 +12,14 @@ namespace WixSharp.Nsis
     /// Defines native (un-managed) bootstrapper. The bootstrapper is created by the NSIS installer authoring tool.
     /// The path to NSIS installation is detected through the WIXSHARP_NSISDIR environment variable or installation in
     /// the default "%ProgramFiles(x86)%\NSIS" location.
-    /// The primary usage of <see cref="NsisBootstrapper"/> is to build bootstrappers for automatically installing .NET
-    /// for executing MSIs containing managed Custom Actions (<see cref="ManagedAction"/>).
+    /// The primary usage of <see>
+    ///     <cref>NsisBootstrapper</cref>
+    /// </see>
+    /// is to build bootstrappers for automatically installing .NET
+    /// for executing MSIs containing managed Custom Actions (<see>
+    ///     <cref>ManagedAction</cref>
+    /// </see>
+    /// ).
     /// <para></para>
     /// <remarks>
     /// NsisBootstrapper is subject to the following limitations:
@@ -33,9 +39,9 @@ namespace WixSharp.Nsis
     ///                        PrimaryFile = "MyProduct.msi",
     ///                        OutputFile = "setup.exe",
     ///                        PrerequisiteRegKeyValue = @"HKLM:SOFTWARE\Microsoft\.NETFramework:InstallRoot",
-    ///
+    /// 
     ///                        IconFile = "app_icon.ico",
-    ///
+    /// 
     ///                        VersionInfo = new VersionInformation("1.0.0.0")
     ///                        {
     ///                            ProductName = "Test Application",
