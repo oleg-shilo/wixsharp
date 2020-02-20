@@ -1,0 +1,486 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WixSharp.Msi</name>
+    </assembly>
+    <members>
+        <member name="T:WixSharp.Extensions">
+            <summary>
+            Collection of generic WixSharp extension methods
+            </summary>
+        </member>
+        <member name="M:WixSharp.Extensions.Is64Os">
+            <summary>
+            Returns <c>true</c> if the OS (this routine is executed on) has an x64 CPU architecture.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.ToPath(System.Environment.SpecialFolder)">
+            <summary>
+            Returns full path of the <see cref="T:System.Environment.SpecialFolder"/>
+            </summary>
+            <param name="folder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.AsWixVarToPath(System.String)">
+             <summary>
+             'Interprets' a string as a WiX constant and expands into a proper File System path. For example "DesktopFolder"
+             will be expanded into "[SysDrive]:\Users\[user]\Desktop". This method is a logical equivalent of C# Environment.GetFolderPath.
+             Though it handles discrepancies between 'special folders' mapping in .NET and WiX.
+            
+             <remarks>
+             The method will always be called from x86 runtime as MSI always loads ManagedUI in x86 host.
+             From the other hand CustomActions are called in the deployment specific CPU type context.
+             </remarks>
+             </summary>
+             <param name="path">The path.</param>
+             <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.PathJoin(System.String,System.String[])">
+            <summary>
+            Equivalent of <see>
+                <cref>System.IO.Path.Combine</cref>
+            </see>
+            .
+            </summary>
+            <param name="path"></param>
+            <param name="items"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.PathGetDirName(System.String)">
+            <summary>
+            Identical to <see>
+                <cref>System.IO.Path.GetDirectoryName(string)</cref>
+            </see>
+            . It is useful for Wix# consuming code as it allows avoiding
+            "using System.IO;" directive, which interferes with Wix# types.
+            </summary>
+            <param name="path">The path.</param>
+        </member>
+        <member name="T:WixSharp.UI.MsiParser">
+            <summary>
+            Utility class for simplifying MSI interpreting tasks DB querying, message data parsing
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.MsiParser.msiFile">
+            <summary>
+            The msi file
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.MsiParser.db">
+            <summary>
+            The msi file database handle.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.Open(System.String)">
+            <summary>
+            Opens the specified MSI file and returns the database handle.
+            </summary>
+            <param name="msiFile">The msi file.</param>
+            <returns>Handle to the MSI database.</returns>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UI.MsiParser" /> class.
+            </summary>
+            <param name="msiFile">The msi file.</param>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.Finalize">
+            <summary>
+            Calls the Dispose method
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.Dispose">
+            <summary>
+            Releases the Resources
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.GetProductName">
+            <summary>
+            Queries the name of the product from the encapsulated MSI database.
+            <para>
+            <remarks>The DB view is not closed after the call</remarks>
+            </para>
+            </summary>
+            <returns>Product name.</returns>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.GetProductVersion">
+            <summary>
+            Queries the version of the product from the encapsulated MSI database.
+            <para>
+            <remarks>The DB view is not closed after the call</remarks>
+            </para>
+            </summary>
+            <returns>Product version.</returns>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.GetProperty(System.String)">
+            <summary>
+            Gets the property value.
+            </summary>
+            <param name="name">The name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.GetProductCode">
+            <summary>
+            Queries the code of the product from the encapsulated MSI database.
+            <para>
+            <remarks>The DB view is not closed after the call</remarks>
+            </para>
+            </summary>
+            <returns>Product code.</returns>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.IsInstalled(System.String)">
+            <summary>
+            Determines whether the specified product code is installed.
+            </summary>
+            <param name="productCode">The product code.</param>
+            <returns>Returns <c>true</c> if the product is installed. Otherwise returns <c>false</c>.</returns>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.IsInstalled">
+            <summary>
+            Determines whether the product from the encapsulated msi file is installed.
+            </summary>
+            <returns>Returns <c>true</c> if the product is installed. Otherwise returns <c>false</c>.</returns>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.GetDirectoryPath(System.String)">
+            <summary>
+            Returns the full path of the directory entry from the Directory MSI table
+            </summary>
+            <param name="name">The name (e.g. INSTALLDIR).</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.ParseCommonData(System.String)">
+            <summary>
+            Parses the <c>MsiInstallMessage.CommonData</c> data.
+            </summary>
+            <param name="s">Message data.</param>
+            <returns>Collection of parsed tokens (fields).</returns>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.ParseProgressString(System.String)">
+            <summary>
+            Parses the <c>MsiInstallMessage.Progress</c> string.
+            </summary>
+            <param name="s">Message data.</param>
+            <returns>Collection of parsed tokens (fields).</returns>
+        </member>
+        <member name="M:WixSharp.UI.MsiParser.Dispose(System.Boolean)">
+            <summary>
+            Releases the acquired resources
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="T:WixSharp.UI.MsiSession">
+            <summary>
+            Generic class that represents runtime properties of the MSI setup session as well as some <c>runtime</c>
+            properties of the product being installed (e.g. CodePage, Caption). It also Simplifies MSI execution
+            and provides automatic responses on the MSI Messages.
+            <para>
+            Normally <c>MsiSession</c> should be extended top meet the needs of the product (MSI) specific setup.</para>
+            </summary>
+        </member>
+        <member name="E:WixSharp.UI.MsiSession.ProgressChanged">
+            <summary>
+            Occurs when setup progress changed.
+            </summary>
+        </member>
+        <member name="E:WixSharp.UI.MsiSession.SetupComplete">
+            <summary>
+            Occurs when setup completes.
+            </summary>
+        </member>
+        <member name="E:WixSharp.UI.MsiSession.SetupStarted">
+            <summary>
+            Occurs when setup starts.
+            </summary>
+        </member>
+        <member name="E:WixSharp.UI.MsiSession.ActionStarted">
+            <summary>
+            Occurs when new setup action started.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.MsiSession.InUiThread">
+            <summary>
+            The UI thread marshalling delegate. It should be set for the environments where cross-thread calls
+            must be marshalled (e.g. WPF, WinForms). Not needed otherwise (e.g. Console application).
+            </summary>
+        </member>
+        <member name="P:WixSharp.UI.MsiSession.ProgressTotal">
+            <summary>
+            Gets or sets the progress total.
+            </summary>
+            <value>The progress total.</value>
+        </member>
+        <member name="P:WixSharp.UI.MsiSession.ProgressCurrentPosition">
+            <summary>
+            Gets or sets the progress current position.
+            </summary>
+            <value>The progress current position.</value>
+        </member>
+        <member name="F:WixSharp.UI.MsiSession.ProgressStepDelay">
+            <summary>
+            The progress step delay. It is a "for-testing" feature. Set it to positive value (number of milliseconds)
+            to artificially slow down the installation process. The default value is 0.
+            </summary>
+        </member>
+        <member name="P:WixSharp.UI.MsiSession.CurrentActionName">
+            <summary>
+            Gets or sets the name of the current action.
+            </summary>
+            <value>
+            The name of the current action.
+            </value>
+        </member>
+        <member name="P:WixSharp.UI.MsiSession.Language">
+            <summary>
+            Gets or sets the product language.
+            </summary>
+            <value>The language.</value>
+        </member>
+        <member name="P:WixSharp.UI.MsiSession.CodePage">
+            <summary>
+            Gets or sets the product CodePage.
+            </summary>
+            <value>The product CodePage.</value>
+        </member>
+        <member name="P:WixSharp.UI.MsiSession.CanCancel">
+            <summary>
+            Gets or sets the flag indication the the user can cancel the setup in progress.
+            </summary>
+            <value>The can cancel.</value>
+        </member>
+        <member name="P:WixSharp.UI.MsiSession.Caption">
+            <summary>
+            Gets or sets the setup window caption.
+            </summary>
+            <value>The caption.</value>
+        </member>
+        <member name="P:WixSharp.UI.MsiSession.IsProgressForwardDirection">
+            <summary>
+            Gets or sets a value indicating whether the progress steps are changing in the forward direction.
+            </summary>
+            <value>
+            <c>true</c> if the progress changes are in forward direction; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:WixSharp.UI.MsiSession.CancelRequested">
+            <summary>
+            Gets or sets the CancelRequested flag. It should beset to <c>true</c> if user wants to cancel the setup in progress.
+            </summary>
+            <value>The CancelRequested value.</value>
+        </member>
+        <member name="M:WixSharp.UI.MsiSession.OnActionData(System.String)">
+            <summary>
+            Called when ActionData MSI message is received.
+            </summary>
+            <param name="data">The message data.</param>
+        </member>
+        <member name="M:WixSharp.UI.MsiSession.OnError(System.String,System.Boolean,System.Nullable{WindowsInstaller.MsiInstallMessage})">
+            <summary>
+            Called when Error event occurs (MSI Error message is received or an internal error condition triggered).
+            </summary>
+            <param name="data">The message data.</param>
+            <param name="fatal">if set to <c>true</c> the error is fatal.</param>
+            <param name="relatedMessageType">Type of the related message. Note the error may be associated with the internal
+            error condition (e.g. exception is raised). </param>
+        </member>
+        <member name="M:WixSharp.UI.MsiSession.OnWarning(System.String)">
+            <summary>
+            Called when Warning MSI message is received.
+            </summary>
+            <param name="data">The message data.</param>
+        </member>
+        <member name="M:WixSharp.UI.MsiSession.OnUser(System.String)">
+            <summary>
+            Called when User MSI message is received.
+            </summary>
+            <param name="data">The message data.</param>
+        </member>
+        <member name="M:WixSharp.UI.MsiSession.OnInfo(System.String)">
+            <summary>
+            Called when Info MSI message is received.
+            </summary>
+            <param name="data">The message data.</param>
+        </member>
+        <member name="M:WixSharp.UI.MsiSession.EnableLog(System.String,WindowsInstaller.MsiInstallLogMode)">
+            <summary>
+            Enables the MSI runtime logging to the specified log file.
+            </summary>
+            <param name="logFile">The log file.</param>
+            <param name="mode">The logging mode.</param>
+        </member>
+        <member name="M:WixSharp.UI.MsiSession.ExecuteInstall(System.String,System.String)">
+            <summary>
+            Executes the install sequence from the specified MSI file.
+            </summary>
+            <param name="msiFile">The MSI file.</param>
+            <param name="msiParams">The MSI params.</param>
+        </member>
+        <member name="M:WixSharp.UI.MsiSession.ExecuteUninstall(System.String,System.String)">
+            <summary>
+            Executes the uninstall sequence from the specified MSI file.
+            </summary>
+            <param name="msiFile">The MSI file.</param>
+            <param name="msiParams">The MSI params.</param>
+        </member>
+        <member name="M:WixSharp.UI.MsiSession.Execute(System.String,System.String)">
+            <summary>
+            Executes the MSI file with the specified MSI parameters.
+            </summary>
+            <param name="msiFile">The MSI file.</param>
+            <param name="msiParams">The MSI parameters.</param>
+            <exception cref="T:System.ApplicationException"></exception>
+        </member>
+        <member name="M:WixSharp.UI.MsiSession.OnMessage(System.String,WindowsInstaller.MsiInstallMessage)">
+            <summary>
+            Called when MSI message is received. It is actual the MSI <c>Message Loop</c>.
+            </summary>
+            <param name="message">The message data.</param>
+            <param name="messageType">Type of the message.</param>
+            <returns>The integer as per MSI documentation.</returns>
+        </member>
+        <member name="P:WixSharp.UI.MsiSession.MsiErrorCode">
+            <summary>
+            Gets or sets the error code of the last MSI install action (e.g. MsiInterop.MsiInstallProduct call).
+            </summary>
+            <value>
+            The error status.
+            </value>
+        </member>
+        <member name="E:WixSharp.UI.MsiSession.PropertyChanged">
+            <summary>
+            Occurs when some of the current instance property changed.
+            </summary>
+        </member>
+        <member name="T:WixSharp.UI.GenericSetup">
+            <summary>
+            Generic class that represents runtime properties of the typical MSI setup.
+            It is a ViewModel class, which has 'value changed' events for all bindable properties
+            automatically marshalled for the cross-thread calls.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.GenericSetup.MsiFile">
+            <summary>
+            The path to the encapsulated MSI file.
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.GenericSetup.LogFile">
+            <summary>
+            The path to the MSI session log file.
+            </summary>
+        </member>
+        <member name="M:WixSharp.UI.GenericSetup.#ctor(System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.UI.GenericSetup" /> class.
+            </summary>
+            <param name="msiFile">The MSI file.</param>
+            <param name="enableLoging">if set to <c>true</c> [enable loging].</param>
+        </member>
+        <member name="M:WixSharp.UI.GenericSetup.StartInstall(System.String)">
+            <summary>
+            Starts the fresh installation.
+            </summary>
+            <param name="msiParams">The MSI parameters.</param>
+        </member>
+        <member name="M:WixSharp.UI.GenericSetup.StartRepair(System.String)">
+            <summary>
+            Starts the repair installation for the already installed product.
+            </summary>
+            <param name="msiParams">The MSI parameters.</param>
+        </member>
+        <member name="M:WixSharp.UI.GenericSetup.StartUninstall(System.String)">
+            <summary>
+            Starts the uninstallation of the already installed product.
+            </summary>
+            <param name="msiParams">The MSI params.</param>
+        </member>
+        <member name="P:WixSharp.UI.GenericSetup.ErrorStatus">
+            <summary>
+            Gets or sets the error status.
+            </summary>
+            <value>
+            The error status.
+            </value>
+        </member>
+        <member name="P:WixSharp.UI.GenericSetup.ProductStatus">
+            <summary>
+            Gets or sets the product status (installed or not installed).
+            </summary>
+            <value>
+            The product status.
+            </value>
+        </member>
+        <member name="P:WixSharp.UI.GenericSetup.ProductVersion">
+            <summary>
+            Gets or sets the product version.
+            </summary>
+            <value>
+            The product version.
+            </value>
+        </member>
+        <member name="P:WixSharp.UI.GenericSetup.ProductName">
+            <summary>
+            Gets or sets the MSI ProductName.
+            </summary>
+            <value>
+            The name of the product.
+            </value>
+        </member>
+        <member name="P:WixSharp.UI.GenericSetup.IsRunning">
+            <summary>
+            Gets or sets a value indicating whether the setup is in progress.
+            </summary>
+            <value>
+            <c>true</c> if this setup is in progress; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:WixSharp.UI.GenericSetup.NotStarted">
+            <summary>
+            Gets or sets a value indicating whether setup was not started yet. This information
+            can be useful for implementing "not started" UI state in the setup GUI.
+            </summary>
+            <value>
+              <c>true</c> if setup was not started; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:WixSharp.UI.GenericSetup.IsCurrentlyInstalled">
+            <summary>
+            Gets or sets a value indicating whether the product is currently installed.
+            </summary>
+            <value>
+            <c>true</c> if the product is currently installed; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:WixSharp.UI.GenericSetup.CanInstall">
+            <summary>
+            Gets a value indicating whether the product can be installed.
+            </summary>
+            <value>
+            <c>true</c> if the product can install; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:WixSharp.UI.GenericSetup.CanUnInstall">
+            <summary>
+            Gets a value indicating whether the product can be uninstalled.
+            </summary>
+            <value>
+            <c>true</c> if the product can uninstall; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:WixSharp.UI.GenericSetup.CanRepair">
+            <summary>
+            Gets a value indicating whether the product can be repaired.
+            </summary>
+            <value>
+            <c>true</c> if the product can repaired; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:WixSharp.UI.GenericSetup.LogFileCreated">
+            <summary>
+            Gets or sets a value indicating whether the log file created.
+            </summary>
+            <value>
+              <c>true</c> if the log file created; otherwise, <c>false</c>.
+            </value>
+        </member>
+    </members>
+</doc>

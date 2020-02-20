@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Std.Install</id>
+    <version>1.0.0.0</version>
+    <title>Install - managed interface for WiX</title>
+    <authors>maniglia</authors>
+    <owners>maniglia</owners>
+    <licenseUrl>https://wixsharp.codeplex.com/license</licenseUrl>
+    <projectUrl>https://wixsharp.codeplex.com/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/oleg-shilo/wixsharp/master/Documentation/wiki_images/wixsharp_logo.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
+The package contains Wix# binaries, code sample and custom MSBuild target (to be merged with VS project and trigger building MSI during the project compilation).
+
+If you need only Wix# binaries you may want to use Std.Install.bin package instead.
+
+In order to use this package you need have WiX Toolset installed.
+The package is tested against WIX (Windows Installer Xml) Toolset v4.0 (v4.0.0.5918)</description>
+    <summary>Std.Install</summary>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright (C) 2020 maniglia</copyright>
+    <language>en-EN</language>
+    <tags>C# scripting msi install setup wix</tags>
+    <dependencies>
+      <dependency id="Std.Install.bin" version="1.0.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="build\SetEnvVar.dll" target="build\SetEnvVar.dll" />
+    <file src="build\WixSharp.targets" target="build\WixSharp.targets" />
+    <file src="tools\Install.bin.ps1" target="tools\Install.ps1" />
+    <file src="readme.txt" target="readme.txt" />
+  </files>
+</package>

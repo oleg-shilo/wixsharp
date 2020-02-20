@@ -225,10 +225,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\bin\WixSharp\$(TargetFileName)" /Y
-xcopy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\bin\WixSharp\$(TargetName).xml" /Y
-xcopy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\src\WixSharp.Samples\$(TargetFileName)" /Y
-xcopy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\src\WixSharp.Samples\$(TargetName).xml" /Y
+    <PostBuildEvent>copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\bin\WixSharp\$(TargetFileName)" /Y
+copy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\bin\WixSharp\$(TargetName).xml" /Y
+copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\src\WixSharp.Samples\$(TargetFileName)" /Y
+copy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\src\WixSharp.Samples\$(TargetName).xml" /Y
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

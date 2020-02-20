@@ -328,7 +328,10 @@ namespace WixSharp.Bootstrapper
 
         /// <summary>
         /// The default MsiProperties of a package .
-        /// <para>This value is merged with user defined <see cref="WixSharp.Bootstrapper.MsiPackage.MsiProperties"/>.</para>
+        /// <para>This value is merged with user defined <see>
+        ///         <cref>WixSharp.Bootstrapper.MsiPackage.MsiProperties</cref>
+        ///     </see>
+        ///     .</para>
         /// <para>The default value of this property is "WIXBUNDLEORIGINALSOURCE=[WixBundleOriginalSource]"</para>
         /// </summary>
         public string DefaultMsiProperties = "WIXBUNDLEORIGINALSOURCE=[WixBundleOriginalSource]";
@@ -497,8 +500,17 @@ namespace WixSharp.Bootstrapper
         public BehaviorValues Behavior;
 
         /// <summary>
-        /// Serializes the <see cref="WixSharp.Bootstrapper.ExitCode"/> into XML based on the members marked with
-        /// <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
+        /// Serializes the <see>
+        ///     <cref>WixSharp.Bootstrapper.ExitCode</cref>
+        /// </see>
+        /// into XML based on the members marked with
+        /// <see>
+        ///     <cref>WixSharp.XmlAttribute</cref>
+        /// </see>
+        /// and <see>
+        ///     <cref>WixSharp.WixObject.Attributes</cref>
+        /// </see>
+        /// .
         /// </summary>
         /// <returns></returns>
         public XElement ToXElement()
@@ -569,7 +581,9 @@ namespace WixSharp.Bootstrapper
     }
 
     /// <summary>
-    /// The search result type to use for a <see cref="UtilProductSearch"/>
+    /// The search result type to use for a <see>
+    ///     <cref>UtilProductSearch</cref>
+    /// </see>
     /// </summary>
     public enum ProductSearchResultType
     {
