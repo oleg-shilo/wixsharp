@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,7 +24,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#endregion
+
+#endregion Licence...
+
 namespace WixSharp
 {
     /// <summary>
@@ -60,20 +63,24 @@ namespace WixSharp
         /// <para>Typically these are all versions older then the version being installed. </para>
         /// </summary>
         public VersionRange UpgradeVersions;
+
         /// <summary>
         /// Range of versions, which should not be automatically uninstalled during the installation of the product MSI being built.
         /// <para>Typically these are all versions newer then the version being installed (downgrade scenario). </para>
         /// </summary>
         public VersionRange PreventDowngradingVersions;
+
         /// <summary>
         /// Step, which determines when the RemoveExistingProducts standard action is to be performed.
-        /// <para>The default value is <c>InstallFinalize</c>. </para>
+        /// <para>The default value is <c>InstallInitialize</c>. </para>
         /// </summary>
-        public Step RemoveExistingProductAfter = Step.InstallFinalize;
+        public Step RemoveExistingProductAfter = Step.InstallInitialize;
+
         /// <summary>
         /// Error message to be displayed if setup is aborted because of restricted downgrade attempt (see <see cref="PreventDowngradingVersions"/>).
         /// </summary>
         public string NewerProductInstalledErrorMessage;
+
         /// <summary>
         /// Default <see cref="MajorUpgradeStrategy"/>. Ensures that all older versions of the product are automatically uninstalled and if
         /// a newer version is detected, <c>"Newer version already installed"</c> message is displayed.
@@ -86,5 +93,3 @@ namespace WixSharp
         };
     }
 }
-
-
