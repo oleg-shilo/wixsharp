@@ -1,5 +1,0 @@
-nuget pack -Prop Configuration=Release Std.Install.nuspec
-nuget pack -Prop Configuration=Release Std.Install.bin.nuspec
-
-dotnet nuget push Std.Install.1.0.0.nupkg -k oy2cenjfmyp2h6a5vsxqxohgsx7ad7zejefmnsoqhojg3y -s https://api.nuget.org/v3/index.json
-dotnet nuget push Std.Install.bin.1.0.0.nupkg -k oy2nzahuo5hc7e7zuvyq5fwbhletclhebgcmevssm4qzau -s https://api.nuget.org/v3/index.json
