@@ -462,7 +462,9 @@ namespace WixSharp.Bootstrapper
         /// <returns></returns>
         public override XContainer[] ToXml()
         {
-            XNamespace bal = "http://schemas.microsoft.com/wix/BalExtension";
+            XNamespace bal = Compiler.IsWix4 ?
+                                "http://wixtoolset.org/schemas/v4/wxs/bal" :
+                                "http://schemas.microsoft.com/wix/BalExtension";
 
             var root = new XElement("BootstrapperApplicationRef");
 
