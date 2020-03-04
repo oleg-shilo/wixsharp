@@ -936,7 +936,7 @@ namespace WixSharp
         /// </summary>
         /// <param name="languages">The languages.</param>
         /// <returns></returns>
-        internal static string ToLcidList(this string languages)
+        public static string ToLcidList(this string languages)
         {
             var result = string.Join(",", languages.Split(',', ';')
                                                    .Select(x => new CultureInfo(x.Trim()).LCID.ToString())
@@ -2979,7 +2979,18 @@ namespace WixSharp
                     $"Normally you would prefer your project default language to be the same as your OS language.");
         }
 
-        static string BuildLanguageTransform(this Project project, string originalMsi, string language, string localizationFile = "")
+        /// <summary>
+        /// Builds a language transform (*.mst) file for a given msi file and its `Project`.
+        /// <para>This method is not intended to be used directly (even though it's possible).
+        /// The developers are encouraged to use a <see cref="LocalizationExtensions.BuildMultilanguageMsi(Project, string)"/>
+        /// instead.</para>
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="originalMsi"></param>
+        /// <param name="language"></param>
+        /// <param name="localizationFile"></param>
+        /// <returns></returns>
+        public static string BuildLanguageTransform(this Project project, string originalMsi, string language, string localizationFile = "")
         {
             var torch = Compiler.WixLocation.PathCombine("torch.exe");
             var originalLng = project.Language;
