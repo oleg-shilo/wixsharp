@@ -860,13 +860,27 @@ namespace WixSharp
         /// <param name="selector"> A transform function to apply to each source element; the second parameter of the function represents the index of the source element.
         /// </param>
         /// <returns></returns>
-        public static string Join(this IEnumerable<string> strings, string separator, Func<string, string> selector = null)
+        public static string JoinBy(this IEnumerable<string> strings, string separator, Func<string, string> selector = null)
         {
             if (selector != null)
                 return string.Join(separator, strings.Select(selector).ToArray());
             else
                 return string.Join(separator, strings.ToArray());
         }
+
+        /// <summary>
+        /// A simple generic wrapper around more specialized <see cref="T:String.Join" />, which is limited to
+        /// work with string arrays only.
+        /// </summary>
+        /// <param name="strings">The strings.</param>
+        /// <param name="separator">The separator.</param>
+        /// <param name="selector"> A transform function to apply to each source element; the second parameter of the function represents the index of the source element.
+        /// </param>
+        /// <returns></returns>
+
+        [Obsolete(message: "This method name is obsolete use `JoinBy` instead", error: false)]
+        public static string Join(this IEnumerable<string> strings, string separator, Func<string, string> selector = null)
+            => Join(strings, separator, selector);
 
         ///<summary>Finds the index of the first item matching an expression in an enumerable.</summary>
         ///<param name="items">The enumerable to search.</param>
@@ -2478,7 +2492,7 @@ namespace WixSharp
                 var installedFeatures = installedPackage.Features
                         .Where(x => x.State == InstallState.Local)
                     .Select(x => x.FeatureName)
-                    .Join(",");
+                    .JoinBy(",");
 
                 session["ADDLOCAL"] = installedFeatures;
             }
@@ -2891,10 +2905,165 @@ namespace WixSharp
     }
 
     /// <summary>
+    /// Represents set of project localization information.
+    /// </summary>
+    public class ProjectLocalization
+    {
+        /// <summary>
+        /// </summary>
+        /// <param name="language">Culture info name. Example: "en-US"</param>
+        /// <param name="localizationFile">Optional path to the localization file</param>
+        public ProjectLocalization(string language, string localizationFile = null)
+            : this(CultureInfo.GetCultureInfo(language), localizationFile)
+        {
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="cultureInfo">Culture info</param>
+        /// <param name="localizationFile">Optional path to the localization file</param>
+        public ProjectLocalization(CultureInfo cultureInfo, string localizationFile = null)
+            : this(cultureInfo.Name, cultureInfo.TextInfo.ANSICodePage.ToString(), cultureInfo.LCID, localizationFile)
+        {
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="language">Culture info name. Example: "en-US"</param>
+        /// <param name="codePage">The ANSI code page identifier. Example: "1252" for en-US.</param>
+        /// <param name="localizationFile">Optional path to the localization file</param>
+        public ProjectLocalization(string language, string codePage, string localizationFile = null)
+            : this(language, codePage, new CultureInfo(language).LCID, localizationFile)
+        {
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="language">Culture info name. Example: "en-US"</param>
+        /// <param name="codePage">The ANSI code page identifier. Example: "1252" for en-US.</param>
+        /// <param name="lcid">Language code Id</param>
+        /// <param name="localizationFile">Optional path to the localization file</param>
+        ProjectLocalization(string language, string codePage, int lcid, string localizationFile = null)
+        {
+            if (language.IsEmpty()) throw new ArgumentException("Invalid localization language.", nameof(language));
+            if (codePage.IsEmpty()) throw new ArgumentException("Invalid localization code page", nameof(codePage));
+
+            this.Language = language;
+            this.CodePage = codePage;
+            this.LocalizationFile = localizationFile;
+            this.LanguageCodeId = lcid;
+        }
+
+        /// <summary>
+        /// Gets the language.
+        /// </summary>
+        /// <value>The language.</value>
+        public string Language { get; }
+
+        /// <summary>
+        /// Gets the code page.
+        /// </summary>
+        /// <value>The code page.</value>
+        public string CodePage { get; }
+
+        /// <summary>
+        /// Gets the localization file.
+        /// </summary>
+        /// <value>
+        /// The localization file.
+        /// </value>
+        public string LocalizationFile { get; }
+
+        /// <summary>
+        /// Gets the language code identifier.
+        /// </summary>
+        /// <value>
+        /// The language code identifier.
+        /// </value>
+        public int LanguageCodeId { get; }
+
+        internal void BindTo(Project project)
+        {
+            if (project is null)
+                throw new ArgumentNullException(nameof(project));
+
+            project.Language = this.Language;
+            project.Codepage = this.CodePage;
+            project.LocalizationFile = this.LocalizationFile ?? "";
+        }
+    }
+
+    /// <summary>
     ///
     /// </summary>
     public static class LocalizationExtensions
     {
+        /// <summary>
+        /// Produces multilanguage MSI with embedded transformations based on <paramref name="localizations"/> collection.
+        /// If this msi is executed on the OS, which language matches one of the embedded transformations,
+        /// this transformation will be automatically triggered and effectively switch the setup UI language.
+        /// Builds the localized msi.
+        /// </summary>
+        ///  <example>The following is an example of building single .msi file with two localizations.
+        ///  With one of trhen based on a custom localization file.
+        ///  <p> During installation, language is automatically selected based on user's operating system region settings.
+        ///  </p>
+        /// <code>
+        /// project.BuildMultilanguageMsi(
+        ///     new ProjectLocalization("en-US"),
+        ///     new ProjectLocalization("sk-SK", "WixUI_sk-SK.wxl"));
+        /// </code>
+        /// </example>
+        /// <param name="project">Wix# project.</param>
+        /// <param name="defaultLocalization">Use your OS language as default localization. This will ensure that the all transformations are embedded in such a way that the produced msi can switch to any alternative language both automatically and manually.</param>
+        /// <param name="localizations">Collection of localizations. At least one localization is expected.</param>
+        public static void BuildMultilanguageMsi(this Project project, ProjectLocalization defaultLocalization, params ProjectLocalization[] localizations)
+        {
+            if (project is null)
+                throw new ArgumentNullException(nameof(project));
+
+            if (defaultLocalization is null)
+                throw new ArgumentNullException(nameof(defaultLocalization));
+
+            if (localizations is null)
+                throw new ArgumentNullException(nameof(localizations));
+
+            if (!localizations.Any())
+                throw new ArgumentException("At least one localization expected", nameof(localizations));
+
+            var torchCmd = Compiler.WixLocation.PathCombine("torch.exe");
+
+            defaultLocalization.BindTo(project);
+
+            var msiFilePath = project.BuildMsi();
+            var preserveTempFiles = project.PreserveTempFiles;
+
+            foreach (var localization in localizations)
+            {
+                if (localization is null)
+                    continue;
+
+                localization.BindTo(project);
+
+                var localizedMsiFilePath = project.BuildMsi(localization.Language);
+                var localizedMstFilePath = localizedMsiFilePath.PathChangeExtension(".mst");
+
+                Process.Start(torchCmd, $"-p -t language \"{msiFilePath}\" \"{localizedMsiFilePath}\" -out \"{localizedMstFilePath}\"")
+                       .WaitForExit();
+
+                msiFilePath.EmbedTransform(localizedMstFilePath);
+
+                if (!preserveTempFiles)
+                {
+                    localizedMsiFilePath.DeleteIfExists();
+                    localizedMstFilePath.DeleteIfExists();
+                }
+            }
+
+            var langCodeIds = $"{defaultLocalization.LanguageCodeId}," + localizations.Select(i => i.LanguageCodeId.ToString()).JoinBy(",");
+            msiFilePath.SetPackageLanguages(langCodeIds);
+        }
+
         /// <summary>
         /// Builds the localized msi.
         ///
@@ -3258,7 +3427,7 @@ namespace WixSharp
             return result.ToArray();
         }
 
-        private static XCData MapToXmlCData(this object obj)
+        static XCData MapToXmlCData(this object obj)
         {
             var emptyArgs = new object[0];
 
@@ -3305,7 +3474,7 @@ namespace WixSharp
             return result;
         }
 
-        private static IEnumerable<MemberInfo> getMemberInfo(object obj)
+        static IEnumerable<MemberInfo> getMemberInfo(object obj)
         {
             // BindingFlags.NonPublic is needed to cover "internal" but not necessarily "private"
             var fields = obj.GetType()
