@@ -3,6 +3,11 @@ using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <seealso cref="WixSharp.WixEntity" />
+    /// <seealso cref="WixSharp.IGenericEntity" />
     public class CopyFile : WixEntity, IGenericEntity
     {
         /// <summary>

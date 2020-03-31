@@ -261,7 +261,7 @@ namespace WixSharp
                                 $"-platform AnyCPU",
                                 $"-projectname \"{project.Name}\"",
                                 $"-out \"{output}\""
-                            }.Join(" ")
+                            }.JoinBy(" ")
             };
 
             // Note, all StdOut and StdErr will be printed by the `tool` anyway

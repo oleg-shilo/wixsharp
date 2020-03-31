@@ -49,7 +49,7 @@ namespace WixSharp
             session["ADDFEATURES"] = session.Features
                                             .Where(x => x.RequestState != InstallState.Absent)
                                             .Select(x => x.Name)
-                                            .Join(",");
+                                            .JoinBy(",");
 
             return ManagedProject.InvokeClientHandlers(session, "BeforeInstall");
         }

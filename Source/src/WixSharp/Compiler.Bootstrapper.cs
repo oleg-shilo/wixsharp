@@ -120,7 +120,7 @@ namespace WixSharp
 
                         string fragmentObjectFiles = project.WxsFiles
                                                      .Distinct()
-                                                     .Join(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"");
+                                                     .JoinBy(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"");
 
                         string lightOptions = LightOptions + " " + project.LightOptions;
 
@@ -238,7 +238,7 @@ namespace WixSharp
 
                 string fragmentObjectFiles = project.WxsFiles
                                              .Distinct()
-                                             .Join(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"");
+                                             .JoinBy(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"");
 
                 string lightOptions = LightOptions + " " + project.LightOptions;
 

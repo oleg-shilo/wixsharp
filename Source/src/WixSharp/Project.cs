@@ -824,7 +824,7 @@ namespace WixSharp
                 path.Insert(0, dir.Name);
                 dir = this.AllDirs.FirstOrDefault(d => d.Dirs.Contains(dir));
             }
-            return path.Join("\\");
+            return path.JoinBy("\\");
         }
 
         /// <summary>

@@ -12,7 +12,29 @@ using io = System.IO;
 
 public static class Script
 {
-    static public void Main()
+    static void Main()
+    {
+        var project = new Project("MyProduct",
+                          new Dir(@"%ProgramFiles%\My Company\My Product",
+                              new File("Program.cs")));
+
+        project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
+        //project.SourceBaseDir = "<input dir path>";
+        //project.OutDir = "<output dir path>";
+
+        //project.BuildMsi();
+
+        project.Language = "en-US";
+        string productMsi = project.BuildMsi();
+
+        project.Language = "ru-RU";
+        string mstFile = project.BuildLanguageTransform(productMsi, "ru-RU");
+
+        productMsi.EmbedTransform(mstFile);
+        productMsi.SetPackageLanguages("en-US,ru-RU".ToLcidList());
+    }
+
+    static public void Main1()
     {
         var product =
             new Project("My Product",

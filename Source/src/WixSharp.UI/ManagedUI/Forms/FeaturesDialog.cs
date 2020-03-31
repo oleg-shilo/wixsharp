@@ -172,17 +172,17 @@ namespace WixSharp.UI.Forms
 
         void next_Click(object sender, System.EventArgs e)
         {
-            bool userChangedFeatures = UserSelectedItems?.Join(",") != InitialUserSelectedItems.Join(",");
+            bool userChangedFeatures = UserSelectedItems?.JoinBy(",") != InitialUserSelectedItems.JoinBy(",");
 
             if (userChangedFeatures)
             {
                 string itemsToInstall = features.Where(x => x.IsViewChecked())
                                                 .Select(x => x.Name)
-                                                .Join(",");
+                                                .JoinBy(",");
 
                 string itemsToRemove = features.Where(x => !x.IsViewChecked())
                                                .Select(x => x.Name)
-                                               .Join(",");
+                                               .JoinBy(",");
 
                 if (itemsToRemove.Any())
                     Runtime.Session["REMOVE"] = itemsToRemove;

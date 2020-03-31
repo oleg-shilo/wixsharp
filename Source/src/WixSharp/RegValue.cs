@@ -337,10 +337,21 @@ namespace WixSharp
             }
         }
 
+        /// <summary>
+        /// Gets or sets the type.
+        /// </summary>
+        /// <value>
+        /// The type.
+        /// </value>
+        public string Type { get; set; }
+
         internal string RegTypeString
         {
             get
             {
+                if (Type != null)
+                    return Type;
+
                 if (Value is String)
                 {
                     var value = Value as string;

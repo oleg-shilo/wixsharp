@@ -3392,6 +3392,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:WixSharp.CopyFile">
+             <summary>
+            
+             </summary>
+             <seealso cref="T:WixSharp.WixEntity" />
+             <seealso cref="T:WixSharp.IGenericEntity" />
+        </member>
         <member name="M:WixSharp.CopyFile.#ctor(WixSharp.Id)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.CopyFile"/> class.
@@ -8297,6 +8304,17 @@
             <param name="text">The text to test.</param>
             <param name="pattern">The value.</param>
             <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.JoinBy(System.Collections.Generic.IEnumerable{System.String},System.String,System.Func{System.String,System.String})">
+            <summary>
+            A simple generic wrapper around more specialized <see cref="T:String.Join" />, which is limited to
+            work with string arrays only.
+            </summary>
+            <param name="strings">The strings.</param>
+            <param name="separator">The separator.</param>
+            <param name="selector"> A transform function to apply to each source element; the second parameter of the function represents the index of the source element.
+            </param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.Extensions.Join(System.Collections.Generic.IEnumerable{System.String},System.String,System.Func{System.String,System.String})">
@@ -14341,10 +14359,91 @@
             <returns>Array of <see cref="T:WixSharp.WixEntity"/> instances, which are either <see cref="T:WixSharp.File"/> or/and <see cref="T:WixSharp.Dir"/> objects.</returns>
             <param name="parentWixDir">Parent Wix# directory</param>
         </member>
+        <member name="T:WixSharp.ProjectLocalization">
+            <summary>
+            Represents set of project localization information.
+            </summary>
+        </member>
+        <member name="M:WixSharp.ProjectLocalization.#ctor(System.String,System.String)">
+            <summary>
+            </summary>
+            <param name="language">Culture info name. Example: "en-US"</param>
+            <param name="localizationFile">Optional path to the localization file</param>
+        </member>
+        <member name="M:WixSharp.ProjectLocalization.#ctor(System.Globalization.CultureInfo,System.String)">
+            <summary>
+            </summary>
+            <param name="cultureInfo">Culture info</param>
+            <param name="localizationFile">Optional path to the localization file</param>
+        </member>
+        <member name="M:WixSharp.ProjectLocalization.#ctor(System.String,System.String,System.String)">
+            <summary>
+            </summary>
+            <param name="language">Culture info name. Example: "en-US"</param>
+            <param name="codePage">The ANSI code page identifier. Example: "1252" for en-US.</param>
+            <param name="localizationFile">Optional path to the localization file</param>
+        </member>
+        <member name="M:WixSharp.ProjectLocalization.#ctor(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            </summary>
+            <param name="language">Culture info name. Example: "en-US"</param>
+            <param name="codePage">The ANSI code page identifier. Example: "1252" for en-US.</param>
+            <param name="lcid">Language code Id</param>
+            <param name="localizationFile">Optional path to the localization file</param>
+        </member>
+        <member name="P:WixSharp.ProjectLocalization.Language">
+            <summary>
+            Gets the language.
+            </summary>
+            <value>The language.</value>
+        </member>
+        <member name="P:WixSharp.ProjectLocalization.CodePage">
+            <summary>
+            Gets the code page.
+            </summary>
+            <value>The code page.</value>
+        </member>
+        <member name="P:WixSharp.ProjectLocalization.LocalizationFile">
+            <summary>
+            Gets the localization file.
+            </summary>
+            <value>
+            The localization file.
+            </value>
+        </member>
+        <member name="P:WixSharp.ProjectLocalization.LanguageCodeId">
+            <summary>
+            Gets the language code identifier.
+            </summary>
+            <value>
+            The language code identifier.
+            </value>
+        </member>
         <member name="T:WixSharp.LocalizationExtensions">
              <summary>
             
              </summary>
+        </member>
+        <member name="M:WixSharp.LocalizationExtensions.BuildMultilanguageMsi(WixSharp.Project,WixSharp.ProjectLocalization,WixSharp.ProjectLocalization[])">
+            <summary>
+            Produces multilanguage MSI with embedded transformations based on <paramref name="localizations"/> collection.
+            If this msi is executed on the OS, which language matches one of the embedded transformations,
+            this transformation will be automatically triggered and effectively switch the setup UI language.
+            Builds the localized msi.
+            </summary>
+             <example>The following is an example of building single .msi file with two localizations.
+             With one of trhen based on a custom localization file.
+             <p> During installation, language is automatically selected based on user's operating system region settings.
+             </p>
+            <code>
+            project.BuildMultilanguageMsi(
+                new ProjectLocalization("en-US"),
+                new ProjectLocalization("sk-SK", "WixUI_sk-SK.wxl"));
+            </code>
+            </example>
+            <param name="project">Wix# project.</param>
+            <param name="defaultLocalization">Use your OS language as default localization. This will ensure that the all transformations are embedded in such a way that the produced msi can switch to any alternative language both automatically and manually.</param>
+            <param name="localizations">Collection of localizations. At least one localization is expected.</param>
         </member>
         <member name="M:WixSharp.LocalizationExtensions.BuildMultilanguageMsi(WixSharp.Project,System.String)">
              <summary>
@@ -14397,6 +14496,19 @@
             sample.
             </summary>
             <param name="project">The project.</param>
+        </member>
+        <member name="M:WixSharp.LocalizationExtensions.BuildLanguageTransform(WixSharp.Project,System.String,System.String,System.String)">
+            <summary>
+            Builds a language transform (*.mst) file for a given msi file and its `Project`.
+            <para>This method is not intended to be used directly (even though it's possible).
+            The developers are encouraged to use a <see cref="M:WixSharp.LocalizationExtensions.BuildMultilanguageMsi(WixSharp.Project,System.String)"/>
+            instead.</para>
+            </summary>
+            <param name="project"></param>
+            <param name="originalMsi"></param>
+            <param name="language"></param>
+            <param name="localizationFile"></param>
+            <returns></returns>
         </member>
         <member name="T:WixSharp.SerializingExtensions">
             <summary>
@@ -17050,6 +17162,14 @@
             The never overwrite.
             </value>
         </member>
+        <member name="P:WixSharp.RegValue.Type">
+            <summary>
+            Gets or sets the type.
+            </summary>
+            <value>
+            The type.
+            </value>
+        </member>
         <member name="T:WixSharp.ScriptAction">
              <summary>
              Defines WiX CustomAction for executing embedded VBScript.
@@ -18251,7 +18371,7 @@
         <member name="F:WixSharp.MajorUpgradeStrategy.RemoveExistingProductAfter">
             <summary>
             Step, which determines when the RemoveExistingProducts standard action is to be performed.
-            <para>The default value is <c>InstallFinalize</c>. </para>
+            <para>The default value is <c>InstallInitialize</c>. </para>
             </summary>
         </member>
         <member name="F:WixSharp.MajorUpgradeStrategy.NewerProductInstalledErrorMessage">

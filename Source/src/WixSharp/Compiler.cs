@@ -684,12 +684,12 @@ namespace WixSharp
             extensionDlls = project.WixExtensions
                                    .Select(x => x.ExpandEnvVars())
                                    .Distinct()
-                                   .Join(" ", dll => " -ext \"" + dll + "\"");
+                                   .JoinBy(" ", dll => " -ext \"" + dll + "\"");
 
             string wxsFiles = project.WxsFiles
                                      .Select(x => x.ExpandEnvVars())
                                      .Distinct()
-                                     .Join(" ", file => "\"" + file + "\"");
+                                     .JoinBy(" ", file => "\"" + file + "\"");
 
             var candleOptions = CandleOptions + " " + project.CandleOptions;
 
@@ -718,11 +718,11 @@ namespace WixSharp
 
             string libFiles = project.LibFiles
                                      .Distinct()
-                                     .Join(" ", x => x.Enquote());
+                                     .JoinBy(" ", x => x.Enquote());
 
             string fragmentObjectFiles = project.WxsFiles
                                                 .Distinct()
-                                                .Join(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"");
+                                                .JoinBy(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"");
 
             var lightCmdLineParams = new StringBuilder();
 

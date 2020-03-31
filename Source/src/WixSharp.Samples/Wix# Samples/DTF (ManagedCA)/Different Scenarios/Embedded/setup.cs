@@ -17,11 +17,11 @@ class Script
         List<string> UserSelectedItems = null;
         List<string> InitialUserSelectedItems = "1,2".Split(',').ToList();
 
-        bool userChangedFeatures = UserSelectedItems?.Join(",") != InitialUserSelectedItems.Join(",");
+        bool userChangedFeatures = UserSelectedItems?.JoinBy(",") != InitialUserSelectedItems.JoinBy(",");
 
         UserSelectedItems = "1,2".Split(',').ToList();
 
-        userChangedFeatures = UserSelectedItems?.Join(",") != InitialUserSelectedItems.Join(",");
+        userChangedFeatures = UserSelectedItems?.JoinBy(",") != InitialUserSelectedItems.JoinBy(",");
 
         var project = new Project()
         {
