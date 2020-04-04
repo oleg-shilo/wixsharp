@@ -54,12 +54,14 @@ namespace WixSharp.Nsis
     {
         /// <summary>
         /// Gets or sets the prerequisite file.
+        /// Executables and .ps1, .bat, .cmd, .vbs, .js scripts are supported.
         /// </summary>
         /// <value>The prerequisite file.</value>
         public string PrerequisiteFile { get; set; }
 
         /// <summary>
         /// Gets or sets the primary setup file.
+        /// Executables and .ps1, .bat, .cmd, .vbs, .js scripts are supported.
         /// </summary>
         /// <value>The primary setup file.</value>
         public string PrimaryFile { get; set; }
@@ -253,7 +255,10 @@ namespace WixSharp.Nsis
                 return null;
             }
 
-            IO.File.Delete(nsiFile);
+            if (!Compiler.PreserveTempFiles)
+            {
+                IO.File.Delete(nsiFile);
+            }
             return OutputFile;
         }
 
@@ -415,6 +420,23 @@ namespace WixSharp.Nsis
 
                 case ".MSI":
                     text = $"ExecWait '{AppendArgument($"\"$%WINDIR%\\System32\\msiexec.exe\" /I \"$PLUGINSDIR\\{fileName}\"", arguments)}'";
+                    text = AppendArgument(text, exitCode);
+                    break;
+
+                case ".PS1":
+                    text = $"ExecWait '{AppendArgument($"\"powershell.exe\" -NoProfile -ExecutionPolicy Bypass -File \"$PLUGINSDIR\\{fileName}\"", arguments)}'";
+                    text = AppendArgument(text, exitCode);
+                    break;
+
+                case ".BAT":
+                case ".CMD":
+                    text = $"ExecWait '{AppendArgument($"\"$%WINDIR%\\System32\\cmd.exe\" /C \"$PLUGINSDIR\\{fileName}\"", arguments)}'";
+                    text = AppendArgument(text, exitCode);
+                    break;
+
+                case ".VBS":
+                case ".JS":
+                    text = $"ExecWait '{AppendArgument($"\"$%WINDIR%\\System32\\wscript.exe\" \"$PLUGINSDIR\\{fileName}\"", arguments)}'";
                     text = AppendArgument(text, exitCode);
                     break;
 
