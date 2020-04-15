@@ -2,6 +2,7 @@
 //css_ref System.Core.dll;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Principal;
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
@@ -101,6 +102,58 @@ static class Script
 
         // project.PreserveTempFiles = true;
         Compiler.BuildMsi(project);
+    }
+
+    static void Issue_825()
+    {
+        var client = new Feature("Feature_Client");
+        var server = new Feature("Feature_Server");
+
+        var project = new Project("Test",
+               new Dir("ProgramFiles64Folder",
+                   new Dir("Test",
+                       new Dir("Server",
+                           new Dir("Sub",
+                               new Files(server, @"Files\Docs\*.* "))),
+                       new Dir(client, "Client",
+                           new Dir("Sub",
+                               new Files(@"Files\Help\*.* "))))));
+
+        project.Platform = Platform.x64;
+        project.UI = WUI.WixUI_FeatureTree;
+        project.PreserveTempFiles = true;
+        project.PreserveDbgFiles = true;
+
+        project.WixSourceGenerated += doc =>
+                                      {
+                                          doc.FindAll("Feature")
+                                             .First(x => x.HasAttribute("Id", "Complete"))
+                                             .Remove();
+                                      };
+        project.BuildMsiCmd();
+    }
+
+    static void Issue_825_a()
+    {
+        var client = new Feature("Feature_Client");
+        var server = new Feature("Feature_Server");
+
+        var project = new Project("Test",
+               new Dir("ProgramFiles64Folder",
+                   new Dir("Test",
+                       new Dir("Server",
+                           new Dir(server, "Sub",
+                               new File(server, "setup.cs"))),
+                       new Dir("Client",
+                           new Dir(client, "Sub",
+                               new File(client, "test.cs"))))));
+
+        project.Platform = Platform.x64;
+        project.UI = WUI.WixUI_FeatureTree;
+        project.PreserveTempFiles = true;
+        project.PreserveDbgFiles = true;
+
+        project.BuildMsi();
     }
 
     static void Issue_374()
@@ -290,6 +343,7 @@ static class Script
     static public void Main()
     {
         // HiTeach_MSI.Program.Main1(); return;
+        Issue_825(); return;
         Issue_609(); return;
         Issue_551(); return;
         Issue_606(); return;

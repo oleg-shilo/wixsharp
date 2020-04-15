@@ -164,6 +164,7 @@ public class Script
                         e.ToString() +
                         "\npersisted_data = " + e.Data["persisted_data"] +
                         "\nADDFEATURES = " + e.Session.Property("ADDFEATURES") +
+                        "\n'MyApp_Binaries' enabled = " + e.Session.IsFeatureEnabled("MyApp Binaries") +
                         "\nEnvVar('INSTALLDIR') -> " + Environment.ExpandEnvironmentVariables("%INSTALLDIR%My App.exe"),
                         caption: "AfterInstall ");
         try
