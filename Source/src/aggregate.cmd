@@ -1,4 +1,4 @@
-echo off 
+echo off
 
 echo Aggregating all artifacts for the release package. Not all steps may succeed on all PCs (e.g. building chm)
 
@@ -13,9 +13,14 @@ copy /Y "..\readme.txt" "..\bin\WixSharp\readme.txt"
 copy /Y "WixSharp.Samples\WixSharp.Lab.dll" "..\bin\WixSharp\WixSharp.Lab.dll"
 copy /Y "WixSharp.Samples\WixSharp.Lab.xml" "..\bin\WixSharp\WixSharp.Lab.xml"
 
-"C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe" /p:Configuration=Release "Docs\WixSharp.Docs.shfbproj"
+rem "C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe" /p:Configuration=Release "Docs\WixSharp.Docs.shfbproj"
+
+set msbuild=C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe
+rem copy /Y "Docs\Build\WixSharp.Reference.chm" "..\bin\WixSharp\WixSharp.Reference.chm"
+
+"%msbuild%" /nologo /verbosity:minimal /t:Clean,Build /p:Configuration=Release /p:Platform="Any CPU" "Docs\WixSharp.Docs.sln"
 
 copy /Y "Docs\Build\WixSharp.Reference.chm" "..\bin\WixSharp\WixSharp.Reference.chm"
-del "..\bin\WixSharp\WixSharp.Reference.chw"
+rem del "..\bin\WixSharp\WixSharp.Reference.chw"
 
 pause

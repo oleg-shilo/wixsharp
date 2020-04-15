@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <!-- The configuration and platform will be used to determine which
          assemblies to include from solution and project documentation
@@ -8,7 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{12f7a748-f685-43df-bc03-1591a76df1ab}</ProjectGuid>
-    <SHFBSchemaVersion>1.9.9.0</SHFBSchemaVersion>
+    <SHFBSchemaVersion>2017.9.26.0</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
          Studio adds them anyway -->
     <AssemblyName>Documentation</AssemblyName>
@@ -20,7 +20,7 @@
     <ProjectSummary>
     </ProjectSummary>
     <MissingTags>Parameter, Returns, AutoDocumentCtors, TypeParameter</MissingTags>
-    <VisibleItems>None</VisibleItems>
+    <VisibleItems>EditorBrowsableNever, NonBrowsable</VisibleItems>
     <HtmlHelp1xCompilerPath>C:\Program Files (x86)\HTML Help Workshop\</HtmlHelp1xCompilerPath>
     <HtmlHelp2xCompilerPath>
     </HtmlHelp2xCompilerPath>
@@ -29,14 +29,15 @@
     <WorkingPath>
     </WorkingPath>
     <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
-    <PresentationStyle>VS2010</PresentationStyle>
+    <PresentationStyle>VS2013</PresentationStyle>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.dll" />
-<DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.Msi.dll" />
-<DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.Msi.xml" />
-<DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.UI.dll" />
-<DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.UI.xml" />
-<DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.xml" /></DocumentationSources>
+      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.Msi.dll" />
+      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.Msi.xml" />
+      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.UI.dll" />
+      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.UI.xml" />
+      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.xml" />
+    </DocumentationSources>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="True">Namespace Summary: N/A</NamespaceSummaryItem>
       <NamespaceSummaryItem name="csscript" isDocumented="True">Namespace Summary: N/A</NamespaceSummaryItem>
@@ -44,7 +45,7 @@
       <NamespaceSummaryItem name="CSScriptLibrary.ThirdpartyLibraries.Rubenhak.Utils" isDocumented="True">Namespace Summary: N/A</NamespaceSummaryItem>
     </NamespaceSummaries>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
-    <SyntaxFilters>CSharp, VisualBasic</SyntaxFilters>
+    <SyntaxFilters>C#, Visual Basic</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <Preliminary>False</Preliminary>
@@ -65,6 +66,7 @@
         <Filter entryType="Class" fullName="WixSharp.CommonDialogs" filterName="CommonDialogs" isExposed="False" />
       </Filter>
     </ApiFilter>
+    <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
