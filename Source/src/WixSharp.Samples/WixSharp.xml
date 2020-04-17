@@ -6059,12 +6059,14 @@
         <member name="P:WixSharp.Nsis.NsisBootstrapper.PrerequisiteFile">
             <summary>
             Gets or sets the prerequisite file.
+            Executables and .ps1, .bat, .cmd, .vbs, .js scripts are supported.
             </summary>
             <value>The prerequisite file.</value>
         </member>
         <member name="P:WixSharp.Nsis.NsisBootstrapper.PrimaryFile">
             <summary>
             Gets or sets the primary setup file.
+            Executables and .ps1, .bat, .cmd, .vbs, .js scripts are supported.
             </summary>
             <value>The primary setup file.</value>
         </member>

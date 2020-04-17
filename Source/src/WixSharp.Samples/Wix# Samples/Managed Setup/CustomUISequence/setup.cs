@@ -15,7 +15,7 @@ using WixSharp.CommonTasks;
 using WixSharp.Forms;
 using WixSharp.UI.Forms;
 
-public class Script
+public static class Script
 {
     static public void Main()
     {
@@ -80,7 +80,23 @@ public class Script
         project.PreserveTempFiles = true;
         project.SourceBaseDir = @"..\..\";
 
+        project.Localize();
+
         project.BuildMsi();
+    }
+
+    static void Localize(this ManagedProject project)
+    {
+        project.AddBinary(new Binary(new Id("de_xsl"), "WixUI_de-de.wxl"));
+
+        project.UIInitialized += (SetupEventArgs e) =>
+        {
+            // Debug.Assert(false);
+            MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
+
+            var bytes = e.Session.ReadBinary("de_xsl");
+            runtime.UIText.InitFromWxl(bytes);
+        };
     }
 
     static void Project_UILoaded(SetupEventArgs e)
@@ -106,6 +122,9 @@ public class Script
 
     static void CheckCompatibility(SetupEventArgs e)
     {
+        // MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
+        // foreach (string text in runtime.UIText.Keys.ToArray())
+        //     runtime.UIText[text] = runtime.UIText[text].ToUpper();
         //MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Embedded Managed UI (" + ((IntPtr.Size == 8) ? "x64" : "x86") + ")");
 
         if (e.IsInstalling)

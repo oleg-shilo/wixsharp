@@ -1,0 +1,1 @@
+This sample demonstrates how to create msi with ManagedUI that allows dynamic language selection.Execute corresponding .cmd file to build desired msi. Then execute the .msi to start the installation.
