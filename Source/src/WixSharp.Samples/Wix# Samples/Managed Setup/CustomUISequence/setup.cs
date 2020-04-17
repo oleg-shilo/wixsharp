@@ -77,26 +77,10 @@ public static class Script
 
         project.SetNetFxPrerequisite(Condition.Net45_Installed, "Please install .Net 4.5 First");
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
         project.SourceBaseDir = @"..\..\";
 
-        project.Localize();
-
         project.BuildMsi();
-    }
-
-    static void Localize(this ManagedProject project)
-    {
-        project.AddBinary(new Binary(new Id("de_xsl"), "WixUI_de-de.wxl"));
-
-        project.UIInitialized += (SetupEventArgs e) =>
-        {
-            // Debug.Assert(false);
-            MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
-
-            var bytes = e.Session.ReadBinary("de_xsl");
-            runtime.UIText.InitFromWxl(bytes);
-        };
     }
 
     static void Project_UILoaded(SetupEventArgs e)
