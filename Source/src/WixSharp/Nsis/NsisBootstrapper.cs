@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using WixSharp.CommonTasks;
 using IO = System.IO;
-using Reflection=System.Reflection;
+using Reflection = System.Reflection;
 
 namespace WixSharp.Nsis
 {
@@ -29,10 +29,13 @@ namespace WixSharp.Nsis
     /// <code>
     /// string setup = new NsisBootstrapper
     ///                    {
-    ///                        PrerequisiteFile = "C:\Users\Public\Public Downloads\dotnetfx.exe",
-    ///                        PrimaryFile = "MyProduct.msi",
+    ///                        Prerequisite = {
+    ///                           FileName = "C:\Users\Public\Public Downloads\dotnetfx.exe",
+    ///                           RegKeyValue = @"HKLM:SOFTWARE\Microsoft\.NETFramework:InstallRoot"
+    ///                        }
+    ///                        Primary = {FileName = "MyProduct.msi"},
+    ///
     ///                        OutputFile = "setup.exe",
-    ///                        PrerequisiteRegKeyValue = @"HKLM:SOFTWARE\Microsoft\.NETFramework:InstallRoot",
     ///
     ///                        IconFile = "app_icon.ico",
     ///
@@ -50,32 +53,8 @@ namespace WixSharp.Nsis
     ///                    .Build();
     /// </code>
     /// </example>
-    public class NsisBootstrapper
+    public class NsisBootstrapper : NsisBootstrapperBase
     {
-        /// <summary>
-        /// Gets or sets the prerequisite file.
-        /// Executables and .ps1, .bat, .cmd, .vbs, .js scripts are supported.
-        /// </summary>
-        /// <value>The prerequisite file.</value>
-        public string PrerequisiteFile { get; set; }
-
-        /// <summary>
-        /// Gets or sets the primary setup file.
-        /// Executables and .ps1, .bat, .cmd, .vbs, .js scripts are supported.
-        /// </summary>
-        /// <value>The primary setup file.</value>
-        public string PrimaryFile { get; set; }
-
-        /// <summary>
-        /// Gets or sets the prerequisite registry key value. This value is used to determine if the <see cref="PrerequisiteFile"/> should be launched.
-        /// <para>This value must comply with the following pattern: &lt;RegistryHive&gt;:&lt;KeyPath&gt;:&lt;ValueName&gt;.</para>
-        /// <code>PrerequisiteRegKeyValue = @"HKLM:Software\My Company\My Product:Installed";</code>
-        /// Existence of the specified registry value at runtime is interpreted as an indication that the <see cref="PrerequisiteFile"/> has been already installed.
-        /// Thus bootstrapper will execute <see cref="PrimaryFile"/> without launching <see cref="PrerequisiteFile"/> first.
-        /// </summary>
-        /// <value>The prerequisite registry key value.</value>
-        public string PrerequisiteRegKeyValue { get; set; }
-
         /// <summary>
         /// Gets or sets the output file (bootstrapper) name.
         /// </summary>
@@ -83,32 +62,10 @@ namespace WixSharp.Nsis
         public string OutputFile { get; set; }
 
         /// <summary>
-        /// Gets or sets the flag which allows you to disable verification of <see cref="PrerequisiteRegKeyValue"/> after the prerequisite setup is completed.
-        /// <para>Normally if <c>bootstrapper</c> checkes if <see cref="PrerequisiteRegKeyValue"/> exists stright after the prerequisite installation and starts
-        /// the primary setup only if it does.</para>
-        /// <para>It is possible to instruct bootstrapper to continue with the primary setup regardless of the prerequisite installation outcome. This can be done
-        /// by setting DoNotPostVerifyPrerequisite to <c>true</c> (default is <c>false</c>)</para>
-        /// </summary>
-        /// <value>The do not post verify prerequisite.</value>
-        public bool DoNotPostVerifyPrerequisite { get; set; }
-
-        /// <summary>
         /// Gets or sets the optional arguments for the bootstrapper compiler.
         /// </summary>
         /// <value>The optional arguments.</value>
         public string OptionalArguments { get; set; }
-
-        /// <summary>
-        /// Gets or sets command line option name for the prerequisite file.
-        /// </summary>
-        /// <value>The option name of the prerequisite file.</value>
-        public string PrerequisiteFileOptionName { get; set; }
-
-        /// <summary>
-        /// Gets or sets command line option name for the primary file.
-        /// </summary>
-        /// <value>The option name of the primary file.</value>
-        public string PrimaryFileOptionName { get; set; }
 
         /// <summary>
         /// Path to an icon that will replace the default icon in the output file (bootstrapper)
@@ -133,18 +90,6 @@ namespace WixSharp.Nsis
         /// before it is compiled into EXE.
         /// </summary>
         public event Action<StringBuilder> NsiSourceGenerated;
-
-        /// <summary>
-        /// Gets or sets preset command line arguments for the prerequisite file.
-        /// </summary>
-        /// <value>The preset command line arguments of the prerequisite file.</value>
-        public string PrerequisiteFileArguments { get; set; }
-
-        /// <summary>
-        /// Gets or sets preset command line arguments for the primary file.
-        /// </summary>
-        /// <value>The preset command line arguments of the primary file.</value>
-        public string PrimaryFileArguments { get; set; }
 
         /// <summary>
         /// Gets or sets the simple splash screen for the output file (bootstrapper).
@@ -179,13 +124,13 @@ namespace WixSharp.Nsis
             string regSubKey = null;
             string regValueName = null;
 
-            if (PrerequisiteRegKeyValue != null)
+            if (Prerequisite.RegKeyValue != null)
             {
-                var regKeyTokens = PrerequisiteRegKeyValue.Split(':');
+                var regKeyTokens = Prerequisite.RegKeyValue.Split(':');
 
                 if (regKeyTokens.Length != 3)
                 {
-                    throw new ArgumentException($"PrerequisiteRegKeyValue: {PrerequisiteRegKeyValue}.\nThis value must comply with the following pattern: <RegistryHive>:<KeyPath>:<ValueName>.");
+                    throw new ArgumentException($"Prerequisite.RegKeyValue: {Prerequisite.RegKeyValue}.\nThis value must comply with the following pattern: <RegistryHive>:<KeyPath>:<ValueName>.");
                 }
 
                 regRootKey = regKeyTokens[0];
@@ -283,27 +228,27 @@ namespace WixSharp.Nsis
 
         private void AddPrerequisiteFile(IO.StringWriter writer, string regRootKey, string regSubKey, string regValueName)
         {
-            if (PrerequisiteFile == null)
+            if (Prerequisite.FileName == null)
                 return;
 
-            if (PrerequisiteRegKeyValue != null)
+            if (Prerequisite.RegKeyValue != null)
             {
                 writer.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
                 writer.WriteLine("IfErrors 0 primary");
             }
 
-            var arguments = PrerequisiteFileArguments;
-            if (PrerequisiteFileOptionName != null)
+            var arguments = Prerequisite.Arguments;
+            if (Prerequisite.OptionName != null)
             {
-                writer.WriteLine($"${{GetOptions}} \"$R0\" \"{PrerequisiteFileOptionName}\" $R1");
+                writer.WriteLine($"${{GetOptions}} \"$R0\" \"{Prerequisite.OptionName}\" $R1");
                 arguments = AppendArgument(arguments, "$R1");
             }
             AddExpandEnvStringsCommand(writer, ref arguments);
 
-            AddFileCommand(writer, PrerequisiteFile);
-            AddExecuteCommand(writer, IO.Path.GetFileName(PrerequisiteFile), arguments, null);
+            AddFileCommand(writer, Prerequisite.FileName);
+            AddExecuteCommand(writer, IO.Path.GetFileName(Prerequisite.FileName), arguments, null);
 
-            if (PrerequisiteRegKeyValue != null && !DoNotPostVerifyPrerequisite)
+            if (Prerequisite.RegKeyValue != null && Prerequisite.PostVerify)
             {
                 writer.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
                 writer.WriteLine("IfErrors end 0");
@@ -313,9 +258,9 @@ namespace WixSharp.Nsis
         private void AddPrimaryFile(IO.StringWriter writer)
         {
             writer.WriteLine("primary:");
-            if (PrimaryFileOptionName != null)
+            if (Primary.OptionName != null)
             {
-                writer.WriteLine($"${{GetOptions}} \"$R0\" \"{PrimaryFileOptionName}\" $R1");
+                writer.WriteLine($"${{GetOptions}} \"$R0\" \"{Primary.OptionName}\" $R1");
                 // Skip copying the original command line options
                 writer.WriteLine("IfErrors 0 +2");
             }
@@ -323,11 +268,11 @@ namespace WixSharp.Nsis
             // copy the original command line options
             writer.WriteLine("StrCpy $R1 $R0");
 
-            string arguments = AppendArgument(PrimaryFileArguments, "$R1");
+            string arguments = AppendArgument(Primary.Arguments, "$R1");
             AddExpandEnvStringsCommand(writer, ref arguments);
 
-            AddFileCommand(writer, PrimaryFile);
-            AddExecuteCommand(writer, IO.Path.GetFileName(PrimaryFile), arguments, "$0");
+            AddFileCommand(writer, Primary.FileName);
+            AddExecuteCommand(writer, IO.Path.GetFileName(Primary.FileName), arguments, "$0");
 
             // Set exit code
             writer.WriteLine("SetErrorlevel $0");
