@@ -298,6 +298,7 @@ namespace WixSharp.Nsis
                 writer.WriteLine($"${{GetOptions}} \"$R0\" \"{PrerequisiteFileOptionName}\" $R1");
                 arguments = AppendArgument(arguments, "$R1");
             }
+            AddExpandEnvStringsCommand(writer, ref arguments);
 
             AddFileCommand(writer, PrerequisiteFile);
             AddExecuteCommand(writer, IO.Path.GetFileName(PrerequisiteFile), arguments, null);
@@ -318,10 +319,16 @@ namespace WixSharp.Nsis
                 // Skip copying the original command line options
                 writer.WriteLine("IfErrors 0 +2");
             }
-            // Copy the original command line options
+            // In case the primary files options are not passed in the command line,
+            // copy the original command line options
             writer.WriteLine("StrCpy $R1 $R0");
+
+            string arguments = AppendArgument(PrimaryFileArguments, "$R1");
+            AddExpandEnvStringsCommand(writer, ref arguments);
+
             AddFileCommand(writer, PrimaryFile);
-            AddExecuteCommand(writer, IO.Path.GetFileName(PrimaryFile), AppendArgument(PrimaryFileArguments, "$R1"), "$0");
+            AddExecuteCommand(writer, IO.Path.GetFileName(PrimaryFile), arguments, "$0");
+
             // Set exit code
             writer.WriteLine("SetErrorlevel $0");
             writer.WriteLine("goto end");
@@ -452,6 +459,15 @@ namespace WixSharp.Nsis
         private static void AddFileCommand(IO.StringWriter writer, string fileName)
         {
             writer.WriteLine($@"File ""/oname=$PLUGINSDIR\{IO.Path.GetFileName(fileName)}"" ""{IO.Path.GetFullPath(fileName)}""");
+        }
+
+        private static void AddExpandEnvStringsCommand(IO.StringWriter writer, ref string arguments)
+        {
+            if (!arguments.IsNullOrEmpty())
+            {
+                writer.WriteLine($"ExpandEnvStrings $R1 '{arguments}'");
+                arguments = "$R1";
+            }
         }
 
         private static string ExecutionLevelToString(RequestExecutionLevel level)
