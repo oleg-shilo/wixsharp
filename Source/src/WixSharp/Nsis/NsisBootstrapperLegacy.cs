@@ -1,35 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace WixSharp.Nsis
+﻿namespace WixSharp.Nsis
 {
-    public abstract class Package
+    public abstract class NsisBootstrapperLegacy
     {
-        public string FileName { get; set; }
+        public abstract PrerequisitePackage Prerequisite { get; }
 
-        public string OptionName { get; set; }
-
-        public string Arguments { get; set; }
-    }
-
-    public class PrimaryPackage : Package
-    {
-    }
-
-    public class PrerequisitePackage : Package
-    {
-        public string RegKeyValue { get; set; }
-
-        public bool PostVerify { get; set; } = true;
-    }
-
-    public class NsisBootstrapperBase
-    {
-        public PrerequisitePackage Prerequisite { get; } = new PrerequisitePackage();
-
-        public PrimaryPackage Primary { get; } = new PrimaryPackage();
+        public abstract PrimaryPackage Primary { get; }
 
         /// <summary>
         /// Gets or sets the prerequisite file.
