@@ -59,7 +59,7 @@
 
         /// <summary>
         /// Gets or sets the flag which allows you to disable verification of <see cref="RegKeyValue"/> after the prerequisite setup is completed.
-        /// <para>Normally if <c>bootstrapper</c> checkes if <see cref="RegKeyValue"/> exists stright after the prerequisite installation and starts
+        /// <para>Normally if <c>bootstrapper</c> checks if <see cref="RegKeyValue"/> exists straight after the prerequisite installation and starts
         /// the primary setup only if it does.</para>
         /// <para>It is possible to instruct bootstrapper to continue with the primary setup regardless of the prerequisite installation outcome. This can be done
         /// by setting PostVerify to <c>false</c> (default is <c>true</c>)</para>
