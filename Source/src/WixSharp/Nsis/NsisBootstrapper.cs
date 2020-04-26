@@ -241,16 +241,15 @@ namespace WixSharp.Nsis
                 writer.WriteLine("IfErrors 0 primary");
             }
 
-            var arguments = Prerequisite.Arguments;
+            string arguments = null;
             if (Prerequisite.OptionName != null)
             {
                 writer.WriteLine($"${{GetOptions}} \"$R0\" \"{Prerequisite.OptionName}\" $R1");
-                arguments = AppendArgument(arguments, "$R1");
+                arguments = "$R1";
             }
-            AddExpandEnvStringsCommand(writer, ref arguments);
 
             AddFileCommand(writer, Prerequisite.FileName);
-            AddExecuteCommand(writer, IO.Path.GetFileName(Prerequisite.FileName), arguments, Prerequisite.CreateNoWindow, "$0");
+            AddExecuteCommand(writer, Prerequisite, arguments, "$0");
 
             if (Prerequisite.RegKeyValue != null && Prerequisite.PostVerify)
             {
@@ -272,11 +271,10 @@ namespace WixSharp.Nsis
             // copy the original command line options
             writer.WriteLine("StrCpy $R1 $R0");
 
-            string arguments = AppendArgument(Primary.Arguments, "$R1");
-            AddExpandEnvStringsCommand(writer, ref arguments);
+            string arguments = "$R1";
 
             AddFileCommand(writer, Primary.FileName);
-            AddExecuteCommand(writer, IO.Path.GetFileName(Primary.FileName), arguments, Primary.CreateNoWindow, "$0");
+            AddExecuteCommand(writer, Primary, arguments, "$0");
 
             // Set exit code
             writer.WriteLine("SetErrorlevel $0");
@@ -362,66 +360,73 @@ namespace WixSharp.Nsis
             }
         }
 
-        private static void AddExecuteCommand(IO.TextWriter writer, string fileName, string arguments, bool createNoWindow, string exitCode)
+        private static void AddExecuteCommand(IO.TextWriter writer, Package package, string arguments, string exitCode)
         {
-            var extension = IO.Path.GetExtension(fileName)?.ToUpper() ?? string.Empty;
+            // Combine arguments and expand environment variables.
+            arguments = AppendArgument(package.Arguments, arguments);
+            AddExpandEnvStringsCommand(writer, ref arguments);
 
-            bool useShellExecute = false;
-            string text = string.Empty;
-            switch (extension)
+            // Extract only filename from the path.
+            var fileName = IO.Path.GetFileName(package.FileName);
+
+            if (package.UseShellExecute)
             {
-                case ".EXE":
-                    text = $"\"$PLUGINSDIR\\{fileName}\"";
-                    text = AppendArgument(text, arguments);
-                    break;
-
-                case ".MSI":
-                    text = $"\"$%WINDIR%\\System32\\msiexec.exe\" /I \"$PLUGINSDIR\\{fileName}\"";
-                    text = AppendArgument(text, arguments);
-                    break;
-
-                case ".PS1":
-                    text = $"\"powershell.exe\" -NoProfile -ExecutionPolicy Bypass -File \"$PLUGINSDIR\\{fileName}\"";
-                    text = AppendArgument(text, arguments);
-                    break;
-
-                case ".BAT":
-                case ".CMD":
-                    text = $"\"$%WINDIR%\\System32\\cmd.exe\" /C \"$PLUGINSDIR\\{fileName}\"";
-                    text = AppendArgument(text, arguments);
-                    break;
-
-                case ".VBS":
-                case ".JS":
-                    text = $"\"$%WINDIR%\\System32\\wscript.exe\" \"$PLUGINSDIR\\{fileName}\"";
-                    text = AppendArgument(text, arguments);
-                    break;
-
-                default:
-                    useShellExecute = true;
-                    break;
-            }
-
-            if (useShellExecute)
-            {
-                text = $"ExecShell \"\" \"$PLUGINSDIR\\{fileName}\"";
+                string text = $"ExecShell \"\" \"$PLUGINSDIR\\{fileName}\"";
                 if (arguments != null)
                 {
                     text = AppendArgument(text, $"\"{arguments}\"");
                 }
                 writer.WriteLine(text);
-            }
-            else if (!createNoWindow)
-            {
-                text = $"ExecWait '{text}'";
-                text = AppendArgument(text, exitCode);
-                writer.WriteLine(text);
+                writer.WriteLine("Sleep 2000");
             }
             else
             {
-                text = $"nsExec::Exec '{text}'";
-                writer.WriteLine(text);
-                writer.WriteLine($"Pop {exitCode}");
+                var extension = IO.Path.GetExtension(fileName)?.ToUpper() ?? string.Empty;
+
+                string text;
+                switch (extension)
+                {
+                    case ".MSI":
+                        text = $"\"$%WINDIR%\\System32\\msiexec.exe\" /I \"$PLUGINSDIR\\{fileName}\"";
+                        text = AppendArgument(text, arguments);
+                        break;
+
+                    case ".PS1":
+                        text = $"\"powershell.exe\" -NoProfile -ExecutionPolicy Bypass -File \"$PLUGINSDIR\\{fileName}\"";
+                        text = AppendArgument(text, arguments);
+                        break;
+
+                    case ".BAT":
+                    case ".CMD":
+                        text = $"\"$%WINDIR%\\System32\\cmd.exe\" /C \"$PLUGINSDIR\\{fileName}\"";
+                        text = AppendArgument(text, arguments);
+                        break;
+
+                    case ".VBS":
+                    case ".JS":
+                        text = $"\"$%WINDIR%\\System32\\wscript.exe\" \"$PLUGINSDIR\\{fileName}\"";
+                        text = AppendArgument(text, arguments);
+                        break;
+
+                    // case ".EXE":
+                    default:
+                        text = $"\"$PLUGINSDIR\\{fileName}\"";
+                        text = AppendArgument(text, arguments);
+                        break;
+                }
+
+                if (package.CreateNoWindow)
+                {
+                    text = $"nsExec::Exec '{text}'";
+                    writer.WriteLine(text);
+                    writer.WriteLine($"Pop {exitCode}");
+                }
+                else
+                {
+                    text = $"ExecWait '{text}'";
+                    text = AppendArgument(text, exitCode);
+                    writer.WriteLine(text);
+                }
             }
         }
 
@@ -430,7 +435,8 @@ namespace WixSharp.Nsis
             writer.WriteLine($@"File ""/oname=$PLUGINSDIR\{IO.Path.GetFileName(fileName)}"" ""{IO.Path.GetFullPath(fileName)}""");
         }
 
-        private static void AddExpandEnvStringsCommand(IO.StringWriter writer, ref string arguments)
+        // Returns the result in $R1 register.
+        private static void AddExpandEnvStringsCommand(IO.TextWriter writer, ref string arguments)
         {
             if (!arguments.IsNullOrEmpty())
             {
