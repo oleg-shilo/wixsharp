@@ -55,8 +55,16 @@ namespace WixSharp.Nsis
     /// </example>
     public class NsisBootstrapper : NsisBootstrapperLegacy
     {
+        /// <summary>
+        /// Describes a prerequisite package.
+        /// </summary>
+        /// <seealso cref="PrerequisitePackage" />
         public override PrerequisitePackage Prerequisite { get; } = new PrerequisitePackage();
 
+        /// <summary>
+        /// Describes a primary package.
+        /// </summary>
+        /// <seealso cref="PrimaryPackage" />
         public override PrimaryPackage Primary { get; } = new PrimaryPackage();
 
         /// <summary>

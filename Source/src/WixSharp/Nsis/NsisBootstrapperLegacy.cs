@@ -1,9 +1,21 @@
 ﻿namespace WixSharp.Nsis
 {
+    /// <summary>
+    /// Describes the legacy NsisBootstrapper interface.
+    /// </summary>
+    /// <seealso cref="NsisBootstrapper" />
     public abstract class NsisBootstrapperLegacy
     {
+        /// <summary>
+        /// Describes a prerequisite package.
+        /// </summary>
+        /// <seealso cref="PrerequisitePackage" />
         public abstract PrerequisitePackage Prerequisite { get; }
 
+        /// <summary>
+        /// Describes a primary package.
+        /// </summary>
+        /// <seealso cref="PrimaryPackage" />
         public abstract PrimaryPackage Primary { get; }
 
         /// <summary>
