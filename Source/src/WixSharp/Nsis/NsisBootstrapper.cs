@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -55,6 +56,8 @@ namespace WixSharp.Nsis
     /// </example>
     public class NsisBootstrapper : NsisBootstrapperLegacy
     {
+        private const string PluginsDir = "$PLUGINSDIR";
+
         /// <summary>
         /// Describes a prerequisite package.
         /// </summary>
@@ -256,6 +259,7 @@ namespace WixSharp.Nsis
                 arguments = "$R1";
             }
 
+            AddPayloads(writer, Prerequisite.Payloads);
             AddFileCommand(writer, Prerequisite.FileName);
             AddExecuteCommand(writer, Prerequisite, arguments, "$0");
 
@@ -281,6 +285,7 @@ namespace WixSharp.Nsis
 
             string arguments = "$R1";
 
+            AddPayloads(writer, Primary.Payloads);
             AddFileCommand(writer, Primary.FileName);
             AddExecuteCommand(writer, Primary, arguments, "$0");
 
@@ -379,7 +384,7 @@ namespace WixSharp.Nsis
 
             if (package.UseShellExecute)
             {
-                string text = $"ExecShell \"\" \"$PLUGINSDIR\\{fileName}\"";
+                string text = $"ExecShell \"\" \"{PluginsDir}\\{fileName}\"";
                 if (arguments != null)
                 {
                     text = AppendArgument(text, $"\"{arguments}\"");
@@ -395,30 +400,30 @@ namespace WixSharp.Nsis
                 switch (extension)
                 {
                     case ".MSI":
-                        text = $"\"$%WINDIR%\\System32\\msiexec.exe\" /I \"$PLUGINSDIR\\{fileName}\"";
+                        text = $"\"$%WINDIR%\\System32\\msiexec.exe\" /I \"{PluginsDir}\\{fileName}\"";
                         text = AppendArgument(text, arguments);
                         break;
 
                     case ".PS1":
-                        text = $"\"powershell.exe\" -NoProfile -ExecutionPolicy Bypass -File \"$PLUGINSDIR\\{fileName}\"";
+                        text = $"\"powershell.exe\" -NoProfile -ExecutionPolicy Bypass -File \"{PluginsDir}\\{fileName}\"";
                         text = AppendArgument(text, arguments);
                         break;
 
                     case ".BAT":
                     case ".CMD":
-                        text = $"\"$%WINDIR%\\System32\\cmd.exe\" /C \"$PLUGINSDIR\\{fileName}\"";
+                        text = $"\"$%WINDIR%\\System32\\cmd.exe\" /C \"{PluginsDir}\\{fileName}\"";
                         text = AppendArgument(text, arguments);
                         break;
 
                     case ".VBS":
                     case ".JS":
-                        text = $"\"$%WINDIR%\\System32\\wscript.exe\" \"$PLUGINSDIR\\{fileName}\"";
+                        text = $"\"$%WINDIR%\\System32\\wscript.exe\" \"{PluginsDir}\\{fileName}\"";
                         text = AppendArgument(text, arguments);
                         break;
 
                     // case ".EXE":
                     default:
-                        text = $"\"$PLUGINSDIR\\{fileName}\"";
+                        text = $"\"{PluginsDir}\\{fileName}\"";
                         text = AppendArgument(text, arguments);
                         break;
                 }
@@ -438,9 +443,22 @@ namespace WixSharp.Nsis
             }
         }
 
-        private static void AddFileCommand(IO.StringWriter writer, string fileName)
+        private static void AddFileCommand(IO.StringWriter writer, string sourcePath, string destinationPath = null)
         {
-            writer.WriteLine($@"File ""/oname=$PLUGINSDIR\{IO.Path.GetFileName(fileName)}"" ""{IO.Path.GetFullPath(fileName)}""");
+            if (destinationPath == null)
+            {
+                destinationPath = IO.Path.GetFileName(sourcePath);
+            }
+            else
+            {
+                var directory = IO.Path.GetDirectoryName(destinationPath);
+                if (!directory.IsNullOrEmpty())
+                {
+                    writer.WriteLine($@"CreateDirectory ""{PluginsDir}\{directory}""");
+                }
+            }
+
+            writer.WriteLine($@"File ""/oname={PluginsDir}\{destinationPath}"" ""{IO.Path.GetFullPath(sourcePath)}""");
         }
 
         // Returns the result in $R1 register.
@@ -544,11 +562,16 @@ namespace WixSharp.Nsis
             if (SplashScreen != null)
             {
                 AddFileCommand(writer, SplashScreen.FileName);
-                writer.WriteLine($@"splash::show {SplashScreen.Delay.TotalMilliseconds} ""$PLUGINSDIR\{IO.Path.GetFileNameWithoutExtension(SplashScreen.FileName)}""");
+                writer.WriteLine($@"splash::show {SplashScreen.Delay.TotalMilliseconds} ""{PluginsDir}\{IO.Path.GetFileNameWithoutExtension(SplashScreen.FileName)}""");
                 // $0 has '1' if the user closed the splash screen early,
                 // '0' if everything closed normally, and '-1' if some error occurred.
                 writer.WriteLine("Pop $0");
             }
+        }
+
+        private void AddPayloads(IO.StringWriter writer, IList<Payload> payloads)
+        {
+            payloads.ForEach(payload => AddFileCommand(writer, payload.SourceFile, payload.Name));
         }
     }
 }
