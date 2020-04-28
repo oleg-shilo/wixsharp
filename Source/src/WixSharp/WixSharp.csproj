@@ -212,6 +212,9 @@
     <Compile Include="Property.cs" />
     <Compile Include="XmlFile.cs" />
     <EmbeddedResource Include="Nsis\macros.nsh" />
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="QtCmdLineAction.cs" />
     <Compile Include="RegFileImporter.cs" />
     <Compile Include="RegValueProperty.cs" />
