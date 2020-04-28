@@ -1,4 +1,6 @@
-﻿namespace WixSharp.Nsis
+﻿using System.Collections.Generic;
+
+namespace WixSharp.Nsis
 {
     /// <summary>
     /// Container class for common members of the <see cref="NsisBootstrapper"/> packages.
@@ -33,6 +35,11 @@
         /// Gets or sets a value indicating whether to use the operating system shell to start the process.
         /// </summary>
         public bool UseShellExecute { get; set; }
+
+        /// <summary>
+        /// Collection of the package dependencies.
+        /// </summary>
+        public IList<Payload> Payloads { get; } = new List<Payload>();
     }
 
     /// <summary>
