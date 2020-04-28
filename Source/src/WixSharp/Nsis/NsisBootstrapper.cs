@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using WixSharp.CommonTasks;
 using IO = System.IO;
-using Reflection=System.Reflection;
+using Reflection = System.Reflection;
 
 namespace WixSharp.Nsis
 {
@@ -29,10 +30,13 @@ namespace WixSharp.Nsis
     /// <code>
     /// string setup = new NsisBootstrapper
     ///                    {
-    ///                        PrerequisiteFile = "C:\Users\Public\Public Downloads\dotnetfx.exe",
-    ///                        PrimaryFile = "MyProduct.msi",
+    ///                        Prerequisite = {
+    ///                           FileName = "C:\Users\Public\Public Downloads\dotnetfx.exe",
+    ///                           RegKeyValue = @"HKLM:SOFTWARE\Microsoft\.NETFramework:InstallRoot"
+    ///                        }
+    ///                        Primary = {FileName = "MyProduct.msi"},
+    ///
     ///                        OutputFile = "setup.exe",
-    ///                        PrerequisiteRegKeyValue = @"HKLM:SOFTWARE\Microsoft\.NETFramework:InstallRoot",
     ///
     ///                        IconFile = "app_icon.ico",
     ///
@@ -50,31 +54,21 @@ namespace WixSharp.Nsis
     ///                    .Build();
     /// </code>
     /// </example>
-    public class NsisBootstrapper
+    public class NsisBootstrapper : NsisBootstrapperLegacy
     {
-        /// <summary>
-        /// Gets or sets the prerequisite file.
-        /// Executables and .ps1, .bat, .cmd, .vbs, .js scripts are supported.
-        /// </summary>
-        /// <value>The prerequisite file.</value>
-        public string PrerequisiteFile { get; set; }
+        private const string PluginsDir = "$PLUGINSDIR";
 
         /// <summary>
-        /// Gets or sets the primary setup file.
-        /// Executables and .ps1, .bat, .cmd, .vbs, .js scripts are supported.
+        /// Describes a prerequisite package.
         /// </summary>
-        /// <value>The primary setup file.</value>
-        public string PrimaryFile { get; set; }
+        /// <seealso cref="PrerequisitePackage" />
+        public override PrerequisitePackage Prerequisite { get; } = new PrerequisitePackage();
 
         /// <summary>
-        /// Gets or sets the prerequisite registry key value. This value is used to determine if the <see cref="PrerequisiteFile"/> should be launched.
-        /// <para>This value must comply with the following pattern: &lt;RegistryHive&gt;:&lt;KeyPath&gt;:&lt;ValueName&gt;.</para>
-        /// <code>PrerequisiteRegKeyValue = @"HKLM:Software\My Company\My Product:Installed";</code>
-        /// Existence of the specified registry value at runtime is interpreted as an indication that the <see cref="PrerequisiteFile"/> has been already installed.
-        /// Thus bootstrapper will execute <see cref="PrimaryFile"/> without launching <see cref="PrerequisiteFile"/> first.
+        /// Describes a primary package.
         /// </summary>
-        /// <value>The prerequisite registry key value.</value>
-        public string PrerequisiteRegKeyValue { get; set; }
+        /// <seealso cref="PrimaryPackage" />
+        public override PrimaryPackage Primary { get; } = new PrimaryPackage();
 
         /// <summary>
         /// Gets or sets the output file (bootstrapper) name.
@@ -83,32 +77,10 @@ namespace WixSharp.Nsis
         public string OutputFile { get; set; }
 
         /// <summary>
-        /// Gets or sets the flag which allows you to disable verification of <see cref="PrerequisiteRegKeyValue"/> after the prerequisite setup is completed.
-        /// <para>Normally if <c>bootstrapper</c> checkes if <see cref="PrerequisiteRegKeyValue"/> exists stright after the prerequisite installation and starts
-        /// the primary setup only if it does.</para>
-        /// <para>It is possible to instruct bootstrapper to continue with the primary setup regardless of the prerequisite installation outcome. This can be done
-        /// by setting DoNotPostVerifyPrerequisite to <c>true</c> (default is <c>false</c>)</para>
-        /// </summary>
-        /// <value>The do not post verify prerequisite.</value>
-        public bool DoNotPostVerifyPrerequisite { get; set; }
-
-        /// <summary>
         /// Gets or sets the optional arguments for the bootstrapper compiler.
         /// </summary>
         /// <value>The optional arguments.</value>
         public string OptionalArguments { get; set; }
-
-        /// <summary>
-        /// Gets or sets command line option name for the prerequisite file.
-        /// </summary>
-        /// <value>The option name of the prerequisite file.</value>
-        public string PrerequisiteFileOptionName { get; set; }
-
-        /// <summary>
-        /// Gets or sets command line option name for the primary file.
-        /// </summary>
-        /// <value>The option name of the primary file.</value>
-        public string PrimaryFileOptionName { get; set; }
 
         /// <summary>
         /// Path to an icon that will replace the default icon in the output file (bootstrapper)
@@ -133,18 +105,6 @@ namespace WixSharp.Nsis
         /// before it is compiled into EXE.
         /// </summary>
         public event Action<StringBuilder> NsiSourceGenerated;
-
-        /// <summary>
-        /// Gets or sets preset command line arguments for the prerequisite file.
-        /// </summary>
-        /// <value>The preset command line arguments of the prerequisite file.</value>
-        public string PrerequisiteFileArguments { get; set; }
-
-        /// <summary>
-        /// Gets or sets preset command line arguments for the primary file.
-        /// </summary>
-        /// <value>The preset command line arguments of the primary file.</value>
-        public string PrimaryFileArguments { get; set; }
 
         /// <summary>
         /// Gets or sets the simple splash screen for the output file (bootstrapper).
@@ -179,13 +139,13 @@ namespace WixSharp.Nsis
             string regSubKey = null;
             string regValueName = null;
 
-            if (PrerequisiteRegKeyValue != null)
+            if (Prerequisite.RegKeyValue != null)
             {
-                var regKeyTokens = PrerequisiteRegKeyValue.Split(':');
+                var regKeyTokens = Prerequisite.RegKeyValue.Split(':');
 
                 if (regKeyTokens.Length != 3)
                 {
-                    throw new ArgumentException($"PrerequisiteRegKeyValue: {PrerequisiteRegKeyValue}.\nThis value must comply with the following pattern: <RegistryHive>:<KeyPath>:<ValueName>.");
+                    throw new ArgumentException($"Prerequisite.RegKeyValue: {Prerequisite.RegKeyValue}.\nThis value must comply with the following pattern: <RegistryHive>:<KeyPath>:<ValueName>.");
                 }
 
                 regRootKey = regKeyTokens[0];
@@ -283,26 +243,27 @@ namespace WixSharp.Nsis
 
         private void AddPrerequisiteFile(IO.StringWriter writer, string regRootKey, string regSubKey, string regValueName)
         {
-            if (PrerequisiteFile == null)
+            if (Prerequisite.FileName == null)
                 return;
 
-            if (PrerequisiteRegKeyValue != null)
+            if (Prerequisite.RegKeyValue != null)
             {
                 writer.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
                 writer.WriteLine("IfErrors 0 primary");
             }
 
-            var arguments = PrerequisiteFileArguments;
-            if (PrerequisiteFileOptionName != null)
+            string arguments = null;
+            if (Prerequisite.OptionName != null)
             {
-                writer.WriteLine($"${{GetOptions}} \"$R0\" \"{PrerequisiteFileOptionName}\" $R1");
-                arguments = AppendArgument(arguments, "$R1");
+                writer.WriteLine($"${{GetOptions}} \"$R0\" \"{Prerequisite.OptionName}\" $R1");
+                arguments = "$R1";
             }
 
-            AddFileCommand(writer, PrerequisiteFile);
-            AddExecuteCommand(writer, IO.Path.GetFileName(PrerequisiteFile), arguments, null);
+            AddPayloads(writer, Prerequisite.Payloads);
+            AddFileCommand(writer, Prerequisite.FileName);
+            AddExecuteCommand(writer, Prerequisite, arguments, "$0");
 
-            if (PrerequisiteRegKeyValue != null && !DoNotPostVerifyPrerequisite)
+            if (Prerequisite.RegKeyValue != null && Prerequisite.PostVerify)
             {
                 writer.WriteLine($"!insertmacro REG_KEY_VALUE_EXISTS {regRootKey} \"{regSubKey}\" \"{regValueName}\"");
                 writer.WriteLine("IfErrors end 0");
@@ -312,16 +273,22 @@ namespace WixSharp.Nsis
         private void AddPrimaryFile(IO.StringWriter writer)
         {
             writer.WriteLine("primary:");
-            if (PrimaryFileOptionName != null)
+            if (Primary.OptionName != null)
             {
-                writer.WriteLine($"${{GetOptions}} \"$R0\" \"{PrimaryFileOptionName}\" $R1");
+                writer.WriteLine($"${{GetOptions}} \"$R0\" \"{Primary.OptionName}\" $R1");
                 // Skip copying the original command line options
                 writer.WriteLine("IfErrors 0 +2");
             }
-            // Copy the original command line options
+            // In case the primary files options are not passed in the command line,
+            // copy the original command line options
             writer.WriteLine("StrCpy $R1 $R0");
-            AddFileCommand(writer, PrimaryFile);
-            AddExecuteCommand(writer, IO.Path.GetFileName(PrimaryFile), AppendArgument(PrimaryFileArguments, "$R1"), "$0");
+
+            string arguments = "$R1";
+
+            AddPayloads(writer, Primary.Payloads);
+            AddFileCommand(writer, Primary.FileName);
+            AddExecuteCommand(writer, Primary, arguments, "$0");
+
             // Set exit code
             writer.WriteLine("SetErrorlevel $0");
             writer.WriteLine("goto end");
@@ -406,52 +373,102 @@ namespace WixSharp.Nsis
             }
         }
 
-        private static void AddExecuteCommand(IO.TextWriter writer, string fileName, string arguments, string exitCode)
+        private static void AddExecuteCommand(IO.TextWriter writer, Package package, string arguments, string exitCode)
         {
-            var extension = IO.Path.GetExtension(fileName)?.ToUpper() ?? string.Empty;
+            // Combine arguments and expand environment variables.
+            arguments = AppendArgument(package.Arguments, arguments);
+            AddExpandEnvStringsCommand(writer, ref arguments);
 
-            string text;
-            switch (extension)
+            // Extract only filename from the path.
+            var fileName = IO.Path.GetFileName(package.FileName);
+
+            if (package.UseShellExecute)
             {
-                case ".EXE":
-                    text = $"ExecWait '{AppendArgument($"\"$PLUGINSDIR\\{fileName}\"", arguments)}'";
-                    text = AppendArgument(text, exitCode);
-                    break;
-
-                case ".MSI":
-                    text = $"ExecWait '{AppendArgument($"\"$%WINDIR%\\System32\\msiexec.exe\" /I \"$PLUGINSDIR\\{fileName}\"", arguments)}'";
-                    text = AppendArgument(text, exitCode);
-                    break;
-
-                case ".PS1":
-                    text = $"ExecWait '{AppendArgument($"\"powershell.exe\" -NoProfile -ExecutionPolicy Bypass -File \"$PLUGINSDIR\\{fileName}\"", arguments)}'";
-                    text = AppendArgument(text, exitCode);
-                    break;
-
-                case ".BAT":
-                case ".CMD":
-                    text = $"ExecWait '{AppendArgument($"\"$%WINDIR%\\System32\\cmd.exe\" /C \"$PLUGINSDIR\\{fileName}\"", arguments)}'";
-                    text = AppendArgument(text, exitCode);
-                    break;
-
-                case ".VBS":
-                case ".JS":
-                    text = $"ExecWait '{AppendArgument($"\"$%WINDIR%\\System32\\wscript.exe\" \"$PLUGINSDIR\\{fileName}\"", arguments)}'";
-                    text = AppendArgument(text, exitCode);
-                    break;
-
-                default:
-                    // arguments parameter are not used
-                    text = $"ExecShell \"open\" \"$PLUGINSDIR\\{fileName}\"";
-                    break;
+                string text = $"ExecShell \"\" \"{PluginsDir}\\{fileName}\"";
+                if (arguments != null)
+                {
+                    text = AppendArgument(text, $"\"{arguments}\"");
+                }
+                writer.WriteLine(text);
+                writer.WriteLine("Sleep 2000");
             }
+            else
+            {
+                var extension = IO.Path.GetExtension(fileName)?.ToUpper() ?? string.Empty;
 
-            writer.WriteLine(text);
+                string text;
+                switch (extension)
+                {
+                    case ".MSI":
+                        text = $"\"$%WINDIR%\\System32\\msiexec.exe\" /I \"{PluginsDir}\\{fileName}\"";
+                        text = AppendArgument(text, arguments);
+                        break;
+
+                    case ".PS1":
+                        text = $"\"powershell.exe\" -NoProfile -ExecutionPolicy Bypass -File \"{PluginsDir}\\{fileName}\"";
+                        text = AppendArgument(text, arguments);
+                        break;
+
+                    case ".BAT":
+                    case ".CMD":
+                        text = $"\"$%WINDIR%\\System32\\cmd.exe\" /C \"{PluginsDir}\\{fileName}\"";
+                        text = AppendArgument(text, arguments);
+                        break;
+
+                    case ".VBS":
+                    case ".JS":
+                        text = $"\"$%WINDIR%\\System32\\wscript.exe\" \"{PluginsDir}\\{fileName}\"";
+                        text = AppendArgument(text, arguments);
+                        break;
+
+                    // case ".EXE":
+                    default:
+                        text = $"\"{PluginsDir}\\{fileName}\"";
+                        text = AppendArgument(text, arguments);
+                        break;
+                }
+
+                if (package.CreateNoWindow)
+                {
+                    text = $"nsExec::Exec '{text}'";
+                    writer.WriteLine(text);
+                    writer.WriteLine($"Pop {exitCode}");
+                }
+                else
+                {
+                    text = $"ExecWait '{text}'";
+                    text = AppendArgument(text, exitCode);
+                    writer.WriteLine(text);
+                }
+            }
         }
 
-        private static void AddFileCommand(IO.StringWriter writer, string fileName)
+        private static void AddFileCommand(IO.StringWriter writer, string sourcePath, string destinationPath = null)
         {
-            writer.WriteLine($@"File ""/oname=$PLUGINSDIR\{IO.Path.GetFileName(fileName)}"" ""{IO.Path.GetFullPath(fileName)}""");
+            if (destinationPath == null)
+            {
+                destinationPath = IO.Path.GetFileName(sourcePath);
+            }
+            else
+            {
+                var directory = IO.Path.GetDirectoryName(destinationPath);
+                if (!directory.IsNullOrEmpty())
+                {
+                    writer.WriteLine($@"CreateDirectory ""{PluginsDir}\{directory}""");
+                }
+            }
+
+            writer.WriteLine($@"File ""/oname={PluginsDir}\{destinationPath}"" ""{IO.Path.GetFullPath(sourcePath)}""");
+        }
+
+        // Returns the result in $R1 register.
+        private static void AddExpandEnvStringsCommand(IO.TextWriter writer, ref string arguments)
+        {
+            if (!arguments.IsNullOrEmpty())
+            {
+                writer.WriteLine($"ExpandEnvStrings $R1 '{arguments}'");
+                arguments = "$R1";
+            }
         }
 
         private static string ExecutionLevelToString(RequestExecutionLevel level)
@@ -545,11 +562,16 @@ namespace WixSharp.Nsis
             if (SplashScreen != null)
             {
                 AddFileCommand(writer, SplashScreen.FileName);
-                writer.WriteLine($@"splash::show {SplashScreen.Delay.TotalMilliseconds} ""$PLUGINSDIR\{IO.Path.GetFileNameWithoutExtension(SplashScreen.FileName)}""");
+                writer.WriteLine($@"splash::show {SplashScreen.Delay.TotalMilliseconds} ""{PluginsDir}\{IO.Path.GetFileNameWithoutExtension(SplashScreen.FileName)}""");
                 // $0 has '1' if the user closed the splash screen early,
                 // '0' if everything closed normally, and '-1' if some error occurred.
                 writer.WriteLine("Pop $0");
             }
+        }
+
+        private void AddPayloads(IO.StringWriter writer, IList<Payload> payloads)
+        {
+            payloads.ForEach(payload => AddFileCommand(writer, payload.SourceFile, payload.Name));
         }
     }
 }
