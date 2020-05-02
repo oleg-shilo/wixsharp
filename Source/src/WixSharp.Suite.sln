@@ -171,7 +171,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Certificates", "WixSharp.Sa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bootstrapper", "Bootstrapper", "{F34C80C3-13F1-46B1-93A9-FE6828EED513}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixBootstrapper_NoU", "WixSharp.Samples\VSProjects\WixBootstrapper_NoU.csproj", "{96E93C0F-48F1-402B-BE41-2F0ABDB1E633}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixBootstrapper_NoUI", "WixSharp.Samples\VSProjects\WixBootstrapper_NoUI.csproj", "{96E93C0F-48F1-402B-BE41-2F0ABDB1E633}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NsisBootstrapper", "WixSharp.Samples\VSProjects\NsisBootstrapper.csproj", "{40D245DA-C5C6-4112-8D18-146A8C6D2431}"
 EndProject
