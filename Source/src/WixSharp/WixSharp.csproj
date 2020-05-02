@@ -146,6 +146,9 @@
     <Compile Include="MajorUpgrade.cs" />
     <Compile Include="Media.cs" />
     <Compile Include="Nsis\NsisBootstrapper.cs" />
+    <Compile Include="Nsis\NsisBootstrapperLegacy.cs" />
+    <Compile Include="Nsis\Package.cs" />
+    <Compile Include="Nsis\Payload.cs" />
     <Compile Include="Nsis\RequestExecutionLevel.cs" />
     <Compile Include="Nsis\SplashScreen.cs" />
     <Compile Include="Nsis\VersionInformation.cs" />

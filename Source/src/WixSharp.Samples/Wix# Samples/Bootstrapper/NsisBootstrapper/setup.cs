@@ -17,12 +17,15 @@ public static class Script
         var project = new ManagedProject("MainProduct",
                           new ManagedAction(CustomActions.MyAction, Return.ignore, When.After, Step.InstallInitialize, Condition.NOT_Installed));
 
-        project.ManagedUI = ManagedUI.Default;
+        project.UI = WUI.WixUI_Minimal;
 
         var msiFile = project.BuildMsi();
 
         if (System.IO.File.Exists(msiFile))
         {
+            // Uncomment to preserve temp NSI files.
+            // Compiler.PreserveTempFiles = true;
+
             // General sample
             BuildGeneralSample(msiFile);
 
@@ -40,6 +43,9 @@ public static class Script
 
             // JScript script sample
             BuildScriptSample(msiFile, @"Assets\script.js");
+
+            // Arguments sample
+            BuildArgumentsSample(msiFile);
         }
     }
 
@@ -47,12 +53,16 @@ public static class Script
     {
         var bootstrapper = new NsisBootstrapper
         {
-            DoNotPostVerifyPrerequisite = false,
-            PrerequisiteFile = "Prerequisite.msi",
-            PrimaryFile = msiFile,
-            OutputFile = "MyProduct.exe",
-            PrerequisiteRegKeyValue = @"HKLM:Software\My Company\My Product:Installed",
+            Prerequisite =
+            {
+                FileName = "Prerequisite.msi",
+                PostVerify = true,
+                RegKeyValue = @"HKLM:Software\My Company\My Product:Installed"
+            },
 
+            Primary = {FileName = msiFile},
+
+            OutputFile = "MyProduct.exe",
             IconFile = "app_icon.ico",
 
             VersionInfo = new VersionInformation("1.0.0.0")
@@ -76,9 +86,48 @@ public static class Script
     {
         var bootstrapper = new NsisBootstrapper
         {
-            PrerequisiteFile = prerequisiteFile,
-            PrimaryFile = msiFile,
+            Prerequisite = {FileName = prerequisiteFile},
+            Primary = {FileName = msiFile},
             OutputFile = $"MyProduct{Path.GetExtension(prerequisiteFile)}.exe"
+        };
+
+        bootstrapper.Build();
+    }
+
+    // Arguments passing examples:
+    //  MyProductArgs.exe /primary:"/qn" /prerequisite:"/passive /norestart"
+    //  MyProductArgs.exe /primary:"PARAM1=VAL1"
+    //  MyProductArgs.exe /qn
+    public static void BuildArgumentsSample(string msiFile)
+    {
+        var bootstrapper = new NsisBootstrapper
+        {
+            Prerequisite =
+            {
+                // See @"Assets\DotNet.ps1" for VBS example
+                FileName = @"Assets\DotNet.ps1",
+                OptionName = "/prerequisite:",
+                Arguments = @"/log %TEMP%\MyProductArgs_DotNetLog.html",
+                CreateNoWindow = false,
+                // Condition to check for presence of .Net 4.5 Framework.
+                // PrerequisiteRegKeyValue = @"HKLM:SOFTWARE\Microsoft\.NETFramework\v4.0.30319\SKUs\.NETFramework,Version=v4.5:"
+
+                Payloads =
+                {
+                    new Payload(@"Assets\Payload.txt"),
+                    new Payload(@"Assets\Payload.txt") { Name = @"Destination\Payload.txt" }
+                }
+            },
+
+            Primary =
+            {
+                FileName = msiFile,
+                OptionName = "/primary:",
+                // $EXEPATH - The full path of the installer executable.
+                Arguments = @"/L*V %TEMP%\MyProductArgs_Msi.log EXEPATH=""$EXEPATH"""
+            },
+
+            OutputFile = "MyProductArgs.exe"
         };
 
         bootstrapper.Build();
@@ -92,6 +141,12 @@ public static class CustomActions
     {
         MessageBox.Show("Hello World!", "Embedded Managed CA");
         session.Log("Begin MyAction Hello World");
+
+        string exeFile = session.Property("EXEPATH");
+        if (!exeFile.IsNullOrEmpty())
+        {
+            session.Log("Exe file path: " + exeFile);
+        }
 
         return ActionResult.Success;
     }
