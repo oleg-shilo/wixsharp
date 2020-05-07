@@ -30,7 +30,16 @@ namespace WixSharp.UI.Forms
             if (!WindowsIdentity.GetCurrent().IsAdmin() && Uac.IsEnabled())
             {
                 this.waitPrompt.Text = Runtime.Session.Property("UAC_WARNING");
-                this.waitPrompt.Visible = true;
+
+                var waitMs = 4000;
+                var t = new System.Windows.Forms.Timer();
+                t.Interval = waitMs;
+                t.Tick += (s, e2) =>
+                {
+                    this.waitPrompt.Visible = true;
+                    t.Stop();
+                };
+                t.Start();
             }
 
             ResetLayout();
