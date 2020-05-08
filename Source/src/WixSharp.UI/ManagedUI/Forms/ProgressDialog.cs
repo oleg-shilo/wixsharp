@@ -21,7 +21,16 @@ namespace WixSharp.UI.Forms
         {
             InitializeComponent();
             dialogText.MakeTransparentOn(banner);
+
+            showWaitPromptTimer = new System.Windows.Forms.Timer() { Interval = 4000 };
+            showWaitPromptTimer.Tick += (s, e) =>
+            {
+                this.waitPrompt.Visible = true;
+                showWaitPromptTimer.Stop();
+            };
         }
+
+        System.Windows.Forms.Timer showWaitPromptTimer;
 
         void ProgressDialog_Load(object sender, EventArgs e)
         {
@@ -31,15 +40,7 @@ namespace WixSharp.UI.Forms
             {
                 this.waitPrompt.Text = Runtime.Session.Property("UAC_WARNING");
 
-                var waitMs = 4000;
-                var t = new System.Windows.Forms.Timer();
-                t.Interval = waitMs;
-                t.Tick += (s, e2) =>
-                {
-                    this.waitPrompt.Visible = true;
-                    t.Stop();
-                };
-                t.Start();
+                showWaitPromptTimer.Start();
             }
 
             ResetLayout();
@@ -110,6 +111,7 @@ namespace WixSharp.UI.Forms
                 case InstallMessage.InstallEnd:
                     {
                         waitPrompt.Visible = false;
+                        showWaitPromptTimer.Stop();
                     }
                     break;
 
