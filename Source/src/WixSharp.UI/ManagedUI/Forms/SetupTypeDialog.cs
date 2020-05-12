@@ -6,7 +6,7 @@ namespace WixSharp.UI.Forms
     /// <summary>
     /// The standard Setup Type dialog
     /// </summary>
-    public partial class SetupTypeDialog : ManagedForm, IManagedDialog // change ManagedForm->Form if you want to show it in designer
+    public partial class SetupTypeDialog : ManagedForm // change ManagedForm->Form if you want to show it in designer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SetupTypeDialog"/> class.
@@ -23,8 +23,7 @@ namespace WixSharp.UI.Forms
             get
             {
                 return Shell.Dialogs
-                            .Where(d => d.GetInterfaces().Contains(typeof(IProgressDialog)))
-                            .FirstOrDefault();
+                    .FirstOrDefault(d => d.GetInterfaces().Contains(typeof(IProgressDialog)));
             }
         }
 

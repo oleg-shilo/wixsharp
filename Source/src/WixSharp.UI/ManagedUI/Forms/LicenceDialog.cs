@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -11,7 +10,7 @@ namespace WixSharp.UI.Forms
     /// <summary>
     /// The standard Licence dialog
     /// </summary>
-    public partial class LicenceDialog : ManagedForm, IManagedDialog // change ManagedForm->Form if you want to show it in designer
+    public partial class LicenceDialog : ManagedForm // change ManagedForm->Form if you want to show it in designer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LicenceDialog"/> class.
@@ -78,7 +77,11 @@ namespace WixSharp.UI.Forms
                 io.File.WriteAllText(file, agreement.Rtf);
                 Process.Start(file);
             }
-            catch { }
+            catch
+            {
+                //Catch all, we don't want the installer to crash in an
+                //attempt to write to a file.
+            }
         }
 
         void copyToolStripMenuItem_Click(object sender, EventArgs e)
@@ -100,7 +103,11 @@ namespace WixSharp.UI.Forms
 
                 Clipboard.SetDataObject(data);
             }
-            catch { }
+            catch
+            {
+                //Catch all, we don't want the installer to crash in an
+                //attempt at setting data on the clipboard.
+            }
         }
     }
 }

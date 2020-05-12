@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 
 namespace WixSharp.UI.Forms
@@ -7,7 +6,7 @@ namespace WixSharp.UI.Forms
     /// <summary>
     /// The standard Maintenance Type dialog
     /// </summary>
-    public partial class MaintenanceTypeDialog : ManagedForm, IManagedDialog // change ManagedForm->Form if you want to show it in designer
+    public partial class MaintenanceTypeDialog : ManagedForm // change ManagedForm->Form if you want to show it in designer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MaintenanceTypeDialog"/> class.
@@ -24,8 +23,7 @@ namespace WixSharp.UI.Forms
             get
             {
                 return Shell.Dialogs
-                            .Where(d => d.GetInterfaces().Contains(typeof(IProgressDialog)))
-                            .FirstOrDefault();
+                    .FirstOrDefault(d => d.GetInterfaces().Contains(typeof(IProgressDialog)));
             }
         }
 
