@@ -9,7 +9,7 @@ namespace WixSharp.UI.Forms
     /// <summary>
     /// The standard Installation Progress dialog
     /// </summary>
-    public partial class ProgressDialog : ManagedForm, IProgressDialog // change ManagedForm->Form if you want to show it in designer
+    public partial class ProgressDialog : ManagedForm, IManagedDialog, IProgressDialog // change ManagedForm->Form if you want to show it in designer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgressDialog"/> class.
@@ -105,31 +105,52 @@ namespace WixSharp.UI.Forms
                     {
                         try
                         {
-                            /*
-                            messageRecord[0] - is reserved for FormatString value
-                            messageRecord[2] unconditionally contains the string to display
+                            //messageRecord[0] - is reserved for FormatString value
 
-                            Examples:
-
-                               messageRecord[0]    "Action 23:14:50: [1]. [2]"
-                               messageRecord[1]    "InstallFiles"
-                               messageRecord[2]    "Copying new files"
-                               messageRecord[3]    "File: [1],  Directory: [9],  Size: [6]"
-
-                               messageRecord[0]    "Action 23:15:21: [1]. [2]"
-                               messageRecord[1]    "RegisterUser"
-                               messageRecord[2]    "Registering user"
-                               messageRecord[3]    "[1]"
-
-                            */
                             string message = null;
-                            if (messageRecord.FieldCount >= 3)
+
+                            bool simple = true;
+                            if (simple)
                             {
-                                message = messageRecord[2].ToString();
+                                /*
+                                messageRecord[2] unconditionally contains the string to display
+
+                                Examples:
+
+                                   messageRecord[0]    "Action 23:14:50: [1]. [2]"
+                                   messageRecord[1]    "InstallFiles"
+                                   messageRecord[2]    "Copying new files"
+                                   messageRecord[3]    "File: [1],  Directory: [9],  Size: [6]"
+
+                                   messageRecord[0]    "Action 23:15:21: [1]. [2]"
+                                   messageRecord[1]    "RegisterUser"
+                                   messageRecord[2]    "Registering user"
+                                   messageRecord[3]    "[1]"
+
+                                */
+                                if (messageRecord.FieldCount >= 3)
+                                {
+                                    message = messageRecord[2].ToString();
+                                }
+                            }
+                            else
+                            {
+                                message = messageRecord.FormatString;
+                                if (message.IsNotEmpty())
+                                {
+                                    for (int i = 1; i < messageRecord.FieldCount; i++)
+                                    {
+                                        message = message.Replace("[" + i + "]", messageRecord[i].ToString());
+                                    }
+                                }
+                                else
+                                {
+                                    message = messageRecord[messageRecord.FieldCount - 1].ToString();
+                                }
                             }
 
                             if (message.IsNotEmpty())
-                                currentAction.Text = string.Format("{0} {1}", currentActionLabel.Text, message);
+                                currentAction.Text = "{0} {1}".FormatWith(currentActionLabel.Text, message);
                         }
                         catch
                         {

@@ -9,7 +9,7 @@ namespace WixSharp.UI.Forms
     /// different user experience as it has checkboxes bound to the features instead of icons context menu
     /// as MSI dialog has.
     /// </summary>
-    public partial class FeaturesDialog : ManagedForm // change ManagedForm->Form if you want to show it in designer
+    public partial class FeaturesDialog : ManagedForm, IManagedDialog // change ManagedForm->Form if you want to show it in designer
     {
         /*https://msdn.microsoft.com/en-us/library/aa367536(v=vs.85).aspx
          * ADDLOCAL - list of features to install
