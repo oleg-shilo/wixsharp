@@ -1,9 +1,6 @@
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Security.Principal;
-using System.Threading;
-using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 
@@ -164,9 +161,13 @@ namespace WixSharp.UI.Forms
                             }
 
                             if (message.IsNotEmpty())
-                                currentAction.Text = currentActionLabel.Text + " " + message;
+                                currentAction.Text = "{0} {1}".FormatWith(currentActionLabel.Text, message);
                         }
-                        catch { }
+                        catch
+                        {
+                            //Catch all, we don't want the installer to crash in an
+                            //attempt to process message.
+                        }
                     }
                     break;
             }

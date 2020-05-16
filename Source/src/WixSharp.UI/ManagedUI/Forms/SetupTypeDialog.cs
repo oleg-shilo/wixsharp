@@ -23,8 +23,7 @@ namespace WixSharp.UI.Forms
             get
             {
                 return Shell.Dialogs
-                            .Where(d => d.GetInterfaces().Contains(typeof(IProgressDialog)))
-                            .FirstOrDefault();
+                    .FirstOrDefault(d => d.GetInterfaces().Contains(typeof(IProgressDialog)));
             }
         }
 
