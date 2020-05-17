@@ -145,7 +145,6 @@ namespace WixSharpSetup.Dialogs
             this.label2.Size = new System.Drawing.Size(122, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "[InstallDirDlgDescription]";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label1
             // 

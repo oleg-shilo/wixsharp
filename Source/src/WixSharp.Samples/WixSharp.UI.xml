@@ -189,12 +189,12 @@
             Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.FeaturesDialog"/> class.
             </summary>
         </member>
-        <member name="F:WixSharp.UI.Forms.FeaturesDialog.UserSelectedItems">
+        <member name="P:WixSharp.UI.Forms.FeaturesDialog.UserSelectedItems">
             <summary>
             The collection of the features selected by user as the features to be installed.
             </summary>
         </member>
-        <member name="F:WixSharp.UI.Forms.FeaturesDialog.InitialUserSelectedItems">
+        <member name="P:WixSharp.UI.Forms.FeaturesDialog.InitialUserSelectedItems">
             <summary>
             The initial/default set of selected items (features) before user made any selection(s).
             </summary>

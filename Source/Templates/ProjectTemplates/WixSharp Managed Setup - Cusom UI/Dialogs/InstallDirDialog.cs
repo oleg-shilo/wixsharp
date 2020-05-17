@@ -1,5 +1,4 @@
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 using WixSharp;
@@ -92,10 +91,6 @@ namespace WixSharpSetup.Dialogs
                     installDir.Text = dialog.SelectedPath;
                 }
             }
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
         }
     }
 }

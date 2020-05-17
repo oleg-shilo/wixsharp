@@ -1,9 +1,6 @@
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Security.Principal;
-using System.Threading;
-using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 
@@ -24,7 +21,16 @@ namespace WixSharpSetup.Dialogs
         {
             InitializeComponent();
             dialogText.MakeTransparentOn(banner);
+
+            showWaitPromptTimer = new System.Windows.Forms.Timer() { Interval = 4000 };
+            showWaitPromptTimer.Tick += (s, e) =>
+            {
+                this.waitPrompt.Visible = true;
+                showWaitPromptTimer.Stop();
+            };
         }
+
+        System.Windows.Forms.Timer showWaitPromptTimer;
 
         void ProgressDialog_Load(object sender, EventArgs e)
         {
@@ -33,7 +39,8 @@ namespace WixSharpSetup.Dialogs
             if (!WindowsIdentity.GetCurrent().IsAdmin() && Uac.IsEnabled())
             {
                 this.waitPrompt.Text = Runtime.Session.Property("UAC_WARNING");
-                this.waitPrompt.Visible = true;
+
+                showWaitPromptTimer.Start();
             }
 
             ResetLayout();
@@ -103,6 +110,7 @@ namespace WixSharpSetup.Dialogs
                 case InstallMessage.InstallStart:
                 case InstallMessage.InstallEnd:
                     {
+                        showWaitPromptTimer.Stop();
                         waitPrompt.Visible = false;
                     }
                     break;
@@ -156,9 +164,13 @@ namespace WixSharpSetup.Dialogs
                             }
 
                             if (message.IsNotEmpty())
-                                currentAction.Text = currentActionLabel.Text + " " + message;
+                                currentAction.Text = "{0} {1}".FormatWith(currentActionLabel.Text, message);
                         }
-                        catch { }
+                        catch
+                        {
+                            //Catch all, we don't want the installer to crash in an
+                            //attempt to process message.
+                        }
                     }
                     break;
             }

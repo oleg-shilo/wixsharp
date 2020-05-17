@@ -26,8 +26,7 @@ namespace WixSharpSetup.Dialogs
             get
             {
                 return Shell.Dialogs
-                            .Where(d => d.GetInterfaces().Contains(typeof(IProgressDialog)))
-                            .FirstOrDefault();
+                    .FirstOrDefault(d => d.GetInterfaces().Contains(typeof(IProgressDialog)));
             }
         }
 
@@ -48,7 +47,7 @@ namespace WixSharpSetup.Dialogs
         void complete_Click(object sender, System.EventArgs e)
         {
             string[] names = Runtime.Session.Features.Select(x => x.Name).ToArray();
-            Runtime.Session["ADDLOCAL"] = names.Join(",");
+            Runtime.Session["ADDLOCAL"] = names.JoinBy(",");
 
             int index = Shell.Dialogs.IndexOf(ProgressDialog);
             if (index != -1)

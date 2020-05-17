@@ -6034,10 +6034,13 @@
              <code>
              string setup = new NsisBootstrapper
                                 {
-                                    PrerequisiteFile = "C:\Users\Public\Public Downloads\dotnetfx.exe",
-                                    PrimaryFile = "MyProduct.msi",
+                                    Prerequisite = {
+                                       FileName = "C:\Users\Public\Public Downloads\dotnetfx.exe",
+                                       RegKeyValue = @"HKLM:SOFTWARE\Microsoft\.NETFramework:InstallRoot"
+                                    }
+                                    Primary = {FileName = "MyProduct.msi"},
+            
                                     OutputFile = "setup.exe",
-                                    PrerequisiteRegKeyValue = @"HKLM:SOFTWARE\Microsoft\.NETFramework:InstallRoot",
             
                                     IconFile = "app_icon.ico",
             
@@ -6056,29 +6059,17 @@
              </code>
              </example>
         </member>
-        <member name="P:WixSharp.Nsis.NsisBootstrapper.PrerequisiteFile">
+        <member name="P:WixSharp.Nsis.NsisBootstrapper.Prerequisite">
             <summary>
-            Gets or sets the prerequisite file.
-            Executables and .ps1, .bat, .cmd, .vbs, .js scripts are supported.
+            Describes a prerequisite package.
             </summary>
-            <value>The prerequisite file.</value>
+            <seealso cref="T:WixSharp.Nsis.PrerequisitePackage" />
         </member>
-        <member name="P:WixSharp.Nsis.NsisBootstrapper.PrimaryFile">
+        <member name="P:WixSharp.Nsis.NsisBootstrapper.Primary">
             <summary>
-            Gets or sets the primary setup file.
-            Executables and .ps1, .bat, .cmd, .vbs, .js scripts are supported.
+            Describes a primary package.
             </summary>
-            <value>The primary setup file.</value>
-        </member>
-        <member name="P:WixSharp.Nsis.NsisBootstrapper.PrerequisiteRegKeyValue">
-            <summary>
-            Gets or sets the prerequisite registry key value. This value is used to determine if the <see cref="P:WixSharp.Nsis.NsisBootstrapper.PrerequisiteFile"/> should be launched.
-            <para>This value must comply with the following pattern: &lt;RegistryHive&gt;:&lt;KeyPath&gt;:&lt;ValueName&gt;.</para>
-            <code>PrerequisiteRegKeyValue = @"HKLM:Software\My Company\My Product:Installed";</code>
-            Existence of the specified registry value at runtime is interpreted as an indication that the <see cref="P:WixSharp.Nsis.NsisBootstrapper.PrerequisiteFile"/> has been already installed.
-            Thus bootstrapper will execute <see cref="P:WixSharp.Nsis.NsisBootstrapper.PrimaryFile"/> without launching <see cref="P:WixSharp.Nsis.NsisBootstrapper.PrerequisiteFile"/> first.
-            </summary>
-            <value>The prerequisite registry key value.</value>
+            <seealso cref="T:WixSharp.Nsis.PrimaryPackage" />
         </member>
         <member name="P:WixSharp.Nsis.NsisBootstrapper.OutputFile">
             <summary>
@@ -6086,33 +6077,11 @@
             </summary>
             <value>The output file name.</value>
         </member>
-        <member name="P:WixSharp.Nsis.NsisBootstrapper.DoNotPostVerifyPrerequisite">
-            <summary>
-            Gets or sets the flag which allows you to disable verification of <see cref="P:WixSharp.Nsis.NsisBootstrapper.PrerequisiteRegKeyValue"/> after the prerequisite setup is completed.
-            <para>Normally if <c>bootstrapper</c> checkes if <see cref="P:WixSharp.Nsis.NsisBootstrapper.PrerequisiteRegKeyValue"/> exists stright after the prerequisite installation and starts
-            the primary setup only if it does.</para>
-            <para>It is possible to instruct bootstrapper to continue with the primary setup regardless of the prerequisite installation outcome. This can be done
-            by setting DoNotPostVerifyPrerequisite to <c>true</c> (default is <c>false</c>)</para>
-            </summary>
-            <value>The do not post verify prerequisite.</value>
-        </member>
         <member name="P:WixSharp.Nsis.NsisBootstrapper.OptionalArguments">
             <summary>
             Gets or sets the optional arguments for the bootstrapper compiler.
             </summary>
             <value>The optional arguments.</value>
-        </member>
-        <member name="P:WixSharp.Nsis.NsisBootstrapper.PrerequisiteFileOptionName">
-            <summary>
-            Gets or sets command line option name for the prerequisite file.
-            </summary>
-            <value>The option name of the prerequisite file.</value>
-        </member>
-        <member name="P:WixSharp.Nsis.NsisBootstrapper.PrimaryFileOptionName">
-            <summary>
-            Gets or sets command line option name for the primary file.
-            </summary>
-            <value>The option name of the primary file.</value>
         </member>
         <member name="P:WixSharp.Nsis.NsisBootstrapper.IconFile">
             <summary>
@@ -6138,18 +6107,6 @@
             before it is compiled into EXE.
             </summary>
         </member>
-        <member name="P:WixSharp.Nsis.NsisBootstrapper.PrerequisiteFileArguments">
-            <summary>
-            Gets or sets preset command line arguments for the prerequisite file.
-            </summary>
-            <value>The preset command line arguments of the prerequisite file.</value>
-        </member>
-        <member name="P:WixSharp.Nsis.NsisBootstrapper.PrimaryFileArguments">
-            <summary>
-            Gets or sets preset command line arguments for the primary file.
-            </summary>
-            <value>The preset command line arguments of the primary file.</value>
-        </member>
         <member name="P:WixSharp.Nsis.NsisBootstrapper.SplashScreen">
             <summary>
             Gets or sets the simple splash screen for the output file (bootstrapper).
@@ -6161,6 +6118,179 @@
             Builds bootstrapper file.
             </summary>
             <returns>Path to the built bootstrapper file. Returns <c>null</c> if bootstrapper cannot be built.</returns>
+        </member>
+        <member name="T:WixSharp.Nsis.NsisBootstrapperLegacy">
+            <summary>
+            Describes the legacy NsisBootstrapper interface.
+            </summary>
+            <seealso cref="T:WixSharp.Nsis.NsisBootstrapper" />
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapperLegacy.Prerequisite">
+            <summary>
+            Describes a prerequisite package.
+            </summary>
+            <seealso cref="T:WixSharp.Nsis.PrerequisitePackage" />
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapperLegacy.Primary">
+            <summary>
+            Describes a primary package.
+            </summary>
+            <seealso cref="T:WixSharp.Nsis.PrimaryPackage" />
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapperLegacy.PrerequisiteFile">
+            <summary>
+            Gets or sets the prerequisite file.
+            Executables and .ps1, .bat, .cmd, .vbs, .js scripts are supported.
+            </summary>
+            <value>The prerequisite file.</value>
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapperLegacy.PrimaryFile">
+            <summary>
+            Gets or sets the primary setup file.
+            Executables and .ps1, .bat, .cmd, .vbs, .js scripts are supported.
+            </summary>
+            <value>The primary setup file.</value>
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapperLegacy.PrerequisiteRegKeyValue">
+            <summary>
+            Gets or sets the prerequisite registry key value. This value is used to determine if the <see cref="P:WixSharp.Nsis.NsisBootstrapperLegacy.Prerequisite"/> file should be launched.
+            <para>This value must comply with the following pattern: &lt;RegistryHive&gt;:&lt;KeyPath&gt;:&lt;ValueName&gt;.</para>
+            <code>PrerequisiteRegKeyValue = @"HKLM:Software\My Company\My Product:Installed";</code>
+            Existence of the specified registry value at runtime is interpreted as an indication that the <see cref="P:WixSharp.Nsis.NsisBootstrapperLegacy.Prerequisite"/> file has been already installed.
+            Thus bootstrapper will execute <see cref="P:WixSharp.Nsis.NsisBootstrapperLegacy.Primary"/> file without launching <see cref="P:WixSharp.Nsis.NsisBootstrapperLegacy.Prerequisite"/> file first.
+            </summary>
+            <value>The prerequisite registry key value.</value>
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapperLegacy.DoNotPostVerifyPrerequisite">
+            <summary>
+            Gets or sets the flag which allows you to disable verification of <see cref="P:WixSharp.Nsis.PrerequisitePackage.RegKeyValue"/> after the prerequisite setup is completed.
+            <para>Normally if <c>bootstrapper</c> checkes if <see cref="P:WixSharp.Nsis.PrerequisitePackage.RegKeyValue"/> exists stright after the prerequisite installation and starts
+            the primary setup only if it does.</para>
+            <para>It is possible to instruct bootstrapper to continue with the primary setup regardless of the prerequisite installation outcome. This can be done
+            by setting DoNotPostVerifyPrerequisite to <c>true</c> (default is <c>false</c>)</para>
+            </summary>
+            <value>The do not post verify prerequisite.</value>
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapperLegacy.PrerequisiteFileOptionName">
+            <summary>
+            Gets or sets command line option name for the prerequisite file.
+            </summary>
+            <value>The option name of the prerequisite file.</value>
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapperLegacy.PrimaryFileOptionName">
+            <summary>
+            Gets or sets command line option name for the primary file.
+            </summary>
+            <value>The option name of the primary file.</value>
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapperLegacy.PrerequisiteFileArguments">
+            <summary>
+            Gets or sets preset command line arguments for the prerequisite file.
+            </summary>
+            <value>The preset command line arguments of the prerequisite file.</value>
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapperLegacy.PrimaryFileArguments">
+            <summary>
+            Gets or sets preset command line arguments for the primary file.
+            </summary>
+            <value>The preset command line arguments of the primary file.</value>
+        </member>
+        <member name="T:WixSharp.Nsis.Package">
+            <summary>
+            Container class for common members of the <see cref="T:WixSharp.Nsis.NsisBootstrapper"/> packages.
+            </summary>
+        </member>
+        <member name="P:WixSharp.Nsis.Package.FileName">
+            <summary>
+            Gets or sets the setup package file name.
+            Executables and .ps1, .bat, .cmd, .vbs, .js scripts are supported.
+            </summary>
+            <value>The setup package file name.</value>
+        </member>
+        <member name="P:WixSharp.Nsis.Package.OptionName">
+            <summary>
+            Gets or sets the command line option name.
+            </summary>
+            <value>The option name.</value>
+        </member>
+        <member name="P:WixSharp.Nsis.Package.Arguments">
+            <summary>
+            Gets or sets preset command line arguments.
+            </summary>
+            <value>The preset command line arguments.</value>
+        </member>
+        <member name="P:WixSharp.Nsis.Package.CreateNoWindow">
+            <summary>
+            Gets or sets a value indicating whether to start the process in a new window.
+            </summary>
+        </member>
+        <member name="P:WixSharp.Nsis.Package.UseShellExecute">
+            <summary>
+            Gets or sets a value indicating whether to use the operating system shell to start the process.
+            </summary>
+        </member>
+        <member name="P:WixSharp.Nsis.Package.Payloads">
+            <summary>
+            Collection of the package dependencies.
+            </summary>
+        </member>
+        <member name="T:WixSharp.Nsis.PrimaryPackage">
+            <summary>
+            Describes a primary package of the <see cref="T:WixSharp.Nsis.NsisBootstrapper"/>.
+            </summary>
+        </member>
+        <member name="T:WixSharp.Nsis.PrerequisitePackage">
+            <summary>
+            Describes a prerequisite package of the <see cref="T:WixSharp.Nsis.NsisBootstrapper"/>.
+            </summary>
+        </member>
+        <member name="P:WixSharp.Nsis.PrerequisitePackage.RegKeyValue">
+            <summary>
+            Gets or sets the prerequisite registry key value. This value is used to determine if the prerequisite file should be launched.
+            <para>This value must comply with the following pattern: &lt;RegistryHive&gt;:&lt;KeyPath&gt;:&lt;ValueName&gt;.</para>
+            <code>Prerequisite.RegKeyValue = @"HKLM:Software\My Company\My Product:Installed";</code>
+            Existence of the specified registry value at runtime is interpreted as an indication that the prerequisite file has been already installed.
+            Thus bootstrapper will execute the primary file without launching the prerequisite file first.
+            </summary>
+            <value>The prerequisite registry key value.</value>
+        </member>
+        <member name="P:WixSharp.Nsis.PrerequisitePackage.PostVerify">
+            <summary>
+            Gets or sets the flag which allows you to disable verification of <see cref="P:WixSharp.Nsis.PrerequisitePackage.RegKeyValue"/> after the prerequisite setup is completed.
+            <para>Normally if <c>bootstrapper</c> checks if <see cref="P:WixSharp.Nsis.PrerequisitePackage.RegKeyValue"/> exists straight after the prerequisite installation and starts
+            the primary setup only if it does.</para>
+            <para>It is possible to instruct bootstrapper to continue with the primary setup regardless of the prerequisite installation outcome. This can be done
+            by setting PostVerify to <c>false</c> (default is <c>true</c>)</para>
+            </summary>
+            <value>Post verify prerequisite.</value>
+        </member>
+        <member name="T:WixSharp.Nsis.Payload">
+            <summary>
+            Describes a payload to a bootstrapper.
+            </summary>
+            <seealso cref="T:WixSharp.Nsis.NsisBootstrapper" />
+        </member>
+        <member name="M:WixSharp.Nsis.Payload.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Nsis.Payload"/> class.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Nsis.Payload.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Nsis.Payload"/> class.
+            </summary>
+            <param name="sourceFile">The source file.</param>
+        </member>
+        <member name="P:WixSharp.Nsis.Payload.Name">
+            <summary>
+            The destination path and file name for this payload.
+            The default is the source file name.
+            </summary>
+        </member>
+        <member name="P:WixSharp.Nsis.Payload.SourceFile">
+            <summary>
+            Location of the source file.
+            </summary>
         </member>
         <member name="T:WixSharp.Nsis.RequestExecutionLevel">
             <summary>

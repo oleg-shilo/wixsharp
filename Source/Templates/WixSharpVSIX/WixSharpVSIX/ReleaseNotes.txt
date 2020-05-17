@@ -1,3 +1,8 @@
+v1.14.4.0
+* Impemented/addressed SonarQube suggested changes to the Manaded UI dialogs.  
+* Issue #838: Small suggestion: Show UACWarning only after some delay
+* Assoretd Nsis improvements
+
 v1.9.1.0
 * Issue #784: WixSharp Managed Setup - Custom UI - FeaturesDialog does not propagate user selection
 

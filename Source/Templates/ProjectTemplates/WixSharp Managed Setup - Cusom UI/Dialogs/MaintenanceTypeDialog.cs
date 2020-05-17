@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 
 using WixSharp;
@@ -27,8 +26,7 @@ namespace WixSharpSetup.Dialogs
             get
             {
                 return Shell.Dialogs
-                            .Where(d => d.GetInterfaces().Contains(typeof(IProgressDialog)))
-                            .FirstOrDefault();
+                    .FirstOrDefault(d => d.GetInterfaces().Contains(typeof(IProgressDialog)));
             }
         }
 

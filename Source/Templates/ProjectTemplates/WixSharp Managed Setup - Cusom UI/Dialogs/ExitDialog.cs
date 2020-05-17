@@ -1,7 +1,5 @@
-using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 using WixSharp;
@@ -85,7 +83,11 @@ namespace WixSharpSetup.Dialogs
                 System.IO.File.WriteAllText(logFile, Shell.Log);
                 Process.Start(logFile);
             }
-            catch { }
+            catch
+            {
+                //Catch all, we don't want the installer to crash in an
+                //attempt to view the log.
+            }
         }
     }
 }
