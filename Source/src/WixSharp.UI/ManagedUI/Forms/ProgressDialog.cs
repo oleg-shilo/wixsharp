@@ -110,8 +110,8 @@ namespace WixSharp.UI.Forms
                 case InstallMessage.InstallStart:
                 case InstallMessage.InstallEnd:
                     {
-                        waitPrompt.Visible = false;
                         showWaitPromptTimer.Stop();
+                        waitPrompt.Visible = false;
                     }
                     break;
 
