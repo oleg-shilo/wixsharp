@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -33,7 +31,6 @@ namespace WixSharp.UI.Forms
 
         void FeaturesDialog_Load(object sender, System.EventArgs e)
         {
-            //Debug.Assert(false);
             string drawTextOnlyProp = Runtime.Session.Property("WixSharpUI_TreeNode_TexOnlyDrawing");
 
             bool drawTextOnly = true;
@@ -45,11 +42,9 @@ namespace WixSharp.UI.Forms
             }
             else
             {
-                float dpi = this.CreateGraphics().DpiY;
+                float dpi = CreateGraphics().DpiY;
                 if (dpi == 96) // the checkbox custom drawing is only compatible with 96 DPI
                     drawTextOnly = false;
-                else
-                    drawTextOnly = true;
             }
 
             ReadOnlyTreeNode.Behavior.AttachTo(featuresTree, drawTextOnly);
@@ -88,12 +83,12 @@ namespace WixSharp.UI.Forms
         /// <summary>
         /// The collection of the features selected by user as the features to be installed.
         /// </summary>
-        public static List<string> UserSelectedItems;
+        public static List<string> UserSelectedItems { get; private set; }
 
         /// <summary>
         /// The initial/default set of selected items (features) before user made any selection(s).
         /// </summary>
-        public static List<string> InitialUserSelectedItems;
+        public static List<string> InitialUserSelectedItems { get; private set; }
 
         void BuildFeaturesHierarchy()
         {

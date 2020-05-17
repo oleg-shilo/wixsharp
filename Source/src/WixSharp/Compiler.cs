@@ -39,9 +39,6 @@ using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 using IO = System.IO;
 
-//WIX References:
-//http://www.wixwiki.com/index.php?title=Main_Page
-
 namespace WixSharp
 {
 
