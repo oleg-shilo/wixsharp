@@ -243,6 +243,7 @@ namespace WixSharp.CommonTasks
             var tool = new ExternalTool
             {
                 WellKnownLocations = wellKnownLocations ??
+                                     @"C:\Program Files (x86)\Windows Kits\10\App Certification Kit;" +
                                      @"C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x86;" +
                                      @"C:\Program Files (x86)\Windows Kits\10\bin\x86;" +
                                      @"C:\Program Files (x86)\Windows Kits\8.1\bin\x86;" +
