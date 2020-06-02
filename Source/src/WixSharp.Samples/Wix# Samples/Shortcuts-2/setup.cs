@@ -20,15 +20,15 @@ class Script
                     //Files and Shortcuts
                     new Dir(@"%ProgramFiles%\My Company\My Product",
                         new File(@"AppFiles\MyApp.exe",
-                            new FileShortcut("MyApp") { WorkingDirectory = "[INSTALL_DIR]" }),
+                            new FileShortcut("MyApp") { WorkingDirectory = "[INSTALLDIR]" }),
                         new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")),
 
                     new Dir(@"%ProgramMenu%\My Company\My Product",
                         new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]"),
-                        new ExeFileShortcut("MyApp", "[INSTALL_DIR]MyApp.exe", arguments: "")),
+                        new ExeFileShortcut("MyApp", "[INSTALLDIR]MyApp.exe", arguments: "")),
 
                      new Dir(@"%Desktop%",
-                        new ExeFileShortcut("MyApp", "[INSTALL_DIR]MyApp.exe", arguments: "")
+                        new ExeFileShortcut("MyApp", "[INSTALLDIR]MyApp.exe", arguments: "")
                         {
                             Condition = new Condition("INSTALLDESKTOPSHORTCUT=\"yes\"") //property based condition
                         }),

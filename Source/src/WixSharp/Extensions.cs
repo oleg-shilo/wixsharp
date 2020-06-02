@@ -1353,9 +1353,9 @@ namespace WixSharp
         /// <para>
         /// <example>
         /// <code>
-        /// @"%INSTALL_DIR%\my_app.exe".NormalizeWixString() -> "[INSTALL_DIR]my_app.exe"
-        /// @"%INSTALL_DIR%my_app.exe".NormalizeWixString()  -> "[INSTALL_DIR]my_app.exe"
-        /// @"[INSTALL_DIR]my_app.exe".NormalizeWixString()  -> "[INSTALL_DIR]my_app.exe"
+        /// @"%INSTALLDIR%\my_app.exe".NormalizeWixString() -> "[INSTALLDIR]my_app.exe"
+        /// @"%INSTALLDIR%my_app.exe".NormalizeWixString()  -> "[INSTALLDIR]my_app.exe"
+        /// @"[INSTALLDIR]my_app.exe".NormalizeWixString()  -> "[INSTALLDIR]my_app.exe"
         /// </code>
         /// </example>
         /// </para>

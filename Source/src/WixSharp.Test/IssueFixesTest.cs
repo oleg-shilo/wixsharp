@@ -56,7 +56,7 @@ namespace WixSharp.Test
         public void Fix_Issue_656()
         {
             // 'MySystem' should not be converted to 'MySystemFolder`
-            var raw_path = @"[INSTALL_DIR]\MySystem\MyProduct.exe";
+            var raw_path = @"[INSTALLDIR]\MySystem\MyProduct.exe";
 
             var normalized_path = raw_path.NormalizeWixString();
 

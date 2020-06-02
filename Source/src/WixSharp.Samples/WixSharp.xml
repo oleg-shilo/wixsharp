@@ -8727,9 +8727,9 @@
             <para>
             <example>
             <code>
-            @"%INSTALL_DIR%\my_app.exe".NormalizeWixString() -> "[INSTALL_DIR]my_app.exe"
-            @"%INSTALL_DIR%my_app.exe".NormalizeWixString()  -> "[INSTALL_DIR]my_app.exe"
-            @"[INSTALL_DIR]my_app.exe".NormalizeWixString()  -> "[INSTALL_DIR]my_app.exe"
+            @"%INSTALLDIR%\my_app.exe".NormalizeWixString() -> "[INSTALLDIR]my_app.exe"
+            @"%INSTALLDIR%my_app.exe".NormalizeWixString()  -> "[INSTALLDIR]my_app.exe"
+            @"[INSTALLDIR]my_app.exe".NormalizeWixString()  -> "[INSTALLDIR]my_app.exe"
             </code>
             </example>
             </para>
@@ -12581,7 +12581,7 @@
                  new Project("My Product",
                  ...
                  new Dir(@"%Desktop%",
-                     new WixSharp.Shortcut("MyApp", "[INSTALL_DIR]MyApp.exe", "")
+                     new WixSharp.Shortcut("MyApp", "[INSTALLDIR]MyApp.exe", "")
                      {
                         Condition = new Condition("INSTALLDESKTOPSHORTCUT=\"yes\"")
                      }),
@@ -13836,7 +13836,7 @@
                 new Project("My Product",
                             ...
                             new Dir(@"%Desktop%",
-                                new WixSharp.Shortcut("MyApp", "[INSTALL_DIR]MyApp.exe", "")
+                                new WixSharp.Shortcut("MyApp", "[INSTALLDIR]MyApp.exe", "")
                                 {
                                     Condition = new Condition("INSTALLDESKTOPSHORTCUT=\"yes\"")
                                 }),
@@ -14046,7 +14046,7 @@
              with custom value <c>INSTALLDESKTOPSHORTCUT="yes"</c>:
              <code>
                  new Dir(@"%Desktop%",
-                     new WixSharp.Shortcut("MyApp", "[INSTALL_DIR]MyApp.exe", "")
+                     new WixSharp.Shortcut("MyApp", "[INSTALLDIR]MyApp.exe", "")
                      {
                         Condition = Condition.Create("INSTALLDESKTOPSHORTCUT=\"yes\"")
                      })
