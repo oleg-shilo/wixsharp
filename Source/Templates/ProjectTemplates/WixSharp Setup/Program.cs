@@ -3,7 +3,7 @@ using WixSharp;
 
 #error "DON'T FORGET to install NuGet package 'WixSharp' and remove this `#error` statement."
 // NuGet console: Install-Package WixSharp
-// NuGet Manager UI: browse tab
+// NuGet Manager UI: browse tab !!!
 
 namespace $safeprojectname$
 {

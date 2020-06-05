@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="wix\$(ProjectName).g.wxs" />
     <Compile Include="CustomDialog.cs">
       <SubType>Form</SubType>
     </Compile>

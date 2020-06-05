@@ -2,6 +2,7 @@
 //css_ref System.Core.dll;
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
@@ -20,24 +21,51 @@ using WixSharp.CommonTasks;
 
 public class Script
 {
-    static public void Main()
+    static public void Main(string[] args)
     {
-        var project = new ManagedProject("CustomActionTest",
-                new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File("setup.cs")),
-                new ManagedAction(CustomActions.MyAction, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed),
-                new Error("9000", "Hello World! (CLR: v[2]) Embedded Managed CA ([3])"));
+        if (args.Contains("-remove"))
+        {
+            RemoveFiles(args[1]);
+        }
+        else
+        {
+            var project = new ManagedProject("CustomActionTest",
+                    new Dir(@"%ProgramFiles%\My Company\My Product",
+                        new File("setup.cs")),
+                    new ManagedAction(CustomActions.MyAction, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed),
+                    new ManagedAction(CustomActions.InvokeRemoveFiles, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed),
+                    new Error("9000", "Hello World! (CLR: v[2]) Embedded Managed CA ([3])"));
 
-        //project.Platform = Platform.x64;
-        project.PreserveTempFiles = true;
-        // project.OutDir = "bin";
+            //project.Platform = Platform.x64;
+            project.PreserveTempFiles = true;
+            // project.OutDir = "bin";
 
-        project.BuildMsi();
+            project.BuildMsi();
+        }
+    }
+
+    static void RemoveFiles(string installdir)
+    {
     }
 }
 
 public class CustomActions
 {
+    [CustomAction]
+    public static ActionResult InvokeRemoveFiles(Session session)
+    {
+        var startInfo = new ProcessStartInfo();
+
+        startInfo.UseShellExecute = true;
+        startInfo.FileName = typeof(CustomActions).Assembly.Location;
+        startInfo.Arguments = "-remove \"" + session.Property("INSTALLDIR") + "\"";
+        startInfo.Verb = "runas";
+
+        Process.Start(startInfo);
+
+        return ActionResult.Success;
+    }
+
     [CustomAction]
     public static ActionResult MyAction(Session session)
     {
