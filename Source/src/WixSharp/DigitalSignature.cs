@@ -90,7 +90,7 @@ namespace WixSharp
         public virtual int Apply(string fileToSign)
         {
             var retValue = CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
-                PrepareOptionalArguments(), WellKnownLocations, CertificateStore, false, OutputLevel, HashAlgorithm);
+                PrepareOptionalArguments(), WellKnownLocations, CertificateStore, OutputLevel, HashAlgorithm);
 
             Console.WriteLine(retValue != 0
                 ? $"Error: Could not sign the {fileToSign} file."
