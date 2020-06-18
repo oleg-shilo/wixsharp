@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>1.14.5.0</version>
+    <version>1.14.6.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,7 +16,8 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.14.5.0
+    <releaseNotes>Release v1.14.6.0
+* Issue #866: Improvements to digital signatures. Support for signing using SHA1, SHA256, or both 
 * Issue #835: Confusing error: "API restriction: The assembly '' has already loaded from a different location. It cannot be loaded from a new location within the same appdomain."
 * NuGet `WixSharp` package v.14.4.1: improved integration with VS templates - no need for project reload on the first run.
 * Issue #856:  INSTALL_DIR should be INSTALLDIR
