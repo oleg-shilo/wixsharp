@@ -392,10 +392,11 @@ namespace WixSharp
         sha1Hash
     }
 
+    [Flags]
     public enum HashAlgorithmType
     {
-        sha1,
-        sha256
+        sha1 = 0x01,
+        sha256 = 0x02
     }
 
 #pragma warning restore 1591
