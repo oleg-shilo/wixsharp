@@ -1533,10 +1533,15 @@ namespace WixSharp
         /// <typeparam name="TSource">The type of the T source.</typeparam>
         /// <param name="source">The source.</param>
         /// <returns></returns>
-        public static bool None<TSource>(this IEnumerable<TSource> source)
-        {
-            return !source.Any();
-        }
+        public static bool None<TSource>(this IEnumerable<TSource> source) => !source.Any();
+
+        /// <summary>
+        /// Determines if the collection contains a single item.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <returns></returns>
+        public static bool SingleItem<TSource>(this IEnumerable<TSource> source) => source.Count() == 1;
 
         /// <summary>
         /// Determines whether the given string is empty.

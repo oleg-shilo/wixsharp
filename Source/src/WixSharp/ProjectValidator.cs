@@ -134,11 +134,11 @@ namespace WixSharp
                                    .GroupBy(a => a.ActionAssembly)
                                        .Where(g => g.Count() > 1)
                                        .Select(g => new
-                                    {
-                                        Assembly = g.Key,
-                                        Info = g.Select(a => new { Name = a.MethodName, RefAsms = a.RefAssemblies.Select(r => Path.GetFileName(r)).ToArray() }).ToArray(),
-                                        IsInconsistent = g.Select(action => action.GetRefAssembliesHashCode(project.DefaultRefAssemblies)).Distinct().Count() > 1,
-                                    })
+                                       {
+                                           Assembly = g.Key,
+                                           Info = g.Select(a => new { Name = a.MethodName, RefAsms = a.RefAssemblies.Select(r => Path.GetFileName(r)).ToArray() }).ToArray(),
+                                           IsInconsistent = g.Select(action => action.GetRefAssembliesHashCode(project.DefaultRefAssemblies)).Distinct().Count() > 1,
+                                       })
                                    .Where(x => x.IsInconsistent)
                                        .FirstOrDefault();
 
@@ -212,6 +212,11 @@ namespace WixSharp
         public string OriginalAssemblyFile(string file)
         {
             return Utils.OriginalAssemblyFile(file);
+        }
+
+        public string AssemblyScopeName(string file)
+        {
+            return Reflection.Assembly.ReflectionOnlyLoad(System.IO.File.ReadAllBytes(file)).ManifestModule.ScopeName;
         }
 
         public void ValidateCAAssembly(string file, string dtfAsm)

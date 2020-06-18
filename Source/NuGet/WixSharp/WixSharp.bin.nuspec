@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>1.14.4.0</version>
+    <version>1.14.5.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,14 +16,12 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.14.4.0
-* Impemented/addressed SonarQube suggested changes to the Manaded UI dialogs.  
-  Currency of @neal83 and Gilles (@GilesBathgate)
-* Issue #838: Small suggestion: Show UACWarning only after some delay
-* Merge pull request #833 from geghamyan/nsis-improvements
-* Assoretd Nsis improvements
-  Currency of Tigran (@geghamyan) 
-
+    <releaseNotes>Release v1.14.5.0
+* Issue #835: Confusing error: "API restriction: The assembly '' has already loaded from a different location. It cannot be loaded from a new location within the same appdomain."
+* NuGet `WixSharp` package v.14.4.1: improved integration with VS templates - no need for project reload on the first run.
+* Issue #856:  INSTALL_DIR should be INSTALLDIR
+* Issue #591 (extended): Code signing timestamping fails if old Windows SDK is installed
+* Issue #810: Localization; Added signing at teh end of `BuildMultilanguageMsi`
 
 
 </releaseNotes>

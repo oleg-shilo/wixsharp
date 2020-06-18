@@ -1327,16 +1327,16 @@ namespace WixSharp
                 Dir firstDirWithItems = wDirs.First();
 
                 string logicalPath = firstDirWithItems.Name;
-                while (firstDirWithItems.Shortcuts.Count() == 0 &&
-                       firstDirWithItems.Dirs.Count() == 1 &&
-                       firstDirWithItems.Files.Count() == 0)
+                while (firstDirWithItems.Shortcuts.None() &&
+                       firstDirWithItems.Dirs.SingleItem() &&
+                       firstDirWithItems.Files.None())
                 {
                     firstDirWithItems = firstDirWithItems.Dirs.First();
                     logicalPath += "\\" + firstDirWithItems.Name;
                 }
 
                 if ((!firstDirWithItems.IsIdSet() || firstDirWithItems.isAutoId) &&
-                    !dirId.IsEmpty())
+                    dirId.IsNotEmpty())
                 {
                     if (firstDirWithItems.Id.IsWixConstant())
                         Compiler.OutputWriteLine($"WARNING: Special folder directory ID '{firstDirWithItems.Id}' has been reset to '{dirId}'.\n" +

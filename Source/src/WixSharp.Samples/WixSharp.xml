@@ -8783,6 +8783,14 @@
             <param name="source">The source.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.SingleItem``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Determines if the collection contains a single item.
+            </summary>
+            <typeparam name="TSource">The type of the source.</typeparam>
+            <param name="source">The source.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.IsEmpty(System.String)">
             <summary>
             Determines whether the given string is empty.
