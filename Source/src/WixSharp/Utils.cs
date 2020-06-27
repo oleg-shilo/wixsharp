@@ -24,6 +24,7 @@ THE SOFTWARE.
 #endregion Licence...
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using IO = System.IO;
@@ -127,11 +128,19 @@ namespace WixSharp
                                .GetAssemblies()
                                .FirstOrDefault(a => a.GetLocation().SamePathAs(file));
 
-            if (asm == null)
-                asm = Reflection.Assembly.ReflectionOnlyLoad(System.IO.File.ReadAllBytes(file));
+            // Get the original name to handle 'setup.cs.dll' vs 'setup.cs.compiled' cases
 
-            // for example 'setup.cs.dll' vs 'setup.cs.compiled'
-            var name = asm.ManifestModule.ScopeName;
+            string name;
+            if (asm == null)
+            {
+                // Issue #835
+                // Cannot use ReflectionOnlyLoad as it will throw if it is called more than once from the same AppDomain.
+                // will use temp domain then
+
+                name = (string)ExecuteInTempDomain<AsmReflector>(asmReflector => asmReflector.AssemblyScopeName(file));
+            }
+            else
+                name = asm.ManifestModule.ScopeName;
 
             return IO.Path.Combine(dir, name);
         }

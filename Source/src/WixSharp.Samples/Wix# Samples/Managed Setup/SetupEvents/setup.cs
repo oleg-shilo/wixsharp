@@ -55,9 +55,11 @@ public class Script
 
         project.UILoaded += project_UIInit;
         project.UIInitialized += Project_UIInitialized;
+
         project.Load += project_Load;
         project.BeforeInstall += project_BeforeInstall;
         project.AfterInstall += project_AfterInstall;
+
         project.DefaultDeferredProperties += ",ADDLOCAL";
 
         project.BeforeInstall += args =>

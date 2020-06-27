@@ -47,7 +47,7 @@ namespace WixSharp
     ///     new Project("My Product",
     ///                 ...
     ///                 new Dir(@"%Desktop%",
-    ///                     new WixSharp.Shortcut("MyApp", "[INSTALL_DIR]MyApp.exe", "")
+    ///                     new WixSharp.Shortcut("MyApp", "[INSTALLDIR]MyApp.exe", "")
     ///                     {
     ///                         Condition = new Condition("INSTALLDESKTOPSHORTCUT=\"yes\"")
     ///                     }),
@@ -295,7 +295,7 @@ namespace WixSharp
         /// with custom value <c>INSTALLDESKTOPSHORTCUT="yes"</c>:
         /// <code>
         ///     new Dir(@"%Desktop%",
-        ///         new WixSharp.Shortcut("MyApp", "[INSTALL_DIR]MyApp.exe", "")
+        ///         new WixSharp.Shortcut("MyApp", "[INSTALLDIR]MyApp.exe", "")
         ///         {
         ///            Condition = Condition.Create("INSTALLDESKTOPSHORTCUT=\"yes\"")
         ///         })

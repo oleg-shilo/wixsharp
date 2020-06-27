@@ -2,6 +2,8 @@
 //css_ref System.Core.dll;
 using System;
 using System.Diagnostics;
+
+// using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Windows.Forms;
@@ -9,8 +11,11 @@ using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
-using WixSharp.Controls;
 using WixSharp.Forms;
+
+#pragma warning "sdsd"
+#pragma warning disable S1075 // URIs should not be hardcoded
+#pragma warning disable S1118 // Utility classes should not have public constructors
 
 // Truly a throw away project for dev testing
 
@@ -67,12 +72,25 @@ static class Script
         }
     }
 
+    static void Issue_865()
+    {
+        // Compiler.AutoGeneration.InstallDirDefaultId = "CommonAppDataFolder";
+
+        var project = new Project("My Product Name",
+                            new Dir(@"%CommonAppDataFolder%",
+                                    new WixSharp.Dir("SubFolder1", new WixSharp.File(@"c:\temp\Dockerfile")),
+                                    new WixSharp.Dir("SubFolder2", new WixSharp.File(@"c:\temp\Dockerfile"))));
+
+        var wix = System.IO.File.ReadAllText(project.BuildWxs());
+        Console.WriteLine(wix);
+    }
+
     static void Issue_386()
     {
         var project =
             new ManagedProject("ElevatedSetup",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File(@"Files\bin\MyApp.exe")));
+                    new WixSharp.File(@"Files\bin\MyApp.exe")));
 
         project.ManagedUI = ManagedUI.Default;
         project.AddAction(new ManagedAction(CustomActions.CheckIfAdmin,
@@ -180,7 +198,7 @@ static class Script
 
     static void Issue_609()
     {
-        // AutoElements.DisableAutoKeyPath = true;
+        AutoElements.DisableAutoKeyPath = true;
 
         var project = new Project("MyProduct",
                 new Dir(@"%LocalAppDataFolder%\My Company\My Product", new File("setup.cs")),
@@ -342,7 +360,15 @@ static class Script
 
     static public void Main()
     {
+        // var file = @"E:\PrivateData\Galos\Projects\WixSharp\Source\src\WixSharp.Samples\Support\testpad\test_asm.dll";
+
+        // file = @"E:\PrivateData\Galos\Projects\WixSharp\Source\src\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll";
+        //
+        // var asm = System.Reflection.Assembly.ReflectionOnlyLoad(System.IO.File.ReadAllBytes(file));
+
         // HiTeach_MSI.Program.Main1(); return;
+        // MsiInstaller.MyMsi.Build(); return;
+        Issue_865(); return;
         Issue_825(); return;
         Issue_609(); return;
         Issue_551(); return;

@@ -345,10 +345,10 @@
             Thus bootstrapper will execute <c>PrimaryFile</c> without launching <c>PrerequisiteFile</c> first.</param>
             <returns>Path to the built bootstrapper file. Returns <c>null</c> if bootstrapper cannot be built.</returns>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySign(System.String,System.String,System.String,System.String,System.String,System.String,WixSharp.StoreType,System.Boolean,WixSharp.SignOutputLevel,WixSharp.HashAlgorithmType)">
+        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySign(System.String,System.String,System.String,System.String,System.String,System.String,WixSharp.StoreType,WixSharp.SignOutputLevel,WixSharp.HashAlgorithmType)">
              <summary>
              Applies digital signature to a file (e.g. msi, exe, dll) with MS <c>SignTool.exe</c> utility.
-             Please use <see cref="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,WixSharp.SignOutputLevel)"/> for signing a bootstrapper.
+             Please use <see cref="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,WixSharp.SignOutputLevel,WixSharp.HashAlgorithmType)"/> for signing a bootstrapper.
              </summary>
              <param name="fileToSign">The file to sign.</param>
              <param name="certificateId">Specify the signing certificate in a file common name or sha1 hash. If this file is a PFX with a password, the password may be supplied
@@ -361,9 +361,10 @@
              If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
              <param name="certificateStore">Where to load the certificate from.
              from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
-             <param name="dualSign">A flag indicating if the file should be signed with both SHA1 and SHA256.</param>
              <param name="outputLevel">A flag indicating the output level</param>
-             <param name="hashAlgorithm">the hash algorithm to use</param>
+             <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow 
+             a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
+             </param>
              <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
             
              <example>The following is an example of signing <c>Setup.msi</c> file.
@@ -378,7 +379,7 @@
              </code>
              </example>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,WixSharp.SignOutputLevel)">
+        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,WixSharp.SignOutputLevel,WixSharp.HashAlgorithmType)">
              <summary>
              Applies digital signature to a bootstrapper and the bootstrapper engine with MS <c>SignTool.exe</c> utility.
              <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about bootstrapper engine signing</a>
@@ -394,8 +395,10 @@
              If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
              <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
              from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
-             <param name="dualSign">A flag indicating if the file should be signed with both SHA1 and SHA256.</param>
              <param name="outputLevel">A flag indicating the output level</param>
+             <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow 
+             a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
+             </param>
              <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
             
              <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file.
@@ -409,11 +412,11 @@
              </code>
              </example>
         </member>
-        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapperEngine(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,WixSharp.SignOutputLevel)">
+        <member name="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapperEngine(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,WixSharp.SignOutputLevel,WixSharp.HashAlgorithmType)">
              <summary>
              Applies digital signature to a bootstrapper engine with MS <c>SignTool.exe</c> utility.
              Note : this method doesn't sign the bootstrapper file but the engine only.
-             Please use <see cref="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,WixSharp.SignOutputLevel)"/> for signing both (bootstrapper and bootstrapper engine) instead.
+             Please use <see cref="M:WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,WixSharp.SignOutputLevel,WixSharp.HashAlgorithmType)"/> for signing both (bootstrapper and bootstrapper engine) instead.
              <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about Bootstrapper engine signing</a>
              </summary>
              <param name="bootstrapperFileToSign">The Bootstrapper file to sign.</param>
@@ -427,8 +430,10 @@
              If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
              <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
              from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
-             <param name="dualSign">A flag indicating if the file should be signed with both SHA1 and SHA256.</param>
              <param name="outputLevel">A flag indicating the output level</param>
+             <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow 
+             a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
+             </param>
              <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
             
              <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file engine.
@@ -8727,9 +8732,9 @@
             <para>
             <example>
             <code>
-            @"%INSTALL_DIR%\my_app.exe".NormalizeWixString() -> "[INSTALL_DIR]my_app.exe"
-            @"%INSTALL_DIR%my_app.exe".NormalizeWixString()  -> "[INSTALL_DIR]my_app.exe"
-            @"[INSTALL_DIR]my_app.exe".NormalizeWixString()  -> "[INSTALL_DIR]my_app.exe"
+            @"%INSTALLDIR%\my_app.exe".NormalizeWixString() -> "[INSTALLDIR]my_app.exe"
+            @"%INSTALLDIR%my_app.exe".NormalizeWixString()  -> "[INSTALLDIR]my_app.exe"
+            @"[INSTALLDIR]my_app.exe".NormalizeWixString()  -> "[INSTALLDIR]my_app.exe"
             </code>
             </example>
             </para>
@@ -8780,6 +8785,14 @@
             Determines if the specified sequence has no items. It is opposite of IEnumerable&lt;TSource&gt;.Any().
             </summary>
             <typeparam name="TSource">The type of the T source.</typeparam>
+            <param name="source">The source.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.SingleItem``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Determines if the collection contains a single item.
+            </summary>
+            <typeparam name="TSource">The type of the source.</typeparam>
             <param name="source">The source.</param>
             <returns></returns>
         </member>
@@ -12581,7 +12594,7 @@
                  new Project("My Product",
                  ...
                  new Dir(@"%Desktop%",
-                     new WixSharp.Shortcut("MyApp", "[INSTALL_DIR]MyApp.exe", "")
+                     new WixSharp.Shortcut("MyApp", "[INSTALLDIR]MyApp.exe", "")
                      {
                         Condition = new Condition("INSTALLDESKTOPSHORTCUT=\"yes\"")
                      }),
@@ -13836,7 +13849,7 @@
                 new Project("My Product",
                             ...
                             new Dir(@"%Desktop%",
-                                new WixSharp.Shortcut("MyApp", "[INSTALL_DIR]MyApp.exe", "")
+                                new WixSharp.Shortcut("MyApp", "[INSTALLDIR]MyApp.exe", "")
                                 {
                                     Condition = new Condition("INSTALLDESKTOPSHORTCUT=\"yes\"")
                                 }),
@@ -14046,7 +14059,7 @@
              with custom value <c>INSTALLDESKTOPSHORTCUT="yes"</c>:
              <code>
                  new Dir(@"%Desktop%",
-                     new WixSharp.Shortcut("MyApp", "[INSTALL_DIR]MyApp.exe", "")
+                     new WixSharp.Shortcut("MyApp", "[INSTALLDIR]MyApp.exe", "")
                      {
                         Condition = Condition.Create("INSTALLDESKTOPSHORTCUT=\"yes\"")
                      })

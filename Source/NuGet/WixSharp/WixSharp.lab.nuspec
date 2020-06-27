@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.Lab</id>
-    <version>1.14.3.0</version>
+    <version>1.14.6.0</version>
     <title>Wix# (WixSharp) - Experimantal features</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -14,11 +14,13 @@
 The package contains the sample code for building a simple MSI with the CLR WinForm dialog inserted into UI sequence between InsallDirDlg and VerifyReadyDlg native MSI dialogs. In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# binaries containing experimental features (e.g. native WiX UI support).</summary>
-    <releaseNotes>Release v1.14.2.0
-* Fix collision possibility for GetHashCode32(): use (uint) instead of Math.Abs()
-* Issue #786: NullReferenceException on FindClientAssemblyInCallStack
-* Dynamic Localization - bootstrapper support
-* Modified `Compiler.BuildMsi(string path)` to return potentially modified input path
+    <releaseNotes>Release v1.14.6.0
+* Issue #866: Improvements to digital signatures. Support for signing using SHA1, SHA256, or both 
+* Issue #835: Confusing error: "API restriction: The assembly '' has already loaded from a different location. It cannot be loaded from a new location within the same appdomain."
+* NuGet `WixSharp` package v.14.4.1: improved integration with VS templates - no need for project reload on the first run.
+* Issue #856:  INSTALL_DIR should be INSTALLDIR
+* Issue #591 (extended): Code signing timestamping fails if old Windows SDK is installed
+* Issue #810: Localization; Added signing at teh end of `BuildMultilanguageMsi`
 
 
 </releaseNotes>
@@ -30,7 +32,7 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
       <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
     </frameworkAssemblies>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.14.3.0" />
+      <dependency id="WixSharp.bin" version="1.14.6.0" />
     </dependencies>
   </metadata>
   <files>

@@ -34,6 +34,8 @@ using System.Xml.Linq;
 using IO = System.IO;
 using Path = System.IO.Path;
 
+#pragma warning disable S2223 // Non-constant static fields should not be visible
+
 namespace WixSharp
 {
     /// <summary>
