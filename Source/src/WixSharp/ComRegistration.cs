@@ -353,4 +353,142 @@ namespace WixSharp
             return root;
         }
     }
+
+    /// <summary>
+    /// Register a type library (TypeLib). Please note that in order to properly use this non-advertised, you will need use this element with Advertise='no' and also author the appropriate child Interface elements by extracting them from the type library itself.
+    /// </summary>
+
+    /// <example>The following is an example of deploying and registering  a COM server.
+    /// <code>
+    /// var project =  new Project("MyProduct",
+    ///     new Dir(@"%ProgramFiles%\My Company\My Product",
+    ///         new File(@"Files\Bin\MyApp.exe",
+    ///                 new TypeLib
+    ///                 {
+    ///                     Id = new Guid("6f330b47-2577-43ad-9095-1861ba25889b"),
+    ///                     Language = 33,
+    ///                     MajorVersion = 23
+    ///                 },
+    ///                 new ComRegistration
+    ///                 {
+    ///                     Id = new Guid("6f330b47-2577-43ad-9095-1861ba25889b"),
+    ///                     Description = "MY DESCRIPTION",
+    ///                     ThreadingModel = ThreadingModel.apartment,
+    ///                     Context = "InprocServer32",
+    ///                     ProgIds = new[]
+    ///                     {
+    ///                         new ProgId
+    ///                         {
+    ///                             Id = "PROG.ID.1",
+    ///                             Description ="Version independent ProgID ",
+    ///                             ProgIds = new[]
+    ///                             {
+    ///                                 new ProgId
+    ///                                 {
+    ///                                     Id = "prog.id",
+    ///                                     Description="some description"
+    ///                                 }
+    ///                             }
+    ///                         }
+    ///                     }
+    ///                 })));
+    /// </code>
+    /// </example>
+    /// <seealso cref="WixSharp.WixEntity" />
+    /// <seealso cref="WixSharp.IGenericEntity" />
+    public class TypeLib : WixEntity, IGenericEntity
+    {
+        /// <summary>
+        /// The GUID that identifes the type library.
+        /// </summary>
+        [Xml]
+        public new Guid? Id;
+
+        /// <summary>
+        /// Value of 'true' will create a row in the TypeLib table. Value of 'false' will create rows in the Registry table. The default value is 'false'.
+        /// </summary>
+        [Xml]
+        public bool? Advertise;
+
+        /// <summary>
+        /// Value of 'true' means the type library describes controls, and should not be displayed in type browsers intended for nonvisual objects. This attribute can only be set if Advertise='false'.
+        /// </summary>
+        [Xml]
+        public bool? Control;
+
+        /// <summary>
+        /// The cost associated with the registration of the type library in bytes. This attribute cannot be set if Advertise='no'.
+        /// </summary>
+        [Xml]
+        public int? Cost;
+
+        /// <summary>
+        /// The localizable description of the type library.
+        /// </summary>
+        [Xml]
+        public string Description;
+
+        /// <summary>
+        /// Value of 'true' means the type library exists in a persisted form on disk. This attribute can only be set if Advertise='false'.
+        /// </summary>
+        [Xml]
+        public bool? HasDiskImage;
+
+        /// <summary>
+        /// The identifier of the Directory element for the help directory.
+        /// </summary>
+        [Xml]
+        public string HelpDirectory;
+
+        /// <summary>
+        /// Value of 'true' means the type library should not be displayed to users, although its use is not restricted. Should be used by controls. Hosts should create a new type library that wraps the control with extended properties. This attribute can only be set if Advertise='false'.
+        /// </summary>
+        [Xml]
+        public bool? Hidden;
+
+        /// <summary>
+        /// The language of the type library. This must be a non-negative integer.
+        /// </summary>
+        [Xml]
+        public int Language;
+
+        /// <summary>
+        /// 	The major version of the type library. The value should be an integer from 0 - 255.
+        /// </summary>
+        [Xml]
+        public int? MajorVersion;
+
+        /// <summary>
+        /// 	The minor version of the type library. The value should be an integer from 0 - 255.
+        /// </summary>
+        [Xml]
+        public int? MinorVersion;
+
+        /// <summary>
+        /// The resource id of a typelib. The value is appended to the end of the typelib path in the registry.
+        /// </summary>
+        [Xml]
+        public int? ResourceId;
+
+        /// <summary>
+        /// Value of 'true' means the type library is restricted, and should not be displayed to users. This attribute can only be set if Advertise='false'.
+        /// </summary>
+        [Xml]
+        public bool? Restricted;
+
+        /// <summary>
+        /// The method demonstrates the correct way of integrating RemoveFolderEx.
+        /// <para>
+        /// The sample also shows various XML manipulation techniques available with Fluent XElement extensions:
+        /// <para>- Auto XML serialization of CLR object with serializable members marked with XMLAttribute.</para>
+        /// <para>- XML namespace-transparent lookup method FindSingle.</para>
+        /// </para>
+        /// </summary>
+        /// <param name="context"></param>
+        public void Process(ProcessingContext context)
+        {
+            XElement element = this.ToXElement("TypeLib");
+            context.XParent.Add(element);
+        }
+    }
 }

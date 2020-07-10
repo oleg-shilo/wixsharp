@@ -12,6 +12,12 @@ class Script
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(@"Files\Bin\MyApp.exe",
+                             new TypeLib
+                             {
+                                 Id = new Guid("6f330b47-2577-43ad-9095-1861ba25889b"),
+                                 Language = 33,
+                                 MajorVersion = 23
+                             },
                              new ComRegistration
                              {
                                  Id = new Guid("6f330b47-2577-43ad-9095-1861ba25889b"),
