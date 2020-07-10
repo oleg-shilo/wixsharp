@@ -1,2 +1,2 @@
-start msiexec /uninstall setup.msi
+start msiexec /uninstall "my product.msi"
 
