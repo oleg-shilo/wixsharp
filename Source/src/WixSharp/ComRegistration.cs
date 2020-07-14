@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace WixSharp
@@ -19,6 +20,102 @@ namespace WixSharp
     }
 
 #pragma warning restore 1591
+
+    /// <summary>
+    /// Application ID containing Distributed COM (DCOM) information for the associated application GUID.
+    /// </summary>
+    public class AppId : WixEntity, IGenericEntity
+    {
+        /// <summary>
+        /// The GUID that corresponds to the named executable.
+        /// </summary>
+        [Xml]
+        public new Guid? Id;
+
+        /// <summary>
+        /// Set this value to true to configure to activate on the same system as persistent storage.
+        /// </summary>
+        [Xml]
+        public bool? ActivateAtStorage;
+
+        /// <summary>
+        /// Set this value to true in order to create a normal AppId table row. Set this value to 'no' in order to
+        /// generate Registry rows that perform similar registration
+        /// (without the often problematic Windows Installer advertising behavior).
+        /// </summary>
+        [Xml]
+        public bool Advertise;
+
+        /// <summary>
+        /// Describes the application associated with this AppId.
+        /// </summary>
+        [Xml]
+        public string Description;
+
+        /// <summary>
+        /// If the class is a DLL that needs to be run in an external executable process, this field specifies the path
+        /// to the executable.
+        /// </summary>
+        [Xml]
+        public string DllSurrogate;
+
+        /// <summary>
+        /// If this field is set, the class will be installed as a service with the name in the field.
+        /// </summary>
+        [Xml]
+        public string LocalService;
+
+        /// <summary>
+        /// If an activation function in the class is called and its COSERVERINFO structure is unspecified, it
+        /// will be run on the remote server specified in this field.
+        /// </summary>
+        [Xml]
+        public string RemoteServerName;
+
+        /// <summary>
+        /// Set this value to true to configure the class to run as the currently logged in and active desktop user.
+        /// </summary>
+        [Xml]
+        public bool RunAsInteractiveUser;
+
+        /// <summary>
+        /// Parameters to pass when the class is being run as a service.
+        /// </summary>
+        [Xml]
+        public string ServiceParameters;
+
+        /// <summary>
+        /// COM Classes associated with this AppId.
+        /// </summary>
+        public ComRegistration[] ComClasses;
+
+        /// <summary>
+        /// Serializes class into WiX document.
+        /// </summary>
+        /// <param name="context">Processing context for WiX Document.</param>
+        public void Process(ProcessingContext context)
+        {
+            string[] AdvertiseParents = { "Fragment", "Module", "Product" };
+
+            // If the parent element is a Fragment, Module, or Product, ensure Advertised is true.
+            if (!Advertise && AdvertiseParents.Any(s => s == context.XParent.Name.LocalName))
+            {
+                throw new ValidationException($"If {nameof(AppId)} is a child of the elements "
+                    + $"{AdvertiseParents.JoinBy(", ")}, then {nameof(Advertise)} must be set to true.");
+            }
+
+            if (Advertise && Description != null)
+            {
+                throw new ValidationException($"If {nameof(AppId)} is Advertised, {nameof(Description)} cannot be set.");
+            }
+
+            XElement element = this.ToXElement("AppId");
+
+            ComClasses?.ForEach(appChild => element.Add(appChild.ToXElement()));
+
+            context.XParent.Add(element);
+        }
+    }
 
     /// <summary>
     /// COM Class registration.
@@ -357,7 +454,6 @@ namespace WixSharp
     /// <summary>
     /// Register a type library (TypeLib). Please note that in order to properly use this non-advertised, you will need use this element with Advertise='no' and also author the appropriate child Interface elements by extracting them from the type library itself.
     /// </summary>
-
     /// <example>The following is an example of deploying and registering  a COM server.
     /// <code>
     /// var project =  new Project("MyProduct",
@@ -477,6 +573,22 @@ namespace WixSharp
         public bool? Restricted;
 
         /// <summary>
+        /// AppIds associated with this Type Library.
+        /// </summary>
+        public AppId[] AppIds;
+
+        /// <summary>
+        /// COM Classes associated with this Type Library.
+        /// </summary>
+        public ComRegistration[] COMClasses;
+
+        /// <summary>
+        /// Interfaces associated with this Type Library.
+        /// </summary>
+        public Interface[] Interfaces;
+
+
+        /// <summary>
         /// The method demonstrates the correct way of integrating RemoveFolderEx.
         /// <para>
         /// The sample also shows various XML manipulation techniques available with Fluent XElement extensions:
@@ -488,6 +600,11 @@ namespace WixSharp
         public void Process(ProcessingContext context)
         {
             XElement element = this.ToXElement("TypeLib");
+
+            AppIds?.ForEach(appId => appId.ToXElement());
+            COMClasses?.ForEach(comClass => comClass.ToXElement());
+            Interfaces?.ForEach(iface => iface.ToXElement());
+
             context.XParent.Add(element);
         }
     }
