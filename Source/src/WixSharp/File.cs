@@ -28,9 +28,7 @@ THE SOFTWARE.
 #endregion Licence...
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using IO = System.IO;
 
 namespace WixSharp
@@ -138,6 +136,7 @@ namespace WixSharp
             IISVirtualDirs = items.OfType<IISVirtualDir>().ToArray();
             ServiceInstaller = items.OfType<ServiceInstaller>().FirstOrDefault();
             Permissions = items.OfType<FilePermission>().ToArray();
+            AppIds = items.OfType<AppId>().ToArray();
             GenericItems = items.OfType<IGenericEntity>().Where(val => val.GetType() != typeof(ServiceInstaller)).ToArray();
 
             FirewallExceptions = items.OfType<FirewallException>().ToArray();
@@ -147,12 +146,13 @@ namespace WixSharp
                                            .Except(IISVirtualDirs)
                                            .Except(Permissions)
                                            .Except(FirewallExceptions)
+                                           .Except(AppIds)
                                            .Except(GenericItems.Cast<WixEntity>())
                                            .Where(x => x != ServiceInstaller)
                                            .ToArray();
 
             if (firstUnExpectedItem.Any())
-                throw new ApplicationException("{0} is unexpected. Only {2}, {3}, {4}, {5}, {6} and {7} items can be added to {1}".FormatWith(
+                throw new ApplicationException("{0} is unexpected. Only {2}, {3}, {4}, {5}, {6}, {7}, and {8} items can be added to {1}".FormatWith(
                                                firstUnExpectedItem.First().GetType(),
                                                this.GetType(),
                                                typeof(FileShortcut),
@@ -160,6 +160,7 @@ namespace WixSharp
                                                typeof(ServiceInstaller),
                                                typeof(FilePermission),
                                                typeof(FirewallException),
+                                               typeof(AppId),
                                                typeof(IGenericEntity)));
         }
 
@@ -217,6 +218,11 @@ namespace WixSharp
             get => GenericItems.OfType<FirewallException>().ToArray();
             set => GenericItems = GenericItems.Concat(value).Distinct().ToArray();
         }
+
+        /// <summary>
+        /// DCOM AppIds associated with this file.
+        /// </summary>
+        public AppId[] AppIds = new AppId[0];
 
         /// <summary>
         /// Collection of <see cref="T:WixSharp.IGenericEntity" /> to be applied to the file.
