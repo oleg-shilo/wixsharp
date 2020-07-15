@@ -64,7 +64,12 @@ namespace WixSharp
 
         /// <summary>
         /// "Working Directory" for the shortcut to be installed. If <see cref="WorkingDirectory"/> is not specified
-        /// it will be set in the installed shortcut to the location of the file the shortcut points to.
+        /// it will be set in the installed shortcut to the location of the file the shortcut points to defined in the <see cref="Target"/>
+        /// field.
+        /// <para>Note, WixSharp will only be able to set correct <see cref="WorkingDirectory"/> automatically if <see cref="Target"/>
+        /// is defined as a dir_id + file name (e.g. `@"[INSTALLDIR]\app.exe"`). But it will fail if <see cref="Target"/> includs
+        /// any other bits of path (e.g. `@"[INSTALLDIR]\bin\app.exe"`). Thet's why it is mmore practical to set the <see cref="WorkingDirectory"/>
+        /// explicitly.</para>
         /// </summary>
         public string WorkingDirectory = "";
 
