@@ -1,3 +1,3 @@
 ..\..\cscs.exe setup.cs
 
-pause
+rem pause

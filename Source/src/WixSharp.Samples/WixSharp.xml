@@ -3121,6 +3121,71 @@
              Threading model for the CLSID.
             </summary>
         </member>
+        <member name="T:WixSharp.AppId">
+            <summary>
+            Application ID containing Distributed COM (DCOM) information for the associated application GUID.
+            </summary>
+        </member>
+        <member name="F:WixSharp.AppId.Id">
+            <summary>
+            The GUID that corresponds to the named executable.
+            </summary>
+        </member>
+        <member name="F:WixSharp.AppId.ActivateAtStorage">
+            <summary>
+            Set this value to true to configure to activate on the same system as persistent storage.
+            </summary>
+        </member>
+        <member name="F:WixSharp.AppId.Advertise">
+            <summary>
+            Set this value to true in order to create a normal AppId table row. Set this value to 'no' in order to
+            generate Registry rows that perform similar registration
+            (without the often problematic Windows Installer advertising behavior).
+            </summary>
+        </member>
+        <member name="F:WixSharp.AppId.Description">
+            <summary>
+            Describes the application associated with this AppId.
+            </summary>
+        </member>
+        <member name="F:WixSharp.AppId.DllSurrogate">
+            <summary>
+            If the class is a DLL that needs to be run in an external executable process, this field specifies the path
+            to the executable.
+            </summary>
+        </member>
+        <member name="F:WixSharp.AppId.LocalService">
+            <summary>
+            If this field is set, the class will be installed as a service with the name in the field.
+            </summary>
+        </member>
+        <member name="F:WixSharp.AppId.RemoteServerName">
+            <summary>
+            If an activation function in the class is called and its COSERVERINFO structure is unspecified, it
+            will be run on the remote server specified in this field.
+            </summary>
+        </member>
+        <member name="F:WixSharp.AppId.RunAsInteractiveUser">
+            <summary>
+            Set this value to true to configure the class to run as the currently logged in and active desktop user.
+            </summary>
+        </member>
+        <member name="F:WixSharp.AppId.ServiceParameters">
+            <summary>
+            Parameters to pass when the class is being run as a service.
+            </summary>
+        </member>
+        <member name="F:WixSharp.AppId.ComClasses">
+            <summary>
+            COM Classes associated with this AppId.
+            </summary>
+        </member>
+        <member name="M:WixSharp.AppId.Process(WixSharp.ProcessingContext)">
+            <summary>
+            Serializes class into WiX document.
+            </summary>
+            <param name="context">Processing context for WiX Document.</param>
+        </member>
         <member name="T:WixSharp.ComRegistration">
             <summary>
             COM Class registration.
@@ -3396,6 +3461,140 @@
             Serializes the class instance into XML element.
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:WixSharp.TypeLib">
+            <summary>
+            Register a type library (TypeLib). Please note that in order to properly use this non-advertised, you will need use this element with Advertise='no' and also author the appropriate child Interface elements by extracting them from the type library itself.
+            </summary>
+            <example>The following is an example of deploying and registering  a COM server.
+            <code>
+            var project =  new Project("MyProduct",
+                new Dir(@"%ProgramFiles%\My Company\My Product",
+                    new File(@"Files\Bin\MyApp.exe",
+                            new TypeLib
+                            {
+                                Id = new Guid("6f330b47-2577-43ad-9095-1861ba25889b"),
+                                Language = 33,
+                                MajorVersion = 23
+                            },
+                            new ComRegistration
+                            {
+                                Id = new Guid("6f330b47-2577-43ad-9095-1861ba25889b"),
+                                Description = "MY DESCRIPTION",
+                                ThreadingModel = ThreadingModel.apartment,
+                                Context = "InprocServer32",
+                                ProgIds = new[]
+                                {
+                                    new ProgId
+                                    {
+                                        Id = "PROG.ID.1",
+                                        Description ="Version independent ProgID ",
+                                        ProgIds = new[]
+                                        {
+                                            new ProgId
+                                            {
+                                                Id = "prog.id",
+                                                Description="some description"
+                                            }
+                                        }
+                                    }
+                                }
+                            })));
+            </code>
+            </example>
+            <seealso cref="T:WixSharp.WixEntity" />
+            <seealso cref="T:WixSharp.IGenericEntity" />
+        </member>
+        <member name="F:WixSharp.TypeLib.Id">
+            <summary>
+            The GUID that identifes the type library.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.Advertise">
+            <summary>
+            Value of 'true' will create a row in the TypeLib table. Value of 'false' will create rows in the Registry table. The default value is 'false'.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.Control">
+            <summary>
+            Value of 'true' means the type library describes controls, and should not be displayed in type browsers intended for nonvisual objects. This attribute can only be set if Advertise='false'.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.Cost">
+            <summary>
+            The cost associated with the registration of the type library in bytes. This attribute cannot be set if Advertise='no'.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.Description">
+            <summary>
+            The localizable description of the type library.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.HasDiskImage">
+            <summary>
+            Value of 'true' means the type library exists in a persisted form on disk. This attribute can only be set if Advertise='false'.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.HelpDirectory">
+            <summary>
+            The identifier of the Directory element for the help directory.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.Hidden">
+            <summary>
+            Value of 'true' means the type library should not be displayed to users, although its use is not restricted. Should be used by controls. Hosts should create a new type library that wraps the control with extended properties. This attribute can only be set if Advertise='false'.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.Language">
+            <summary>
+            The language of the type library. This must be a non-negative integer.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.MajorVersion">
+            <summary>
+            	The major version of the type library. The value should be an integer from 0 - 255.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.MinorVersion">
+            <summary>
+            	The minor version of the type library. The value should be an integer from 0 - 255.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.ResourceId">
+            <summary>
+            The resource id of a typelib. The value is appended to the end of the typelib path in the registry.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.Restricted">
+            <summary>
+            Value of 'true' means the type library is restricted, and should not be displayed to users. This attribute can only be set if Advertise='false'.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.AppIds">
+            <summary>
+            AppIds associated with this Type Library.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.COMClasses">
+            <summary>
+            COM Classes associated with this Type Library.
+            </summary>
+        </member>
+        <member name="F:WixSharp.TypeLib.Interfaces">
+            <summary>
+            Interfaces associated with this Type Library.
+            </summary>
+        </member>
+        <member name="M:WixSharp.TypeLib.Process(WixSharp.ProcessingContext)">
+            <summary>
+            The method demonstrates the correct way of integrating RemoveFolderEx.
+            <para>
+            The sample also shows various XML manipulation techniques available with Fluent XElement extensions:
+            <para>- Auto XML serialization of CLR object with serializable members marked with XMLAttribute.</para>
+            <para>- XML namespace-transparent lookup method FindSingle.</para>
+            </para>
+            </summary>
+            <param name="context"></param>
         </member>
         <member name="T:WixSharp.CopyFile">
              <summary>
@@ -15153,6 +15352,11 @@
             Collection of <see cref="T:WixSharp.FirewallException" /> to be applied to the file.
             </summary>
         </member>
+        <member name="F:WixSharp.File.AppIds">
+            <summary>
+            DCOM AppIds associated with this file.
+            </summary>
+        </member>
         <member name="F:WixSharp.File.GenericItems">
             <summary>
             Collection of <see cref="T:WixSharp.IGenericEntity" /> to be applied to the file.
@@ -17991,7 +18195,12 @@
         <member name="F:WixSharp.Shortcut.WorkingDirectory">
             <summary>
             "Working Directory" for the shortcut to be installed. If <see cref="F:WixSharp.Shortcut.WorkingDirectory"/> is not specified
-            it will be set in the installed shortcut to the location of the file the shortcut points to.
+            it will be set in the installed shortcut to the location of the file the shortcut points to defined in the <see cref="F:WixSharp.Shortcut.Target"/>
+            field.
+            <para>Note, WixSharp will only be able to set correct <see cref="F:WixSharp.Shortcut.WorkingDirectory"/> automatically if <see cref="F:WixSharp.Shortcut.Target"/>
+            is defined as a dir_id + file name (e.g. `@"[INSTALLDIR]\app.exe"`). But it will fail if <see cref="F:WixSharp.Shortcut.Target"/> includs
+            any other bits of path (e.g. `@"[INSTALLDIR]\bin\app.exe"`). Thet's why it is mmore practical to set the <see cref="F:WixSharp.Shortcut.WorkingDirectory"/>
+            explicitly.</para>
             </summary>
         </member>
         <member name="F:WixSharp.Shortcut.Condition">

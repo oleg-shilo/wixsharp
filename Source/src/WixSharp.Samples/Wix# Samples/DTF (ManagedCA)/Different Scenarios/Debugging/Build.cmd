@@ -1,2 +1,2 @@
 ..\..\..\..\cscs.exe /d setup.cs
-pause
+rem pause
