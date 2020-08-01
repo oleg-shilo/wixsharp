@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -19,6 +20,7 @@ using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using Microsoft.Win32;
 using WixSharp.CommonTasks;
 using static WixSharp.SetupEventArgs;
+
 using IO = System.IO;
 
 namespace WixSharp
@@ -3599,5 +3601,60 @@ namespace WixSharp
         /// The namespace.
         /// </value>
         public string Namespace { get; set; }
+    }
+
+    /// <summary>
+    /// Extension methods for <see cref="System.Diagnostics.Process"/>
+    /// </summary>
+    public static class ProcessExtensions
+    {
+        /// <summary>
+        /// Starts a process resource by specifying the name of an application and a set of command-line arguments,
+        /// and associates the resource with a new System.Diagnostics.Process component.
+        /// </summary>
+        /// <param name="fileName">Gets or sets the application or document to start.</param>
+        /// <param name="args">Gets or sets the set of command-line arguments to use when starting the application.</param>
+        /// <returns>A new <see cref="System.Diagnostics.Process"/> component that is associated with the process, or null, if no process resource is started (for example, if an existing process is reused).</returns>
+        public static Process StartElevated(this string fileName, string args = "")
+        {
+            bool isAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+
+            return Process.Start(new ProcessStartInfo
+            {
+                WorkingDirectory = fileName.PathGetFullPath().PathGetDirName(),
+                FileName = fileName,
+                Arguments = args,
+                UseShellExecute = true,
+                Verb = isAdmin ? "" : "runas"
+            });
+        }
+
+        /// <summary>
+        /// Starts a process resource by specifying the name of an application and a set of command-line arguments,
+        /// and associates the resource with a new System.Diagnostics.Process component.
+        /// </summary>
+        /// <param name="fileName">Gets or sets the application or document to start.</param>
+        /// <param name="args">Gets or sets the set of command-line arguments to use when starting the application.</param>
+        /// <returns>A new <see cref="System.Diagnostics.Process"/> component that is associated with the process, or null, if no process resource is started (for example, if an existing process is reused).</returns>
+        public static Process Start(this string fileName, string args = "")
+        {
+            return Process.Start(new ProcessStartInfo
+            {
+                WorkingDirectory = fileName.PathGetFullPath().PathGetDirName(),
+                FileName = fileName,
+                Arguments = args,
+            });
+        }
+
+        /// <summary>
+        /// Instructs the <see cref="System.Diagnostics.Process"/> component to wait indefinitely for the associated process to exit.
+        /// </summary>
+        /// <param name="process">An instance of <see cref="System.Diagnostics.Process"/> component that is running.</param>
+        /// <returns>An instance of <see cref="System.Diagnostics.Process"/> component that is running.</returns>
+        public static Process Wait(this Process process)
+        {
+            process.WaitForExit();
+            return process;
+        }
     }
 }
