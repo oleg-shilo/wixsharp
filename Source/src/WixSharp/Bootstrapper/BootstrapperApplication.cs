@@ -498,12 +498,12 @@ namespace WixSharp.Bootstrapper
                         payloads.Add(new Payload(LicensePath));
                     }
                 }
+            }
 
-                foreach (Payload item in payloads)
-                {
-                    var xml = item.ToXElement("Payload");
-                    root.AddElement(xml);
-                }
+            foreach (Payload item in payloads)
+            {
+                var xml = item.ToXElement("Payload");
+                root.AddElement(xml);
             }
 
             root.Add(app);
