@@ -8,6 +8,7 @@ class Script
 {
     static public void Main()
     {
+        // an alternative approach using InstallUtils can be found here: https://github.com/oleg-shilo/wixsharp/issues/892
         var project = new Project()
         {
             Name = "CustomActionTest",
