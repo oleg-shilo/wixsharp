@@ -15008,6 +15008,36 @@
             The namespace.
             </value>
         </member>
+        <member name="T:WixSharp.ProcessExtensions">
+            <summary>
+            Extension methods for <see cref="T:System.Diagnostics.Process"/>
+            </summary>
+        </member>
+        <member name="M:WixSharp.ProcessExtensions.StartElevated(System.String,System.String)">
+            <summary>
+            Starts a process resource by specifying the name of an application and a set of command-line arguments,
+            and associates the resource with a new System.Diagnostics.Process component.
+            </summary>
+            <param name="fileName">Gets or sets the application or document to start.</param>
+            <param name="args">Gets or sets the set of command-line arguments to use when starting the application.</param>
+            <returns>A new <see cref="T:System.Diagnostics.Process"/> component that is associated with the process, or null, if no process resource is started (for example, if an existing process is reused).</returns>
+        </member>
+        <member name="M:WixSharp.ProcessExtensions.Start(System.String,System.String)">
+            <summary>
+            Starts a process resource by specifying the name of an application and a set of command-line arguments,
+            and associates the resource with a new System.Diagnostics.Process component.
+            </summary>
+            <param name="fileName">Gets or sets the application or document to start.</param>
+            <param name="args">Gets or sets the set of command-line arguments to use when starting the application.</param>
+            <returns>A new <see cref="T:System.Diagnostics.Process"/> component that is associated with the process, or null, if no process resource is started (for example, if an existing process is reused).</returns>
+        </member>
+        <member name="M:WixSharp.ProcessExtensions.Wait(System.Diagnostics.Process)">
+            <summary>
+            Instructs the <see cref="T:System.Diagnostics.Process"/> component to wait indefinitely for the associated process to exit.
+            </summary>
+            <param name="process">An instance of <see cref="T:System.Diagnostics.Process"/> component that is running.</param>
+            <returns>An instance of <see cref="T:System.Diagnostics.Process"/> component that is running.</returns>
+        </member>
         <member name="T:WixSharp.FeatureSet">
              <summary>
             

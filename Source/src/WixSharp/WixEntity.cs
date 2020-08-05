@@ -320,9 +320,14 @@ namespace WixSharp
         /// </value>
         public string ComponentCondition
         {
-            get => GetAttributeDefinition("Component:Condition");
-            set => SetAttributeDefinition("Component:Condition", value);
+            // Component:element_Condition=base64_SU5TVEFMTF9PREJDID0gInllcyI=
+            get => (GetAttributeDefinition("Component:element_Condition") ?? "").Replace("base64_", "").Base64Decode();
+            set => SetAttributeDefinition("Component:element_Condition", "base64_" + value.Base64Encode());
         }
+
+        // public string ComponentCondition;
+
+        // public Condition ComponentCondition;
 
         internal void AddInclude(string xmlFile, string parentElement)
         {

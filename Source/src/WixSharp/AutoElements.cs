@@ -456,11 +456,12 @@ namespace WixSharp
 
         static bool DefaultExpandCustomAttribute(XElement source, string item, WixProject project)
         {
-            var attrParts = item.Split('=');
+            var attrParts = item.Split(new[] { '=' }, 2, StringSplitOptions.None);
 
             // {dep}ProductKey=12345 vs
             // Component:{dep}ProductKey=12345 vs
             // {http://schemas.microsoft.com/wix/BalExtension}Overridable=yes"
+            // Component:{dep}elementm_Condition=base64:edr34r34r43
 
             // Note the syntax below is not supported:
             // Component:{http://schemas.microsoft.com/wix/BalExtension}Overridable=yes"
@@ -490,7 +491,20 @@ namespace WixSharp
                 XElement destElement = source.Parent("Component");
                 if (destElement != null)
                 {
-                    destElement.SetAttribute(key, value);
+                    if (key == "element_Condition")
+                    {
+                        var name = "Condition";
+                        var data = value;
+
+                        if (data.StartsWith("base64_"))
+                            data = data.Replace("base64_", "").Base64Decode();
+
+                        destElement.AddElement(name, null, data);
+                    }
+                    else
+                    {
+                        destElement.SetAttribute(key, value);
+                    }
                     return true;
                 }
             }

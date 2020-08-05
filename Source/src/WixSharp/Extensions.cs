@@ -245,7 +245,7 @@ namespace WixSharp
                     if (pair.IsNotEmpty())
                         try
                         {
-                            string[] tokens = pair.Split(new[] { valueDelimiter }, StringSplitOptions.RemoveEmptyEntries);
+                            string[] tokens = pair.Split(new[] { valueDelimiter }, 2, StringSplitOptions.RemoveEmptyEntries);
                             string name = tokens[0].Trim();
 
                             string value = "";
@@ -3265,6 +3265,12 @@ namespace WixSharp
             else
                 return encoding.GetBytes(obj);
         }
+
+        public static string Base64Encode(this string text)
+            => Convert.ToBase64String((text ?? "").GetBytes());
+
+        public static string Base64Decode(this string data)
+            => Convert.FromBase64String(data ?? "").GetString();
     }
 
     class WixItems : WixObject

@@ -63,6 +63,7 @@ public class InstallScript
         bootstrapper.Version = Tasks.GetVersionFromFile(productMsi); //will extract "product version"
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
         bootstrapper.Application.LogoFile = "logo.png";
+        bootstrapper.Application.Payloads = new[] { "logo.png".ToPayload() };
 
         // adding themes
         // var themes = new[]
@@ -72,7 +73,7 @@ public class InstallScript
         // bootstrapper.Application.Payloads = themes;
 
         bootstrapper.Application.LicensePath = "licence.html";  //HyperlinkLicense app with embedded license file
-        // bootstrapper.Application.LicensePath = "licence.rtf"; //RtfLicense app with embedded license file
+        bootstrapper.Application.LicensePath = "licence.rtf"; //RtfLicense app with embedded license file
         // bootstrapper.Application.LicensePath = "http://opensource.org/licenses/MIT"; //HyperlinkLicense app with online license file
         // bootstrapper.Application.LicensePath = null; //HyperlinkLicense app with no license
 

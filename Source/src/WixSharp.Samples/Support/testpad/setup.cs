@@ -13,7 +13,6 @@ using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
 
-#pragma warning "sdsd"
 #pragma warning disable S1075 // URIs should not be hardcoded
 #pragma warning disable S1118 // Utility classes should not have public constructors
 
