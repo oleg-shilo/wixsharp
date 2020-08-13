@@ -64,11 +64,26 @@ namespace WixSharp
                 return Path.GetFullPath(wixInstallDir.PathJoin("bin"));
             }
 
-            throw new Exception("WiX binaries cannot be found. Wix# is capable of automatically finding WiX tools only if " +
-                                            "WiX Toolset installed. In all other cases you need to set the environment variable " +
-                                            "WIXSHARP_WIXDIR or WixSharp.Compiler.WixLocation to the valid path to the WiX binaries.\n" +
-                                            "WiX binaries can be brought to the build environment by either installing WiX Toolset, " +
-                                            "downloading Wix# suite or by adding WixSharp.wix.bin NuGet package to your project.");
+            string wixBinPackageDir = @"%userprofile%\.nuget\packages\wixsharp.wix.bin".ExpandEnvVars();
+
+            if (Directory.Exists(wixBinPackageDir))
+            {
+                Version greatestWixBinVersion = System.IO.Directory.GetDirectories(wixBinPackageDir)
+                                                                   .Select(dirPath => new Version(dirPath.PathGetFileName()))
+                                                                   .OrderDescending()
+                                                                   .FirstOrDefault();
+
+                if (greatestWixBinVersion != null)
+                {
+                    wixBinPackageDir.PathJoin(greatestWixBinVersion.ToString(), @"tools\bin");
+                }
+            }
+
+            throw new WixSharpException("WiX binaries cannot be found. Wix# is capable of automatically finding WiX tools only if " +
+                                        "WiX Toolset installed. In all other cases you need to set the environment variable " +
+                                        "WIXSHARP_WIXDIR or WixSharp.Compiler.WixLocation to the valid path to the WiX binaries.\n" +
+                                        "WiX binaries can be brought to the build environment by either installing WiX Toolset, " +
+                                        "downloading Wix# suite or by adding WixSharp.wix.bin NuGet package to your project.");
         }
     }
 }
