@@ -14243,6 +14243,11 @@
             The .NET4.7.2 installed. This condition is to be used in Project.SetNetFxPrerequisite.
             </summary>
         </member>
+        <member name="F:WixSharp.Condition.Net48_Installed">
+            <summary>
+            The .NET4.8 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+            </summary>
+        </member>
         <member name="F:WixSharp.Condition.Net30_SP_Installed">
             <summary>
             The .NET3.0 SP installed. This condition is to be used in Project.SetNetFxPrerequisite.
@@ -18792,10 +18797,23 @@
             <param name="message">The error message that explains the reason for the exception.</param>
             <param name="innerException">The exception that is the cause of the current exception. If the <paramref name="innerException" /> parameter is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
         </member>
+        <member name="T:WixSharp.WixSharpException">
+            <summary>
+            Generic WixSharp exception class.
+            </summary>
+            <seealso cref="T:System.ApplicationException" />
+        </member>
+        <member name="M:WixSharp.WixSharpException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.WixSharpException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
         <member name="T:WixSharp.ValidationException">
             <summary>
             Generic validation exception class.
             </summary>
+            <seealso cref="T:System.ApplicationException" />
         </member>
         <member name="M:WixSharp.ValidationException.#ctor(System.String)">
             <summary>
