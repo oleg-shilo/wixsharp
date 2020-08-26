@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.IO;
+using System.Linq;
 
 namespace WixSharp
 {
@@ -75,7 +75,7 @@ namespace WixSharp
 
                 if (greatestWixBinVersion != null)
                 {
-                    wixBinPackageDir.PathJoin(greatestWixBinVersion.ToString(), @"tools\bin");
+                    return wixBinPackageDir.PathJoin(greatestWixBinVersion.ToString(), @"tools\bin");
                 }
             }
 
