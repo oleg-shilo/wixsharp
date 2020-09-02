@@ -25,6 +25,7 @@ THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.Deployment.WindowsInstaller;
@@ -575,7 +576,8 @@ namespace WixSharp
         internal int GetRefAssembliesHashCode(IEnumerable<string> defaultAssemblies)
         {
             return RefAssemblies.Concat(defaultAssemblies)
-                                .Select(a => System.IO.Path.GetFullPath(a).ToLower())
+                                .Where(a => a.IsNotEmpty())
+                                .Select(a => a.PathGetFullPath().ToLower())
                                 .Distinct()
                                 .OrderBy(a => a)
                                 .GetItemsHashCode();

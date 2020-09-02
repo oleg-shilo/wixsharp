@@ -255,6 +255,7 @@ namespace WixSharp
         public string DefaultDeferredProperties
         {
             set { defaultDeferredProperties = value; }
+
             get
             {
                 return string.Join(",", this.Properties
@@ -366,8 +367,8 @@ namespace WixSharp
 
                 foreach (var item in dialogs)
                 {
-                    if (!this.DefaultRefAssemblies.Contains(item.Assembly.Location))
-                        this.DefaultRefAssemblies.Add(item.Assembly.Location);
+                    if (!this.DefaultRefAssemblies.Contains(item.Assembly.GetLocation()))
+                        this.DefaultRefAssemblies.Add(item.Assembly.GetLocation());
 
                     var info = GetDialogInfo(item);
 
@@ -417,7 +418,9 @@ namespace WixSharp
         {
             string[] parts = info.Split('|');
 
-            var assembly = System.Reflection.Assembly.Load(parts[0]);
+            var assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name.StartsWith(parts[0]))
+                           ??
+                           System.Reflection.Assembly.Load(parts[0]);
 
             return assembly.GetType(parts[1]);
         }
