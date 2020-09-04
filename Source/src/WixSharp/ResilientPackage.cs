@@ -37,11 +37,11 @@ namespace WixSharp
         /// <param name="project">The project.</param>
         public static void EnableResilientPackage(this Project project)
         {
-            project.EnableResilientPackage("{$ResilientPackageIstallDir}");
+            project.EnableResilientPackage("{$ResilientPackageInstallDir}");
 
             project.WixSourceFormated += (ref string content) =>
             {
-                content = content.Replace("{$ResilientPackageIstallDir}", project.ActualInstallDirId);
+                content = content.Replace("{$ResilientPackageInstallDir}", project.ActualInstallDirId);
             };
         }
 

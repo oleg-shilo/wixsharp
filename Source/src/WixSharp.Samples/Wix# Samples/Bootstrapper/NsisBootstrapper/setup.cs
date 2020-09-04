@@ -88,7 +88,7 @@ public static class Script
         {
             Prerequisite = {FileName = prerequisiteFile},
             Primary = {FileName = msiFile},
-            OutputFile = $"MyProduct{Path.GetExtension(prerequisiteFile)}.exe"
+            OutputFile = "MyProduct" + Path.GetExtension(prerequisiteFile) + ".exe"
         };
 
         bootstrapper.Build();
