@@ -113,6 +113,11 @@ namespace WixSharp.Nsis
         public SplashScreen SplashScreen { get; set; }
 
         /// <summary>
+        /// Gets or sets digital signature parameters for the bootstrapper.
+        /// </summary>
+        public DigitalSignature DigitalSignature;
+
+        /// <summary>
         /// Builds bootstrapper file.
         /// </summary>
         /// <returns>Path to the built bootstrapper file. Returns <c>null</c> if bootstrapper cannot be built.</returns>
@@ -219,6 +224,9 @@ namespace WixSharp.Nsis
             {
                 IO.File.Delete(nsiFile);
             }
+
+            DigitalSignature?.Apply(OutputFile);
+
             return OutputFile;
         }
 
