@@ -264,6 +264,7 @@ namespace WixSharp
                                             .Concat(defaultDeferredProperties.Split(','))
                                             .Where(x => x.IsNotEmpty())
                                             .Select(x => x.Trim())
+                                            .Distinct()
                                             .ToArray());
             }
         }
