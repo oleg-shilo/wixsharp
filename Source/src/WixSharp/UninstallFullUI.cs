@@ -36,10 +36,15 @@ namespace WixSharp
             {
                 // Add the DisplayIcon key to the Uninstall section
                 project.AddRegValues(
-                    new RegValue(RegistryHive.LocalMachine, $@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\[ProductCode]", "DisplayIcon", displayIconPath));
+                    new RegValue(new Id("WixSharp_RegValue_DisplayIcon"),
+                                 RegistryHive.LocalMachine,
+                                 @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\[ProductCode]",
+                                 "DisplayIcon",
+                                 displayIconPath));
             }
 
             project.AddAction(new ElevatedManagedAction(
+                new Id(nameof(WixSharp_EnableUninstallFullUI_Action)),
                 WixSharp_EnableUninstallFullUI_Action,
                 typeof(UninstallFullUI).Assembly.Location,
                 Return.ignore,
@@ -49,7 +54,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Internal ResilientPackage action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
+        /// Internal UninstallFullUI action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
         /// </summary>
         /// <param name="session">The session.</param>
         /// <returns></returns>
@@ -65,7 +70,7 @@ namespace WixSharp
                 {
                     if (uninstallKey != null)
                     {
-                        uninstallKey.SetValue("ModifyPath", $"MsiExec.exe /I{productCode}");
+                        uninstallKey.SetValue("ModifyPath", string.Empty);
                         uninstallKey.SetValue("UninstallString", $"MsiExec.exe /I{productCode}");
                         uninstallKey.SetValue("WindowsInstaller", 0);
                     }
