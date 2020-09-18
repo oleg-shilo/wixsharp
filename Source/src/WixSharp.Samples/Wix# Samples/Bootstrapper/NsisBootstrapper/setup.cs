@@ -2,6 +2,7 @@
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 
+using System;
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
@@ -77,6 +78,10 @@ public static class Script
             },
 
             SplashScreen = new SplashScreen("wixsharp.bmp")
+            {
+                FadeIn = TimeSpan.FromMilliseconds(600),
+                FadeOut = TimeSpan.FromMilliseconds(400)
+            }
         };
 
         bootstrapper.Build();
