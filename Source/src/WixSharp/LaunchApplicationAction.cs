@@ -10,7 +10,7 @@ namespace WixSharp
     /// 
     /// <example>
     /// <code>
-    /// new LaunchApplicationAction("GUI_ID")
+    /// new LaunchApplicationAction("EXE_ID")
     /// {
     ///     Description = "Launch app",
     /// }
