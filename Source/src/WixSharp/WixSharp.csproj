@@ -143,6 +143,7 @@
     <Compile Include="IconFile.cs" />
     <Compile Include="IISWebSite.cs" />
     <Compile Include="IniFile.cs" />
+    <Compile Include="LaunchApplicationAction.cs" />
     <Compile Include="NativeImage.cs" />
     <Compile Include="EventSource.cs" />
     <Compile Include="FirewallException.cs" />
