@@ -71,7 +71,7 @@ namespace WixSharp
                     if (uninstallKey != null)
                     {
                         uninstallKey.SetValue("ModifyPath", string.Empty);
-                        uninstallKey.SetValue("UninstallString", $"MsiExec.exe /I{productCode}");
+                        uninstallKey.SetValue("UninstallString", $"MsiExec.exe /x{productCode} -qf");
                         uninstallKey.SetValue("WindowsInstaller", 0);
                     }
                 }
