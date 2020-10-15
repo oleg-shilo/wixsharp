@@ -52,6 +52,8 @@ static class Script
                     new PathFileAction(@"%WindowsFolder%\notepad.exe", "readme.txt", @"INSTALLDIR", Return.asyncNoWait, When.After, Step.InstallFinalize, Condition.NOT_Installed),
 
                     new ManagedAction(CustomActions.MyManagedAction, "%this%"),
+					
+                    new LaunchApplicationFromExitDialog(exeId: "myapp_exe", description: "Launch app"),
 
                     new InstalledFileAction("myapp_exe", ""));
 
