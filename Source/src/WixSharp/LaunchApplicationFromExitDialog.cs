@@ -10,20 +10,18 @@ namespace WixSharp
     /// 
     /// <example>
     /// <code>
-    /// new LaunchApplicationAction("EXE_ID")
-    /// {
-    ///     Description = "Launch app",
-    /// }
+    /// new LaunchApplicationFromExitDialog("EXE_ID", "Launch app")
     /// </code>
     /// </example>
-    public class LaunchApplicationAction : WixEntity, IGenericEntity
+    public class LaunchApplicationFromExitDialog : WixEntity, IGenericEntity
     {
         #region Properties
 
         /// <summary>
-        /// CheckBox text.
+        /// CheckBox text. <br/>
+        /// Default value is <value>"Launch"</value>.
         /// </summary>
-        public string Description { get; set; } = "Launch";
+        public string Description { get; set; }
 
         /// <summary>
         /// Exe ID.
@@ -38,9 +36,11 @@ namespace WixSharp
         /// Launches the application after the finish, if the corresponding checkbox is selected.
         /// </summary>
         /// <param name="exeId"></param>
-        public LaunchApplicationAction(string exeId)
+        /// <param name="description"></param>
+        public LaunchApplicationFromExitDialog(string exeId, string description = "Launch")
         {
             ExeId = exeId ?? throw new ArgumentNullException(nameof(exeId));
+            Description = description ?? throw new ArgumentNullException(nameof(description));
         }
 
         #endregion
@@ -57,7 +57,7 @@ namespace WixSharp
             context.Project.Include(WixExtension.Util);
 
             var project = context.Project as Project ?? 
-                          throw new InvalidOperationException("LaunchApplicationAction works only with Projects");
+                          throw new InvalidOperationException("LaunchApplicationFromExitDialog works only with Projects");
             
             project.CustomUI
                 .On(NativeDialogs.ExitDialog, 
