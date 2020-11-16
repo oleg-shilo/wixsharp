@@ -1523,10 +1523,20 @@ namespace WixSharp.CommonTasks
         /// <param name="languages">The languages.</param>
         static public void SetPackageLanguages(this string msiPath, string languages)
         {
+            const string delimiter = ";";
             using (var database = new Database(msiPath, DatabaseOpenMode.Direct))
             {
                 // sample: "Intel;1033,1031,1049"
-                database.SummaryInfo.Template = "Intel;" + languages;
+                var template = database.SummaryInfo.Template;
+                var platformLangPair = template.Split(new[] { delimiter }, StringSplitOptions.None);
+                //platformLangPair[0] is platforms, platformLangPair[1] is languages
+                if (platformLangPair.Length != 2)
+                {
+                    throw new InvalidOperationException("Invalid format of SummaryInfo.Template: " + template);
+                }
+
+                platformLangPair[1] = languages;
+                database.SummaryInfo.Template = String.Join(delimiter, platformLangPair);
             }
         }
 
