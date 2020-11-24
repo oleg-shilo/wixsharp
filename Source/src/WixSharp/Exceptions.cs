@@ -67,8 +67,24 @@ namespace WixSharp
     }
 
     /// <summary>
+    /// Generic WixSharp exception class.
+    /// </summary>
+    /// <seealso cref="System.ApplicationException" />
+    public class WixSharpException : ApplicationException
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WixSharpException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        public WixSharpException(string message) : base(message)
+        {
+        }
+    }
+
+    /// <summary>
     /// Generic validation exception class.
     /// </summary>
+    /// <seealso cref="System.ApplicationException" />
     public class ValidationException : ApplicationException
     {
         /// <summary>

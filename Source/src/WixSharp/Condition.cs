@@ -280,6 +280,11 @@ namespace WixSharp
         /// The .NET4.7.2 installed. This condition is to be used in Project.SetNetFxPrerequisite.
         /// </summary>
         public readonly static Condition Net472_Installed = new Condition(" (NETFRAMEWORK45 >= '#461808') ");
+        
+        /// <summary>
+        /// The .NET4.8 installed. This condition is to be used in Project.SetNetFxPrerequisite.
+        /// </summary>
+        public readonly static Condition Net48_Installed = new Condition(" (NETFRAMEWORK45 >= '#528040') ");
 
         /// <summary>
         /// The .NET3.0 SP installed. This condition is to be used in Project.SetNetFxPrerequisite.

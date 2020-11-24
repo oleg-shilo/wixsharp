@@ -403,6 +403,19 @@ namespace WixSharp.UI
 
         int OnExternalUI(IntPtr context, uint messageType, string message)
         {
+            return OnMessage(message, messageType);
+        }
+
+        /// <summary>
+        /// Called when MSI message is received. It is actual the MSI <c>Message Loop</c>.
+        /// </summary>
+        /// <param name="message">The message data.</param>
+        /// <param name="messageType">Type of the message. This value get's combined with MessageIcon and a MessageButtons values. Use
+        /// <see cref="MsiInterop.MessageTypeMask"/> to extract the <see cref="WindowsInstaller.MsiInstallMessage"/> value.
+        /// </param>
+        /// <returns>The integer as per MSI documentation.</returns>
+        protected virtual int OnMessage(string message, uint messageType)
+        {
             MsiInstallMessage msgType = (MsiInstallMessage)(MsiInterop.MessageTypeMask & messageType);
             return OnMessage(message, msgType);
         }

@@ -56,6 +56,11 @@ namespace WixSharp
             return p.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
+        static internal IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> items, Func<TSource, TKey> keySelector)
+        {
+            return items.GroupBy(keySelector).Select(g => g.First());
+        }
+
         static internal IEnumerable<T> AllChildren<T>(this T node, Func<T, IEnumerable<T>> getChildren)
         {
             return new T[] { node }.AllChildren(getChildren);
@@ -879,7 +884,6 @@ namespace WixSharp
         /// <param name="selector"> A transform function to apply to each source element; the second parameter of the function represents the index of the source element.
         /// </param>
         /// <returns></returns>
-
         [Obsolete(message: "This method name is obsolete use `JoinBy` instead", error: false)]
         public static string Join(this IEnumerable<string> strings, string separator, Func<string, string> selector = null)
             => Join(strings, separator, selector);

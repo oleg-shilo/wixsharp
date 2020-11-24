@@ -52,6 +52,8 @@ internal static class Script
                     new PathFileAction(@"%WindowsFolder%\notepad.exe", "readme.txt", @"INSTALLDIR", Return.asyncNoWait, When.After, Step.InstallFinalize, Condition.NOT_Installed),
 
                     new ManagedAction(CustomActions.MyManagedAction, "%this%"),
+					
+                    new LaunchApplicationFromExitDialog(exeId: "myapp_exe", description: "Launch app"),
 
                     new InstalledFileAction("myapp_exe", ""));
 
@@ -65,6 +67,9 @@ internal static class Script
 
             // Optionally enable an ability to repair the installation even when the original MSI is no longer available.
             project.EnableResilientPackage();
+
+            // Uncomment to optionally enable the full UI for "Uninstall/Change" button in the Control Panel.
+            // project.EnableUninstallFullUI("[#myapp_exe],0");
 
             // project.PreserveTempFiles = true;
             project.WixSourceGenerated += Compiler_WixSourceGenerated;

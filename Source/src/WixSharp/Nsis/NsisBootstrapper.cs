@@ -113,6 +113,11 @@ namespace WixSharp.Nsis
         public SplashScreen SplashScreen { get; set; }
 
         /// <summary>
+        /// Gets or sets digital signature parameters for the bootstrapper.
+        /// </summary>
+        public DigitalSignature DigitalSignature;
+
+        /// <summary>
         /// Builds bootstrapper file.
         /// </summary>
         /// <returns>Path to the built bootstrapper file. Returns <c>null</c> if bootstrapper cannot be built.</returns>
@@ -219,6 +224,9 @@ namespace WixSharp.Nsis
             {
                 IO.File.Delete(nsiFile);
             }
+
+            DigitalSignature?.Apply(OutputFile);
+
             return OutputFile;
         }
 
@@ -562,7 +570,19 @@ namespace WixSharp.Nsis
             if (SplashScreen != null)
             {
                 AddFileCommand(writer, SplashScreen.FileName);
-                writer.WriteLine($@"splash::show {SplashScreen.Delay.TotalMilliseconds} ""{PluginsDir}\{IO.Path.GetFileNameWithoutExtension(SplashScreen.FileName)}""");
+
+                var keyColor = SplashScreen.KeyColor.IsEmpty
+                    ? "-1"
+                    : $"0x{SplashScreen.KeyColor.ToArgb() & 0x00FFFFFF:X6}";
+
+                var text = string.Format("advsplash::show {0} {1} {2} {3} \"{4}\"",
+                    SplashScreen.Delay.TotalMilliseconds,
+                    SplashScreen.FadeIn.TotalMilliseconds,
+                    SplashScreen.FadeOut.TotalMilliseconds,
+                    keyColor,
+                    $@"{PluginsDir}\{IO.Path.GetFileNameWithoutExtension(SplashScreen.FileName)}");
+
+                writer.WriteLine(text);
                 // $0 has '1' if the user closed the splash screen early,
                 // '0' if everything closed normally, and '-1' if some error occurred.
                 writer.WriteLine("Pop $0");

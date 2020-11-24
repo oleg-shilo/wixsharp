@@ -81,7 +81,9 @@ namespace WixSharp
                     string pdbFile = IO.Path.ChangeExtension(wxsFile, ".wixpdb");
 
                     string extensionDlls = "";
-                    foreach (string dll in project.WixExtensions.Distinct())
+                    // note we need to avoid possible duplications cause by non expanded envars
+                    // %wix_location%\ext.dll vs c:\Program Files\...\ext.dll
+                    foreach (string dll in project.WixExtensions.DistinctBy(x => x.ExpandEnvVars()))
                         extensionDlls += " -ext \"" + dll + "\"";
 
                     string wxsFiles = "";
@@ -208,7 +210,9 @@ namespace WixSharp
                 string pdbFile = IO.Path.ChangeExtension(wxsFile, ".wixpdb");
 
                 string extensionDlls = "";
-                foreach (string dll in project.WixExtensions.Distinct())
+                // note we need to avoid possible duplications cause by non expanded envars
+                // %wix_location%\ext.dll vs c:\Program Files\...\ext.dll
+                foreach (string dll in project.WixExtensions.DistinctBy(x => x.ExpandEnvVars()))
                     extensionDlls += " -ext \"" + dll + "\"";
 
                 string wxsFiles = "";

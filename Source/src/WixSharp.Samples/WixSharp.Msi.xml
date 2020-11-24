@@ -336,6 +336,16 @@
             <param name="msiParams">The MSI parameters.</param>
             <exception cref="T:System.ApplicationException"></exception>
         </member>
+        <member name="M:WixSharp.UI.MsiSession.OnMessage(System.String,System.UInt32)">
+            <summary>
+            Called when MSI message is received. It is actual the MSI <c>Message Loop</c>.
+            </summary>
+            <param name="message">The message data.</param>
+            <param name="messageType">Type of the message. This value get's combined with MessageIcon and a MessageButtons values. Use
+            <see cref="F:WindowsInstaller.MsiInterop.MessageTypeMask"/> to extract the <see cref="T:WindowsInstaller.MsiInstallMessage"/> value.
+            </param>
+            <returns>The integer as per MSI documentation.</returns>
+        </member>
         <member name="M:WixSharp.UI.MsiSession.OnMessage(System.String,WindowsInstaller.MsiInstallMessage)">
             <summary>
             Called when MSI message is received. It is actual the MSI <c>Message Loop</c>.

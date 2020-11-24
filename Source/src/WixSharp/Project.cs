@@ -183,7 +183,7 @@ namespace WixSharp
         public string Description = "";
 
         /// <summary>
-        /// Parameters of digitaly sign of this project
+        /// Parameters of digitally sign of this project
         /// </summary>
         public DigitalSignature DigitalSignature;
 

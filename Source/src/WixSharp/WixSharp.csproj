@@ -137,6 +137,7 @@
     <Compile Include="IconFile.cs" />
     <Compile Include="IISWebSite.cs" />
     <Compile Include="IniFile.cs" />
+    <Compile Include="LaunchApplicationFromExitDialog.cs" />
     <Compile Include="NativeImage.cs" />
     <Compile Include="EventSource.cs" />
     <Compile Include="FirewallException.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Nsis\SplashScreen.cs" />
     <Compile Include="Nsis\VersionInformation.cs" />
     <Compile Include="ODBCDataSource.cs" />
+    <Compile Include="PermissionEx.cs" />
     <Compile Include="Permissions.cs" />
     <Compile Include="Properties\AssemblyInfo.version.cs" />
     <Compile Include="Reboot.cs" />
