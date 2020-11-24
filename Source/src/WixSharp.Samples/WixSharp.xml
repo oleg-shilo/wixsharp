@@ -7215,14 +7215,14 @@
             Maps to the WriteExtendedAttributes property of PermissionEx
             </summary>
         </member>
-        <member name="M:WixSharp.PermissionExt.EmitAttributes(WixSharp.DirPermission,System.Xml.Linq.XElement)">
+        <member name="M:WixSharp.PermissionExtensions.EmitAttributes(WixSharp.DirPermission,System.Xml.Linq.XElement)">
             <summary>
             Adds attributes to <paramref name="permissionElement"/> representing the state of <paramref name="dirPermission"/>
             </summary>
             <param name="dirPermission"></param>
             <param name="permissionElement"></param>
         </member>
-        <member name="M:WixSharp.PermissionExt.EmitAttributes(WixSharp.FilePermission,System.Xml.Linq.XElement)">
+        <member name="M:WixSharp.PermissionExtensions.EmitAttributes(WixSharp.FilePermission,System.Xml.Linq.XElement)">
             <summary>
             Adds attributes to <paramref name="permissionElement"/> representing the state of <paramref name="filePermission"/>
             </summary>
@@ -18091,6 +18091,68 @@
             See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
             </summary>
             <param name="context">The context.</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:WixSharp.PermissionEx.CreateChild" -->
+        <!-- Badly formed XML comment ignored for member "F:WixSharp.PermissionEx.CreateFile" -->
+        <member name="F:WixSharp.PermissionEx.DeleteChild">
+            <summary>
+            For a directory, the right to delete a directory and all the files it contains, including read-only files. Only valid under a 'CreateFolder' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.GenericRead">
+            <summary>
+            specifying this will fail to grant read access
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceChangeConfig">
+            <summary>
+            Required to call the ChangeServiceConfig or ChangeServiceConfig2 function to change the service configuration. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceEnumerateDependents">
+            <summary>
+            Required to call the EnumDependentServices function to enumerate all the services dependent on the service. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceInterrogate">
+            <summary>
+            Required to call the ControlService function to ask the service to report its status immediately. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServicePauseContinue">
+            <summary>
+            Required to call the ControlService function to pause or continue the service. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceQueryConfig">
+            <summary>
+            Required to call the QueryServiceConfig and QueryServiceConfig2 functions to query the service configuration. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceQueryStatus">
+            <summary>
+            Required to call the QueryServiceStatus function to ask the service control manager about the status of the service. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceStart">
+            <summary>
+            Required to call the StartService function to start the service. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceStop">
+            <summary>
+            Required to call the ControlService function to stop the service. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceUserDefinedControl">
+            <summary>
+            Required to call the ControlService function to specify a user-defined control code. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.Traverse">
+            <summary>
+            For a directory, the right to traverse the directory. By default, users are assigned the BYPASS_TRAVERSE_CHECKING privilege, which ignores the FILE_TRAVERSE access right. Only valid under a 'CreateFolder' parent.
+            </summary>
         </member>
         <member name="T:WixSharp.SetPropertyAction">
              <summary>

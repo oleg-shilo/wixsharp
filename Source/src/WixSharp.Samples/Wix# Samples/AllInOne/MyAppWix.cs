@@ -10,7 +10,7 @@ using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 
-static class Script
+internal static class Script
 {
     static public void Main()
     {
@@ -69,6 +69,7 @@ static class Script
             // project.PreserveTempFiles = true;
             project.WixSourceGenerated += Compiler_WixSourceGenerated;
             project.BuildMsi();
+
             // project.BuildMsiCmd();
         }
         catch (System.Exception ex)
@@ -77,7 +78,7 @@ static class Script
         }
     }
 
-    static void Compiler_WixSourceGenerated(System.Xml.Linq.XDocument document)
+    private static void Compiler_WixSourceGenerated(System.Xml.Linq.XDocument document)
     {
         document.Root.Descendants("Shortcut")
                      .ToList()

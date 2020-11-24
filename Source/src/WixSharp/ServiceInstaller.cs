@@ -80,6 +80,8 @@ namespace WixSharp
             }
         }
 
+        // public PermissionExt Permission;
+
         /// <summary>
         /// The display name of the service as it is listed in the Control Panel.
         /// If not specified the name of the service will be used instead.
@@ -239,6 +241,8 @@ namespace WixSharp
         [Xml]
         public string Password;
 
+        public PermissionEx PermissionEx;
+
         /// <summary>
         /// The overall install should fail if this service fails to install.
         /// </summary>
@@ -323,7 +327,6 @@ namespace WixSharp
         /// </summary>
         public IGenericEntity[] UrlReservations = new IGenericEntity[0];
 
-
         private bool RequiresConfig()
         {
             return DelayedAutoStart != null ||
@@ -376,6 +379,11 @@ namespace WixSharp
             }
 
             XElement ServiceInstaller = this.ToXElement("ServiceInstall");
+            if (PermissionEx != null)
+            {
+                ServiceInstaller.AddElement(this.PermissionEx.ToXElement(WixExtension.Util, "PermissionEx"));
+            }
+
             context.XParent.Add(ServiceInstaller);
 
             var newContext = new ProcessingContext
