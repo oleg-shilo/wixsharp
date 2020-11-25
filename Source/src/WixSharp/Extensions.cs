@@ -3270,9 +3270,19 @@ namespace WixSharp
                 return encoding.GetBytes(obj);
         }
 
+        /// <summary>
+        /// Converts a string in Base64 encoding.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns></returns>
         public static string Base64Encode(this string text)
             => Convert.ToBase64String((text ?? "").GetBytes());
 
+        /// <summary>
+        /// Decodes Base64 data into a string..
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <returns></returns>
         public static string Base64Decode(this string data)
             => Convert.FromBase64String(data ?? "").GetString();
     }

@@ -6761,11 +6761,69 @@
             </summary>
             <seealso cref="T:WixSharp.WixEntity" />
         </member>
-        <!-- Badly formed XML comment ignored for member "F:WixSharp.PermissionEx.CreateChild" -->
-        <!-- Badly formed XML comment ignored for member "F:WixSharp.PermissionEx.CreateFile" -->
+        <member name="F:WixSharp.PermissionEx.Append">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ChangePermission">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.CreateChild">
+            <summary>
+            For a directory, the right to create a subdirectory. Only valid under a 'CreateFolder' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.CreateFile">
+            <summary>
+            For a directory, the right to create a file in the directory. Only valid under a 'CreateFolder' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.CreateLink">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.CreateSubkeys">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.Delete">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
         <member name="F:WixSharp.PermissionEx.DeleteChild">
             <summary>
             For a directory, the right to delete a directory and all the files it contains, including read-only files. Only valid under a 'CreateFolder' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.Domain">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.EnumerateSubkeys">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.Execute">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.GenericAll">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.GenericExecute">
+            <summary>
+            WiX element description is not available
             </summary>
         </member>
         <member name="F:WixSharp.PermissionEx.GenericRead">
@@ -15077,6 +15135,20 @@
             <param name="encoding">The encoding.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.SerializingExtensions.Base64Encode(System.String)">
+            <summary>
+            Converts a string in Base64 encoding.
+            </summary>
+            <param name="text">The text.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.SerializingExtensions.Base64Decode(System.String)">
+            <summary>
+            Decodes Base64 data into a string..
+            </summary>
+            <param name="data">The data.</param>
+            <returns></returns>
+        </member>
         <member name="T:WixSharp.XmlMapping">
              <summary>
              Serializes CLR entity into XML, based on the type members being marked for the serialization with <see cref="T:WixSharp.XmlAttribute"/>.
@@ -18196,6 +18268,11 @@
         <member name="F:WixSharp.ServiceInstaller.Password">
             <summary>
             The password for the account. Valid only when the account has a password.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceInstaller.PermissionEx">
+            <summary>
+            The <c>PermissionEx</c> element associated with the emitted <c>ServiceInstall</c> element.
             </summary>
         </member>
         <member name="F:WixSharp.ServiceInstaller.Vital">

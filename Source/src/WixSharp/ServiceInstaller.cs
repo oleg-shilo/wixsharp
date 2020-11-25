@@ -241,6 +241,9 @@ namespace WixSharp
         [Xml]
         public string Password;
 
+        /// <summary>
+        /// The <c>PermissionEx</c> element associated with the emitted <c>ServiceInstall</c> element.
+        /// </summary>
         public PermissionEx PermissionEx;
 
         /// <summary>

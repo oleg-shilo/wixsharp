@@ -6,15 +6,20 @@ namespace WixSharp
     /// <seealso cref="WixSharp.WixEntity" />
     public class PermissionEx : WixEntity
     {
+        /// <summary>
+        /// WiX element description is not available
+        /// </summary>
         [Xml]
         public bool? Append;
 
+        /// <summary>
+        /// WiX element description is not available
+        /// </summary>
         [Xml]
         public bool? ChangePermission;
 
         /// <summary>
         /// For a directory, the right to create a subdirectory. Only valid under a 'CreateFolder' parent.
-        /// </summary>
         /// </summary>
         [Xml]
         public bool? CreateChild;
@@ -22,16 +27,24 @@ namespace WixSharp
         /// <summary>
         /// For a directory, the right to create a file in the directory. Only valid under a 'CreateFolder' parent.
         /// </summary>
-        /// </summary>
         [Xml]
         public bool? CreateFile;
 
+        /// <summary>
+        /// WiX element description is not available
+        /// </summary>
         [Xml]
         public bool? CreateLink;
 
+        /// <summary>
+        /// WiX element description is not available
+        /// </summary>
         [Xml]
         public bool? CreateSubkeys;
 
+        /// <summary>
+        /// WiX element description is not available
+        /// </summary>
         [Xml]
         public bool? Delete;
 
@@ -41,18 +54,33 @@ namespace WixSharp
         [Xml]
         public bool? DeleteChild;
 
+        /// <summary>
+        /// WiX element description is not available
+        /// </summary>
         [Xml]
         public string Domain;
 
+        /// <summary>
+        /// WiX element description is not available
+        /// </summary>
         [Xml]
         public bool? EnumerateSubkeys;
 
+        /// <summary>
+        /// WiX element description is not available
+        /// </summary>
         [Xml]
         public bool? Execute;
 
+        /// <summary>
+        /// WiX element description is not available
+        /// </summary>
         [Xml]
         public bool? GenericAll;
 
+        /// <summary>
+        /// WiX element description is not available
+        /// </summary>
         [Xml]
         public bool? GenericExecute;
 

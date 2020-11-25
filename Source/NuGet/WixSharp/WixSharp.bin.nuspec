@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>1.14.8.0</version>
+    <version>1.15.0.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,16 +16,18 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.14.8.0
-
-* - Issue #902: candle.exe : error CNDL0125 when building bootstrapper application from existing msi and add bootstrapper variable
-* Issue #862: I can't seem to get it working
-* Issue #900: Preserve messageType value for ExternalUI setup with Custom Actions
-* Merge pull request #899 from Q-Sharp/master
-* Added Condition Net48_Installed
-* Implemented/fixed `WixEntity.ComponentCondition`. Triggered by "How to add Condition to ODBCDataSource #896 "
-* Issue #894: LicenseBootstrapperApplication do not add payloads in case of rtf license
-* - Added `Process.StartElevated` extension method</releaseNotes>
+    <releaseNotes>Release v1.15.0.0
+* Localization: preserve msi platform settings when settings language with SetPackageLanguages (fixes #939)
+* Added LaunchApplicationAction.
+* NSIS bootstrapper-spash
+  - Switched to the stock AdvSplash plugin
+  - Added support to FadeIn, FadeOut, KeyColor parameters https://nsis.sourceforge.io/Docs/AdvSplash/advsplash.txt
+* Forced to use a single "Uninstall/Change" button in the ARP
+* Remove duplicated deferred properties.
+* Allows the installer to display full UI for the "Uninstall" button in the Control Panel.
+* Typo fix ResilientPackageIstallDir -&gt; ResilientPackageInstallDir
+* DigitalSignature support has been added to the NsisBootstrapper
+* Issue #906: Error in Compiler.BuildMsi when building using cscs.exe but not from Visual Studio</releaseNotes>
     <copyright>Copyright (C) 2008-2019 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
