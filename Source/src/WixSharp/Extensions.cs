@@ -3028,7 +3028,7 @@ namespace WixSharp
         /// <param name="project">Wix# project.</param>
         /// <param name="defaultLocalization">Use your OS language as default localization. This will ensure that the all transformations are embedded in such a way that the produced msi can switch to any alternative language both automatically and manually.</param>
         /// <param name="localizations">Collection of localizations. At least one localization is expected.</param>
-        /// <returns>Path to the built msi.</returns>
+        /// <returns>Path to the built MSI file.</returns>
         public static string BuildMultilanguageMsi(this Project project, ProjectLocalization defaultLocalization, params ProjectLocalization[] localizations)
         {
             if (project is null)
@@ -3057,9 +3057,11 @@ namespace WixSharp
 
                 localization.BindTo(project);
 
+                Compiler.OutputWriteLine($"> Building msi for {localization.Language}...");
                 var localizedMsiFilePath = project.BuildMsi(localization.Language);
                 var localizedMstFilePath = localizedMsiFilePath.PathChangeExtension(".mst");
 
+                Compiler.OutputWriteLine("> Preparing language transformations...");
                 Process.Start(torchCmd, $"-p -t language \"{msiFilePath}\" \"{localizedMsiFilePath}\" -out \"{localizedMstFilePath}\"")
                        .WaitForExit();
 
@@ -3083,6 +3085,7 @@ namespace WixSharp
                     throw new InvalidOperationException($"Signing the file '{msiFilePath}' failed. Return code: {signingReturnCode}");
             }
 
+            Compiler.OutputWriteLine($"> Multi-language setup {msiFilePath} is completed.");
             return msiFilePath;
         }
 
@@ -3115,7 +3118,7 @@ namespace WixSharp
         /// </example>
         /// <param name="project">The project.</param>
         /// <param name="path">The path.</param>
-        /// <returns></returns>
+        /// <returns>Path to the built MSI file.</returns>
         static public string BuildMultilanguageMsi(this WixSharp.Project project, string path = null)
         {
             project.VerifyLanguage();
