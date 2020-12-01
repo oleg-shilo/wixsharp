@@ -3028,7 +3028,8 @@ namespace WixSharp
         /// <param name="project">Wix# project.</param>
         /// <param name="defaultLocalization">Use your OS language as default localization. This will ensure that the all transformations are embedded in such a way that the produced msi can switch to any alternative language both automatically and manually.</param>
         /// <param name="localizations">Collection of localizations. At least one localization is expected.</param>
-        public static void BuildMultilanguageMsi(this Project project, ProjectLocalization defaultLocalization, params ProjectLocalization[] localizations)
+        /// <returns>Path to the built msi.</returns>
+        public static string BuildMultilanguageMsi(this Project project, ProjectLocalization defaultLocalization, params ProjectLocalization[] localizations)
         {
             if (project is null)
                 throw new ArgumentNullException(nameof(project));
@@ -3081,6 +3082,8 @@ namespace WixSharp
                 if (signingReturnCode != 0)
                     throw new InvalidOperationException($"Signing the file '{msiFilePath}' failed. Return code: {signingReturnCode}");
             }
+
+            return msiFilePath;
         }
 
         /// <summary>
