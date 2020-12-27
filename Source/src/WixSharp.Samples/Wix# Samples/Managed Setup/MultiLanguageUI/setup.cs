@@ -19,6 +19,8 @@ public static class Script
 {
     static public void Main(string[] args)
     {
+        Compiler.WixLocation = @"..\..\..\..\..\Wix_bin\bin";
+
         var project = new ManagedProject("ManagedSetup",
                               new Dir(@"%ProgramFiles%\My Company\My Product",
                                   new File(@"..\Files\bin\MyApp.exe"),

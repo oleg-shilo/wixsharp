@@ -31,6 +31,7 @@ using System.Xml.Linq;
 
 namespace WixSharp
 {
+
     /// <summary>
     ///  This class allows creating an IIS Website without using IISVirtualDir.
     /// </summary>

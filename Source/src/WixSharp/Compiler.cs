@@ -384,6 +384,11 @@ namespace WixSharp
             set
             {
                 wixLocation = value;
+
+                // prevent interfering with the user defined relative path WixLocation by setting custom CurrentDir 
+                if (wixLocation.IsNotEmpty() && !IO.Path.IsPathRooted(wixLocation) && IO.Directory.Exists(wixLocation))
+                    wixLocation = wixLocation.PathGetFullPath();
+
                 Environment.SetEnvironmentVariable("WixLocation", wixLocation);
             }
         }

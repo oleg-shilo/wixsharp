@@ -8,4 +8,4 @@ echo **********************************************************
 echo.
 rem set WIXSHARP_WIXDIR=e:\Wix\bin
 ..\..\..\cscs.exe setup.cs
-rem pause
+pause

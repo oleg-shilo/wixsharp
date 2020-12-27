@@ -7,8 +7,10 @@ public static class Script
 {
     static public void Main()
     {
+        Compiler.WixLocation = @"..\..\..\..\..\Wix_bin\bin";
+
         ProductActivationDialogSetup.Build();
-        //MultiStepDialogSetup.Build();  
-        //EmptyDialogSetup.Build(); 
+        //MultiStepDialogSetup.Build();
+        //EmptyDialogSetup.Build();
     }
 }

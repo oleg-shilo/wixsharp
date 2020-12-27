@@ -13,6 +13,8 @@ public class InstallScript
 {
     static public void Main()
     {
+        var tt = WixBinLocator.FindWixBinLocation(throwOnError: false);
+
         var project =
             new Project("MyProduct",
 

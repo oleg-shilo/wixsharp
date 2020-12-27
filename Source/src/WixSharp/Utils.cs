@@ -68,7 +68,7 @@ namespace WixSharp
             return IO.Path.Combine(p1, p2);
         }
 
-        internal static string MakeRelative(this string filePath, string referencePath)
+        public static string MakeRelativeTo(this string filePath, string referencePath)
         {
             //1 - 'Uri.MakeRelativeUri' doesn't work without *.config file
             //2 - Substring doesn't work for paths containing ..\..\

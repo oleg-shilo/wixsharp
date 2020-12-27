@@ -5036,6 +5036,92 @@
             </summary>
             <param name="context">The context.</param>
         </member>
+        <member name="T:WixSharp.IISCertificate.CertificateStoreName">
+            <summary>
+            This attribute's value must be one of the following.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.ca">
+            <summary>
+            Contains the certificates of certificate authorities that the user trusts to issue certificates to others. Certificates in these stores are normally supplied with the operating system or by the user's network administrator.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.my">
+            <summary>
+            Use the "personal" value instead.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.personal">
+            <summary>
+            Contains personal certificates. These certificates will usually have an associated private key. This store is often referred to as the "MY" certificate store.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.root">
+            <summary>
+               Contains the certificates of certificate authorities that the user trusts to issue certificates to others. Certificates in these stores are normally supplied with the operating system or by the user's network administrator. Certificates in this store are typically self-signed.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.otherPeople">
+            <summary>
+            Contains the certificates of those that the user normally sends enveloped messages to or receives signed messages from.See MSDN documentation for more information.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.trustedPeople">
+            <summary>
+            Contains the certificates of those directly trusted people and resources.See MSDN documentation for more information.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.trustedPublisher">
+            <summary>
+            Contains the certificates of those publishers who are trusted. See MSDN documentation for more information.
+            </summary>
+        </member>
+        <member name="P:WixSharp.IISCertificate.Id">
+            <summary>
+            Gets or sets the <c>Id</c> value of the <see cref="T:WixSharp.WixEntity"/>.
+            <para>This value is used as a <c>Id</c> for the corresponding WiX XML element.</para>
+            <para>If the <see cref="P:WixSharp.IISCertificate.Id"/> value is not specified explicitly by the user the Wix# compiler
+            generates it automatically insuring its uniqueness.</para>
+            <remarks>
+             Note: The ID auto-generation is triggered on the first access (evaluation) and in order to make the id
+             allocation deterministic the compiler resets ID generator just before the build starts. However if you
+             accessing any auto-id before the Build*() is called you can it interferes with the ID auto generation and eventually
+             lead to the WiX ID duplications. To prevent this from happening either:
+             <para> - Avoid evaluating the auto-generated IDs values before the call to Build*()</para>
+             <para> - Set the IDs (to be evaluated) explicitly</para>
+             <para> - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";</para>
+            </remarks>
+            </summary>
+            <value>The id.</value>
+        </member>
+        <member name="F:WixSharp.IISCertificate.BinaryKey">
+            <summary>
+            Reference to a Binary element that will store the certificate as a stream inside the package. This attribute cannot be specified with the CertificatePath attribute.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.CertificatePath">
+            <summary>
+            If the Request attribute is "no" then this attribute is the path to the certificate file outside of the package. If the Request attribute is "yes" then this atribute
+            is the certificate authority to request the certificate from. This attribute may be set via a formatted Property (e.g. [MyProperty]).
+            </summary>
+        </member>
+        <member name="P:WixSharp.IISCertificate.Name">
+            <summary>
+            Name of the certificate that will be installed or uninstalled in the specified store. This attribute may be set via a formatted Property (e.g. [MyProperty]).
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.PFXPassword">
+            <summary>
+            If the Binary stream or path to the file outside of the package is a password protected PFX file, the password for that PFX must be specified here.
+            This attribute may be set via a formatted Property (e.g. [MyProperty]).
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.Request">
+            <summary>
+            This attribute controls whether the CertificatePath attribute is a path to a certificate file (Request='no') or the certificate authority to request
+            the certificate from (Request='yes').
+            </summary>
+        </member>
         <member name="T:WixSharp.IISWebSite">
             <summary>
              This class allows creating an IIS Website without using IISVirtualDir.
@@ -5417,15 +5503,15 @@
             <param name="context">The context.</param>
         </member>
         <member name="T:WixSharp.LaunchApplicationFromExitDialog">
-            <summary>
-            Launches the application after the finish, if the corresponding checkbox is selected.
-            </summary>
+             <summary>
+             Launches the application after the finish, if the corresponding checkbox is selected.
+             </summary>
             
-            <example>
-            <code>
-            new LaunchApplicationFromExitDialog("EXE_ID", "Launch app")
-            </code>
-            </example>
+             <example>
+             <code>
+             new LaunchApplicationFromExitDialog("EXE_ID", "Launch app")
+             </code>
+             </example>
         </member>
         <member name="P:WixSharp.LaunchApplicationFromExitDialog.Description">
             <summary>
@@ -5446,10 +5532,10 @@
             <param name="description"></param>
         </member>
         <member name="M:WixSharp.LaunchApplicationFromExitDialog.Process(WixSharp.ProcessingContext)">
-            <summary>
+             <summary>
             
-            </summary>
-            <param name="context"></param>
+             </summary>
+             <param name="context"></param>
         </member>
         <member name="T:WixSharp.NativeImage">
             <summary>
@@ -15034,6 +15120,7 @@
             <param name="project">Wix# project.</param>
             <param name="defaultLocalization">Use your OS language as default localization. This will ensure that the all transformations are embedded in such a way that the produced msi can switch to any alternative language both automatically and manually.</param>
             <param name="localizations">Collection of localizations. At least one localization is expected.</param>
+            <returns>Path to the built MSI file.</returns>
         </member>
         <member name="M:WixSharp.LocalizationExtensions.BuildMultilanguageMsi(WixSharp.Project,System.String)">
              <summary>
@@ -15065,7 +15152,7 @@
              </example>
              <param name="project">The project.</param>
              <param name="path">The path.</param>
-             <returns></returns>
+             <returns>Path to the built MSI file.</returns>
         </member>
         <member name="M:WixSharp.LocalizationExtensions.IsCompatibleWith(System.Globalization.CultureInfo,System.Globalization.CultureInfo)">
             <summary>

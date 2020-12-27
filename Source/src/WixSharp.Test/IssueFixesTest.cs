@@ -7,10 +7,28 @@ using System.Xml.Linq;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
 using Xunit;
+using Xunit.Abstractions;
+using Xunit.Sdk;
+
+[assembly: Xunit.TestFramework("WixSharp.Test.WixLocator", "WixSharp.Test")]
 
 namespace WixSharp.Test
 {
-    public class IssueFixesTest
+    public class WixLocator
+    {
+        static bool done = false;
+
+        public WixLocator()
+        {
+            if (!done)
+            {
+                done = true;
+                Compiler.WixLocation = @"..\..\..\WixSharp.Samples\Wix_bin\bin";
+            }
+        }
+    }
+
+    public class IssueFixesTest : WixLocator
     {
         /// <summary>
         /// Fixes the issue 803.

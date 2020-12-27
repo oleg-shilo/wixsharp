@@ -26,7 +26,7 @@ namespace WixSharp.Test
             var path = @"E:\Projects\WixSharp\src\WixSharp.Samples\Wix# Samples\Content\readme.txt";
             var baseDir = @"E:\Projects\WixSharp\src\WixSharp.Samples\Wix# Samples\Install Files";
 
-            var result = Utils.MakeRelative(path, baseDir);
+            var result = path.MakeRelativeTo(baseDir);
             Assert.Equal(@"..\Content\readme.txt", result);
         }
 

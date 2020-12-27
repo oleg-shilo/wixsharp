@@ -62,6 +62,9 @@ namespace WixSharp.Test
 
             var allSamples = samples.Select(g => new { Category = g.Key, Items = g, Index = ++sampleDirIndex });
 
+#if DEBUG
+            ShowLogFileToObserveProgress();
+#endif
             Parallel.ForEach(allSamples, (group) =>
             {
                 string sampleDir = group.Category;
@@ -153,6 +156,31 @@ namespace WixSharp.Test
             var logFile = @"..\..\..\WixSharp.Samples\test_progress.txt";
             using (var writer = new StreamWriter(logFile, true))
                 writer.WriteLine(text);
+        }
+
+        void ShowLogFileToObserveProgress()
+        {
+            var logFile = @"..\..\..\WixSharp.Samples\test_progress.txt".PathGetFullPath();
+            if (!IO.File.Exists(logFile))
+                IO.File.WriteAllText(logFile, "");
+
+            try
+            {
+                // sublimme is always installed in x64 progfiles, but this process is x86 process so
+                // envar always returns x86 location fro %PROGRAMFILES%
+                Process.Start(@"%PROGRAMFILES%\Sublime Text 3\sublime_text.exe".ExpandEnvVars().Replace(" (x86)", ""), $"\"{logFile}\"");
+            }
+            catch
+            {
+                try
+                {
+                    Process.Start("notepad++.exe", $"\"{logFile}\"");
+                }
+                catch
+                {
+                    Process.Start("notepad.exe", $"\"{logFile}\"");
+                }
+            }
         }
 
         void DisablePause(string batchFile)

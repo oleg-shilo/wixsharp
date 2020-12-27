@@ -7,7 +7,7 @@ namespace WixSharp
     /// <summary>
     /// Launches the application after the finish, if the corresponding checkbox is selected.
     /// </summary>
-    /// 
+    ///
     /// <example>
     /// <code>
     /// new LaunchApplicationFromExitDialog("EXE_ID", "Launch app")
@@ -28,7 +28,7 @@ namespace WixSharp
         /// </summary>
         public string ExeId { get; }
 
-        #endregion
+        #endregion Properties
 
         #region Constructors
 
@@ -43,12 +43,12 @@ namespace WixSharp
             Description = description ?? throw new ArgumentNullException(nameof(description));
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="context"></param>
         public void Process(ProcessingContext context)
@@ -56,14 +56,17 @@ namespace WixSharp
             context.Project.Include(WixExtension.UI);
             context.Project.Include(WixExtension.Util);
 
-            var project = context.Project as Project ?? 
+            var project = context.Project as Project ??
                           throw new InvalidOperationException("LaunchApplicationFromExitDialog works only with Projects");
-            
+
+            if (project.CustomUI == null)
+                throw new InvalidOperationException("LaunchApplicationFromExitDialog can only work with Projects with native custom UI (project.CustomUI)");
+
             project.CustomUI
-                .On(NativeDialogs.ExitDialog, 
-                    Buttons.Finish, 
+                .On(NativeDialogs.ExitDialog,
+                    Buttons.Finish,
                     new ExecuteCustomAction(
-                        "LaunchApplication", 
+                        "LaunchApplication",
                         "WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed"));
 
             context.XParent
@@ -87,6 +90,6 @@ namespace WixSharp
                     .SetAttribute("Impersonate", "yes"));
         }
 
-        #endregion
+        #endregion Methods
     }
 }

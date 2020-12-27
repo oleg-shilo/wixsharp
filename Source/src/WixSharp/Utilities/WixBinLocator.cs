@@ -4,23 +4,25 @@ using System.Linq;
 
 namespace WixSharp
 {
-    static class WixBinLocator
+    public static class WixBinLocator
     {
-        public static string FindWixSdkLocation(string wixLocation)
+        public static string FindWixSdkLocation(string wixLocation, bool throwOnError = true)
         {
             var wixSdkLocation = Path.GetFullPath(Utils.PathCombine(wixLocation, @"..\sdk"));
 
             if (!Directory.Exists(wixSdkLocation))
             {
                 wixSdkLocation = Path.GetFullPath(Utils.PathCombine(wixLocation, "sdk")); //NuGet package shovels the dirs
-                if (!Directory.Exists(wixSdkLocation))
+                if (!Directory.Exists(wixSdkLocation) && throwOnError)
                     throw new Exception("WiX SDK binaries cannot be found. Please set WixSharp.Compiler.WixSdkLocation to valid path to the Wix SDK binaries.");
+
+                return null;
             }
 
             return wixSdkLocation;
         }
 
-        public static string FindWixBinLocation()
+        public static string FindWixBinLocation(bool throwOnError = true)
         {
             // See if the command line was set for this property
             var msBuildArgument = Environment.GetCommandLineArgs().FirstPrefixedValue("/WIXBIN:");
@@ -79,11 +81,28 @@ namespace WixSharp
                 }
             }
 
-            throw new WixSharpException("WiX binaries cannot be found. Wix# is capable of automatically finding WiX tools only if " +
-                                        "WiX Toolset installed. In all other cases you need to set the environment variable " +
-                                        "WIXSHARP_WIXDIR or WixSharp.Compiler.WixLocation to the valid path to the WiX binaries.\n" +
-                                        "WiX binaries can be brought to the build environment by either installing WiX Toolset, " +
-                                        "downloading Wix# suite or by adding WixSharp.wix.bin NuGet package to your project.");
+            string samplesWixBinDir = @"..\..\Wix_bin\bin".PathGetFullPath();
+
+            if (Directory.Exists(samplesWixBinDir))
+                return samplesWixBinDir;
+
+            samplesWixBinDir = @"..\..\..\Wix_bin\bin".PathGetFullPath();
+
+            if (Directory.Exists(samplesWixBinDir))
+                return samplesWixBinDir;
+
+            samplesWixBinDir = @"..\..\..\..\Wix_bin\bin".PathGetFullPath();
+
+            if (Directory.Exists(samplesWixBinDir))
+                return samplesWixBinDir;
+
+            if (throwOnError)
+                throw new WixSharpException("WiX binaries cannot be found. Wix# is capable of automatically finding WiX tools only if " +
+                                            "WiX Toolset installed. In all other cases you need to set the environment variable " +
+                                            "WIXSHARP_WIXDIR or WixSharp.Compiler.WixLocation to the valid path to the WiX binaries.\n" +
+                                            "WiX binaries can be brought to the build environment by either installing WiX Toolset, " +
+                                            "downloading Wix# suite or by adding WixSharp.wix.bin NuGet package to your project.");
+            return null;
         }
     }
 }

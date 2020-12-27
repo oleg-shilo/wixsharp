@@ -828,7 +828,7 @@ namespace WixSharp
                                 {
                                     var attr = e.Attribute(attributeName);
                                     if (emitRelativePaths)
-                                        attr.Value = Utils.MakeRelative(attr.Value, rootDir);
+                                        attr.Value = Utils.MakeRelativeTo(attr.Value, rootDir);
                                     else
                                         attr.Value = Path.GetFullPath(attr.Value);
                                 });
