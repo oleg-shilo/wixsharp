@@ -2,10 +2,10 @@
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
-using System.Xml;
-using System.Xml.Linq;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
@@ -67,7 +67,7 @@ static class Script
             project.EnableResilientPackage();
 
             // Uncomment to optionally enable the full UI for "Uninstall/Change" button in the Control Panel.
-            // project.EnableUninstallFullUI("[#myapp_exe],0");
+            project.EnableUninstallFullUI("[#myapp_exe],0");
 
             // project.PreserveTempFiles = true;
             project.WixSourceGenerated += Compiler_WixSourceGenerated;
