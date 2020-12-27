@@ -11041,6 +11041,37 @@
             A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
             </returns>
         </member>
+        <member name="T:WixSharp.UninstallFullUI">
+            <summary>
+              <para>Allows the installer to display full UI for the "Uninstall" button in the Control Panel. </para>
+              <para>By default, The Windows Installer executes "Repair" and "Uninstall" actions in the basic UI mode. <br />
+            The extension methods allow to enable the full UI for all maintenance operations. <br /></para>
+              <para>References:</para>
+              <list type="bullet">
+                <item>https://www.advancedinstaller.com/user-guide/qa-uninstall-change-button.html</item>
+              </list>
+            </summary>
+        </member>
+        <member name="M:WixSharp.UninstallFullUI.EnableUninstallFullUI(WixSharp.Project)">
+            <summary>
+            Enables the full UI.
+            </summary>
+            <param name="project">The project.</param>
+        </member>
+        <member name="M:WixSharp.UninstallFullUI.EnableUninstallFullUI(WixSharp.Project,System.String)">
+            <summary>
+            Enables the full UI.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="displayIconPath">The location of the app icon in the ARP.</param>
+        </member>
+        <member name="M:WixSharp.UninstallFullUI.WixSharp_EnableUninstallFullUI_Action(Microsoft.Deployment.WindowsInstaller.Session)">
+            <summary>
+            Internal UninstallFullUI action. It must be public for the DTF accessibility but it is not to be used by the user/developer.
+            </summary>
+            <param name="session">The session.</param>
+            <returns></returns>
+        </member>
         <member name="T:WixSharp.UrlAce">
             <summary>
             The security principal and which rights to assign to them for the URL reservation.

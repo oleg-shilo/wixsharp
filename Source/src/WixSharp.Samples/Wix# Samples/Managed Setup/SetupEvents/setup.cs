@@ -1,14 +1,13 @@
 //css_dir ..\..\..\;
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
-//css_ref WixSharp.UI.dll;
-//css_ref System.Core.dll;
-//css_ref System.Xml.dll;
+//css_ref WixSharp.UI;
+//css_ref System.Core;
+//css_ref System.Xml;
 
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
-
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
