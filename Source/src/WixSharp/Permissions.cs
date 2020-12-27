@@ -647,7 +647,7 @@ namespace WixSharp
         public bool? WriteExtendedAttributes { get; set; }
     }
 
-    internal static class PermissionExt
+    internal static class PermissionExtensions
     {
         static void Do<T>(this T? nullable, Action<T> action) where T : struct
         {

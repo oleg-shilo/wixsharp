@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using IO = System.IO;
 
 namespace WixSharp.Nsis
@@ -51,5 +52,20 @@ namespace WixSharp.Nsis
         /// Gets or sets the length to show the screen for.
         /// </summary>
         public TimeSpan Delay { get; set; }
+
+        /// <summary>
+        /// Gets or sets the length to show the fadein scene (not included in Delay).
+        /// </summary>
+        public TimeSpan FadeIn;
+
+        /// <summary>
+        /// Gets or sets the length to show the fadeout scene (not included in Delay).
+        /// </summary>
+        public TimeSpan FadeOut;
+
+        /// <summary>
+        /// Gets or sets the color used for transparency.
+        /// </summary>
+        public Color KeyColor;
     }
 }

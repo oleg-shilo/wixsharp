@@ -36,13 +36,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <NuGetPackageImportStamp>6fe112be</NuGetPackageImportStamp>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-  </ItemGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -143,6 +137,7 @@
     <Compile Include="IconFile.cs" />
     <Compile Include="IISWebSite.cs" />
     <Compile Include="IniFile.cs" />
+    <Compile Include="LaunchApplicationFromExitDialog.cs" />
     <Compile Include="NativeImage.cs" />
     <Compile Include="EventSource.cs" />
     <Compile Include="FirewallException.cs" />
@@ -159,6 +154,7 @@
     <Compile Include="Nsis\SplashScreen.cs" />
     <Compile Include="Nsis\VersionInformation.cs" />
     <Compile Include="ODBCDataSource.cs" />
+    <Compile Include="PermissionEx.cs" />
     <Compile Include="Permissions.cs" />
     <Compile Include="Properties\AssemblyInfo.version.cs" />
     <Compile Include="Reboot.cs" />
@@ -177,7 +173,6 @@
     <Compile Include="SqlString.cs" />
     <Compile Include="StringEnum.cs" />
     <Compile Include="UACRevealer.cs" />
-    <Compile Include="UninstallFullUI.cs" />
     <Compile Include="UrlAce.cs" />
     <Compile Include="UrlReservation.cs" />
     <Compile Include="User.cs" />

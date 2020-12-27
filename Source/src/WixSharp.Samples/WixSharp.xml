@@ -5416,6 +5416,41 @@
             </summary>
             <param name="context">The context.</param>
         </member>
+        <member name="T:WixSharp.LaunchApplicationFromExitDialog">
+            <summary>
+            Launches the application after the finish, if the corresponding checkbox is selected.
+            </summary>
+            
+            <example>
+            <code>
+            new LaunchApplicationFromExitDialog("EXE_ID", "Launch app")
+            </code>
+            </example>
+        </member>
+        <member name="P:WixSharp.LaunchApplicationFromExitDialog.Description">
+            <summary>
+            CheckBox text. <br/>
+            Default value is <value>"Launch"</value>.
+            </summary>
+        </member>
+        <member name="P:WixSharp.LaunchApplicationFromExitDialog.ExeId">
+            <summary>
+            Exe ID.
+            </summary>
+        </member>
+        <member name="M:WixSharp.LaunchApplicationFromExitDialog.#ctor(System.String,System.String)">
+            <summary>
+            Launches the application after the finish, if the corresponding checkbox is selected.
+            </summary>
+            <param name="exeId"></param>
+            <param name="description"></param>
+        </member>
+        <member name="M:WixSharp.LaunchApplicationFromExitDialog.Process(WixSharp.ProcessingContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+        </member>
         <member name="T:WixSharp.NativeImage">
             <summary>
             Improves the performance of managed applications by creating native images. Requires the .NET Framework 2.0 or newer to be installed on the target machine since it runs NGen.
@@ -6317,6 +6352,11 @@
             </summary>
             <value>The simple splash screen for the output file (bootstrapper)</value>
         </member>
+        <member name="F:WixSharp.Nsis.NsisBootstrapper.DigitalSignature">
+            <summary>
+            Gets or sets digital signature parameters for the bootstrapper.
+            </summary>
+        </member>
         <member name="M:WixSharp.Nsis.NsisBootstrapper.Build">
             <summary>
             Builds bootstrapper file.
@@ -6553,6 +6593,21 @@
             Gets or sets the length to show the screen for.
             </summary>
         </member>
+        <member name="F:WixSharp.Nsis.SplashScreen.FadeIn">
+            <summary>
+            Gets or sets the length to show the fadein scene (not included in Delay).
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.SplashScreen.FadeOut">
+            <summary>
+            Gets or sets the length to show the fadeout scene (not included in Delay).
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.SplashScreen.KeyColor">
+            <summary>
+            Gets or sets the color used for transparency.
+            </summary>
+        </member>
         <member name="T:WixSharp.Nsis.VersionInformation">
             <summary>
             Defines version information.
@@ -6698,6 +6753,192 @@
         <member name="F:WixSharp.ODBCDataSource.Properties">
             <summary>
             Collection of WiX/MSI <see cref="T:WixSharp.Property"/> objects to be created during the installed.
+            </summary>
+        </member>
+        <member name="T:WixSharp.PermissionEx">
+            <summary>
+            Sets ACLs on File, Registry, CreateFolder, or ServiceInstall. When under a Registry element, this cannot be used if the Action attribute's value is remove or removeKeyOnInstall. This element has no Id attribute. The table and key are taken from the parent element.
+            </summary>
+            <seealso cref="T:WixSharp.WixEntity" />
+        </member>
+        <member name="F:WixSharp.PermissionEx.Append">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ChangePermission">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.CreateChild">
+            <summary>
+            For a directory, the right to create a subdirectory. Only valid under a 'CreateFolder' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.CreateFile">
+            <summary>
+            For a directory, the right to create a file in the directory. Only valid under a 'CreateFolder' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.CreateLink">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.CreateSubkeys">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.Delete">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.DeleteChild">
+            <summary>
+            For a directory, the right to delete a directory and all the files it contains, including read-only files. Only valid under a 'CreateFolder' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.Domain">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.EnumerateSubkeys">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.Execute">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.GenericAll">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.GenericExecute">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.GenericRead">
+            <summary>
+            specifying this will fail to grant read access
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.GenericWrite">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.Notify">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.Read">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ReadAttributes">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ReadExtendedAttributes">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ReadPermission">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceChangeConfig">
+            <summary>
+            Required to call the ChangeServiceConfig or ChangeServiceConfig2 function to change the service configuration. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceEnumerateDependents">
+            <summary>
+            Required to call the EnumDependentServices function to enumerate all the services dependent on the service. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceInterrogate">
+            <summary>
+            Required to call the ControlService function to ask the service to report its status immediately. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServicePauseContinue">
+            <summary>
+            Required to call the ControlService function to pause or continue the service. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceQueryConfig">
+            <summary>
+            Required to call the QueryServiceConfig and QueryServiceConfig2 functions to query the service configuration. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceQueryStatus">
+            <summary>
+            Required to call the QueryServiceStatus function to ask the service control manager about the status of the service. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceStart">
+            <summary>
+            Required to call the StartService function to start the service. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceStop">
+            <summary>
+            Required to call the ControlService function to stop the service. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.ServiceUserDefinedControl">
+            <summary>
+            Required to call the ControlService function to specify a user-defined control code. Only valid under a 'ServiceInstall' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.Synchronize">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.TakeOwnership">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.Traverse">
+            <summary>
+            For a directory, the right to traverse the directory. By default, users are assigned the BYPASS_TRAVERSE_CHECKING privilege, which ignores the FILE_TRAVERSE access right. Only valid under a 'CreateFolder' parent.
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.User">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.Write">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.WriteAttributes">
+            <summary>
+            WiX element description is not available
+            </summary>
+        </member>
+        <member name="F:WixSharp.PermissionEx.WriteExtendedAttributes">
+            <summary>
+            WiX element description is not available
             </summary>
         </member>
         <member name="T:WixSharp.GenericPermission">
@@ -7215,14 +7456,14 @@
             Maps to the WriteExtendedAttributes property of PermissionEx
             </summary>
         </member>
-        <member name="M:WixSharp.PermissionExt.EmitAttributes(WixSharp.DirPermission,System.Xml.Linq.XElement)">
+        <member name="M:WixSharp.PermissionExtensions.EmitAttributes(WixSharp.DirPermission,System.Xml.Linq.XElement)">
             <summary>
             Adds attributes to <paramref name="permissionElement"/> representing the state of <paramref name="dirPermission"/>
             </summary>
             <param name="dirPermission"></param>
             <param name="permissionElement"></param>
         </member>
-        <member name="M:WixSharp.PermissionExt.EmitAttributes(WixSharp.FilePermission,System.Xml.Linq.XElement)">
+        <member name="M:WixSharp.PermissionExtensions.EmitAttributes(WixSharp.FilePermission,System.Xml.Linq.XElement)">
             <summary>
             Adds attributes to <paramref name="permissionElement"/> representing the state of <paramref name="filePermission"/>
             </summary>
@@ -14894,6 +15135,20 @@
             <param name="encoding">The encoding.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.SerializingExtensions.Base64Encode(System.String)">
+            <summary>
+            Converts a string in Base64 encoding.
+            </summary>
+            <param name="text">The text.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.SerializingExtensions.Base64Decode(System.String)">
+            <summary>
+            Decodes Base64 data into a string..
+            </summary>
+            <param name="data">The data.</param>
+            <returns></returns>
+        </member>
         <member name="T:WixSharp.XmlMapping">
              <summary>
              Serializes CLR entity into XML, based on the type members being marked for the serialization with <see cref="T:WixSharp.XmlAttribute"/>.
@@ -16362,7 +16617,7 @@
         </member>
         <member name="F:WixSharp.Project.DigitalSignature">
             <summary>
-            Parameters of digitaly sign of this project
+            Parameters of digitally sign of this project
             </summary>
         </member>
         <member name="F:WixSharp.Project.Package">
@@ -18013,6 +18268,11 @@
         <member name="F:WixSharp.ServiceInstaller.Password">
             <summary>
             The password for the account. Valid only when the account has a password.
+            </summary>
+        </member>
+        <member name="F:WixSharp.ServiceInstaller.PermissionEx">
+            <summary>
+            The <c>PermissionEx</c> element associated with the emitted <c>ServiceInstall</c> element.
             </summary>
         </member>
         <member name="F:WixSharp.ServiceInstaller.Vital">

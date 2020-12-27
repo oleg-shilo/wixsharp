@@ -35,7 +35,7 @@ public class Script
                               PasswordNeverExpires = true,
                               CreateUser = true
                           },
-                          new Binary("CUSTOM_LNG".ToId(), @"C:\Program Files (x86)\WiX Toolset v3.11\SDK\wixui\WixUI_fi-FI.wxl"),
+                          new Binary("CUSTOM_LNG".ToId(), "WixUI_fi-FI.wxl"),
                           new Property("PASSWORD", "pwd123") { IsDeferred = true });
 
         project.SourceBaseDir = @"..\..\";

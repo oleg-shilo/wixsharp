@@ -20,7 +20,7 @@ internal class ConsoleSetup
 
         Console.WriteLine("The product is {0}INSTALLED\n\n", setup.IsCurrentlyInstalled ? "" : "NOT ");
 
-        try
+        try 
         {
             if (!setup.IsCurrentlyInstalled)
             {
