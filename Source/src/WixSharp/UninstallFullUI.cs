@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using WixSharp.CommonTasks;
@@ -51,6 +52,28 @@ namespace WixSharp
                 When.Before,
                 Step.InstallFinalize,
                 Condition.NOT_Installed));
+
+            project.WixSourceGenerated += doc =>
+            {
+                /*
+                  <Component Id="...
+                      <RegistryKey Root="...
+                          <RegistryValue Id="WixSharp_RegValue_DisplayIcon..."
+                 */
+
+                var comp = doc.FindAll("RegistryValue")
+                              .First(x => x.HasAttribute("Id", "WixSharp_RegValue_DisplayIcon"))
+                              .Parent
+                              .Parent;
+
+                var compId = comp.Attribute("Id").Value;
+
+                var features = doc.FindAll("Feature")
+                                  .Where(x => !x.FindAll("ComponentRef")
+                                                .Any(y => y.HasAttribute("Id", compId))).ToArray();
+
+                features.ForEach(f => f.AddElement("ComponentRef", $"Id={compId}"));
+            };
         }
 
         /// <summary>
