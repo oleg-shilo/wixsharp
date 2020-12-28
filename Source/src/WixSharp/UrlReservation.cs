@@ -177,6 +177,8 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
+            context.Project.Include(WixExtension.Http);
+
             XElement UrlReservation = this.ToXElement(WixExtension.Http, GetType().Name);
             if (UrlAce != null)
             {

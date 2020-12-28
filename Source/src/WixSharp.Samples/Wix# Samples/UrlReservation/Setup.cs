@@ -56,10 +56,8 @@ namespace FutoRollbackGeneration
                         new UrlReservation("http://+:2131/url/device_service/", "*S-1-1-0", UrlReservationRights.register));
 
                 project.GUID = new Guid("EC18F80D-2528-4C85-848A-B485401B6523");
-                project.Include(WixExtension.Util)
-                       .Include(WixExtension.Http);
 
-                Compiler.PreserveTempFiles = true;
+                // Compiler.PreserveTempFiles = true;
                 Compiler.BuildMsi(project);
             }
             catch (Exception ex)

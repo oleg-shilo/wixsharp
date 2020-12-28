@@ -684,8 +684,9 @@ namespace WixSharp
             objFile = IO.Path.ChangeExtension(wxsFile, ".wixobj");
 
             extensionDlls = project.WixExtensions
-                                   .Select(x => x.ExpandEnvVars())
-                                   .Distinct()
+                                   .Select(x => x.ExpandEnvVars().PathGetFullPath())
+                                   .Select(x => x.PathGetFullPath()) // the csame extension can be included multiple times (e.g with relative and absolute path
+                                   .Distinct() 
                                    .JoinBy(" ", dll => " -ext \"" + dll + "\"");
 
             string wxsFiles = project.WxsFiles
