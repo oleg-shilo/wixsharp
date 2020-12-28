@@ -9,8 +9,8 @@ class Script
 {
     static public void Main()
     {
-        // SimpleScenario();
-        HeatScenario();
+        SimpleScenario();
+        // HeatScenario();
     }
 
     static void SimpleScenario()
@@ -53,6 +53,9 @@ class Script
 
     static void HeatScenario()
     {
+        // NOTE:
+        // WiX's heat.exe has a build dependency on NETFX v3.5. If you enable the ".NET Framework 3.5" feature in
+        // "Programs and Features", you should be able to build your WiX projects.
         var project =
             new ManagedProject("HeatAggregatedMsi",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
