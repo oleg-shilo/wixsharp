@@ -73,9 +73,8 @@ internal static class Script
 
             // project.PreserveTempFiles = true;
             project.WixSourceGenerated += Compiler_WixSourceGenerated;
-            project.BuildMsi();
 
-            // project.BuildMsiCmd();
+            project.BuildMsi();
         }
         catch (System.Exception ex)
         {

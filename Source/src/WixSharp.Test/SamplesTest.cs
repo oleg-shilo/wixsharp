@@ -110,6 +110,8 @@ namespace WixSharp.Test
 
                 string output = Run(batchFile);
 
+                IO.File.WriteAllText(batchFile + ".log", output);
+
                 if (output.Contains(" : error") || output.Contains("Error: ") || (!nonMsi && !HasAnyMsis(dir)))
                 {
                     if (batchFile.EndsWith(@"Signing\Build.cmd") && output.Contains("SignTool Error:"))
@@ -216,16 +218,18 @@ namespace WixSharp.Test
             process.StartInfo.WorkingDirectory = IO.Path.GetDirectoryName(batchFile);
             process.Start();
 
-            string line;
-            var output = new StringBuilder();
-            while (null != (line = process.StandardOutput.ReadLine()))
-            {
-                output.AppendLine(line);
-            }
+            return process.StandardOutput.ReadToEnd();
 
-            process.WaitForExit();
+            // string line;
+            // var output = new StringBuilder();
+            // while (null != (line = process.StandardOutput.ReadLine()))
+            // {
+            //     output.AppendLine(line);
+            // }
 
-            return output.ToString();
+            // process.WaitForExit();
+
+            // return output.ToString();
         }
     }
 }
