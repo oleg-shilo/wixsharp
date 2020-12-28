@@ -53,7 +53,7 @@ internal static class Script
 
                     new ManagedAction(CustomActions.MyManagedAction, "%this%"),
 
-                    // new LaunchApplicationFromExitDialog(exeId: "myapp_exe", description: "Launch app"),
+                    new LaunchApplicationFromExitDialog(exeId: "myapp_exe", description: "Launch app"),
 
                     new InstalledFileAction("myapp_exe", ""));
 

@@ -60,19 +60,32 @@ namespace WixSharp
                           throw new InvalidOperationException("LaunchApplicationFromExitDialog works only with Projects");
 
             if (project.CustomUI == null)
-                throw new InvalidOperationException("LaunchApplicationFromExitDialog can only work with Projects with native custom UI (project.CustomUI)");
-
-            project.CustomUI
-                .On(NativeDialogs.ExitDialog,
-                    Buttons.Finish,
-                    new ExecuteCustomAction(
-                        "LaunchApplication",
-                        "WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed"));
+            {
+                context.XParent.FindFirst("UI")
+                    .AddElement("Publish",
+                                attributesDefinition:
+                                    "Dialog=ExitDialog;" +
+                                    "Control=Finish;" +
+                                    "Event=DoAction;" +
+                                    "Value=LaunchApplication",
+                                value:
+                                    "WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed");
+            }
+            else
+            {
+                project.CustomUI
+                    .On(NativeDialogs.ExitDialog,
+                        Buttons.Finish,
+                        new ExecuteCustomAction(
+                            "LaunchApplication",
+                            "WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed"));
+            }
 
             context.XParent
                 .Add(new XElement("Property")
                     .SetAttribute("Id", "WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT")
                     .SetAttribute("Value", Description));
+
             context.XParent
                 .Add(new XElement("Property")
                     .SetAttribute("Id", "WIXUI_EXITDIALOGOPTIONALCHECKBOX")
@@ -82,6 +95,7 @@ namespace WixSharp
                 .Add(new XElement("Property")
                     .SetAttribute("Id", "WixShellExecTarget")
                     .SetAttribute("Value", $"[#{ExeId}]"));
+
             context.XParent
                 .Add(new XElement("CustomAction")
                     .SetAttribute("Id", "LaunchApplication")
