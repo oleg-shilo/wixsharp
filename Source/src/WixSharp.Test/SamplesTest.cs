@@ -32,7 +32,8 @@ namespace WixSharp.Test
             if (Environment.GetEnvironmentVariable("APPVEYOR") != null)
                 return;
 
-            //need to exclude some samples; for example the two samples from the same dir will interfere with each other;
+            // need to exclude some samples; for example the two samples from the same dir will interfere with each other;
+            // or some other tests are built as a part of the solution
             string[] exclude = new string[] { };
 
             var failedSamples = new List<string>();
@@ -46,7 +47,7 @@ namespace WixSharp.Test
 
             compiled_scripts.ForEach(x => System.IO.File.Delete(x));
 
-            files = files.Where(f => !exclude.Any(y => f.EndsWith(y))).ToArray();
+            files = files.Where(f => !exclude.Any(y => f.EndsWith(y, ignoreCase: true))).ToArray();
 
             files = files.Skip(startStep).ToArray();
 
@@ -64,11 +65,14 @@ namespace WixSharp.Test
 
             var allSamples = samples.Select(g => new { Category = g.Key, Items = g, Index = ++sampleDirIndex }).ToArray();
 
+            var parallel = false;
+
 #if DEBUG
+            parallel = true;
             ShowLogFileToObserveProgress();
             // System.Diagnostics.Process.GetProcessesByName("cmd").ToList().ForEach(x => { try { x.Kill(); } catch { } });
-            System.Diagnostics.Process.GetProcessesByName("cscs").ToList().ForEach(x => { try { x.Kill(); } catch { } });
-            System.Diagnostics.Process.GetProcessesByName("conhost").ToList().ForEach(x => { try { x.Kill(); } catch { } });
+            // System.Diagnostics.Process.GetProcessesByName("cscs").ToList().ForEach(x => { try { x.Kill(); } catch { } });
+            // System.Diagnostics.Process.GetProcessesByName("conhost").ToList().ForEach(x => { try { x.Kill(); } catch { } });
 #endif
 
             void processDir(dynamic group)
@@ -85,10 +89,12 @@ namespace WixSharp.Test
                 }
             };
 
-            var parallel = false;
             if (parallel)
             {
-                Parallel.ForEach(allSamples, processDir);
+                foreach (var item in allSamples)
+                    ThreadPool.QueueUserWorkItem((x) => processDir(item));
+
+                //Parallel.ForEach(allSamples, processDir);
                 while (completedSamples < samplesTotal)
                 {
                     Thread.Sleep(1000);

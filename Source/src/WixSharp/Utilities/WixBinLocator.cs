@@ -96,6 +96,11 @@ namespace WixSharp
             if (Directory.Exists(samplesWixBinDir))
                 return samplesWixBinDir;
 
+            samplesWixBinDir = @"..\..\..\..\..\Wix_bin\bin".PathGetFullPath();
+
+            if (Directory.Exists(samplesWixBinDir))
+                return samplesWixBinDir;
+
             if (throwOnError)
                 throw new WixSharpException("WiX binaries cannot be found. Wix# is capable of automatically finding WiX tools only if " +
                                             "WiX Toolset installed. In all other cases you need to set the environment variable " +
