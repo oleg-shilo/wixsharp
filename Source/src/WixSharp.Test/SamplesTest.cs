@@ -12,7 +12,7 @@ using IO = System.IO;
 
 namespace WixSharp.Test
 {
-    public class SamplesTest
+    public class SamplesTest : WixLocator
     {
         IEnumerable<string> nonMsiProjects = @"CustomAttributes,
                                                External_UI,
@@ -38,6 +38,7 @@ namespace WixSharp.Test
             var failedSamples = new List<string>();
             int startStep = 0;
             int? howManyToRun = null; //null - all
+            int? whichOneToRun = null; //null - all
             int sampleDirIndex = 0;
 
             var files = Directory.GetFiles(@"..\..\..\WixSharp.Samples\Wix# Samples", "build*.cmd", SearchOption.AllDirectories);
@@ -49,7 +50,8 @@ namespace WixSharp.Test
 
             files = files.Skip(startStep).ToArray();
 
-            // files = files.Where(x => x.Contains("DeferredActions")).ToArray();
+            if (whichOneToRun.HasValue)
+                files = new[] { files[whichOneToRun.Value] };
 
             if (howManyToRun.HasValue)
                 files = files.Take(howManyToRun.Value).ToArray();
@@ -60,12 +62,16 @@ namespace WixSharp.Test
 
             var samples = files.GroupBy(x => Path.GetDirectoryName(x));
 
-            var allSamples = samples.Select(g => new { Category = g.Key, Items = g, Index = ++sampleDirIndex });
+            var allSamples = samples.Select(g => new { Category = g.Key, Items = g, Index = ++sampleDirIndex }).ToArray();
 
 #if DEBUG
             ShowLogFileToObserveProgress();
+            // System.Diagnostics.Process.GetProcessesByName("cmd").ToList().ForEach(x => { try { x.Kill(); } catch { } });
+            System.Diagnostics.Process.GetProcessesByName("cscs").ToList().ForEach(x => { try { x.Kill(); } catch { } });
+            System.Diagnostics.Process.GetProcessesByName("conhost").ToList().ForEach(x => { try { x.Kill(); } catch { } });
 #endif
-            Parallel.ForEach(allSamples, (group) =>
+
+            void processDir(dynamic group)
             {
                 string sampleDir = group.Category;
 
@@ -77,10 +83,22 @@ namespace WixSharp.Test
                 {
                     BuildSample(batchFile, group.Index, failedSamples);
                 }
-            });
+            };
 
-            while (completedSamples < samplesTotal)
-                Thread.Sleep(1000);
+            var parallel = false;
+            if (parallel)
+            {
+                Parallel.ForEach(allSamples, processDir);
+                while (completedSamples < samplesTotal)
+                {
+                    Thread.Sleep(1000);
+                }
+            }
+            else
+            {
+                foreach (var item in allSamples)
+                    processDir(item);
+            }
 
             testTime.Stop();
             LogAppend("\r\n--- END ---");
@@ -110,7 +128,16 @@ namespace WixSharp.Test
 
                 string output = Run(batchFile);
 
-                IO.File.WriteAllText(batchFile + ".log", output);
+                IO.File.WriteAllText(batchFile + ".log",
+                    $"CurrDir: {Environment.CurrentDirectory}{Environment.NewLine}" +
+                    $"Cmd: {batchFile}{Environment.NewLine}" +
+                    $"======================================{Environment.NewLine}" +
+                    $"{output}");
+
+                if (batchFile.Contains("InjectXml"))
+                {
+                    Debug.Assert(false);
+                }
 
                 if (output.Contains(" : error") || output.Contains("Error: ") || (!nonMsi && !HasAnyMsis(dir)))
                 {
@@ -163,8 +190,8 @@ namespace WixSharp.Test
         void ShowLogFileToObserveProgress()
         {
             var logFile = @"..\..\..\WixSharp.Samples\test_progress.txt".PathGetFullPath();
-            if (!IO.File.Exists(logFile))
-                IO.File.WriteAllText(logFile, "");
+            if (IO.File.Exists(logFile))
+                IO.File.WriteAllText(logFile, "The file will be updated as soon as the samples will start being tested.");
 
             try
             {
@@ -180,7 +207,8 @@ namespace WixSharp.Test
                 }
                 catch
                 {
-                    Process.Start("notepad.exe", $"\"{logFile}\"");
+                    // notepad does not support reloading on changes
+                    // Process.Start("notepad.exe", $"\"{logFile}\"");
                 }
             }
         }

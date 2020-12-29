@@ -37,6 +37,10 @@ class Script
         project.LocalizationFile = "FirewallExtension.ru.wxl";
         project.Encoding = Encoding.UTF8;
 
+
+        // see
+        // https://github.com/oleg-shilo/wixsharp/issues/748
+
         project.BuildMsi();
     }
 }

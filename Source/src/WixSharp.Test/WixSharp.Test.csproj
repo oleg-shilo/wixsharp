@@ -81,6 +81,7 @@
     <Compile Include="RegFileTest.cs" />
     <Compile Include="SamplesTest.cs" />
     <Compile Include="ServiceInstallerTest.cs" />
+    <Compile Include="WixLocator.cs" />
     <Compile Include="XmlInjectionTests.cs" />
   </ItemGroup>
   <ItemGroup>

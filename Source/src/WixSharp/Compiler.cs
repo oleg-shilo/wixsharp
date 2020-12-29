@@ -375,7 +375,7 @@ namespace WixSharp
 
                 if (wixLocation.IsEmpty()) // Not set from the installer - find it now
                 {
-                    wixLocation = WixBinLocator.FindWixBinLocation();
+                    wixLocation = WixBinLocator.FindWixBinLocation()?.PathGetFullPath();
                     Environment.SetEnvironmentVariable("WixLocation", wixLocation);
                 }
 
@@ -681,16 +681,16 @@ namespace WixSharp
 
         static string GenerateCandleCommand(Project project, string wxsFile, string outDir, out string objFile, out string extensionDlls)
         {
+            // Debug.Assert(false);
             objFile = IO.Path.ChangeExtension(wxsFile, ".wixobj");
 
             extensionDlls = project.WixExtensions
                                    .Select(x => x.ExpandEnvVars().PathGetFullPath())
-                                   .Select(x => x.PathGetFullPath()) // the csame extension can be included multiple times (e.g with relative and absolute path
                                    .Distinct() 
                                    .JoinBy(" ", dll => " -ext \"" + dll + "\"");
 
             string wxsFiles = project.WxsFiles
-                                     .Select(x => x.ExpandEnvVars())
+                                     .Select(x => x.ExpandEnvVars().PathGetFullPath())
                                      .Distinct()
                                      .JoinBy(" ", file => "\"" + file + "\"");
 

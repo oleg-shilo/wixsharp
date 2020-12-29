@@ -10,24 +10,8 @@ using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-[assembly: Xunit.TestFramework("WixSharp.Test.WixLocator", "WixSharp.Test")]
-
 namespace WixSharp.Test
 {
-    public class WixLocator
-    {
-        static bool done = false;
-
-        public WixLocator()
-        {
-            if (!done)
-            {
-                done = true;
-                Compiler.WixLocation = @"..\..\..\WixSharp.Samples\Wix_bin\bin";
-            }
-        }
-    }
-
     public class IssueFixesTest : WixLocator
     {
         /// <summary>
