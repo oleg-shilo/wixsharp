@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Xml.Linq;
 using WixSharp.Controls;
 
@@ -15,8 +16,6 @@ namespace WixSharp
     /// </example>
     public class LaunchApplicationFromExitDialog : WixEntity, IGenericEntity
     {
-        #region Properties
-
         /// <summary>
         /// CheckBox text. <br/>
         /// Default value is <value>"Launch"</value>.
@@ -27,10 +26,6 @@ namespace WixSharp
         /// Exe ID.
         /// </summary>
         public string ExeId { get; }
-
-        #endregion Properties
-
-        #region Constructors
 
         /// <summary>
         /// Launches the application after the finish, if the corresponding checkbox is selected.
@@ -43,16 +38,13 @@ namespace WixSharp
             Description = description ?? throw new ArgumentNullException(nameof(description));
         }
 
-        #endregion Constructors
-
-        #region Methods
-
         /// <summary>
         ///
         /// </summary>
         /// <param name="context"></param>
         public void Process(ProcessingContext context)
         {
+            // Debug.Assert(false);
             context.Project.Include(WixExtension.UI);
             context.Project.Include(WixExtension.Util);
 
@@ -103,7 +95,5 @@ namespace WixSharp
                     .SetAttribute("DllEntry", "WixShellExec")
                     .SetAttribute("Impersonate", "yes"));
         }
-
-        #endregion Methods
     }
 }
