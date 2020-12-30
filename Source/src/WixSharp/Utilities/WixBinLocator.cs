@@ -31,8 +31,15 @@ namespace WixSharp
                 return Path.GetFullPath(msBuildArgument);
             }
 
-            // Now check to see if the environment variable was set
+            // Now check to see if the environment variable was set system wide
             var environmentVar = Environment.GetEnvironmentVariable("WIXSHARP_WIXDIR");
+            if (environmentVar.IsNotEmpty() && Directory.Exists(environmentVar))
+            {
+                return Path.GetFullPath(environmentVar);
+            }
+
+            // Now check to see if the environment variable was set by the parent process
+            environmentVar = Environment.GetEnvironmentVariable("WixLocation");
             if (environmentVar.IsNotEmpty() && Directory.Exists(environmentVar))
             {
                 return Path.GetFullPath(environmentVar);
