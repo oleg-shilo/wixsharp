@@ -19,8 +19,6 @@ public static class Script
 {
     static public void Main()
     {
-        Compiler.WixLocation = @"..\..\..\..\..\Wix_bin\bin";
-
         // optionally modify UAC related settings
         AutoElements.EnableUACRevealer = true;
         AutoElements.UACWarning = "Wait for UAC prompt to appear on the taskbar.";
