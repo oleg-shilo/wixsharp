@@ -546,7 +546,7 @@ namespace WixSharp
         /// <returns>Path to the batch file.</returns>
         static public string BuildMsiCmd(Project project, string path)
         {
-                ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
+            ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
             BuildCmd(project, path, OutputType.MSI);
             return path;
         }
@@ -686,7 +686,7 @@ namespace WixSharp
 
             extensionDlls = project.WixExtensions
                                    .Select(x => x.ExpandEnvVars().PathGetFullPath())
-                                   .Distinct() 
+                                   .Distinct()
                                    .JoinBy(" ", dll => " -ext \"" + dll + "\"");
 
             string wxsFiles = project.WxsFiles
@@ -2284,8 +2284,8 @@ namespace WixSharp
                                                .SetAttribute("KeyPath", keyPathSet)
                                                .AddAttributes(regVal.Attributes)));
 
-                    if(regVal.Permissions != null)
-                        foreach (Permission permission in  regVal.Permissions)
+                    if (regVal.Permissions != null)
+                        foreach (Permission permission in regVal.Permissions)
                             regValEl.AddElement(permission.ToXElement("Permission"));
 
                     if (!regVal.Key.IsEmpty())
@@ -2340,17 +2340,19 @@ namespace WixSharp
             }
         }
 
-        static void InsertWebSite(WebSite webSite, string dirID, XElement element)
+        static void InsertWebSite(WebSite webSite, string dirID, XElement parent, Project project)
         {
             XNamespace ns = "http://schemas.microsoft.com/wix/IIsExtension";
 
-            XElement xWebSite = element.AddElement(new XElement(ns + "WebSite",
+            XElement xWebSite = parent.AddElement(new XElement(ns + "WebSite",
                                                        new XAttribute("Id", webSite.Id),
                                                        new XAttribute("Description", webSite.Description),
                                                        new XAttribute("Directory", dirID)));
 
             xWebSite.SetAttribute("WebApplication", webSite.WebApplication)
                     .AddAttributes(webSite.Attributes);
+
+
 
             var count = 0;
             foreach (WebSite.WebAddress address in webSite.Addresses)
@@ -2363,6 +2365,34 @@ namespace WixSharp
                                                             new XAttribute("Port", address.Port)));
 
                 xAddress.AddAttributes(address.Attributes);
+            }
+
+            if (webSite.Certificate != null)
+            {
+                var certificate = webSite.Certificate.ToXElement(WixExtension.IIs, "Certificate");
+
+                if (!parent.FindAll("Certificate").Any(x => x.HasAttribute("Id", webSite.Certificate.Id)))
+                {
+                    parent.AddElement(certificate);
+
+                    if (webSite.Certificate.File.IsNotEmpty())
+                    {
+                        // since user requested not to reference `Binary` element but use the file it is WixSharp responsibility to
+                        // include the file as to the `Product` element as a new `Binary` XML element.
+
+                        var binary = new Binary(webSite.Certificate.File); // will generate a correct unique Id
+
+                        string bynaryPath = project.SourceBaseDir.PathJoin(binary.Name);
+
+                        parent.Document
+                              .FindFirst("Product")
+                              .AddElement("Binary", $"Id={binary.Id};SourceFile={bynaryPath}");
+
+                        certificate.SetAttribute("BinaryKey", binary.Id);
+                    }
+                }
+
+                xWebSite.AddElement(ns + "CertificateRef", $"Id={webSite.Certificate.Id}");
             }
         }
 
@@ -2417,7 +2447,7 @@ namespace WixSharp
                 {
                     if (!uniqueComponentWebSites.Contains(wVDir.WebSite))
                     {
-                        InsertWebSite(wVDir.WebSite, dirID, component);
+                        InsertWebSite(wVDir.WebSite, dirID, component, project);
                         uniqueComponentWebSites.Add(wVDir.WebSite);
                     }
                 }
@@ -2450,7 +2480,7 @@ namespace WixSharp
 
             foreach (WebSite webSite in uniqueProductWebSites)
             {
-                InsertWebSite(webSite, dirID, xProduct);
+                InsertWebSite(webSite, dirID, xProduct, project);
             }
 
             if (wasInserted)

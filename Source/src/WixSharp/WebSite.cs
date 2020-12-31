@@ -38,6 +38,8 @@ namespace WixSharp
     /// </summary>
     public partial class WebSite : WixEntity
     {
+        public IISCertificate Certificate;
+
         /// <summary>
         /// This is the name of the web site that will show up in the IIS management console.
         /// </summary>

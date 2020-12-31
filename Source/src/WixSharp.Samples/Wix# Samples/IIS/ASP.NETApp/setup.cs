@@ -38,15 +38,26 @@ class Script
 
                                 new Dir("AdminWeb3",
                                     new File(@"MyWebApp\AdminWeb3\Default.aspx",
-                                        new IISVirtualDir
+                                    new IISVirtualDir
+                                    {
+                                        Name = "MyWebApp3",
+                                        AppName = "Test3",
+                                        WebSite = new WebSite("NewSite3", "*:8083")
                                         {
-                                            Name = "MyWebApp3",
-                                            AppName = "Test3",
-                                            WebSite = new WebSite("NewSite3", "*:8083") { InstallWebSite = true },
-                                            WebAppPool = new WebAppPool("MyWebApp3", "Identity=applicationPoolIdentity")
-                                        }
-                                            )
-                                       ),
+                                            InstallWebSite = true,
+                                            Certificate = new IISCertificate
+                                            {
+                                                File = "MyServer.cert.pfx",
+                                                Name = "MyServerCert",
+                                                StoreLocation = IISCertificate.CertificateStoreLocation.localMachine,
+                                                StoreName = IISCertificate.CertificateStoreName.personal,
+                                                PFXPassword = "password123",
+                                                Request = false,
+                                                Overwrite = false
+                                            }
+                                        },
+                                        WebAppPool = new WebAppPool("MyWebApp3", "Identity=applicationPoolIdentity")
+                                    })),
                             new File(@"MyWebApp\Default.aspx",
                                 new IISVirtualDir
                                 {

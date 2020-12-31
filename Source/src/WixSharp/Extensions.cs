@@ -145,11 +145,17 @@ namespace WixSharp
         /// </summary>
         /// <param name="obj">The instance of the <see cref="T:System.Xml.Linq.XElement"/>.</param>
         /// <param name="elementName">Name of the element.</param>
+        /// <param name="attributesDefinition">The attributes definition. Rules of the composing the
+        /// definition are the same as for <see cref="P:WixSharp.WixEntity.AttributesDefinition" />.</param>
+        /// <param name="value">The value of the added element.</param>
         /// <returns>Added <see cref="T:System.Xml.Linq.XElement"/>.</returns>
-        public static XElement AddElement(this XElement obj, XName elementName)
+        public static XElement AddElement(this XElement obj, XName elementName, string attributesDefinition = null, string value = null)
         {
             var parent = obj;
-            parent = parent.AddElement(new XElement(elementName));
+            XElement element;
+            parent = parent.AddElement(element = new XElement(elementName)).AddAttributes(attributesDefinition);
+            if (value != null)
+                element.Value = value;
             return parent;
         }
 
@@ -291,7 +297,7 @@ namespace WixSharp
         /// <returns></returns>
         public static XElement AddAttributes(this XElement obj, string attributesDefinition)
         {
-            return obj.AddAttributes(attributesDefinition.ToDictionary());
+            return obj.AddAttributes(attributesDefinition?.ToDictionary());
         }
 
         /// <summary>
@@ -456,7 +462,7 @@ namespace WixSharp
         /// <returns><see cref="T:System.Xml.Linq.XElement"/> with added attributes.</returns>
         public static XElement AddAttributes(this XElement obj, Dictionary<string, string> attributes)
         {
-            if (attributes.Any())
+            if (attributes != null && attributes.Any())
             {
                 // "Component:ProviderKey=12345
                 // {dep}ProductKey=12345

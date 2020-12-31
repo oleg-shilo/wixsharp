@@ -31,18 +31,45 @@ using System.Xml.Linq;
 
 namespace WixSharp
 {
+    /// <summary>
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// new IISVirtualDir
+    /// {
+    ///     Name = "MyWebApp3",
+    ///     AppName = "Test3",
+    ///     WebSite = new WebSite("NewSite3", "*:8083")
+    ///     {
+    ///         InstallWebSite = true,
+    ///         Certificate = new IISCertificate
+    ///         {
+    ///             File = "MyServer.cert.pfx",
+    ///             Name = "MyServerCert",
+    ///             StoreLocation = IISCertificate.CertificateStoreLocation.localMachine,
+    ///             StoreName = IISCertificate.CertificateStoreName.personal,
+    ///             PFXPassword = "password123",
+    ///             Request = false,
+    ///             Overwrite = false
+    ///         }
+    ///     },
+    ///     WebAppPool = new WebAppPool("MyWebApp3", "Identity=applicationPoolIdentity")
+    /// }
+    /// </code>
+    /// </example>
+    /// <seealso cref="WixSharp.WixEntity" />
     public class IISCertificate : WixEntity
     {
         /// <summary>
         /// This attribute's value must be one of the following.
         /// </summary>
-        public enum CertificateStoreName
+        public enum CertificateStoreLocation
         {
             currentUser,
             localMachine
         }
 
-        public enum CertificateStoreLocation
+        public enum CertificateStoreName
         {
             /// <summary>
             /// Contains the certificates of certificate authorities that the user trusts to issue certificates to others. Certificates in these stores are normally supplied with the operating system or by the user's network administrator.
@@ -60,10 +87,10 @@ namespace WixSharp
             personal,
 
             request,
-            /// <summary>
-            ///    Contains the certificates of certificate authorities that the user trusts to issue certificates to others. Certificates in these stores are normally supplied with the operating system or by the user's network administrator. Certificates in this store are typically self-signed.
-            /// </summary>
 
+            /// <summary>
+            /// Contains the certificates of certificate authorities that the user trusts to issue certificates to others. Certificates in these stores are normally supplied with the operating system or by the user's network administrator. Certificates in this store are typically self-signed.
+            /// </summary>
             root,
 
             /// <summary>
@@ -106,10 +133,23 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Reference to a Binary element that will store the certificate as a stream inside the package. This attribute cannot be specified with the CertificatePath attribute.
+        /// Reference to a Binary element that will store the certificate as a stream inside the package. This attribute cannot be specified with the
+        /// CertificatePath attribute.
+        /// <para><see cref="IISCertificate.BinaryKey"/> cannot be used if property <see cref="IISCertificate.File"/> is set.</para>
         /// </summary>
         [Xml]
         public string BinaryKey;
+
+        /// <summary>
+        /// The location of the certificate file.
+        /// <para>In a canonical WiX use-case the user must add a certificate file as a <c>Binary</c> XML element and then reference the element Id as
+        /// the <c>BinaryKey</c> attribute of the <c>Certificate</c> element. However with WixSharp you can simply assing <see cref="IISCertificate.File"/>
+        /// property to the certificalte file path and the compiler will automatically insert the required <c>Binary</c> element and reference it in all
+        /// required places in the XML document.
+        /// </para>
+        /// <para><see cref="IISCertificate.File"/> cannot be used if property <see cref="IISCertificate.BinaryKey"/> is set.</para>
+        /// </summary>
+        public string File;
 
         /// <summary>
         /// If the Request attribute is "no" then this attribute is the path to the certificate file outside of the package. If the Request attribute is "yes" then this atribute
