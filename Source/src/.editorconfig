@@ -1,0 +1,4 @@
+﻿[*.{cs,vb}]
+
+# IDE0044: Add readonly modifier
+dotnet_diagnostic.IDE0044.severity = none

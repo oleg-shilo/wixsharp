@@ -40,7 +40,7 @@ namespace WixSharp
         /// <summary>
         /// The security principal and which rights to assign to them for the URL reservation.
         /// </summary>
-        private UrlAce UrlAce;
+        readonly UrlAce UrlAce;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UrlReservation" /> class.

@@ -20,7 +20,7 @@ namespace WixSharp.Test
                                                ASP.NETApp,
                                                EnvVariables,
                                                WixBootstrapper"
-                                .Split(',').Select(x => x.Trim());
+                                             .Split(',').Select(x => x.Trim());
 
         int completedSamples = 0;
         int samplesTotal = 0;
@@ -177,6 +177,7 @@ namespace WixSharp.Test
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "useful for debugging")]
         void Log(int currentStep, List<string> failedSamples)
         {
             lock (failedSamples)

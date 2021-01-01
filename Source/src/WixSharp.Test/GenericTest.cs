@@ -332,7 +332,7 @@ namespace WixSharp.Test
         [Fact]
         public void Shoud_Resolve_WixVars()
         {
-            Func<string, string> asWixVarToPath = name => name.AsWixVarToPath();
+            string asWixVarToPath(string name) => name.AsWixVarToPath();
 
             var adminToolsFolder = asWixVarToPath("AdminToolsFolder");
             var appDataFolder = asWixVarToPath("AppDataFolder");
@@ -359,7 +359,7 @@ namespace WixSharp.Test
             var fontsFolder = asWixVarToPath("FontsFolder");
             var tempFolder = asWixVarToPath("TempFolder");
 
-            Func<string, string, bool> isValid = (dir, ending) => io.Directory.Exists(dir) && dir.EndsWith(ending, StringComparison.OrdinalIgnoreCase);
+            bool isValid(string dir, string ending) => io.Directory.Exists(dir) && dir.EndsWith(ending, StringComparison.OrdinalIgnoreCase);
 
             //expected to be tested on OS Vista or above from the x86 runtime
             Assert.True(isValid(adminToolsFolder, "Administrative Tools"));

@@ -604,7 +604,7 @@ namespace WixSharp
         /// </summary>
         public bool ValidateBackgroundImage = true;
 
-        private Feature _defaultFeature = new Feature("Complete");
+        private Feature defaultFeature = new Feature("Complete");
 
         /// <summary>
         /// Gets or Sets the default Feature for the project.
@@ -613,12 +613,8 @@ namespace WixSharp
         /// </summary>
         public Feature DefaultFeature
         {
-            get { return _defaultFeature; }
-            set
-            {
-                if (value == null) throw new ArgumentNullException(nameof(value), "DefaultFeature cannot be null");
-                _defaultFeature = value;
-            }
+            get => defaultFeature;
+            set => defaultFeature = value ?? throw new ArgumentNullException(nameof(value), "DefaultFeature cannot be null");
         }
 
         /// <summary>
@@ -817,8 +813,8 @@ namespace WixSharp
         public string GetTargetPathOf(File file)
         {
             var dir = this.AllDirs.FirstOrDefault(d => d.Files.Contains(file));
-            var path = new List<string>();
-            path.Add(file.Name);
+            var path = new List<string> { file.Name };
+
             while (dir != null)
             {
                 path.Insert(0, dir.Name);
@@ -832,6 +828,7 @@ namespace WixSharp
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "for future use")]
         private string HashedIdAlgorithm(WixEntity entity)
         {
             if (entity is File file)

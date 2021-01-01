@@ -80,7 +80,7 @@ namespace WixSharp
             //2 - Substring doesn't work for paths containing ..\..\
 
             char dirSeparator = IO.Path.DirectorySeparatorChar;
-            Func<string, string[]> split = path => IO.Path.GetFullPath(path).Trim(dirSeparator).Split(dirSeparator);
+            string[] split(string path) => IO.Path.GetFullPath(path).Trim(dirSeparator).Split(dirSeparator);
 
             string[] absParts = split(filePath);
             string[] relParts = split(referencePath);

@@ -247,7 +247,7 @@ namespace WixSharp.Test
         [Description("Post 576142#post1428674")]
         public void Should_Handle_NonstandardProductVersions()
         {
-            Project project = new Project("MyProduct",
+            var project = new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(this.GetType().Assembly.Location)
                        )
@@ -275,7 +275,7 @@ namespace WixSharp.Test
 
             binaries.Children.Add(docs);
 
-            Project project = new Project("MyProduct",
+            var project = new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(binaries, @"Files\Bin\MyApp.exe"),
                     new Dir(docs, @"Docs\Manual",

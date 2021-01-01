@@ -15,10 +15,10 @@ namespace WixSharp
         /// <example>WixIIsExtension.dll</example>
         public string Assembly
         {
-            get { return Environment.ExpandEnvironmentVariables(assembly); }
+            get { return assembly.ExpandEnvVars(); }
         }
 
-        string assembly;
+        readonly string assembly;
 
         /// <summary>
         /// Xml namespace declaration prefix for the represented Wix Extension

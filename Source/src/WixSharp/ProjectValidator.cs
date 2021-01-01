@@ -224,10 +224,10 @@ namespace WixSharp
             // `ValidateCAAssemblyImpl` will load assembly from `file` for validation. Though for this to happen
             // the AppDomain will need to be able resolve the only dependence assembly `file` has - dtfAsm.
             // Thus always resolve it to dtfAsm (regardless of `args.Name` value) when AssemblyResolve is fired.
-            ResolveEventHandler resolver = (sender, args) =>
+            Reflection.Assembly resolver(object sender, ResolveEventArgs args)
             {
                 return System.Reflection.Assembly.LoadFrom(dtfAsm);
-            };
+            }
 
             AppDomain.CurrentDomain.AssemblyResolve += resolver;
             ValidateCAAssemblyImpl(file, dtfAsm, loadFromMemory: false);
@@ -239,6 +239,7 @@ namespace WixSharp
             ValidateCAAssemblyImpl(file, dtfAsm, loadFromMemory: true);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         internal void ValidateCAAssemblyImpl(string file, string dtfAsm, bool loadFromMemory)
         {
             //Debug.Assert(false);

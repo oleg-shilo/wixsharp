@@ -82,6 +82,7 @@
     <Compile Include="..\Wix# Samples\FirewallException\setup.cs">
       <Link>setup.cs</Link>
     </Compile>
+    <Compile Include="GlobalSuppressions2.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

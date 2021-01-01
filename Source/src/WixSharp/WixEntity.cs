@@ -79,7 +79,7 @@ namespace WixSharp
             }
         }
 
-        private Dictionary<string, string> attributes = new Dictionary<string, string>();
+        Dictionary<string, string> attributes = new Dictionary<string, string>();
 
         /// <summary>
         /// Optional attributes of the <c>WiX Element</c> (e.g. Secure:YesNoPath) expressed as a string KeyValue pairs (e.g. "StartOnInstall=Yes; Sequence=1").
@@ -106,13 +106,10 @@ namespace WixSharp
 
         internal Dictionary<string, string> attributesBag = new Dictionary<string, string>();
 
-        private void ProcessAttributesDefinition()
+        void ProcessAttributesDefinition()
         {
             if (!AttributesDefinition.IsEmpty())
             {
-                var attrToAdd = new Dictionary<string, string>();
-                var attrs = AttributesDefinition.ToDictionary();
-
                 try
                 {
                     this.Attributes = AttributesDefinition.ToDictionary();
@@ -186,7 +183,7 @@ namespace WixSharp
             internal get { return feature; }
         }
 
-        private Feature feature;
+        Feature feature;
 
         /// <summary>
         /// The collection of <see cref="Feature"></see>s the Wix object belongs to. This member is processed only for the
@@ -457,7 +454,7 @@ namespace WixSharp
             }
         }
 
-        private static List<string> alreadyTakenIds = new List<string>();
+        static readonly List<string> alreadyTakenIds = new List<string>();
 
         internal bool isAutoId = true;
 
@@ -473,7 +470,7 @@ namespace WixSharp
         /// </summary>
         static public bool DoNotResetIdGenerator = false;
 
-        private static Dictionary<Type, Dictionary<string, int>> idMaps = new Dictionary<Type, Dictionary<string, int>>();
+        static readonly Dictionary<Type, Dictionary<string, int>> idMaps = new Dictionary<Type, Dictionary<string, int>>();
 
         /// <summary>
         /// Resets the <see cref="Id"/> generator. This method is exercised by the Wix# compiler before any

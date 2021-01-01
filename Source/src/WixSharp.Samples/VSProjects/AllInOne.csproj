@@ -87,6 +87,7 @@
     <Compile Include="..\Wix# Samples\AllInOne\MyAppWix.cs">
       <Link>setup.cs</Link>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

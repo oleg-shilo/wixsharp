@@ -77,6 +77,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="setup.cs" />
   </ItemGroup>
   <ItemGroup>

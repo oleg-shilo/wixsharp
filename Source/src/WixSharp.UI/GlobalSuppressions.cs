@@ -4,6 +4,8 @@
 // Project-level suppressions either have no target or are given 
 // a specific target and scoped to a namespace, type, member, etc.
 
+using System.Diagnostics.CodeAnalysis;
+
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Potential Code Quality Issues", "RECS0022:A catch clause that catches System.Exception and has an empty body", Justification = "<Pending>", Scope = "member", Target = "~M:WixSharp.InstallerRuntime.#ctor(WixSharp.ISession)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Potential Code Quality Issues", "RECS0022:A catch clause that catches System.Exception and has an empty body", Justification = "<Pending>", Scope = "member", Target = "~M:WixSharp.InstallerRuntime.GetMsiBitmap(System.String)~System.Drawing.Bitmap")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Potential Code Quality Issues", "RECS0022:A catch clause that catches System.Exception and has an empty body", Justification = "<Pending>", Scope = "member", Target = "~M:WixSharp.InstallerRuntime.Localize(System.String)~System.String")]
@@ -24,3 +26,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Redundancies in Symbol Declarations", "RECS0154:Parameter is never used", Justification = "<Pending>", Scope = "member", Target = "~M:WixSharp.Win32.GetTaskbarWindow~System.IntPtr")]
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Common Practices and Code Improvements", "RECS0030:Suggests using the class declaring a static function when calling it", Justification = "<Pending>", Scope = "member", Target = "~M:WixSharp.InstallerRuntime.GetMsiBitmap(System.String)~System.Drawing.Bitmap")]
+[assembly: SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>", Scope = "member", Target = "~M:WixSharp.UIShell.BuildUiPlayerResources~System.String")]

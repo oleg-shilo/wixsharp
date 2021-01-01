@@ -739,11 +739,7 @@ namespace WixSharp
         /// <param name="defaultValue">The default value.</param>
         /// <returns></returns>
         public static int ToInt(this string value, int defaultValue = 0)
-        {
-            int result = defaultValue;
-            int.TryParse(value, out result);
-            return result;
-        }
+            => int.TryParse(value, out int result) ? result : defaultValue;
 
         /// <summary>
         /// Determines if the integer is an even value
@@ -919,12 +915,11 @@ namespace WixSharp
         /// <returns></returns>
         public static IntPtr ToIntPtr(this string value)
         {
-            int result = 0;
-            int.TryParse(value, out result);
+            int.TryParse(value, out int result);
             return (IntPtr)result;
         }
 
-        static char[] xmlDelimiters = "<>&".ToCharArray();
+        static readonly char[] xmlDelimiters = "<>&".ToCharArray();
 
         /// <summary>
         /// Returns the string data as a <see cref="T:System.Xml.Linq.XCData"/> if the value contains
@@ -1156,11 +1151,11 @@ namespace WixSharp
         /// <param name="path2">The path2.</param>
         /// <returns></returns>
 #pragma warning restore CS0419 // Ambiguous reference in cref attribute
+
         public static string PathCombine(this string path1, string path2)
         {
             return IO.Path.Combine(path1, path2);
         }
-
 
         /// <summary>
         /// The change the file name of the file path.
@@ -1694,7 +1689,6 @@ namespace WixSharp
             var doc = XDocument.Parse(@"<Root xmlns=""http://www.test.com/xml/2015"">
                                           <Element xmlns=""""/>
                                         </Root>");
-            var xml = doc.ToString();
 
             XNamespace ns = doc.Root.Name.NamespaceName;
 
@@ -1703,7 +1697,8 @@ namespace WixSharp
 
             try
             {
-                xml = doc.ToString();
+
+                var xml = doc.ToString();
                 return false;
             }
             catch
@@ -1858,7 +1853,7 @@ namespace WixSharp
             return placementElement;
         }
 
-        static Dictionary<string, int> autoXIds = new Dictionary<string, int>();
+        static readonly Dictionary<string, int> autoXIds = new Dictionary<string, int>();
 
         static void EnsureId(this XElement element)
         {
@@ -2387,8 +2382,7 @@ namespace WixSharp
         {
             string upgradeCode = session.Property("UpgradeCode");
 
-            bool createdNew;
-            using (var m = new System.Threading.Mutex(true, "WIXSHARP_UI_CANCEL_REQUEST." + upgradeCode, out createdNew))
+            using (var m = new System.Threading.Mutex(true, "WIXSHARP_UI_CANCEL_REQUEST." + upgradeCode, out bool createdNew))
             {
                 return (!createdNew);
             }
@@ -2504,16 +2498,16 @@ namespace WixSharp
         /// Then this method is to do the heavy lifting.</para>
         /// </summary>
         /// <param name="session"></param>
-        static void InitFeaturesFromCurrentInstallation(this Session session)
+        public static void InitFeaturesFromCurrentInstallation(this Session session)
         {
             var upgradeCode = session["UpgradeCode"];
             var installedPackage = ProductInstallation.GetRelatedProducts(upgradeCode).FirstOrDefault();
             if (installedPackage != null)
             {
                 var installedFeatures = installedPackage.Features
-                        .Where(x => x.State == InstallState.Local)
-                    .Select(x => x.FeatureName)
-                    .JoinBy(",");
+                                                        .Where(x => x.State == InstallState.Local)
+                                                        .Select(x => x.FeatureName)
+                                                        .JoinBy(",");
 
                 session["ADDLOCAL"] = installedFeatures;
             }
@@ -3411,7 +3405,7 @@ namespace WixSharp
 
             var result = new List<XAttribute>();
 
-            var items = getMemberInfo(obj)
+            var items = GetMemberInfo(obj)
                                       .Select(x =>
                                       {
                                           var xmlAttr = (XmlAttribute)x.GetCustomAttributes(typeof(XmlAttribute), false)
@@ -3460,15 +3454,15 @@ namespace WixSharp
 
                 if (item.Value is bool?)
                 {
-                    var bulVal = (item.Value as bool?);
-                    if (!bulVal.HasValue)
+                    var boolVal = (item.Value as bool?);
+                    if (!boolVal.HasValue)
                         continue;
                     else
-                        xmlValue = bulVal.Value.ToYesNo();
+                        xmlValue = boolVal.Value.ToYesNo();
                 }
-                else if (item.Value is bool)
+                else if (item.Value is bool boolean)
                 {
-                    xmlValue = ((bool)item.Value).ToYesNo();
+                    xmlValue = boolean.ToYesNo();
                 }
 
                 XNamespace ns = item.Namespace ?? "";
@@ -3484,7 +3478,7 @@ namespace WixSharp
 
             XCData result = null;
 
-            var items = getMemberInfo(obj)
+            var items = GetMemberInfo(obj)
                 .Select(x =>
                 {
                     var xmlAttr = (XmlAttribute)x.GetCustomAttributes(typeof(XmlAttribute), false).FirstOrDefault();
@@ -3525,7 +3519,7 @@ namespace WixSharp
             return result;
         }
 
-        static IEnumerable<MemberInfo> getMemberInfo(object obj)
+        static IEnumerable<MemberInfo> GetMemberInfo(object obj)
         {
             // BindingFlags.NonPublic is needed to cover "internal" but not necessarily "private"
             var fields = obj.GetType()
