@@ -38,6 +38,9 @@ namespace WixSharp
     /// </summary>
     public partial class WebSite : WixEntity
     {
+        /// <summary>
+        /// The IIS certificate
+        /// </summary>
         public IISCertificate Certificate;
 
         /// <summary>

@@ -65,10 +65,20 @@ namespace WixSharp
         /// </summary>
         public enum CertificateStoreLocation
         {
+            /// <summary>
+            /// The current user
+            /// </summary>
             currentUser,
+
+            /// <summary>
+            /// The local machine
+            /// </summary>
             localMachine
         }
 
+        /// <summary>
+        ///
+        /// </summary>
         public enum CertificateStoreName
         {
             /// <summary>
@@ -86,6 +96,9 @@ namespace WixSharp
             /// </summary>
             personal,
 
+            /// <summary>
+            /// WiX desctription is not available
+            /// </summary>
             request,
 
             /// <summary>
@@ -168,6 +181,9 @@ namespace WixSharp
             set => base.Name = value;
         }
 
+        /// <summary>
+        /// WiX desctription is not available
+        /// </summary>
         [Xml]
         public bool? Overwrite;
 
@@ -185,9 +201,15 @@ namespace WixSharp
         [Xml]
         public bool? Request;
 
+        /// <summary>
+        /// The store location value
+        /// </summary>
         [Xml]
         public CertificateStoreLocation StoreLocation;
 
+        /// <summary>
+        /// The store name value
+        /// </summary>
         [Xml]
         public CertificateStoreName StoreName;
     }

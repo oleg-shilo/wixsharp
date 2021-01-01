@@ -5036,42 +5036,91 @@
             </summary>
             <param name="context">The context.</param>
         </member>
-        <member name="T:WixSharp.IISCertificate.CertificateStoreName">
+        <member name="T:WixSharp.IISCertificate">
+            <summary>
+            </summary>
+            <example>
+            <code>
+            new IISVirtualDir
+            {
+                Name = "MyWebApp3",
+                AppName = "Test3",
+                WebSite = new WebSite("NewSite3", "*:8083")
+                {
+                    InstallWebSite = true,
+                    Certificate = new IISCertificate
+                    {
+                        File = "MyServer.cert.pfx",
+                        Name = "MyServerCert",
+                        StoreLocation = IISCertificate.CertificateStoreLocation.localMachine,
+                        StoreName = IISCertificate.CertificateStoreName.personal,
+                        PFXPassword = "password123",
+                        Request = false,
+                        Overwrite = false
+                    }
+                },
+                WebAppPool = new WebAppPool("MyWebApp3", "Identity=applicationPoolIdentity")
+            }
+            </code>
+            </example>
+            <seealso cref="T:WixSharp.WixEntity" />
+        </member>
+        <member name="T:WixSharp.IISCertificate.CertificateStoreLocation">
             <summary>
             This attribute's value must be one of the following.
             </summary>
         </member>
-        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.ca">
+        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.currentUser">
+            <summary>
+            The current user
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.localMachine">
+            <summary>
+            The local machine
+            </summary>
+        </member>
+        <member name="T:WixSharp.IISCertificate.CertificateStoreName">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.CertificateStoreName.ca">
             <summary>
             Contains the certificates of certificate authorities that the user trusts to issue certificates to others. Certificates in these stores are normally supplied with the operating system or by the user's network administrator.
             </summary>
         </member>
-        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.my">
+        <member name="F:WixSharp.IISCertificate.CertificateStoreName.my">
             <summary>
             Use the "personal" value instead.
             </summary>
         </member>
-        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.personal">
+        <member name="F:WixSharp.IISCertificate.CertificateStoreName.personal">
             <summary>
             Contains personal certificates. These certificates will usually have an associated private key. This store is often referred to as the "MY" certificate store.
             </summary>
         </member>
-        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.root">
+        <member name="F:WixSharp.IISCertificate.CertificateStoreName.request">
             <summary>
-               Contains the certificates of certificate authorities that the user trusts to issue certificates to others. Certificates in these stores are normally supplied with the operating system or by the user's network administrator. Certificates in this store are typically self-signed.
+            WiX desctription is not available
             </summary>
         </member>
-        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.otherPeople">
+        <member name="F:WixSharp.IISCertificate.CertificateStoreName.root">
+            <summary>
+            Contains the certificates of certificate authorities that the user trusts to issue certificates to others. Certificates in these stores are normally supplied with the operating system or by the user's network administrator. Certificates in this store are typically self-signed.
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.CertificateStoreName.otherPeople">
             <summary>
             Contains the certificates of those that the user normally sends enveloped messages to or receives signed messages from.See MSDN documentation for more information.
             </summary>
         </member>
-        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.trustedPeople">
+        <member name="F:WixSharp.IISCertificate.CertificateStoreName.trustedPeople">
             <summary>
             Contains the certificates of those directly trusted people and resources.See MSDN documentation for more information.
             </summary>
         </member>
-        <member name="F:WixSharp.IISCertificate.CertificateStoreLocation.trustedPublisher">
+        <member name="F:WixSharp.IISCertificate.CertificateStoreName.trustedPublisher">
             <summary>
             Contains the certificates of those publishers who are trusted. See MSDN documentation for more information.
             </summary>
@@ -5096,7 +5145,20 @@
         </member>
         <member name="F:WixSharp.IISCertificate.BinaryKey">
             <summary>
-            Reference to a Binary element that will store the certificate as a stream inside the package. This attribute cannot be specified with the CertificatePath attribute.
+            Reference to a Binary element that will store the certificate as a stream inside the package. This attribute cannot be specified with the
+            CertificatePath attribute.
+            <para><see cref="F:WixSharp.IISCertificate.BinaryKey"/> cannot be used if property <see cref="F:WixSharp.IISCertificate.File"/> is set.</para>
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.File">
+            <summary>
+            The location of the certificate file.
+            <para>In a canonical WiX use-case the user must add a certificate file as a <c>Binary</c> XML element and then reference the element Id as
+            the <c>BinaryKey</c> attribute of the <c>Certificate</c> element. However with WixSharp you can simply assing <see cref="F:WixSharp.IISCertificate.File"/>
+            property to the certificalte file path and the compiler will automatically insert the required <c>Binary</c> element and reference it in all
+            required places in the XML document.
+            </para>
+            <para><see cref="F:WixSharp.IISCertificate.File"/> cannot be used if property <see cref="F:WixSharp.IISCertificate.BinaryKey"/> is set.</para>
             </summary>
         </member>
         <member name="F:WixSharp.IISCertificate.CertificatePath">
@@ -5110,6 +5172,11 @@
             Name of the certificate that will be installed or uninstalled in the specified store. This attribute may be set via a formatted Property (e.g. [MyProperty]).
             </summary>
         </member>
+        <member name="F:WixSharp.IISCertificate.Overwrite">
+            <summary>
+            WiX desctription is not available
+            </summary>
+        </member>
         <member name="F:WixSharp.IISCertificate.PFXPassword">
             <summary>
             If the Binary stream or path to the file outside of the package is a password protected PFX file, the password for that PFX must be specified here.
@@ -5120,6 +5187,16 @@
             <summary>
             This attribute controls whether the CertificatePath attribute is a path to a certificate file (Request='no') or the certificate authority to request
             the certificate from (Request='yes').
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.StoreLocation">
+            <summary>
+            The store location value
+            </summary>
+        </member>
+        <member name="F:WixSharp.IISCertificate.StoreName">
+            <summary>
+            The store name value
             </summary>
         </member>
         <member name="T:WixSharp.IISWebSite">
@@ -8554,12 +8631,15 @@
             <param name="elementName">Element to add.</param>
             <returns>Added <see cref="T:System.Xml.Linq.XElement"/>.</returns>
         </member>
-        <member name="M:WixSharp.Extensions.AddElement(System.Xml.Linq.XElement,System.Xml.Linq.XName)">
+        <member name="M:WixSharp.Extensions.AddElement(System.Xml.Linq.XElement,System.Xml.Linq.XName,System.String,System.String)">
             <summary>
             Adds the element to a given XML element. It is a Fluent version of <see cref="T:System.Xml.Linq.XElement.Add"/>.
             </summary>
             <param name="obj">The instance of the <see cref="T:System.Xml.Linq.XElement"/>.</param>
             <param name="elementName">Name of the element.</param>
+            <param name="attributesDefinition">The attributes definition. Rules of the composing the
+            definition are the same as for <see cref="P:WixSharp.WixEntity.AttributesDefinition" />.</param>
+            <param name="value">The value of the added element.</param>
             <returns>Added <see cref="T:System.Xml.Linq.XElement"/>.</returns>
         </member>
         <member name="M:WixSharp.Extensions.AddElement(System.Xml.Linq.XElement,System.String,System.String,System.String)">
@@ -11423,6 +11503,32 @@
             See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
             </summary>
             <param name="context">The context.</param>
+        </member>
+        <member name="T:WixSharp.WixBinLocator">
+            <summary>
+            A class for probing directories of the build environment for presense of WiX tools.
+            </summary>
+        </member>
+        <member name="M:WixSharp.WixBinLocator.FindWixSdkLocation(System.String,System.Boolean)">
+            <summary>
+            Finds the WiX SDK location.
+            </summary>
+            <param name="wixLocation">The WiX location.</param>
+            <param name="throwOnError">if set to <c>true</c> [throw on error].</param>
+            <returns></returns>
+            <exception cref="T:System.Exception">WiX SDK binaries cannot be found. Please set WixSharp.Compiler.WixSdkLocation to valid path to the Wix SDK binaries.</exception>
+        </member>
+        <member name="M:WixSharp.WixBinLocator.FindWixBinLocation(System.Boolean)">
+            <summary>
+            Finds the WiX bin folder location.
+            </summary>
+            <param name="throwOnError">if set to <c>true</c> [throw on error].</param>
+            <returns></returns>
+            <exception cref="T:WixSharp.WixSharpException">WiX binaries cannot be found. Wix# is capable of automatically finding WiX tools only if " +
+                                                        "WiX Toolset installed. In all other cases you need to set the environment variable " +
+                                                        "WIXSHARP_WIXDIR or WixSharp.Compiler.WixLocation to the valid path to the WiX binaries.\n" +
+                                                        "WiX binaries can be brought to the build environment by either installing WiX Toolset, " +
+                                                        "downloading Wix# suite or by adding WixSharp.wix.bin NuGet package to your project.</exception>
         </member>
         <member name="T:WixSharp.WixExtension">
             <summary>
@@ -19215,6 +19321,14 @@
             <param name="path2">The path2.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Utils.MakeRelativeTo(System.String,System.String)">
+            <summary>
+            Converts a path into a relative path with respect to another path..
+            </summary>
+            <param name="filePath">The file path.</param>
+            <param name="referencePath">The reference path.</param>
+            <returns></returns>
+        </member>
         <member name="P:WixSharp.Utils.ProgramFilesDirectory">
             <summary>
             Gets the program files directory.
@@ -19295,6 +19409,11 @@
         <member name="T:WixSharp.WebSite">
             <summary>
             This class defines website attributes. It is a close equivalent of WebSite WiX element.
+            </summary>
+        </member>
+        <member name="F:WixSharp.WebSite.Certificate">
+            <summary>
+            The IIS certificate
             </summary>
         </member>
         <member name="F:WixSharp.WebSite.Description">

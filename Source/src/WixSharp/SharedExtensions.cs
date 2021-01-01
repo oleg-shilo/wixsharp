@@ -93,12 +93,16 @@ namespace WixSharp
             }
         }
 
+#pragma warning disable CS0419 // Ambiguous reference in cref attribute
+
         /// <summary>
-        /// Equivalent of <see cref="System.IO.Path.Combine"/>.
+        /// Equivalent of <see cref="Path.Combine"/>.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="items"></param>
         /// <returns></returns>
+#pragma warning restore CS0419 // Ambiguous reference in cref attribute
+
         public static string PathJoin(this string path, params string[] items)
         {
             foreach (var item in items)

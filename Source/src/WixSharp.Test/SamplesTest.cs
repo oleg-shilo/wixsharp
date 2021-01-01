@@ -29,8 +29,8 @@ namespace WixSharp.Test
         [Fact]
         public void CanBuildAllSamples()
         {
-            if (Environment.GetEnvironmentVariable("APPVEYOR") != null)
-                return;
+            // if (Environment.GetEnvironmentVariable("APPVEYOR") != null)
+            //     return;
 
             // need to exclude some samples; for example the two samples from the same dir will interfere with each other;
             // or some other tests are built as a part of the solution
@@ -91,10 +91,11 @@ namespace WixSharp.Test
 
             if (parallel)
             {
-                foreach (var item in allSamples)
-                    ThreadPool.QueueUserWorkItem((x) => processDir(item));
+                // allSamples.ForEach(item =>
+                //     ThreadPool.QueueUserWorkItem(x =>
+                //         processDir(item)));
 
-                //Parallel.ForEach(allSamples, processDir);
+                Parallel.ForEach(allSamples, processDir);
                 while (completedSamples < samplesTotal)
                 {
                     Thread.Sleep(1000);

@@ -4,8 +4,18 @@ using System.Linq;
 
 namespace WixSharp
 {
+    /// <summary>
+    /// A class for probing directories of the build environment for presense of WiX tools.
+    /// </summary>
     public static class WixBinLocator
     {
+        /// <summary>
+        /// Finds the WiX SDK location.
+        /// </summary>
+        /// <param name="wixLocation">The WiX location.</param>
+        /// <param name="throwOnError">if set to <c>true</c> [throw on error].</param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception">WiX SDK binaries cannot be found. Please set WixSharp.Compiler.WixSdkLocation to valid path to the Wix SDK binaries.</exception>
         public static string FindWixSdkLocation(string wixLocation, bool throwOnError = true)
         {
             var wixSdkLocation = Path.GetFullPath(Utils.PathCombine(wixLocation, @"..\sdk"));
@@ -22,6 +32,16 @@ namespace WixSharp
             return wixSdkLocation;
         }
 
+        /// <summary>
+        /// Finds the WiX bin folder location.
+        /// </summary>
+        /// <param name="throwOnError">if set to <c>true</c> [throw on error].</param>
+        /// <returns></returns>
+        /// <exception cref="WixSharpException">WiX binaries cannot be found. Wix# is capable of automatically finding WiX tools only if " +
+        ///                                             "WiX Toolset installed. In all other cases you need to set the environment variable " +
+        ///                                             "WIXSHARP_WIXDIR or WixSharp.Compiler.WixLocation to the valid path to the WiX binaries.\n" +
+        ///                                             "WiX binaries can be brought to the build environment by either installing WiX Toolset, " +
+        ///                                             "downloading Wix# suite or by adding WixSharp.wix.bin NuGet package to your project.</exception>
         public static string FindWixBinLocation(bool throwOnError = true)
         {
             // See if the command line was set for this property

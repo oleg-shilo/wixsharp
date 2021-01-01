@@ -68,6 +68,12 @@ namespace WixSharp
             return IO.Path.Combine(p1, p2);
         }
 
+        /// <summary>
+        /// Converts a path into a relative path with respect to another path..
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <param name="referencePath">The reference path.</param>
+        /// <returns></returns>
         public static string MakeRelativeTo(this string filePath, string referencePath)
         {
             //1 - 'Uri.MakeRelativeUri' doesn't work without *.config file

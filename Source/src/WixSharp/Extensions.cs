@@ -1147,16 +1147,20 @@ namespace WixSharp
             return IO.Path.Combine(newDir, IO.Path.GetFileName(path));
         }
 
+#pragma warning disable CS0419 // Ambiguous reference in cref attribute
+
         /// <summary>
-        /// Combines path parts. Encapsulates <see cref="System.IO.Path.Combine"/>
+        /// Combines path parts. Encapsulates <see cref="Path.Combine"/>
         /// </summary>
         /// <param name="path1">The path1.</param>
         /// <param name="path2">The path2.</param>
         /// <returns></returns>
+#pragma warning restore CS0419 // Ambiguous reference in cref attribute
         public static string PathCombine(this string path1, string path2)
         {
             return IO.Path.Combine(path1, path2);
         }
+
 
         /// <summary>
         /// The change the file name of the file path.
