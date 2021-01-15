@@ -404,6 +404,8 @@ namespace WixSharp.Bootstrapper
         [Xml]
         public string KB;
 
+        public RemotePayload[] RemotePayloads = new RemotePayload[0];
+
         /// <summary>
         /// Emits WiX XML.
         /// </summary>
@@ -422,6 +424,9 @@ namespace WixSharp.Bootstrapper
 
             if (Payloads.Any())
                 Payloads.ForEach(p => root.Add(p.ToXElement("Payload")));
+
+            if (RemotePayloads.Any())
+                RemotePayloads.ForEach(p => root.Add(p.ToXElement("RemotePayload")));
 
             return new[] { root };
         }
