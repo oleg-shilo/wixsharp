@@ -24,10 +24,14 @@ namespace WixSharp.Test
         {
             // Arrange
             var correctScript = @"${If} ${IsWin7}
-!define MB_OK 0x00000000
-!define MB_ICONERROR 0x00000010
-System::Call 'USER32::MessageBox(i $hwndparent, t ""This operating system is not supported.$\nPlease, update your OS."", t ""Error"", i ${MB_OK}|${MB_ICONERROR})i'
-goto end
+    ClearErrors
+    ${GetOptions} $R0 ""/S"" $0
+    ${If} ${Errors}
+        !define MB_OK 0x00000000
+        !define MB_ICONERROR 0x00000010
+        System::Call 'USER32::MessageBox(i $hwndparent, t ""This operating system is not supported.$\nPlease, update your OS."", t ""Error"", i ${MB_OK}|${MB_ICONERROR})i'
+    ${EndIf}
+    goto end
 ${EndIf}
 ";
             var osValidation = CreateOsValidation();
@@ -45,11 +49,15 @@ ${EndIf}
         {
             // Arrange
             var correctScript = @"${If} ${IsWin8}
-${AndIf} ${IsServicePack} 1
-!define MB_OK 0x00000000
-!define MB_ICONERROR 0x00000010
-System::Call 'USER32::MessageBox(i $hwndparent, t ""This operating system is not supported.$\nPlease, update your OS."", t ""Error"", i ${MB_OK}|${MB_ICONERROR})i'
-goto end
+    ${AndIf} ${IsServicePack} 1
+    ClearErrors
+    ${GetOptions} $R0 ""/S"" $0
+    ${If} ${Errors}
+        !define MB_OK 0x00000000
+        !define MB_ICONERROR 0x00000010
+        System::Call 'USER32::MessageBox(i $hwndparent, t ""This operating system is not supported.$\nPlease, update your OS."", t ""Error"", i ${MB_OK}|${MB_ICONERROR})i'
+    ${EndIf}
+    goto end
 ${EndIf}
 ";
             var osValidation = CreateOsValidation();
@@ -67,10 +75,14 @@ ${EndIf}
         {
             // Arrange
             var correctScript = @"${Unless} ${AtLeastWin2012}
-!define MB_OK 0x00000000
-!define MB_ICONERROR 0x00000010
-System::Call 'USER32::MessageBox(i $hwndparent, t ""This operating system is not supported.$\nPlease, update your OS."", t ""Error"", i ${MB_OK}|${MB_ICONERROR})i'
-goto end
+    ClearErrors
+    ${GetOptions} $R0 ""/S"" $0
+    ${If} ${Errors}
+        !define MB_OK 0x00000000
+        !define MB_ICONERROR 0x00000010
+        System::Call 'USER32::MessageBox(i $hwndparent, t ""This operating system is not supported.$\nPlease, update your OS."", t ""Error"", i ${MB_OK}|${MB_ICONERROR})i'
+    ${EndIf}
+    goto end
 ${EndUnless}
 ";
             var osValidation = CreateOsValidation(); 
@@ -90,11 +102,15 @@ ${EndUnless}
             var correctScript = @"${Unless} ${AtLeastWin7}
 ${OrIf} ${IsWin8}
 ${OrIf} ${IsWin2008}
-${AndIf} ${IsServicePack} 0
-!define MB_OK 0x00000000
-!define MB_ICONERROR 0x00000010
-System::Call 'USER32::MessageBox(i $hwndparent, t ""This operating system is not supported.$\nPlease, update your OS."", t ""Error"", i ${MB_OK}|${MB_ICONERROR})i'
-goto end
+    ${AndIf} ${IsServicePack} 0
+    ClearErrors
+    ${GetOptions} $R0 ""/S"" $0
+    ${If} ${Errors}
+        !define MB_OK 0x00000000
+        !define MB_ICONERROR 0x00000010
+        System::Call 'USER32::MessageBox(i $hwndparent, t ""This operating system is not supported.$\nPlease, update your OS."", t ""Error"", i ${MB_OK}|${MB_ICONERROR})i'
+    ${EndIf}
+    goto end
 ${EndUnless}
 ";
             var osValidation = CreateOsValidation();
@@ -114,9 +130,13 @@ ${EndUnless}
         {
             // Arrange
             var correctScript = @"${If} ${IsWin7}
-!define MB_OK 0x00000000
-!define MB_ICONERROR 0x00000010
-System::Call 'USER32::MessageBox(i $hwndparent, t ""This operating system is not supported.$\nPlease, update your OS."", t ""Error"", i ${MB_OK}|${MB_ICONERROR})i'
+    ClearErrors
+    ${GetOptions} $R0 ""/S"" $0
+    ${If} ${Errors}
+        !define MB_OK 0x00000000
+        !define MB_ICONERROR 0x00000010
+        System::Call 'USER32::MessageBox(i $hwndparent, t ""This operating system is not supported.$\nPlease, update your OS."", t ""Error"", i ${MB_OK}|${MB_ICONERROR})i'
+    ${EndIf}
 ${EndIf}
 ";
             var osValidation = CreateOsValidation();
@@ -136,10 +156,14 @@ ${EndIf}
             // Arrange
             var customErrorMessage = "Custom error message";
             var correctScript = @"${If} ${IsWin7}
-!define MB_OK 0x00000000
-!define MB_ICONERROR 0x00000010
-System::Call 'USER32::MessageBox(i $hwndparent, t """+customErrorMessage+@""", t ""Error"", i ${MB_OK}|${MB_ICONERROR})i'
-goto end
+    ClearErrors
+    ${GetOptions} $R0 ""/S"" $0
+    ${If} ${Errors}
+        !define MB_OK 0x00000000
+        !define MB_ICONERROR 0x00000010
+        System::Call 'USER32::MessageBox(i $hwndparent, t """+customErrorMessage+@""", t ""Error"", i ${MB_OK}|${MB_ICONERROR})i'
+    ${EndIf}
+    goto end
 ${EndIf}
 ";
             var osValidation = CreateOsValidation();

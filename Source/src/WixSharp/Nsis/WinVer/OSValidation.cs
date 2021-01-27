@@ -9,6 +9,7 @@ namespace WixSharp.Nsis.WinVer
     /// Adds to Nsis bootstrapper a block of code that compares current windows version with a set of specified versions.
     /// If version is not supported, shows an error MessageBox with a specified or default <see cref="ErrorMessage"/>.
     /// Also, can <see cref="TerminateInstallation"/> after showing error message (default = true).
+    /// If /S switch is added when launching bootstrapped executable - no messagebox will be shown.
     /// <example>
     /// <code>
     /// bootstrapper.OSValidation.MinVersion = WindowsVersionNumber._7;
@@ -80,11 +81,11 @@ namespace WixSharp.Nsis.WinVer
 
             WriteUnsupportedVersions(writer);
 
-            WriteMessageBox(writer);
+            WriteBody(writer);
 
             if (TerminateInstallation)
             {
-                writer.WriteLine("goto end");
+                writer.WriteLine("    goto end");
             }
 
             writer.WriteLine(MinVersion.HasValue ? "${EndUnless}" : "${EndIf}");
@@ -126,17 +127,20 @@ namespace WixSharp.Nsis.WinVer
 
                 if (unsupportedVersion.ServicePack != -1)
                 {
-                    writer.WriteLine($"${{AndIf}} ${{IsServicePack}} {unsupportedVersion.ServicePack}");
+                    writer.WriteLine($"    ${{AndIf}} ${{IsServicePack}} {unsupportedVersion.ServicePack}");
                 }
             }
         }
 
-        private void WriteMessageBox(StringWriter writer)
-        {
-            writer.WriteLine("!define MB_OK 0x00000000");
-            writer.WriteLine("!define MB_ICONERROR 0x00000010");
-            writer.WriteLine(
-                $"System::Call 'USER32::MessageBox(i $hwndparent, t \"{ErrorMessage}\", t \"Error\", i ${{MB_OK}}|${{MB_ICONERROR}})i'");
+        private void WriteBody(StringWriter writer)
+        {   
+            writer.WriteLine("    ClearErrors");
+            writer.WriteLine("    ${GetOptions} $R0 \"/S\" $0");
+            writer.WriteLine("    ${If} ${Errors}");
+            writer.WriteLine("        !define MB_OK 0x00000000");
+            writer.WriteLine("        !define MB_ICONERROR 0x00000010");
+            writer.WriteLine($"        System::Call 'USER32::MessageBox(i $hwndparent, t \"{ErrorMessage}\", t \"Error\", i ${{MB_OK}}|${{MB_ICONERROR}})i'");
+            writer.WriteLine("    ${EndIf}");
         }
     }
 }

@@ -124,6 +124,8 @@ namespace WixSharp.Nsis
         /// If any version added, checks if current windows version is not supported.
         /// <para></para>
         /// If so - displays error and terminates installation (configurable via <see cref="OSValidation"/> properties).
+        /// <para></para>
+        /// If /S switch is added when launching bootstrapped executable - no messagebox will be shown.
         /// </summary>
         // ReSharper disable once InconsistentNaming
         public OSValidation OSValidation { get; } = new OSValidation();
@@ -197,18 +199,17 @@ namespace WixSharp.Nsis
                 AddVersionInformation(writer);
 
                 writer.WriteLine("Function .onInit");
-                
-                var versionCheckScript = OSValidation.BuildVersionCheckScriptPart();
-                if (!string.IsNullOrEmpty(versionCheckScript))
-                {
-                    writer.Write(versionCheckScript);
-                }
-
                 writer.WriteLine("InitPluginsDir");
 
                 // Read command line parameters
                 writer.WriteLine("${GetParameters} $R0");
 
+                var versionCheckScript = OSValidation.BuildVersionCheckScriptPart();
+                if (!string.IsNullOrEmpty(versionCheckScript))
+                {
+                    writer.Write(versionCheckScript);
+                }
+                
                 AddSplashScreen(writer);
 
                 AddPrerequisiteFile(writer, regRootKey, regSubKey, regValueName);
