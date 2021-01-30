@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security;
+using System.Threading;
 
 namespace WixSharp
 {
@@ -32,7 +35,46 @@ namespace WixSharp
         /// <summary>The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
         /// A warning is generated if timestamping fails.
         /// </summary>
-        public Uri TimeUrl { get; set; }
+        public Uri TimeUrl
+        {
+            get => TimeUrls.FirstOrDefault();
+
+            set
+            {
+                TimeUrls.Clear();
+                if (value != null)
+                    TimeUrls.Add(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the time server URLs.
+        /// <para>This list of urls is useful if you want to try multiple time servers in case some of them is failing.
+        /// </para>
+        /// <para>
+        /// You can customize the way the servers are accessed by signing tool. Use <see cref="DigitalSignature.MaxTimeUrlRetry"/>
+        /// and <see cref="DigitalSignature.UrlRetrySleep"/> for that.</para>
+        /// </summary>
+        /// <value>
+        /// The time server urls.
+        /// </value>
+        public List<Uri> TimeUrls { get; set; } = new List<Uri>();
+
+        /// <summary>
+        /// Gets or sets the maximum count of retrying an individual time server from <see cref="DigitalSignature.TimeUrls"/>.
+        /// </summary>
+        /// <value>
+        /// The maximum time URL retry.
+        /// </value>
+        public int MaxTimeUrlRetry { get; set; } = 3;
+
+        /// <summary>
+        /// Gets or sets the delay (in milliseconds) between retries when accessing an individual time server from <see cref="DigitalSignature.TimeUrls"/>.
+        /// </summary>
+        /// <value>
+        /// The URL retry sleep.
+        /// </value>
+        public int UrlRetrySleep { get; set; } = 500;
 
         /// <summary>
         /// The password to use when opening the PFX file. Should be <c>null</c> if no password required.
@@ -89,12 +131,29 @@ namespace WixSharp
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         public virtual int Apply(string fileToSign)
         {
-            var retValue = CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
-                PrepareOptionalArguments(), WellKnownLocations, CertificateStore, OutputLevel, HashAlgorithm);
+            int retValue = -1;
 
-            Console.WriteLine(retValue != 0
-                ? $"Error: Could not sign the {fileToSign} file."
-                : $"The file {fileToSign} was signed successfully.");
+            int apply(string url) =>
+                CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
+                                               PrepareOptionalArguments(), WellKnownLocations, CertificateStore, OutputLevel, HashAlgorithm);
+
+            Console.WriteLine("Signing with DigitasSignature");
+
+            if (TimeUrls.Any())
+                foreach (Uri uri in TimeUrls)
+                {
+                    for (int i = 0; i < MaxTimeUrlRetry && retValue != 0; i++)
+                    {
+                        retValue = apply(uri?.AbsoluteUri);
+                        Console.WriteLine("Retrying applying DigitalSignature");
+                        Thread.Sleep(UrlRetrySleep);
+                    }
+
+                    if (retValue == 0)
+                        break;
+                }
+            else
+                retValue = apply(null);
 
             return retValue;
         }
