@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -2916,6 +2917,34 @@ namespace WixSharp
         public static WixObject ToWObject<T>(this IEnumerable<T> items) where T : WixObject
         {
             return new WixItems(items.Cast<WixObject>());
+        }
+        
+        /// <summary>
+        /// Gets a value of Description attribute from enum
+        /// </summary>
+        /// <param name="value">Enum value</param>
+        /// <returns>Value of Description attribute or default</returns>
+        public static string GetDescription(this Enum value)
+        {
+            var description = GetAttribute<DescriptionAttribute>(value);
+            return description?.Description;
+        }
+        
+        /// <summary>
+        /// Gets an attribute from Enum value
+        /// </summary>
+        /// <param name="value">Enum value</param>
+        /// <typeparam name="TAttribute">Attribute type</typeparam>
+        /// <returns>Instance of specified attribute type or default</returns>
+        public static TAttribute GetAttribute<TAttribute>(this Enum value)
+            where TAttribute : Attribute
+        {
+            var type = value.GetType();
+            var name = Enum.GetName(type, value);
+            return type.GetField(name)
+                .GetCustomAttributes(false)
+                .OfType<TAttribute>()
+                .SingleOrDefault();
         }
     }
 

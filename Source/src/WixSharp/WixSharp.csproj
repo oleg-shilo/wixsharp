@@ -157,6 +157,9 @@
     <Compile Include="Nsis\RequestExecutionLevel.cs" />
     <Compile Include="Nsis\SplashScreen.cs" />
     <Compile Include="Nsis\VersionInformation.cs" />
+    <Compile Include="Nsis\WinVer\WindowsVersion.cs" />
+    <Compile Include="Nsis\WinVer\WindowsVersionNumber.cs" />
+    <Compile Include="Nsis\WinVer\OSValidation.cs" />
     <Compile Include="ODBCDataSource.cs" />
     <Compile Include="PermissionEx.cs" />
     <Compile Include="Permissions.cs" />

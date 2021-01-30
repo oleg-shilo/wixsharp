@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using WixSharp.CommonTasks;
+using WixSharp.Nsis.WinVer;
 using IO = System.IO;
 using Reflection = System.Reflection;
 
@@ -115,7 +116,19 @@ namespace WixSharp.Nsis
         /// <summary>
         /// Gets or sets digital signature parameters for the bootstrapper.
         /// </summary>
-        public DigitalSignature DigitalSignature;
+        public DigitalSignature DigitalSignature { get; set; }
+
+        /// <summary>
+        /// Allows to validate Windows version
+        /// <para></para>
+        /// If any version added, checks if current windows version is not supported.
+        /// <para></para>
+        /// If so - displays error and terminates installation (configurable via <see cref="OSValidation"/> properties).
+        /// <para></para>
+        /// If /S switch is added when launching bootstrapped executable - no messagebox will be shown.
+        /// </summary>
+        // ReSharper disable once InconsistentNaming
+        public OSValidation OSValidation { get; } = new OSValidation();
 
         /// <summary>
         /// Builds bootstrapper file.
@@ -168,6 +181,7 @@ namespace WixSharp.Nsis
             using (var writer = new IO.StringWriter(builder))
             {
                 writer.WriteLine("Unicode true");
+                writer.WriteLine("ManifestSupportedOS all");
 
                 AddIncludes(writer);
 
@@ -185,12 +199,17 @@ namespace WixSharp.Nsis
                 AddVersionInformation(writer);
 
                 writer.WriteLine("Function .onInit");
-
                 writer.WriteLine("InitPluginsDir");
 
                 // Read command line parameters
                 writer.WriteLine("${GetParameters} $R0");
 
+                var versionCheckScript = OSValidation.BuildVersionCheckScriptPart();
+                if (!string.IsNullOrEmpty(versionCheckScript))
+                {
+                    writer.Write(versionCheckScript);
+                }
+                
                 AddSplashScreen(writer);
 
                 AddPrerequisiteFile(writer, regRootKey, regSubKey, regValueName);
@@ -230,11 +249,16 @@ namespace WixSharp.Nsis
             return OutputFile;
         }
 
-        private static void AddIncludes(IO.StringWriter writer)
+        private void AddIncludes(IO.StringWriter writer)
         {
             writer.WriteLine("!include LogicLib.nsh");
             writer.WriteLine("!include x64.nsh");
             writer.WriteLine("!include FileFunc.nsh");
+            
+            if (OSValidation.Any)
+            {
+                writer.WriteLine("!include WinVer.nsh");
+            }
         }
 
         private static void AddMacros(IO.StringWriter writer)
