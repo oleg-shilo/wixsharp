@@ -2834,6 +2834,11 @@
             When the KB attribute is specified, the Permanent attribute will the control whether the package is uninstalled.
             </summary>
         </member>
+        <member name="F:WixSharp.Bootstrapper.MsuPackage.RemotePayloads">
+            <summary>
+            The remote payloads
+            </summary>
+        </member>
         <member name="M:WixSharp.Bootstrapper.MsuPackage.ToXml">
             <summary>
             Emits WiX XML.
@@ -3757,6 +3762,35 @@
             <summary>The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
             A warning is generated if timestamping fails.
             </summary>
+        </member>
+        <member name="P:WixSharp.DigitalSignature.TimeUrls">
+            <summary>
+            Gets or sets the time server URLs.
+            <para>This list of urls is useful if you want to try multiple time servers in case some of them is failing.
+            </para>
+            <para>
+            You can customize the way the servers are accessed by signing tool. Use <see cref="P:WixSharp.DigitalSignature.MaxTimeUrlRetry"/>
+            and <see cref="P:WixSharp.DigitalSignature.UrlRetrySleep"/> for that.</para>
+            </summary>
+            <value>
+            The time server urls.
+            </value>
+        </member>
+        <member name="P:WixSharp.DigitalSignature.MaxTimeUrlRetry">
+            <summary>
+            Gets or sets the maximum count of retrying an individual time server from <see cref="P:WixSharp.DigitalSignature.TimeUrls"/>.
+            </summary>
+            <value>
+            The maximum time URL retry.
+            </value>
+        </member>
+        <member name="P:WixSharp.DigitalSignature.UrlRetrySleep">
+            <summary>
+            Gets or sets the delay (in milliseconds) between retries when accessing an individual time server from <see cref="P:WixSharp.DigitalSignature.TimeUrls"/>.
+            </summary>
+            <value>
+            The URL retry sleep.
+            </value>
         </member>
         <member name="P:WixSharp.DigitalSignature.Password">
             <summary>
@@ -6515,9 +6549,20 @@
             </summary>
             <value>The simple splash screen for the output file (bootstrapper)</value>
         </member>
-        <member name="F:WixSharp.Nsis.NsisBootstrapper.DigitalSignature">
+        <member name="P:WixSharp.Nsis.NsisBootstrapper.DigitalSignature">
             <summary>
             Gets or sets digital signature parameters for the bootstrapper.
+            </summary>
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapper.OSValidation">
+            <summary>
+            Allows to validate Windows version
+            <para></para>
+            If any version added, checks if current windows version is not supported.
+            <para></para>
+            If so - displays error and terminates installation (configurable via <see cref="P:WixSharp.Nsis.NsisBootstrapper.OSValidation"/> properties).
+            <para></para>
+            If /S switch is added when launching bootstrapped executable - no messagebox will be shown.
             </summary>
         </member>
         <member name="M:WixSharp.Nsis.NsisBootstrapper.Build">
@@ -6840,6 +6885,157 @@
         <member name="P:WixSharp.Nsis.VersionInformation.SpecialBuild">
             <summary>
             Gets or sets the special build information for the file.
+            </summary>
+        </member>
+        <member name="T:WixSharp.Nsis.WinVer.WindowsVersion">
+            <summary>
+            Represents Windows Version
+            </summary>
+        </member>
+        <member name="M:WixSharp.Nsis.WinVer.WindowsVersion.#ctor(WixSharp.Nsis.WinVer.WindowsVersionNumber,System.Int32)">
+            <summary>
+            Creates an instance of WindowsVersion struct
+            </summary>
+            <param name="versionNumber">Represents a windows version</param>
+            <param name="servicePack">Represents an optional service pack (-1 = no service pack)</param>
+        </member>
+        <member name="P:WixSharp.Nsis.WinVer.WindowsVersion.VersionNumber">
+            <summary>
+            Version to check
+            </summary>
+        </member>
+        <member name="P:WixSharp.Nsis.WinVer.WindowsVersion.ServicePack">
+            <summary>
+            Service pack
+            </summary>
+        </member>
+        <member name="T:WixSharp.Nsis.WinVer.WindowsVersionNumber">
+            <summary>
+            Provides a windows version that can be used with AtLeastWin/IsWin/AtMostWin NSIS WinVer operators
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber._95">
+            <summary>
+            Represents Windows 95
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber._98">
+            <summary>
+            Represents Windows 98
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber.ME">
+            <summary>
+            Represents Windows ME
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber.NT4">
+            <summary>
+            Represents Windows NT4
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber._2000">
+            <summary>
+            Represents Windows 2000
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber.XP">
+            <summary>
+            Represents Windows XP
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber._2003">
+            <summary>
+            Represents Windows 2003
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber.Vista">
+            <summary>
+            Represents Windows Vista
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber._2008">
+            <summary>
+            Represents Windows 2008
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber._7">
+            <summary>
+            Represents Windows 7
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber._2008R2">
+            <summary>
+            Represents Windows 2008R2
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber._8">
+            <summary>
+            Represents Windows 8
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber._2012">
+            <summary>
+            Represents Windows 2012
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber._8_1">
+            <summary>
+            Represents Windows 8.1
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber._2012R2">
+            <summary>
+            Represents Windows 2012R2
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.WinVer.WindowsVersionNumber._10">
+            <summary>
+            Represents Windows 10
+            </summary>
+        </member>
+        <member name="T:WixSharp.Nsis.WinVer.OSValidation">
+            <summary>
+            Adds to Nsis bootstrapper a block of code that compares current windows version with a set of specified versions.
+            If version is not supported, shows an error MessageBox with a specified or default <see cref="P:WixSharp.Nsis.WinVer.OSValidation.ErrorMessage"/>.
+            Also, can <see cref="P:WixSharp.Nsis.WinVer.OSValidation.TerminateInstallation"/> after showing error message (default = true).
+            If /S switch is added when launching bootstrapped executable - no messagebox will be shown.
+            <example>
+            <code>
+            bootstrapper.OSValidation.MinVersion = WindowsVersionNumber._7;
+            bootstrapper.OSValidation.UnsupportedVersions.Add(new WindowsVersion(WindowsVersionNumber._7, 0));
+            bootstrapper.OSValidation.UnsupportedVersions.Add(new WindowsVersion(WindowsVersionNumber._8));
+            </code>
+            </example>
+            </summary>
+        </member>
+        <member name="M:WixSharp.Nsis.WinVer.OSValidation.#ctor">
+            <summary>
+                Initializes a new instance of NotSupportedWindowsVersions
+            </summary>
+        </member>
+        <member name="P:WixSharp.Nsis.WinVer.OSValidation.ErrorMessage">
+            <summary>
+            Specifies an error message that is shown when OS is not supported
+            <para></para>
+            If not set, the following error message is shown:
+            <para></para>
+            This operating system is not supported.$\\nPlease, update your OS.
+            </summary>
+        </member>
+        <member name="P:WixSharp.Nsis.WinVer.OSValidation.TerminateInstallation">
+            <summary>
+            Terminate installation if current OS version is not supported. Default = true
+            </summary>
+        </member>
+        <member name="P:WixSharp.Nsis.WinVer.OSValidation.MinVersion">
+            <summary>
+            Minimal required windows version
+            </summary>
+        </member>
+        <member name="P:WixSharp.Nsis.WinVer.OSValidation.UnsupportedVersions">
+            <summary>
+            Optional windows versions that are not supported
             </summary>
         </member>
         <member name="T:WixSharp.ODBCDataSource">
@@ -10091,6 +10287,21 @@
             <typeparam name="T"></typeparam>
             <param name="items">The items.</param>
             <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.GetDescription(System.Enum)">
+            <summary>
+            Gets a value of Description attribute from enum
+            </summary>
+            <param name="value">Enum value</param>
+            <returns>Value of Description attribute or default</returns>
+        </member>
+        <member name="M:WixSharp.Extensions.GetAttribute``1(System.Enum)">
+            <summary>
+            Gets an attribute from Enum value
+            </summary>
+            <param name="value">Enum value</param>
+            <typeparam name="TAttribute">Attribute type</typeparam>
+            <returns>Instance of specified attribute type or default</returns>
         </member>
         <member name="T:WixSharp.SqlDatabase">
             <summary>

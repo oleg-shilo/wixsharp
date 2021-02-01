@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>1.15.0.0</version>
+    <version>1.16.0.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,18 +16,30 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.15.0.0
-* Localization: preserve msi platform settings when settings language with SetPackageLanguages (fixes #939)
-* Added LaunchApplicationAction.
-* NSIS bootstrapper-spash
-  - Switched to the stock AdvSplash plugin
-  - Added support to FadeIn, FadeOut, KeyColor parameters https://nsis.sourceforge.io/Docs/AdvSplash/advsplash.txt
-* Forced to use a single "Uninstall/Change" button in the ARP
-* Remove duplicated deferred properties.
-* Allows the installer to display full UI for the "Uninstall" button in the Control Panel.
-* Typo fix ResilientPackageIstallDir -&gt; ResilientPackageInstallDir
-* DigitalSignature support has been added to the NsisBootstrapper
-* Issue #906: Error in Compiler.BuildMsi when building using cscs.exe but not from Visual Studio</releaseNotes>
+    <releaseNotes>Release v1.16.0.0
+
+* Add "OS validation" functionality to NSIS bootstrapper
+* Issue #962: Add RemotePayloads support for MsuPackage
+* Issue #965: Retry strategy for DigitalSignature
+* Implemented the most obvious/acceptable static code analysis recommendations
+* Added IISCertificate support 
+* Added `GlobalSuppressions*.cs` files to suppress non-meaningful warnings
+* Added support for `IISCertificate` element.
+* Added missing `FirewallExtension.ru.wxl` file
+* Fixed problem with UninstallFullUI' display icon not being added to all `features`
+* "Added LaunchApplicationAction" is extended with support for stock UI
+* U-Tests are completed and `BuildSamples` enabled on AppVeyor
+* Samples
+	- Fixed "UrlReservation" sample
+	- Fixed "Release Folder" sample
+	- Added `UninstallFullUI.cs` sample
+	- Projects are migrated on target v4.6.1
+* BuildMultilanguageMsi improvements
+  	- returns path of the built MSI file
+	- prints additional build progress messages in output
+
+
+</releaseNotes>
     <copyright>Copyright (C) 2008-2019 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>

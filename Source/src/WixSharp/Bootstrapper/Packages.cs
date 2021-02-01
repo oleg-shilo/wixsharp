@@ -404,6 +404,9 @@ namespace WixSharp.Bootstrapper
         [Xml]
         public string KB;
 
+        /// <summary>
+        /// The remote payloads
+        /// </summary>
         public RemotePayload[] RemotePayloads = new RemotePayload[0];
 
         /// <summary>
