@@ -6,9 +6,9 @@
     <title>Wix# (WixSharp) - Experimantal features</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
-    <licenseUrl>https://github.com/oleg-shilo/wixsharp/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/oleg-shilo/wixsharp</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/oleg-shilo/wixsharp/master/Documentation/wiki_images/wixsharp_logo.png</iconUrl>
+    <license type="expression">MIT</license>
+    <icon>wixsharp_logo.png</icon>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
 The package contains the sample code for building a simple MSI with the CLR WinForm dialog inserted into UI sequence between InsallDirDlg and VerifyReadyDlg native MSI dialogs. In order to use this package you need have WiX Toolset installed.
@@ -52,5 +52,6 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
   <files>
     <file src="lib\WixSharp.Lab.dll" target="lib\WixSharp.Lab.dll" />
     <file src="lib\WixSharp.Lab.xml" target="lib\WixSharp.Lab.xml" />
+    <file src="..\..\Templates\WixSharpVSIX\WixSharpVSIX\wixsharp_logo.png" target="" />
   </files>
 </package>

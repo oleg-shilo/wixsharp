@@ -6,9 +6,9 @@
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
-    <licenseUrl>https://github.com/oleg-shilo/wixsharp/blob/master/LICENSE</licenseUrl>
+    <license type="expression">MIT</license>
+    <icon>wixsharp_logo.png</icon>
     <projectUrl>https://github.com/oleg-shilo/wixsharp</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/oleg-shilo/wixsharp/master/Documentation/wiki_images/wixsharp_logo.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
 The package contains Wix# binaries only.
@@ -64,5 +64,6 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
     <file src="lib\WixSharp.UI.dll" target="lib\WixSharp.UI.dll" />
     <file src="lib\WixSharp.UI.xml" target="lib\WixSharp.UI.xml" />
     <file src="lib\WixSharp.xml" target="lib\WixSharp.xml" />
+    <file src="..\..\Templates\WixSharpVSIX\WixSharpVSIX\wixsharp_logo.png" target="" />
   </files>
 </package>

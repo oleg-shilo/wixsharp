@@ -6,9 +6,9 @@
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
-    <licenseUrl>https://github.com/oleg-shilo/wixsharp/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/oleg-shilo/wixsharp</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/oleg-shilo/wixsharp/master/Documentation/wiki_images/wixsharp_logo.png</iconUrl>
+    <license type="expression">MIT</license>
+    <icon>wixsharp_logo.png</icon>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
 The package contains Wix# binaries, code sample and custom MSBuild target (to be merged with VS project and trigger building MSI during the project compilation).
@@ -51,5 +51,6 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
   </metadata>
   <files>
     <file src="build\WixSharp.targets" target="build\WixSharp.targets" />
+    <file src="..\..\Templates\WixSharpVSIX\WixSharpVSIX\wixsharp_logo.png" target="" />
   </files>
 </package>

@@ -7,9 +7,9 @@
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <licenseUrl>https://wixsharp.codeplex.com/license</licenseUrl>
     <projectUrl>https://wixsharp.codeplex.com/</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/oleg-shilo/wixsharp/master/Documentation/wiki_images/wixsharp_logo.png</iconUrl>
+    <license type="expression">MIT</license>
+    <icon>wixsharp_logo.png</icon>
     <description>The package containsWIX (Windows Installer Xml) Toolset v3.11.2  required for Wix#. Wix# is a framework for building a complete MSI by using build script files written with the C# syntax.
 
 Note WiX binaries do not belong to WiX#  and they are licenced by their own licencing agreement.</description>
@@ -190,5 +190,6 @@ WiX - Copyright (C) .NET Foundation and contributors</copyright>
     <file src="..\..\src\WixSharp.Samples\Wix_bin\SDK\XsdGen.exe" target="tools\SDK\XsdGen.exe" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\SDK\XsdStitch.exe" target="tools\SDK\XsdStitch.exe" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\version.txt" target="tools\version.txt" />
+    <file src="..\..\Templates\WixSharpVSIX\WixSharpVSIX\wixsharp_logo.png" target="" />
   </files>
 </package>
