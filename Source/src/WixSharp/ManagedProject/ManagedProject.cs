@@ -269,7 +269,7 @@ namespace WixSharp
             }
         }
 
-        string defaultDeferredProperties = "INSTALLDIR,UILevel,ProductName";
+        string defaultDeferredProperties = "INSTALLDIR,UILevel,ProductName,FOUNDPREVIOUSVERSION";
 
         /// <summary>
         /// Flags that indicates if <c>WixSharp_InitRuntime_Action</c> custom action should be always scheduled. The default value is <c>true</c>.
@@ -545,6 +545,7 @@ namespace WixSharp
                 data["REINSTALL"] = session["REINSTALL"];
                 data["MsiFile"] = session["OriginalDatabase"];
                 data["UPGRADINGPRODUCTCODE"] = session["UPGRADINGPRODUCTCODE"];
+                data["FOUNDPREVIOUSVERSION"] = session["FOUNDPREVIOUSVERSION"];
                 data["UILevel"] = session["UILevel"];
                 data["WIXSHARP_MANAGED_UI"] = session["WIXSHARP_MANAGED_UI"];
                 data["WIXSHARP_MANAGED_UI_HANDLE"] = session["WIXSHARP_MANAGED_UI_HANDLE"];

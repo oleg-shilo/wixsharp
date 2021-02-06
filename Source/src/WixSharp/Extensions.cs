@@ -1698,7 +1698,6 @@ namespace WixSharp
 
             try
             {
-
                 var xml = doc.ToString();
                 return false;
             }
@@ -2422,16 +2421,33 @@ namespace WixSharp
         /// Gets a value indicating whether the product is being upgraded.
         /// <para>
         /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
-        /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
+        /// (that it depends on) are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
         /// </para>
         /// <para>
         /// This method relies on "UPGRADINGPRODUCTCODE" property, which is not set by MSI until previous version is uninstalled. Thus it may not be the
         /// most practical way of detecting upgrades. Use AppSearch.GetProductVersionFromUpgradeCode as a more reliable alternative.
         /// </para>
         /// </summary>
+        [Obsolete("This extension method is based on the MSI property 'UPGRADINGPRODUCTCODE' and it does not detect previous installations reliable. " +
+                  "Thus use property 'IsUpgradingInstalledVersion' instead.")]
         static public bool IsUpgrading(this Session session)
         {
             return session.IsModifying() && session.Property("UPGRADINGPRODUCTCODE").IsNotEmpty();
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is upgrading installed version of the product.
+        /// <para>This extension method is implemented on custom WixSharp algorithm that involves detection of the previously installed version
+        /// of the product from the internal custom action (before `AppSearch`). Thus this algorithm is more reliable than traditional
+        /// UPGRADINGPRODUCTCODE based algorithm. </para>
+        /// <para>Because the custom action is specific to ManagedProject you can only use this extension from ManagedProject setups.</para>
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is upgrading installed version; otherwise, <c>false</c>.
+        /// </value>
+        static public bool IsUpgradingInstalledVersion(this Session session)
+        {
+            return session.IsInstalling() && !session.IsModifying() && session.Property("FOUNDPREVIOUSVERSION").IsNotEmpty();
         }
 
         /// <summary>
@@ -2918,7 +2934,7 @@ namespace WixSharp
         {
             return new WixItems(items.Cast<WixObject>());
         }
-        
+
         /// <summary>
         /// Gets a value of Description attribute from enum
         /// </summary>
@@ -2929,7 +2945,7 @@ namespace WixSharp
             var description = GetAttribute<DescriptionAttribute>(value);
             return description?.Description;
         }
-        
+
         /// <summary>
         /// Gets an attribute from Enum value
         /// </summary>

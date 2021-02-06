@@ -37,6 +37,11 @@ class Script
             DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
         };
 
+        project.Load +=
+            e => MessageBox.Show(e.Session.GetMainWindow(), e.ToString(), "Before (Install/Uninstall) - " + e.Session.QueryProductVersion());
+
+        // project.PreserveTempFiles = true;
+
         return project;
     }
 

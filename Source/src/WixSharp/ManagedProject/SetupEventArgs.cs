@@ -141,11 +141,38 @@ namespace WixSharp
         /// This property relies on "UPGRADINGPRODUCTCODE" MSI property, which is not set by MSI until previous version is uninstalled. Thus it may not be the
         /// most practical way of detecting upgrades. Use AppSearch.GetProductVersionFromUpgradeCode as a more reliable alternative.
         /// </para>
+        /// <para>You should use more reliable <see cref="SetupEventArgs.IsUpgradingInstalledVersion"/>,
+        /// which encapsulates <see cref="AppSearch.GetProductVersionFromUpgradeCode"/></para>
         /// </summary>
         /// <value>
         /// <c>true</c> if modifying; otherwise, <c>false</c>.
         /// </value>
+        [Obsolete("This property is based on the MSI property 'UPGRADINGPRODUCTCODE' and it does not detect previous installations reliable. " +
+                  "Thus use property 'IsUpgradingInstalledVersion' instead.")]
         public bool IsUpgrading { get { return IsModifying && UpgradingProductCode.IsNotEmpty(); } }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is upgrading installed version of the product.
+        /// <para>This property is implemented on custom WixSharp algorithm that involves detection of the previously installed version
+        /// of the product from the internal custom action (before `AppSearch`). Thus this algorithm is more reliable than traditional
+        /// UPGRADINGPRODUCTCODE based algorithm. </para>
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is upgrading installed version; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsUpgradingInstalledVersion { get { return IsInstalling && !IsModifying && FoundPreviousVersion.IsNotEmpty(); } }
+
+        /// <summary>
+        /// Gets the value of the previous version of this product if found.
+        /// <para>This property is based on MSI session property 'FOUNDPREVIOUSVERSION' which is only set by WixSharp if Managed project is used.
+        /// </para>
+        /// If you are not using ManagedProject and still need to detect previous version then you need to do it manually with
+        /// <see cref="AppSearch.GetProductVersionFromUpgradeCode(string)"/>.
+        /// </summary>
+        /// <value>
+        /// The found previous version.
+        /// </value>
+        public string FoundPreviousVersion { get { return Session.Property("FOUNDPREVIOUSVERSION"); } }
 
         /// <summary>
         /// Gets a value indicating whether the installed product is being repaired.
@@ -408,12 +435,13 @@ namespace WixSharp
                 "\nIsInstalling=" + IsInstalling +
                 "\nIsUninstalling=" + IsUninstalling +
                 "\nIsReparing=" + IsRepairing +
-                //"\nIsUpgrading=" + IsUpgrading + //not reliable
+                "\nIsUpgradingInstalledVersion=" + IsUpgradingInstalledVersion +
                 "\nIsModifying=" + IsModifying +
                 "\nModifyAction=" + ModifyAction +
                 "\nProductCode=" + ProductCode +
                 "\nUpgradeCode=" + UpgradeCode +
                 "\nUpgradingProductCode=" + UpgradingProductCode +
+                "\nFoundPreviousVersion=" + FoundPreviousVersion +
                 "\nIsManagedUISession=" + IsManagedUISession +
                 "\nManagedUIHandle=" + ManagedUIHandle +
                 "\n" +

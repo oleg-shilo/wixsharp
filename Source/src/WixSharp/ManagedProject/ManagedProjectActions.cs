@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Microsoft.Deployment.WindowsInstaller;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
@@ -22,6 +23,9 @@ namespace WixSharp
         public static ActionResult WixSharp_InitRuntime_Action(Session session)
         {
             // Debugger.Launch();
+            if (session.Property("FOUNDPREVIOUSVERSION").IsEmpty())
+                session["FOUNDPREVIOUSVERSION"] = session.LookupInstalledVersion()?.ToString();
+
             return ManagedProject.Init(session);
         }
 
