@@ -619,7 +619,7 @@ namespace WixSharp
 
         /// <summary>
         /// The wild card deduplication algorithm to be used during wild card resolution (<c>ResolveWildCards</c>).
-        /// <para>The default implementation does nothing but you can assgn a custom routine that
+        /// <para>The default implementation does nothing but you can assign a custom routine that
         /// can be used to do post-resolving deduplication of the <see cref="Dir"/> items.</para>
         /// <para>
         /// The following sample demonstrates how to remove files with the same file name:
