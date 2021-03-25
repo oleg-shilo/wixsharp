@@ -93,7 +93,19 @@ namespace WixSharp
                 return Path.GetFullPath(wixInstallDir.PathJoin("bin"));
             }
 
-            string wixBinPackageDir = @"%userprofile%\.nuget\packages\wixsharp.wix.bin".ExpandEnvVars();
+            //The global packages may be redirected with environment variable
+            //https://docs.microsoft.com/en-us/nuget/consume-packages/managing-the-global-packages-and-cache-folders
+
+            string wixBinPackageDir;
+            var    nugetPackagesEnvironmentVariable = Environment.GetEnvironmentVariable("NUGET_PACKAGES");
+            if (nugetPackagesEnvironmentVariable.IsNotEmpty() && Directory.Exists(nugetPackagesEnvironmentVariable))
+            {
+                wixBinPackageDir = Path.Combine(nugetPackagesEnvironmentVariable, "wixsharp.wix.bin");
+            }
+            else
+            {
+                wixBinPackageDir = @"%userprofile%\.nuget\packages\wixsharp.wix.bin".ExpandEnvVars();
+            }
 
             if (Directory.Exists(wixBinPackageDir))
             {
