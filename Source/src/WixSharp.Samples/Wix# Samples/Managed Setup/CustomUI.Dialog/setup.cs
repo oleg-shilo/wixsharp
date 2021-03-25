@@ -62,6 +62,8 @@ public class Script
 
         project.PreserveTempFiles = true;
 
+        project.DefaultRefAssemblies.Add(@"C:\Users\oleg.shilo\source\repos\WindowsFormsApp2\WixSharp Setup1\bin\Debug\WpfControlLibrary2.dll");
+
         project.BuildMsi();
     }
 

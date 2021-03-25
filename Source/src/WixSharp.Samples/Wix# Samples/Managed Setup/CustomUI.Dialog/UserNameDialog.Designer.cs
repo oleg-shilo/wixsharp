@@ -47,6 +47,7 @@
             this.networkDomain = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.middlePanel = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.banner)).BeginInit();
             this.topPanel.SuspendLayout();
             this.bottomPanel.SuspendLayout();
@@ -61,7 +62,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.banner.BackColor = System.Drawing.Color.White;
-            this.banner.Location = new System.Drawing.Point(0, 9);
+            this.banner.Location = new System.Drawing.Point(-1, 110);
             this.banner.Name = "banner";
             this.banner.Size = new System.Drawing.Size(501, 51);
             this.banner.TabIndex = 0;
@@ -75,8 +76,7 @@
             this.topPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.topPanel.Controls.Add(this.label2);
             this.topPanel.Controls.Add(this.label1);
-            this.topPanel.Controls.Add(this.banner);
-            this.topPanel.Location = new System.Drawing.Point(-5, -5);
+            this.topPanel.Location = new System.Drawing.Point(59, 117);
             this.topPanel.Name = "topPanel";
             this.topPanel.Size = new System.Drawing.Size(503, 61);
             this.topPanel.TabIndex = 10;
@@ -87,7 +87,7 @@
             this.label2.BackColor = System.Drawing.Color.White;
             this.label2.Location = new System.Drawing.Point(30, 40);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(132, 13);
+            this.label2.Size = new System.Drawing.Size(171, 16);
             this.label2.TabIndex = 1;
             this.label2.Text = "[UserNameDlgDescription]";
             // 
@@ -138,10 +138,10 @@
             this.back.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.back.AutoSize = true;
             this.back.Enabled = false;
-            this.back.Location = new System.Drawing.Point(222, 10);
+            this.back.Location = new System.Drawing.Point(179, 8);
             this.back.MinimumSize = new System.Drawing.Size(75, 0);
             this.back.Name = "back";
-            this.back.Size = new System.Drawing.Size(77, 23);
+            this.back.Size = new System.Drawing.Size(92, 26);
             this.back.TabIndex = 0;
             this.back.Text = "[WixUIBack]";
             this.back.UseVisualStyleBackColor = true;
@@ -151,10 +151,10 @@
             // 
             this.next.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.next.AutoSize = true;
-            this.next.Location = new System.Drawing.Point(305, 10);
+            this.next.Location = new System.Drawing.Point(277, 8);
             this.next.MinimumSize = new System.Drawing.Size(75, 0);
             this.next.Name = "next";
-            this.next.Size = new System.Drawing.Size(77, 23);
+            this.next.Size = new System.Drawing.Size(88, 26);
             this.next.TabIndex = 0;
             this.next.Text = "[WixUINext]";
             this.next.UseVisualStyleBackColor = true;
@@ -164,10 +164,10 @@
             // 
             this.cancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.cancel.AutoSize = true;
-            this.cancel.Location = new System.Drawing.Point(402, 10);
+            this.cancel.Location = new System.Drawing.Point(385, 8);
             this.cancel.MinimumSize = new System.Drawing.Size(75, 0);
             this.cancel.Name = "cancel";
-            this.cancel.Size = new System.Drawing.Size(86, 23);
+            this.cancel.Size = new System.Drawing.Size(103, 26);
             this.cancel.TabIndex = 0;
             this.cancel.Text = "[WixUICancel]";
             this.cancel.UseVisualStyleBackColor = true;
@@ -178,7 +178,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(15, 14);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(133, 13);
+            this.label3.Size = new System.Drawing.Size(174, 16);
             this.label3.TabIndex = 11;
             this.label3.Text = "[UserNameDlgNameLabel]";
             this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -190,7 +190,7 @@
             this.name.Location = new System.Drawing.Point(188, 14);
             this.name.Name = "name";
             this.name.ReadOnly = true;
-            this.name.Size = new System.Drawing.Size(268, 20);
+            this.name.Size = new System.Drawing.Size(268, 22);
             this.name.TabIndex = 13;
             // 
             // password
@@ -199,7 +199,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.password.Location = new System.Drawing.Point(188, 50);
             this.password.Name = "password";
-            this.password.Size = new System.Drawing.Size(268, 20);
+            this.password.Size = new System.Drawing.Size(268, 22);
             this.password.TabIndex = 13;
             this.password.TextChanged += new System.EventHandler(this.password_TextChanged);
             // 
@@ -209,7 +209,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.domain.Location = new System.Drawing.Point(188, 91);
             this.domain.Name = "domain";
-            this.domain.Size = new System.Drawing.Size(268, 20);
+            this.domain.Size = new System.Drawing.Size(268, 22);
             this.domain.TabIndex = 13;
             // 
             // label4
@@ -217,7 +217,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(15, 53);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(151, 13);
+            this.label4.Size = new System.Drawing.Size(197, 16);
             this.label4.TabIndex = 11;
             this.label4.Text = "[UserNameDlgPasswordLabel]";
             this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -227,7 +227,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(15, 94);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(141, 13);
+            this.label5.Size = new System.Drawing.Size(184, 16);
             this.label5.TabIndex = 11;
             this.label5.Text = "[UserNameDlgDomainLabel]";
             this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -237,7 +237,7 @@
             this.localDomain.AutoSize = true;
             this.localDomain.Location = new System.Drawing.Point(19, 29);
             this.localDomain.Name = "localDomain";
-            this.localDomain.Size = new System.Drawing.Size(185, 17);
+            this.localDomain.Size = new System.Drawing.Size(235, 20);
             this.localDomain.TabIndex = 14;
             this.localDomain.TabStop = true;
             this.localDomain.Text = "[UserNameDlgLocalDomainLabel]";
@@ -249,7 +249,7 @@
             this.networkDomain.AutoSize = true;
             this.networkDomain.Location = new System.Drawing.Point(19, 56);
             this.networkDomain.Name = "networkDomain";
-            this.networkDomain.Size = new System.Drawing.Size(199, 17);
+            this.networkDomain.Size = new System.Drawing.Size(251, 20);
             this.networkDomain.TabIndex = 14;
             this.networkDomain.TabStop = true;
             this.networkDomain.Text = "[UserNameDlgNetworkDomainLabel]";
@@ -263,7 +263,7 @@
             this.groupBox1.Controls.Add(this.localDomain);
             this.groupBox1.Location = new System.Drawing.Point(188, 131);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(268, 92);
+            this.groupBox1.Size = new System.Drawing.Size(276, 97);
             this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "[UserNameDlgDomainTypeLabel]";
@@ -280,15 +280,27 @@
             this.middlePanel.Controls.Add(this.label5);
             this.middlePanel.Controls.Add(this.password);
             this.middlePanel.Controls.Add(this.name);
-            this.middlePanel.Location = new System.Drawing.Point(12, 59);
+            this.middlePanel.Location = new System.Drawing.Point(12, 167);
             this.middlePanel.Name = "middlePanel";
-            this.middlePanel.Size = new System.Drawing.Size(470, 246);
+            this.middlePanel.Size = new System.Drawing.Size(470, 138);
             this.middlePanel.TabIndex = 16;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(186, 37);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 16;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // UserNameDialog
             // 
             this.ClientSize = new System.Drawing.Size(494, 361);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.middlePanel);
+            this.Controls.Add(this.banner);
             this.Controls.Add(this.topPanel);
             this.Controls.Add(this.bottomPanel);
             this.Name = "UserNameDialog";
@@ -329,5 +341,6 @@
         private System.Windows.Forms.Button next;
         private System.Windows.Forms.Button cancel;
         private System.Windows.Forms.Panel middlePanel;
+        private System.Windows.Forms.Button button1;
     }
 }

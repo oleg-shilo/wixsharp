@@ -25,7 +25,7 @@ namespace WixSharp.UI.Forms
         void ResetLayout()
         {
             // The form controls are properly anchored and will be correctly resized on parent form
-            // resizing. However the initial sizing by WinForm runtime doesn't a do good job with DPI
+            // resizing. However the initial sizing by WinForm runtime doesn't do good job with DPI
             // other than 96. Thus manual resizing is the only reliable option apart from going WPF.
 
             var bHeight = (int)(next.Height * 2.3);

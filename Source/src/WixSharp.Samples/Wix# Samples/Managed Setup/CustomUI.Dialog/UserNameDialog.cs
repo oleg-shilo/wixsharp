@@ -3,12 +3,15 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using WixSharp;
+
 using WixSharp.UI.Forms;
 
 namespace MyProduct
 {
     public partial class UserNameDialog : ManagedForm, IManagedDialog
     {
+        WpfControlLibrary2.UserControl1 panel;
+
         public UserNameDialog()
         {
             MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - UserNameDialog");
@@ -82,6 +85,18 @@ namespace MyProduct
         {
             domain.Enabled = networkDomain.Checked;
             next.Enabled = password.Text.IsNotEmpty();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.panel = new WpfControlLibrary2.UserControl1();
+            var host = new System.Windows.Forms.Integration.ElementHost();
+            host.Location = new System.Drawing.Point(10, 10);
+            host.Size = new System.Drawing.Size(200, 100);
+            this.Controls.Add(host);
+            host.Child = panel;
+
+            panel.SetContent("Hello From WPF!");
         }
     }
 }
