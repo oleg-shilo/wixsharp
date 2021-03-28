@@ -62,6 +62,14 @@ namespace WixSharp
             return items.GroupBy(keySelector).Select(g => g.First());
         }
 
+        static internal List<T> FilterDuplicates<T>(this List<T> items)
+        {
+            var distinctItems = items.Distinct().ToArray();
+            items.Clear();
+            items.AddRange(distinctItems);
+            return items;
+        }
+
         static internal IEnumerable<T> AllChildren<T>(this T node, Func<T, IEnumerable<T>> getChildren)
         {
             return new T[] { node }.AllChildren(getChildren);
@@ -102,6 +110,15 @@ namespace WixSharp
                 return null;
             }
         }
+
+        /// <summary>
+        /// Checks if the type iplements the interface .
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        public static bool Implements<T>(this Type type)
+            => type.GetInterfaces().Contains(typeof(T));
 
         /// <summary>
         /// Adds the element to a given XML element. It is a Fluent version of <see cref="T:System.Xml.Linq.XElement.Add"/>.

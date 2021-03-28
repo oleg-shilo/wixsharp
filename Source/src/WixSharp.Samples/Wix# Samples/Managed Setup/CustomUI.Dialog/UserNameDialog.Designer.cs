@@ -47,7 +47,6 @@
             this.networkDomain = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.middlePanel = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.banner)).BeginInit();
             this.topPanel.SuspendLayout();
             this.bottomPanel.SuspendLayout();
@@ -62,7 +61,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.banner.BackColor = System.Drawing.Color.White;
-            this.banner.Location = new System.Drawing.Point(-1, 110);
+            this.banner.Location = new System.Drawing.Point(-1, -2);
             this.banner.Name = "banner";
             this.banner.Size = new System.Drawing.Size(501, 51);
             this.banner.TabIndex = 0;
@@ -76,7 +75,7 @@
             this.topPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.topPanel.Controls.Add(this.label2);
             this.topPanel.Controls.Add(this.label1);
-            this.topPanel.Location = new System.Drawing.Point(59, 117);
+            this.topPanel.Location = new System.Drawing.Point(12, -2);
             this.topPanel.Name = "topPanel";
             this.topPanel.Size = new System.Drawing.Size(503, 61);
             this.topPanel.TabIndex = 10;
@@ -87,7 +86,7 @@
             this.label2.BackColor = System.Drawing.Color.White;
             this.label2.Location = new System.Drawing.Point(30, 40);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(171, 16);
+            this.label2.Size = new System.Drawing.Size(132, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "[UserNameDlgDescription]";
             // 
@@ -178,7 +177,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(15, 14);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(174, 16);
+            this.label3.Size = new System.Drawing.Size(133, 13);
             this.label3.TabIndex = 11;
             this.label3.Text = "[UserNameDlgNameLabel]";
             this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -190,7 +189,7 @@
             this.name.Location = new System.Drawing.Point(188, 14);
             this.name.Name = "name";
             this.name.ReadOnly = true;
-            this.name.Size = new System.Drawing.Size(268, 22);
+            this.name.Size = new System.Drawing.Size(288, 20);
             this.name.TabIndex = 13;
             // 
             // password
@@ -199,7 +198,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.password.Location = new System.Drawing.Point(188, 50);
             this.password.Name = "password";
-            this.password.Size = new System.Drawing.Size(268, 22);
+            this.password.Size = new System.Drawing.Size(288, 20);
             this.password.TabIndex = 13;
             this.password.TextChanged += new System.EventHandler(this.password_TextChanged);
             // 
@@ -209,7 +208,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.domain.Location = new System.Drawing.Point(188, 91);
             this.domain.Name = "domain";
-            this.domain.Size = new System.Drawing.Size(268, 22);
+            this.domain.Size = new System.Drawing.Size(288, 20);
             this.domain.TabIndex = 13;
             // 
             // label4
@@ -217,7 +216,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(15, 53);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(197, 16);
+            this.label4.Size = new System.Drawing.Size(151, 13);
             this.label4.TabIndex = 11;
             this.label4.Text = "[UserNameDlgPasswordLabel]";
             this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -227,7 +226,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(15, 94);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(184, 16);
+            this.label5.Size = new System.Drawing.Size(141, 13);
             this.label5.TabIndex = 11;
             this.label5.Text = "[UserNameDlgDomainLabel]";
             this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -237,7 +236,7 @@
             this.localDomain.AutoSize = true;
             this.localDomain.Location = new System.Drawing.Point(19, 29);
             this.localDomain.Name = "localDomain";
-            this.localDomain.Size = new System.Drawing.Size(235, 20);
+            this.localDomain.Size = new System.Drawing.Size(185, 17);
             this.localDomain.TabIndex = 14;
             this.localDomain.TabStop = true;
             this.localDomain.Text = "[UserNameDlgLocalDomainLabel]";
@@ -249,7 +248,7 @@
             this.networkDomain.AutoSize = true;
             this.networkDomain.Location = new System.Drawing.Point(19, 56);
             this.networkDomain.Name = "networkDomain";
-            this.networkDomain.Size = new System.Drawing.Size(251, 20);
+            this.networkDomain.Size = new System.Drawing.Size(199, 17);
             this.networkDomain.TabIndex = 14;
             this.networkDomain.TabStop = true;
             this.networkDomain.Text = "[UserNameDlgNetworkDomainLabel]";
@@ -280,25 +279,14 @@
             this.middlePanel.Controls.Add(this.label5);
             this.middlePanel.Controls.Add(this.password);
             this.middlePanel.Controls.Add(this.name);
-            this.middlePanel.Location = new System.Drawing.Point(12, 167);
+            this.middlePanel.Location = new System.Drawing.Point(-1, 112);
             this.middlePanel.Name = "middlePanel";
-            this.middlePanel.Size = new System.Drawing.Size(470, 138);
+            this.middlePanel.Size = new System.Drawing.Size(490, 194);
             this.middlePanel.TabIndex = 16;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(186, 37);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 16;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // UserNameDialog
             // 
             this.ClientSize = new System.Drawing.Size(494, 361);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.middlePanel);
             this.Controls.Add(this.banner);
             this.Controls.Add(this.topPanel);
@@ -341,6 +329,5 @@
         private System.Windows.Forms.Button next;
         private System.Windows.Forms.Button cancel;
         private System.Windows.Forms.Panel middlePanel;
-        private System.Windows.Forms.Button button1;
     }
 }

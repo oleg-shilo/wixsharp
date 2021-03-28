@@ -1,8 +1,9 @@
-﻿<UserControl x:Class="MyProduct.CustomDialogView"
+﻿<wixsharp:WpfDialog x:Class="MyProduct.CustomDialogView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:wixsharp="clr-namespace:WixSharp.UI.WPF;assembly=WixSharp.UI.WPF"
              mc:Ignorable="d"
              d:DesignHeight="200" d:DesignWidth="500">
     <Grid x:Name="Root">
@@ -17,25 +18,31 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="80" />
                 </Grid.ColumnDefinitions>
-                <Image x:Name="banner" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                <Image x:Name="Banner" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
                 <StackPanel Margin="9">
                     <TextBlock  Grid.Column="0" Background="White" FontWeight="Bold" FontSize="12">[CustomDlgTitle]</TextBlock>
                     <TextBlock Margin="17,5" VerticalAlignment="Stretch" x:Name="DialogDescription" Background="White" TextWrapping="WrapWithOverflow" >[CustomDlgTitleDescription]</TextBlock>
                 </StackPanel>
             </Grid>
         </Border>
-
-        <TextBlock x:Name="Gritting" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" FontStyle="Italic" FontWeight="Bold"></TextBlock>
+        <!--
+        <TextBlock x:Name="Gritting" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" FontStyle="Italic" FontWeight="Bold"></TextBlock>-->
+        <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" FontStyle="Italic" FontWeight="Bold">
+            <Run Text="Hello WPF user " />
+            <Run Text="{Binding User}" />
+            <Run Text="!!!" />
+        </TextBlock>
+        <CheckBox x:Name="CanProceedIsChecked" Grid.Row="1" Margin="20" VerticalContentAlignment="Center" VerticalAlignment="Bottom">Allow proceeding to the next step.</CheckBox>
 
         <Border Margin="-1,0,-1,-1"  Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Gray" BorderThickness="1">
             <StackPanel  VerticalAlignment="Center"  HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button  MinWidth="73" Height="23" Click="GoPrev_Click">[WixUIBack]</Button>
+                <Button  MinWidth="73" Height="23" x:Name="GoPrev">[WixUIBack]</Button>
                 <Separator Opacity="0" Width="10" />
-                <Button MinWidth="73" Height="23" Click="GoNext_Click">[WixUINext]</Button>
+                <Button MinWidth="73" Height="23" x:Name="GoNext">[WixUINext]</Button>
                 <Separator Opacity="0" Width="20" />
-                <Button MinWidth="73" Height="23" Click="Cancel_Click">[WixUICancel]</Button>
+                <Button MinWidth="73" Height="23" x:Name="Cancel">[WixUICancel]</Button>
                 <Separator Opacity="0" Width="10" />
             </StackPanel>
         </Border>
     </Grid>
-</UserControl>
+</wixsharp:WpfDialog>

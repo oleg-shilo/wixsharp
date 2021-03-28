@@ -54,6 +54,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Wix_bin\SDK\BootstrapperCore.dll</HintPath>
     </Reference>
+    <Reference Include="Caliburn.Micro, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Caliburn.Micro.Core.3.2.0\lib\net45\Caliburn.Micro.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Caliburn.Micro.3.2.0\lib\net45\Caliburn.Micro.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Caliburn.Micro.3.2.0\lib\net45\Caliburn.Micro.Platform.Core.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -115,8 +124,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\WixSharp.UI.WPF\WixSharp.UI.WPF.csproj">
+      <Project>{b8efff07-76bc-4e6d-9a13-4e3a0777eb0c}</Project>
+      <Name>WixSharp.UI.WPF</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\WixSharp.UI\WixSharp.UI.csproj">
       <Project>{79033a3e-565e-47a3-93f6-d95789b024fc}</Project>
       <Name>WixSharp.UI</Name>

@@ -150,6 +150,16 @@ namespace WixSharp
         /// <value>The current dialog.</value>
         public IManagedDialog CurrentDialog { get; set; }
 
+        public IWpfDialogHost CreateDefaultWpfDialgHost()
+        {
+            // only one type in WixSharp.UI.WPF should implemnt tis interface. It is a WinForm based WPF host.
+            var host = System.Reflection.Assembly.Load("WixSharp.UI.WPF")
+                                                 .GetTypes()
+                                                 .Single(t => t.Implements<IWpfDialogHost>());
+
+            return (IWpfDialogHost)Activator.CreateInstance(host);
+        }
+
         Form shellView;
 
         int currentViewIndex = -1;
@@ -174,7 +184,21 @@ namespace WixSharp
 
                         Type viewType = Dialogs[currentViewIndex];
 
-                        var view = (Form)Activator.CreateInstance(viewType);
+                        Form view;
+
+                        if (viewType.Implements<IWpfDialog>())
+                        {
+                            IWpfDialog wpfContent = (IWpfDialog)Activator.CreateInstance(viewType);
+
+                            IWpfDialogHost winFormHost = CreateDefaultWpfDialgHost();
+                            winFormHost.SetDialogContent(wpfContent);
+
+                            view = (Form)winFormHost;
+                        }
+                        else
+                        {
+                            view = (Form)Activator.CreateInstance(viewType);
+                        }
 
                         view.LocalizeWith(Runtime.Localize);
                         view.FormBorderStyle = forms.FormBorderStyle.None;

@@ -1,31 +1,12 @@
+using MyProduct;
 using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Threading;
-using System.Windows.Forms;
 using WixSharp;
-using WixSharp.CommonTasks;
 using WixSharp.UI.Forms;
-
-internal static class Defaults
-{
-    public const string UserName = "MP_USER";
-}
 
 public class Script
 {
     static public void Main(string[] args)
     {
-        Compiler.WixLocation = @"..\..\..\..\..\Wix_bin\bin";
-
-        if (args.Contains("-test")) //for demo only
-        {
-            UIShell.Play(ManagedUI.Default.InstallDialogs);
-            return;
-        }
-
         var project = new ManagedProject("ManagedSetup",
                           new Dir(@"%ProgramFiles%\My Company\My Product",
                               new File("readme.md")));
@@ -34,12 +15,21 @@ public class Script
         project.ManagedUI = new ManagedUI();
         project.ManagedUI.InstallDialogs.Add<WelcomeDialog>()
                                         .Add<FeaturesDialog>()
-                                        .Add<MyProduct.UserNameDialog>()
+                                        .Add<CustomDialogView>()
+                                        .Add<CustomDialogView>()
                                         .Add<ProgressDialog>()
                                         .Add<ExitDialog>();
 
         project.ManagedUI.ModifyDialogs.Add<ProgressDialog>()
                                        .Add<ExitDialog>();
+
+        project.DefaultRefAssemblies.AddRange(new[]
+        {
+            System.Reflection.Assembly.Load("Caliburn.Micro").Location,
+            System.Reflection.Assembly.Load("Caliburn.Micro.Platform").Location,
+            System.Reflection.Assembly.Load("Caliburn.Micro.Platform.Core").Location,
+            System.Reflection.Assembly.Load("System.Windows.Interactivity").Location
+        });
 
         project.PreserveTempFiles = true;
         project.SourceBaseDir = @"..\..\";

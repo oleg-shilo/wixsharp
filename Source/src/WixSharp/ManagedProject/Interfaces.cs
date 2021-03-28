@@ -17,10 +17,26 @@ namespace WixSharp
     {
     }
 
+    public interface IDialog
+    {
+    }
+
+    public interface IWpfDialogHost
+    {
+        void SetDialogContent(IWpfDialog content);
+    }
+
+    public interface IWpfDialog : IDialog
+    {
+        IManagedDialog Host { get; set; }
+
+        void Init();
+    }
+
     /// <summary>
     /// Interface of a typical UI dialog managed by shell (the main window) of the MSI external/embedded UI.
     /// </summary>
-    public interface IManagedDialog
+    public interface IManagedDialog : IDialog
     {
         /// <summary>
         /// Gets or sets the UI shell (main UI window). This property is set the ManagedUI runtime (IManagedUI).
@@ -151,7 +167,6 @@ namespace WixSharp
         /// </value>
         ManagedDialogs Dialogs { get; }
 
-
         IManagedDialog MessageDialog { get; set; }
 
         /// <summary>
@@ -249,7 +264,7 @@ namespace WixSharp
         /// </summary>
         /// <typeparam name="T">Type implementing ManagedUI dialog</typeparam>
         /// <returns></returns>
-        public ManagedDialogs Add<T>() where T : IManagedDialog
+        public ManagedDialogs Add<T>() where T : IDialog
         {
             base.Add(typeof(T));
             return this;
@@ -275,5 +290,13 @@ namespace WixSharp
             base.Clear();
             return this;
         }
+
+        public string[] Assemblies
+            => this.SelectMany(x => x.Assembly.GetReferencedAssemblies())
+                   .Where(a => a.Name.StartsWith("WixSharp."))
+                   .Select(a => System.Reflection.Assembly.Load(a.FullName))
+                   .Select(a => a.Location)
+                   .Distinct()
+                   .ToArray();
     }
 }

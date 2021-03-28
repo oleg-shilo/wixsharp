@@ -346,7 +346,10 @@ namespace WixSharp
 
                     this.EmbeddedUI = new EmbeddedAssembly(new Id("WixSharp_EmbeddedUI_Asm"), ManagedUI.GetType().Assembly.Location);
 
+                    this.DefaultRefAssemblies.AddRange(ManagedUI.InstallDialogs.Assemblies);
+                    this.DefaultRefAssemblies.AddRange(ManagedUI.ModifyDialogs.Assemblies);
                     this.DefaultRefAssemblies.Add(ManagedUI.GetType().Assembly.Location);
+                    this.DefaultRefAssemblies.FilterDuplicates();
 
                     Bind(() => UIInitialized);
                     Bind(() => UILoaded);

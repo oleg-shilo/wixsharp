@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>1.16.1.0-HotFix</version>
+    <version>1.16.2.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,8 +16,9 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.16.1.0
-* Implemented more reliable `session.IsUpgradingInstalledVersion` instead of `session.IsUpgrading`. Triggered by Issue #964: "Upgrades howto"
+    <releaseNotes>Release v1.16.2.0
+* Issue #971: Unable to build win latest nuget on net45 
+* Downgraded target runtime to v4.5.1. To improve compatibility
 </releaseNotes>
     <copyright>Copyright (C) 2008-2021 Oleg Shilo</copyright>
     <language>en-AU</language>

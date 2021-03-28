@@ -8808,6 +8808,14 @@
             <param name="obj"></param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.Implements``1(System.Type)">
+            <summary>
+            Checks if the type iplements the interface .
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="type">The type.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.AddElement(System.Xml.Linq.XElement,System.Xml.Linq.XElement)">
             <summary>
             Adds the element to a given XML element. It is a Fluent version of <see cref="T:System.Xml.Linq.XElement.Add"/>.

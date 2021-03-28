@@ -248,6 +248,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomUIDialog.WPF", "WixSh
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomUI.WPF", "CustomUI.WPF", "{1CFD0B87-E292-41B3-A914-FF8254D4A32C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixSharp.UI.WPF", "WixSharp.UI.WPF\WixSharp.UI.WPF.csproj", "{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1338,6 +1340,18 @@ Global
 		{B7B90CFA-6D46-4DAA-9BD1-0C9EBB1A44AD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B7B90CFA-6D46-4DAA-9BD1-0C9EBB1A44AD}.Release|x86.ActiveCfg = Release|Any CPU
 		{B7B90CFA-6D46-4DAA-9BD1-0C9EBB1A44AD}.Release|x86.Build.0 = Release|Any CPU
+		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Debug|x86.Build.0 = Debug|Any CPU
+		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Release|x86.ActiveCfg = Release|Any CPU
+		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -45,6 +45,8 @@
     <Reference Include="Microsoft.Deployment.WindowsInstaller">
       <HintPath>..\WixSharp.Samples\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
@@ -53,6 +55,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
       <Private>True</Private>
@@ -99,6 +102,10 @@
       <Project>{611d8893-7d39-4f3c-92d5-0554f780a914}</Project>
       <Name>WixSharp.Msi</Name>
       <Aliases>WixSharpMsi</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\WixSharp.UI.WPF\WixSharp.UI.WPF.csproj">
+      <Project>{b8efff07-76bc-4e6d-9a13-4e3a0777eb0c}</Project>
+      <Name>WixSharp.UI.WPF</Name>
     </ProjectReference>
     <ProjectReference Include="..\WixSharp.UI\WixSharp.UI.csproj">
       <Project>{79033a3e-565e-47a3-93f6-d95789b024fc}</Project>
