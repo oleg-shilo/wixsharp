@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wixsharp="clr-namespace:WixSharp.UI.WPF;assembly=WixSharp.UI.WPF"
              mc:Ignorable="d"
+             DialogTitle="[ProductName] Setup"
              d:DesignHeight="200" d:DesignWidth="500">
     <Grid x:Name="Root">
         <Grid.RowDefinitions>

@@ -13,12 +13,11 @@ public class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.ManagedUI = new ManagedUI();
-        project.ManagedUI.InstallDialogs.Add<WelcomeDialog>()
-                                        .Add<FeaturesDialog>()
-                                        .Add<CustomDialogView>()
-                                        .Add<CustomDialogView>()
-                                        .Add<ProgressDialog>()
-                                        .Add<ExitDialog>();
+        project.ManagedUI.InstallDialogs.Add<WelcomeDialog>()    // stock WinForm dialog
+                                        .Add<FeaturesDialog>()   // stock WinForm dialog
+                                        .Add<CustomDialogView>() // custom WPF dialog
+                                        .Add<ProgressDialog>()   // stock WinForm dialog
+                                        .Add<ExitDialog>();      // stock WinForm dialog
 
         project.ManagedUI.ModifyDialogs.Add<ProgressDialog>()
                                        .Add<ExitDialog>();

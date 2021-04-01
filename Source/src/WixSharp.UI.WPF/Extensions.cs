@@ -69,6 +69,23 @@ namespace WixSharp.UI.WPF
 
     public class WpfDialog : UserControl, IManagedDialog
     {
+        string dialogTitle;
+
+        public string DialogTitle
+        {
+            get
+            {
+                return dialogTitle;
+            }
+
+            set
+            {
+                dialogTitle = value;
+
+                ManagedFormHost?.Localize();
+            }
+        }
+
         public IManagedDialog Host { get; set; }
         public ManagedForm ManagedFormHost { get => (ManagedForm)Host; }
         public IManagedUIShell Shell { get; set; }
@@ -76,6 +93,15 @@ namespace WixSharp.UI.WPF
         /// <summary>
         /// Called when MSI execution is complete.
         /// </summary>
+        public void Localize(DependencyObject element = null)
+        {
+            var root = (element ?? this.Content as DependencyObject);
+
+            // resolve and translate all elements with translatable content ("[<localization_key>]")
+            if (root != null)
+                this.ManagedFormHost.Runtime.Localize(root);
+        }
+
         virtual public void OnExecuteComplete()
         {
         }
@@ -126,6 +152,7 @@ namespace WixSharp.UI.WPF
                 host.Child = (UserControl)content;
                 this.Controls.Add(host);
                 content.Init();
+                this.Localize();
             };
         }
 
