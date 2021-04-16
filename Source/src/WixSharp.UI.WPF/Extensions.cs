@@ -81,8 +81,11 @@ namespace WixSharp.UI.WPF
             set
             {
                 dialogTitle = value;
-
-                ManagedFormHost?.Localize();
+                if (ManagedFormHost != null)
+                {
+                    ManagedFormHost.Text = value;
+                    ManagedFormHost.Localize();
+                }
             }
         }
 
@@ -150,9 +153,16 @@ namespace WixSharp.UI.WPF
                 var host = new System.Windows.Forms.Integration.ElementHost();
                 host.Dock = System.Windows.Forms.DockStyle.Fill;
                 host.Child = (UserControl)content;
+
+                if (content is WpfDialog wpfDialog)
+                {
+                    wpfDialog.Localize();
+                    this.Text = wpfDialog.DialogTitle;
+                }
+                this.Localize();
+
                 this.Controls.Add(host);
                 content.Init();
-                this.Localize();
             };
         }
 

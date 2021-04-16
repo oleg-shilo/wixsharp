@@ -29,7 +29,7 @@
         <!--
         <TextBlock x:Name="Gritting" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" FontStyle="Italic" FontWeight="Bold"></TextBlock>-->
         <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="24" FontStyle="Italic" FontWeight="Bold">
-            <Run Text="Hello WPF user " />
+            <Run Text="Hello WPF+CM user " />
             <Run Text="{Binding User}" />
             <Run Text="!!!" />
         </TextBlock>

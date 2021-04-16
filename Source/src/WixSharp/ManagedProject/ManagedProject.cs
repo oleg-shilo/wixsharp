@@ -346,9 +346,11 @@ namespace WixSharp
 
                     this.EmbeddedUI = new EmbeddedAssembly(new Id("WixSharp_EmbeddedUI_Asm"), ManagedUI.GetType().Assembly.Location);
 
-                    this.DefaultRefAssemblies.AddRange(ManagedUI.InstallDialogs.Assemblies);
+                    this.DefaultRefAssemblies.AddRange(ManagedUI.InstallDialogs.Assemblies); // WixSharp.UI and WixSharp.UI.WPF
                     this.DefaultRefAssemblies.AddRange(ManagedUI.ModifyDialogs.Assemblies);
+                    this.DefaultRefAssemblies.AddRange(GetUiDialogsDependencies(ManagedUI)); // Caliburn, etc.
                     this.DefaultRefAssemblies.Add(ManagedUI.GetType().Assembly.Location);
+
                     this.DefaultRefAssemblies.FilterDuplicates();
 
                     Bind(() => UIInitialized);
@@ -361,6 +363,24 @@ namespace WixSharp
                 Bind(() => BeforeInstall, When.Before, Step.InstallFiles);
                 Bind(() => AfterInstall, When.After, Step.InstallFiles, true);
             }
+        }
+
+        string[] GetUiDialogsDependencies(IManagedUI ui)
+        {
+            var usngWpfStockDialogs = ui.InstallDialogs
+                                        .Combine(ui.ModifyDialogs)
+                                        .SelectMany(x => x.Assembly.GetReferencedAssemblies())
+                                        .Any(a => a.Name.StartsWith("WixSharp.UI.WPF"));
+            if (usngWpfStockDialogs)
+                return new[]
+                {
+                    System.Reflection.Assembly.Load("Caliburn.Micro").Location,
+                    System.Reflection.Assembly.Load("Caliburn.Micro.Platform").Location,
+                    System.Reflection.Assembly.Load("Caliburn.Micro.Platform.Core").Location,
+                    System.Reflection.Assembly.Load("System.Windows.Interactivity").Location
+                };
+            else
+                return new string[0];
         }
 
         void InjectDialogs(string name, ManagedDialogs dialogs)

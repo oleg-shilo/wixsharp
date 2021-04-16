@@ -152,7 +152,7 @@ namespace WixSharp
 
         public IWpfDialogHost CreateDefaultWpfDialgHost()
         {
-            // only one type in WixSharp.UI.WPF should implemnt tis interface. It is a WinForm based WPF host.
+            // only one type in WixSharp.UI.WPF should implement tis interface. It is a WinForm based WPF host.
             var host = System.Reflection.Assembly.Load("WixSharp.UI.WPF")
                                                  .GetTypes()
                                                  .Single(t => t.Implements<IWpfDialogHost>());
@@ -161,7 +161,6 @@ namespace WixSharp
         }
 
         Form shellView;
-
         int currentViewIndex = -1;
 
         /// <summary>

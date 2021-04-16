@@ -113,6 +113,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="CustomWpfDialogRaw.xaml.cs">
+      <DependentUpon>CustomWpfDialogRaw.xaml</DependentUpon>
+    </Compile>
     <Compile Include="setup.cs" />
     <Page Include="CustomWpfDialog.xaml">
       <SubType>Designer</SubType>
@@ -121,6 +124,10 @@
     <Compile Include="CustomWpfDialog.xaml.cs">
       <DependentUpon>CustomWpfDialog.xaml</DependentUpon>
     </Compile>
+    <Page Include="CustomWpfDialogRaw.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

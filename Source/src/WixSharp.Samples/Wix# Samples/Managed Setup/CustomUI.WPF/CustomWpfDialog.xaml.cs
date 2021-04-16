@@ -16,12 +16,7 @@ namespace MyProduct
 
         public void Init()
         {
-            // resolve and translate all elements with translatable content ("[<localization_key>]")
-            base.Localize();
-
-            var viewModel = new CustomDialogModel { Host = this.ManagedFormHost };
-
-            ViewModelBinder.Bind(viewModel, this, null);
+            ViewModelBinder.Bind(new CustomDialogModel { Host = ManagedFormHost }, this, null);
         }
     }
 

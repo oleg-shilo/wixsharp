@@ -293,7 +293,7 @@ namespace WixSharp
 
         public string[] Assemblies
             => this.SelectMany(x => x.Assembly.GetReferencedAssemblies())
-                   .Where(a => a.Name.StartsWith("WixSharp."))
+                   .Where(a => a.Name.StartsWith("WixSharp.") || a.Name.StartsWith("Cliburn."))
                    .Select(a => System.Reflection.Assembly.Load(a.FullName))
                    .Select(a => a.Location)
                    .Distinct()
