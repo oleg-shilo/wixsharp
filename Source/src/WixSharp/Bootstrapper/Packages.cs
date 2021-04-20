@@ -365,6 +365,115 @@ namespace WixSharp.Bootstrapper
     }
 
     /// <summary>
+    /// Standard WiX MspPackage.
+    /// </summary>
+    public class MspPackage : Package
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MspPackage"/> class.
+        /// </summary>
+        public MspPackage()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MspPackage"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        public MspPackage(string path)
+        {
+            SourceFile = path;
+        }
+
+        /// <summary>
+        /// The identifier of another package that this one should be installed after. By default the After attribute is set to the previous sibling
+        /// package in the Chain or PackageGroup element. If this attribute is specified ensure that a cycle is not created explicitly or implicitly.
+        /// </summary>
+        [Xml]
+        public string After;
+
+        /// <summary>
+        /// The identifier to use when caching the package.
+        /// </summary>
+        [Xml]
+        public string CacheId;
+
+        /// <summary>
+        /// Specifies whether the bundle will show the UI authored into the msp package. The default is "no" which means all information is routed to the
+        /// bootstrapper application to provide a unified installation experience. If "yes" is specified the UI authored into the msp package will be
+        /// displayed on top of any bootstrapper application UI.
+        /// </summary>
+        [Xml]
+        public bool? DisplayInternalUI;
+
+        /// <summary>
+        /// The size this package will take on disk in bytes after it is installed. By default, the binder will calculate the install size by scanning
+        /// the package (File table for MSIs, Payloads for EXEs) and use the total for the install size of the package.
+        /// </summary>
+        [Xml]
+        public string InstallSize;
+
+        /// <summary>
+        /// Indicates the package must be executed elevated. The default is "no".
+        /// </summary>
+        [Xml]
+        public bool? PerMachine;
+
+        /// <summary>
+        /// Specifies whether to automatically slipstream the patch for any target msi packages in the chain. The default is "no". Even when the value is
+        /// "no", you can still author the SlipstreamMsp element under MsiPackage elements as desired.
+        /// </summary>
+        [Xml]
+        public bool? Slipstream;
+
+        /// <summary>
+        ///  	By default, a Bundle will use the hash of a package to verify its contents. If this attribute is explicitly set to "no" and the package
+        ///  	is signed with an Authenticode signature the Bundle will verify the contents of the package using the signature instead. Therefore, the
+        ///  	default for this attribute could be considered to be "yes". It is unusual for "yes" to be the default of an attribute. In this case, the
+        ///  	default was changed in WiX v3.9 after experiencing real world issues with Windows verifying Authenticode signatures. Since the
+        ///  	Authenticode signatures are no more secure than hashing the packages directly, the default was changed.
+        /// </summary>
+        public bool? SuppressSignatureVerification;
+
+        /// <summary>
+        /// When set to "yes", the Prereq BA will plan the package to be installed if its InstallCondition is "true" or empty.
+        /// (http://schemas.microsoft.com/wix/BalExtension)
+        /// </summary>
+        [Xml]
+        public bool? PrereqSupportPackage;
+
+        /// <summary>
+        /// The remote payloads
+        /// </summary>
+        public RemotePayload[] RemotePayloads = new RemotePayload[0];
+
+        /// <summary>
+        /// Emits WiX XML.
+        /// </summary>
+        /// <returns></returns>
+        public override XContainer[] ToXml()
+        {
+            var root = new XElement("MspPackage");
+
+            root.SetAttribute("Name", Name); //will respect null
+
+            if (this.IsIdSet())
+                root.SetAttribute("Id", Id);
+
+            root.AddAttributes(this.Attributes)
+                .Add(this.MapToXmlAttributes());
+
+            if (Payloads.Any())
+                Payloads.ForEach(p => root.Add(p.ToXElement("Payload")));
+
+            if (RemotePayloads.Any())
+                RemotePayloads.ForEach(p => root.Add(p.ToXElement("RemotePayload")));
+
+            return new[] { root };
+        }
+    }
+
+    /// <summary>
     /// Standard WiX MsuPackage.
     /// </summary>
     public class MsuPackage : Package
@@ -522,6 +631,13 @@ namespace WixSharp.Bootstrapper
     }
 
 #pragma warning disable 1591
+
+    public enum YesNoAlways
+    {
+        yes,
+        no,
+        always
+    }
 
     public enum BehaviorValues
     {

@@ -52,6 +52,11 @@ public class InstallScript
                         Visible = true,
                         MsiProperties = "PACKAGE_PROPERTY=[BundleVariable]"
                     },
+                    // new MspPackage("Patch.msp")
+                    // {
+                    //     DisplayInternalUI = true,
+                    //     Slipstream = false
+                    // },
                     new MsiPackage(productMsi)
                     {
                         DisplayInternalUI = true,
@@ -109,12 +114,6 @@ public class InstallScript
         // bootstrapper.Variables = Variables.ToStringVariables("BundleVariable=333");
 
         bootstrapper.PreserveTempFiles = true;
-
-        // Add MspPackage manually (demo only).
-        // In the future releases the direct support for MspPackage element will be added.
-        // bootstrapper.WixSourceGenerated += (doc) => doc.FindSingle("Chain")
-        //                                                .AddElement("MspPackage",
-        //                                                            "SourceFile=Patch.msp; Slipstream=no");
 
         // bootstrapper.WixSourceGenerated += doc => doc.FindSingle("WixStandardBootstrapperApplication")
         //                                              .AddAttributes("ShowVersion=yes; ShowFilesInUse=no");
