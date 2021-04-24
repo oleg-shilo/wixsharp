@@ -150,6 +150,11 @@ namespace WixSharp
         /// <value>The current dialog.</value>
         public IManagedDialog CurrentDialog { get; set; }
 
+        /// <summary>
+        /// Creates an instance of the WinForm dialog that can host WPF content.
+        /// This method is not to be used by users but WixSharp compiler only.
+        /// </summary>
+        /// <returns></returns>
         public IWpfDialogHost CreateDefaultWpfDialgHost()
         {
             // only one type in WixSharp.UI.WPF should implement tis interface. It is a WinForm based WPF host.

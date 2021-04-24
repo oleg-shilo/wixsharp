@@ -120,9 +120,12 @@ namespace WixSharp
         public static bool Implements<T>(this Type type)
             => type.GetInterfaces().Contains(typeof(T));
 
-        // public static bool Implements(this Type type, string interfaceName)
-        //     => type.GetInterfaces().Contains(AppDomain.Get(T));
-
+        /// <summary>
+        /// Gets the base name of the generic type (e.g. "System.Geneics.List" for
+        /// type "System.Geneics.List&lt;T&gt;").
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
         public static string GetGenericTypeBaseName(this Type type)
         {
             if (type.IsGenericType)
@@ -130,6 +133,13 @@ namespace WixSharp
             return null;
         }
 
+        /// <summary>
+        /// Invokes the method ob the object with the specified name.
+        /// </summary>
+        /// <param name="object">The object.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="args">The arguments.</param>
+        /// <returns></returns>
         public static object Invoke(this object @object, string name, params object[] args)
             => @object.GetType().GetMethod(name).Invoke(@object, args);
 
