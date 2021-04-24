@@ -194,6 +194,26 @@ namespace WixSharp
 
                             view = (Form)winFormHost;
                         }
+                        else if (viewType.GetGenericTypeBaseName() == typeof(CustomDialogWith<object>).GetGenericTypeBaseName())
+                        {
+                            // composite dialog with the content panel sup[plied by the user and the rest being a standard dialog base
+                            Type userContentType = viewType.GetGenericArguments().FirstOrDefault();
+
+                            var dialogBase = Type.GetType("WixSharp.UI.WPF.CustomDialogBase");
+
+                            if (dialogBase == null) // the assembly may not be loaded yet
+                                dialogBase = System.Reflection.Assembly.Load("WixSharp.UI.WPF")
+                                                                       .GetType("WixSharp.UI.WPF.CustomDialogBase");
+
+                            object userContent = Activator.CreateInstance(userContentType);
+                            IWpfDialog wpfContentPresenter = (IWpfDialog)Activator.CreateInstance(dialogBase);
+                            wpfContentPresenter.Invoke("SetUserContent", userContent);
+
+                            IWpfDialogHost winFormHost = CreateDefaultWpfDialgHost();
+                            winFormHost.SetDialogContent(wpfContentPresenter);
+
+                            view = (Form)winFormHost;
+                        }
                         else
                         {
                             view = (Form)Activator.CreateInstance(viewType);

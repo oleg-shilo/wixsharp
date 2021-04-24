@@ -44,7 +44,7 @@ public class InstallScript
                     //     Compressed = true
                     //},
 
-                    //msiOnlinePackage, //just a demo sample
+                    //msiOnlinePackage, // just a demo sample
 
                     new MsiPackage(crtMsi)
                     {

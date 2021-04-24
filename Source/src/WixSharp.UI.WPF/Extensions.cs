@@ -67,8 +67,14 @@ namespace WixSharp.UI.WPF
 
     class WpfDialogMock : UI.WPF.WpfDialog { } // this private class is needed for testing
 
+    public interface IWpfDialogContent : IDialog
+    {
+        void Init(CustomDialogBase parentDialog);
+    }
+
     public class WpfDialog : UserControl, IManagedDialog
     {
+        // public virtual Bu
         string dialogTitle;
 
         public string DialogTitle

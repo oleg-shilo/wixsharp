@@ -8887,7 +8887,7 @@
         </member>
         <member name="M:WixSharp.Extensions.Implements``1(System.Type)">
             <summary>
-            Checks if the type iplements the interface .
+            Checks if the type implements the interface .
             </summary>
             <typeparam name="T"></typeparam>
             <param name="type">The type.</param>

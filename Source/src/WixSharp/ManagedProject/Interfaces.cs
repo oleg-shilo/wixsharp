@@ -26,6 +26,8 @@ namespace WixSharp
         void SetDialogContent(IWpfDialog content);
     }
 
+    public class CustomDialogWith<T2> : IDialog { }
+
     public interface IWpfDialog : IDialog
     {
         IManagedDialog Host { get; set; }
@@ -266,8 +268,15 @@ namespace WixSharp
         /// <returns></returns>
         public ManagedDialogs Add<T>() where T : IDialog
         {
-            base.Add(typeof(T));
+            base.Add(Translate(typeof(T)));
             return this;
+        }
+
+        static Type Translate(Type type)
+        {
+            // if(type.GetInterfaces().Select(x => x.FullName).Contains("WixSharp.UI.WPF.IWpfDialogContent"))
+            //     return typeof();
+            return type;
         }
 
         /// <summary>
@@ -277,7 +286,7 @@ namespace WixSharp
         /// <returns></returns>
         public new ManagedDialogs Add(Type type)
         {
-            base.Add(type);
+            base.Add(Translate(type));
             return this;
         }
 

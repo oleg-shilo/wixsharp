@@ -1,8 +1,10 @@
+using ConsoleApplication1;
 using MyProduct;
 using System;
 using System.Linq;
 using WixSharp;
 using WixSharp.UI.Forms;
+using WixSharp.UI.WPF;
 
 public class Script
 {
@@ -16,6 +18,7 @@ public class Script
         project.ManagedUI = new ManagedUI();
         project.ManagedUI.InstallDialogs.Add<WelcomeDialog>()       // stock WinForm dialog
                                         .Add<FeaturesDialog>()      // stock WinForm dialog
+                                        .Add<CustomDialogWith<CustomDialogPanel>>()    // custom WPF dialog (minimalistic)
                                         .Add<CustomDialogRawView>() // custom WPF dialog
                                         .Add<CustomDialogView>()    // custom WPF dialog (with Claiburn.Micro as MVVM)
                                         .Add<ProgressDialog>()      // stock WinForm dialog

@@ -112,13 +112,26 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Checks if the type iplements the interface .
+        /// Checks if the type implements the interface .
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="type">The type.</param>
         /// <returns></returns>
         public static bool Implements<T>(this Type type)
             => type.GetInterfaces().Contains(typeof(T));
+
+        // public static bool Implements(this Type type, string interfaceName)
+        //     => type.GetInterfaces().Contains(AppDomain.Get(T));
+
+        public static string GetGenericTypeBaseName(this Type type)
+        {
+            if (type.IsGenericType)
+                return type.FullName.Split('`').FirstOrDefault();
+            return null;
+        }
+
+        public static object Invoke(this object @object, string name, params object[] args)
+            => @object.GetType().GetMethod(name).Invoke(@object, args);
 
         /// <summary>
         /// Adds the element to a given XML element. It is a Fluent version of <see cref="T:System.Xml.Linq.XElement.Add"/>.
