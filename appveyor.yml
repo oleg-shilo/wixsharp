@@ -21,6 +21,7 @@ install:
 
     - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %archi%
     - nuget restore "%APPVEYOR_BUILD_FOLDER%"\Source\src\WixSharp.Test\packages.config -PackagesDirectory "%APPVEYOR_BUILD_FOLDER%"\Source\src\packages
+    - nuget restore "%APPVEYOR_BUILD_FOLDER%"\Source\src\WixSharp.UI.WPF\packages.config -PackagesDirectory "%APPVEYOR_BUILD_FOLDER%"\Source\src\packages
 
 
 init:
