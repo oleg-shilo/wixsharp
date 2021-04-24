@@ -18,7 +18,7 @@ public class Script
 {
     static public void Main(string[] args)
     {
-        Compiler.WixLocation = @"..\..\..\..\..\Wix_bin\bin";
+        // Compiler.WixLocation = @"..\..\..\..\..\Wix_bin\bin";
 
         if (args.Contains("/test")) //for demo only
         {
