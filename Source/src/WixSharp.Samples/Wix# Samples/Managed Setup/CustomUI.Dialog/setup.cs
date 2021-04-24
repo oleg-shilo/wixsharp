@@ -18,6 +18,8 @@ public class Script
 {
     static public void Main(string[] args)
     {
+        if (Environment.GetEnvironmentVariable("APPVEYOR") != null)
+            return;
         // Compiler.WixLocation = @"..\..\..\..\..\Wix_bin\bin";
 
         if (args.Contains("/test")) //for demo only
