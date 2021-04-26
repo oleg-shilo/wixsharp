@@ -65,6 +65,13 @@ namespace WixSharp
                 return Path.GetFullPath(environmentVar);
             }
 
+            // Now check to see if the environment variable was set by the scoop installation
+            environmentVar = Environment.GetEnvironmentVariable("WixToolPath");
+            if (environmentVar.IsNotEmpty() && Directory.Exists(environmentVar))
+            {
+                return Path.GetFullPath(environmentVar);
+            }
+
             // Now check to see if the WIX install set an environment variable
             var wixEnvironmentVariable = Environment.ExpandEnvironmentVariables(@"%WIX%\bin");
             if (wixEnvironmentVariable.IsNotEmpty() && Directory.Exists(wixEnvironmentVariable))
@@ -97,7 +104,7 @@ namespace WixSharp
             //https://docs.microsoft.com/en-us/nuget/consume-packages/managing-the-global-packages-and-cache-folders
 
             string wixBinPackageDir;
-            var    nugetPackagesEnvironmentVariable = Environment.GetEnvironmentVariable("NUGET_PACKAGES");
+            var nugetPackagesEnvironmentVariable = Environment.GetEnvironmentVariable("NUGET_PACKAGES");
             if (nugetPackagesEnvironmentVariable.IsNotEmpty() && Directory.Exists(nugetPackagesEnvironmentVariable))
             {
                 wixBinPackageDir = Path.Combine(nugetPackagesEnvironmentVariable, "wixsharp.wix.bin");
