@@ -120,6 +120,9 @@ namespace WixSharp
         public static bool Implements<T>(this Type type)
             => type.GetInterfaces().Contains(typeof(T));
 
+        internal static bool Implements(this Type type, string interfaceName)
+            => type.GetInterfaces().Any(i => i.FullName == interfaceName);
+
         /// <summary>
         /// Gets the base name of the generic type (e.g. "System.Geneics.List" for
         /// type "System.Geneics.List&lt;T&gt;").
@@ -154,6 +157,12 @@ namespace WixSharp
             obj.Add(element);
             return element;
         }
+
+        internal static AssemblyName[] GetWixSharpDependencies(this System.Reflection.Assembly asm)
+            => asm.GetReferencedAssemblies()
+               .Where(a => a.Name.StartsWith("WixSharp.") ||
+                           a.Name.StartsWith("Caliburn.") ||
+                           a.Name.StartsWith("System.Windows.Interactivity")).ToArray();
 
         /// <summary>
         /// Adds the element to a given XML element. It is a Fluent version of <see cref="T:System.Xml.Linq.XElement.Add"/>.
@@ -2517,6 +2526,17 @@ namespace WixSharp
         {
             return session.Property("REMOVE").SameAs("All", true);
         }
+
+        // static bool IsGlobalAssembly(this Assembly assembly)
+        // {
+        //     try
+        //     {
+        //         if (assembly.Location.)
+        //             return session.Property("REMOVE").SameAs("All", true);
+        //     }
+        //     catch
+        //     { return false; }
+        // }
 
         /// <summary>
         /// Returns the first string `value1` if it is not empty. Otherwise returns `value2`.

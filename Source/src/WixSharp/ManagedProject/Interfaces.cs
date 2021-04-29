@@ -1,4 +1,5 @@
 ﻿using System;
+using Reflection = System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Deployment.WindowsInstaller;
@@ -28,10 +29,24 @@ namespace WixSharp
 
     public class CustomDialogWith<T2> : IDialog { }
 
+    /// <summary>
+    /// A custom WPF UI dialog interface.
+    /// </summary>
+    /// <seealso cref="WixSharp.IDialog" />
     public interface IWpfDialog : IDialog
     {
+        /// <summary>
+        /// Gets or sets the reference to the WinForm host (parent) of the CustomDialog content. This member is set by WixSHarp runtime.
+        /// </summary>
+        /// <value>
+        /// The host.
+        /// </value>
         IManagedDialog Host { get; set; }
 
+        /// <summary>
+        /// This method is invoked by WixSHarp runtime when the custom dialog content is internally fully initialized.
+        /// This is a convenient place to do further initialization activities (e.g. localization).
+        /// </summary>
         void Init();
     }
 
@@ -268,14 +283,45 @@ namespace WixSharp
         /// <returns></returns>
         public ManagedDialogs Add<T>() where T : IDialog
         {
-            base.Add(Translate(typeof(T)));
+            base.Add(Validate(typeof(T)));
             return this;
         }
 
-        static Type Translate(Type type)
+        Type Validate(Type type)
         {
-            // if(type.GetInterfaces().Select(x => x.FullName).Contains("WixSharp.UI.WPF.IWpfDialogContent"))
-            //     return typeof();
+            if (type.GetGenericTypeBaseName() == "WixSharp.CustomDialogWith")
+            {
+                var userContentInterfaceName = "WixSharp.UI.WPF.IWpfDialogContent";
+
+                if (type.GenericTypeArguments.Any(t => t.Implements(userContentInterfaceName)))
+                {
+                    var userContentHostDependencies = (Reflection.AssemblyName[])
+                        Reflection.Assembly.Load("WixSharp.UI.WPF")
+                        .GetType("WixSharp.UI.WPF.DependencyDescriptor")
+                        .GetMethod("GetRefAssemblies")
+                        .Invoke(null, new object[0]);
+
+                    var userContentDependencies = type.GenericTypeArguments
+                                                      .Where(t => t.Implements(userContentInterfaceName))
+                                                      .SelectMany(t =>
+                                                      {
+                                                          var asms = new List<System.Reflection.AssemblyName>();
+                                                          asms.Add(t.Assembly.GetName());
+                                                          asms.AddRange(t.Assembly.GetWixSharpDependencies());
+                                                          return asms;
+                                                      });
+
+                    indirectRefAssemblies.AddRange(userContentHostDependencies);
+                    indirectRefAssemblies.AddRange(userContentDependencies);
+                }
+                else
+                {
+                    if (type.GenericTypeArguments.Count() == 1)
+                        throw new ValidationException($"Error: The generic type argument {type.GenericTypeArguments.First()} must implement {userContentInterfaceName} interface");
+                    else
+                        throw new ValidationException($"Error: The generic type argument of {type} must implement {userContentInterfaceName} interface");
+                }
+            }
             return type;
         }
 
@@ -286,7 +332,7 @@ namespace WixSharp
         /// <returns></returns>
         public new ManagedDialogs Add(Type type)
         {
-            base.Add(Translate(type));
+            base.Add(Validate(type));
             return this;
         }
 
@@ -300,9 +346,12 @@ namespace WixSharp
             return this;
         }
 
+        List<System.Reflection.AssemblyName> indirectRefAssemblies = new List<System.Reflection.AssemblyName>();
+
         public string[] Assemblies
             => this.SelectMany(x => x.Assembly.GetReferencedAssemblies())
                    .Where(a => a.Name.StartsWith("WixSharp.") || a.Name.StartsWith("Cliburn."))
+                   .Concat(indirectRefAssemblies)
                    .Select(a => System.Reflection.Assembly.Load(a.FullName))
                    .Select(a => a.Location)
                    .Distinct()

@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\WixSharp.UI.WPF.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\WixSharp.UI.WPF.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BootstrapperCore">
@@ -75,6 +77,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="..\WixSharp\Properties\AssemblyInfo.version.cs">
+      <Link>Properties\AssemblyInfo.version.cs</Link>
+    </Compile>
     <Compile Include="CustomDialogBase.xaml.cs">
       <DependentUpon>CustomDialogBase.xaml</DependentUpon>
     </Compile>
@@ -115,4 +120,11 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+            copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\bin\WixSharp\$(TargetFileName)"
+            copy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\bin\WixSharp\$(TargetName).xml"
+            copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\src\WixSharp.Samples\$(TargetFileName)"
+            copy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\src\WixSharp.Samples\$(TargetName).xml"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -1,6 +1,6 @@
 1. Rebuild Release configuration       (Just to verify Release code correctness)
 
 2.1 Execute src\build.cmd              (Builds all solutions)
-2.2 Execute src\aggregate.isadmin
+2.2 Execute src\aggregate
 
 

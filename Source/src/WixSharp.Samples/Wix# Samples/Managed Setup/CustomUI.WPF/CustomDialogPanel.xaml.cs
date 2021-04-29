@@ -50,6 +50,7 @@ namespace ConsoleApplication1
 
     public class CustomDialogPanelModel : Caliburn.Micro.Screen
     {
+        public ISession Session => ParentDialog?.ManagedFormHost.Runtime.Session;
         public ManagedForm Host => ParentDialog?.ManagedFormHost;
         public CustomDialogBase ParentDialog { get; set; }
 

@@ -446,7 +446,12 @@ namespace WixSharp
                            ??
                            System.Reflection.Assembly.Load(parts[0]);
 
-            return assembly.GetType(parts[1]);
+            var dialogType = assembly.GetType(parts[1]);
+            if (dialogType == null)
+                throw new Exception($"Cannot instantiate '{parts[1]}'. " +
+                                    $"Make sure you added this type assembly to your setup with 'project.{nameof(DefaultRefAssemblies)}'");
+
+            return dialogType;
         }
 
         static void ValidateHandlerInfo(string info)

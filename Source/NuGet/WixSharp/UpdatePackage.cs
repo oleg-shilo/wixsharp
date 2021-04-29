@@ -21,6 +21,7 @@ class Script
         string releaseNotes = ValidateReleaseNotes(version.ToString());
 
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.nuspec", releaseNotes, version.ToString());
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.WPF.nuspec", releaseNotes, version.ToString());
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.bin.nuspec", releaseNotes, version.ToString());
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.lab.nuspec", releaseNotes, version.ToString());
         //UpdateReleaseNotesAndVersion(@"E:\Galos\Projects\WixSharp\NuGet\WixSharp\WixSharp.ClrDialog.nuspec", releaseNotes, version.ToString());
@@ -29,6 +30,8 @@ class Script
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.xml", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.UI.dll", @"lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.UI.xml", @"lib");
+        CopyFiles(root + @"\bin\WixSharp", "WixSharp.UI.WPF.dll", @"lib");
+        CopyFiles(root + @"\bin\WixSharp", "WixSharp.UI.WPF.xml", @"lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.Msi.dll", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.Msi.xml", @"lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.Lab.dll", "lib");

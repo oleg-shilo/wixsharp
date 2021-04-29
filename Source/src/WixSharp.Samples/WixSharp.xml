@@ -8893,6 +8893,23 @@
             <param name="type">The type.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.GetGenericTypeBaseName(System.Type)">
+            <summary>
+            Gets the base name of the generic type (e.g. "System.Geneics.List" for
+            type "System.Geneics.List&lt;T&gt;").
+            </summary>
+            <param name="type">The type.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.Extensions.Invoke(System.Object,System.String,System.Object[])">
+            <summary>
+            Invokes the method ob the object with the specified name.
+            </summary>
+            <param name="object">The object.</param>
+            <param name="name">The name.</param>
+            <param name="args">The arguments.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.AddElement(System.Xml.Linq.XElement,System.Xml.Linq.XElement)">
             <summary>
             Adds the element to a given XML element. It is a Fluent version of <see cref="T:System.Xml.Linq.XElement.Add"/>.
@@ -13626,6 +13643,26 @@
             <see cref="T:WixSharp.IManagedDialog"/> except that it initiates the MSI execution by calling
             <see cref="T:WixSharp.IManagedUIShell.StartExecute"/> on loading the dialog. ManagedUI dialogs sequence
             should have only a single dialog of this type.
+            </summary>
+        </member>
+        <member name="T:WixSharp.IWpfDialog">
+            <summary>
+            A custom WPF UI dialog interface.
+            </summary>
+            <seealso cref="T:WixSharp.IDialog" />
+        </member>
+        <member name="P:WixSharp.IWpfDialog.Host">
+            <summary>
+            Gets or sets the reference to the WinForm host (parent) of the CustomDialog content. This member is set by WixSHarp runtime.
+            </summary>
+            <value>
+            The host.
+            </value>
+        </member>
+        <member name="M:WixSharp.IWpfDialog.Init">
+            <summary>
+            This method is invoked by WixSHarp runtime when the custom dialog content is internally fully initialized.
+            This is a convenient place to do further initialization activities (e.g. localization).
             </summary>
         </member>
         <member name="T:WixSharp.IManagedDialog">
