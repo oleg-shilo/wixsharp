@@ -16,9 +16,15 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.16.2.0
-* Issue #971: Unable to build win latest nuget on net45 
-* Downgraded target runtime to v4.5.1. To improve compatibility
+    <releaseNotes>Release v1.17.0.0
+* Added support for [WPF custom dialogs](https://github.com/oleg-shilo/wixsharp/wiki/Deployment-scenarios#managed-wpf-ui).
+* Issue #982: MSP Patch Packages and upgrading
+* Added ManagedWpfDialog sample based on Caliburn.Micro
+* Issue #986: WixBinLocator doesn't find WiX if installed with scoop
+  Fixed the problem of finding the WiX bin folder location after the nuget package path was redirected with NUGET_PACKAGES
+
+
+
 </releaseNotes>
     <copyright>Copyright (C) 2008-2021 Oleg Shilo</copyright>
     <language>en-AU</language>
