@@ -1710,9 +1710,13 @@ namespace WixSharp
 
                 if (wFile.OverwriteOnInstall)
                 {
+                    string removeFileName = wFile.TargetFileName.IsNotEmpty() ?
+                                            wFile.TargetFileName :
+                                            wFile.Name.PathGetFileName();
+
                     comp.AddElement("RemoveFile",
                                   $@"Id=Remove_{fileId};
-                                     Name={ wFile.Name.PathGetFileName()};
+                                     Name={ removeFileName };
                                      On=both");
                 }
 
