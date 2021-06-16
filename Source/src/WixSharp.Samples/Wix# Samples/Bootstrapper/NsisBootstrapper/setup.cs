@@ -52,6 +52,9 @@ public static class Script
             // Another BAT script sample with not supported win versions
             BuildScriptSampleWithOsValidationMultiple(msiFile, @"Assets\script.bat");
 
+            // Sample of Compressor usage
+            BuildScriptWithCompressor(msiFile);
+            
             // Arguments sample
             BuildArgumentsSample(msiFile);
         }
@@ -136,6 +139,18 @@ public static class Script
 
         bootstrapper.OSValidation.UnsupportedVersions.Add(new WindowsVersion(WindowsVersionNumber._7));
         
+        bootstrapper.Build();
+    }
+
+    public static void BuildScriptWithCompressor(string msiFile)
+    {
+        var bootstrapper = new NsisBootstrapper
+        {
+            Primary = {FileName = msiFile},
+            OutputFile = "BuildScriptWithCompressor.exe"
+        };
+
+        bootstrapper.Compressor = new Compressor(false, true, Compressor.CompressionMethod.Bzip2);
         bootstrapper.Build();
     }
 

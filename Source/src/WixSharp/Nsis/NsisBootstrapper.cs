@@ -129,6 +129,11 @@ namespace WixSharp.Nsis
         /// </summary>
         // ReSharper disable once InconsistentNaming
         public OSValidation OSValidation { get; } = new OSValidation();
+        
+        /// <summary>
+        /// Gets or sets Compressor which is used for specifying Compression level via SetCompressor NSIS command
+        /// </summary>
+        public Compressor Compressor { get; set; }
 
         /// <summary>
         /// Builds bootstrapper file.
@@ -180,6 +185,11 @@ namespace WixSharp.Nsis
             var builder = new StringBuilder();
             using (var writer = new IO.StringWriter(builder))
             {
+                if (Compressor != null)
+                {
+                    writer.WriteLine(Compressor.ToString());
+                }
+                
                 writer.WriteLine("Unicode true");
                 writer.WriteLine("ManifestSupportedOS all");
 
