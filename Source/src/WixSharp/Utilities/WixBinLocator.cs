@@ -23,8 +23,17 @@ namespace WixSharp
             if (!Directory.Exists(wixSdkLocation))
             {
                 wixSdkLocation = Path.GetFullPath(Utils.PathCombine(wixLocation, "sdk")); //NuGet package shovels the dirs
-                if (!Directory.Exists(wixSdkLocation) && throwOnError)
-                    throw new Exception("WiX SDK binaries cannot be found. Please set WixSharp.Compiler.WixSdkLocation to valid path to the Wix SDK binaries.");
+                if (!Directory.Exists(wixSdkLocation))
+                {
+                    if (throwOnError)
+                    {
+                        throw new Exception("WiX SDK binaries cannot be found. Please set WixSharp.Compiler.WixSdkLocation to valid path to the Wix SDK binaries.");
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
             }
 
             return wixSdkLocation;
