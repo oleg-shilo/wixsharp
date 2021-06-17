@@ -134,7 +134,7 @@ namespace WixSharp
             Shortcuts = items.OfType<FileShortcut>().ToArray();
             Associations = items.OfType<FileAssociation>().ToArray();
             IISVirtualDirs = items.OfType<IISVirtualDir>().ToArray();
-            ServiceInstaller = items.OfType<ServiceInstaller>().FirstOrDefault();
+            ServiceInstallers = items.OfType<ServiceInstaller>().Cast<IGenericEntity>().ToArray();
             Permissions = items.OfType<FilePermission>().ToArray();
             AppIds = items.OfType<AppId>().ToArray();
             GenericItems = items.OfType<IGenericEntity>().Where(val => val.GetType() != typeof(ServiceInstaller)).ToArray();
@@ -148,7 +148,7 @@ namespace WixSharp
                                            .Except(FirewallExceptions)
                                            .Except(AppIds)
                                            .Except(GenericItems.Cast<WixEntity>())
-                                           .Where(x => x != ServiceInstaller)
+                                           .Where(x => !ServiceInstallers.Contains((IGenericEntity)x))
                                            .ToArray();
 
             if (firstUnExpectedItem.Any())
@@ -173,7 +173,19 @@ namespace WixSharp
         /// The service installer associated with the file.
         ///  Set this field to the properly initialized instance of <see cref="ServiceInstaller"/> if the file is a windows service module.
         /// </summary>
-        public IGenericEntity ServiceInstaller = null;
+        public IGenericEntity ServiceInstaller
+        {
+            get => ServiceInstallers?.FirstOrDefault();
+            set => ServiceInstallers = new[] { value };
+        }
+
+        /// <summary>
+        /// The service installers associated with the file.
+        ///  Set this field to the collection of the properly initialized instances of <see cref="ServiceInstaller"/> if the file is a windows service module.
+        ///  <para>This member is designed to allow installing multiple services based on a single file. For the trivial cases of "single file - single service"
+        ///  use <see cref="WixSharp.File.ServiceInstaller"/></para>
+        /// </summary>>
+        public IGenericEntity[] ServiceInstallers = null;
 
         /// <summary>
         /// Collection of the contained <see cref="IISVirtualDir"/>s.
