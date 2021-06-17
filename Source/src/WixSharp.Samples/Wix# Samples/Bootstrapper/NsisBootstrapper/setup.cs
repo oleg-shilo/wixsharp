@@ -149,8 +149,10 @@ public static class Script
             Primary = {FileName = msiFile},
             OutputFile = "BuildScriptWithCompressor.exe"
         };
-
-        bootstrapper.Compressor = new Compressor(false, true, Compressor.CompressionMethod.Bzip2);
+        
+        // Uncomment following to see resulting NSIS script in console 
+        // bootstrapper.NsiSourceGenerated += builder => Console.WriteLine(builder);
+        bootstrapper.Compressor = new Compressor(Compressor.Method.Lzma, Compressor.Options.Final | Compressor.Options.Solid);
         bootstrapper.Build();
     }
 

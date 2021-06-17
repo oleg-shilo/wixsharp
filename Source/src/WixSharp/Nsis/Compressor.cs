@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace WixSharp.Nsis
 {
@@ -11,21 +12,18 @@ namespace WixSharp.Nsis
     /// </summary>
     public class Compressor
     {
-        private readonly bool _isSolid;
-        private readonly bool _isFinal;
-        private readonly CompressionMethod _compressionMethod;
+        private readonly Method method;
+        private readonly Options options;
 
         /// <summary>
         /// Creates an instance of Compressor class which is used for building SetCompressor command
         /// </summary>
-        /// <param name="isSolid">If /SOLID is used, all of the installer data is compressed in one block. This results in greater compression ratios.</param>
-        /// <param name="isFinal">If /FINAL is used, subsequent calls to SetCompressor will be ignored.</param>
-        /// <param name="compressionMethod">Three compression methods are supported: ZLIB, BZIP2 and LZMA.</param>
-        public Compressor(bool isSolid, bool isFinal, CompressionMethod compressionMethod)
+        /// <param name="method">Three compression methods are supported: ZLIB, BZIP2 and LZMA.</param>
+        /// <param name="options">Allows to specify optional /SOLID or /FINAL flags</param>
+        public Compressor(Method method, Options options)
         {
-            _isSolid = isSolid;
-            _isFinal = isFinal;
-            _compressionMethod = compressionMethod;
+            this.method = method;
+            this.options = options;
         }
 
         /// <summary>
@@ -33,12 +31,12 @@ namespace WixSharp.Nsis
         /// </summary>
         /// <returns>Built SetCompressor command</returns>
         public override string ToString() => 
-            "SetCompressor " + (_isSolid ? "/SOLID " : string.Empty) + (_isFinal ? "/FINAL " : string.Empty) + _compressionMethod.GetDescription();
+            "SetCompressor " + (options.HasFlag(Options.Solid) ? "/SOLID " : string.Empty) + (options.HasFlag(Options.Final)  ? "/FINAL " : string.Empty) + method.GetDescription();
 
         /// <summary>
         /// Supported compressor Types
         /// </summary>
-        public enum CompressionMethod
+        public enum Method
         {
             /// <summary>
             /// ZLIB (the default) uses the deflate algorithm, it is a quick and simple method. With the default compression level it uses about 300 KB of memory.
@@ -55,6 +53,26 @@ namespace WixSharp.Nsis
             /// </summary>
             [Description("lzma")]
             Lzma
+        }
+        
+        /// <summary>
+        /// Represents switches (flags) for SetCompressor method
+        /// </summary>
+        [Flags]
+        public enum Options
+        {
+            /// <summary>
+            /// None
+            /// </summary>
+            None = 0,
+            /// <summary>
+            /// If /SOLID is used, all of the installer data is compressed in one block. This results in greater compression ratios.
+            /// </summary>
+            Solid = 1, 
+            /// <summary>
+            /// If /FINAL is used, subsequent calls to SetCompressor will be ignored.
+            /// </summary>
+            Final = 2,
         }
     }
 }
