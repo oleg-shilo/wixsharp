@@ -148,7 +148,7 @@ namespace WixSharp
                                            .Except(FirewallExceptions)
                                            .Except(AppIds)
                                            .Except(GenericItems.Cast<WixEntity>())
-                                           .Where(x => !ServiceInstallers.Contains((IGenericEntity)x))
+                                           .Where(x => !(x is IGenericEntity) || !ServiceInstallers.Contains(x as IGenericEntity))
                                            .ToArray();
 
             if (firstUnExpectedItem.Any())

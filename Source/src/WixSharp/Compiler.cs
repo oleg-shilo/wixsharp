@@ -1735,7 +1735,7 @@ namespace WixSharp
                     FeatureComponents = featureComponents
                 };
 
-                wFile.ServiceInstallers.ForEach(x=>x.Process(context));
+                wFile.ServiceInstallers?.ForEach(x=>x.Process(context));
 
                 if (wFile is Assembly assembly && assembly.RegisterInGAC)
                 {
