@@ -256,7 +256,7 @@ namespace WixSharp
         /// <summary>
         /// Collection of Media generic <see cref="T:WixSharp.WixEntity"/> containers for defining WiX <c>Media</c> elements
         /// attributes. Project is always initialized with a sinle Media item. Though if you add multiples media items via
-        /// <see cref="T:WixSharp.Project"/> constructor it remeve the initial Media item befeore adding any new items.
+        /// <see cref="T:WixSharp.Project"/> constructor it removes the initial Media item before adding any new items.
         /// <para>These attributes describe a disk that makes up the source media for the installation.</para>
         ///<example>The following is an example of defining the <c>Package</c> attributes.
         ///<code>
@@ -723,22 +723,20 @@ namespace WixSharp
 
                 IEnumerable<Dir> emptyDirs;
 
-                var lastEmptyDirCount = 0;
                 while ((emptyDirs = getEmptyDirs()).Any())
                 {
-                    // some of the empty dirs cannot be removed./ignored (e.g. root dirs)
-                    // so we need to stop when we are no longer removing anything (#995)
-                    if (lastEmptyDirCount == emptyDirs.Count())
-                        break;
-                    else
-                        lastEmptyDirCount = emptyDirs.Count();
-
                     foreach (Dir dirToRemove in emptyDirs)
+                    {
                         AllDirs.ForEach(d =>
                                         {
                                             if (d.Dirs.Contains(dirToRemove))
                                                 d.Dirs = d.Dirs.Except(dirToRemove).ToArray();
                                         });
+
+                        // check the root dirs too
+                        if (this.Dirs.Contains(dirToRemove))
+                            this.Dirs = this.Dirs.Except(dirToRemove).ToArray();
+                    }
                 }
             }
 
