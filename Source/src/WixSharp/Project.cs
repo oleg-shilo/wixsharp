@@ -723,13 +723,22 @@ namespace WixSharp
 
                 IEnumerable<Dir> emptyDirs;
 
+                var lastEmptyDirCount = 0;
                 while ((emptyDirs = getEmptyDirs()).Any())
                 {
-                    emptyDirs.ForEach(emptyDir => AllDirs.ForEach(d =>
-                                                  {
-                                                      if (d.Dirs.Contains(emptyDir))
-                                                          d.Dirs = d.Dirs.Where(x => x != emptyDir).ToArray();
-                                                  }));
+                    // some of the empty dirs cannot be removed./ignored (e.g. root dirs)
+                    // so we need to stop when we are no longer removing anything (#995)
+                    if (lastEmptyDirCount == emptyDirs.Count())
+                        break;
+                    else
+                        lastEmptyDirCount = emptyDirs.Count();
+
+                    foreach (Dir dirToRemove in emptyDirs)
+                        AllDirs.ForEach(d =>
+                                        {
+                                            if (d.Dirs.Contains(dirToRemove))
+                                                d.Dirs = d.Dirs.Except(dirToRemove).ToArray();
+                                        });
                 }
             }
 

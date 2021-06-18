@@ -703,6 +703,9 @@ namespace WixSharp
             return collection;
         }
 
+        public static IEnumerable<T> Except<T>(this IEnumerable<T> collection, T exceptItem)
+            => collection.Where(x => !x.Equals(exceptItem));
+
         /// <summary>
         /// Determines whether the input value is one of the specified values.
         /// </summary>

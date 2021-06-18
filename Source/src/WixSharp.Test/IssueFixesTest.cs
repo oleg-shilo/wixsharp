@@ -54,6 +54,27 @@ namespace WixSharp.Test
         }
 
         [Fact]
+        [Description("Issue #995")]
+        public void Fix_Issue_995()
+        {
+            Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories = true;
+
+            try
+            {
+                var project =
+                    new Project("myproduct",
+                        new Dir("%Desktop%"),
+                        new Dir("%ProgramFiles%"));
+
+                project.BuildWxs();
+            }
+            finally
+            {
+                Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories = false;
+            }
+        }
+
+        [Fact]
         [Description("Issue #656: ExeFileShortcut changing folder name ")]
         public void Fix_Issue_656()
         {
