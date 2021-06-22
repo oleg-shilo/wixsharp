@@ -81,7 +81,6 @@
     <Compile Include="IssueFixesTest.cs" />
     <Compile Include="ManagedActionsTest.cs" />
     <Compile Include="ManagedProjectTest.cs" />
-    <Compile Include="MsiexecLogCommandTests.cs" />
     <Compile Include="OSValidationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegFileTest.cs" />

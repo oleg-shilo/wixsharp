@@ -146,8 +146,6 @@
     <Compile Include="IISWebSite.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="LaunchApplicationFromExitDialog.cs" />
-    <Compile Include="Msiexec\MsiexecLogCommand.cs" />
-    <Compile Include="Msiexec\MsiexecLogSwitches.cs" />
     <Compile Include="NativeImage.cs" />
     <Compile Include="EventSource.cs" />
     <Compile Include="FirewallException.cs" />

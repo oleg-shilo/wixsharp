@@ -2,7 +2,6 @@
 using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using WixSharp.CommonTasks;
-using WixSharp.Msiexec;
 
 namespace WixSharp
 {
@@ -27,14 +26,13 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Enables the full UI.
+        /// Enables the full UI with extra parameters for msiexec.
         /// </summary>
         /// <param name="project">The project.</param>
-        /// <param name="logFilePath">Path for MSI logs file</param>
-        /// <param name="logSwitches">MSI logging switches</param>
-        public static void EnableUninstallFullUI(this Project project, string logFilePath, MsiexecLogSwitches logSwitches)
+        /// <param name="extraParameters">Extra parameters for msiexec</param>
+        public static void EnableUninstallFullUIWithExtraParameters(this Project project, string extraParameters)
         {
-            EnableUninstallFullUI(project, null, logFilePath, logSwitches);
+            EnableUninstallFullUI(project, null, extraParameters);
         }
 
         /// <summary>
@@ -42,10 +40,8 @@ namespace WixSharp
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="displayIconPath">The location of the app icon in the ARP.</param>
-        /// <param name="logFilePath">Path for MSI logs file</param>
-        /// <param name="logSwitches">MSI logging switches</param>
-        public static void EnableUninstallFullUI(this Project project, string displayIconPath,
-            string logFilePath = null, MsiexecLogSwitches logSwitches = MsiexecLogSwitches.None)
+        /// <param name="extraParameters">Extra parameters for msiexec</param>
+        public static void EnableUninstallFullUI(this Project project, string displayIconPath, string extraParameters = "")
         {
             if (displayIconPath != null)
             {
@@ -68,7 +64,7 @@ namespace WixSharp
                 Condition.NOT_Installed)
             {
                 UsesProperties =
-                    $"MSIEXEC_LOG_COMMAND={MsiexecLogCommand.Generate(logFilePath, logSwitches)}",
+                    $"MSIEXEC_EXTRA_PARAMETERS={extraParameters ?? ""}",
             });
 
             project.WixSourceGenerated += doc =>
@@ -79,6 +75,11 @@ namespace WixSharp
                           <RegistryValue Id="WixSharp_RegValue_DisplayIcon..."
                  */
 
+                if (displayIconPath == null)
+                {
+                    return;
+                }
+                
                 var comp = doc.FindAll("RegistryValue")
                     .First(x => x.HasAttribute("Id", "WixSharp_RegValue_DisplayIcon"))
                     .Parent
@@ -105,7 +106,7 @@ namespace WixSharp
             return session.HandleErrors(() =>
             {
                 var productCode = session.Property("ProductCode");
-                var logCommand = session.Property("MSIEXEC_LOG_COMMAND");
+                var extraParameters = session.Property("MSIEXEC_EXTRA_PARAMETERS");
 
                 var keyName = $@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{productCode}";
 
@@ -117,7 +118,7 @@ namespace WixSharp
                     }
 
                     uninstallKey.SetValue("ModifyPath", string.Empty);
-                    uninstallKey.SetValue("UninstallString", $"MsiExec.exe /I{productCode} {logCommand}");
+                    uninstallKey.SetValue("UninstallString", $"MsiExec.exe /I{productCode} {extraParameters}");
                     uninstallKey.SetValue("WindowsInstaller", 0);
                 }
             });
