@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>WixSharp.WPF</id>
+    <version>1.18.0.0</version>
+    <title>Wix# (WixSharp) - Binaries</title>
+    <authors>Oleg Shilo</authors>
+    <owners>Oleg Shilo</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <icon>wixsharp_logo.png</icon>
+    <projectUrl>https://github.com/oleg-shilo/wixsharp</projectUrl>
+    <description>Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
+The package contains Wix# binaries only.
+
+In order to use this package you need have WiX Toolset installed.
+The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
+    <summary>Wix# (WixSharp) - Binaries</summary>
+    <releaseNotes>Release v1.18.0.0
+
+* Added full UI for uninstalling from control panel. The feature can be enabled via `project.EnableUninstallFullUI(...)`
+* Added support for Nsis Bootstrapper compression.
+  Added sample `BuildScriptWithCompressor` (Samples/Bootstrapper/NsisBootstrapper/setup.cs)
+* Introduce logging options for UninstallFullUI feature
+* Issue #1005: Request: Arm64 support
+* Issue #1001: Fix null reference exception if SDK is located inside the wixlocation…
+* Issue #999: Multiple windows services to single .exe
+* Issue #995: IgnoreWildCardEmptyDirectories with 1.17.0 causes Wxs generation to never finish with multiple top-level dirs
+* Addressed U-Test failures for Issue #999 dev
+* Respect TargetFileName on OverwriteOnInstall option
+</releaseNotes>
+    <copyright>Copyright (C) 2008-2021 Oleg Shilo</copyright>
+    <language>en-AU</language>
+    <tags>C# scripting msi install setup wix</tags>
+    <dependencies>
+      <dependency id="WixSharp.bin" version="1.18.0.0" />
+      <dependency id="Caliburn.Micro" version="3.2.0" />
+    </dependencies>
+    <references>
+      <reference file="WixSharp.UI.WPF.dll" />
+    </references>
+  </metadata>
+  <files>
+    <file src="lib\WixSharp.UI.WPF.dll" target="lib\any\WixSharp.UI.WPF.dll" />
+    <file src="lib\WixSharp.UI.WPF.xml" target="lib\any\WixSharp.UI.WPF.xml" />
+    <file src="..\..\Templates\WixSharpVSIX\WixSharpVSIX\wixsharp_logo.png" target="" />
+  </files>
+</package>
