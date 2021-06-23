@@ -6525,6 +6525,68 @@
             </summary>
             <param name="context">The context.</param>
         </member>
+        <member name="T:WixSharp.Nsis.Compressor">
+            <summary>
+            A class that describes SetCompressor Operation from NSIS
+            This command sets the compression algorithm used to compress files/data in the installer.
+            It can only be used outside of sections and functions and before any data is compressed.
+            Different compression methods can not be used for different files in the same installer.
+            It is recommended to use it on the very top of the script to avoid compilation errors.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Nsis.Compressor.#ctor(WixSharp.Nsis.Compressor.Method,WixSharp.Nsis.Compressor.Options)">
+            <summary>
+            Creates an instance of Compressor class which is used for building SetCompressor command
+            </summary>
+            <param name="method">Three compression methods are supported: ZLIB, BZIP2 and LZMA.</param>
+            <param name="options">Allows to specify optional /SOLID or /FINAL flags</param>
+        </member>
+        <member name="M:WixSharp.Nsis.Compressor.ToString">
+            <summary>
+            Used to build SetCompressor command based on Compressor state
+            </summary>
+            <returns>Built SetCompressor command</returns>
+        </member>
+        <member name="T:WixSharp.Nsis.Compressor.Method">
+            <summary>
+            Supported compressor Types
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.Compressor.Method.Zlib">
+            <summary>
+            ZLIB (the default) uses the deflate algorithm, it is a quick and simple method. With the default compression level it uses about 300 KB of memory.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.Compressor.Method.Bzip2">
+            <summary>
+            BZIP2 usually gives better compression ratios than ZLIB, but it is a bit slower and uses more memory. With the default compression level it uses about 4 MB of memory.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.Compressor.Method.Lzma">
+            <summary>
+            LZMA is a new compression method that gives very good compression ratios. The decompression speed is high (10-20 MB/s on a 2 GHz CPU), the compression speed is lower. The memory size that will be used for decompression is the dictionary size plus a few KBs, the default is 8 MB.
+            </summary>
+        </member>
+        <member name="T:WixSharp.Nsis.Compressor.Options">
+            <summary>
+            Represents switches (flags) for SetCompressor method
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.Compressor.Options.None">
+            <summary>
+            None
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.Compressor.Options.Solid">
+            <summary>
+            If /SOLID is used, all of the installer data is compressed in one block. This results in greater compression ratios.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Nsis.Compressor.Options.Final">
+            <summary>
+            If /FINAL is used, subsequent calls to SetCompressor will be ignored.
+            </summary>
+        </member>
         <member name="T:WixSharp.Nsis.NsisBootstrapper">
              <summary>
              Defines native (un-managed) bootstrapper. The bootstrapper is created by the NSIS installer authoring tool.
@@ -6640,6 +6702,11 @@
             If so - displays error and terminates installation (configurable via <see cref="P:WixSharp.Nsis.NsisBootstrapper.OSValidation"/> properties).
             <para></para>
             If /S switch is added when launching bootstrapped executable - no messagebox will be shown.
+            </summary>
+        </member>
+        <member name="P:WixSharp.Nsis.NsisBootstrapper.Compressor">
+            <summary>
+            Gets or sets Compressor which is used for specifying Compression level via SetCompressor NSIS command
             </summary>
         </member>
         <member name="M:WixSharp.Nsis.NsisBootstrapper.Build">
@@ -9219,6 +9286,15 @@
             <param name="action">The action.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Extensions.Except``1(System.Collections.Generic.IEnumerable{``0},``0)">
+            <summary>
+            Returns all items from the collection except specified one.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="collection">The collection.</param>
+            <param name="exceptItem">The except item.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Extensions.IsOneOf``1(``0,``0[])">
             <summary>
             Determines whether the input value is one of the specified values.
@@ -11463,12 +11539,20 @@
             </summary>
             <param name="project">The project.</param>
         </member>
-        <member name="M:WixSharp.UninstallFullUI.EnableUninstallFullUI(WixSharp.Project,System.String)">
+        <member name="M:WixSharp.UninstallFullUI.EnableUninstallFullUIWithExtraParameters(WixSharp.Project,System.String)">
+            <summary>
+            Enables the full UI with extra parameters for msiexec.
+            </summary>
+            <param name="project">The project.</param>
+            <param name="extraParameters">Extra parameters for msiexec</param>
+        </member>
+        <member name="M:WixSharp.UninstallFullUI.EnableUninstallFullUI(WixSharp.Project,System.String,System.String)">
             <summary>
             Enables the full UI.
             </summary>
             <param name="project">The project.</param>
             <param name="displayIconPath">The location of the app icon in the ARP.</param>
+            <param name="extraParameters">Extra parameters for msiexec</param>
         </member>
         <member name="M:WixSharp.UninstallFullUI.WixSharp_EnableUninstallFullUI_Action(Microsoft.Deployment.WindowsInstaller.Session)">
             <summary>
@@ -16190,11 +16274,19 @@
             Collection of the <see cref="T:WixSharp.FileAssociation"/>s associated with the file.
             </summary>
         </member>
-        <member name="F:WixSharp.File.ServiceInstaller">
+        <member name="P:WixSharp.File.ServiceInstaller">
             <summary>
             The service installer associated with the file.
-             Set this field to the properly initialized instance of <see cref="F:WixSharp.File.ServiceInstaller"/> if the file is a windows service module.
+             Set this field to the properly initialized instance of <see cref="P:WixSharp.File.ServiceInstaller"/> if the file is a windows service module.
             </summary>
+        </member>
+        <member name="F:WixSharp.File.ServiceInstallers">
+            <summary>
+            The service installers associated with the file.
+             Set this field to the collection of the properly initialized instances of <see cref="P:WixSharp.File.ServiceInstaller"/> if the file is a windows service module.
+             <para>This member is designed to allow installing multiple services based on a single file. For the trivial cases of "single file - single service"
+             use <see cref="P:WixSharp.File.ServiceInstaller"/></para>
+            </summary>>
         </member>
         <member name="F:WixSharp.File.IISVirtualDirs">
             <summary>
@@ -17244,7 +17336,7 @@
              <summary>
              Collection of Media generic <see cref="T:WixSharp.WixEntity"/> containers for defining WiX <c>Media</c> elements
              attributes. Project is always initialized with a sinle Media item. Though if you add multiples media items via
-             <see cref="T:WixSharp.Project"/> constructor it remeve the initial Media item befeore adding any new items.
+             <see cref="T:WixSharp.Project"/> constructor it removes the initial Media item before adding any new items.
              <para>These attributes describe a disk that makes up the source media for the installation.</para>
             <example>The following is an example of defining the <c>Package</c> attributes.
             <code>
@@ -20756,6 +20848,11 @@
         <member name="F:WixSharp.Platform.arm">
             <summary>
              Set this value to declare that the package is an arm package. This value requires that the  InstallerVersion property be set to 500 or greater.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Platform.arm64">
+            <summary>
+            Set this value to declare that the package is an arm64 package. This value requires that the InstallerVersion property be set to 500 or greater.
             </summary>
         </member>
         <member name="T:WixSharp.CompressionLevel">

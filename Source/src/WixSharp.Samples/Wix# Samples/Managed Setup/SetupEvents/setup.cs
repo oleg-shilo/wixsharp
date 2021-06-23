@@ -136,7 +136,7 @@ public class Script
 
         var msi = e.MsiFile;
 
-        if (!e.IsInstalling && !e.IsUpgrading)
+        if (!e.IsInstalling && !e.IsUpgradingInstalledVersion)
             SetEnvVersion(e.Session);
 
         // MSI doesn't preserve any e.Session properties if they are accessed from deferred actions (e.g. project_AfterInstall)

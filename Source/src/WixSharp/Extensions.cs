@@ -703,6 +703,13 @@ namespace WixSharp
             return collection;
         }
 
+        /// <summary>
+        /// Returns all items from the collection except specified one.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection">The collection.</param>
+        /// <param name="exceptItem">The except item.</param>
+        /// <returns></returns>
         public static IEnumerable<T> Except<T>(this IEnumerable<T> collection, T exceptItem)
             => collection.Where(x => !x.Equals(exceptItem));
 

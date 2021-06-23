@@ -1480,6 +1480,13 @@
             </summary>
             <value>The current dialog.</value>
         </member>
+        <member name="M:WixSharp.UIShell.CreateDefaultWpfDialgHost">
+            <summary>
+            Creates an instance of the WinForm dialog that can host WPF content.
+            This method is not to be used by users but WixSharp compiler only.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:WixSharp.UIShell.CurrentDialogIndex">
             <summary>
             Gets or sets the current dialog by the dialog index.

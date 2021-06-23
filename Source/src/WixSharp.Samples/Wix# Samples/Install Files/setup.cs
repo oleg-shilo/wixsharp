@@ -45,11 +45,12 @@ class Script
         project.PreserveTempFiles = true;
         project.PreserveDbgFiles = true;
 
+        project.EnableUninstallFullUI();
         project.EnableResilientPackage();
 
         project.Language = "en-US";
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 

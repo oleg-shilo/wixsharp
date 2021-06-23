@@ -120,6 +120,7 @@ public class InstallScript
 
         //in real life scenarios suppression may need to be enabled (see SuppressWixMbaPrereqVars documentation)
         //bootstrapper.SuppressWixMbaPrereqVars = true;
+
         var setup = bootstrapper.Build("app_setup");
         Console.WriteLine(setup);
         //---------------------------------------------------------
