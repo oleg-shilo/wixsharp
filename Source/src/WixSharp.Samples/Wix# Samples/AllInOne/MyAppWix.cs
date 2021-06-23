@@ -68,9 +68,12 @@ internal static class Script
             // Optionally enable an ability to repair the installation even when the original MSI is no longer available.
             project.EnableResilientPackage();
 
-            // Uncomment to optionally enable the full UI for "Uninstall/Change" button in the Control Panel.
-            project.EnableUninstallFullUI("[#myapp_exe],0");
-
+            // Uncomment one of the following to optionally enable the full UI for "Uninstall/Change" button in the Control Panel.
+            // project.EnableUninstallFullUI();
+            // project.EnableUninstallFullUI("[#myapp_exe],0");
+            // project.EnableUninstallFullUIWithExtraParameters(@"/L*V [TempFolder]CustomMsiLog.log PARAM1=VALUE1 PARAM2=VALUE2");
+            // project.EnableUninstallFullUI("[#myapp_exe],0", @"/L*V [TempFolder]CustomMsiLog.log");
+            
             // project.PreserveTempFiles = true;
             project.WixSourceGenerated += Compiler_WixSourceGenerated;
 

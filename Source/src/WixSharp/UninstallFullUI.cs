@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using WixSharp.CommonTasks;
@@ -27,21 +26,32 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Enables the full UI with extra parameters for msiexec.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="extraParameters">Extra parameters for msiexec</param>
+        public static void EnableUninstallFullUIWithExtraParameters(this Project project, string extraParameters)
+        {
+            EnableUninstallFullUI(project, null, extraParameters);
+        }
+
+        /// <summary>
         /// Enables the full UI.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="displayIconPath">The location of the app icon in the ARP.</param>
-        public static void EnableUninstallFullUI(this Project project, string displayIconPath)
+        /// <param name="extraParameters">Extra parameters for msiexec</param>
+        public static void EnableUninstallFullUI(this Project project, string displayIconPath, string extraParameters = "")
         {
             if (displayIconPath != null)
             {
                 // Add the DisplayIcon key to the Uninstall section
                 project.AddRegValues(
                     new RegValue(new Id("WixSharp_RegValue_DisplayIcon"),
-                                 RegistryHive.LocalMachine,
-                                 @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\[ProductCode]",
-                                 "DisplayIcon",
-                                 displayIconPath));
+                        RegistryHive.LocalMachine,
+                        @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\[ProductCode]",
+                        "DisplayIcon",
+                        displayIconPath));
             }
 
             project.AddAction(new ElevatedManagedAction(
@@ -51,7 +61,11 @@ namespace WixSharp
                 Return.ignore,
                 When.Before,
                 Step.InstallFinalize,
-                Condition.NOT_Installed));
+                Condition.NOT_Installed)
+            {
+                UsesProperties =
+                    $"MSIEXEC_EXTRA_PARAMETERS={extraParameters ?? ""}",
+            });
 
             project.WixSourceGenerated += doc =>
             {
@@ -61,16 +75,21 @@ namespace WixSharp
                           <RegistryValue Id="WixSharp_RegValue_DisplayIcon..."
                  */
 
+                if (displayIconPath == null)
+                {
+                    return;
+                }
+                
                 var comp = doc.FindAll("RegistryValue")
-                              .First(x => x.HasAttribute("Id", "WixSharp_RegValue_DisplayIcon"))
-                              .Parent
-                              .Parent;
+                    .First(x => x.HasAttribute("Id", "WixSharp_RegValue_DisplayIcon"))
+                    .Parent
+                    .Parent;
 
                 var compId = comp.Attribute("Id").Value;
 
                 var features = doc.FindAll("Feature")
-                                  .Where(x => !x.FindAll("ComponentRef")
-                                                .Any(y => y.HasAttribute("Id", compId))).ToArray();
+                    .Where(x => !x.FindAll("ComponentRef")
+                        .Any(y => y.HasAttribute("Id", compId))).ToArray();
 
                 features.ForEach(f => f.AddElement("ComponentRef", $"Id={compId}"));
             };
@@ -84,28 +103,25 @@ namespace WixSharp
         [CustomAction]
         public static ActionResult WixSharp_EnableUninstallFullUI_Action(Session session)
         {
-            var productCode = session.Property("ProductCode");
-            var keyName = $@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{productCode}";
-
-            try
+            return session.HandleErrors(() =>
             {
+                var productCode = session.Property("ProductCode");
+                var extraParameters = session.Property("MSIEXEC_EXTRA_PARAMETERS");
+
+                var keyName = $@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{productCode}";
+
                 using (var uninstallKey = Registry.LocalMachine.OpenSubKey(keyName, true))
                 {
-                    if (uninstallKey != null)
+                    if (uninstallKey == null)
                     {
-                        uninstallKey.SetValue("ModifyPath", string.Empty);
-                        uninstallKey.SetValue("UninstallString", $"MsiExec.exe /I{productCode}");
-                        uninstallKey.SetValue("WindowsInstaller", 0);
+                        return;
                     }
-                }
-            }
-            catch (Exception e)
-            {
-                session.Log("{0}: {1}", nameof(WixSharp_EnableUninstallFullUI_Action), e.Message);
-                return ActionResult.Failure;
-            }
 
-            return ActionResult.Success;
+                    uninstallKey.SetValue("ModifyPath", string.Empty);
+                    uninstallKey.SetValue("UninstallString", $"MsiExec.exe /I{productCode} {extraParameters}");
+                    uninstallKey.SetValue("WindowsInstaller", 0);
+                }
+            });
         }
     }
 }

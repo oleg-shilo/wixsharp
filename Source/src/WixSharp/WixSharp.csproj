@@ -154,6 +154,7 @@
     <Compile Include="InternetShortcut.cs" />
     <Compile Include="MajorUpgrade.cs" />
     <Compile Include="Media.cs" />
+    <Compile Include="Nsis\Compressor.cs" />
     <Compile Include="Nsis\NsisBootstrapper.cs" />
     <Compile Include="Nsis\NsisBootstrapperLegacy.cs" />
     <Compile Include="Nsis\Package.cs" />
