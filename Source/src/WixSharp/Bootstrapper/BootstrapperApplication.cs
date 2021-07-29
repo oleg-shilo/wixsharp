@@ -479,7 +479,14 @@ namespace WixSharp.Bootstrapper
             }
             else
             {
-                root.SetAttribute("Id", "WixStandardBootstrapperApplication.HyperlinkLicense");
+                if (LogoSideFile.IsEmpty())
+                {
+                    root.SetAttribute("Id", "WixStandardBootstrapperApplication.HyperlinkLicense");
+                }
+                else
+                {
+                    root.SetAttribute("Id", "WixStandardBootstrapperApplication.HyperlinkSidebarLicense");
+                }
 
                 if (LicensePath.IsEmpty())
                 {
