@@ -4,7 +4,8 @@ using WixSharp.CommonTasks;
 namespace WixSharp
 {
     /// <summary>
-    ///
+    /// This class implements 'CopyFile' WiX element.
+    /// <para>This feature has been contributed as the result of "CopyFile element not implemented #801"</para>
     /// </summary>
     /// <seealso cref="WixSharp.WixEntity" />
     /// <seealso cref="WixSharp.IGenericEntity" />
@@ -76,10 +77,10 @@ namespace WixSharp
         public string DestinationProperty;
 
         /// <summary>
-        /// The field 	This attribute cannot be specified if the element is nested under a File element. Set this attribute's value to the identifier of a file from a different component to copy it based on the install state of the parent component.
+        /// This attribute cannot be specified if the element is nested under a File element. Set this attribute's value to the identifier of a file from a different component to copy it based on the install state of the parent component.
         /// </summary>
         [Xml]
-        public string Field;
+        public string FileId;
 
         /// <summary>
         /// This attribute cannot be specified if the element is nested under a File element or the FileId attribute is
