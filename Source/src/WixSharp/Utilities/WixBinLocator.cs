@@ -79,6 +79,13 @@ namespace WixSharp
                 return Path.GetFullPath(environmentVar);
             }
 
+            // Now check to see if the environment variable was set by the WiX nuget package
+            environmentVar = Environment.GetEnvironmentVariable("WixExtDir");
+            if (environmentVar.IsNotEmpty() && Directory.Exists(environmentVar))
+            {
+                return Path.GetFullPath(environmentVar);
+            }
+
             // Now check to see if the WIX install set an environment variable
             var wixEnvironmentVariable = Environment.ExpandEnvironmentVariables(@"%WIX%\bin");
             if (wixEnvironmentVariable.IsNotEmpty() && Directory.Exists(wixEnvironmentVariable))
