@@ -2,6 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Target Name="MSIAuthoring" AfterTargets="AfterBuild">
     <Message Importance="high" Text="Building MSI" />
-    <Exec Command="&quot;$(TargetPath)&quot; &quot;/MSBUILD:$(ProjectName)&quot; &quot;/WIXBIN:$(WixBinPackage)&quot;" WorkingDirectory="$(ProjectDir)"/>
+    <Exec Command="&quot;$(TargetPath)&quot; &quot;/MSBUILD:$(ProjectName)&quot; &quot;/WIXBIN:$(WixBinPackage)&quot; &quot;/Configuration:$(Configuration)&quot; &quot;/Platform:$(Platform)&quot;" WorkingDirectory="$(ProjectDir)"/>
   </Target>
 </Project>
