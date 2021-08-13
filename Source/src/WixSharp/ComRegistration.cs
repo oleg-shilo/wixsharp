@@ -601,9 +601,9 @@ namespace WixSharp
         {
             XElement element = this.ToXElement("TypeLib");
 
-            AppIds?.ForEach(appId => appId.ToXElement());
-            COMClasses?.ForEach(comClass => comClass.ToXElement());
-            Interfaces?.ForEach(iface => iface.ToXElement());
+            AppIds?.ForEach(appId => element.Add(appId.ToXElement()));
+            COMClasses?.ForEach(comClass => element.Add(comClass.ToXElement()));
+            Interfaces?.ForEach(iface => element.Add(iface.ToXElement()));
 
             context.XParent.Add(element);
         }
