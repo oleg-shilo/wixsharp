@@ -14,7 +14,7 @@ using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 
-public class Script
+public static class Script
 {
     static public void Main()
     {
@@ -73,10 +73,24 @@ public class Script
                 Tasks.StartService("some_service", throwOnError: false);
         };
 
+        // project.UnelevateAfterInstallEvent(); // just for demo purposes
+
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-        // project.PreserveTempFiles = true;
+        project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project);
+    }
+
+    static ManagedProject UnelevateAfterInstallEvent(this ManagedProject project)
+    {
+        project.WixSourceGenerated +=
+            doc =>
+            {
+                doc.FindAll("CustomAction")
+                   .Single(x => x.HasAttribute("Id", "WixSharp_AfterInstall_Action"))
+                   .SetAttribute("Execute", "immediate");
+            };
+        return project;
     }
 
     static void Project_UIInitialized(SetupEventArgs e)

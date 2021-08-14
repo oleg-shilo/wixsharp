@@ -37,7 +37,7 @@ class Script
                                      RebootMessage = "Failure actions do not specify reboot",
                                      DependsOn = new[]
                                      {
-                                         new ServiceDependency("Dnscache"),
+                                         new ServiceDependency("[Dnscache]"),
                                          new ServiceDependency("Dhcp"),
                                      },
                                  }),

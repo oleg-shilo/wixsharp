@@ -3679,11 +3679,12 @@
             <param name="context"></param>
         </member>
         <member name="T:WixSharp.CopyFile">
-             <summary>
-            
-             </summary>
-             <seealso cref="T:WixSharp.WixEntity" />
-             <seealso cref="T:WixSharp.IGenericEntity" />
+            <summary>
+            This class implements 'CopyFile' WiX element.
+            <para>This feature has been contributed as the result of "CopyFile element not implemented #801"</para>
+            </summary>
+            <seealso cref="T:WixSharp.WixEntity" />
+            <seealso cref="T:WixSharp.IGenericEntity" />
         </member>
         <member name="M:WixSharp.CopyFile.#ctor(WixSharp.Id)">
             <summary>
@@ -3736,9 +3737,9 @@
             Set this value to a property that will have a value that resolves to the full path of the destination directory. The property does not have to exist in the installer database at creation time; it could be created at installation time by a custom action, on the command line, etc. This attribute cannot be specified in conjunction with DestinationDirectory.
             </summary>
         </member>
-        <member name="F:WixSharp.CopyFile.Field">
+        <member name="F:WixSharp.CopyFile.FileId">
             <summary>
-            The field 	This attribute cannot be specified if the element is nested under a File element. Set this attribute's value to the identifier of a file from a different component to copy it based on the install state of the parent component.
+            This attribute cannot be specified if the element is nested under a File element. Set this attribute's value to the identifier of a file from a different component to copy it based on the install state of the parent component.
             </summary>
         </member>
         <member name="F:WixSharp.CopyFile.SourceDirectory">

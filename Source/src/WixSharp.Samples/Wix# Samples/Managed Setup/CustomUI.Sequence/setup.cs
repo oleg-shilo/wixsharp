@@ -106,20 +106,16 @@ public static class Script
 
     static void CheckCompatibility(SetupEventArgs e)
     {
-        // MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
-        // foreach (string text in runtime.UIText.Keys.ToArray())
-        //     runtime.UIText[text] = runtime.UIText[text].ToUpper();
-        //MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Embedded Managed UI (" + ((IntPtr.Size == 8) ? "x64" : "x86") + ")");
-
         if (e.IsInstalling)
         {
             var conflictingProductCode = "{1D6432B4-E24D-405E-A4AB-D7E6D088C111}";
 
             if (AppSearch.IsProductInstalled(conflictingProductCode))
             {
-                string msg = string.Format("Installed '{0}' is incompatible with this product.\n" +
-                                           "Setup will be aborted.",
-                                           AppSearch.GetProductName(conflictingProductCode) ?? conflictingProductCode);
+                string msg = "Installed '{0}' is incompatible with this product.\n" +
+                                "Setup will be aborted."
+                                .FormatWith(AppSearch.GetProductName(conflictingProductCode) ?? conflictingProductCode);
+
                 MessageBox.Show(msg, "Setup");
                 e.Result = ActionResult.UserExit;
             }
