@@ -79,8 +79,12 @@ public class InstallScript
 
         bootstrapper.Application.LicensePath = "licence.html";  //HyperlinkLicense app with embedded license file
         bootstrapper.Application.LicensePath = "licence.rtf"; //RtfLicense app with embedded license file
-        // bootstrapper.Application.LicensePath = "http://opensource.org/licenses/MIT"; //HyperlinkLicense app with online license file
-        // bootstrapper.Application.LicensePath = null; //HyperlinkLicense app with no license
+                                                              // bootstrapper.Application.LicensePath = "http://opensource.org/licenses/MIT"; //HyperlinkLicense app with online license file
+                                                              // bootstrapper.Application.LicensePath = null; //HyperlinkLicense app with no license
+
+        // if you want to use `WixStandardBootstrapperApplication.HyperlinkSidebarLicense`
+        // you need to clear bootstrapper.Application.LicensePath and uncomment the next line
+        // bootstrapper.Application.LogoSideFile = "logo.png";
 
         bootstrapper.Application.AttributesDefinition = "ShowVersion=yes; ShowFilesInUse=yes";
         bootstrapper.Include(WixExtension.Util);
