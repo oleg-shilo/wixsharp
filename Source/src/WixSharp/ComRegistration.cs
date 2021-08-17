@@ -717,7 +717,7 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            var element = this.ToXElement();
+            var element = this.ToXElement("MIME");
             bool? isParentAdvertised;
 
             if (!(context.Parent is Extension p))
