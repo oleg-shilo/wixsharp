@@ -39,6 +39,7 @@ namespace WixSharp
         /// <summary>
         /// The GUID that corresponds to the named executable.
         /// </summary>
+        [Xml]
         public new Guid? Id
         {
             get => appId;
@@ -132,9 +133,9 @@ namespace WixSharp
 
             XElement appIdElement = this.ToXElement("AppId");
 
-            if (ComClasses.Length > 0)
+            if (ComClasses?.Length > 0)
             {
-                var appIdChildrenContext = new ProcessingContext
+                var appIdContext = new ProcessingContext
                 {
                     Project = context.Project,
                     Parent = this,
@@ -142,7 +143,7 @@ namespace WixSharp
                     XParent = appIdElement
                 };
 
-                _ = ComClasses.ForEach(comClass => comClass.Process(appIdChildrenContext));
+                _ = ComClasses.ForEach(comClass => comClass.Process(appIdContext));
             }
 
             context.XParent.Add(appIdElement);
@@ -368,9 +369,9 @@ namespace WixSharp
             if (id == null)
                 throw new ValidationException("Class Identifier (CLSID) cannot be null.");
 
-            if (ProgIds.Length > 0 || Interfaces.Length > 0)
+            if (ProgIds?.Length > 0 || Interfaces?.Length > 0)
             {
-                var progIdContext = new ProcessingContext
+                var comRegContext = new ProcessingContext
                 {
                     Project = context.Project,
                     Parent = this,
@@ -378,11 +379,11 @@ namespace WixSharp
                     XParent = element
                 };
 
-                if (ProgIds.Length > 0)
-                    _ = ProgIds.ForEach(progId => progId.Process(context));
+                if (ProgIds?.Length > 0)
+                    _ = ProgIds.ForEach(progId => progId.Process(comRegContext));
 
-                if (Interfaces.Length > 0)
-                    _ = Interfaces.ForEach(interfaceChild => interfaceChild.Process(context));
+                if (Interfaces?.Length > 0)
+                    _ = Interfaces.ForEach(interfaceChild => interfaceChild.Process(comRegContext));
             }
 
             context.XParent.Add(element);
@@ -390,10 +391,28 @@ namespace WixSharp
     }
 
     /// <summary>
-    /// ProgId registration. If ProgId has an associated Class, it must be a child of that element.
+    /// COM ProgId registration. If ProgId has an associated Class, it must be a child of that element.
     /// </summary>
     public class ProgId : WixEntity, IGenericEntity
     {
+        /// <summary>
+        /// Creates a new COM ProgId registration.
+        /// </summary>
+        public ProgId()
+        {
+            isAutoId = false;
+        }
+
+        /// <summary>
+        /// COM Class ProgId.
+        /// </summary>
+        [Xml]
+        public new string Id
+        {
+            get => base.Id;
+            set => base.Id = value;
+        }
+
         /// <summary>
         /// Not available from WiX documentation.
         /// </summary>
@@ -445,7 +464,12 @@ namespace WixSharp
         {
             XElement element = this.ToXElement("ProgId");
 
-            if (ProgIds.Length > 0 || Extensions.Length > 0)
+            if (Id.IsNullOrEmpty())
+            {
+                throw new ValidationException($"{nameof(ProgId)} must contain the name of a COM ProgId in the {nameof(Id)} property.");
+            }
+
+            if (ProgIds?.Length > 0 || Extensions?.Length > 0)
             {
                 var progIdContext = new ProcessingContext
                 {
@@ -455,11 +479,11 @@ namespace WixSharp
                     XParent = element
                 };
 
-                if (Extensions.Length > 0)
-                    _ = Extensions.ForEach(ext => ext.Process(context));
+                if (Extensions?.Length > 0)
+                    _ = Extensions.ForEach(ext => ext.Process(progIdContext));
 
-                if (ProgIds.Length > 0)
-                    _ = ProgIds.ForEach(progId => progId.Process(context));
+                if (ProgIds?.Length > 0)
+                    _ = ProgIds.ForEach(progId => progId.Process(progIdContext));
             }
 
             context.XParent.Add(element);
@@ -472,8 +496,17 @@ namespace WixSharp
     public class Extension : WixEntity, IGenericEntity
     {
         /// <summary>
+        /// Creates a new file extension association.
+        /// </summary>
+        public Extension()
+        {
+            isAutoId = false;
+        }
+
+        /// <summary>
         /// This is simply the file extension, like "doc" or "xml". Do not include the preceding period.
         /// </summary>
+        [Xml]
         public new string Id
         {
             get => base.Id;
@@ -526,7 +559,7 @@ namespace WixSharp
             if (!Advertise.HasValue)
                 Advertise = false;
 
-            if (GenericEntities.Length > 0 || MIMETypes.Length > 0 || Verbs.Length > 0)
+            if (GenericEntities?.Length > 0 || MIMETypes?.Length > 0 || Verbs?.Length > 0)
             {
                 var extensionContext = new ProcessingContext
                 {
@@ -551,8 +584,17 @@ namespace WixSharp
     public class Verb : WixEntity, IGenericEntity
     {
         /// <summary>
+        /// Creates a new Verb definition for an <see cref="Extension"/>.
+        /// </summary>
+        public Verb()
+        {
+            isAutoId = false;
+        }
+
+        /// <summary>
         /// The verb for the command.
         /// </summary>
+        [Xml]
         public new string Id
         {
             get => base.Id;
@@ -587,13 +629,13 @@ namespace WixSharp
         public int? Sequence;
 
         /// <summary>
-        /// Either this attribute or the TargetProperty attribute must be specified for a non-advertised verb. The value should be the identifier of the target file to be executed for the verb.
+        /// Either this attribute or the <see cref="TargetProperty"/> attribute must be specified for a non-advertised verb. The value should be the identifier of the target file to be executed for the verb.
         /// </summary>
         [Xml]
         public string TargetFile;
 
         /// <summary>
-        /// Either this attribute or the TargetFile attribute must be specified for a non-advertised verb.
+        /// Either this attribute or the <see cref="TargetFile"/> attribute must be specified for a non-advertised verb.
         /// The value should be the identifier of the property which will resolve to the path to the target file to be executed for the verb.
         /// </summary>
         [Xml]
@@ -609,6 +651,9 @@ namespace WixSharp
         {
             var element = this.ToXElement("Verb");
             bool isParentAdvertised;
+
+            if (Id.IsNullOrEmpty())
+                throw new ValidationException($"{nameof(Verb)} must contain the name of an executable or command in the {nameof(Id)} property.");
 
             if (!(context.Parent is Extension))
             {
@@ -638,7 +683,7 @@ namespace WixSharp
     /// <summary>
     /// MIME content-type for an Extension
     /// </summary>
-    public class MimeType : IGenericEntity
+    public class MimeType : WixEntity, IGenericEntity
     {
         /// <summary>
         /// Whether this MIME is to be advertised. The default is to match whatever the parent extension element uses.
@@ -672,7 +717,7 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            var element = ToXElement();
+            var element = this.ToXElement();
             bool? isParentAdvertised;
 
             if (!(context.Parent is Extension p))
@@ -691,21 +736,6 @@ namespace WixSharp
 
             context.XParent.Add(element);
         }
-
-        /// <summary>
-        /// Creates <see cref="XElement"/> from <see cref="MimeType"/> class data.
-        /// </summary>
-        /// <returns>
-        /// <see cref="XElement"/> from <see cref="MimeType"/> class data.
-        /// </returns>
-        public XElement ToXElement()
-        {
-            var mimeElement = new XElement("MIME");
-
-            mimeElement.Add(this.MapToXmlAttributes());
-
-            return mimeElement;
-        }
     }
 
     /// <summary>
@@ -716,8 +746,17 @@ namespace WixSharp
         private Guid? ifaceId;
 
         /// <summary>
+        /// Creates a new COM Interface registration.
+        /// </summary>
+        public Interface()
+        {
+            isAutoId = false;
+        }
+
+        /// <summary>
         /// GUID identifier for COM Interface.
         /// </summary>
+        [Xml]
         public new Guid Id
         {
             get => ifaceId.Value;
@@ -737,6 +776,7 @@ namespace WixSharp
         /// <summary>
         /// Name for COM Interface.
         /// </summary>
+        [Xml]
         public new string Name
         {
             get => base.Name;
@@ -825,8 +865,17 @@ namespace WixSharp
         private Guid? libId;
 
         /// <summary>
-        /// The GUID that identifes the type library.
+        /// Creates a new TypeLib registration.
         /// </summary>
+        public TypeLib()
+        {
+            isAutoId = false;
+        }
+
+        /// <summary>
+        /// The GUID that identifies the type library.
+        /// </summary>
+        [Xml]
         public new Guid? Id
         {
             get => libId;
@@ -936,7 +985,10 @@ namespace WixSharp
         /// <exception cref="ValidationException"></exception>
         public void Process(ProcessingContext context)
         {
-            XElement element = this.ToXElement("TypeLib");
+            XElement typeLibElement = this.ToXElement("TypeLib");
+
+            if (!libId.HasValue)
+                throw new ValidationException("Type Libraries must have a GUID.");
 
             // If advertised, the TypeLib cannot be a control.
             if (Control == true && Advertise == true)
@@ -954,26 +1006,26 @@ namespace WixSharp
             if (Advertise == true && Restricted.HasValue)
                 throw new ValidationException($"If {nameof(TypeLib)} is advertised, {nameof(Restricted)} must be null.");
 
-            _ = Interfaces?.ForEach(iface => element.Add(iface.ToXElement()));
+            _ = Interfaces?.ForEach(iface => typeLibElement.Add(iface.ToXElement()));
 
-            if (AppIds.Length > 0 || COMClasses.Length > 0)
+            if (AppIds?.Length > 0 || COMClasses?.Length > 0)
             {
                 var typeLibContext = new ProcessingContext
                 {
                     Project = context.Project,
                     Parent = this,
                     FeatureComponents = context.FeatureComponents,
-                    XParent = element
+                    XParent = typeLibElement
                 };
 
-                if (AppIds.Length > 0)
-                    _ = AppIds.ForEach(id => id.Process(context));
+                if (AppIds?.Length > 0)
+                    _ = AppIds.ForEach(id => id.Process(typeLibContext));
 
-                if (COMClasses.Length > 0)
-                    _ = COMClasses.ForEach(cls => cls.Process(context));
+                if (COMClasses?.Length > 0)
+                    _ = COMClasses.ForEach(cls => cls.Process(typeLibContext));
             }
 
-            context.XParent.Add(element);
+            context.XParent.Add(typeLibElement);
         }
     }
 }
