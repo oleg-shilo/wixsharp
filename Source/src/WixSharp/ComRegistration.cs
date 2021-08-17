@@ -27,10 +27,28 @@ namespace WixSharp
     public class AppId : WixEntity, IGenericEntity
     {
         /// <summary>
+        /// Creates a new <see cref="AppId"/> element.
+        /// </summary>
+        public AppId()
+        {
+            isAutoId = false;
+        }
+
+        private Guid? appId;
+
+        /// <summary>
         /// The GUID that corresponds to the named executable.
         /// </summary>
         [Xml]
-        public new Guid? Id;
+        public new Guid? Id
+        {
+            get => appId;
+            set
+            {
+                appId = value;
+                base.Id = value?.ToString();
+            }
+        }
 
         /// <summary>
         /// Set this value to true to configure to activate on the same system as persistent storage.
@@ -93,6 +111,7 @@ namespace WixSharp
         /// Serializes class into WiX document.
         /// </summary>
         /// <param name="context">Processing context for WiX Document.</param>
+        /// <exception cref="ValidationException"></exception>
         public void Process(ProcessingContext context)
         {
             string[] AdvertiseParents = { "Fragment", "Module", "Product" };
@@ -109,11 +128,25 @@ namespace WixSharp
                 throw new ValidationException($"If {nameof(AppId)} is Advertised, {nameof(Description)} cannot be set.");
             }
 
-            XElement element = this.ToXElement("AppId");
+            if (appId == null)
+                throw new ValidationException($"AppId {nameof(Id)} field cannot be null.");
 
-            ComClasses?.ForEach(appChild => element.Add(appChild.ToXElement()));
+            XElement appIdElement = this.ToXElement("AppId");
 
-            context.XParent.Add(element);
+            if (ComClasses?.Length > 0)
+            {
+                var appIdContext = new ProcessingContext
+                {
+                    Project = context.Project,
+                    Parent = this,
+                    FeatureComponents = context.FeatureComponents,
+                    XParent = appIdElement
+                };
+
+                _ = ComClasses.ForEach(comClass => comClass.Process(appIdContext));
+            }
+
+            context.XParent.Add(appIdElement);
         }
     }
 
@@ -155,10 +188,28 @@ namespace WixSharp
     public class ComRegistration : WixEntity, IGenericEntity
     {
         /// <summary>
+        /// Creates a new COM class registration entity.
+        /// </summary>
+        public ComRegistration()
+        {
+            isAutoId = false;
+        }
+
+        private Guid? clsId;
+
+        /// <summary>
         /// The Class identifier (CLSID) of a COM server.
         /// </summary>
         [Xml]
-        public new Guid? Id;
+        public new Guid? Id
+        {
+            get => clsId;
+            set
+            {
+                clsId = value;
+                base.Id = value?.ToString();
+            }
+        }
 
         /// <summary>
         /// Set this value to "true" in order to create a normal Class table row. Set this value to "false" in order to
@@ -307,36 +358,60 @@ namespace WixSharp
         public Interface[] Interfaces;
 
         /// <summary>
-        /// The method demonstrates the correct way of integrating RemoveFolderEx.
-        /// <para>
-        /// The sample also shows various XML manipulation techniques available with Fluent XElement extensions:
-        /// <para>- Auto XML serialization of CLR object with serializable members marked with XMLAttribute.</para>
-        /// <para>- XML namespace-transparent lookup method FindSingle.</para>
-        /// </para>
+        /// Serializes class into WiX document.
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="context">Processing context for WiX Document.</param>
+        /// <exception cref="ValidationException"></exception>
         public void Process(ProcessingContext context)
         {
             XElement element = this.ToXElement("Class");
 
-            ProgIds?.ForEach(progIdChild => element.Add(progIdChild.ToXElement()));
+            if (id == null)
+                throw new ValidationException("Class Identifier (CLSID) cannot be null.");
 
-            Interfaces?.ForEach(interfaceChild => element.Add(interfaceChild.ToXElement()));
+            if (ProgIds?.Length > 0 || Interfaces?.Length > 0)
+            {
+                var comRegContext = new ProcessingContext
+                {
+                    Project = context.Project,
+                    Parent = this,
+                    FeatureComponents = context.FeatureComponents,
+                    XParent = element
+                };
+
+                if (ProgIds?.Length > 0)
+                    _ = ProgIds.ForEach(progId => progId.Process(comRegContext));
+
+                if (Interfaces?.Length > 0)
+                    _ = Interfaces.ForEach(interfaceChild => interfaceChild.Process(comRegContext));
+            }
 
             context.XParent.Add(element);
         }
     }
 
     /// <summary>
-    /// ProgId registration. If ProgId has an associated Class, it must be a child of that element.
+    /// COM ProgId registration. If ProgId has an associated Class, it must be a child of that element.
     /// </summary>
-    public class ProgId
+    public class ProgId : WixEntity, IGenericEntity
     {
         /// <summary>
-        /// Not available from WiX documentation.
+        /// Creates a new COM ProgId registration.
+        /// </summary>
+        public ProgId()
+        {
+            isAutoId = false;
+        }
+
+        /// <summary>
+        /// COM Class ProgId.
         /// </summary>
         [Xml]
-        public string Id;
+        public new string Id
+        {
+            get => base.Id;
+            set => base.Id = value;
+        }
 
         /// <summary>
         /// Not available from WiX documentation.
@@ -376,31 +451,321 @@ namespace WixSharp
         public ProgId[] ProgIds;
 
         /// <summary>
-        /// Serializes the class instance into XML element.
+        /// File extensions that refer to this ProgId, including MIME type and Verb data.
         /// </summary>
-        /// <returns></returns>
-        public XElement ToXElement()
+        public Extension[] Extensions;
+
+        /// <summary>
+        /// Adds itself as an XML content into the WiX source being generated from the <see cref="Project" />.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        public void Process(ProcessingContext context)
         {
-            var root = new XElement("ProgId");
+            XElement element = this.ToXElement("ProgId");
 
-            root.Add(this.MapToXmlAttributes());
+            if (Id.IsNullOrEmpty())
+            {
+                throw new ValidationException($"{nameof(ProgId)} must contain the name of a COM ProgId in the {nameof(Id)} property.");
+            }
 
-            ProgIds?.ForEach(progIdChild => root.Add(progIdChild.ToXElement()));
+            if (ProgIds?.Length > 0 || Extensions?.Length > 0)
+            {
+                var progIdContext = new ProcessingContext
+                {
+                    Project = context.Project,
+                    Parent = this,
+                    FeatureComponents = context.FeatureComponents,
+                    XParent = element
+                };
 
-            return root;
+                if (Extensions?.Length > 0)
+                    _ = Extensions.ForEach(ext => ext.Process(progIdContext));
+
+                if (ProgIds?.Length > 0)
+                    _ = ProgIds.ForEach(progId => progId.Process(progIdContext));
+            }
+
+            context.XParent.Add(element);
+        }
+    }
+
+    /// <summary>
+    /// Associates a Component or COM ProgID with a file extension or system action.
+    /// </summary>
+    public class Extension : WixEntity, IGenericEntity
+    {
+        /// <summary>
+        /// Creates a new file extension association.
+        /// </summary>
+        public Extension()
+        {
+            isAutoId = false;
+        }
+
+        /// <summary>
+        /// This is simply the file extension, like "doc" or "xml". Do not include the preceding period.
+        /// </summary>
+        [Xml]
+        public new string Id
+        {
+            get => base.Id;
+            set => base.Id = value;
+        }
+
+        /// <summary>
+        /// Whether this extension is to be advertised. The default is no.
+        /// </summary>
+        [Xml]
+        public bool? Advertise;
+
+        /// <summary>
+        /// The MIME type that is to be written.
+        /// </summary>
+        [Xml]
+        public string ContentType;
+
+        /// <summary>
+        /// Extensibility point in the WiX XML Schema.
+        /// Schema extensions can register additional attributes at this point in the schema.
+        /// </summary>
+        public IGenericEntity[] GenericEntities;
+
+        /// <summary>
+        /// MIME content-types for an <see cref="Extension"/>.
+        /// </summary>
+        public MimeType[] MIMETypes;
+
+        /// <summary>
+        /// Verb definitions for an <see cref="Extension"/>.
+        /// </summary>
+        public Verb[] Verbs;
+
+        /// <summary>
+        /// Adds itself as an XML content into the WiX source being generated from the <see cref="Project" />.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        public void Process(ProcessingContext context)
+        {
+            var element = this.ToXElement("Extension");
+
+            if (Id.IsNullOrEmpty())
+            {
+                throw new ValidationException(
+                    $"Extension must have an {nameof(Id)} that is the file extension without the preceding period.");
+            }
+
+            if (!Advertise.HasValue)
+                Advertise = false;
+
+            if (GenericEntities?.Length > 0 || MIMETypes?.Length > 0 || Verbs?.Length > 0)
+            {
+                var extensionContext = new ProcessingContext
+                {
+                    Project = context.Project,
+                    Parent = this,
+                    FeatureComponents = context.FeatureComponents,
+                    XParent = element
+                };
+
+                _ = GenericEntities.ForEach(e => e.Process(extensionContext));
+                _ = MIMETypes.ForEach(t => t.Process(extensionContext));
+                _ = Verbs.ForEach(v => v.Process(extensionContext));
+            }
+
+            context.XParent.Add(element);
+        }
+    }
+
+    /// <summary>
+    /// Verb definition for an Extension. When advertised, this element creates a row in the Verb table. When not advertised, this element creates the appropriate rows in Registry table.
+    /// </summary>
+    public class Verb : WixEntity, IGenericEntity
+    {
+        /// <summary>
+        /// Creates a new Verb definition for an <see cref="Extension"/>.
+        /// </summary>
+        public Verb()
+        {
+            isAutoId = false;
+        }
+
+        /// <summary>
+        /// The verb for the command.
+        /// </summary>
+        [Xml]
+        public new string Id
+        {
+            get => base.Id;
+            set => base.Id = value;
+        }
+
+        /// <summary>
+        /// The value for command arguments.
+        /// </summary>
+        /// <remarks>
+        /// The resolution of properties in the Argument field is limited.
+        /// A property formatted as [Property] in this field can only be resolved if the property already has the intended value when the component owning the verb is installed.
+        /// For example, for the argument "[#MyDoc.doc]" to resolve to the correct value, the same process must be installing the file MyDoc.doc and the component that owns the verb.
+        /// </remarks>
+        [Xml]
+        public string Argument;
+
+        /// <summary>
+        /// The localized text displayed on the context menu.
+        /// </summary>
+        [Xml]
+        public string Command;
+
+        /// <summary>
+        /// The sequence of the commands.
+        /// </summary>
+        /// <remarks>
+        /// Only verbs for which the Sequence is specified are used to prepare an ordered list for the default value of the shell key.
+        /// The Verb with the lowest value in this column becomes the default verb. Used only for Advertised verbs.
+        /// </remarks>
+        [Xml]
+        public int? Sequence;
+
+        /// <summary>
+        /// Either this attribute or the <see cref="TargetProperty"/> attribute must be specified for a non-advertised verb. The value should be the identifier of the target file to be executed for the verb.
+        /// </summary>
+        [Xml]
+        public string TargetFile;
+
+        /// <summary>
+        /// Either this attribute or the <see cref="TargetFile"/> attribute must be specified for a non-advertised verb.
+        /// The value should be the identifier of the property which will resolve to the path to the target file to be executed for the verb.
+        /// </summary>
+        [Xml]
+        public string TargetProperty;
+
+        /// <summary>
+        /// Adds itself as an XML content into the WiX source being generated from the <see cref="Project" />.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <exception cref="ValidationException"></exception>
+        public void Process(ProcessingContext context)
+        {
+            var element = this.ToXElement("Verb");
+            bool isParentAdvertised;
+
+            if (Id.IsNullOrEmpty())
+                throw new ValidationException($"{nameof(Verb)} must contain the name of an executable or command in the {nameof(Id)} property.");
+
+            if (!(context.Parent is Extension))
+            {
+                throw new ValidationException($"{nameof(Verb)} element must be a child of {nameof(Extension)}.");
+            }
+            else
+            {
+                isParentAdvertised = (context.Parent as Extension)?.Advertise == true;
+            }
+
+            if (!isParentAdvertised)
+            {
+                if (Sequence.HasValue)
+                    throw new ValidationException($"If parent {nameof(Extension)} is not advertised, {nameof(Sequence)} should not be set.");
+
+                if (!(TargetFile.IsNullOrEmpty() ^ TargetProperty.IsNullOrEmpty()))
+                    throw new ValidationException($"If parent {nameof(Extension)} is not advertised, either {nameof(TargetFile)} or {nameof(TargetProperty)} must be set.");
+            }
+
+            if (isParentAdvertised && !(TargetFile.IsNullOrEmpty() || TargetProperty.IsNullOrEmpty()))
+                throw new ValidationException($"If parent {nameof(Extension)} is advertised, it may not specify a {nameof(TargetFile)} or {nameof(TargetProperty)}.");
+
+            context.XParent.Add(element);
+        }
+    }
+
+    /// <summary>
+    /// MIME content-type for an Extension
+    /// </summary>
+    public class MimeType : WixEntity, IGenericEntity
+    {
+        /// <summary>
+        /// Whether this MIME is to be advertised. The default is to match whatever the parent extension element uses.
+        /// If the parent element is not advertised, then this element cannot be advertised either.
+        /// </summary>
+        [Xml]
+        public bool? Advertise;
+
+        /// <summary>
+        /// Class ID for the COM server that is to be associated with the MIME content.
+        /// </summary>
+        [Xml(Name = "Class")]
+        public Guid COMClassId;
+
+        /// <summary>
+        /// This is the identifier for the MIME content. It is commonly written in the form of: type/format.
+        /// </summary>
+        [Xml]
+        public string ContentType;
+
+        /// <summary>
+        /// If 'yes', become the content type for the parent Extension. The default value is 'no'.
+        /// </summary>
+        [Xml]
+        public bool Default;
+
+        /// <summary>
+        /// Adds itself as an XML content into the WiX source being generated from the <see cref="Project" />.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        public void Process(ProcessingContext context)
+        {
+            var element = this.ToXElement("MIME");
+            bool? isParentAdvertised;
+
+            if (!(context.Parent is Extension p))
+                throw new ValidationException($"{nameof(MimeType)} may only be a child of an {nameof(Extension)}.");
+            else
+                isParentAdvertised = p.Advertise;
+
+            if (ContentType.IsNullOrEmpty())
+                throw new ValidationException($"{nameof(ContentType)} must have a value.");
+
+            if (!Advertise.HasValue)
+                Advertise = isParentAdvertised;
+
+            if (isParentAdvertised == false && Advertise == true)
+                throw new ValidationException($"{nameof(MimeType)} cannot be advertised if parent {nameof(Extension)} is not also advertised.");
+
+            context.XParent.Add(element);
         }
     }
 
     /// <summary>
     /// COM Interface registration for parent Class.
     /// </summary>
-    public class Interface
+    public class Interface : WixEntity, IGenericEntity
     {
+        private Guid? ifaceId;
+
+        /// <summary>
+        /// Creates a new COM Interface registration.
+        /// </summary>
+        public Interface()
+        {
+            isAutoId = false;
+        }
+
         /// <summary>
         /// GUID identifier for COM Interface.
         /// </summary>
         [Xml]
-        public string Id;
+        public new Guid Id
+        {
+            get => ifaceId.Value;
+            set
+            {
+                ifaceId = value;
+                base.Id = value.ToString();
+            }
+        }
 
         /// <summary>
         /// Identifies the interface from which the current interface is derived.
@@ -412,7 +777,11 @@ namespace WixSharp
         /// Name for COM Interface.
         /// </summary>
         [Xml]
-        public string Name;
+        public new string Name
+        {
+            get => base.Name;
+            set => base.Name = value;
+        }
 
         /// <summary>
         /// Number of methods implemented on COM Interface.
@@ -438,16 +807,15 @@ namespace WixSharp
         public bool? Versioned;
 
         /// <summary>
-        /// Serializes the class instance into XML element.
+        /// Adds itself as an XML content into the WiX source being generated from the <see cref="Project" />.
+        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
         /// </summary>
-        /// <returns></returns>
-        public XElement ToXElement()
+        /// <param name="context">The context.</param>
+        public void Process(ProcessingContext context)
         {
-            var root = new XElement("Interface");
+            var element = this.ToXElement("Interface");
 
-            root.Add(this.MapToXmlAttributes());
-
-            return root;
+            context.XParent.Add(element);
         }
     }
 
@@ -494,11 +862,29 @@ namespace WixSharp
     /// <seealso cref="WixSharp.IGenericEntity" />
     public class TypeLib : WixEntity, IGenericEntity
     {
+        private Guid? libId;
+
         /// <summary>
-        /// The GUID that identifes the type library.
+        /// Creates a new TypeLib registration.
+        /// </summary>
+        public TypeLib()
+        {
+            isAutoId = false;
+        }
+
+        /// <summary>
+        /// The GUID that identifies the type library.
         /// </summary>
         [Xml]
-        public new Guid? Id;
+        public new Guid? Id
+        {
+            get => libId;
+            set
+            {
+                libId = value;
+                base.Id = value?.ToString();
+            }
+        }
 
         /// <summary>
         /// Value of 'true' will create a row in the TypeLib table. Value of 'false' will create rows in the Registry table. The default value is 'false'.
@@ -587,7 +973,6 @@ namespace WixSharp
         /// </summary>
         public Interface[] Interfaces;
 
-
         /// <summary>
         /// The method demonstrates the correct way of integrating RemoveFolderEx.
         /// <para>
@@ -597,15 +982,51 @@ namespace WixSharp
         /// </para>
         /// </summary>
         /// <param name="context"></param>
+        /// <exception cref="ValidationException"></exception>
         public void Process(ProcessingContext context)
         {
-            XElement element = this.ToXElement("TypeLib");
+            XElement typeLibElement = this.ToXElement("TypeLib");
 
-            AppIds?.ForEach(appId => element.Add(appId.ToXElement()));
-            COMClasses?.ForEach(comClass => element.Add(comClass.ToXElement()));
-            Interfaces?.ForEach(iface => element.Add(iface.ToXElement()));
+            if (!libId.HasValue)
+                throw new ValidationException("Type Libraries must have a GUID.");
 
-            context.XParent.Add(element);
+            // If advertised, the TypeLib cannot be a control.
+            if (Control == true && Advertise == true)
+                throw new ValidationException($"If {nameof(TypeLib)} is advertised, {nameof(Control)} cannot be set.");
+
+            if (Advertise == false && Cost.HasValue)
+                throw new ValidationException($"If {nameof(TypeLib)} is not advertised, it cannot have a {nameof(Cost)}.");
+
+            if (Advertise == true && HasDiskImage == true)
+                throw new ValidationException($"If {nameof(TypeLib)} is advertised, {nameof(HasDiskImage)} must be false.");
+
+            if (Advertise == true && Hidden.HasValue)
+                throw new ValidationException($"If {nameof(TypeLib)} is advertised, {nameof(Hidden)} must be null.");
+
+            if (Advertise == true && Restricted.HasValue)
+                throw new ValidationException($"If {nameof(TypeLib)} is advertised, {nameof(Restricted)} must be null.");
+
+            if (AppIds?.Length > 0 || COMClasses?.Length > 0 || Interfaces?.Length > 0)
+            {
+                var typeLibContext = new ProcessingContext
+                {
+                    Project = context.Project,
+                    Parent = this,
+                    FeatureComponents = context.FeatureComponents,
+                    XParent = typeLibElement
+                };
+
+                if (AppIds?.Length > 0)
+                    _ = AppIds.ForEach(id => id.Process(typeLibContext));
+
+                if (COMClasses?.Length > 0)
+                    _ = COMClasses.ForEach(cls => cls.Process(typeLibContext));
+
+                if (Interfaces?.Length > 0)
+                    _ = Interfaces.ForEach(iface => iface.Process(typeLibContext));
+            }
+
+            context.XParent.Add(typeLibElement);
         }
     }
 }
