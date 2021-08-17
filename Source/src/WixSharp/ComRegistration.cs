@@ -1006,9 +1006,7 @@ namespace WixSharp
             if (Advertise == true && Restricted.HasValue)
                 throw new ValidationException($"If {nameof(TypeLib)} is advertised, {nameof(Restricted)} must be null.");
 
-            _ = Interfaces?.ForEach(iface => typeLibElement.Add(iface.ToXElement()));
-
-            if (AppIds?.Length > 0 || COMClasses?.Length > 0)
+            if (AppIds?.Length > 0 || COMClasses?.Length > 0 || Interfaces?.Length > 0)
             {
                 var typeLibContext = new ProcessingContext
                 {
@@ -1023,6 +1021,9 @@ namespace WixSharp
 
                 if (COMClasses?.Length > 0)
                     _ = COMClasses.ForEach(cls => cls.Process(typeLibContext));
+
+                if (Interfaces?.Length > 0)
+                    _ = Interfaces.ForEach(iface => iface.Process(typeLibContext));
             }
 
             context.XParent.Add(typeLibElement);
