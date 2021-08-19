@@ -348,6 +348,12 @@ namespace WixSharp
         public string Server;
 
         /// <summary>
+        /// Version for the CLSID.
+        /// </summary>
+        [Xml]
+        public string Version;
+
+        /// <summary>
         /// ProgId(s) associated with Class must be a child element of the ClassRegistration instance.
         /// </summary>
         public ProgId[] ProgIds;
@@ -365,9 +371,26 @@ namespace WixSharp
         public void Process(ProcessingContext context)
         {
             XElement element = this.ToXElement("Class");
+            string[] ctxs = Context?.Split(' ');
+            string[] localServers = new string[2] { "LocalServer", "LocalServer32" };
 
             if (id == null)
                 throw new ValidationException("Class Identifier (CLSID) cannot be null.");
+
+            if (Advertise == false && AppId.HasValue)
+                throw new ValidationException($"{nameof(AppId)} may not be set if the class is Advertised.");
+
+            if (Advertise == true && Context.IsNullOrEmpty())
+                throw new ValidationException($"{nameof(Context)} must be set if class is Advertised.");
+
+            if ((Advertise == false || !Server.IsNullOrEmpty()) && !ForeignServer.IsNullOrEmpty())
+                throw new ValidationException($"{nameof(ForeignServer)} cannot be set if class is Advertised or {nameof(Server)} is set.");
+
+            if (Advertise == true && SafeForInitializing.HasValue)
+                throw new ValidationException($"{nameof(SafeForInitializing)} cannot be set if class is Advertised.");
+
+            if (Advertise == true && SafeForScripting.HasValue)
+                throw new ValidationException($"{nameof(SafeForScripting)} cannot be set if class is Advertised.");
 
             if (ProgIds?.Length > 0 || Interfaces?.Length > 0)
             {
