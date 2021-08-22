@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.Lab</id>
-    <version>1.18.1.0</version>
+    <version>1.18.2.0</version>
     <title>Wix# (WixSharp) - Experimantal features</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -14,23 +14,10 @@
 The package contains the sample code for building a simple MSI with the CLR WinForm dialog inserted into UI sequence between InsallDirDlg and VerifyReadyDlg native MSI dialogs. In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# binaries containing experimental features (e.g. native WiX UI support).</summary>
-    <releaseNotes>Release v1.18.1.0
+    <releaseNotes>Release v1.18.2.0
 
-* Added full UI for uninstalling from control panel. The feature can be enabled via `project.EnableUninstallFullUI(...)`
-* Nsis Bootstrapper
-  - Added support for Nsis Bootstrapper compression.
-  - Added sample `BuildScriptWithCompressor` (Samples/Bootstrapper/NsisBootstrapper/setup.cs)
-* Issue #1025: Add generated children of TypeLib to element
-* Issue #1014: Modify MS Build task to include configuration and platform parameters
-* Added support for `WixStandardBootstrapperApplication.HyperlinkSidebarLicense`.
-* Issue #1023: Copy File Not working; Fixed misspelled field name
-* Introduce logging options for UninstallFullUI feature
-* Issue #1005: Request: Arm64 support
-* Issue #1001: Fix null reference exception if SDK is located inside the wixlocation…
-* Issue #999: Multiple windows services to single .exe
-* Issue #995: IgnoreWildCardEmptyDirectories with 1.17.0 causes Wxs generation to never finish with multiple top-level dirs
-* Fixed: Respect TargetFileName on OverwriteOnInstall option
-</releaseNotes>
+- Add missing Version element to ComRegistration (Class element) and add extra validation
+- Fix COM registration output</releaseNotes>
     <copyright>Copyright (C) 2008-2021 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# Scripting msi install setup</tags>
@@ -39,7 +26,7 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
       <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
     </frameworkAssemblies>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.18.1.0" />
+      <dependency id="WixSharp.bin" version="1.18.2.0" />
     </dependencies>
   </metadata>
   <files>
