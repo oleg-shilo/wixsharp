@@ -371,19 +371,17 @@ namespace WixSharp
         public void Process(ProcessingContext context)
         {
             XElement element = this.ToXElement("Class");
-            string[] ctxs = Context?.Split(' ');
-            string[] localServers = new string[2] { "LocalServer", "LocalServer32" };
 
             if (id == null)
                 throw new ValidationException("Class Identifier (CLSID) cannot be null.");
 
-            if (Advertise == false && AppId.HasValue)
+            if (Advertise == true && AppId.HasValue)
                 throw new ValidationException($"{nameof(AppId)} may not be set if the class is Advertised.");
 
             if (Advertise == true && Context.IsNullOrEmpty())
                 throw new ValidationException($"{nameof(Context)} must be set if class is Advertised.");
 
-            if ((Advertise == false || !Server.IsNullOrEmpty()) && !ForeignServer.IsNullOrEmpty())
+            if ((Advertise == true || !Server.IsNullOrEmpty()) && !ForeignServer.IsNullOrEmpty())
                 throw new ValidationException($"{nameof(ForeignServer)} cannot be set if class is Advertised or {nameof(Server)} is set.");
 
             if (Advertise == true && SafeForInitializing.HasValue)
@@ -573,7 +571,7 @@ namespace WixSharp
         {
             var element = this.ToXElement("Extension");
 
-            if (Id.IsNullOrEmpty())
+            if (Id.IsNullOrEmpty() || Id[0] == '.')
             {
                 throw new ValidationException(
                     $"Extension must have an {nameof(Id)} that is the file extension without the preceding period.");
@@ -1014,7 +1012,7 @@ namespace WixSharp
                 throw new ValidationException("Type Libraries must have a GUID.");
 
             // If advertised, the TypeLib cannot be a control.
-            if (Control == true && Advertise == true)
+            if (Control.HasValue && Advertise == true)
                 throw new ValidationException($"If {nameof(TypeLib)} is advertised, {nameof(Control)} cannot be set.");
 
             if (Advertise == false && Cost.HasValue)
