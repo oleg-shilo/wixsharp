@@ -1,5 +1,5 @@
 In order to builk the packages executhe the following steps:
-- Updata the files to be included in the package
+- Update the files to be included in the package
   ```
   css updatepackage
   ```
