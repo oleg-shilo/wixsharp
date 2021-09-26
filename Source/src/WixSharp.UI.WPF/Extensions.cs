@@ -293,6 +293,45 @@ namespace WixSharp.UI.WPF
         }
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <param name="messageType"></param>
+        /// <param name="messageRecord"></param>
+        /// <param name="buttons"></param>
+        /// <param name="icon"></param>
+        /// <param name="defaultButton"></param>
+        /// <returns></returns>
+        public override MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, MessageButtons buttons, MessageIcon icon, MessageDefaultButton defaultButton)
+        {
+            return base.ProcessMessage(messageType, messageRecord, buttons, icon, defaultButton);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public override void OnExecuteComplete()
+        {
+            (content as IManagedDialog)?.OnExecuteComplete();
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public override void OnExecuteStarted()
+        {
+            (content as IManagedDialog)?.OnExecuteStarted();
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="progressPercentage"></param>
+        public override void OnProgress(int progressPercentage)
+        {
+            (content as IManagedDialog)?.OnProgress(progressPercentage);
+        }
+
+        /// <summary>
         /// Called when Shell is changed. It is a good place to initialize the dialog to reflect the MSI session
         /// (e.g. localize the view).
         /// </summary>
