@@ -104,15 +104,17 @@ namespace WixSharp
         /// </example>
         public string AttributesDefinition { get; set; }
 
+        internal string HiddenAttributesDefinition;
+
         internal Dictionary<string, string> attributesBag = new Dictionary<string, string>();
 
         void ProcessAttributesDefinition()
         {
-            if (!AttributesDefinition.IsEmpty())
+            if (AttributesDefinition.IsNotEmpty() || HiddenAttributesDefinition.IsNotEmpty())
             {
                 try
                 {
-                    this.Attributes = AttributesDefinition.ToDictionary();
+                    this.Attributes = (AttributesDefinition + ";" + HiddenAttributesDefinition).ToDictionary();
                 }
                 catch (Exception e)
                 {
@@ -128,7 +130,7 @@ namespace WixSharp
         {
             var preffix = name + "=";
 
-            return (AttributesDefinition ?? "").Trim()
+            return (HiddenAttributesDefinition ?? "").Trim()
                                                .Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
                                                .Where(x => x.StartsWith(preffix))
                                                .Select(x => x.Substring(preffix.Length))
@@ -139,9 +141,10 @@ namespace WixSharp
         {
             var preffix = name + "=";
 
-            var allItems = (AttributesDefinition ?? "").Trim()
-                                                       .Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
-                                                       .ToList();
+            var allItems = (HiddenAttributesDefinition ?? "")
+                .Trim()
+                .Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+                .ToList();
 
             var items = allItems;
 
@@ -161,7 +164,7 @@ namespace WixSharp
                 }
             }
 
-            AttributesDefinition = string.Join(";", items.ToArray());
+            HiddenAttributesDefinition = string.Join(";", items.ToArray());
         }
 
         /// <summary>

@@ -1629,7 +1629,7 @@ namespace WixSharp
         /// <summary>
         /// Determines whether the given string is empty or not.
         /// </summary>
-        /// <param name="s">The string to analyse.</param>
+        /// <param name="s">The string to analyses.</param>
         /// <returns>
         /// 	<c>true</c> if the specified string is not empty; otherwise, <c>false</c>.
         /// </returns>
