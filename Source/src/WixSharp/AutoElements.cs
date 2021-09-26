@@ -501,6 +501,16 @@ namespace WixSharp
 
                         destElement.AddElement(name, null, data);
                     }
+                    else if (key == "Id")
+                    {
+                        var refs = destElement.Document.Root
+                            .FindAll("ComponentRef")
+                            .Where(x => x.HasAttribute("Id", destElement.GetAttribute(key)));
+
+                        refs.ForEach(x => x.SetAttribute(key, value)); // reference a new Id
+
+                        destElement.SetAttribute(key, value);
+                    }
                     else
                     {
                         destElement.SetAttribute(key, value);
