@@ -260,7 +260,8 @@ namespace WixSharp
         /// </summary>
         public bool? DelayedAutoStart;
 
-        ///public object FailureActionsWhen { get; set; } //note implementing util:serviceconfig instead
+        //public object FailureActionsWhen { get; set; } //note implementing util:serviceconfig instead
+
         /// <summary>	            ConfigUtil?.Process(newContext);
         /// Specifies time in milliseconds that the Service Control Manager (SCM) waits after notifying
         /// the service of a system shutdown. If this attribute is not present the default value, 3 minutes, is used.
@@ -334,8 +335,9 @@ namespace WixSharp
         {
             return DelayedAutoStart != null ||
                    PreShutdownDelay != null ||
-                   ServiceSid != null ||
-                   ConfigureServiceTrigger != ConfigureServiceTrigger.None;
+                   ServiceSid != null;
+            // mote ConfigureServiceTrigger value is irrelevant as it will be used only if the
+            // fields above are not empty;
         }
 
         private bool RequiresConfigUtil()
