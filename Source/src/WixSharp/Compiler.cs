@@ -3428,7 +3428,7 @@ namespace WixSharp
                 }
                 else
                 {
-                    wDir.Id = $"{parent.Attribute("Id").Value}.{wDir.Name.Expand(doNotFixStartDigit: true)}_{(uint)wDir.Name.GetHashCode32()}";
+                    wDir.Id = parent.Attribute("Id").Value + "." + wDir.Name.Expand(doNotFixStartDigit: true);
                 }
             }
 
