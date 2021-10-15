@@ -1537,17 +1537,27 @@ namespace WixSharp
         /// <returns></returns>
         public static string EscapeIllegalCharacters(this string data, bool doNotFixStartDigit = false)
         {
-            string retval = data;
             List<char> legalChars = new List<char>();
 
             legalChars.AddRange("._0123456789".ToCharArray());
             legalChars.AddRange("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray());
 
-            for (int i = 0; i < data.Length; i++)
+            // Replace non-legal character to their character code. This is to
+            // prevent a bug that the directory Ids are duplicated if directory
+            // names consists of non-legal characters, and the lengths are same.
+            var escaped = new StringBuilder();
+            foreach (var ch in data)
             {
-                if (!legalChars.Contains(retval[i]))
-                    retval = retval.Replace(data[i], '_');
+                if (legalChars.Contains(ch))
+                {
+                    escaped.Append(ch);
+                }
+                else
+                {
+                    escaped.Append(string.Format("{0:x}", (int)ch));
+                }
             }
+            string retval = escaped.ToString();
 
             if (!doNotFixStartDigit && (retval.IsNotEmpty() && (retval[0].IsDigit() || retval.StartsWith("."))))
                 return "_" + retval;
