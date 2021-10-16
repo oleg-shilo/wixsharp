@@ -116,6 +116,9 @@
     <Compile Include="CustomDialogPanel.xaml.cs">
       <DependentUpon>CustomDialogPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomProgressDialogView.xaml.cs">
+      <DependentUpon>CustomProgressDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CustomWpfDialogRaw.xaml.cs">
       <DependentUpon>CustomWpfDialogRaw.xaml</DependentUpon>
     </Compile>
@@ -123,6 +126,10 @@
     <Page Include="CustomDialogPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomProgressDialogView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="CustomWpfDialog.xaml">
       <SubType>Designer</SubType>

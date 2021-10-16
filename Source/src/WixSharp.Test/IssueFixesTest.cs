@@ -270,9 +270,7 @@ namespace WixSharp.Test
         {
             var project = new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File(this.GetType().Assembly.Location)
-                       )
-                                         );
+                    new File(this.GetType().Assembly.Location)));
 
             project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
             project.Version = new Version("2014.1.26.0");

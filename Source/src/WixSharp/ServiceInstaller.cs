@@ -336,7 +336,7 @@ namespace WixSharp
             return DelayedAutoStart != null ||
                    PreShutdownDelay != null ||
                    ServiceSid != null;
-            // mote ConfigureServiceTrigger value is irrelevant as it will be used only if the
+            // note ConfigureServiceTrigger value is irrelevant as it will be used only if the
             // fields above are not empty;
         }
 
