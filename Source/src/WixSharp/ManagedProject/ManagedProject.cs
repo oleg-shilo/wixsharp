@@ -16,44 +16,56 @@ using IO = System.IO;
 namespace WixSharp
 {
     /// <summary>
-    /// Extends <see cref="T:WixSharp.Project"/> with runtime event-driven behavior ans managed UI (see <see cref="T:WixSharp.ManagedUI"/> and
-    /// <see cref="T:WixSharp.UI.Forms.ManagedForm"/>).
+    /// Extends <see cref="T:WixSharp.Project"/> with runtime event-driven behavior ans managed UI
+    /// (see <see cref="T:WixSharp.ManagedUI"/> and <see cref="T:WixSharp.UI.Forms.ManagedForm"/>).
     /// <para>
-    /// The managed project has three very important events that are raised during deployment at run: Load/BeforeInstall/AfterInstall.
+    /// The managed project has three very important events that are raised during deployment at
+    /// run: Load/BeforeInstall/AfterInstall.
     /// </para>
-    /// <remark>
-    /// ManagedProject still maintains backward compatibility for the all older features. That is why it is important to distinguish the use cases
-    /// associated with the project class members dedicated to the same problem domain but resolving the problems in different ways:
+    /// <remark> ManagedProject still maintains backward compatibility for the all older features.
+    /// That is why it is important to distinguish the use cases associated with the project class
+    /// members dedicated to the same problem domain but resolving the problems in different ways:
     /// <para><c>UI support</c></para>
-    /// <para>   project.UI - to be used to define native MSI/WiX UI.</para>
-    /// <para>   project.CustomUI - to be used for minor to customization of native MSI/WiX UI and injection of CLR dialogs. </para>
-    /// <para>   project.ManagedUI - to be used to define managed Embedded UI. It allows full customization of the UI</para>
-    /// <para> </para>
+    /// <para>project.UI - to be used to define native MSI/WiX UI.</para>
+    /// <para>
+    /// project.CustomUI - to be used for minor to customization of native MSI/WiX UI and injection
+    /// of CLR dialogs.
+    /// </para>
+    /// <para>
+    /// project.ManagedUI - to be used to define managed Embedded UI. It allows full customization
+    /// of the UI
+    /// </para>
+    /// <para></para>
     /// <para><c>Events</c></para>
-    /// <para>   project.WixSourceGenerated</para>
-    /// <para>   project.WixSourceFormated</para>
-    /// <para>   project.WixSourceSaved - to be used at compile time to customize WiX source code (XML) generation.</para>
-    /// <para> </para>
-    /// <para>   project.Load</para>
-    /// <para>   project.BeforeInstall</para>
-    /// <para>   project.AfterInstall - to be used at runtime (msi execution) to customize deployment behaver.</para>
+    /// <para>project.WixSourceGenerated</para>
+    /// <para>project.WixSourceFormated</para>
+    /// <para>
+    /// project.WixSourceSaved - to be used at compile time to customize WiX source code (XML) generation.
+    /// </para>
+    /// <para></para>
+    /// <para>project.Load</para>
+    /// <para>project.BeforeInstall</para>
+    /// <para>
+    /// project.AfterInstall - to be used at runtime (msi execution) to customize deployment behaver.
+    /// </para>
     /// </remark>
     /// </summary>
-    /// <example>The following is an example of a simple setup handling the three setup events at runtime.
+    /// <example>
+    /// The following is an example of a simple setup handling the three setup events at runtime.
     /// <code>
-    /// var project = new ManagedProject("ManagedSetup",
-    ///                   new Dir(@"%ProgramFiles%\My Company\My Product",
-    ///                       new File(@"..\Files\bin\MyApp.exe")));
+    ///var project = new ManagedProject("ManagedSetup",
+    ///new Dir(@"%ProgramFiles%\My Company\My Product",
+    ///new File(@"..\Files\bin\MyApp.exe")));
     ///
-    /// project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
+    ///project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
     ///
-    /// project.ManagedUI = ManagedUI.Empty;
+    ///project.ManagedUI = ManagedUI.Empty;
     ///
-    /// project.Load += project_Load;
-    /// project.BeforeInstall += project_BeforeInstall;
-    /// project.AfterInstall += project_AfterInstall;
+    ///project.Load += project_Load;
+    ///project.BeforeInstall += project_BeforeInstall;
+    ///project.AfterInstall += project_AfterInstall;
     ///
-    /// project.BuildMsi();
+    ///project.BuildMsi();
     /// </code>
     /// </example>
     public class ManagedProject : Project
@@ -70,23 +82,31 @@ namespace WixSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagedProject"/> class.
         /// </summary>
-        /// <param name="name">The name of the project. Typically it is the name of the product to be installed.</param>
-        /// <param name="items">The project installable items (e.g. directories, files, registry keys, Custom Actions).</param>
+        /// <param name="name">
+        /// The name of the project. Typically it is the name of the product to be installed.
+        /// </param>
+        /// <param name="items">
+        /// The project installable items (e.g. directories, files, registry keys, Custom Actions).
+        /// </param>
         public ManagedProject(string name, params WixObject[] items)
             : base(name, items)
         {
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the full or reduced custom drawing algorithm should be used for rendering the Features dialog
-        /// tree view control. The reduced algorithm involves no manual positioning of the visual elements so it handles better custom screen resolutions.
-        /// However it also leads to the slightly less intuitive tree view item appearance.
-        /// <para>Reduced custom drawing will render disabled tree view items with the text grayed out.</para>
-        /// <para>Full custom drawing will render disabled tree view items with the checkbox grayed out.</para>
+        /// Gets or sets a value indicating whether the full or reduced custom drawing algorithm
+        /// should be used for rendering the Features dialog tree view control. The reduced
+        /// algorithm involves no manual positioning of the visual elements so it handles better
+        /// custom screen resolutions. However it also leads to the slightly less intuitive tree
+        /// view item appearance.
+        /// <para>
+        /// Reduced custom drawing will render disabled tree view items with the text grayed out.
+        /// </para>
+        /// <para>
+        /// Full custom drawing will render disabled tree view items with the checkbox grayed out.
+        /// </para>
         /// </summary>
-        /// <value>
-        /// <c>true</c> (default) if custom drawing should be reduced otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> (default) if custom drawing should be reduced otherwise, <c>false</c>.</value>
         public bool MinimalCustomDrawing
         {
             get
@@ -118,23 +138,25 @@ namespace WixSharp
         public delegate void SetupEventHandler(SetupEventArgs e);
 
         /// <summary>
-        /// Indicates if the installations should be aborted if managed event handler throws an unhanded exception.
-        /// <para>
-        /// Aborting is the default behavior if this field is not set.
-        /// </para>
+        /// Indicates if the installations should be aborted if managed event handler throws an
+        /// unhanded exception.
+        /// <para>Aborting is the default behavior if this field is not set.</para>
         /// </summary>
         public bool? AbortSetupOnUnhandledExceptions;
 
         /// <summary>
-        /// Occurs on EmbeddedUI initialized but before the first dialog is displayed. It is only invoked if ManagedUI is set.
+        /// Occurs on EmbeddedUI initialized but before the first dialog is displayed. It is only
+        /// invoked if ManagedUI is set.
         /// </summary>
         public event SetupEventHandler UIInitialized;
 
         /// <summary>
-        /// Occurs on EmbeddedUI loaded and ShellView (main window) is displayed but before first dialog is positioned within ShellView.
-        /// It is only invoked if ManagedUI is set.
-        /// <para>Note that this event is fired on the loading the UI main window thus it's not a good stage for any decision regarding
-        /// aborting/continuing the whole setup process. That is UILoaded event will ignore any value set to SetupEventArgs.Result by the user.
+        /// Occurs on EmbeddedUI loaded and ShellView (main window) is displayed but before first
+        /// dialog is positioned within ShellView. It is only invoked if ManagedUI is set.
+        /// <para>
+        /// Note that this event is fired on the loading the UI main window thus it's not a good
+        /// stage for any decision regarding aborting/continuing the whole setup process. That is
+        /// UILoaded event will ignore any value set to SetupEventArgs.Result by the user.
         /// </para>
         /// </summary>
         public event SetupEventHandler UILoaded;
@@ -150,13 +172,14 @@ namespace WixSharp
         public event SetupEventHandler BeforeInstall;
 
         /// <summary>
-        /// Occurs after InstallFiles standard action. The event is fired from the elevated execution context.
+        /// Occurs after InstallFiles standard action. The event is fired from the elevated
+        /// execution context.
         /// </summary>
         public event SetupEventHandler AfterInstall;
 
         /// <summary>
-        /// An instance of ManagedUI defining MSI UI dialogs sequence. User should set it if he/she wants native MSI dialogs to be
-        /// replaced by managed ones.
+        /// An instance of ManagedUI defining MSI UI dialogs sequence. User should set it if he/she
+        /// wants native MSI dialogs to be replaced by managed ones.
         /// </summary>
         public IManagedUI ManagedUI;
 
@@ -249,7 +272,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// The default properties mapped for use with the deferred custom actions. See <see cref="ManagedAction.UsesProperties"/> for the details.
+        /// The default properties mapped for use with the deferred custom actions. See <see
+        /// cref="ManagedAction.UsesProperties"/> for the details.
         /// <para>The default value is "INSTALLDIR,UILevel"</para>
         /// </summary>
         public string DefaultDeferredProperties
@@ -272,23 +296,43 @@ namespace WixSharp
         string defaultDeferredProperties = "INSTALLDIR,UILevel,ProductName,FOUNDPREVIOUSVERSION";
 
         /// <summary>
-        /// Flags that indicates if <c>WixSharp_InitRuntime_Action</c> custom action should be always scheduled. The default value is <c>true</c>.
-        /// <para><c>WixSharp_InitRuntime_Action</c> is the action, which ManagedSetup performs at startup (before AppSearch).
-        /// In this action the most important MSI properties are pushed into Session.CustomActionData. These properties are typically consumed
-        /// from other custom actions (e.g. Project.AfterInstall event) and they are:
+        /// Flags that indicates if <c>WixSharp_InitRuntime_Action</c> custom action should be
+        /// always scheduled. The default value is <c>true</c>.
+        /// <para>
+        /// <c>WixSharp_InitRuntime_Action</c> is the action, which ManagedSetup performs at startup
+        /// (before AppSearch). In this action the most important MSI properties are pushed into
+        /// Session.CustomActionData. These properties are typically consumed from other custom
+        /// actions (e.g. Project.AfterInstall event) and they are:
         /// <list type="bullet">
-        /// <item><description>Installed</description></item>
-        /// <item><description>REMOVE</description></item>
-        /// <item><description>ProductName</description></item>
-        /// <item><description>REINSTALL</description></item>
-        /// <item><description>UPGRADINGPRODUCTCODE</description></item>
-        /// <item><description>UILevel</description></item>
-        /// <item><description>WIXSHARP_MANAGED_UI</description></item>
+        /// <item>
+        /// <description>Installed</description>
+        /// </item>
+        /// <item>
+        /// <description>REMOVE</description>
+        /// </item>
+        /// <item>
+        /// <description>ProductName</description>
+        /// </item>
+        /// <item>
+        /// <description>REINSTALL</description>
+        /// </item>
+        /// <item>
+        /// <description>UPGRADINGPRODUCTCODE</description>
+        /// </item>
+        /// <item>
+        /// <description>UILevel</description>
+        /// </item>
+        /// <item>
+        /// <description>WIXSHARP_MANAGED_UI</description>
+        /// </item>
         /// </list>
         /// </para>
-        /// <para>However in same cases (e.g. oversizes msi file) it is desirable to minimize amount of time the msi loaded into memory
-        /// (e.g. by custom actions). Thus setting AlwaysScheduleInitRuntime to <c>false</c> will prevent scheduling <c>WixSharp_InitRuntime_Action</c>
-        /// unless any of the ManagedProject events (e.g. Project.AfterInstall) has user handler assigned.
+        /// <para>
+        /// However in same cases (e.g. oversizes msi file) it is desirable to minimize amount of
+        /// time the msi loaded into memory (e.g. by custom actions). Thus setting
+        /// AlwaysScheduleInitRuntime to <c>false</c> will prevent scheduling
+        /// <c>WixSharp_InitRuntime_Action</c> unless any of the ManagedProject events (e.g.
+        /// Project.AfterInstall) has user handler assigned.
         /// </para>
         /// </summary>
         public bool AlwaysScheduleInitRuntime = true;
@@ -404,7 +448,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Reads and returns the dialog types from the string definition. This method is to be used by WixSharp assembly.
+        /// Reads and returns the dialog types from the string definition. This method is to be used
+        /// by WixSharp assembly.
         /// </summary>
         /// <param name="data">The data.</param>
         /// <returns></returns>
@@ -489,12 +534,12 @@ namespace WixSharp
         {
             string[] parts = info.Split('|');
 
-            // Try to see if it's already loaded. `Assembly.Load(name)` still loads from the file
-            // if found. Even though the file-less (or renamed) assembly is loaded.
-            // Yep, it's not what one would expect.
+            // Try to see if it's already loaded. `Assembly.Load(name)` still loads from the file if
+            // found. Even though the file-less (or renamed) assembly is loaded. Yep, it's not what
+            // one would expect.
             //
-            // If not done this way it might locks the asm file, which in turn leads
-            // to the problems if host is a cs-script app.
+            // If not done this way it might locks the asm file, which in turn leads to the problems
+            // if host is a cs-script app.
 
             var assembly = System.AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.FullName.StartsWith(parts[0]))
                            ?? System.Reflection.Assembly.Load(parts[0]);
@@ -505,11 +550,12 @@ namespace WixSharp
             // Though loading some internal (irrelevant) types can fail because of the dependencies.
             try
             {
-                assembly.GetTypes().Single(t => t.FullName == parts[1]);
+                type = assembly.GetTypes().Single(t => t.FullName == parts[1]);
             }
             catch { }
 
-            //If we failed to iterate through the types then try to load the type explicitly. Though in this case it has to be public.
+            // If we failed to iterate through the types then try to load the type explicitly.
+            // Though in this case it has to be public.
             if (type == null)
                 type = assembly.GetType(parts[1]);
 
