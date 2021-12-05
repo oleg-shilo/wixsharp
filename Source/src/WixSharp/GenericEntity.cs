@@ -25,12 +25,12 @@ namespace WixSharp
         public XElement XParent;
 
         /// <summary>
-        ///
         /// </summary>
         public XElement XParentComponent;
 
         /// <summary>
-        /// Map of features and their associated components. The map contains pairs of Features and their component IDs.
+        /// Map of features and their associated components. The map contains pairs of Features and
+        /// their component IDs.
         /// <para>
         /// If <see cref="WixSharp.IGenericEntity"/> needs to create a component it can immediately
         /// associate this component with either existing feature in the map or add a new map entry.
@@ -56,13 +56,15 @@ namespace WixSharp
     }
 
     /// <summary>
-    /// An interface for the external user defined WiX entities (e.g. new WiX extensions) to be integrated with Wix# compiler.
+    /// An interface for the external user defined WiX entities (e.g. new WiX extensions) to be
+    /// integrated with Wix# compiler.
     /// </summary>
     public interface IGenericEntity
     {
         /// <summary>
-        /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
-        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+        /// Adds itself as an XML content into the WiX source being generated from the <see
+        /// cref="WixSharp.Project"/>. See 'Wix#/samples/Extensions' sample for the details on how
+        /// to implement this interface correctly.
         /// </summary>
         /// <param name="context">The context.</param>
         void Process(ProcessingContext context);
@@ -74,23 +76,31 @@ namespace WixSharp
     public abstract class GenericNestedEntity : WixEntity
     {
         /// <summary>
-        /// Gets or sets the <c>Id</c> value of the <see cref="T:WixSharp.WixEntity" />.
-        /// <para>This value is used as a <c>Id</c> for the corresponding WiX XML element.</para><para>If the <see cref="P:WixSharp.WixEntity.Id" /> value is not specified explicitly by the user the Wix# compiler
-        /// generates it automatically insuring its uniqueness.</para><remarks>
-        /// Note: The ID auto-generation is triggered on the first access (evaluation) and in order to make the id
-        /// allocation deterministic the compiler resets ID generator just before the build starts. However if you
-        /// accessing any auto-id before the Build*() is called you can it interferes with the ID auto generation and eventually
-        /// lead to the WiX ID duplications. To prevent this from happening either:"
-        /// <para> - Avoid evaluating the auto-generated IDs values before the call to Build*()</para><para> - Set the IDs (to be evaluated) explicitly</para><para> - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";</para></remarks>
+        /// Gets or sets the <c>Id</c> value of the <see cref="T:WixSharp.WixEntity"/>.
+        /// <para>This value is used as a <c>Id</c> for the corresponding WiX XML element.</para>
+        /// <para>
+        /// If the <see cref="P:WixSharp.WixEntity.Id"/> value is not specified explicitly by the
+        /// user the Wix# compiler generates it automatically insuring its uniqueness.
+        /// </para>
+        /// <remarks>
+        /// Note: The ID auto-generation is triggered on the first access (evaluation) and in order
+        ///       to make the id allocation deterministic the compiler resets ID generator just
+        /// before the build starts. However if you accessing any auto-id before the Build*() is
+        /// called you can it interferes with the ID auto generation and eventually lead to the WiX
+        /// ID duplications. To prevent this from happening either:"
+        /// <para>- Avoid evaluating the auto-generated IDs values before the call to Build*()</para>
+        /// <para>- Set the IDs (to be evaluated) explicitly</para>
+        /// <para>
+        /// - Prevent resetting auto-ID generator by setting WixEntity.DoNotResetIdGenerator to true";
+        /// </para>
+        /// </remarks>
         /// </summary>
-        /// <value>
-        /// The id.
-        /// </value>
+        /// <value>The id.</value>
         [Xml]
         new public string Id
         {
             get => base.Id;
-            set => Id = value;
+            set => base.Id = value;
         }
 
         /// <summary>
@@ -99,8 +109,9 @@ namespace WixSharp
         public IGenericEntity[] Children = new IGenericEntity[0];
 
         /// <summary>
-        /// Adds itself as an XML content (element of the specified name) into the WiX source being generated from the <see cref="T:WixSharp.Project" />.
-        /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
+        /// Adds itself as an XML content (element of the specified name) into the WiX source being
+        /// generated from the <see cref="T:WixSharp.Project"/>. See 'Wix#/samples/Extensions'
+        /// sample for the details on how to implement this interface correctly.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="elementName">Name of the element.</param>
