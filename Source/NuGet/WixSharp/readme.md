@@ -3,7 +3,7 @@ In order to builk the packages executhe the following steps:
   ```
   css updatepackage
   ```
-  Make sure you hace CS-Script installed (e.g. from https://community.chocolatey.org/packages/cs-script)
+  Make sure you have CS-Script installed (e.g. from https://community.chocolatey.org/packages/cs-script)
 
 - Execute build.cmd
 

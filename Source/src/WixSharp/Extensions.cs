@@ -27,7 +27,6 @@ using IO = System.IO;
 namespace WixSharp
 {
     /// <summary>
-    ///
     /// </summary>
     public static partial class Extensions
     {
@@ -94,7 +93,10 @@ namespace WixSharp
 
         /// <summary>
         /// Converts string value of a version into the <see cref="System.Version"/> object.
-        /// <para>This method handles alpha-numeric strings. For example "v1.2.3-HotFix" is converted in "1.2.3" <see cref="System.Version"/> object.</para>
+        /// <para>
+        /// This method handles alpha-numeric strings. For example "v1.2.3-HotFix" is converted in
+        /// "1.2.3" <see cref="System.Version"/> object.
+        /// </para>
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -124,8 +126,7 @@ namespace WixSharp
             => type.GetInterfaces().Any(i => i.FullName == interfaceName);
 
         /// <summary>
-        /// Gets the base name of the generic type (e.g. "System.Geneics.List" for
-        /// type "System.Geneics.List&lt;T&gt;").
+        /// Gets the base name of the generic type (e.g. "System.Geneics.List" for type "System.Geneics.List&lt;T&gt;").
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
@@ -167,7 +168,8 @@ namespace WixSharp
         /// <summary>
         /// Adds the element to a given XML element. It is a Fluent version of <see cref="T:System.Xml.Linq.XElement.Add"/>.
         /// <para>
-        /// <c>elementName</c> can be either the name of the element to be added or the sequence of the elements specified by path (e.g. <c>AddElement("Product/Package")</c>).
+        /// <c>elementName</c> can be either the name of the element to be added or the sequence of
+        /// the elements specified by path (e.g. <c>AddElement("Product/Package")</c>).
         /// </para>
         /// </summary>
         /// <param name="obj">The instance of the <see cref="T:System.Xml.Linq.XElement"/>.</param>
@@ -195,8 +197,10 @@ namespace WixSharp
         /// </summary>
         /// <param name="obj">The instance of the <see cref="T:System.Xml.Linq.XElement"/>.</param>
         /// <param name="elementName">Name of the element.</param>
-        /// <param name="attributesDefinition">The attributes definition. Rules of the composing the
-        /// definition are the same as for <see cref="P:WixSharp.WixEntity.AttributesDefinition" />.</param>
+        /// <param name="attributesDefinition">
+        /// The attributes definition. Rules of the composing the definition are the same as for
+        /// <see cref="P:WixSharp.WixEntity.AttributesDefinition"/>.
+        /// </param>
         /// <param name="value">The value of the added element.</param>
         /// <returns>Added <see cref="T:System.Xml.Linq.XElement"/>.</returns>
         public static XElement AddElement(this XElement obj, XName elementName, string attributesDefinition = null, string value = null)
@@ -212,13 +216,16 @@ namespace WixSharp
         /// <summary>
         /// Adds the element to a given XML element and sets the attributes of the newly created element.
         /// <para>
-        /// <c>elementName</c> can be either the name of the element to be added or the sequence of the elements specified by path (e.g. <c>AddElement("Product/Package")</c>).
+        /// <c>elementName</c> can be either the name of the element to be added or the sequence of
+        /// the elements specified by path (e.g. <c>AddElement("Product/Package")</c>).
         /// </para>
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="elementName">The element.</param>
-        /// <param name="attributesDefinition">The attributes definition. Rules of the composing the
-        /// definition are the same as for <see cref="P:WixSharp.WixEntity.AttributesDefinition" />.</param>
+        /// <param name="attributesDefinition">
+        /// The attributes definition. Rules of the composing the definition are the same as for
+        /// <see cref="P:WixSharp.WixEntity.AttributesDefinition"/>.
+        /// </param>
         /// <param name="value">The value of the added element.</param>
         /// <returns></returns>
         public static XElement AddElement(this XElement obj, string elementName, string attributesDefinition, string value = null)
@@ -230,7 +237,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Sets the value of the first child element (with 'elementName'). If the element s not found then it is created.
+        /// Sets the value of the first child element (with 'elementName'). If the element s not
+        /// found then it is created.
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="elementName">Name of the element.</param>
@@ -255,9 +263,7 @@ namespace WixSharp
         /// Determines whether the string is an absolute path.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns>
-        ///   <c>true</c> if it is an absolute path; otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if it is an absolute path; otherwise, <c>false</c>.</returns>
         public static bool IsAbsolutePath(this string path)
         {
             return IO.Path.IsPathRooted(path);
@@ -267,9 +273,7 @@ namespace WixSharp
         /// Determines whether the character is a digit.
         /// </summary>
         /// <param name="c">The c.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified c is digit; otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if the specified c is digit; otherwise, <c>false</c>.</returns>
         public static bool IsDigit(this char c)
         {
             return char.IsDigit(c);
@@ -288,8 +292,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Converts key/value map into the dictionary. The map entry format
-        /// is as follows: &lt;key&gt;=&lt;value&gt;[;&lt;key&gt;=&lt;value&gt;].
+        /// Converts key/value map into the dictionary. The map entry format is as follows: &lt;key&gt;=&lt;value&gt;[;&lt;key&gt;=&lt;value&gt;].
         /// </summary>
         /// <param name="map">The map.</param>
         /// <param name="itemDelimiter">The item delimiter.</param>
@@ -338,12 +341,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Adds/sets the attributes to the to a given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
+        /// Adds/sets the attributes to the to a given XML element ( <see cref="T:System.Xml.Linq.XElement"/>).
         /// <para>It is a renamed version of <see cref="Extensions.SetAttributes"/></para>
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="attributesDefinition">The attributes definition. Rules of the composing the
-        /// definition are the same as for <see cref="WixObject.AttributesDefinition"/>.</param>
+        /// <param name="attributesDefinition">
+        /// The attributes definition. Rules of the composing the definition are the same as for
+        /// <see cref="WixObject.AttributesDefinition"/>.
+        /// </param>
         /// <returns></returns>
         public static XElement AddAttributes(this XElement obj, string attributesDefinition)
         {
@@ -362,11 +367,13 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Sets/adds the attributes to the given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
+        /// Sets/adds the attributes to the given XML element ( <see cref="T:System.Xml.Linq.XElement"/>).
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="attributesDefinition">The attributes definition. Rules of the composing the
-        /// definition are the same as for <see cref="WixObject.AttributesDefinition"/>.</param>
+        /// <param name="attributesDefinition">
+        /// The attributes definition. Rules of the composing the definition are the same as for
+        /// <see cref="WixObject.AttributesDefinition"/>.
+        /// </param>
         /// <returns></returns>
         public static XElement SetAttributes(this XElement obj, string attributesDefinition)
         {
@@ -374,7 +381,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Gets the attribute of the given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
+        /// Gets the attribute of the given XML element ( <see cref="T:System.Xml.Linq.XElement"/>).
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="name">The name.</param>
@@ -437,9 +444,10 @@ namespace WixSharp
         /// Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue.
         /// <para>Note <c>name</c> can include xml namespace prefix:
         /// <code>
-        /// element.SetAttribute("{dep}ProviderKey", "01234567-8901-2345-6789-012345678901");
+        ///element.SetAttribute("{dep}ProviderKey", "01234567-8901-2345-6789-012345678901");
         /// </code>
-        /// Though in this case the required namespace must be already added to the element/document.</para>
+        /// Though in this case the required namespace must be already added to the element/document.
+        /// </para>
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="name">The name.</param>
@@ -474,11 +482,13 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue that takes the Name/Value
-        /// string definition as a single input parameter.
+        /// Sets the value of the attribute. This is a fluent version of XElement.SetAttributeValue
+        /// that takes the Name/Value string definition as a single input parameter.
         /// </summary>
         /// <param name="obj">The object.</param>
-        /// <param name="nameValuePair">The attribute name/value pair of the "[name]=[value]" format (e.g. ""Version=!(bind.FileVersion.Utils.dll)").</param>
+        /// <param name="nameValuePair">
+        /// The attribute name/value pair of the "[name]=[value]" format (e.g. ""Version=!(bind.FileVersion.Utils.dll)").
+        /// </param>
         /// <returns></returns>
         public static XElement SetAttribute(this XElement obj, string nameValuePair)
         {
@@ -492,7 +502,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Adds the attributes to the to a given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
+        /// Adds the attributes to the to a given XML element ( <see cref="T:System.Xml.Linq.XElement"/>).
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="attributes">The attributes.</param>
@@ -505,7 +515,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Adds the attributes to the to a given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
+        /// Adds the attributes to the to a given XML element ( <see cref="T:System.Xml.Linq.XElement"/>).
         /// </summary>
         /// <param name="obj">The instance of the <see cref="T:System.Xml.Linq.XElement"/>.</param>
         /// <param name="attributes">The collection of Name/Value attributes to add.</param>
@@ -514,9 +524,7 @@ namespace WixSharp
         {
             if (attributes != null && attributes.Any())
             {
-                // "Component:ProviderKey=12345
-                // {dep}ProductKey=12345
-                // Component:{dep}ProductKey=12345
+                // "Component:ProviderKey=12345 {dep}ProductKey=12345 Component:{dep}ProductKey=12345
                 var optimizedAttributes = attributes.Where(x => !x.Key.Contains(":") &&
                                                                 !x.Key.StartsWith("{"));
 
@@ -538,7 +546,8 @@ namespace WixSharp
         /// <param name="obj">The obj.</param>
         /// <param name="name">The name.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified <see cref="T:System.Xml.Linq.XElement"/> has attribute; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="T:System.Xml.Linq.XElement"/> has attribute;
+        /// otherwise, <c>false</c>.
         /// </returns>
         public static bool HasAttribute(this XElement obj, string name)
         {
@@ -546,14 +555,17 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="T:System.Xml.Linq.XElement"/> has attribute and the attribute value passes the test
-        /// by <c>attributeValueSelector</c>.
+        /// Determines whether the specified <see cref="T:System.Xml.Linq.XElement"/> has attribute
+        /// and the attribute value passes the test by <c>attributeValueSelector</c>.
         /// </summary>
         /// <param name="obj">The obj.</param>
         /// <param name="name">The name.</param>
-        /// <param name="attributeValueSelector">The attribute value selector. Allows testing the attribute value.</param>
+        /// <param name="attributeValueSelector">
+        /// The attribute value selector. Allows testing the attribute value.
+        /// </param>
         /// <returns>
-        /// 	<c>true</c> if the specified <see cref="T:System.Xml.Linq.XElement"/> has attribute; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="T:System.Xml.Linq.XElement"/> has attribute;
+        /// otherwise, <c>false</c>.
         /// </returns>
         public static bool HasAttribute(this XElement obj, string name, Predicate<string> attributeValueSelector)
         {
@@ -561,13 +573,15 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="T:System.Xml.Linq.XElement" /> has attribute and the specific attribute value.
+        /// Determines whether the specified <see cref="T:System.Xml.Linq.XElement"/> has attribute
+        /// and the specific attribute value.
         /// </summary>
         /// <param name="obj">The obj.</param>
         /// <param name="name">The name.</param>
         /// <param name="attributeValue">The attribute value.</param>
         /// <returns>
-        ///   <c>true</c> if the specified <see cref="T:System.Xml.Linq.XElement" /> has attribute; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified <see cref="T:System.Xml.Linq.XElement"/> has attribute;
+        /// otherwise, <c>false</c>.
         /// </returns>
         public static bool HasAttribute(this XElement obj, string name, string attributeValue)
         {
@@ -575,7 +589,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Search for the first parent element (in the "parents chain") with the specified name of the given XML element (<see cref="T:System.Xml.Linq.XElement"/>).
+        /// Search for the first parent element (in the "parents chain") with the specified name of
+        /// the given XML element ( <see cref="T:System.Xml.Linq.XElement"/>).
         /// </summary>
         /// <param name="obj">The instance of the <see cref="T:System.Xml.Linq.XElement"/>.</param>
         /// <param name="parentName">Name of the parent element to search.</param>
@@ -596,12 +611,19 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Copies attribute value from one <see cref="T:System.Xml.Linq.XElement"/> to another. If the attribute already exists, its value is modified.
+        /// Copies attribute value from one <see cref="T:System.Xml.Linq.XElement"/> to another. If
+        /// the attribute already exists, its value is modified.
         /// </summary>
-        /// <param name="dest">The instance of the <see cref="T:System.Xml.Linq.XElement"/> to copy the attribute to.</param>
-        /// <param name="src">The instance of the <see cref="T:System.Xml.Linq.XElement"/> to copy the attribute from.</param>
+        /// <param name="dest">
+        /// The instance of the <see cref="T:System.Xml.Linq.XElement"/> to copy the attribute to.
+        /// </param>
+        /// <param name="src">
+        /// The instance of the <see cref="T:System.Xml.Linq.XElement"/> to copy the attribute from.
+        /// </param>
         /// <param name="attributeName">Name of the source attribute to copy.</param>
-        /// <returns>The instance of the <see cref="T:System.Xml.Linq.XElement"/> to copy the attribute to.</returns>
+        /// <returns>
+        /// The instance of the <see cref="T:System.Xml.Linq.XElement"/> to copy the attribute to.
+        /// </returns>
         public static XElement CopyAttributeFrom(this XElement dest, XElement src, string attributeName)
         {
             if (src.Attribute(attributeName) != null)
@@ -615,30 +637,31 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Injects the Wxs (WiX source) into Wxs document. It merges 'Wix/Product' elements of document with
-        /// 'Wix/Product' elements of wxsFile.
-        /// <para> This method is nothing else but a 'syntactic sugar' method, which wraps the following code:
+        /// Injects the Wxs (WiX source) into Wxs document. It merges 'Wix/Product' elements of
+        /// document with 'Wix/Product' elements of wxsFile.
+        /// <para>
+        /// This method is nothing else but a 'syntactic sugar' method, which wraps the following code:
         /// <code>
-        /// document.Root.Select("Product")
-        ///              .Add(XDocument.Load(wxsFile)
-        ///              .Root.Select("Product").Elements());
+        ///document.Root.Select("Product")
+        ///.Add(XDocument.Load(wxsFile)
+        ///.Root.Select("Product").Elements());
         /// </code>
         /// </para>
         /// <example>The following is an example of using InjectWxs.
         /// <code>
-        /// Compiler.WixSourceGenerated +=
-        ///            document => document.InjectWxs("CommonProperies.wxs");
+        ///Compiler.WixSourceGenerated +=
+        ///document =&gt; document.InjectWxs("CommonProperies.wxs");
         ///
-        /// //where CommonProperies.wxs contains the following XML
-        /// &lt;?xml version=&quot;1.0&quot; encoding=&quot;Windows-1252&quot;?&gt;
-        /// &lt;Wix xmlns = &quot;http://schemas.microsoft.com/wix/2006/wi&quot; &gt;
-        ///   &lt;Product&gt;
-        ///     &lt;Property Id=&quot;Prop1&quot; Value=&quot;1&quot; /&gt;
-        ///     &lt;Property Id=&quot;Prop2&quot; Value=&quot;2&quot; /&gt;
-        ///     &lt;Property Id=&quot;Prop3&quot; Value=&quot;3&quot; /&gt;
-        ///     &lt;Property Id=&quot;Prop4&quot; Value=&quot;4&quot; /&gt;
-        ///   &lt;/Product&gt;
-        /// &lt;/Wix&gt;
+        /////where CommonProperies.wxs contains the following XML
+        ///&lt;?xml version="1.0" encoding="Windows-1252"?&gt;
+        ///&lt;Wix xmlns = "http://schemas.microsoft.com/wix/2006/wi" &gt;
+        ///&lt;Product&gt;
+        ///&lt;Property Id="Prop1" Value="1" /&gt;
+        ///&lt;Property Id="Prop2" Value="2" /&gt;
+        ///&lt;Property Id="Prop3" Value="3" /&gt;
+        ///&lt;Property Id="Prop4" Value="4" /&gt;
+        ///&lt;/Product&gt;
+        ///&lt;/Wix&gt;
         /// </code>
         /// </example>
         /// </summary>
@@ -719,16 +742,14 @@ namespace WixSharp
         /// <typeparam name="T"></typeparam>
         /// <param name="value">The value.</param>
         /// <param name="values">The values.</param>
-        /// <returns>
-        ///   <c>true</c> if [is one of] [the specified values]; otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if [is one of] [the specified values]; otherwise, <c>false</c>.</returns>
         public static bool IsOneOf<T>(this T value, params T[] values)
         {
             return values.Any(x => value.Equals(x));
         }
 
         /// <summary>
-        /// Enqueues the range of the items into a instance of the  <see cref="T:System.Collections.Generics.Queue"/>.
+        /// Enqueues the range of the items into a instance of the <see cref="T:System.Collections.Generics.Queue"/>.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="queue">The queue.</param>
@@ -744,8 +765,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Gets the combined hash code of all items in the collection. This method is convenient to use to
-        /// verify that the collections have identical items.
+        /// Gets the combined hash code of all items in the collection. This method is convenient to
+        /// use to verify that the collections have identical items.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="collection">The collection.</param>
@@ -761,13 +782,20 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Copies attribute value from one <see cref="T:System.Xml.Linq.XElement"/> to another. If the attribute already exists, its value is modified.
+        /// Copies attribute value from one <see cref="T:System.Xml.Linq.XElement"/> to another. If
+        /// the attribute already exists, its value is modified.
         /// </summary>
-        /// <param name="dest">The instance of the <see cref="T:System.Xml.Linq.XElement"/> to copy the attribute to.</param>
+        /// <param name="dest">
+        /// The instance of the <see cref="T:System.Xml.Linq.XElement"/> to copy the attribute to.
+        /// </param>
         /// <param name="destAttributeName">Name of the destination attribute to copy.</param>
-        /// <param name="src">The instance of the <see cref="T:System.Xml.Linq.XElement"/> to copy the attribute from.</param>
+        /// <param name="src">
+        /// The instance of the <see cref="T:System.Xml.Linq.XElement"/> to copy the attribute from.
+        /// </param>
         /// <param name="srcAttributeName">Name of the source attribute to copy.</param>
-        /// <returns>The instance of the <see cref="T:System.Xml.Linq.XElement"/> to copy the attribute to.</returns>
+        /// <returns>
+        /// The instance of the <see cref="T:System.Xml.Linq.XElement"/> to copy the attribute to.
+        /// </returns>
         public static XElement CopyAttributeFrom(this XElement dest, string destAttributeName, XElement src, string srcAttributeName)
         {
             if (src.Attribute(srcAttributeName) != null)
@@ -782,8 +810,10 @@ namespace WixSharp
 
         /// <summary>
         /// Replaces all Wix# predefined string constants in the Wix# directory path with their WiX equivalents.
-        /// <para>Processed string can be used as an Id for referencing from other Wix# components and setting the
-        /// corresponding path from <c>MsiExec.exe</c> command line.</para>
+        /// <para>
+        /// Processed string can be used as an Id for referencing from other Wix# components and
+        /// setting the corresponding path from <c>MsiExec.exe</c> command line.
+        /// </para>
         /// </summary>
         /// <param name="path">The Wix# directory path.</param>
         /// <returns>Replacement/conversion result.</returns>
@@ -847,7 +877,8 @@ namespace WixSharp
         /// <summary>
         /// Returns Exception.ToString result containing no debug information.
         /// <para>
-        /// Sanitizes the result before returning by removing any debug info (file locations) from the exception trace stack.
+        /// Sanitizes the result before returning by removing any debug info (file locations) from
+        /// the exception trace stack.
         /// </para>
         /// </summary>
         /// <param name="ex">The ex.</param>
@@ -921,12 +952,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// A simple generic wrapper around more specialized <see cref="T:String.Join" />, which is limited to
-        /// work with string arrays only.
+        /// A simple generic wrapper around more specialized <see cref="T:String.Join"/>, which is
+        /// limited to work with string arrays only.
         /// </summary>
         /// <param name="strings">The strings.</param>
         /// <param name="separator">The separator.</param>
-        /// <param name="selector"> A transform function to apply to each source element; the second parameter of the function represents the index of the source element.
+        /// <param name="selector">
+        /// A transform function to apply to each source element; the second parameter of the
+        /// function represents the index of the source element.
         /// </param>
         /// <returns></returns>
         public static string JoinBy(this IEnumerable<string> strings, string separator, Func<string, string> selector = null)
@@ -938,12 +971,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// A simple generic wrapper around more specialized <see cref="T:String.Join" />, which is limited to
-        /// work with string arrays only.
+        /// A simple generic wrapper around more specialized <see cref="T:String.Join"/>, which is
+        /// limited to work with string arrays only.
         /// </summary>
         /// <param name="strings">The strings.</param>
         /// <param name="separator">The separator.</param>
-        /// <param name="selector"> A transform function to apply to each source element; the second parameter of the function represents the index of the source element.
+        /// <param name="selector">
+        /// A transform function to apply to each source element; the second parameter of the
+        /// function represents the index of the source element.
         /// </param>
         /// <returns></returns>
         [Obsolete(message: "This method name is obsolete use `JoinBy` instead", error: false)]
@@ -982,8 +1017,8 @@ namespace WixSharp
         static readonly char[] xmlDelimiters = "<>&".ToCharArray();
 
         /// <summary>
-        /// Returns the string data as a <see cref="T:System.Xml.Linq.XCData"/> if the value contains
-        /// XML tags begin and end characters and it is not already a CDATA expression.
+        /// Returns the string data as a <see cref="T:System.Xml.Linq.XCData"/> if the value
+        /// contains XML tags begin and end characters and it is not already a CDATA expression.
         /// </summary>
         /// <returns></returns>
         public static object ToXValue(this object value)
@@ -1043,9 +1078,7 @@ namespace WixSharp
         /// Determines whether this path is a file.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified path is file; otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if the specified path is file; otherwise, <c>false</c>.</returns>
         public static bool IsFile(this string path)
             => IO.File.Exists(path);
 
@@ -1053,9 +1086,7 @@ namespace WixSharp
         /// Determines whether this instance is directory.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified path is directory; otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if the specified path is directory; otherwise, <c>false</c>.</returns>
         public static bool IsDirectory(this string path)
             => IO.Directory.Exists(path);
 
@@ -1166,7 +1197,9 @@ namespace WixSharp
 
         /// <summary>
         /// Gets the location of the assembly.
-        /// <p>Can discover the original location of the assembly being loaded from memory in case of a CS-Script assembly.
+        /// <p>
+        /// Can discover the original location of the assembly being loaded from memory in case of a
+        /// CS-Script assembly.
         /// </p>
         /// </summary>
         /// <param name="assembly">The assembly.</param>
@@ -1229,7 +1262,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Converts string value representing path into an absolute path. If string is null or empty it is treated as the CurrentDirectory equivalent.
+        /// Converts string value representing path into an absolute path. If string is null or
+        /// empty it is treated as the CurrentDirectory equivalent.
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns></returns>
@@ -1239,8 +1273,9 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Identical to <see cref="System.IO.Path.GetFileName(string)"/>. It is useful for Wix# consuming code as it allows avoiding
-        /// "using System.IO;" directive, which interferes with Wix# types.
+        /// Identical to <see cref="System.IO.Path.GetFileName(string)"/>. It is useful for Wix#
+        /// consuming code as it allows avoiding "using System.IO;" directive, which interferes with
+        /// Wix# types.
         /// </summary>
         /// <param name="path">The path.</param>
         public static string PathGetFileName(this string path)
@@ -1249,8 +1284,9 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Identical to <see cref="System.IO.Path.GetExtension(string)"/>. It is useful for Wix# consuming code as it allows avoiding
-        /// "using System.IO;" directive, which interferes with Wix# types.
+        /// Identical to <see cref="System.IO.Path.GetExtension(string)"/>. It is useful for Wix#
+        /// consuming code as it allows avoiding "using System.IO;" directive, which interferes with
+        /// Wix# types.
         /// </summary>
         /// <param name="path">The file extension.</param>
         public static string PathGetExtension(this string path)
@@ -1327,20 +1363,29 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Replaces all Wix# predefined string constants (Environment Constants) in the Wix# directory path with their WiX equivalents and escapes all WiX illegal characters (e.g. space character).
-        /// <para><para>It also replaces all "illegal" characters (e.g. !,\) with '_' character to allow the path value to be used as a WiX Id XML attribute.</para><example>The following is an example of expanding directory name paths.
+        /// Replaces all Wix# predefined string constants (Environment Constants) in the Wix#
+        /// directory path with their WiX equivalents and escapes all WiX illegal characters (e.g.
+        /// space character).
+        /// <para>
+        /// <para>
+        /// It also replaces all "illegal" characters (e.g. !,\) with '_' character to allow the
+        /// path value to be used as a WiX Id XML attribute.
+        /// </para>
+        /// <example>The following is an example of expanding directory name paths.
         /// <code>
-        /// @"%ProgramFiles%\My Company\My Product".Expand()       -&gt; @"ProgramFilesFolder\My_Company\My_Product"
-        /// @"ProgramFilesFolder\My Company\My Product".Expand()   -&gt; @"ProgramFilesFolder\My_Company\My_Product"
-        /// @"[ProgramFilesFolder]\My Company\My Product".Expand() -&gt; @"ProgramFilesFolder\My_Company\My_Product"
-        /// </code></example></para>
+        ///@"%ProgramFiles%\My Company\My Product".Expand()       -&gt; @"ProgramFilesFolder\My_Company\My_Product"
+        ///@"ProgramFilesFolder\My Company\My Product".Expand()   -&gt; @"ProgramFilesFolder\My_Company\My_Product"
+        ///@"[ProgramFilesFolder]\My Company\My Product".Expand() -&gt; @"ProgramFilesFolder\My_Company\My_Product"
+        /// </code>
+        /// </example>
+        /// </para>
         /// For the list of supported constants analyses <c>WixSharp.Compiler.EnvironmentConstantsMapping.Keys</c>.
         /// </summary>
         /// <param name="path">The Wix# directory path.</param>
-        /// <param name="doNotFixStartDigit">if set to <c>true</c> starting from digit character is permitted.</param>
-        /// <returns>
-        /// Replacement result.
-        /// </returns>
+        /// <param name="doNotFixStartDigit">
+        /// if set to <c>true</c> starting from digit character is permitted.
+        /// </param>
+        /// <returns>Replacement result.</returns>
         public static string Expand(this string path, bool doNotFixStartDigit = false)
         {
             var result = path.ExpandWixEnvConsts()
@@ -1367,9 +1412,7 @@ namespace WixSharp
         /// Determines whether the value is a WiX constant (e.g. 'SystemFolder').
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified value is a WiX constant; otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if the specified value is a WiX constant; otherwise, <c>false</c>.</returns>
         public static bool IsWixConstant(this string value)
         {
             return Compiler.EnvironmentConstantsMapping.ContainsValue(value);
@@ -1377,7 +1420,10 @@ namespace WixSharp
 
         /// <summary>
         /// Maps the Wix# constants included in path into their x64 equivalents.
-        /// <para>For example %ProgramFiles%\My Company\My Product should be preprocessed into %ProgramFiles64%\My Company\My Product</para>
+        /// <para>
+        /// For example %ProgramFiles%\My Company\My Product should be preprocessed into
+        /// %ProgramFiles64%\My Company\My Product
+        /// </para>
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns></returns>
@@ -1393,13 +1439,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Replaces all Wix# predefined string constants (Environment Constants) in the Wix# directory path with their WiX equivalents and escapes all WiX illegal characters (e.g. space character).
-        /// <para>
-        /// <example>The following is an example of expanding directory name paths.
+        /// Replaces all Wix# predefined string constants (Environment Constants) in the Wix#
+        /// directory path with their WiX equivalents and escapes all WiX illegal characters (e.g.
+        /// space character).
+        /// <para><example>The following is an example of expanding directory name paths.
         /// <code>
-        /// @"%ProgramFiles%\My Company\My Product".Expand()       -> @"ProgramFilesFolder\My_Company\My_Product"
-        /// @"ProgramFilesFolder\My Company\My Product".Expand()   -> @"ProgramFilesFolder\My_Company\My_Product"
-        /// @"[ProgramFilesFolder]\My Company\My Product".Expand() -> @"ProgramFilesFolder\My_Company\My_Product"
+        ///@"%ProgramFiles%\My Company\My Product".Expand()       -&gt; @"ProgramFilesFolder\My_Company\My_Product"
+        ///@"ProgramFilesFolder\My Company\My Product".Expand()   -&gt; @"ProgramFilesFolder\My_Company\My_Product"
+        ///@"[ProgramFilesFolder]\My Company\My Product".Expand() -&gt; @"ProgramFilesFolder\My_Company\My_Product"
         /// </code>
         /// </example>
         /// </para>
@@ -1418,15 +1465,16 @@ namespace WixSharp
 
         /// <summary>
         /// Normalizes the wix environment constants and custom properties.
-        /// <para>This method is not the same as `ExpandWixEnvConsts`. The key difference is
-        /// that it handles custom properties, leaves square brackets unchanged and also normalizes directory separators.
-        /// Normalization is critical for string values that are used as `ExeFileShortcut.Target`:</para>
         /// <para>
-        /// <example>
+        /// This method is not the same as `ExpandWixEnvConsts`. The key difference is that it
+        /// handles custom properties, leaves square brackets unchanged and also normalizes
+        /// directory separators. Normalization is critical for string values that are used as `ExeFileShortcut.Target`:
+        /// </para>
+        /// <para><example>
         /// <code>
-        /// @"%INSTALLDIR%\my_app.exe".NormalizeWixString() -> "[INSTALLDIR]my_app.exe"
-        /// @"%INSTALLDIR%my_app.exe".NormalizeWixString()  -> "[INSTALLDIR]my_app.exe"
-        /// @"[INSTALLDIR]my_app.exe".NormalizeWixString()  -> "[INSTALLDIR]my_app.exe"
+        ///@"%INSTALLDIR%\my_app.exe".NormalizeWixString() -&gt; "[INSTALLDIR]my_app.exe"
+        ///@"%INSTALLDIR%my_app.exe".NormalizeWixString()  -&gt; "[INSTALLDIR]my_app.exe"
+        ///@"[INSTALLDIR]my_app.exe".NormalizeWixString()  -&gt; "[INSTALLDIR]my_app.exe"
         /// </code>
         /// </example>
         /// </para>
@@ -1435,20 +1483,21 @@ namespace WixSharp
         /// <returns></returns>
         public static string NormalizeWixString(this string path)
         {
-            // EnvironmentConstantsMapping.Keys include '%' chars:
-            //   { "%ProgramFiles%", "ProgramFilesFolder" },
+            // EnvironmentConstantsMapping.Keys include '%' chars: { "%ProgramFiles%",
+            // "ProgramFilesFolder" },
             foreach (string key in Compiler.EnvironmentConstantsMapping.Keys)
                 path = path
-                           // if the constant came to this method already extended/normalized then the
-                           // call `.Replace(key.Trim('%'), Compiler.EnvironmentConstantsMapping[key]` would
-                           // insert suffix `Folder` one extra time (e.g. SystemFolder64Folder->SystemFolder64FolderFolder)
+                           // if the constant came to this method already extended/normalized then
+                           // the call `.Replace(key.Trim('%'),
+                           // Compiler.EnvironmentConstantsMapping[key]` would insert suffix
+                           // `Folder` one extra time (e.g. SystemFolder64Folder->SystemFolder64FolderFolder)
 
-                           // Another problem is that *64Folder/*FilesFolder can be ruined by * replacement
-                           // ProgramFiles64Folder/ProgramFilesFolder <- ProgramFiles
+                           // Another problem is that *64Folder/*FilesFolder can be ruined by *
+                           // replacement ProgramFiles64Folder/ProgramFilesFolder <- ProgramFiles
                            // System64Folder, SystemFolder <- System
 
-                           // The solution is not elegant in terms of performance but adequate. We don't need
-                           // performance during the compilation.
+                           // The solution is not elegant in terms of performance but adequate. We
+                           // don't need performance during the compilation.
 
                            // protect `System` and `ProgramFiles`
                            .Replace("System64Folder", "Sys64Folder")
@@ -1466,8 +1515,8 @@ namespace WixSharp
                            .Replace("ProgFiles64Folder", "ProgramFiles64Folder")
                            .Replace("ProgFilesFolder", "ProgramFilesFolder");
 
-            // ensure `%System64Folder%msiexec.exe` and `%System64Folder%\msiexec.exe` are converted in
-            // `[System64Folder]msiexec.exe`
+            // ensure `%System64Folder%msiexec.exe` and `%System64Folder%\msiexec.exe` are converted
+            // in `[System64Folder]msiexec.exe`
             var chars = path.Replace(@"%\", "%")
                             .ToArray();
 
@@ -1485,9 +1534,13 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Unescape '\%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product").
-        /// <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent
-        /// "%ProgramFiles%\My Product" being later converted into "ProgramFilesFolder\My Product"</para>
+        /// Unescape '\%' characters in the tokens representing environment variables (e.g.
+        /// "%ProgramFiles%\My Product").
+        /// <para>
+        /// Required for avoiding collisions between environment variables and WiX constants. For
+        /// example to prevent "%ProgramFiles%\My Product" being later converted into
+        /// "ProgramFilesFolder\My Product"
+        /// </para>
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
@@ -1497,9 +1550,13 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Escape '%' characters in the tokens representing environment variables (e.g. "%ProgramFiles%\My Product").
-        /// <para>Required for avoiding collisions between environment variables and WiX constants. For example to prevent
-        /// "%ProgramFiles%\My Product" being later converted into "ProgramFilesFolder\My Product"</para>
+        /// Escape '%' characters in the tokens representing environment variables (e.g.
+        /// "%ProgramFiles%\My Product").
+        /// <para>
+        /// Required for avoiding collisions between environment variables and WiX constants. For
+        /// example to prevent "%ProgramFiles%\My Product" being later converted into
+        /// "ProgramFilesFolder\My Product"
+        /// </para>
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
@@ -1517,7 +1574,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Expands the EnvironmentVariable It is nothing else but a an extension method wrapping Environment.ExpandEnvironmentVariables to allow fluent API.
+        /// Expands the EnvironmentVariable It is nothing else but a an extension method wrapping
+        /// Environment.ExpandEnvironmentVariables to allow fluent API.
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns></returns>
@@ -1533,7 +1591,9 @@ namespace WixSharp
         /// Escapes the illegal characters in the WiX Id value.
         /// </summary>
         /// <param name="data">The data.</param>
-        /// <param name="doNotFixStartDigit">if set to <c>true</c> starting from digit character is permitted.</param>
+        /// <param name="doNotFixStartDigit">
+        /// if set to <c>true</c> starting from digit character is permitted.
+        /// </param>
         /// <returns></returns>
         public static string EscapeIllegalCharacters(this string data, bool doNotFixStartDigit = false)
         {
@@ -1542,9 +1602,9 @@ namespace WixSharp
             legalChars.AddRange("._0123456789".ToCharArray());
             legalChars.AddRange("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray());
 
-            // Replace non-legal character to their character code. This is to
-            // prevent a bug that the directory Ids are duplicated if directory
-            // names consists of non-legal characters, and the lengths are same.
+            // Replace non-legal character to their character code. This is to prevent a bug that
+            // the directory Ids are duplicated if directory names consists of non-legal characters,
+            // and the lengths are same.
             var escaped = new StringBuilder();
             foreach (var ch in data)
             {
@@ -1628,9 +1688,7 @@ namespace WixSharp
         /// Determines whether the given string is empty.
         /// </summary>
         /// <param name="s">The string to analyze.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified s is empty; otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if the specified s is empty; otherwise, <c>false</c>.</returns>
         public static bool IsEmpty(this string s)
         {
             return string.IsNullOrEmpty(s);
@@ -1640,9 +1698,7 @@ namespace WixSharp
         /// Determines whether the given string is empty or not.
         /// </summary>
         /// <param name="s">The string to analyses.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified string is not empty; otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if the specified string is not empty; otherwise, <c>false</c>.</returns>
         public static bool IsNotEmpty(this string s)
         {
             return !string.IsNullOrEmpty(s);
@@ -1671,14 +1727,15 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Returns the first item that starts with one of the specified possible prefixes.
-        /// The method returns the matching item value without the prefix.
+        /// Returns the first item that starts with one of the specified possible prefixes. The
+        /// method returns the matching item value without the prefix.
         /// </summary>
-        /// <example>This method is convenient a convenient way of parsing command line arguments.
+        /// <example>
+        /// This method is convenient a convenient way of parsing command line arguments.
         /// <code>
-        /// // Command line: "app.exe -out:.\log.file"
-        /// // outFile value is ".\log.file"
-        /// string outFile = Environment.GetCommandLineArgs().FirstPrefixedValue("-out:", "-o:");
+        ///// Command line: "app.exe -out:.\log.file"
+        ///// outFile value is ".\log.file"
+        ///string outFile = Environment.GetCommandLineArgs().FirstPrefixedValue("-out:", "-o:");
         /// </code>
         /// </example>
         /// <param name="items">The items.</param>
@@ -1704,16 +1761,15 @@ namespace WixSharp
         /// Returns all leading white-space characters.
         /// </summary>
         /// <param name="s">The string to analyse.</param>
-        /// <returns>
-        /// 	Total count of leading white-space characters
-        /// </returns>
+        /// <returns>Total count of leading white-space characters</returns>
         public static int GetLeftIndent(this string s)
         {
             return s.Length - s.TrimStart('\n', '\r', '\t', ' ').Length;
         }
 
         /// <summary>
-        /// Concats the specified strings. In the result string all items are separated with the specified delimiter.
+        /// Concats the specified strings. In the result string all items are separated with the
+        /// specified delimiter.
         /// </summary>
         /// <param name="strings">The strings.</param>
         /// <param name="delimiter">The delimiter.</param>
@@ -1734,9 +1790,7 @@ namespace WixSharp
         /// </summary>
         /// <param name="element">The element to be searched.</param>
         /// <param name="path">The path.</param>
-        /// <returns>
-        /// The element matching the path.
-        /// </returns>
+        /// <returns>The element matching the path.</returns>
         public static XElement Select(this XContainer element, string path)
         {
             string[] parts = path.Split('/');
@@ -1821,7 +1875,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Selects from the given element the first child element Directory matching the specified path (e.g. <c>Select("ProgramFiles/MyCompany") by </c>).
+        /// Selects from the given element the first child element Directory matching the specified
+        /// path (e.g. <c>Select("ProgramFiles/MyCompany") by</c>).
         /// </summary>
         /// <param name="element">The element to be searched.</param>
         /// <param name="path">The path.</param>
@@ -1856,8 +1911,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Iterates through the all already prepared/processed components grouped by features and either
-        /// add the new component to the existing group or to the freshly created one.
+        /// Iterates through the all already prepared/processed components grouped by features and
+        /// either add the new component to the existing group or to the freshly created one.
         /// <para>featureComponents[feature].Add(componentId);</para>
         /// </summary>
         /// <param name="featureComponents">The feature components.</param>
@@ -1878,14 +1933,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Adds the XML (*.wxi) include.
-        /// <example>The following is an example of including external XML files.
+        /// Adds the XML (*.wxi) include. <example>The following is an example of including external
+        /// XML files.
         /// <code>
-        /// project.AddXmlInclude("CommonProperies.wxi")
-        ///        .AddXmlInclude("CommonProperies2.wxi");
+        ///project.AddXmlInclude("CommonProperies.wxi")
+        ///.AddXmlInclude("CommonProperies2.wxi");
         ///
-        /// new File(@"Files\Bin\MyApp.exe")
-        ///           .AddXmlInclude("FileItems.wxi", parentElement: "Component");
+        ///new File(@"Files\Bin\MyApp.exe")
+        ///.AddXmlInclude("FileItems.wxi", parentElement: "Component");
         /// </code>
         /// </example>
         /// </summary>
@@ -1903,7 +1958,9 @@ namespace WixSharp
         /// <summary>
         /// Adds the specified XML content as a WiX Fragment/FragmentRef elements combination.
         /// </summary>
-        /// <param name="placementElement">The element the reference to the fragment should be placed at.</param>
+        /// <param name="placementElement">
+        /// The element the reference to the fragment should be placed at.
+        /// </param>
         /// <param name="content">The fragment content.</param>
         /// <returns></returns>
         public static XElement AddWixFragment(this XElement placementElement, params XElement[] content)
@@ -1938,7 +1995,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Adds the specified extension to  <see cref="T:WixSharp.WixProject" />
+        /// Adds the specified extension to <see cref="T:WixSharp.WixProject"/>
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="extension">The extension.</param>
@@ -1951,7 +2008,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Adds the specified extension to  <see cref="T:WixSharp.WixProject" />.
+        /// Adds the specified extension to <see cref="T:WixSharp.WixProject"/>.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="extension">The extension.</param>
@@ -1963,7 +2020,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Adds the specified extension to  <see cref="T:WixSharp.WixProject" />
+        /// Adds the specified extension to <see cref="T:WixSharp.WixProject"/>
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="extensionAssembly">The extension assembly.</param>
@@ -1986,7 +2043,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Selects single descendant element with a given name (LocalName). Throws if no or more then one match found
+        /// Selects single descendant element with a given name (LocalName). Throws if no or more
+        /// then one match found
         /// </summary>
         /// <param name="container">The element to be searched.</param>
         /// <param name="elementName">The element local name.</param>
@@ -1997,7 +2055,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Selects all descendant elements with a given name (LocalName). Throws if no or more then one match found
+        /// Selects all descendant elements with a given name (LocalName). Throws if no or more then
+        /// one match found
         /// </summary>
         /// <param name="element">The element to be searched.</param>
         /// <param name="elementName">The element local name.</param>
@@ -2039,7 +2098,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Selects the first descendant "Directory" element that has no other sub-directories (child "Directory" XElements).
+        /// Selects the first descendant "Directory" element that has no other sub-directories
+        /// (child "Directory" XElements).
         /// </summary>
         /// <param name="element">The element to be searched.</param>
         /// <returns>Directory XElement.</returns>
@@ -2064,8 +2124,8 @@ namespace WixSharp
 
         /// <summary>
         /// Selects, from the given element, the child element matching the specified path.
-        /// <para> If the child element is not found, a new element is created matching the
-        /// path (e.g. <c>SelectOrCreate("userSettings/MyApp.Properties.Settings/setting")</c>).
+        /// <para>
+        /// If the child element is not found, a new element is created matching the path (e.g. <c>SelectOrCreate("userSettings/MyApp.Properties.Settings/setting")</c>).
         /// </para>
         /// </summary>
         /// <param name="element">The element to be searched.</param>
@@ -2121,7 +2181,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Converts <see cref="T:WixSharp.Sequence"/> into the WiX identifier by removing WiX illegal characters.
+        /// Converts <see cref="T:WixSharp.Sequence"/> into the WiX identifier by removing WiX
+        /// illegal characters.
         /// </summary>
         /// <param name="value">The <see cref="T:WixSharp.Sequence"/> value.</param>
         /// <returns>Valid WiX identifier.</returns>
@@ -2171,7 +2232,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Unescapes any serialization tokens in the key value string. These tokens are '{$EQV}', '{$SMCOL}' and '{$NL}'.
+        /// Unescapes any serialization tokens in the key value string. These tokens are '{$EQV}',
+        /// '{$SMCOL}' and '{$NL}'.
         /// </summary>
         /// <param name="data">The data.</param>
         /// <returns></returns>
@@ -2183,8 +2245,9 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Merges and replaces key values in a given dictionary (<c>map</c> parameter) with another dictionary values. Another dictionary
-        /// is provided in a serialized form (<c>data</c> parameter).
+        /// Merges and replaces key values in a given dictionary ( <c>map</c> parameter) with
+        /// another dictionary values. Another dictionary is provided in a serialized form (
+        /// <c>data</c> parameter).
         /// </summary>
         /// <param name="map">The dictionary, which is a subject of the merge operation.</param>
         /// <param name="data">The merge key/values source in it's serialized form data.</param>
@@ -2210,8 +2273,8 @@ namespace WixSharp
             => map.ContainsKey(key) ? map[key] : null;
 
         /// <summary>
-        /// Sets the adds or sets key/value pair. <para>Removes the key/value pair if the specified
-        /// value is <c>null</c>.</para>
+        /// Sets the adds or sets key/value pair.
+        /// <para>Removes the key/value pair if the specified value is <c>null</c>.</para>
         /// </summary>
         /// <typeparam name="T1">The type of the 1.</typeparam>
         /// <typeparam name="T2">The type of the 2.</typeparam>
@@ -2311,8 +2374,10 @@ namespace WixSharp
 
         /// <summary>
         /// Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
-        /// <para>If you are adding items to the <c>Project</c> or <c>Dir</c> then you can use the dedicated
-        /// methods for that (e.g. `dir.AffFiles(drivers)`).</para>
+        /// <para>
+        /// If you are adding items to the <c>Project</c> or <c>Dir</c> then you can use the
+        /// dedicated methods for that (e.g. `dir.AffFiles(drivers)`).
+        /// </para>
         /// </summary>
         /// <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
         /// <typeparam name="T2">The type of the elements of the items being added.</typeparam>
@@ -2351,11 +2416,15 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Combines given <see cref="T:System.Collections.Generic.List"/> items with items of another <see cref="T:System.Collections.Generic.List"/>.
+        /// Combines given <see cref="T:System.Collections.Generic.List"/> items with items of
+        /// another <see cref="T:System.Collections.Generic.List"/>.
         /// </summary>
         /// <typeparam name="T">The type of the elements of <c>obj</c>.</typeparam>
         /// <param name="obj">A <see cref="T:System.Collections.Generic.List"/>.</param>
-        /// <param name="items">Another instance of <see cref="T:System.Collections.Generic.List"/> whose elements are to be combined with those of <c>obj</c>.</param>
+        /// <param name="items">
+        /// Another instance of <see cref="T:System.Collections.Generic.List"/> whose elements are
+        /// to be combined with those of <c>obj</c>.
+        /// </param>
         /// <returns>A combined <see cref="T:System.Collections.Generic.List"/>.</returns>
         public static List<T> Combine<T>(this List<T> obj, List<T> items)
         {
@@ -2365,19 +2434,24 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Fluent version of the <see cref="T:System.String.IsNullOrEmpty"/> for analysing the string value
-        /// for being <c>null</c> or empty.
+        /// Fluent version of the <see cref="T:System.String.IsNullOrEmpty"/> for analysing the
+        /// string value for being <c>null</c> or empty.
         /// </summary>
         /// <param name="obj">A <see cref="T:System.String"/> whose value to analyse.</param>
-        /// <returns>true if the value parameter is null or an empty string (""); otherwise, false.</returns>
+        /// <returns>
+        /// true if the value parameter is null or an empty string (""); otherwise, false.
+        /// </returns>
         public static bool IsNullOrEmpty(this string obj)
         {
             return string.IsNullOrEmpty(obj);
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="T:Microsoft.Deployment.WindowsInstaller.Session"/> is active.
-        /// <para>It is useful for checking if the session is terminated (e.g. in deferred custom actions).</para>
+        /// Determines whether the specified <see
+        /// cref="T:Microsoft.Deployment.WindowsInstaller.Session"/> is active.
+        /// <para>
+        /// It is useful for checking if the session is terminated (e.g. in deferred custom actions).
+        /// </para>
         /// </summary>
         /// <param name="session">The session.</param>
         /// <returns></returns>
@@ -2398,8 +2472,9 @@ namespace WixSharp
         /// <summary>
         /// Determines whether the product associated with the session is installed.
         /// <para>
-        /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
-        /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
+        /// This method will fail to retrieve the correct value if called from the deferred custom
+        /// action and the session properties that it depends on are not preserved with
+        /// 'UsesProperties' or 'DefaultUsesProperties'.
         /// </para>
         /// </summary>
         /// <param name="session">The session.</param>
@@ -2412,9 +2487,7 @@ namespace WixSharp
         /// <summary>
         /// Gets a value indicating whether Authored UI and wizard dialog boxes suppressed.
         /// </summary>
-        /// <value>
-        /// <c>true</c> if UI is suppressed; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if UI is suppressed; otherwise, <c>false</c>.</value>
         public static bool IsUISupressed(this Session session)
         {
             return session.UILevel() <= 4;
@@ -2422,11 +2495,9 @@ namespace WixSharp
 
         /// <summary>
         /// Gets the UIlevel.
-        /// <para>UILevel > 4 lead to displaying modal dialogs. See https://msdn.microsoft.com/en-us/library/aa369487(v=vs.85).aspx. </para>
+        /// <para>UILevel &gt; 4 lead to displaying modal dialogs. See https://msdn.microsoft.com/en-us/library/aa369487(v=vs.85).aspx.</para>
         /// </summary>
-        /// <value>
-        /// The UI level.
-        /// </value>
+        /// <value>The UI level.</value>
         public static int UILevel(this Session session)
         {
             return session.Property("UILevel").ToInt(-1);
@@ -2435,13 +2506,12 @@ namespace WixSharp
         /// <summary>
         /// Gets a value indicating whether the product is being installed.
         /// <para>
-        /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
-        /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
+        /// This method will fail to retrieve the correct value if called from the deferred custom
+        /// action and the session properties that it depends on are not preserved with
+        /// 'UsesProperties' or 'DefaultUsesProperties'.
         /// </para>
         /// </summary>
-        /// <value>
-        /// <c>true</c> if installing; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if installing; otherwise, <c>false</c>.</value>
         static public bool IsInstalling(this Session session)
         {
             return !session.IsInstalled() && !session.IsUninstalling();
@@ -2459,9 +2529,11 @@ namespace WixSharp
 
         /// <summary>
         /// <para>
-        /// Gets the main window of the <c>msiexec.exe</c> process that has 'MainWindowTitle' containing the name of the product being installed.
+        /// Gets the main window of the <c>msiexec.exe</c> process that has 'MainWindowTitle'
+        /// containing the name of the product being installed.
         /// </para>
-        /// This method is a convenient way to display message box from a custom action with properly specified parent window.
+        /// This method is a convenient way to display message box from a custom action with
+        /// properly specified parent window.
         /// </summary>
         /// <param name="session">The session.</param>
         /// <returns></returns>
@@ -2471,8 +2543,9 @@ namespace WixSharp
         /// <summary>
         /// Gets a value indicating whether the product is being repaired.
         /// <para>
-        /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
-        /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
+        /// This method will fail to retrieve the correct value if called from the deferred custom
+        /// action and the session properties that it depends on are not preserved with
+        /// 'UsesProperties' or 'DefaultUsesProperties'.
         /// </para>
         /// </summary>
         static public bool IsRepairing(this Session session)
@@ -2489,12 +2562,14 @@ namespace WixSharp
         /// <summary>
         /// Gets a value indicating whether the product is being upgraded.
         /// <para>
-        /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
-        /// (that it depends on) are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
+        /// This method will fail to retrieve the correct value if called from the deferred custom
+        /// action and the session properties (that it depends on) are not preserved with
+        /// 'UsesProperties' or 'DefaultUsesProperties'.
         /// </para>
         /// <para>
-        /// This method relies on "UPGRADINGPRODUCTCODE" property, which is not set by MSI until previous version is uninstalled. Thus it may not be the
-        /// most practical way of detecting upgrades. Use AppSearch.GetProductVersionFromUpgradeCode as a more reliable alternative.
+        /// This method relies on "UPGRADINGPRODUCTCODE" property, which is not set by MSI until
+        /// previous version is uninstalled. Thus it may not be the most practical way of detecting
+        /// upgrades. Use AppSearch.GetProductVersionFromUpgradeCode as a more reliable alternative.
         /// </para>
         /// </summary>
         [Obsolete("This extension method is based on the MSI property 'UPGRADINGPRODUCTCODE' and it does not detect previous installations reliable. " +
@@ -2506,14 +2581,18 @@ namespace WixSharp
 
         /// <summary>
         /// Gets a value indicating whether this instance is upgrading installed version of the product.
-        /// <para>This extension method is implemented on custom WixSharp algorithm that involves detection of the previously installed version
-        /// of the product from the internal custom action (before `AppSearch`). Thus this algorithm is more reliable than traditional
-        /// UPGRADINGPRODUCTCODE based algorithm. </para>
-        /// <para>Because the custom action is specific to ManagedProject you can only use this extension from ManagedProject setups.</para>
+        /// <para>
+        /// This extension method is implemented on custom WixSharp algorithm that involves
+        /// detection of the previously installed version of the product from the internal custom
+        /// action (before `AppSearch`). Thus this algorithm is more reliable than traditional
+        /// UPGRADINGPRODUCTCODE based algorithm.
+        /// </para>
+        /// <para>
+        /// Because the custom action is specific to ManagedProject you can only use this extension
+        /// from ManagedProject setups.
+        /// </para>
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is upgrading installed version; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if this instance is upgrading installed version; otherwise, <c>false</c>.</value>
         static public bool IsUpgradingInstalledVersion(this Session session)
         {
             return session.IsInstalling() && !session.IsModifying() && session.Property("FOUNDPREVIOUSVERSION").IsNotEmpty();
@@ -2522,8 +2601,9 @@ namespace WixSharp
         /// <summary>
         /// Determines whether MSI is running in "modifying" mode.
         /// <para>
-        /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
-        /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
+        /// This method will fail to retrieve the correct value if called from the deferred custom
+        /// action and the session properties that it depends on are not preserved with
+        /// 'UsesProperties' or 'DefaultUsesProperties'.
         /// </para>
         /// </summary>
         /// <param name="session">The session.</param>
@@ -2536,8 +2616,9 @@ namespace WixSharp
         /// <summary>
         /// Determines whether MSI is running in "uninstalling" mode.
         /// <para>
-        /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
-        /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
+        /// This method will fail to retrieve the correct value if called from the deferred custom
+        /// action and the session properties that it depends on are not preserved with
+        /// 'UsesProperties' or 'DefaultUsesProperties'.
         /// </para>
         /// </summary>
         /// <param name="session">The session.</param>
@@ -2547,16 +2628,8 @@ namespace WixSharp
             return session.Property("REMOVE").SameAs("All", true);
         }
 
-        // static bool IsGlobalAssembly(this Assembly assembly)
-        // {
-        //     try
-        //     {
-        //         if (assembly.Location.)
-        //             return session.Property("REMOVE").SameAs("All", true);
-        //     }
-        //     catch
-        //     { return false; }
-        // }
+        // static bool IsGlobalAssembly(this Assembly assembly) { try { if (assembly.Location.)
+        // return session.Property("REMOVE").SameAs("All", true); } catch { return false; } }
 
         /// <summary>
         /// Returns the first string `value1` if it is not empty. Otherwise returns `value2`.
@@ -2569,10 +2642,10 @@ namespace WixSharp
 
         /// <summary>
         /// Determines whether the feature is selected in the feature tree of the Features dialog
-        /// and will be installed. The "selected" state of the feature is determined by analysing the
-        /// `ADDLOCAL` session property, which has the required information either feature selected via UI
-        /// or via msiexec.exe CLI arguments. If none of this selections is made by the user the method will
-        /// return the default state of the feature (from session property "ADDFEATURES").
+        /// and will be installed. The "selected" state of the feature is determined by analysing
+        /// the `ADDLOCAL` session property, which has the required information either feature
+        /// selected via UI or via msiexec.exe CLI arguments. If none of this selections is made by
+        /// the user the method will return the default state of the feature (from session property "ADDFEATURES").
         /// </summary>
         /// <param name="session">The session.</param>
         /// <param name="featureName">Name of the feature.</param>
@@ -2588,11 +2661,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Sets `ADDLOCAL` session property to the coma-delimited values of the all features currently installed.
-        /// This method is useful if you want to initialize current session with the specific features enabled according
-        /// the previous installation if found. Applicable only for Major Upgrade scenarios.
-        /// <para>Managed UI does this automatically but if you suppress UI then you may want to do this manually.
-        /// Then this method is to do the heavy lifting.</para>
+        /// Sets `ADDLOCAL` session property to the coma-delimited values of the all features
+        /// currently installed. This method is useful if you want to initialize current session
+        /// with the specific features enabled according the previous installation if found.
+        /// Applicable only for Major Upgrade scenarios.
+        /// <para>
+        /// Managed UI does this automatically but if you suppress UI then you may want to do this
+        /// manually. Then this method is to do the heavy lifting.
+        /// </para>
         /// </summary>
         /// <param name="session"></param>
         public static void InitFeaturesFromCurrentInstallation(this Session session)
@@ -2611,8 +2687,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Builds an MSI condition expression for the given <see cref="WixSharp.Feature"/>, which evaluates
-        /// as <c>true</c> if the feature is being installed.
+        /// Builds an MSI condition expression for the given <see cref="WixSharp.Feature"/>, which
+        /// evaluates as <c>true</c> if the feature is being installed.
         /// </summary>
         /// <param name="feature">The feature.</param>
         /// <returns></returns>
@@ -2622,16 +2698,16 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates a condition that checks if the feature shall be installed
-        /// regardless of whether it already is intalled
+        /// Creates a condition that checks if the feature shall be installed regardless of whether
+        /// it already is intalled
         /// </summary>
         /// <param name="feature">The feature to check</param>
         public static Condition ShallInstall(this Feature feature) =>
             new Condition($"&{feature.Id}=3");
 
         /// <summary>
-        /// Creates a condition that checks if the feature shall be uninstalled
-        /// regardless of whether it already is intalled
+        /// Creates a condition that checks if the feature shall be uninstalled regardless of
+        /// whether it already is intalled
         /// </summary>
         /// <param name="feature">The feature to check</param>
         public static Condition ShallUninstall(this Feature feature) =>
@@ -2654,8 +2730,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Builds an MSI condition expression for the given <see cref="WixSharp.Feature"/>, which evaluates
-        /// as <c>true</c> if the feature is being uninstalled.
+        /// Builds an MSI condition expression for the given <see cref="WixSharp.Feature"/>, which
+        /// evaluates as <c>true</c> if the feature is being uninstalled.
         /// </summary>
         /// <param name="feature">The feature.</param>
         /// <returns></returns>
@@ -2677,10 +2753,14 @@ namespace WixSharp
         /////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Returns the value of the named property of the specified <see cref="T:Microsoft.Deployment.WindowsInstaller.Session"/> object.
-        /// <para>It can be uses as a generic way of accessing the properties as it redirects (transparently) access to the
-        /// <see cref="T:Microsoft.Deployment.WindowsInstaller.Session.CustomActionData"/> if the session is terminated (e.g. in deferred
-        /// custom actions).</para>
+        /// Returns the value of the named property of the specified <see
+        /// cref="T:Microsoft.Deployment.WindowsInstaller.Session"/> object.
+        /// <para>
+        /// It can be uses as a generic way of accessing the properties as it redirects
+        /// (transparently) access to the <see
+        /// cref="T:Microsoft.Deployment.WindowsInstaller.Session.CustomActionData"/> if the session
+        /// is terminated (e.g. in deferred custom actions).
+        /// </para>
         /// </summary>
         /// <param name="session">The session.</param>
         /// <param name="name">The name.</param>
@@ -2697,9 +2777,7 @@ namespace WixSharp
         /// Determines whether the specified session is cancelled.
         /// </summary>
         /// <param name="session">The session.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified session is cancelled; otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if the specified session is cancelled; otherwise, <c>false</c>.</returns>
         public static bool IsCancelled(this Session session)
         {
             try
@@ -2719,16 +2797,19 @@ namespace WixSharp
 
         /// <summary>
         /// Determines whether the specified session is cancelled.
-        /// <para>It is identical to <see cref="WixSharp.Extensions.IsCancelled(Session)"/> except
-        /// it does not throw/handle internal exception This helps if it is preferred to keep MSI log clean from any
-        /// messages triggered by handled exceptions.</para>
-        /// <para>Though this method relies on <see cref="Microsoft.Deployment.WindowsInstaller"/> internal (non-public)
-        /// implementation thus is not warranteed to stay unchanged in the future WiX releases.</para>
+        /// <para>
+        /// It is identical to <see cref="WixSharp.Extensions.IsCancelled(Session)"/> except it does
+        /// not throw/handle internal exception This helps if it is preferred to keep MSI log clean
+        /// from any messages triggered by handled exceptions.
+        /// </para>
+        /// <para>
+        /// Though this method relies on <see cref="Microsoft.Deployment.WindowsInstaller"/>
+        /// internal (non-public) implementation thus is not warranteed to stay unchanged in the
+        /// future WiX releases.
+        /// </para>
         /// </summary>
         /// <param name="session">The session.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified session is cancelled; otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if the specified session is cancelled; otherwise, <c>false</c>.</returns>
         public static bool IsCancelledRaw(this Session session)
         {
             // does not throw but will become broken if WiX team changes the implementation
@@ -2753,8 +2834,9 @@ namespace WixSharp
         //============================
 
         /// <summary>
-        /// Queries MSI database directly for the table 'Property' value. This method is particularly useful for the stages when WiX session
-        /// object is not fully initialized. For example properties are not discovered yet during EmbeddedUI loading event.
+        /// Queries MSI database directly for the table 'Property' value. This method is
+        /// particularly useful for the stages when WiX session object is not fully initialized. For
+        /// example properties are not discovered yet during EmbeddedUI loading event.
         /// </summary>
         /// <param name="session">The session.</param>
         /// <param name="name">The name.</param>
@@ -2861,8 +2943,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// A simple generic wrapper around MSI View open operation. It retrieves all view data and returns it as a
-        /// collection of dictionaries (set of named values).
+        /// A simple generic wrapper around MSI View open operation. It retrieves all view data and
+        /// returns it as a collection of dictionaries (set of named values).
         /// </summary>
         /// <param name="session">The session.</param>
         /// <param name="sqlText">The SQL text.</param>
@@ -2926,7 +3008,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        ///  Extracts the string embedded into MSI (into Binary table).
+        /// Extracts the string embedded into MSI (into Binary table).
         /// </summary>
         /// <param name="session">The session.</param>
         /// <param name="binary">The name on resource in the Binary table.</param>
@@ -2937,7 +3019,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        ///  Extracts the data embedded into MSI (into Binary table).
+        /// Extracts the data embedded into MSI (into Binary table).
         /// </summary>
         /// <param name="session">The session.</param>
         /// <param name="binary">The name on resource in the Binary table.</param>
@@ -2983,12 +3065,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Handles the errors in the specified action being executed. The all exceptions are caught and logged to the msi log.
+        /// Handles the errors in the specified action being executed. The all exceptions are caught
+        /// and logged to the msi log.
         /// </summary>
         /// <param name="session">The session.</param>
         /// <param name="action">The action.</param>
-        /// <returns><see cref="T:Microsoft.Deployment.WindowsInstaller.ActionResult.Success"/> if no errors detected, otherwise
-        /// it returns <see cref="T:Microsoft.Deployment.WindowsInstaller.ActionResult.Failure"/>.
+        /// <returns>
+        /// <see cref="T:Microsoft.Deployment.WindowsInstaller.ActionResult.Success"/> if no errors
+        /// detected, otherwise it returns <see cref="T:Microsoft.Deployment.WindowsInstaller.ActionResult.Failure"/>.
         /// </returns>
         public static ActionResult HandleErrors(this Session session, System.Action action)
         {
@@ -3109,17 +3193,13 @@ namespace WixSharp
         /// <summary>
         /// Gets the localization file.
         /// </summary>
-        /// <value>
-        /// The localization file.
-        /// </value>
+        /// <value>The localization file.</value>
         public string LocalizationFile { get; }
 
         /// <summary>
         /// Gets the language code identifier.
         /// </summary>
-        /// <value>
-        /// The language code identifier.
-        /// </value>
+        /// <value>The language code identifier.</value>
         public int LanguageCodeId { get; }
 
         internal void BindTo(Project project)
@@ -3134,29 +3214,37 @@ namespace WixSharp
     }
 
     /// <summary>
-    ///
     /// </summary>
     public static class LocalizationExtensions
     {
         /// <summary>
-        /// Produces multilanguage MSI with embedded transformations based on <paramref name="localizations"/> collection.
-        /// If this msi is executed on the OS, which language matches one of the embedded transformations,
-        /// this transformation will be automatically triggered and effectively switch the setup UI language.
-        /// Builds the localized msi.
+        /// Produces multilanguage MSI with embedded transformations based on <paramref
+        /// name="localizations"/> collection. If this msi is executed on the OS, which language
+        /// matches one of the embedded transformations, this transformation will be automatically
+        /// triggered and effectively switch the setup UI language. Builds the localized msi.
         /// </summary>
-        ///  <example>The following is an example of building single .msi file with two localizations.
-        ///  With one of trhen based on a custom localization file.
-        ///  <p> During installation, language is automatically selected based on user's operating system region settings.
-        ///  </p>
+        /// <example>
+        /// The following is an example of building single .msi file with two localizations. With
+        /// one of trhen based on a custom localization file.
+        /// <p>
+        /// During installation, language is automatically selected based on user's operating system
+        /// region settings.
+        /// </p>
         /// <code>
-        /// project.BuildMultilanguageMsi(
-        ///     new ProjectLocalization("en-US"),
-        ///     new ProjectLocalization("sk-SK", "WixUI_sk-SK.wxl"));
+        ///project.BuildMultilanguageMsi(
+        ///new ProjectLocalization("en-US"),
+        ///new ProjectLocalization("sk-SK", "WixUI_sk-SK.wxl"));
         /// </code>
         /// </example>
         /// <param name="project">Wix# project.</param>
-        /// <param name="defaultLocalization">Use your OS language as default localization. This will ensure that the all transformations are embedded in such a way that the produced msi can switch to any alternative language both automatically and manually.</param>
-        /// <param name="localizations">Collection of localizations. At least one localization is expected.</param>
+        /// <param name="defaultLocalization">
+        /// Use your OS language as default localization. This will ensure that the all
+        /// transformations are embedded in such a way that the produced msi can switch to any
+        /// alternative language both automatically and manually.
+        /// </param>
+        /// <param name="localizations">
+        /// Collection of localizations. At least one localization is expected.
+        /// </param>
         /// <returns>Path to the built MSI file.</returns>
         public static string BuildMultilanguageMsi(this Project project, ProjectLocalization defaultLocalization, params ProjectLocalization[] localizations)
         {
@@ -3208,7 +3296,8 @@ namespace WixSharp
 
             if (project.DigitalSignature != null)
             {
-                // sign the MSI after embedding transforms again (as it won't contain publisher info in UAC dialog)
+                // sign the MSI after embedding transforms again (as it won't contain publisher info
+                // in UAC dialog)
                 var signingReturnCode = project.DigitalSignature.Apply(msiFilePath);
                 if (signingReturnCode != 0)
                     throw new InvalidOperationException($"Signing the file '{msiFilePath}' failed. Return code: {signingReturnCode}");
@@ -3220,29 +3309,46 @@ namespace WixSharp
 
         /// <summary>
         /// Builds the localized msi.
-        ///
-        /// <para>This method builds the msi with the default language support according `project.Language`
-        /// setting. The additional languages can also be embedded into the resulting msi during the build.</para>
-        /// <para>Invoking specific language UI is triggered either automatically based on the OS default language
-        /// or by passing special MSI properties arguments to the <c>msiexec.exe</c>:</para>
+        /// <para>
+        /// This method builds the msi with the default language support according
+        /// `project.Language` setting. The additional languages can also be embedded into the
+        /// resulting msi during the build.
+        /// </para>
+        /// <para>
+        /// Invoking specific language UI is triggered either automatically based on the OS default
+        /// language or by passing special MSI properties arguments to the <c>msiexec.exe</c>:
+        /// </para>
         /// <list type="bullet">
-        /// <item><description><i>English</i><para><c>msiexec /i setup.msi</c></para></description></item>
-        /// <item><description><i>German</i><para><c>msiexec /i setup.msi TRANSFORMS=:1031</c></para></description></item>
-        /// <item><description><i>Russian</i> <para><c>msiexec /i setup.msi TRANSFORMS=:1049</c></para></description></item>
+        /// <item>
+        /// <description><i>English</i>
+        /// <para><c>msiexec /i setup.msi</c></para>
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description><i>German</i>
+        /// <para><c>msiexec /i setup.msi TRANSFORMS=:1031</c></para>
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description><i>Russian</i>
+        /// <para><c>msiexec /i setup.msi TRANSFORMS=:1049</c></para>
+        /// </description>
+        /// </item>
         /// </list>
         /// </summary>
-        ///  <example>The following is an example of building <c>English</c> msi, which can also support <c>German</c>
-        ///  and <c>Russian</c> UI.
+        /// <example>
+        /// The following is an example of building <c>English</c> msi, which can also support
+        /// <c>German</c> and <c>Russian</c> UI.
         /// <code>
-        /// var project =
-        ///     new ManagedProject("My Product",
-        ///         new Dir(@"%ProgramFiles%\My Company\My Product",
-        ///             new File("readme.txt")));
+        ///var project =
+        ///new ManagedProject("My Product",
+        ///new Dir(@"%ProgramFiles%\My Company\My Product",
+        ///new File("readme.txt")));
         ///
-        /// project.Language = "en-US,ru-RU,de-DE";
-        /// project.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
+        ///project.Language = "en-US,ru-RU,de-DE";
+        ///project.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
         ///
-        /// project.BuildLocalizedMsi();
+        ///project.BuildLocalizedMsi();
         /// </code>
         /// </example>
         /// <param name="project">The project.</param>
@@ -3274,22 +3380,22 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Determines whether two cultures are compatible based on the same neutral culture (e.g. en-US is compatible with en-AU).
+        /// Determines whether two cultures are compatible based on the same neutral culture (e.g.
+        /// en-US is compatible with en-AU).
         /// </summary>
         /// <param name="info1">The info1.</param>
         /// <param name="info2">The info2.</param>
-        /// <returns>
-        ///   <c>true</c> if [is compatible with] [the specified info2]; otherwise, <c>false</c>.
-        /// </returns>
+        /// <returns><c>true</c> if [is compatible with] [the specified info2]; otherwise, <c>false</c>.</returns>
         public static bool IsCompatibleWith(this CultureInfo info1, CultureInfo info2)
             => info1.TwoLetterISOLanguageName == info2.TwoLetterISOLanguageName;
 
         /// <summary>
-        /// Verifies the language of the multi-language project being compatible with the language of the operating system
-        /// the project is being built on. The compatibility is important in this case as the wrong choice of the default
-        /// language can lead to the problems when building bootstrapper with the language selection.
-        /// See "&lt;root>\Source\src\WixSharp.Samples\Wix# Samples\Bootstrapper\MultiLanguageSupport\setup.cs&gt;
-        /// sample.
+        /// Verifies the language of the multi-language project being compatible with the language
+        /// of the operating system the project is being built on. The compatibility is important in
+        /// this case as the wrong choice of the default language can lead to the problems when
+        /// building bootstrapper with the language selection. See
+        /// "&lt;root&gt;\Source\src\WixSharp.Samples\Wix#
+        /// Samples\Bootstrapper\MultiLanguageSupport\setup.cs&gt; sample.
         /// </summary>
         /// <param name="project">The project.</param>
         public static void VerifyLanguage(this Project project)
@@ -3304,9 +3410,11 @@ namespace WixSharp
 
         /// <summary>
         /// Builds a language transform (*.mst) file for a given msi file and its `Project`.
-        /// <para>This method is not intended to be used directly (even though it's possible).
-        /// The developers are encouraged to use a <see cref="LocalizationExtensions.BuildMultilanguageMsi(Project, string)"/>
-        /// instead.</para>
+        /// <para>
+        /// This method is not intended to be used directly (even though it's possible). The
+        /// developers are encouraged to use a <see
+        /// cref="LocalizationExtensions.BuildMultilanguageMsi(Project, string)"/> instead.
+        /// </para>
         /// </summary>
         /// <param name="project"></param>
         /// <param name="originalMsi"></param>
@@ -3433,26 +3541,27 @@ namespace WixSharp
     }
 
     /// <summary>
-    /// Serializes CLR entity into XML, based on the type members being marked for the serialization with <see cref="WixSharp.XmlAttribute"/>.
+    /// Serializes CLR entity into XML, based on the type members being marked for the serialization
+    /// with <see cref="WixSharp.XmlAttribute"/>.
     /// <code>
-    /// public class RemoveFolderEx : WixEntity, IGenericEntity
-    /// {
-    ///     [Xml]
-    ///     public InstallEvent? On;
+    ///public class RemoveFolderEx : WixEntity, IGenericEntity
+    ///{
+    ///[Xml]
+    ///public InstallEvent? On;
     ///
-    ///     [Xml]
-    ///     public string Property;
+    ///[Xml]
+    ///public string Property;
     ///
-    ///     [Xml]
-    ///     public string Id;
-    /// }
+    ///[Xml]
+    ///public string Id;
+    ///}
     /// </code>
     /// </summary>
     public static class XmlMapping
     {
         /// <summary>
-        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked with
-        /// <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
+        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked
+        /// with <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -3467,8 +3576,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked with
-        /// <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
+        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked
+        /// with <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="elementName"></param>
@@ -3484,8 +3593,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked with
-        /// <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
+        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked
+        /// with <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
         /// </summary>
         /// <param name="obj">The obj.</param>
         /// <param name="extension">The extension.</param>
@@ -3501,8 +3610,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked with
-        /// <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
+        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked
+        /// with <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
         /// </summary>
         /// <param name="obj">The obj.</param>
         /// <param name="extension">The extension.</param>
@@ -3519,8 +3628,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Serializes the object into XML based on the members marked with
-        /// <see cref="WixSharp.XmlAttribute"/>.
+        /// Serializes the object into XML based on the members marked with <see cref="WixSharp.XmlAttribute"/>.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
@@ -3700,7 +3808,8 @@ namespace WixSharp
     }
 
     /// <summary>
-    /// The attribute indicating the type member being mapped to XML element. Used by Wix# compiler to emit XML base on CLR types.
+    /// The attribute indicating the type member being mapped to XML element. Used by Wix# compiler
+    /// to emit XML base on CLR types.
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class XmlAttribute : Attribute
@@ -3752,9 +3861,7 @@ namespace WixSharp
         /// <summary>
         /// Gets or sets the namespace.
         /// </summary>
-        /// <value>
-        /// The namespace.
-        /// </value>
+        /// <value>The namespace.</value>
         public string Namespace { get; set; }
     }
 
@@ -3764,12 +3871,19 @@ namespace WixSharp
     public static class ProcessExtensions
     {
         /// <summary>
-        /// Starts a process resource by specifying the name of an application and a set of command-line arguments,
-        /// and associates the resource with a new System.Diagnostics.Process component.
+        /// Starts a process resource by specifying the name of an application and a set of
+        /// command-line arguments, and associates the resource with a new
+        /// System.Diagnostics.Process component.
         /// </summary>
         /// <param name="fileName">Gets or sets the application or document to start.</param>
-        /// <param name="args">Gets or sets the set of command-line arguments to use when starting the application.</param>
-        /// <returns>A new <see cref="System.Diagnostics.Process"/> component that is associated with the process, or null, if no process resource is started (for example, if an existing process is reused).</returns>
+        /// <param name="args">
+        /// Gets or sets the set of command-line arguments to use when starting the application.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="System.Diagnostics.Process"/> component that is associated with the
+        /// process, or null, if no process resource is started (for example, if an existing process
+        /// is reused).
+        /// </returns>
         public static Process StartElevated(this string fileName, string args = "")
         {
             bool isAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
@@ -3785,12 +3899,19 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Starts a process resource by specifying the name of an application and a set of command-line arguments,
-        /// and associates the resource with a new System.Diagnostics.Process component.
+        /// Starts a process resource by specifying the name of an application and a set of
+        /// command-line arguments, and associates the resource with a new
+        /// System.Diagnostics.Process component.
         /// </summary>
         /// <param name="fileName">Gets or sets the application or document to start.</param>
-        /// <param name="args">Gets or sets the set of command-line arguments to use when starting the application.</param>
-        /// <returns>A new <see cref="System.Diagnostics.Process"/> component that is associated with the process, or null, if no process resource is started (for example, if an existing process is reused).</returns>
+        /// <param name="args">
+        /// Gets or sets the set of command-line arguments to use when starting the application.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="System.Diagnostics.Process"/> component that is associated with the
+        /// process, or null, if no process resource is started (for example, if an existing process
+        /// is reused).
+        /// </returns>
         public static Process Start(this string fileName, string args = "")
         {
             return Process.Start(new ProcessStartInfo
@@ -3802,14 +3923,36 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Instructs the <see cref="System.Diagnostics.Process"/> component to wait indefinitely for the associated process to exit.
+        /// Instructs the <see cref="System.Diagnostics.Process"/> component to wait indefinitely
+        /// for the associated process to exit.
         /// </summary>
-        /// <param name="process">An instance of <see cref="System.Diagnostics.Process"/> component that is running.</param>
-        /// <returns>An instance of <see cref="System.Diagnostics.Process"/> component that is running.</returns>
+        /// <param name="process">
+        /// An instance of <see cref="System.Diagnostics.Process"/> component that is running.
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="System.Diagnostics.Process"/> component that is running.
+        /// </returns>
         public static Process Wait(this Process process)
         {
             process.WaitForExit();
             return process;
+        }
+
+        // beautiful solution:
+        // https://stackoverflow.com/questions/49190830/is-it-possible-for-string-split-to-return-tuple
+        // var line = "a=b"; var (first, second, _) = line.Split('='); var (first, (second, _)) =
+        // line.Split('='); var(first, (second, (third, _))) = line.Split('='); var(first, rest) = line.Split('=');
+        public static void Deconstruct<T>(this IList<T> list, out T first, out IList<T> rest)
+        {
+            first = list.Count > 0 ? list[0] : default(T); // or throw
+            rest = list.Skip(1).ToList();
+        }
+
+        public static void Deconstruct<T>(this IList<T> list, out T first, out T second, out IList<T> rest)
+        {
+            first = list.Count > 0 ? list[0] : default(T); // or throw
+            second = list.Count > 1 ? list[1] : default(T); // or throw
+            rest = list.Skip(2).ToList();
         }
     }
 }

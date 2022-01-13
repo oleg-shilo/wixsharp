@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.Lab</id>
-    <version>1.19.0.0</version>
+    <version>1.19.1.0</version>
     <title>Wix# (WixSharp) - Experimantal features</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -14,14 +14,9 @@
 The package contains the sample code for building a simple MSI with the CLR WinForm dialog inserted into UI sequence between InsallDirDlg and VerifyReadyDlg native MSI dialogs. In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# binaries containing experimental features (e.g. native WiX UI support).</summary>
-    <releaseNotes>Release v1.19.0.0
+    <releaseNotes>Release v1.19.1.0-pre
 
-- Issue #1062: Potential problem with ServiceConfig
-- Removed extra spaces in the FeaturesDialog title
-- Added the hash of a directory name to the end of the directory Id.
-- Changed to replace the non-legal characters in Ids to their character code.
-- Add .gitattributes file and normalize line endings #1040
-- Merge pull request #1022: Updated namespace: using System.Windows.Forms;
+- Issue #1087: Intermittent error
 
 
 </releaseNotes>
@@ -33,7 +28,7 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
       <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
     </frameworkAssemblies>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.19.0.0" />
+      <dependency id="WixSharp.bin" version="1.19.1.0" />
     </dependencies>
   </metadata>
   <files>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="WixSharp project templates" Version="1.15.0" Language="en-US" Publisher="Oleg Shilo" />
+        <Identity Id="WixSharp Visual Studio project templetes" Version="1.16.0" Language="en-US" Publisher="Oleg Shilo" />
         <DisplayName>WixSharp Project Templates</DisplayName>
         <Description xml:space="preserve">A WixSharp project templates for WiX/MSI setup (C#).
 Compatibility: Wix# v1.6.4.0 and higher</Description>
