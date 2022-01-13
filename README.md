@@ -27,7 +27,7 @@ same language (C#). This also allows homogeneous, simplified and more consistent
 
 **_Overview_**
 
-If you are planing to use Wix# on Linux you my find this [article](https://github.com/oleg-shilo/wixsharp/wiki/WixSharp-on-Linux) being useful. Please note that Wix# builds MSI deployment packages and while MSI can be build on Linux it cannot be run on Linux as MSI is a pure Windows technology.   
+If you are planing to use Wix# on Linux you may find this [article](https://github.com/oleg-shilo/wixsharp/wiki/WixSharp-on-Linux) being useful. Please note that Wix# builds MSI deployment packages and while MSI can be build on Linux it cannot be run on Linux as MSI is a pure Windows technology.   
 
 Please note that WixSharp NuGet packages are targeting .NET Framework only. This is due to the fact that WiX does not support integration with anoy other .NET flavours but .NET Framework only. 
 
