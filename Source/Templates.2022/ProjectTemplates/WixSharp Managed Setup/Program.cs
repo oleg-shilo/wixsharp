@@ -3,10 +3,6 @@ using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Forms;
 
-#error "DON'T FORGET to install NuGet package 'WixSharp' and remove this `#error` statement."
-// NuGet console: Install-Package WixSharp
-// NuGet Manager UI: browse tab
-
 namespace $safeprojectname$
 {
     class Program

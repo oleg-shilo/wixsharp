@@ -1,7 +1,10 @@
+v1.15.0.0
+* Migrated to VS2022
+
 v1.14.4.0
-* Impemented/addressed SonarQube suggested changes to the Manaded UI dialogs.  
+* Implemented/addressed SonarQube suggested changes to the Manaded UI dialogs.  
 * Issue #838: Small suggestion: Show UACWarning only after some delay
-* Assoretd Nsis improvements
+* Assorted NSIS improvements
 
 v1.9.1.0
 * Issue #784: WixSharp Managed Setup - Custom UI - FeaturesDialog does not propagate user selection
