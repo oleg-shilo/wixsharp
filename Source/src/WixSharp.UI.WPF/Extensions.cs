@@ -1,4 +1,3 @@
-using Microsoft.Deployment.WindowsInstaller;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -8,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.UI.Forms;
 
@@ -64,11 +64,11 @@ namespace WixSharp.UI.WPF
         /// <returns></returns>
         public static InstallerRuntime Localize(this InstallerRuntime runtime, DependencyObject parent)
         {
-            string translate(string text)
-                => runtime.Localize(text.Trim('[', ']'))
-                          .TrimStart('&'); // trim buttons text "&Next"
-            bool isLocalizable(string text)
-                => text.StartsWith("[") && text.EndsWith("]");
+            bool isLocalizable(string text) => text.StartsWith("[") && text.EndsWith("]");
+            string translate(string text) => text.LocalizeWith(runtime.Localize)
+                                                 .Replace("&&", "{amp}") // clean `&Next` and `I &accept...`
+                                                 .Replace("&", "")
+                                                 .Replace("{mp}", "&");
 
             parent
                 .GetChildrenOfType<TextBlock>()
@@ -76,8 +76,8 @@ namespace WixSharp.UI.WPF
                 .ForEach(x => x.Text = translate(x.Text));
 
             parent
-                .GetChildrenOfType<Button>()
-                .Where(x => isLocalizable(x.Content.ToString()))
+                .GetChildrenOfType<ContentControl>()
+                .Where(x => isLocalizable(x.Content?.ToString()))
                 .ForEach(x => x.Content = translate(x.Content.ToString()));
 
             return runtime;

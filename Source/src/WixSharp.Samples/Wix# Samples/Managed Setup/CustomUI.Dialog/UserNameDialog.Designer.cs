@@ -1,4 +1,4 @@
-﻿namespace MyProduct
+﻿namespace WixSharp.UI.WPF
 {
     partial class UserNameDialog
     {

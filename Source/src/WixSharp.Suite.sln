@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29503.13
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixSharp", "WixSharp\WixSharp.csproj", "{8860B29B-749F-4925-86C8-F9C4B93C9DA5}"
 EndProject
@@ -249,6 +249,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomUI.WPF", "CustomUI.WPF", "{1CFD0B87-E292-41B3-A914-FF8254D4A32C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixSharp.UI.WPF", "WixSharp.UI.WPF\WixSharp.UI.WPF.csproj", "{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomUI.WPF.Sequence", "WixSharp.Samples\Wix# Samples\Managed Setup\CustomUI.WPF.Sequence\CustomUI.WPF.Sequence.csproj", "{18EF7DE3-5726-46CF-A2F1-B168D84328B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1352,6 +1354,18 @@ Global
 		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Release|x86.ActiveCfg = Release|Any CPU
 		{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}.Release|x86.Build.0 = Release|Any CPU
+		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Debug|x86.Build.0 = Debug|Any CPU
+		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Release|x86.ActiveCfg = Release|Any CPU
+		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1460,6 +1474,7 @@ Global
 		{3F5F5E7E-08DB-421B-9F1C-4013EF70736D} = {DA107019-87B6-473D-8C9B-1C3A48CB8FD5}
 		{B7B90CFA-6D46-4DAA-9BD1-0C9EBB1A44AD} = {1CFD0B87-E292-41B3-A914-FF8254D4A32C}
 		{1CFD0B87-E292-41B3-A914-FF8254D4A32C} = {DA107019-87B6-473D-8C9B-1C3A48CB8FD5}
+		{18EF7DE3-5726-46CF-A2F1-B168D84328B4} = {1CFD0B87-E292-41B3-A914-FF8254D4A32C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {559711D5-4429-4577-BBC9-F0D973972079}

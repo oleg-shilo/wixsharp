@@ -50,7 +50,7 @@ public class Script
         project.SetNetFxPrerequisite("NETFRAMEWORK35='#1'", "Please install .NET 3.5 first.");
         project.ManagedUI = new ManagedUI();
         project.ManagedUI.InstallDialogs.Add<WelcomeDialog>()
-                                        .Add<MyProduct.UserNameDialog>()
+                                        .Add<WixSharp.UI.WPF.UserNameDialog>()
                                         .Add<ProgressDialog>()
                                         .Add<ExitDialog>();
 

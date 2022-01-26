@@ -6,7 +6,7 @@ using WixSharp;
 
 using WixSharp.UI.Forms;
 
-namespace MyProduct
+namespace WixSharp.UI.WPF
 {
     public partial class UserNameDialog : ManagedForm, IManagedDialog
     {

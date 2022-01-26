@@ -37,8 +37,7 @@ class Script
                     new Property("PropName", "<your value>"));
 
         project.SetVersionFrom("MyApp_file");
-        // project.SetVersionFromFileId("MyApp_file");
-        // project.SetVersionFromFile(@"Files\Bin\MyApp.exe");z
+
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         project.EmitConsistentPackageId = true;

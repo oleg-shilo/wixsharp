@@ -5,7 +5,7 @@ using WixSharp;
 using WixSharp.UI.Forms;
 using WixSharp.UI.WPF;
 
-namespace MyProduct
+namespace WixSharp.UI.WPF
 {
     public partial class CustomDialogView : WpfDialog, IWpfDialog
     {

@@ -1,5 +1,5 @@
 using ConsoleApplication1;
-using MyProduct;
+using WixSharp.UI.WPF;
 using System;
 using System.Linq;
 using WixSharp;

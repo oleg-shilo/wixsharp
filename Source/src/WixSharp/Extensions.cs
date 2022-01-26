@@ -643,25 +643,25 @@ namespace WixSharp
         /// This method is nothing else but a 'syntactic sugar' method, which wraps the following code:
         /// <code>
         ///document.Root.Select("Product")
-        ///.Add(XDocument.Load(wxsFile)
-        ///.Root.Select("Product").Elements());
+        ///             .Add(XDocument.Load(wxsFile)
+        ///             .Root.Select("Product").Elements());
         /// </code>
         /// </para>
         /// <example>The following is an example of using InjectWxs.
         /// <code>
-        ///Compiler.WixSourceGenerated +=
-        ///document =&gt; document.InjectWxs("CommonProperies.wxs");
+        /// Compiler.WixSourceGenerated +=
+        /// document =&gt; document.InjectWxs("CommonProperies.wxs");
         ///
-        /////where CommonProperies.wxs contains the following XML
-        ///&lt;?xml version="1.0" encoding="Windows-1252"?&gt;
-        ///&lt;Wix xmlns = "http://schemas.microsoft.com/wix/2006/wi" &gt;
-        ///&lt;Product&gt;
-        ///&lt;Property Id="Prop1" Value="1" /&gt;
-        ///&lt;Property Id="Prop2" Value="2" /&gt;
-        ///&lt;Property Id="Prop3" Value="3" /&gt;
-        ///&lt;Property Id="Prop4" Value="4" /&gt;
-        ///&lt;/Product&gt;
-        ///&lt;/Wix&gt;
+        /// //where CommonProperies.wxs contains the following XML
+        /// &lt;?xml version="1.0" encoding="Windows-1252"?&gt;
+        /// &lt;Wix xmlns = "http://schemas.microsoft.com/wix/2006/wi" &gt;
+        ///   &lt;Product&gt;
+        ///     &lt;Property Id="Prop1" Value="1" /&gt;
+        ///     &lt;Property Id="Prop2" Value="2" /&gt;
+        ///     &lt;Property Id="Prop3" Value="3" /&gt;
+        ///     &lt;Property Id="Prop4" Value="4" /&gt;
+        ///   &lt;/Product&gt;
+        /// &lt;/Wix&gt;
         /// </code>
         /// </example>
         /// </summary>
