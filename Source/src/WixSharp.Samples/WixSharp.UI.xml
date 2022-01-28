@@ -1519,6 +1519,12 @@
             </summary>
             <param name="dialog">The dialog.</param>
         </member>
+        <member name="M:WixSharp.UIShell.Play(System.String,System.Type[])">
+            <summary>
+            Plays the specified dialog set.
+            </summary>
+            <param name="dialogSet">The dialog set.</param>
+        </member>
         <member name="P:WixSharp.UIShell.IsDemoMode">
             <summary>
             Gets or sets a value indicating whether the UIShell is demo mode.

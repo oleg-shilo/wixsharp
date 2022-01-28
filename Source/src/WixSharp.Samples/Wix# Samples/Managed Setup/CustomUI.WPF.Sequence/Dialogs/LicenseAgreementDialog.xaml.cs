@@ -13,9 +13,9 @@ using IO = System.IO;
 
 namespace WixSharp.UI.WPF
 {
-    public partial class LicenseDialog : WpfDialog, IWpfDialog
+    public partial class LicenceDialog : WpfDialog, IWpfDialog
     {
-        public LicenseDialog()
+        public LicenceDialog()
         {
             InitializeComponent();
         }

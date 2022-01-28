@@ -112,18 +112,30 @@
     </Reference> -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Dialogs\InstallDirDialog.xaml.cs">
+      <DependentUpon>InstallDirDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\WelcomeDialog.xaml.cs">
+      <DependentUpon>WelcomeDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="setup.cs" />
-    <Page Include="LicenseAgreementDialog.xaml">
+    <Page Include="Dialogs\InstallDirDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\WelcomeDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\LicenseAgreementDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="LicenseAgreementDialog.xaml.cs">
+    <Compile Include="Dialogs\LicenseAgreementDialog.xaml.cs">
       <DependentUpon>LicenseAgreementDialog.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

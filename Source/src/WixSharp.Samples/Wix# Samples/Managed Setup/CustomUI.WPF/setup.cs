@@ -1,7 +1,6 @@
-using ConsoleApplication1;
-using WixSharp.UI.WPF;
 using System;
 using System.Linq;
+using ConsoleApplication1;
 using WixSharp;
 using WixSharp.UI.Forms;
 using WixSharp.UI.WPF;
@@ -10,20 +9,6 @@ public class Script
 {
     static public void Main(string[] args)
     {
-        // var ttt = typeof(CustomDialogWith<CustomDialogPanel>)
-        //            .Assembly.GetReferencedAssemblies()
-        //            .SelectMany(a => System.Reflection.Assembly.Load(a)
-        //                                                       .GetTypes()
-        //                                                       .SelectMany(t => t.GenericTypeArguments
-        //                                                                         .Select(t1 => t1.Assembly.GetName())))
-
-        //            .Where(a => a.Name.StartsWith("WixSharp.") || a.Name.StartsWith("Cliburn."))
-        //            .Select(a => System.Reflection.Assembly.Load(a.FullName))
-        //            .Select(a => a.Location)
-        //            .Distinct()
-        //            .ToArray();
-        // return;
-
         var project = new ManagedProject("ManagedSetup",
                       new Dir(@"%ProgramFiles%\My Company\My Product",
                           new File("readme.md")));

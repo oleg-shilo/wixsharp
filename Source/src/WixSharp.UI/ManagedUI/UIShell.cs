@@ -362,7 +362,7 @@ namespace WixSharp
         /// Plays the specified dialog in demo mode.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public static void Play<T>() where T : IManagedDialog
+        public static void Play<T>() where T : IManagedDialog, IDialog
         {
             var dialogs = new ManagedDialogs();
             dialogs.Add<T>();
@@ -380,7 +380,18 @@ namespace WixSharp
             new UIShell().DemoPlay(dialogs);
         }
 
-        void DemoPlay(ManagedDialogs dialogs)
+        /// <summary>
+        /// Plays the specified dialog set.
+        /// </summary>
+        /// <param name="dialogSet">The dialog set.</param>
+        public static void Play(string demoProperties, params Type[] dialogSet)
+        {
+            var dialogs = new ManagedDialogs();
+            dialogSet.ForEach(dialog => dialogs.Add(dialog));
+            new UIShell().DemoPlay(dialogs, demoProperties);
+        }
+
+        void DemoPlay(ManagedDialogs dialogs, string demoProperties = "")
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -389,6 +400,9 @@ namespace WixSharp
 
             var resourcesMsi = BuildUiPlayerResources();
             var dummySession = Installer.OpenPackage(resourcesMsi, true);
+
+            foreach (var pair in demoProperties.ToDictionary())
+                dummySession[pair.Key] = pair.Value;
 
             Runtime = new MsiRuntime(dummySession);
             Dialogs = dialogs;
