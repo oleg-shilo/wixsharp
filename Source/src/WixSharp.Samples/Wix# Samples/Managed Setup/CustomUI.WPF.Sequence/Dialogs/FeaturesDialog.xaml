@@ -98,14 +98,24 @@
             <TreeView
                 x:Name="FeaturesTree"
                 Grid.Row="1"
-                Grid.Column="0" />
+                Grid.Column="0"
+                ItemsSource="{Binding RootNodes}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding Checked}" IsEnabled="{Binding IsEditable}" />
+                            <TextBlock Margin="5, 0" VerticalAlignment="Center" Text="{Binding Name}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
             <Border
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="10,0,0,0"
                 BorderBrush="Black"
                 BorderThickness="1">
-                <TextBlock x:Name="Description" />
+                <TextBlock x:Name="SelectedNodeDescription" Margin="10" />
             </Border>
             <Button
                 x:Name="Reset"

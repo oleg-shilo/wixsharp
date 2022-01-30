@@ -11,6 +11,10 @@ public class Script
     {
         UIShell.Play(
             "WixSharp_UI_INSTALLDIR=INSTALLDIR", // needed for InstallDir dialog
+            typeof(WixSharp.UI.WPF.FeaturesDialog),
+            typeof(WixSharp.UI.Forms.FeaturesDialog),
+            typeof(WixSharp.UI.Forms.SetupTypeDialog),
+            typeof(WixSharp.UI.WPF.SetupTypeDialog),
             typeof(WixSharp.UI.Forms.InstallDirDialog),
             typeof(WixSharp.UI.WPF.InstallDirDialog),
             typeof(WixSharp.UI.WPF.WelcomeDialog),
@@ -29,9 +33,9 @@ public class Script
         project.ManagedUI.InstallDialogs.Add<WixSharp.UI.Forms.WelcomeDialog>()
                                         .Add<WixSharp.UI.Forms.LicenceDialog>()
                                         .Add<WixSharp.UI.WPF.LicenceDialog>()
-                                        .Add<FeaturesDialog>()      // stock WinForm dialog
-                                        .Add<ProgressDialog>()      // stock WinForm dialog
-                                        .Add<ExitDialog>();         // stock WinForm dialog
+                                        .Add<WixSharp.UI.Forms.FeaturesDialog>()      // stock WinForm dialog
+                                        .Add<WixSharp.UI.Forms.ProgressDialog>()      // stock WinForm dialog
+                                        .Add<WixSharp.UI.Forms.ExitDialog>();         // stock WinForm dialog
 
         // new ManagedDialogs()
         //                                 .Add<WelcomeDialog>()
