@@ -76,9 +76,9 @@ static class Script
         // Compiler.AutoGeneration.InstallDirDefaultId = "CommonAppDataFolder";
 
         var project = new Project("My Product Name",
-                            new Dir(@"%CommonAppDataFolder%",
-                                    new WixSharp.Dir("SubFolder1", new WixSharp.File(@"c:\temp\Dockerfile")),
-                                    new WixSharp.Dir("SubFolder2", new WixSharp.File(@"c:\temp\Dockerfile"))));
+                              new Dir(@"%CommonAppDataFolder%",
+                                      new WixSharp.Dir("SubFolder1", new WixSharp.File(@"c:\temp\Dockerfile")),
+                                      new WixSharp.Dir("SubFolder2", new WixSharp.File(@"c:\temp\Dockerfile"))));
 
         var wix = System.IO.File.ReadAllText(project.BuildWxs());
         Console.WriteLine(wix);
@@ -127,14 +127,14 @@ static class Script
         var server = new Feature("Feature_Server");
 
         var project = new Project("Test",
-               new Dir("ProgramFiles64Folder",
-                   new Dir("Test",
-                       new Dir("Server",
-                           new Dir("Sub",
-                               new Files(server, @"Files\Docs\*.* "))),
-                       new Dir(client, "Client",
-                           new Dir("Sub",
-                               new Files(@"Files\Help\*.* "))))));
+                new Dir("ProgramFiles64Folder",
+                    new Dir("Test",
+                        new Dir("Server",
+                            new Dir("Sub",
+                                new Files(server, @"Files\Docs\*.* "))),
+                        new Dir(client, "Client",
+                            new Dir("Sub",
+                                new Files(@"Files\Help\*.* "))))));
 
         project.Platform = Platform.x64;
         project.UI = WUI.WixUI_FeatureTree;
@@ -156,14 +156,14 @@ static class Script
         var server = new Feature("Feature_Server");
 
         var project = new Project("Test",
-               new Dir("ProgramFiles64Folder",
-                   new Dir("Test",
-                       new Dir("Server",
-                           new Dir(server, "Sub",
-                               new File(server, "setup.cs"))),
-                       new Dir("Client",
-                           new Dir(client, "Sub",
-                               new File(client, "test.cs"))))));
+                new Dir("ProgramFiles64Folder",
+                    new Dir("Test",
+                        new Dir("Server",
+                            new Dir(server, "Sub",
+                                new File(server, "setup.cs"))),
+                        new Dir("Client",
+                            new Dir(client, "Sub",
+                                new File(client, "test.cs"))))));
 
         project.Platform = Platform.x64;
         project.UI = WUI.WixUI_FeatureTree;
@@ -355,6 +355,17 @@ static class Script
         // project.BuildMsiCmd();
     }
 
+    static void Issue_1114()
+    {
+        var project = new ManagedProject("MyProductSetup",
+                new Dir(@"%ProgramFiles%\MyCompany\MyProduct\MyApp",
+                        new Dir(@"Logs"))); // after adding this, the install folder will NOT be removed at uninstall
+
+        project.PreserveTempFiles = true;
+
+        project.BuildMsi();
+    }
+
 #pragma warning disable
 
     static public void Main()
@@ -367,6 +378,7 @@ static class Script
 
         // HiTeach_MSI.Program.Main1(); return;
         // MsiInstaller.MyMsi.Build(); return;
+        Issue_1114(); return;
         Issue_865(); return;
         Issue_825(); return;
         Issue_609(); return;
