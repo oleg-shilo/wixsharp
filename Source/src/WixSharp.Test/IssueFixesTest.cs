@@ -42,6 +42,24 @@ namespace WixSharp.Test
         }
 
         [Fact]
+        [Description("Issue #1114")]
+        public void Fix_Issue_1114()
+        {
+            var project = new Project("MyProductSetup",
+                new Dir(@"%ProgramFiles%\MyCompany\MyProduct\MyApp",
+                        new Dir(
+                            // new Feature("extra"),
+                            @"Logs")));
+
+            project.PreserveTempFiles = true;
+            project.WixSourceGenerated += document =>
+            {
+                var xml = document.ToString();
+            };
+            project.BuildWxs();
+        }
+
+        [Fact]
         [Description("Issue #67")]
         public void Fix_Issue_67()
         {
@@ -303,7 +321,7 @@ namespace WixSharp.Test
                         new File(docs_03, @"Files\Docs\Manual_03.txt")
                            )
                        )
-                                         );
+                                     );
 
             project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 

@@ -115,6 +115,9 @@
     <Compile Include="Dialogs\FeaturesDialog.xaml.cs">
       <DependentUpon>FeaturesDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\ProgressDialog.xaml.cs">
+      <DependentUpon>ProgressDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\SetupTypeDialog.xaml.cs">
       <DependentUpon>SetupTypeDialog.xaml</DependentUpon>
     </Compile>
@@ -126,6 +129,10 @@
     </Compile>
     <Compile Include="setup.cs" />
     <Page Include="Dialogs\FeaturesDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\ProgressDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
