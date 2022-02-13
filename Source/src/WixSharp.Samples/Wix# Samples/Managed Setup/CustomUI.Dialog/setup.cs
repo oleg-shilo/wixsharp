@@ -90,7 +90,6 @@ public class Script
         MessageBox.Show(e.Data["test"], "Project_AfterInstall");
         if (e.IsInstalling)
         {
-            System.IO.Directory.CreateDirectory(@"C:\Program Files\ttt");
             MessageBox.Show($"User '{Defaults.UserName}' with password '{e.Session.Property("PASSWORD")}' has been created");
         }
     }
