@@ -7,7 +7,7 @@ using WixSharp.UI.Forms;
 
 namespace WixSharp.UI.WPF
 {
-    public partial class ProgressDialog : WpfDialog, IWpfDialog
+    public partial class ProgressDialog : WpfDialog, IWpfDialog, IProgressDialog
     {
         public ProgressDialog()
         {
@@ -16,8 +16,16 @@ namespace WixSharp.UI.WPF
 
         public void Init()
         {
-            var session = ManagedFormHost.Runtime.Session;
+            UpdateTitles(ManagedFormHost.Runtime.Session);
 
+            model = new ProgressDialogModel { Host = ManagedFormHost };
+            ViewModelBinder.Bind(model, this, null);
+
+            model.StartExecute();
+        }
+
+        public void UpdateTitles(ISession session)
+        {
             if (session.IsUninstalling())
             {
                 DialogTitle.Text = "[ProgressDlgTitleRemoving]";
@@ -34,14 +42,8 @@ namespace WixSharp.UI.WPF
                 DialogDescription.Text = "[ProgressDlgTextInstalling]";
             }
 
-            this.Localize(); // this will resolve [...] titles and descriptions into the localized strings stored in MSI resources tables
-
-            // -------
-
-            model = new ProgressDialogModel { Host = ManagedFormHost };
-            ViewModelBinder.Bind(model, this, null);
-
-            model.StartExecute();
+            // `Localize` resolves [...] titles and descriptions into the localized strings stored in MSI resources tables
+            this.Localize();
         }
 
         ProgressDialogModel model;
@@ -55,23 +57,11 @@ namespace WixSharp.UI.WPF
         public ManagedForm Host;
 
         ISession session => Host?.Runtime.Session;
+        IManagedUIShell shell => Host?.Shell;
+
         public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
-        public void StartExecute()
-        {
-            //Host?.Shell.StartExecute();
-        }
-
-        public bool UacPromptIsVisible
-        {
-            get
-            {
-                if (!WindowsIdentity.GetCurrent().IsAdmin() && Uac.IsEnabled() && !uacPromptActioned)
-                    return true;
-                else
-                    return false;
-            }
-        }
+        public bool UacPromptIsVisible => (!WindowsIdentity.GetCurrent().IsAdmin() && Uac.IsEnabled() && !uacPromptActioned);
 
         public string CurrentAction { get => currentAction; set { currentAction = value; base.NotifyOfPropertyChange(() => CurrentAction); } }
 
@@ -97,14 +87,17 @@ namespace WixSharp.UI.WPF
             }
         }
 
+        public void StartExecute()
+            => shell?.StartExecute();
+
         public void GoPrev()
-            => Host?.Shell.GoPrev();
+            => shell?.GoPrev();
 
         public void GoNext()
-            => Host?.Shell.GoNext();
+            => shell?.GoNext();
 
         public void Cancel()
-            => Host?.Shell.Cancel();
+            => shell?.Cancel();
 
         public MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, string currentStatus)
         {

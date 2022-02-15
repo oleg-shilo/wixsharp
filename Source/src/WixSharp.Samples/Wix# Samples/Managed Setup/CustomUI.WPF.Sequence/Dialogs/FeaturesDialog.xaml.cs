@@ -46,6 +46,8 @@ namespace WixSharp.UI.WPF
     {
         ManagedForm Host;
         ISession session => Host?.Runtime.Session;
+        IManagedUIShell shell => Host?.Shell;
+
         string selectedNodeDescription;
         public ObservableCollection<Node> RootNodes { get; set; } = new ObservableCollection<Node>();
 
@@ -76,7 +78,7 @@ namespace WixSharp.UI.WPF
         public void GoPrev()
         {
             SaveUserSelection();
-            Host?.Shell.GoPrev();
+            shell?.GoPrev();
         }
 
         /*https://msdn.microsoft.com/en-us/library/aa367536(v=vs.85).aspx
@@ -114,11 +116,11 @@ namespace WixSharp.UI.WPF
             }
 
             SaveUserSelection();
-            Host.Shell.GoNext();
+            shell.GoNext();
         }
 
         public void Cancel()
-            => Host?.Shell.Cancel();
+            => shell?.Cancel();
 
         public void Reset()
         {

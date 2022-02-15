@@ -30,8 +30,9 @@ namespace WixSharp.UI.WPF
     public class InstallDirDialogModel : Caliburn.Micro.Screen
     {
         public ManagedForm Host;
-
         ISession session => Host?.Runtime.Session;
+        IManagedUIShell shell => Host?.Shell;
+
         public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
         string installDirProperty => session?.Property("WixSharp_UI_INSTALLDIR");
@@ -75,12 +76,12 @@ namespace WixSharp.UI.WPF
         }
 
         public void GoPrev()
-            => Host?.Shell.GoPrev();
+            => shell?.GoPrev();
 
         public void GoNext()
-            => Host?.Shell.GoNext();
+            => shell?.GoNext();
 
         public void Cancel()
-            => Host?.Shell.Cancel();
+            => shell?.Cancel();
     }
 }

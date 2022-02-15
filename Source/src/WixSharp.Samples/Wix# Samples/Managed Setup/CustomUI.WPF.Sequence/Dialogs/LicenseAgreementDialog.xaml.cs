@@ -50,6 +50,9 @@ namespace WixSharp.UI.WPF
     public class LicenseDialogModel : Caliburn.Micro.Screen
     {
         ManagedForm host;
+        ISession session => Host?.Runtime.Session;
+        IManagedUIShell shell => Host?.Shell;
+
         public Action<string> ShowRtfContent;
 
         public ManagedForm Host
@@ -66,17 +69,17 @@ namespace WixSharp.UI.WPF
             }
         }
 
-        public string LicenceText => host?.Runtime.Session.GetResourceString("WixSharp_LicenceFile");
+        public string LicenceText => session?.GetResourceString("WixSharp_LicenceFile");
 
-        public BitmapImage Banner => Host?.Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
         public bool LicenseAcceptedChecked
         {
-            get => Host?.Runtime.Session["LastLicenceAcceptedChecked"] == "True";
+            get => session?["LastLicenceAcceptedChecked"] == "True";
             set
             {
                 if (Host != null)
-                    Host.Runtime.Session["LastLicenceAcceptedChecked"] = value.ToString();
+                    session["LastLicenceAcceptedChecked"] = value.ToString();
 
                 NotifyOfPropertyChange(() => LicenseAcceptedChecked);
                 NotifyOfPropertyChange(() => CanGoNext);
@@ -87,13 +90,13 @@ namespace WixSharp.UI.WPF
             => LicenseAcceptedChecked;
 
         public void GoPrev()
-            => Host?.Shell.GoPrev();
+            => shell?.GoPrev();
 
         public void GoNext()
-            => Host?.Shell.GoNext();
+            => shell?.GoNext();
 
         public void Cancel()
-            => Host?.Shell.Cancel();
+            => shell?.Cancel();
 
         public void Print()
         {
@@ -105,8 +108,8 @@ namespace WixSharp.UI.WPF
             }
             catch
             {
-                //Catch all, we don't want the installer to crash in an
-                //attempt to write to a file.
+                // Catch all, we don't want the installer to crash in an
+                // attempt to write to a file.
             }
         }
     }

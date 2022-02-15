@@ -1,10 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
+﻿using System.Linq;
 using System.Windows.Media.Imaging;
 using Caliburn.Micro;
 using WixSharp;
@@ -32,55 +26,49 @@ namespace WixSharp.UI.WPF
         public ManagedForm Host;
 
         ISession session => Host?.Runtime.Session;
+        IManagedUIShell shell => Host?.Shell;
+
         public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
-        string installDirProperty => session?.Property("WixSharp_UI_INSTALLDIR");
-
-        public string InstallDirPath
+        void JumpToProgressDialog()
         {
-            get
-            {
-                if (Host == null) return null;
-
-                string installDirPropertyValue = session.Property(installDirProperty);
-
-                if (installDirPropertyValue.IsEmpty())
-                {
-                    // We are executed before any of the MSI actions are invoked so the INSTALLDIR (if set to absolute path)
-                    // is not resolved yet. So we need to do it manually
-                    var installDir = session.GetDirectoryPath(installDirProperty);
-
-                    if (installDir == "ABSOLUTEPATH")
-                        installDir = session.Property("INSTALLDIR_ABSOLUTEPATH");
-
-                    return installDir;
-                }
-                else
-                {
-                    //INSTALLDIR set either from the command line or by one of the early setup events (e.g. UILoaded)
-                    return installDirPropertyValue;
-                }
-            }
-
-            set => session[installDirProperty] = value;
+            int index = shell.Dialogs.IndexOfDialogImplementing<IProgressDialog>();
+            if (index != -1)
+                shell.GoTo(index);
+            else
+                shell.GoNext(); // if user did not supply progress dialog then simply go next
         }
 
-        public void ChangeInstallDir()
+        public bool CanGoNext => false;
+
+        public void DoTypical()
         {
-            using (var dialog = new FolderBrowserDialog { SelectedPath = InstallDirPath })
+            if (shell != null)
+                JumpToProgressDialog();
+        }
+
+        public void DoComplete()
+        {
+            if (shell != null)
             {
-                if (dialog.ShowDialog() == DialogResult.OK)
-                    InstallDirPath = dialog.SelectedPath;
+                // mark all features to be installed
+                string[] names = session.Features.Select(x => x.Name).ToArray();
+                session["ADDLOCAL"] = names.JoinBy(",");
+
+                JumpToProgressDialog();
             }
         }
+
+        public void DoCustom()
+            => shell?.GoNext(); // let the dialog flow through
 
         public void GoPrev()
-            => Host?.Shell.GoPrev();
+            => shell?.GoPrev();
 
         public void GoNext()
-            => Host?.Shell.GoNext();
+            => shell?.GoNext();
 
         public void Cancel()
-            => Host?.Shell.Cancel();
+            => shell?.Cancel();
     }
 }
