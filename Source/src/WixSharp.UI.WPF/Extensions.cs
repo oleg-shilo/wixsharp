@@ -250,6 +250,7 @@ namespace WixSharp.UI.WPF
         /// <param name="defaultButton">The default button.</param>
         /// <returns></returns>
         virtual public MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, MessageButtons buttons, MessageIcon icon, MessageDefaultButton defaultButton)
+
             => MessageResult.OK;
     }
 
@@ -303,7 +304,9 @@ namespace WixSharp.UI.WPF
         /// <returns></returns>
         public override MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, MessageButtons buttons, MessageIcon icon, MessageDefaultButton defaultButton)
         {
-            return base.ProcessMessage(messageType, messageRecord, buttons, icon, defaultButton);
+            var result = (content as IManagedDialog)?.ProcessMessage(messageType, messageRecord, buttons, icon, defaultButton);
+
+            return result ?? base.ProcessMessage(messageType, messageRecord, buttons, icon, defaultButton);
         }
 
         /// <summary>

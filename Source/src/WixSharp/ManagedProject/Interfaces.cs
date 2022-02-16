@@ -1,8 +1,8 @@
 ﻿using System;
-using Reflection = System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Deployment.WindowsInstaller;
+using Reflection = System.Reflection;
 
 #pragma warning disable 1591
 
@@ -286,6 +286,14 @@ namespace WixSharp
             base.Add(Validate(typeof(T)));
             return this;
         }
+
+        /// <summary>
+        /// Indexes the of dialog implementing specified interface.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public int IndexOfDialogImplementing<T>()
+            => this.FindIndex(x => typeof(T).IsAssignableFrom(x));
 
         Type Validate(Type type)
         {

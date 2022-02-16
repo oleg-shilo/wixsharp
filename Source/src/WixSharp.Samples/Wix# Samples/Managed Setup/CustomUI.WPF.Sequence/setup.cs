@@ -12,6 +12,33 @@ public class Script
         // TestDialogs();
     }
 
+    static void BuildMsi()
+    {
+        var project = new ManagedProject("ManagedSetup",
+                      new Dir(@"%ProgramFiles%\My Company\My Product",
+                          new File("readme.md")));
+
+        project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
+
+        project.ManagedUI = new ManagedUI();
+
+        project.ManagedUI.InstallDialogs.Add<WelcomeDialog>()
+                                        //.Add<LicenceDialog>()
+                                        .Add<FeaturesDialog>()
+                                            .Add<ProgressDialog>() // broken, does not process messages
+                                            .Add<ExitDialog>();
+
+        project.ManagedUI.ModifyDialogs.Add<ProgressDialog>()
+                                       .Add<ExitDialog>();
+
+        // project.ManagedUI = ManagedUI.Default;
+
+        // project.PreserveTempFiles = true;
+        project.SourceBaseDir = @"..\..\";
+
+        project.BuildMsi();
+    }
+
     static void TestDialogs()
     {
         UIShell.Play(
@@ -24,30 +51,5 @@ public class Script
             typeof(FeaturesDialog),
             typeof(ProgressDialog),
             typeof(ExitDialog));
-    }
-
-    static void BuildMsi()
-    {
-        var project = new ManagedProject("ManagedSetup",
-                      new Dir(@"%ProgramFiles%\My Company\My Product",
-                          new File("readme.md")));
-
-        project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-
-        project.ManagedUI = new ManagedUI();
-
-        project.ManagedUI.InstallDialogs.Add<WelcomeDialog>()
-                                        .Add<LicenceDialog>()
-                                        .Add<FeaturesDialog>()
-                                        .Add<ProgressDialog>()
-                                        .Add<ExitDialog>();
-
-        project.ManagedUI.ModifyDialogs.Add<ProgressDialog>()
-                                       .Add<ExitDialog>();
-
-        // project.PreserveTempFiles = true;
-        project.SourceBaseDir = @"..\..\";
-
-        project.BuildMsi();
     }
 }

@@ -95,11 +95,11 @@ namespace WixSharp.UI.WPF
 
             if (userChangedFeatures)
             {
-                string itemsToInstall = features.Where(x => x.IsViewChecked())
+                string itemsToInstall = features.Where(x => (x.View as Node).Checked)
                                                 .Select(x => x.Name)
                                                 .JoinBy(",");
 
-                string itemsToRemove = features.Where(x => !x.IsViewChecked())
+                string itemsToRemove = features.Where(x => !(x.View as Node).Checked)
                                                .Select(x => x.Name)
                                                .JoinBy(",");
 

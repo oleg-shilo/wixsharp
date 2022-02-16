@@ -1,4 +1,3 @@
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using Microsoft.Deployment.WindowsInstaller;
 
 namespace WixSharp.UI.Forms
 {
@@ -25,6 +25,7 @@ namespace WixSharp.UI.Forms
         {
             if (feature.View is TreeNode)
                 return (feature.View as TreeNode).Checked;
+
             return false;
         }
 

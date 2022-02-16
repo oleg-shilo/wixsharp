@@ -41,26 +41,29 @@ namespace WixSharp.UI.WPF
         {
             get
             {
-                if (Host == null) return null;
-
-                string installDirPropertyValue = session.Property(installDirProperty);
-
-                if (installDirPropertyValue.IsEmpty())
+                if (Host != null)
                 {
-                    // We are executed before any of the MSI actions are invoked so the INSTALLDIR (if set to absolute path)
-                    // is not resolved yet. So we need to do it manually
-                    var installDir = session.GetDirectoryPath(installDirProperty);
+                    string installDirPropertyValue = session.Property(installDirProperty);
 
-                    if (installDir == "ABSOLUTEPATH")
-                        installDir = session.Property("INSTALLDIR_ABSOLUTEPATH");
+                    if (installDirPropertyValue.IsEmpty())
+                    {
+                        // We are executed before any of the MSI actions are invoked so the INSTALLDIR (if set to absolute path)
+                        // is not resolved yet. So we need to do it manually
+                        var installDir = session.GetDirectoryPath(installDirProperty);
 
-                    return installDir;
+                        if (installDir == "ABSOLUTEPATH")
+                            installDir = session.Property("INSTALLDIR_ABSOLUTEPATH");
+
+                        return installDir;
+                    }
+                    else
+                    {
+                        //INSTALLDIR set either from the command line or by one of the early setup events (e.g. UILoaded)
+                        return installDirPropertyValue;
+                    }
                 }
                 else
-                {
-                    //INSTALLDIR set either from the command line or by one of the early setup events (e.g. UILoaded)
-                    return installDirPropertyValue;
-                }
+                    return null;
             }
 
             set => session[installDirProperty] = value;

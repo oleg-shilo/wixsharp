@@ -26,23 +26,20 @@ namespace WixSharp.UI.WPF
     public class ExitDialogModel : Caliburn.Micro.Screen
     {
         public ManagedForm Host { get; set; }
+        ISession session => Host?.Runtime.Session;
+        IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => Host?.Runtime.Session.GetResourceBitmap("WixUI_Bmp_Dialog").ToImageSource();
-
-        public bool CanGoPrev => false;
-
-        public void GoPrev()
-            => Host?.Shell.GoPrev();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Dialog").ToImageSource();
 
         public void GoExit()
-            => Host?.Shell.Exit();
+            => shell?.Exit();
 
         public void Cancel()
-            => Host?.Shell.Cancel();
+            => shell?.Exit();
 
         public void ViewLog()
         {
-            if (Host != null)
+            if (shell != null)
                 try
                 {
                     string wixSharpDir = Path.GetTempPath().PathCombine("WixSharp");
@@ -50,7 +47,7 @@ namespace WixSharp.UI.WPF
                         Directory.CreateDirectory(wixSharpDir);
 
                     string logFile = wixSharpDir.PathCombine(Host.Runtime.ProductName + ".log");
-                    IO.File.WriteAllText(logFile, Host.Shell.Log);
+                    IO.File.WriteAllText(logFile, shell.Log);
 
                     Process.Start(logFile);
                 }

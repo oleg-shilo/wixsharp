@@ -68,14 +68,14 @@
             this.textPanel.Size = new System.Drawing.Size(305, 289);
             this.textPanel.TabIndex = 8;
             // 
-            // label1
+            // title
             // 
             this.title.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.title.BackColor = System.Drawing.Color.Transparent;
             this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.title.Location = new System.Drawing.Point(3, 0);
-            this.title.Name = "label1";
+            this.title.Name = "title";
             this.title.Size = new System.Drawing.Size(299, 61);
             this.title.TabIndex = 6;
             this.title.Text = "[ExitDialogTitle]";

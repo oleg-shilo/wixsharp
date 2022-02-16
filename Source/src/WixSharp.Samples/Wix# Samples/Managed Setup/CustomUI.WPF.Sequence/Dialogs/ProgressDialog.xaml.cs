@@ -50,6 +50,9 @@ namespace WixSharp.UI.WPF
 
         public override MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, MessageButtons buttons, MessageIcon icon, MessageDefaultButton defaultButton)
             => model?.ProcessMessage(messageType, messageRecord, CurrentStatus.Text) ?? MessageResult.None;
+
+        public override void OnExecuteComplete()
+            => model?.OnExecuteComplete();
     }
 
     public class ProgressDialogModel : Caliburn.Micro.Screen
@@ -87,6 +90,9 @@ namespace WixSharp.UI.WPF
             }
         }
 
+        public bool CanGoNext => false;
+        public bool CanGoPrev => false;
+
         public void StartExecute()
             => shell?.StartExecute();
 
@@ -97,7 +103,12 @@ namespace WixSharp.UI.WPF
             => shell?.GoNext();
 
         public void Cancel()
-            => shell?.Cancel();
+        {
+            if (shell.IsDemoMode)
+                shell.GoNext();
+            else
+                shell.Cancel();
+        }
 
         public MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, string currentStatus)
         {
@@ -147,6 +158,12 @@ namespace WixSharp.UI.WPF
                     break;
             }
             return MessageResult.OK;
+        }
+
+        public void OnExecuteComplete()
+        {
+            CurrentAction = null;
+            shell?.GoNext();
         }
     }
 }

@@ -22,9 +22,13 @@ namespace WixSharp.UI.WPF
 
     public class WelcomeDialogModel : Caliburn.Micro.Screen
     {
-        public ManagedForm Host { get; set; }
+        public ManagedForm Host;
+        ISession session => Host?.Runtime.Session;
+        IManagedUIShell shell => Host?.Shell;
 
         public BitmapImage Banner => Host?.Runtime.Session.GetResourceBitmap("WixUI_Bmp_Dialog").ToImageSource();
+
+        public bool CanGoPrev => false;
 
         public void GoPrev()
             => Host?.Shell.GoPrev();
