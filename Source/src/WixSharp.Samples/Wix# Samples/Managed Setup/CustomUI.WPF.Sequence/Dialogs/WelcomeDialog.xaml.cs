@@ -5,7 +5,7 @@ using WixSharp.UI.Forms;
 
 using IO = System.IO;
 
-namespace WixSharp.UI.WPF
+namespace WixSharp.UI.WPF.Sequence
 {
     public partial class WelcomeDialog : WpfDialog, IWpfDialog
     {
@@ -26,17 +26,17 @@ namespace WixSharp.UI.WPF
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => Host?.Runtime.Session.GetResourceBitmap("WixUI_Bmp_Dialog").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Dialog").ToImageSource();
 
         public bool CanGoPrev => false;
 
         public void GoPrev()
-            => Host?.Shell.GoPrev();
+            => shell?.GoPrev();
 
         public void GoNext()
-            => Host?.Shell.GoNext();
+            => shell?.GoNext();
 
         public void Cancel()
-            => Host?.Shell.Cancel();
+            => shell?.Cancel();
     }
 }

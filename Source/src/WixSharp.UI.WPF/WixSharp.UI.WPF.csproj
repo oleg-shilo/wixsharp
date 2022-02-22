@@ -83,7 +83,63 @@
     <Compile Include="CustomDialogBase.xaml.cs">
       <DependentUpon>CustomDialogBase.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\ExitDialog.xaml.cs">
+      <DependentUpon>ExitDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\FeaturesDialog.xaml.cs">
+      <DependentUpon>FeaturesDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\InstallDirDialog.xaml.cs">
+      <DependentUpon>InstallDirDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\LicenseAgreementDialog.xaml.cs">
+      <DependentUpon>LicenseAgreementDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\MaintenanceTypeDialog.xaml.cs">
+      <DependentUpon>MaintenanceTypeDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ProgressDialog.xaml.cs">
+      <DependentUpon>ProgressDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\SetupTypeDialog.xaml.cs">
+      <DependentUpon>SetupTypeDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\WelcomeDialog.xaml.cs">
+      <DependentUpon>WelcomeDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Extensions.cs" />
+    <Page Include="Dialogs\ExitDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Dialogs\FeaturesDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Dialogs\InstallDirDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Dialogs\LicenseAgreementDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Dialogs\MaintenanceTypeDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Dialogs\ProgressDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Dialogs\SetupTypeDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Dialogs\WelcomeDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

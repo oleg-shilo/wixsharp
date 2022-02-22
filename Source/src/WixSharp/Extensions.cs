@@ -1733,9 +1733,9 @@ namespace WixSharp
         /// <example>
         /// This method is convenient a convenient way of parsing command line arguments.
         /// <code>
-        ///// Command line: "app.exe -out:.\log.file"
-        ///// outFile value is ".\log.file"
-        ///string outFile = Environment.GetCommandLineArgs().FirstPrefixedValue("-out:", "-o:");
+        /// // Command line: "app.exe -out:.\log.file"
+        /// // outFile value is ".\log.file"
+        /// string outFile = Environment.GetCommandLineArgs().FirstPrefixedValue("-out:", "-o:");
         /// </code>
         /// </example>
         /// <param name="items">The items.</param>
@@ -3938,16 +3938,38 @@ namespace WixSharp
             return process;
         }
 
-        // beautiful solution:
-        // https://stackoverflow.com/questions/49190830/is-it-possible-for-string-split-to-return-tuple
-        // var line = "a=b"; var (first, second, _) = line.Split('='); var (first, (second, _)) =
-        // line.Split('='); var(first, (second, (third, _))) = line.Split('='); var(first, rest) = line.Split('=');
+        /// <summary>
+        /// Deconstructs the collection into the tuple.
+        /// <para>Beautiful solution of: https://stackoverflow.com/questions/49190830/is-it-possible-for-string-split-to-return-tuple
+        /// </para>
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// var line = "a=b";
+        /// var (first, second, _) = line.Split('=');
+        /// var (first, (second, _)) = line.Split('=');
+        /// var(first, (second, (third, _))) = line.Split('=');
+        /// var(first, rest) = line.Split('=');
+        /// </code>
+        /// </example>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list">The list.</param>
+        /// <param name="first">The first.</param>
+        /// <param name="rest">The rest.</param>
         public static void Deconstruct<T>(this IList<T> list, out T first, out IList<T> rest)
         {
             first = list.Count > 0 ? list[0] : default(T); // or throw
             rest = list.Skip(1).ToList();
         }
 
+        /// <summary>
+        /// Deconstructs the collection into the tuple.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list">The list.</param>
+        /// <param name="first">The first.</param>
+        /// <param name="second">The second.</param>
+        /// <param name="rest">The rest.</param>
         public static void Deconstruct<T>(this IList<T> list, out T first, out T second, out IList<T> rest)
         {
             first = list.Count > 0 ? list[0] : default(T); // or throw

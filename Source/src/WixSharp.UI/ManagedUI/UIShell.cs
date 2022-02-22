@@ -383,6 +383,7 @@ namespace WixSharp
         /// <summary>
         /// Plays the specified dialog set.
         /// </summary>
+        /// <param name="demoProperties">The demo properties.</param>
         /// <param name="dialogSet">The dialog set.</param>
         public static void Play(string demoProperties, params Type[] dialogSet)
         {

@@ -12,7 +12,7 @@ using WixSharp.UI.Forms;
 
 using IO = System.IO;
 
-namespace WixSharp.UI.WPF
+namespace WixSharp.UI.WPF.Sequence
 {
     public partial class InstallDirDialog : WpfDialog, IWpfDialog
     {

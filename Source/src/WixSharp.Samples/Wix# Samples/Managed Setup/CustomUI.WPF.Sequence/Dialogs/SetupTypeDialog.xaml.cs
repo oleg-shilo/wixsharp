@@ -6,7 +6,7 @@ using WixSharp.UI.Forms;
 
 using IO = System.IO;
 
-namespace WixSharp.UI.WPF
+namespace WixSharp.UI.WPF.Sequence
 {
     public partial class SetupTypeDialog : WpfDialog, IWpfDialog
     {
@@ -38,8 +38,6 @@ namespace WixSharp.UI.WPF
             else
                 shell.GoNext(); // if user did not supply progress dialog then simply go next
         }
-
-        public bool CanGoNext => false;
 
         public void DoTypical()
         {

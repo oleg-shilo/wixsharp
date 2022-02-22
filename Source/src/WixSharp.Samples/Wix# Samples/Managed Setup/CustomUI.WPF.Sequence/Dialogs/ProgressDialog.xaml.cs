@@ -5,7 +5,7 @@ using Caliburn.Micro;
 using WixSharp.CommonTasks;
 using WixSharp.UI.Forms;
 
-namespace WixSharp.UI.WPF
+namespace WixSharp.UI.WPF.Sequence
 {
     public partial class ProgressDialog : WpfDialog, IWpfDialog, IProgressDialog
     {
@@ -28,17 +28,17 @@ namespace WixSharp.UI.WPF
         {
             if (session.IsUninstalling())
             {
-                DialogTitle.Text = "[ProgressDlgTitleRemoving]";
+                DialogTitleLabel.Text = "[ProgressDlgTitleRemoving]";
                 DialogDescription.Text = "[ProgressDlgTextRemoving]";
             }
             else if (session.IsRepairing())
             {
-                DialogTitle.Text = "[ProgressDlgTextRepairing]";
+                DialogTitleLabel.Text = "[ProgressDlgTextRepairing]";
                 DialogDescription.Text = "[ProgressDlgTitleRepairing]";
             }
             else if (session.IsInstalling())
             {
-                DialogTitle.Text = "[ProgressDlgTitleInstalling]";
+                DialogTitleLabel.Text = "[ProgressDlgTitleInstalling]";
                 DialogDescription.Text = "[ProgressDlgTextInstalling]";
             }
 
@@ -90,17 +90,8 @@ namespace WixSharp.UI.WPF
             }
         }
 
-        public bool CanGoNext => false;
-        public bool CanGoPrev => false;
-
         public void StartExecute()
             => shell?.StartExecute();
-
-        public void GoPrev()
-            => shell?.GoPrev();
-
-        public void GoNext()
-            => shell?.GoNext();
 
         public void Cancel()
         {

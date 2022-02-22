@@ -1,5 +1,5 @@
 ﻿<wixsharp:WpfDialog
-    x:Class="WixSharp.UI.WPF.ProgressDialog"
+    x:Class="WixSharp.UI.WPF.Sequence.ProgressDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cal="http://www.caliburnproject.org"
@@ -37,7 +37,7 @@
                     VerticalAlignment="Stretch" />
                 <StackPanel Margin="9">
                     <TextBlock
-                        x:Name="DialogTitle"
+                        x:Name="DialogTitleLabel"
                         Grid.Column="0"
                         Background="White"
                         FontSize="12"
