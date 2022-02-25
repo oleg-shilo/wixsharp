@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using ConsoleApplication1;
 using WixSharp;
-using WixSharp.UI.Forms;
 using WixSharp.UI.WPF;
 
 public class Script
@@ -15,13 +14,13 @@ public class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.ManagedUI = new ManagedUI();
-        project.ManagedUI.InstallDialogs.Add<WelcomeDialog>()       // stock WinForm dialog
-                                        .Add<FeaturesDialog>()      // stock WinForm dialog
-                                        .Add<CustomDialogWith<CustomDialogPanel>>()    // custom WPF dialog (minimalistic);
-                                        .Add<CustomDialogRawView>() // custom WPF dialog
-                                        .Add<CustomDialogView>()    // custom WPF dialog (with Claiburn.Micro as MVVM)
-                                        .Add<ProgressDialog>()      // stock WinForm dialog
-                                        .Add<ExitDialog>();         // stock WinForm dialog
+        project.ManagedUI.InstallDialogs.Add<WixSharp.UI.Forms.WelcomeDialog>()     // stock WinForm dialog
+                                        .Add<FeaturesDialog>()                      // stock WinForm dialog
+                                        .Add<CustomDialogWith<CustomDialogPanel>>() // custom WPF dialog (minimalistic);
+                                        .Add<CustomDialogRawView>()                 // custom WPF dialog
+                                        .Add<CustomDialogView>()                    // custom WPF dialog (with Claiburn.Micro as MVVM)
+                                        .Add<WixSharp.UI.Forms.ProgressDialog>()    // stock WinForm dialog
+                                        .Add<WixSharp.UI.Forms.ExitDialog>();       // stock WinForm dialog
 
         project.ManagedUI.ModifyDialogs.Add<ProgressDialog>()
                                        .Add<ExitDialog>();
