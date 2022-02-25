@@ -853,9 +853,14 @@
              </code>
              </example>
         </member>
+        <member name="P:WixSharp.ManagedUI.DefaultWpf">
+            <summary>
+            The default WPF implementation of ManagedUI. It implements all major dialogs of a typical MSI UI.
+            </summary>
+        </member>
         <member name="F:WixSharp.ManagedUI.Default">
             <summary>
-            The default implementation of ManagedUI. It implements all major dialogs of a typical MSI UI.
+            The default WinForm implementation of ManagedUI. It implements all major dialogs of a typical MSI UI.
             </summary>
         </member>
         <member name="F:WixSharp.ManagedUI.Empty">

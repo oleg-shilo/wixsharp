@@ -1,4 +1,4 @@
-﻿using System.Security.Principal;
+using System.Security.Principal;
 using System.Windows.Media.Imaging;
 using Microsoft.Deployment.WindowsInstaller;
 using Caliburn.Micro;
@@ -7,13 +7,28 @@ using WixSharp.UI.Forms;
 
 namespace WixSharp.UI.WPF
 {
+    /// <summary>
+    /// The standard ProgressDialog.
+    /// <para>Follows the design of the canonical Caliburn.Micro View (MVVM).</para>
+    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
+    /// </summary>
+    /// <seealso cref="WixSharp.UI.WPF.WpfDialog" />
+    /// <seealso cref="WixSharp.IWpfDialog" />
+    /// <seealso cref="System.Windows.Markup.IComponentConnector" />
     public partial class ProgressDialog : WpfDialog, IWpfDialog, IProgressDialog
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgressDialog" /> class.
+        /// </summary>
         public ProgressDialog()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// This method is invoked by WixSHarp runtime when the custom dialog content is internally fully initialized.
+        /// This is a convenient place to do further initialization activities (e.g. localization).
+        /// </summary>
         public void Init()
         {
             UpdateTitles(ManagedFormHost.Runtime.Session);
@@ -24,21 +39,25 @@ namespace WixSharp.UI.WPF
             model.StartExecute();
         }
 
+        /// <summary>
+        /// Updates the titles of the dialog depending on what type of installation action MSI is performing.
+        /// </summary>
+        /// <param name="session">The session.</param>
         public void UpdateTitles(ISession session)
         {
             if (session.IsUninstalling())
             {
-                DialogTitle.Text = "[ProgressDlgTitleRemoving]";
+                DialogTitleLabel.Text = "[ProgressDlgTitleRemoving]";
                 DialogDescription.Text = "[ProgressDlgTextRemoving]";
             }
             else if (session.IsRepairing())
             {
-                DialogTitle.Text = "[ProgressDlgTextRepairing]";
+                DialogTitleLabel.Text = "[ProgressDlgTextRepairing]";
                 DialogDescription.Text = "[ProgressDlgTitleRepairing]";
             }
             else if (session.IsInstalling())
             {
-                DialogTitle.Text = "[ProgressDlgTitleInstalling]";
+                DialogTitleLabel.Text = "[ProgressDlgTitleInstalling]";
                 DialogDescription.Text = "[ProgressDlgTextInstalling]";
             }
 
@@ -48,14 +67,44 @@ namespace WixSharp.UI.WPF
 
         ProgressDialogModel model;
 
+        /// <summary>
+        /// Processes information and progress messages sent to the user interface.
+        /// <para> This method directly mapped to the
+        /// <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI.ProcessMessage" />.</para>
+        /// </summary>
+        /// <param name="messageType">Type of the message.</param>
+        /// <param name="messageRecord">The message record.</param>
+        /// <param name="buttons">The buttons.</param>
+        /// <param name="icon">The icon.</param>
+        /// <param name="defaultButton">The default button.</param>
+        /// <returns></returns>
         public override MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, MessageButtons buttons, MessageIcon icon, MessageDefaultButton defaultButton)
             => model?.ProcessMessage(messageType, messageRecord, CurrentStatus.Text) ?? MessageResult.None;
 
+        /// <summary>
+        /// Called when MSI execution is complete.
+        /// </summary>
         public override void OnExecuteComplete()
             => model?.OnExecuteComplete();
+
+        /// <summary>
+        /// Called when MSI execution progress is changed.
+        /// </summary>
+        /// <param name="progressPercentage">The progress percentage.</param>
+        public override void OnProgress(int progressPercentage)
+        {
+            if (model != null)
+                model.ProgressValue = progressPercentage;
+        }
     }
 
-    public class ProgressDialogModel : Caliburn.Micro.Screen
+    /// <summary>
+    /// ViewModel for standard ProgressDialog.
+    /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
+    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
+    /// </summary>
+    /// <seealso cref="Caliburn.Micro.Screen" />
+    class ProgressDialogModel : Caliburn.Micro.Screen
     {
         public ManagedForm Host;
 
@@ -67,9 +116,11 @@ namespace WixSharp.UI.WPF
         public bool UacPromptIsVisible => (!WindowsIdentity.GetCurrent().IsAdmin() && Uac.IsEnabled() && !uacPromptActioned);
 
         public string CurrentAction { get => currentAction; set { currentAction = value; base.NotifyOfPropertyChange(() => CurrentAction); } }
+        public int ProgressValue { get => progressValue; set { progressValue = value; base.NotifyOfPropertyChange(() => ProgressValue); } }
 
         bool uacPromptActioned = false;
         private string currentAction;
+        private int progressValue;
 
         public string UacPrompt
         {

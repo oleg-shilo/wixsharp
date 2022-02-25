@@ -1,7 +1,10 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using WixSharp;
 using WixSharp.UI.WPF;
+
+using Custom = WixSharp.UI.WPF.Sequence;
 
 public class Script
 {
@@ -20,20 +23,24 @@ public class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
+        // custom WPF dialogs
         project.ManagedUI = new ManagedUI();
 
-        project.ManagedUI.InstallDialogs.Add<WelcomeDialog>()
-                                        //.Add<LicenceDialog>()
-                                        .Add<FeaturesDialog>()
-                                            .Add<ProgressDialog>() // broken, does not process messages
-                                            .Add<ExitDialog>();
+        project.ManagedUI.InstallDialogs.Add<Custom.WelcomeDialog>()
+                                        .Add<Custom.LicenceDialog>()
+                                        .Add<Custom.FeaturesDialog>()
+                                        .Add<Custom.ProgressDialog>()
+                                        .Add<Custom.ExitDialog>();
 
-        project.ManagedUI.ModifyDialogs.Add<ProgressDialog>()
-                                       .Add<ExitDialog>();
+        project.ManagedUI.ModifyDialogs.Add<Custom.ProgressDialog>()
+                                       .Add<Custom.ExitDialog>();
 
-        // project.ManagedUI = ManagedUI.Default;
+        // project.ManagedUI = ManagedWpfUI.Default;   // WPF based dialogs
+        // project.ManagedUI = ManagedUI.DefaultWpf;   // the same as ManagedWpfUI.Default
 
-        // project.PreserveTempFiles = true;
+        // project.ManagedUI = ManagedUI.Default;      // WinForm based dialogs
+
+        project.PreserveTempFiles = true;
         project.SourceBaseDir = @"..\..\";
 
         project.BuildMsi();
@@ -43,13 +50,13 @@ public class Script
     {
         UIShell.Play(
             "WixSharp_UI_INSTALLDIR=INSTALLDIR", // required by InstallDirDialog for initialization of the demo MSI session
-            typeof(WelcomeDialog),
-            typeof(LicenceDialog),
-            typeof(InstallDirDialog),
-            typeof(MaintenanceTypeDialog),
-            typeof(SetupTypeDialog),
-            typeof(FeaturesDialog),
-            typeof(ProgressDialog),
-            typeof(ExitDialog));
+            typeof(Custom.WelcomeDialog),
+            typeof(Custom.LicenceDialog),
+            typeof(Custom.InstallDirDialog),
+            typeof(Custom.MaintenanceTypeDialog),
+            typeof(Custom.SetupTypeDialog),
+            typeof(Custom.FeaturesDialog),
+            typeof(Custom.ProgressDialog),
+            typeof(Custom.ExitDialog));
     }
 }

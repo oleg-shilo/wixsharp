@@ -180,6 +180,8 @@ namespace WixSharp
             {
                 currentViewIndex = value;
 
+                // Debug.Assert(false);
+
                 try
                 {
                     if (currentViewIndex >= 0 && currentViewIndex < Dialogs.Count)

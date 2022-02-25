@@ -14,7 +14,69 @@ using WixSharp.UI.Forms;
 namespace WixSharp.UI.WPF
 {
     /// <summary>
-    /// Returns an array of AssemblyName that definses referenced assemblies required at runtime for WixSharp WPF dialogs.
+    /// Implements as standard dialog-based MSI embedded UI as a sequence of WPF dialogs.
+    /// <para>
+    /// This class allows defining separate sequences of UI dialogs for 'install'
+    /// and 'modify' MSI executions. The dialog sequence can contain any mixture
+    /// of built-in standard dialogs and/or custom WPF dialogs.
+    /// </para>
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// using WixSharp.UI.WPF;
+    /// ...
+    /// project.ManagedUI = new ManagedDpfUI();
+    /// project.ManagedUI.InstallDialogs.Add(Dialogs.Welcome)
+    ///                                 .Add(Dialogs.Licence)
+    ///                                 .Add(Dialogs.SetupType)
+    ///                                 .Add(Dialogs.Features)
+    ///                                 .Add(Dialogs.InstallDir)
+    ///                                 .Add(Dialogs.Progress)
+    ///                                 .Add(Dialogs.Exit);
+    ///
+    /// project.ManagedUI.ModifyDialogs.Add(Dialogs.MaintenanceType)
+    ///                                .Add(Dialogs.Features)
+    ///                                .Add(Dialogs.Progress)
+    ///                                .Add(Dialogs.Exit);
+    ///
+    /// // or
+    ///
+    ///  project.ManagedUI = ManagedWpfUI.Default;
+    ///
+    /// </code>
+    /// </example>
+    public class ManagedWpfUI
+    {
+        /// <summary>
+        /// The default WPF implementation of ManagedUI. It implements all major dialogs of a typical MSI UI.
+        /// </summary>
+        static public IManagedUI Default
+        {
+            get
+            {
+                return new WixSharp.ManagedUI
+                {
+                    InstallDialogs = new ManagedDialogs()
+                                         .Add<WelcomeDialog>()
+                                         .Add<LicenceDialog>()
+                                         .Add<SetupTypeDialog>()
+                                         .Add<FeaturesDialog>()
+                                         .Add<InstallDirDialog>()
+                                         .Add<ProgressDialog>()
+                                         .Add<ExitDialog>(),
+
+                    ModifyDialogs = new ManagedDialogs()
+                                        .Add<MaintenanceTypeDialog>()
+                                        .Add<FeaturesDialog>()
+                                        .Add<ProgressDialog>()
+                                        .Add<ExitDialog>()
+                };
+            }
+        }
+    }
+
+    /// <summary>
+    /// Returns an array of AssemblyName that defines referenced assemblies required at runtime for WixSharp WPF dialogs.
     /// <para>Typically it is Caliburn.Micro assemblies and their dependencies and WixSharp.UI assembly.</para>
     /// <para>This method is to be used by WixSharp compiler only.</para>
     /// </summary>
@@ -64,7 +126,7 @@ namespace WixSharp.UI.WPF
         /// <returns></returns>
         public static InstallerRuntime Localize(this InstallerRuntime runtime, DependencyObject parent)
         {
-            bool isLocalizable(string text) => text.StartsWith("[") && text.EndsWith("]");
+            bool isLocalizable(string text) => text != null && text.StartsWith("[") && text.EndsWith("]");
             string translate(string text) => text.LocalizeWith(runtime.Localize)
                                                  .Replace("&&", "{amp}") // clean `&Next` and `I &accept...`
                                                  .Replace("&", "")

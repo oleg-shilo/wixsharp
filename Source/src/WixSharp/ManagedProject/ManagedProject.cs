@@ -411,11 +411,16 @@ namespace WixSharp
 
         string[] GetUiDialogsDependencies(IManagedUI ui)
         {
+            var dependsOnWpfDialogsBase = ui.InstallDialogs
+                                            .Combine(ui.ModifyDialogs)
+                                            .SelectMany(x => x.Assembly.GetReferencedAssemblies())
+                                            .Any(a => a.Name.StartsWith("WixSharp.UI.WPF"));
+
             var usngWpfStockDialogs = ui.InstallDialogs
                                         .Combine(ui.ModifyDialogs)
-                                        .SelectMany(x => x.Assembly.GetReferencedAssemblies())
-                                        .Any(a => a.Name.StartsWith("WixSharp.UI.WPF"));
-            if (usngWpfStockDialogs)
+                                        .Any(a => a.Assembly.GetName().Name == "WixSharp.UI.WPF");
+
+            if (usngWpfStockDialogs || dependsOnWpfDialogsBase)
                 return new[]
                 {
                     System.Reflection.Assembly.Load("Caliburn.Micro").Location,

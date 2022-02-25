@@ -20,7 +20,7 @@ namespace WixSharp.UI.WPF.Sequence
         }
     }
 
-    public class WelcomeDialogModel : Caliburn.Micro.Screen
+    internal class WelcomeDialogModel : Caliburn.Micro.Screen
     {
         public ManagedForm Host;
         ISession session => Host?.Runtime.Session;

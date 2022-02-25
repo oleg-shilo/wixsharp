@@ -1,15 +1,15 @@
 using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Threading;
+using System.Windows.Forms;
+using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
-using WixSharp.UI.ManagedUI;
-using System.Diagnostics;
 using WixSharp.UI.Forms;
-using System.Xml.Linq;
-using System.Text;
-using System.Drawing;
-using System.Windows.Forms;
+using WixSharp.UI.ManagedUI;
 
 namespace WixSharp
 {
@@ -43,24 +43,43 @@ namespace WixSharp
     public class ManagedUI : IManagedUI, IEmbeddedUI
     {
         /// <summary>
-        /// The default implementation of ManagedUI. It implements all major dialogs of a typical MSI UI.
+        /// The default WPF implementation of ManagedUI. It implements all major dialogs of a typical MSI UI.
+        /// </summary>
+        static public IManagedUI DefaultWpf
+        {
+            get
+            {
+                var assembly = "WixSharp.UI.WPF";
+                var type = "ManagedWpfUI";
+                var ManagedWpfUI = System.Reflection.Assembly.Load(assembly)?.GetType($"{assembly}.{type}");
+
+                if (ManagedWpfUI == null)
+                    throw new Exception($"Cannot load {assembly}.{type}. Make sure you are referencing {assembly} package/assembly.");
+
+                return ManagedWpfUI.GetProperty("Default")
+                                   .GetValue(null) as IManagedUI;
+            }
+        }
+
+        /// <summary>
+        /// The default WinForm implementation of ManagedUI. It implements all major dialogs of a typical MSI UI.
         /// </summary>
         static public ManagedUI Default = new ManagedUI
         {
             InstallDialogs = new ManagedDialogs()
-                                        .Add<WelcomeDialog>()
-                                        .Add<LicenceDialog>()
-                                        .Add<SetupTypeDialog>()
-                                        .Add<FeaturesDialog>()
-                                        .Add<InstallDirDialog>()
-                                        .Add<ProgressDialog>()
-                                        .Add<ExitDialog>(),
+                                     .Add<WelcomeDialog>()
+                                         .Add<LicenceDialog>()
+                                         .Add<SetupTypeDialog>()
+                                         .Add<FeaturesDialog>()
+                                         .Add<InstallDirDialog>()
+                                         .Add<ProgressDialog>()
+                                         .Add<ExitDialog>(),
 
             ModifyDialogs = new ManagedDialogs()
-                                       .Add<MaintenanceTypeDialog>()
-                                       .Add<FeaturesDialog>()
-                                       .Add<ProgressDialog>()
-                                       .Add<ExitDialog>()
+                                    .Add<MaintenanceTypeDialog>()
+                                        .Add<FeaturesDialog>()
+                                        .Add<ProgressDialog>()
+                                        .Add<ExitDialog>()
         };
 
         /// <summary>
@@ -170,7 +189,7 @@ namespace WixSharp
                           .AddRange(ManagedProject.ReadDialogs(session.Property("WixSharp_InstallDialogs")));
 
             ModifyDialogs.Clear()
-                          .AddRange(ManagedProject.ReadDialogs(session.Property("WixSharp_ModifyDialogs")));
+                         .AddRange(ManagedProject.ReadDialogs(session.Property("WixSharp_ModifyDialogs")));
         }
 
         Mutex cancelRequest = null;

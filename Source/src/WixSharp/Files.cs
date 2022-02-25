@@ -189,8 +189,6 @@ namespace WixSharp
         /// relative <see cref="Files.Directory"/>. Though <see cref="Files.Directory"/> takes precedence if it is an absolute path.</param>
         /// <returns>Array of <see cref="WixEntity"/> instances, which are either <see cref="File"/> or/and <see cref="Dir"/> objects.</returns>
         /// <param name="parentWixDir">Parent Wix# directory</param>
-        // in anticipation of issues#48
-        //public WixEntity[] GetAllItems(string baseDirectory)
         public WixEntity[] GetAllItems(string baseDirectory, Dir parentWixDir = null)
         {
             if (IO.Path.IsPathRooted(Directory))
