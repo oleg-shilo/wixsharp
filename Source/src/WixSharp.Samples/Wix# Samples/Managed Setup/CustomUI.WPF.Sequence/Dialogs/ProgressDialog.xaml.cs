@@ -53,6 +53,12 @@ namespace WixSharp.UI.WPF.Sequence
 
         public override void OnExecuteComplete()
             => model?.OnExecuteComplete();
+
+        public override void OnProgress(int progressPercentage)
+        {
+            if (model != null)
+                model.ProgressValue = progressPercentage;
+        }
     }
 
     public class ProgressDialogModel : Caliburn.Micro.Screen
@@ -64,10 +70,13 @@ namespace WixSharp.UI.WPF.Sequence
 
         public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
+        public int ProgressValue { get => progressValue; set { progressValue = value; base.NotifyOfPropertyChange(() => ProgressValue); } }
+
         public bool UacPromptIsVisible => (!WindowsIdentity.GetCurrent().IsAdmin() && Uac.IsEnabled() && !uacPromptActioned);
 
         public string CurrentAction { get => currentAction; set { currentAction = value; base.NotifyOfPropertyChange(() => CurrentAction); } }
 
+        int progressValue;
         bool uacPromptActioned = false;
         private string currentAction;
 

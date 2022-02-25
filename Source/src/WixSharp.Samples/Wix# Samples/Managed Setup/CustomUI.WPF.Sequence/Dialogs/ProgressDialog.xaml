@@ -65,10 +65,12 @@
                 <TextBlock x:Name="CurrentAction" TextWrapping="WrapWithOverflow" />
             </StackPanel>
             <ProgressBar
-                x:Name="Progress"
+                x:Name="ProgressValue"
                 Height="10"
                 Margin="10"
-                VerticalContentAlignment="Center" />
+                VerticalContentAlignment="Center"
+                Maximum="100"
+                Value="{Binding ProgressValue}" />
             <Grid
                 x:Name="UacPromptIsVisible"
                 Width="328"

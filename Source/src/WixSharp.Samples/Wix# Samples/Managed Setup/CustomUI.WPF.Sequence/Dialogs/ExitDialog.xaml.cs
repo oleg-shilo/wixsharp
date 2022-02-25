@@ -19,7 +19,29 @@ namespace WixSharp.UI.WPF.Sequence
 
         public void Init()
         {
+            UpdateTitles(ManagedFormHost.Runtime.Session);
             ViewModelBinder.Bind(new ExitDialogModel { Host = ManagedFormHost }, this, null);
+        }
+
+        /// <summary>
+        /// Updates the titles of the dialog depending on the success of the installation action.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        public void UpdateTitles(ISession session)
+        {
+            if (Shell.UserInterrupted || Shell.Log.Contains("User canceled installation."))
+            {
+                DialogTitleLabel.Text = "[UserExitTitle]";
+                DialogDescription.Text = "[UserExitDescription1]";
+            }
+            else if (Shell.ErrorDetected)
+            {
+                DialogTitleLabel.Text = "[FatalErrorTitle]";
+                DialogDescription.Text = Shell.CustomErrorDescription ?? "[FatalErrorDescription1]";
+            }
+
+            // `Localize` resolves [...] titles and descriptions into the localized strings stored in MSI resources tables
+            this.Localize();
         }
     }
 

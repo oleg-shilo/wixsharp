@@ -119,8 +119,8 @@ namespace WixSharp.UI.WPF
         public int ProgressValue { get => progressValue; set { progressValue = value; base.NotifyOfPropertyChange(() => ProgressValue); } }
 
         bool uacPromptActioned = false;
-        private string currentAction;
-        private int progressValue;
+        string currentAction;
+        int progressValue;
 
         public string UacPrompt
         {
