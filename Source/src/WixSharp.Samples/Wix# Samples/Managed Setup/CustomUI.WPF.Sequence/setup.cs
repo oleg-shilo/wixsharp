@@ -29,11 +29,15 @@ public class Script
         project.ManagedUI.InstallDialogs.Add<Custom.WelcomeDialog>()
                                         .Add<Custom.LicenceDialog>()
                                         .Add<Custom.FeaturesDialog>()
+                                        .Add<Custom.InstallDirDialog>()
                                         .Add<Custom.ProgressDialog>()
                                         .Add<Custom.ExitDialog>();
 
         project.ManagedUI.ModifyDialogs.Add<Custom.ProgressDialog>()
                                        .Add<Custom.ExitDialog>();
+
+        // custom WPF dialog (this project):        Custom.ProgressDialog
+        // stock WPF dialog (WixSharp.UI.WPF.dll):  WixSharp.UI.WPF.ProgressDialog
 
         // project.ManagedUI = ManagedWpfUI.Default;   // WPF based dialogs
         // project.ManagedUI = ManagedUI.DefaultWpf;   // the same as ManagedWpfUI.Default
