@@ -1,8 +1,11 @@
+v1.17.0.0
+* Added "WixSharp Managed Setup - Custom WPF UI" project template
+	
 v1.15.0.0
 * Migrated to VS2022
 
 v1.14.4.0
-* Implemented/addressed SonarQube suggested changes to the Manaded UI dialogs.  
+* Implemented/addressed SonarQube suggested changes to the Managed UI dialogs.  
 * Issue #838: Small suggestion: Show UACWarning only after some delay
 * Assorted NSIS improvements
 
