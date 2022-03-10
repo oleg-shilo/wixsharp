@@ -86,14 +86,19 @@ namespace $safeprojectname$
             if (shell != null)
                 try
                 {
-                    string wixSharpDir = Path.GetTempPath().PathCombine("WixSharp");
-                    if (!Directory.Exists(wixSharpDir))
-                        Directory.CreateDirectory(wixSharpDir);
+                    string logFile = session.LogFile;
 
-                    string logFile = wixSharpDir.PathCombine(Host.Runtime.ProductName + ".log");
-                    IO.File.WriteAllText(logFile, shell.Log);
+                    if (logFile.IsEmpty())
+                    {
+                        string wixSharpDir = Path.GetTempPath().PathCombine("WixSharp");
 
-                    Process.Start(logFile);
+                        if (!Directory.Exists(wixSharpDir))
+                            Directory.CreateDirectory(wixSharpDir);
+
+                        logFile = wixSharpDir.PathCombine(Host.Runtime.ProductName + ".log");
+                        IO.File.WriteAllText(logFile, shell.Log);
+                    }
+                    Process.Start("notepad.exe", logFile);
                 }
                 catch
                 {

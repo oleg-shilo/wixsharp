@@ -75,13 +75,19 @@ namespace WixSharpSetup.Dialogs
         {
             try
             {
-                string wixSharpDir = Path.Combine(Path.GetTempPath(), @"WixSharp");
-                if (!Directory.Exists(wixSharpDir))
-                    Directory.CreateDirectory(wixSharpDir);
+                string logFile = session.LogFile;
 
-                string logFile = Path.Combine(wixSharpDir, Runtime.ProductName + ".log");
-                System.IO.File.WriteAllText(logFile, Shell.Log);
-                Process.Start(logFile);
+                if (logFile.IsEmpty())
+                {
+                    string wixSharpDir = Path.GetTempPath().PathCombine("WixSharp");
+
+                    if (!Directory.Exists(wixSharpDir))
+                        Directory.CreateDirectory(wixSharpDir);
+
+                    logFile = wixSharpDir.PathCombine(Host.Runtime.ProductName + ".log");
+                    IO.File.WriteAllText(logFile, shell.Log);
+                }
+                Process.Start("notepad.exe", logFile);
             }
             catch
             {
