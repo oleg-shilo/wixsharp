@@ -286,6 +286,7 @@ namespace WixSharp
                                             .Where(x => x.IsDeferred)
                                             .Select(x => x.Name)
                                             .Concat(defaultDeferredProperties.Split(','))
+                                            .Concat(new[] { "MsiLogFileLocation" })
                                             .Where(x => x.IsNotEmpty())
                                             .Select(x => x.Trim())
                                             .Distinct()

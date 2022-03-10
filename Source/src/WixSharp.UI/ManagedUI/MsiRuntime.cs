@@ -1,18 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
-
-using io = System.IO;
 
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Microsoft.Deployment.WindowsInstaller;
+
+using io = System.IO;
+
 using sys = System.Windows.Forms;
-using System.Drawing.Imaging;
-using System.Diagnostics;
 
 namespace WixSharp
 {
@@ -105,6 +106,8 @@ namespace WixSharp
         /// The session object.
         /// </summary>
         public readonly ISession Session;
+
+        internal static StringBuilder VirtualLog = new StringBuilder();
 
         /// <summary>
         /// Invokes Client Handlers

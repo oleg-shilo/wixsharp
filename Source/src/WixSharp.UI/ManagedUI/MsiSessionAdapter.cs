@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using System.Linq;
 using Microsoft.Deployment.WindowsInstaller;
@@ -109,7 +110,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Gets a value indicating whether the product is being installed.
+        /// Gets a value indicating whether the MSI is running in "installing" mode.
         /// <para>
         /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
         /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
@@ -124,19 +125,20 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Gets a value indicating whether the product is being repaired.
+        /// Gets a value indicating whether the MSI is running in "repair" mode.
         /// <para>
         /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
         /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
         /// </para>
         /// </summary>
+        /// <returns></returns>
         public bool IsRepairing()
         {
             return MsiSession.IsRepairing();
         }
 
         /// <summary>
-        /// Determines whether MSI is running in "uninstalling" mode.
+        /// Determines whether the MSI is running in "uninstalling" mode.
         /// <para>
         /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
         /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
@@ -155,6 +157,17 @@ namespace WixSharp
         public void Log(string msg)
         {
             MsiSession.Log(msg);
+            InstallerRuntime.VirtualLog.AppendLine(msg);
         }
+
+        /// <summary>
+        /// Gets the log file.
+        /// </summary>
+        /// <value>
+        /// The log file.
+        /// </value>
+        public string LogFile => MsiSession.GetLogFile().IsNotEmpty() ?
+            MsiSession.GetLogFile() : // may fail if the session is closed
+            Environment.GetEnvironmentVariable("MsiLogFileLocation");
     }
 }

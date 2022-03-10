@@ -2461,6 +2461,7 @@ namespace WixSharp
             try
             {
                 var test = session.Components; //it will throw for the deferred action
+                var text = session["INSTALLDIR"];
                 return true;
             }
             catch
@@ -2504,7 +2505,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Gets a value indicating whether the product is being installed.
+        /// Gets a value indicating whether the MSI is running in "installing" mode.
         /// <para>
         /// This method will fail to retrieve the correct value if called from the deferred custom
         /// action and the session properties that it depends on are not preserved with
@@ -2541,7 +2542,7 @@ namespace WixSharp
             Tasks.GetMainWindow("msiexec", p => p.MainWindowTitle.Contains(session.Property("ProductName")));
 
         /// <summary>
-        /// Gets a value indicating whether the product is being repaired.
+        /// Gets a value indicating whether the MSI is running in "repair" mode.
         /// <para>
         /// This method will fail to retrieve the correct value if called from the deferred custom
         /// action and the session properties that it depends on are not preserved with
@@ -2599,7 +2600,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Determines whether MSI is running in "modifying" mode.
+        /// Determines whether the MSI is running in "modifying" mode.
         /// <para>
         /// This method will fail to retrieve the correct value if called from the deferred custom
         /// action and the session properties that it depends on are not preserved with
@@ -2614,7 +2615,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Determines whether MSI is running in "uninstalling" mode.
+        /// Determines whether the MSI is running in "uninstalling" mode.
         /// <para>
         /// This method will fail to retrieve the correct value if called from the deferred custom
         /// action and the session properties that it depends on are not preserved with
@@ -2627,6 +2628,14 @@ namespace WixSharp
         {
             return session.Property("REMOVE").SameAs("All", true);
         }
+
+        /// <summary>
+        /// Gets the log file.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
+        static public string GetLogFile(this Session session)
+            => session.Property("MsiLogFileLocation");
 
         // static bool IsGlobalAssembly(this Assembly assembly) { try { if (assembly.Location.)
         // return session.Property("REMOVE").SameAs("All", true); } catch { return false; } }

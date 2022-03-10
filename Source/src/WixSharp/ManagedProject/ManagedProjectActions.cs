@@ -26,6 +26,9 @@ namespace WixSharp
             if (session.Property("FOUNDPREVIOUSVERSION").IsEmpty())
                 session["FOUNDPREVIOUSVERSION"] = session.LookupInstalledVersion()?.ToString();
 
+            if (session["MsiLogFileLocation"].IsNotEmpty())
+                Environment.SetEnvironmentVariable("MsiLogFileLocation", session.Property("MsiLogFileLocation"));
+
             return ManagedProject.Init(session);
         }
 

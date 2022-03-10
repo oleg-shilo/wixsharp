@@ -75,7 +75,7 @@ namespace WixSharp
         bool IsInstalling();
 
         /// <summary>
-        /// Gets a value indicating whether the product is being repaired.
+        /// Gets a value indicating whether the MSI is running in Repair mode.
         /// <para>
         /// This method will fail to retrieve the correct value if called from the deferred custom action and the session properties
         /// that it depends on are not preserved with 'UsesProperties' or 'DefaultUsesProperties'.
@@ -98,5 +98,13 @@ namespace WixSharp
         /// </summary>
         /// <param name="msg">The line to be written to the log</param>
         void Log(string msg);
+
+        /// <summary>
+        /// Gets the log file.
+        /// </summary>
+        /// <value>
+        /// The log file.
+        /// </value>
+        string LogFile { get; }
     }
 }

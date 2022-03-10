@@ -82,7 +82,10 @@ namespace WixSharp.UI.WPF.Sequence
             => shell?.GoPrev();
 
         public void GoNext()
-            => shell?.GoNext();
+        {
+            session.Log("!!!!!!!");
+            shell?.GoNext();
+        }
 
         public void Cancel()
             => shell?.Cancel();

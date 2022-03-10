@@ -655,19 +655,17 @@ namespace WixSharp
             return result;
         }
 
-        StringBuilder log = new StringBuilder();
-
         /// <summary>
         /// Gets the MSI log text.
         /// </summary>
         /// <value>
         /// The log.
         /// </value>
-        public string Log { get { return log.ToString(); } }
+        public string Log { get { return InstallerRuntime.VirtualLog.ToString(); } }
 
         void LogMessage(string message, params object[] args)
         {
-            log.AppendLine(message.FormatWith(args));
+            InstallerRuntime.VirtualLog.AppendLine(message.FormatWith(args));
         }
 
         /// <summary>

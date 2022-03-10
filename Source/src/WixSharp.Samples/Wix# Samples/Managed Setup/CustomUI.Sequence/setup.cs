@@ -62,7 +62,7 @@ public static class Script
 
         //removing entry dialog
         project.ManagedUI.ModifyDialogs.Add(Dialogs.MaintenanceType)
-                                       .Add(Dialogs.Features)
+                                       //.Add(Dialogs.Features)
                                        .Add(Dialogs.Progress)
                                        .Add(Dialogs.Exit);
 
@@ -113,8 +113,8 @@ public static class Script
             if (AppSearch.IsProductInstalled(conflictingProductCode))
             {
                 string msg = "Installed '{0}' is incompatible with this product.\n" +
-                                "Setup will be aborted."
-                                .FormatWith(AppSearch.GetProductName(conflictingProductCode) ?? conflictingProductCode);
+                           "Setup will be aborted."
+                               .FormatWith(AppSearch.GetProductName(conflictingProductCode) ?? conflictingProductCode);
 
                 MessageBox.Show(msg, "Setup");
                 e.Result = ActionResult.UserExit;

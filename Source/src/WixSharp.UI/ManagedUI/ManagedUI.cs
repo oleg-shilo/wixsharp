@@ -207,6 +207,11 @@ namespace WixSharp
             if (session != null && (session.IsUninstalling() || uiLevel.IsBasic()))
                 return false; //use built-in MSI basic UI
 
+            // Debugger.Launch();
+
+            if (session["MsiLogFileLocation"].IsNotEmpty())
+                Environment.SetEnvironmentVariable("MsiLogFileLocation", session.Property("MsiLogFileLocation"));
+
             string upgradeCode = session["UpgradeCode"];
 
             using (cancelRequest)
