@@ -72,7 +72,7 @@ namespace WixSharp.UI.Forms
         {
             try
             {
-                string logFile = session.LogFile;
+                string logFile = Runtime.Session.LogFile;
 
                 if (logFile.IsEmpty())
                 {
@@ -81,8 +81,8 @@ namespace WixSharp.UI.Forms
                     if (!Directory.Exists(wixSharpDir))
                         Directory.CreateDirectory(wixSharpDir);
 
-                    logFile = wixSharpDir.PathCombine(Host.Runtime.ProductName + ".log");
-                    IO.File.WriteAllText(logFile, shell.Log);
+                    logFile = wixSharpDir.PathCombine(Runtime.ProductName + ".log");
+                    System.IO.File.WriteAllText(logFile, Shell.Log);
                 }
                 Process.Start("notepad.exe", logFile);
             }
