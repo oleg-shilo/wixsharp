@@ -676,9 +676,9 @@ namespace WixSharp
         /// </para><remarks><see cref="ResolveWildCards" /> should be called only after <see cref="T:WixSharp.WixProject.SourceBaseDir" /> is set.
         /// Otherwise wild card paths may not be resolved correctly.</remarks>
         /// </summary>
-        /// <param name="ignoreEmptyDirectories">if set to <c>true</c> empty directories are ignored and not added to the project.</param>
+        /// <param name="pruneEmptyDirectories ">if set to <c>true</c> empty directories are ignored and not added to the project.</param>
         /// <returns></returns>
-        public Project ResolveWildCards(bool ignoreEmptyDirectories = false)
+        public Project ResolveWildCards(bool pruneEmptyDirectories = false)
         {
             int iterator = 0;
             var dirList = new List<Dir>();
@@ -717,7 +717,7 @@ namespace WixSharp
                 iterator++;
             }
 
-            if (ignoreEmptyDirectories)
+            if (pruneEmptyDirectories)
             {
                 IEnumerable<Dir> getEmptyDirs() => AllDirs.Where(d => !d.Files.Any() && !d.Dirs.Any());
 
