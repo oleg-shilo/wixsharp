@@ -97,7 +97,7 @@ class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1561ba25889b");
 
-        project.ResolveWildCards(ignoreEmptyDirectories: true)
+        project.ResolveWildCards(pruneEmptyDirectories: true)
                .FindFirstFile("MyApp.exe")
                .Shortcuts = new[]
                {
