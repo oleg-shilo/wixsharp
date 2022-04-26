@@ -316,9 +316,9 @@ namespace WixSharp
         /// </value>
         public bool? NeverOverwrite
         {
-            get => attributesBag.Get("Component:NeverOverwrite") == "yes";
+            get => Attributes.Get("Component:NeverOverwrite") == "yes";
 
-            set => attributesBag.Set("Component:NeverOverwrite", value.ToNullOrYesNo());
+            set => Attributes.Set("Component:NeverOverwrite", value.ToNullOrYesNo());
         }
 
         internal string RegValueString

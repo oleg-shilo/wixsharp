@@ -16,10 +16,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
+
 using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using Microsoft.Win32;
+
 using WixSharp.CommonTasks;
+
 using static WixSharp.SetupEventArgs;
 
 using IO = System.IO;
@@ -41,7 +44,7 @@ namespace WixSharp
         {
             //While it is tempting to move the implementation to WixEntity the extension method gives a
             //better support for Fluent API as it returns not the base but the actual type.
-            obj.SetAttributeDefinition("Component:Permanent", isPermanent.ToYesNo());
+            obj.Attributes.Set("Component:Permanent", isPermanent.ToYesNo());
             return obj;
         }
 
@@ -325,6 +328,20 @@ namespace WixSharp
                 }
             }
             return retval;
+        }
+
+        /// <summary>
+        /// Merges a dictionary into this one. Replacing values that are present in both
+        /// and adding values that are not.
+        /// </summary>
+        /// <param name="a">Merge target</param>
+        /// <param name="b">Merge source</param>
+        public static void Merge(this Dictionary<string, string> a, Dictionary<string,string> b)
+        {
+            foreach (var kvp in b)
+            {
+                a.Set(kvp.Key, kvp.Value);
+            }
         }
 
         /// <summary>

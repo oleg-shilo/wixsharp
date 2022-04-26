@@ -66,20 +66,8 @@ namespace WixSharp
         /// </remarks>
         /// </para>
         /// </summary>
-        public Dictionary<string, string> Attributes
-        {
-            get
-            {
-                ProcessAttributesDefinition();
-                return attributes;
-            }
-            set
-            {
-                attributes = value;
-            }
-        }
-
-        Dictionary<string, string> attributes = new Dictionary<string, string>();
+        public Dictionary<string, string> Attributes { get; set; }
+            = new Dictionary<string, string>();
 
         /// <summary>
         /// Optional attributes of the <c>WiX Element</c> (e.g. Secure:YesNoPath) expressed as a string KeyValue pairs (e.g. "StartOnInstall=Yes; Sequence=1").
@@ -102,69 +90,12 @@ namespace WixSharp
         ///     ...
         /// </code>
         /// </example>
-        public string AttributesDefinition { get; set; }
-
-        internal string HiddenAttributesDefinition;
-
-        internal Dictionary<string, string> attributesBag = new Dictionary<string, string>();
-
-        void ProcessAttributesDefinition()
+        public string AttributesDefinition
         {
-            if (AttributesDefinition.IsNotEmpty() || HiddenAttributesDefinition.IsNotEmpty())
-            {
-                try
-                {
-                    this.Attributes = (AttributesDefinition + ";" + HiddenAttributesDefinition).ToDictionary();
-                }
-                catch (Exception e)
-                {
-                    throw new Exception("Invalid AttributesDefinition", e);
-                }
-            }
-
-            foreach (var item in attributesBag)
-                this.attributes[item.Key] = item.Value;
-        }
-
-        internal string GetAttributeDefinition(string name)
-        {
-            var preffix = name + "=";
-
-            return (HiddenAttributesDefinition ?? "").Trim()
-                                               .Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
-                                               .Where(x => x.StartsWith(preffix))
-                                               .Select(x => x.Substring(preffix.Length))
-                                               .FirstOrDefault();
-        }
-
-        internal void SetAttributeDefinition(string name, string value, bool append = false)
-        {
-            var preffix = name + "=";
-
-            var allItems = (HiddenAttributesDefinition ?? "")
-                .Trim()
-                .Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
-                .ToList();
-
-            var items = allItems;
-
-            if (value.IsNotEmpty())
-            {
-                if (append)
-                {
-                    //add index to the items with the same key
-                    var similarNamedItems = allItems.Where(x => x.StartsWith(name)).ToArray();
-                    items.Add(name + similarNamedItems.Count() + "=" + value);
-                }
-                else
-                {
-                    //reset items with the same key
-                    items.RemoveAll(x => x.StartsWith(preffix));
-                    items.Add(name + "=" + value);
-                }
-            }
-
-            HiddenAttributesDefinition = string.Join(";", items.ToArray());
+            get => string.Join(
+                ";",
+                this.Attributes.Select(kvp => $"{kvp.Key}={kvp.Value}"));
+            set => this.Attributes.Merge(value.ToDictionary());
         }
 
         /// <summary>
@@ -305,8 +236,8 @@ namespace WixSharp
         /// </value>
         public string ComponentId
         {
-            get => GetAttributeDefinition("Component:Id");
-            set => SetAttributeDefinition("Component:Id", value);
+            get => Attributes.Get("Component:Id");
+            set => Attributes.Set("Component:Id", value);
         }
 
         /// <summary>
@@ -321,8 +252,8 @@ namespace WixSharp
         public string ComponentCondition
         {
             // Component:element_Condition=base64_SU5TVEFMTF9PREJDID0gInllcyI=
-            get => (GetAttributeDefinition("Component:element_Condition") ?? "").Replace("base64_", "").Base64Decode();
-            set => SetAttributeDefinition("Component:element_Condition", "base64_" + value.Base64Encode());
+            get => (Attributes.Get("Component:element_Condition") ?? "").Replace("base64_", "").Base64Decode();
+            set => Attributes.Set("Component:element_Condition", "base64_" + value.Base64Encode());
         }
 
         // public string ComponentCondition;
@@ -331,7 +262,7 @@ namespace WixSharp
 
         internal void AddInclude(string xmlFile, string parentElement)
         {
-            SetAttributeDefinition("WixSharpCustomAttributes:xml_include", parentElement + "|" + xmlFile, append: true);
+            Attributes.Set("WixSharpCustomAttributes:xml_include", parentElement + "|" + xmlFile);
         }
 
         /// <summary>

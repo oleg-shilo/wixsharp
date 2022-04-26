@@ -268,6 +268,32 @@ namespace WixSharp.Test
             public string FieldA;
         }
 
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void AttributesDeterminism(
+            bool attributeDefinitionInitiallyContainsData)
+        {
+            var attributeKey = "TestAttribute";
+            var attributeValue = "TestValue";
+            var attributeDefinition = $"{attributeKey}={attributeValue}";
+            var obj = new TestEntity();
+            if (attributeDefinitionInitiallyContainsData)
+            {
+                obj.ComponentId = "Component.TestEntity.1";
+            }
+            var initialCount = obj.Attributes.Count;
+
+            obj.Attributes.Add(attributeKey, attributeValue);
+            obj.SetComponentPermanent(true);
+            Assert.NotNull(obj.AttributesDefinition);
+            Assert.Equal(initialCount + 2, obj.Attributes.Count);
+            Assert.Contains(
+                attributeDefinition,
+                obj.AttributesDefinition
+                    .Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
+        }
+
         [Fact]
         public void MapToXmlAttributes()
         {
