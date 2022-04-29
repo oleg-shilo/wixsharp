@@ -719,7 +719,7 @@ namespace WixSharp
 
             if (pruneEmptyDirectories)
             {
-                IEnumerable<Dir> getEmptyDirs() => AllDirs.Where(d => !d.Files.Any() && !d.Dirs.Any());
+                IEnumerable<Dir> getEmptyDirs() => AllDirs.Where(d => !d.Files.Any() && !d.Dirs.Any() && !d.Shortcuts.Any());
 
                 IEnumerable<Dir> emptyDirs;
 

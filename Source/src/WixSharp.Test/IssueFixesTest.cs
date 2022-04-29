@@ -10,6 +10,8 @@ using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
+#pragma warning disable MethodDocumentationHeader // The method must have a documentation header.
+
 namespace WixSharp.Test
 {
     public class IssueFixesTest : WixLocator
@@ -57,6 +59,27 @@ namespace WixSharp.Test
                 var xml = document.ToString();
             };
             project.BuildWxs();
+        }
+
+        [Fact]
+        [Description("Issue #1132")]
+        public void Fix_Issue_1132()
+        {
+            var i = 0;
+
+            var project = new Project("CableScheduler",
+                new Dir(@"%ProgramFiles%\CADbloke\CableScheduler",
+                new Files($"{Environment.CurrentDirectory}\\*.*", f => i++ < 1)),
+
+                new Dir(@"%ProgramMenu%\CADbloke\CableScheduler",
+                        new ExeFileShortcut("Cable Scheduler", $"[INSTALLDIR]Test.exe", "")));
+
+            project.ResolveWildCards(pruneEmptyDirectories: true);
+
+            var wsx = project.BuildWxs();
+            var xml = System.IO.File.ReadAllText(wsx);
+
+            Assert.True(xml.Contains("<Shortcut Id="));
         }
 
         [Fact]
