@@ -9,9 +9,9 @@ using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
+using static WixSharp.SetupEventArgs;
 using WixSharp.UI;
 using Xunit;
-using static WixSharp.SetupEventArgs;
 using io = System.IO;
 
 using WixMsi = WixSharpMsi::WixSharp;
@@ -257,6 +257,30 @@ namespace WixSharp.Test
             //should not throw
             project.AddAction(new InstalledFileAction("", ""));
             project.AddActions(project.Actions);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void AttributesDeterminism(bool attributeDefinitionInitiallyContainsData)
+        {
+            var obj = new TestEntity();
+
+            if (attributeDefinitionInitiallyContainsData)
+            {
+                obj.ComponentId = "Component.TestEntity.1";
+            }
+
+            var initialCount = obj.Attributes.Count;
+
+            obj.Attributes.Add("TestAttribute", "TestValue");
+
+            // SetComponentPermanent is implemented by using attributes injection of `WixEntity.Attributes`
+            // But the implementation should interfere with neither `WixEntity.Attributes` nor `WixEntity.AttributesDefinition`
+            obj.SetComponentPermanent(true);
+
+            Assert.Null(obj.AttributesDefinition);
+            Assert.Equal(initialCount + 1, obj.Attributes.Count);
         }
 
         class TestEntity : WixEntity

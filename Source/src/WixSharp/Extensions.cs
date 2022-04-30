@@ -292,6 +292,20 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Merges a dictionary into this one. Replacing values that are present in both
+        /// and adding values that are not.
+        /// </summary>
+        /// <param name="a">Merge target</param>
+        /// <param name="b">Merge source</param>
+        public static void Merge(this Dictionary<string, string> a, Dictionary<string, string> b)
+        {
+            foreach (var kvp in b)
+            {
+                a.Set(kvp.Key, kvp.Value);
+            }
+        }
+
+        /// <summary>
         /// Converts key/value map into the dictionary. The map entry format is as follows: &lt;key&gt;=&lt;value&gt;[;&lt;key&gt;=&lt;value&gt;].
         /// </summary>
         /// <param name="map">The map.</param>
