@@ -28,7 +28,8 @@ class Script
                     AttributesDefinition = "Type=binary",
                     Permissions = new[] { new Permission { User = "usr", Read = true } }
                 },
-                // HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\My Company\My Product
+                // 'HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\My Company\My Product'
+                // if 'HKEY_LOCAL_MACHINE\SOFTWARE\My Company\My Product' is required set `RegValue(...){ Win64 = true }`
                 new RegKey(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product",
                     new RegValue("Message", "Hello"),
                     new RegValue("Count", 777),

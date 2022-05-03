@@ -250,6 +250,8 @@ namespace WixSharp
 
         /// <summary>
         /// The target platform type.
+        /// <para>Note if you install any registry key they will not be affected by tis setting and you need
+        /// to specify boolean <see cref="RegValue.Win64"/> explicitly.</para>
         /// </summary>
         public Platform? Platform;
 
