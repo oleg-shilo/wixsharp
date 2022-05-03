@@ -8,6 +8,10 @@ class Script
 {
     static public void Main()
     {
+        // You can also use `CommonTasks.RegisterComAssembly` to register COM servers.
+        // Which is not a WiX/MSI recommended approach for COM registration, but may still
+        // be a good choice of the registration technique.
+
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",

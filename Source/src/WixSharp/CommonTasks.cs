@@ -167,7 +167,7 @@ namespace WixSharp.CommonTasks
         /// <param name="certificateStore">Where to load the certificate from.
         /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
         /// <param name="outputLevel">A flag indicating the output level</param>
-        /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow 
+        /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow
         /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
         /// </param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
@@ -189,7 +189,7 @@ namespace WixSharp.CommonTasks
         {
             // SHA-1 Sample SignTool line: SignTool.exe /f "C:\MyFolder\MyCert.pfx" /p "PFX Password" /t "http://timestamp.comodoca.com/authenticode" "C:\MyFolder\MyFile.exe"
             // SHA-256 Sample SignTool line (NOT dual signing): SignTool.exe /f "C:\MyFolder\MyCert.pfx" /p "PFX Password" /fd sha256 /tr "http://timestamp.comodoca.com?td=sha256" /td sha256 "C:\MyFolder\MyFile.exe"
-            // SHA-256 Sample SignTool line (Dual signing): SignTool.exe /f "C:\MyFolder\MyCert.pfx" /p "PFX Password" /fd sha256 /tr "http://timestamp.comodoca.com?td=sha256" /td sha256 /as "C:\MyFolder\MyFile.exe" 
+            // SHA-256 Sample SignTool line (Dual signing): SignTool.exe /f "C:\MyFolder\MyCert.pfx" /p "PFX Password" /fd sha256 /tr "http://timestamp.comodoca.com?td=sha256" /td sha256 /as "C:\MyFolder\MyFile.exe"
             bool shouldSignSHA1 = (hashAlgorithm & HashAlgorithmType.sha1) == HashAlgorithmType.sha1;
             bool shouldSignSHA256 = (hashAlgorithm & HashAlgorithmType.sha256) == HashAlgorithmType.sha256;
 
@@ -265,9 +265,9 @@ namespace WixSharp.CommonTasks
                 return retval;
 
             if (shouldSignSHA1 && fileToSign.EndsWith(".msi", StringComparison.OrdinalIgnoreCase))
-                return retval; // Dual signing not allowed for .msi 
+                return retval; // Dual signing not allowed for .msi
                                // (https://social.msdn.microsoft.com/Forums/ie/en-US/d4b70ecd-a883-4289-8047-cc9cde28b492/sha1-sha256-dualsigning-for-msi?forum=windowssecurity)
-            
+
             // Append SHA-256 signature
             string sha256 = args;
             if (shouldSignSHA1)
@@ -301,7 +301,7 @@ namespace WixSharp.CommonTasks
         /// <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
         /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
         /// <param name="outputLevel">A flag indicating the output level</param>
-        /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow 
+        /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow
         /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
         /// </param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
@@ -344,7 +344,7 @@ namespace WixSharp.CommonTasks
         /// <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
         /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
         /// <param name="outputLevel">A flag indicating the output level</param>
-        /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow 
+        /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow
         /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
         /// </param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
@@ -1565,6 +1565,28 @@ namespace WixSharp.CommonTasks
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Registers the classes in a managed assembly to enable creation from COM.
+        /// <para>Note, this technique has limitations. It uses the assembly <see cref="System.Runtime.InteropServices.RegistrationServices"/>
+        /// for registration, which requires the assembly being registered to be loaded in the current AppDomain.
+        /// Thus the method will fail if the assembly cannot be loaded for whatever reason. IE AppDomain is x86 and the assembly
+        /// is x64 architecture.</para>
+        /// </summary>
+        /// <param name="assemblyFile">The assembly file.</param>
+        /// <param name="isInstalling">if set to <c>true</c> is installing/registering
+        /// COM server, otherwise uninstalling/unregistering.</param>
+        /// <returns></returns>
+        static public bool RegisterComAssembly(this string assemblyFile, bool isInstalling)
+        {
+            var asm = System.Reflection.Assembly.LoadFrom(assemblyFile);
+
+            var regAsm = new System.Runtime.InteropServices.RegistrationServices();
+            if (isInstalling)
+                return regAsm.RegisterAssembly(asm, System.Runtime.InteropServices.AssemblyRegistrationFlags.SetCodeBase);
+            else
+                return regAsm.UnregisterAssembly(asm);
         }
 
         /// <summary>
