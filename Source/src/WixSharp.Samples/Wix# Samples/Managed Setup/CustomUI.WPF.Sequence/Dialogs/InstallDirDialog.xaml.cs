@@ -66,7 +66,11 @@ namespace WixSharp.UI.WPF.Sequence
                     return null;
             }
 
-            set => session[installDirProperty] = value;
+            set
+            {
+                session[installDirProperty] = value;
+                base.NotifyOfPropertyChange(() => InstallDirPath);
+            }
         }
 
         public void ChangeInstallDir()
