@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>1.20.0.0</version>
+    <version>1.20.1.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,13 +16,12 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.20.0.0
+    <releaseNotes>Release v1.20.1.0
 
-- Added WPF stock dialogs for Custom UI (WixSharp.Ui.WPF assembly)
-- Added test case for #1114
-- Issue #1087: Intermittent error
-- "WixSharp Project Templates" extension is ported to VS2022
-- Issue #1096: Setting RegistrySearch Id causes infinite loop
+- Issue #1162: WPF installDir dialog is ignoring selectedfolder
+- Added `CommonTasks.RegisterComAssembly` to register COM servers.
+- Issue #1132: Project.ResolveWildCards(ignoreEmptyDirectories: true) removes Start Menu shortcut
+- Issue #118: Logging
 
 
 
