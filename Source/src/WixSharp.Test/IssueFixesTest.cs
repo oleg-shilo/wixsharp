@@ -62,6 +62,28 @@ namespace WixSharp.Test
         }
 
         [Fact]
+        [Description("Issue #1171")]
+        public void Fix_Issue_1171()
+        {
+            var tempFile = System.IO.Path.GetTempFileName();
+            try
+            {
+                System.IO.File.WriteAllLines(tempFile, new[]
+                {
+                    "Windows Registry Editor Version 5.00",
+                    "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Test]",
+                    "\"New Value #1\"=dword:00000001",
+                    "\"New Value #2\"=hex(b):02,00,00,00,00,00,00,00",
+                });
+                var values = WixSharp.RegFileImporter.ImportFrom(tempFile);
+            }
+            finally
+            {
+                tempFile.DeleteIfExists();
+            }
+        }
+
+        [Fact]
         [Description("Issue #1132")]
         public void Fix_Issue_1132()
         {

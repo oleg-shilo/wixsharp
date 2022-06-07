@@ -26,6 +26,10 @@ namespace WixSharp.Test
             Assert.IsType<string>(value);
             Assert.Equal(value, "%PATH%");
 
+            value = RegFileImporter.Deserialize("hex(b):02,00,00,00,00,00,00,00", Encoding.Unicode);
+            Assert.IsType<long>(value);
+            Assert.Equal(value, 2L);
+
             value = RegFileImporter.Deserialize(@"hex(7):6f,00,6e,00,65,00,00,00,74,00,77,00,6f,00,00,00,74,00,68,\
 00,72,00,65,00,65,00,00,00,00,00", Encoding.Unicode);
             Assert.IsType<string>(value);

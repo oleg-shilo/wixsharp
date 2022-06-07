@@ -23,12 +23,12 @@ THE SOFTWARE.
 
 #endregion Licence...
 
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.Win32;
 
 namespace WixSharp
 {
@@ -102,6 +102,13 @@ namespace WixSharp
             //WiX 'integer'
             if (isPreffix("hex(4):") || isPreffix("dword:"))
                 return Convert.ToInt32(rawValue, 16);
+
+            //WiX '64 integer'
+            if (isPreffix("hex(b):"))
+            {
+                byte[] data = rawValue.Unescape().DecodeFromRegHex();
+                return BitConverter.ToInt64(data, 0);
+            }
 
             //WiX 'multiString'
             if (isPreffix("hex(7):"))
