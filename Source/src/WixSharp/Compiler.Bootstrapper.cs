@@ -222,7 +222,7 @@ namespace WixSharp
                 var candleOptions = CandleOptions + " " + project.CandleOptions;
 
                 string batchFileContent = wixLocationEnvVar + "\"" + compiler + "\" " + candleOptions + " " + extensionDlls +
-                                          " \"" + IO.Path.GetFileName(wxsFile) + "\" ";
+                                          " \"" + wxsFile + "\" ";
 
                 string outDir = null;
                 if (wxsFiles.IsNotEmpty())
