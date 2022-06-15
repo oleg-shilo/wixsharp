@@ -240,7 +240,8 @@ namespace WixSharp
 
                         view.Parent = shellView;
                         view.Visible = true;
-                        shellView.Text = view.Text;
+                        shellView.Text = view.Text; // the title is already set in `SetDialogContent` for WPF but for winform dialogs
+                                                    // it needs to be set now
 
                         if (shellView is ShellView)
                         {

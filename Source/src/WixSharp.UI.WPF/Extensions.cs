@@ -351,6 +351,7 @@ namespace WixSharp.UI.WPF
                 this.Localize();
 
                 this.Controls.Add(host);
+                this.Parent.Text = this.Text; // this.Parent is a shell view
                 content.Init();
             };
         }

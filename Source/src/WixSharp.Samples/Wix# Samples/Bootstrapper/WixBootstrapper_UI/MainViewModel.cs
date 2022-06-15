@@ -108,7 +108,7 @@ public class MainViewModel : INotifyPropertyChanged
     {
         IsBusy = true;
 
-        Bootstrapper.Engine.StringVariables["UserInput"] = UserInput;
+        // Bootstrapper.Engine.StringVariables["UserInput"] = UserInput;
         Bootstrapper.Engine.Plan(LaunchAction.Install);
     }
 

@@ -77,8 +77,8 @@ public class InstallScript
         //     };
         // bootstrapper.Application.Payloads = themes;
 
-        bootstrapper.Application.LicensePath = "licence.html";  //HyperlinkLicense app with embedded license file
-        bootstrapper.Application.LicensePath = "licence.rtf"; //RtfLicense app with embedded license file
+        bootstrapper.Application.LicensePath = "licence.html"; //HyperlinkLicense app with embedded license file
+        bootstrapper.Application.LicensePath = "licence.rtf"; // RtfLicense app with embedded license file
                                                               // bootstrapper.Application.LicensePath = "http://opensource.org/licenses/MIT"; //HyperlinkLicense app with online license file
                                                               // bootstrapper.Application.LicensePath = null; //HyperlinkLicense app with no license
 
