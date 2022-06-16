@@ -252,8 +252,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixSharp.UI.WPF", "WixSharp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomUI.WPF.Sequence", "WixSharp.Samples\Wix# Samples\Managed Setup\CustomUI.WPF.Sequence\CustomUI.WPF.Sequence.csproj", "{18EF7DE3-5726-46CF-A2F1-B168D84328B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixBootstrapper_CustomAction", "WixSharp.Samples\Wix# Samples\Bootstrapper\WixBootstrapper_CustomAction\WixBootstrapper_CustomAction.csproj", "{3A0023AE-DE8F-4291-B7B8-7F807A20FB36}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1368,18 +1366,6 @@ Global
 		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Release|x86.ActiveCfg = Release|Any CPU
 		{18EF7DE3-5726-46CF-A2F1-B168D84328B4}.Release|x86.Build.0 = Release|Any CPU
-		{3A0023AE-DE8F-4291-B7B8-7F807A20FB36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A0023AE-DE8F-4291-B7B8-7F807A20FB36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A0023AE-DE8F-4291-B7B8-7F807A20FB36}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{3A0023AE-DE8F-4291-B7B8-7F807A20FB36}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{3A0023AE-DE8F-4291-B7B8-7F807A20FB36}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{3A0023AE-DE8F-4291-B7B8-7F807A20FB36}.Debug|x86.Build.0 = Debug|Any CPU
-		{3A0023AE-DE8F-4291-B7B8-7F807A20FB36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A0023AE-DE8F-4291-B7B8-7F807A20FB36}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A0023AE-DE8F-4291-B7B8-7F807A20FB36}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{3A0023AE-DE8F-4291-B7B8-7F807A20FB36}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{3A0023AE-DE8F-4291-B7B8-7F807A20FB36}.Release|x86.ActiveCfg = Release|Any CPU
-		{3A0023AE-DE8F-4291-B7B8-7F807A20FB36}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1489,7 +1475,6 @@ Global
 		{B7B90CFA-6D46-4DAA-9BD1-0C9EBB1A44AD} = {1CFD0B87-E292-41B3-A914-FF8254D4A32C}
 		{1CFD0B87-E292-41B3-A914-FF8254D4A32C} = {DA107019-87B6-473D-8C9B-1C3A48CB8FD5}
 		{18EF7DE3-5726-46CF-A2F1-B168D84328B4} = {1CFD0B87-E292-41B3-A914-FF8254D4A32C}
-		{3A0023AE-DE8F-4291-B7B8-7F807A20FB36} = {F34C80C3-13F1-46B1-93A9-FE6828EED513}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {559711D5-4429-4577-BBC9-F0D973972079}
