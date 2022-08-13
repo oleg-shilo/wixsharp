@@ -546,7 +546,6 @@ namespace WixSharp
         /// <returns>Path to the batch file.</returns>
         static public string BuildMsiCmd(Project project, string path)
         {
-            ClientAssembly = System.Reflection.Assembly.GetCallingAssembly().GetLocation();
             BuildCmd(project, path, OutputType.MSI);
             return path;
         }
