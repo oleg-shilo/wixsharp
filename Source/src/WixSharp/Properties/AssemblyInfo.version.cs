@@ -7,5 +7,5 @@ using System.Reflection;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.20.1.0")]
-[assembly: AssemblyFileVersion("1.20.1.0")]
+[assembly: AssemblyVersion("1.20.2.0")]
+[assembly: AssemblyFileVersion("1.20.2.0")]

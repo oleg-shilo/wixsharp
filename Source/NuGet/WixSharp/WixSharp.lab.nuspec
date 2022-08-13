@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.Lab</id>
-    <version>1.20.1.0</version>
+    <version>1.20.2.0</version>
     <title>Wix# (WixSharp) - Experimantal features</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -14,18 +14,12 @@
 The package contains the sample code for building a simple MSI with the CLR WinForm dialog inserted into UI sequence between InsallDirDlg and VerifyReadyDlg native MSI dialogs. In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# binaries containing experimental features (e.g. native WiX UI support).</summary>
-    <releaseNotes>Release v1.20.1.0
+    <releaseNotes>Release v1.20.2.0
 
-- Issue #1162: WPF installDir dialog is ignoring selectedfolder
-- Added `CommonTasks.RegisterComAssembly` to register COM servers.
-- Issue #1132: Project.ResolveWildCards(ignoreEmptyDirectories: true) removes Start Menu shortcut
-- Issue #118: Logging
-
-
-
-
-
-</releaseNotes>
+- PR #1197: Fix BuildMsiCmd generating incorrect custom action dll
+- Issue #1178: WelcomeDialog doesn't show title.
+- Issue #1170: Generate only small Installer.exe file to binary (enhancement)
+- Issue #1171: RegFileImporter does not support hex(b): REG_QWORD Partial fix as WiX still does not support REG_QWORD===integer64</releaseNotes>
     <copyright>Copyright (C) 2008-2022 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# Scripting msi install setup</tags>
@@ -34,7 +28,7 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
       <frameworkAssembly assemblyName="System.Drawing" targetFramework="" />
     </frameworkAssemblies>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.20.1.0" />
+      <dependency id="WixSharp.bin" version="1.20.2.0" />
     </dependencies>
   </metadata>
   <files>
