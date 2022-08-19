@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Controls;
 using System.Xml.Linq;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
@@ -114,6 +115,72 @@ namespace WixSharp.Test
             project.LicenceFile = "license.rtf";
 
             var file = project.BuildWxs();
+        }
+
+        [Fact]
+        [Description("Issue #182")]
+        public void Fix_Issue_182()
+        {
+            void assert(Platform? projPlatform, bool? is64Reg1, bool? is64Reg2, Action<XDocument, XElement, XElement, XElement> assertHandler)
+            {
+                var proj = new Project("MyProduct",
+                                       new Dir(@"%ProgramFiles%\My Company\My Product",
+                                           new File("setup.cs")));
+
+                if (projPlatform != null)
+                    proj.Platform = projPlatform;
+
+                var regval = new RegValue(RegistryHive.LocalMachine, @"Software\test", "foo_value", "bar") { Win64 = is64Reg1 };
+                proj.AddRegValue(regval);
+
+                var regkey = new RegKey(null, RegistryHive.LocalMachine, @"Software\My Company\My Product", new RegValue("Message", "Hello"))
+                {
+                    Win64 = is64Reg2
+                };
+                proj.AddRegKey(regkey);
+
+                proj.WixSourceGenerated += doc =>
+                {
+                    var cpmponents = doc.FindAll("Component");
+                    var reg = cpmponents.FirstOrDefault(x => x.HasAttribute("Id", "Registry.1"));
+                    var reg2 = cpmponents.FirstOrDefault(x => x.HasAttribute("Id", "Registry.2"));
+                    var file = cpmponents.FirstOrDefault(x => x.HasAttribute("Id", value => value.StartsWith("Component.setup.cs")));
+                    assertHandler(doc, reg, reg2, file);
+                };
+
+                proj.BuildMsiCmd();
+            }
+
+            assert(projPlatform: null, is64Reg1: true, is64Reg2: true,
+                   (doc, reg, reg2, file) =>
+                   {
+                       Assert.True(reg.HasAttribute("Win64", "yes"));
+                       Assert.True(reg2.HasAttribute("Win64", "yes"));
+                       Assert.False(file.HasAttribute("Win64", "yes"));
+                   });
+
+            assert(Platform.x64, is64Reg1: null, is64Reg2: null,
+                   (doc, reg, reg2, file) =>
+                   {
+                       Assert.True(reg.HasAttribute("Win64", "yes"));
+                       Assert.True(reg2.HasAttribute("Win64", "yes"));
+                       Assert.True(file.HasAttribute("Win64", "yes"));
+                   });
+
+            assert(Platform.x64, is64Reg1: false, is64Reg2: false,
+                   (doc, reg, reg2, file) =>
+                   {
+                       Assert.False(reg.HasAttribute("Win64", "yes"));
+                       Assert.False(reg2.HasAttribute("Win64", "yes"));
+                       Assert.True(file.HasAttribute("Win64", "yes"));
+                   });
+            assert(Platform.x64, is64Reg1: false, is64Reg2: false,
+                   (doc, reg, reg2, file) =>
+                   {
+                       Assert.False(reg.HasAttribute("Win64", "yes"));
+                       Assert.False(reg2.HasAttribute("Win64", "yes"));
+                       Assert.True(file.HasAttribute("Win64", "yes"));
+                   });
         }
 
         [Fact]

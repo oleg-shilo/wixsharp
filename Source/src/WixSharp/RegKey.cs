@@ -5,7 +5,6 @@
     /// </summary>
     public class RegKey : WixObject
     {
-
         /// <summary>
         /// The registry hive name.
         /// </summary>
@@ -20,7 +19,9 @@
         /// Facilitates the installation of packages that include both 32-bit and 64-bit components.
         /// Set this attribute to 'yes' to mark the corresponding RegValue as a 64-bit component.
         /// </summary>
-        public bool Win64;
+        public bool? Win64;
+
+        internal bool IsWin64 => Win64 == true;
 
         internal RegValue[] GetValues()
         {

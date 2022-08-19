@@ -1715,7 +1715,7 @@ namespace WixSharp
 
                     comp.AddElement("RemoveFile",
                                   $@"Id=Remove_{fileId};
-                                     Name={ removeFileName };
+                                     Name={removeFileName};
                                      On=both");
                 }
 
@@ -1734,7 +1734,7 @@ namespace WixSharp
                     FeatureComponents = featureComponents
                 };
 
-                wFile.ServiceInstallers?.ForEach(x=>x.Process(context));
+                wFile.ServiceInstallers?.ForEach(x => x.Process(context));
 
                 if (wFile is Assembly assembly && assembly.RegisterInGAC)
                 {
@@ -2229,15 +2229,22 @@ namespace WixSharp
                 {
                     if (wProject.Platform.HasValue)
                     {
-                        if (regVal.Win64 && wProject.Platform == Platform.x86)
-                            regVal.AttributesDefinition += ";Component:Win64=yes";
-                        else if (!regVal.Win64 && wProject.Platform == Platform.x64)
-                            regVal.AttributesDefinition += ";Component:Win64=no";
-
+                        if (regVal.Win64.HasValue)
+                        {
+                            if (regVal.IsWin64 && wProject.Platform == Platform.x86)
+                                regVal.AttributesDefinition += ";Component:Win64=yes";
+                            else if (!regVal.IsWin64 && wProject.Platform == Platform.x64)
+                                regVal.AttributesDefinition += ";Component:Win64=no";
+                        }
+                        else
+                        {
+                            if (wProject.Platform != Platform.x86)
+                                regVal.AttributesDefinition += ";Component:Win64=yes";
+                        } 
                     }
                     else //equivalent of wProject.Platform == Platform.x86 as MSI will be hosted by x86 msiexec.exe
                     {
-                        if (regVal.Win64)
+                        if (regVal.IsWin64)
                             regVal.AttributesDefinition += ";Component:Win64=yes";
                     }
 
@@ -2260,7 +2267,7 @@ namespace WixSharp
                     // case belongs to a permanent dir but not to the user dir. It is still shocking to enclose an entity
                     // that is a system wide to the directory. But the containment is slightly better in this case.
 
-                    XElement topLevelDir = GetTopLevelPermanentDir(product, regVal.Win64);
+                    XElement topLevelDir = GetTopLevelPermanentDir(product, regVal.IsWin64);
                     // topLevelDir = GetTopLevelDir(product); // the old way
 
                     XElement comp = topLevelDir.AddElement(
