@@ -152,7 +152,7 @@ namespace WixSharp.Test
             }
 
             assert(projPlatform: null, is64Reg1: true, is64Reg2: true,
-                   (doc, reg, reg2, file) =>
+                   assertHandler: (doc, reg, reg2, file) =>
                    {
                        Assert.True(reg.HasAttribute("Win64", "yes"));
                        Assert.True(reg2.HasAttribute("Win64", "yes"));
@@ -160,7 +160,7 @@ namespace WixSharp.Test
                    });
 
             assert(projPlatform: Platform.x64, is64Reg1: null, is64Reg2: null,
-                   (doc, reg, reg2, file) =>
+                   assertHandler: (doc, reg, reg2, file) =>
                    {
                        Assert.True(reg.HasAttribute("Win64", "yes"));
                        Assert.True(reg2.HasAttribute("Win64", "yes"));
@@ -168,7 +168,7 @@ namespace WixSharp.Test
                    });
 
             assert(projPlatform: Platform.x64, is64Reg1: false, is64Reg2: false,
-                   (doc, reg, reg2, file) =>
+                   assertHandler: (doc, reg, reg2, file) =>
                    {
                        Assert.False(reg.HasAttribute("Win64", "yes"));
                        Assert.False(reg2.HasAttribute("Win64", "yes"));
