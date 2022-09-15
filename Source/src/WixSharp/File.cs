@@ -176,7 +176,16 @@ namespace WixSharp
         public IGenericEntity ServiceInstaller
         {
             get => ServiceInstallers?.FirstOrDefault();
-            set => ServiceInstallers = new[] { value };
+            set
+            {
+                if (value != null)
+                {
+                    ServiceInstallers = new[]
+                    {
+                        value
+                    };
+                }
+            }
         }
 
         /// <summary>
