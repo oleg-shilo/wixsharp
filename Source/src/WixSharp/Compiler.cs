@@ -2267,8 +2267,9 @@ namespace WixSharp
                     // case belongs to a permanent dir but not to the user dir. It is still shocking to enclose an entity
                     // that is a system wide to the directory. But the containment is slightly better in this case.
 
-                    XElement topLevelDir = GetTopLevelPermanentDir(product, regVal.IsWin64);
-                    // topLevelDir = GetTopLevelDir(product); // the old way
+                    bool is64 = regVal.Win64 ?? (wProject.Platform == Platform.x64);
+                    
+                    XElement topLevelDir = GetTopLevelPermanentDir(product, is64);
 
                     XElement comp = topLevelDir.AddElement(
                                                    new XElement("Component",

@@ -34,7 +34,7 @@ class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
-        project.BuildMsi();
+        project.BuildMsm();
     }
 
     static public void BuildWithAttributes()
@@ -66,9 +66,6 @@ class Script
     static void Compiler_WixSourceGenerated(XDocument document)
     {
         document.Descendants("Component")
-                .ForEach(comp=>comp.SetAttributeValue("Win64", "yes"));
+                .ForEach(comp => comp.SetAttributeValue("Win64", "yes"));
     }
 }
-
-
-
