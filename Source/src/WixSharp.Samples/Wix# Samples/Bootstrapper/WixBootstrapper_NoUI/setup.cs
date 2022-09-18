@@ -29,6 +29,7 @@ public class InstallScript
 
         productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
         productProj.LicenceFile = "License.rtf";
+
         var productMsi = productProj.BuildMsi();
 
         var bootstrapper =

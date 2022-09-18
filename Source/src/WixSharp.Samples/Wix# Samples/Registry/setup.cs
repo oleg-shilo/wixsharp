@@ -52,7 +52,6 @@ class Script
         //                                                                    "User=[WIX_ACCOUNT_USERS]; GenericAll=yes; CreateSubkeys=yes")));
         //              };
         project.PreserveTempFiles = true;
-        // project.BuildMsi();
-        project.BuildMsiCmd();
+        project.BuildMsi();
     }
 }

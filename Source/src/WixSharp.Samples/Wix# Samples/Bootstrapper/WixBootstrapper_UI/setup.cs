@@ -11,22 +11,21 @@ public class Script
 
     static public void Main()
     {
-        // var productProj =
-        //     new ManagedProject("My Product",
-        //         new Dir(@"%ProgramFiles%\My Company\My Product",
-        //             new File("readme.txt")));
+        var productProj =
+            new ManagedProject("My Product",
+                new Dir(@"%ProgramFiles%\My Company\My Product",
+                    new File("readme.txt")));
 
-        // productProj.InstallScope = InstallScope.perMachine;
-        // productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
+        productProj.InstallScope = InstallScope.perMachine;
+        productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
 
-        // productProj.Load += (SetupEventArgs e) =>
-        // {
-        //     MessageBox.Show(e.Session.Property("USERINPUT"), "User Input");
-        //     e.Result = Microsoft.Deployment.WindowsInstaller.ActionResult.Failure;
-        // };
+        productProj.Load += (SetupEventArgs e) =>
+        {
+            MessageBox.Show(e.Session.Property("USERINPUT"), "User Input");
+            e.Result = Microsoft.Deployment.WindowsInstaller.ActionResult.Failure;
+        };
 
-        // string productMsi = productProj.BuildMsiCmd();
-        string productMsi = @"D:\dev\Galos\wixsharp\Source\src\WixSharp.Samples\Wix# Samples\Bootstrapper\WixBootstrapper_UI\bin\Debug\My Product.msi";
+        string productMsi = productProj.BuildMsi();
 
         //------------------------------------
 
@@ -40,6 +39,7 @@ public class Script
                            // Permanent = true,
                            Compressed = true
                        },
+
                        new MsiPackage(productMsi)
                        {
                            Id = "MyProductPackageId",
@@ -77,8 +77,7 @@ public class Script
         //        bootstrapper.SuppressWixMbaPrereqVars = true;
 
         bootstrapper.OutFileName = "my_app";
-        // bootstrapper.Build("my_app.exe");
-        bootstrapper.BuildCmd();
-        // io.File.Delete(productMsi);
+        bootstrapper.Build("my_app.exe");
+        io.File.Delete(productMsi);
     }
 }

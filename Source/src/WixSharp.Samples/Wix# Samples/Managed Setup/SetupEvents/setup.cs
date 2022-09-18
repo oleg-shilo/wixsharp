@@ -63,6 +63,7 @@ public static class Script
 
         project.BeforeInstall += args =>
         {
+            
             if (!args.IsUninstalling)
                 Tasks.StopService("some_service", throwOnError: false);
         };
