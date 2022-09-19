@@ -382,6 +382,7 @@ static class Script
 
         // HiTeach_MSI.Program.Main1(); return;
         // MsiInstaller.MyMsi.Build(); return;
+        issue_1075(); return;
         Issue_298(); return;
         Issue_1114(); return;
         Issue_865(); return;
@@ -503,5 +504,26 @@ static class Script
 
         project.PreserveTempFiles = true;
         project.BuildMsi();
+    }
+
+    static void issue_1075()
+    {
+        var project =
+            new ManagedProject("Application",
+                new Dir(@"%ProgramFiles%\CompanyName\ApplicationName",
+                    new File(@"setup.cs")),
+                new LaunchApplicationFromExitDialog("EXE_ID", $"Launch Application"))
+            {
+                GUID = new Guid("2D943540-EF1F-43A1-AD8F-DA34E59CEB47"),
+
+                ManagedUI = new ManagedUI
+                {
+                    InstallDialogs = { Dialogs.Progress, Dialogs.Exit, },
+                    ModifyDialogs = { Dialogs.MaintenanceType, Dialogs.Progress, Dialogs.Exit, }
+                },
+            };
+
+        project.PreserveTempFiles = true;
+        Compiler.BuildMsi(project);
     }
 }

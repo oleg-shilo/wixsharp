@@ -44,6 +44,13 @@ namespace WixSharp
         /// <param name="context"></param>
         public void Process(ProcessingContext context)
         {
+            if ((context.Project as ManagedProject)?.ManagedUI != null)
+                throw new Exception(
+                    this.GetType().Name + " can only be used in with native UI (but not ManagedUI). " +
+                    "It is designed to overcome the limitations of the native MSI UI. For the setup that " +
+                    "uses Managed UI you can launch the application from the `AfterInstall` event or from the " +
+                    "exit dialog definition.\n");
+
             // Debug.Assert(false);
             context.Project.Include(WixExtension.UI);
             context.Project.Include(WixExtension.Util);
