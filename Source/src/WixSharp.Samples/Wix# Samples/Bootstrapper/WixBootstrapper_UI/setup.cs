@@ -22,6 +22,7 @@ public class Script
         productProj.Load += (SetupEventArgs e) =>
         {
             MessageBox.Show(e.Session.Property("USERINPUT"), "User Input");
+            MessageBox.Show(e.Session.Property("REGISTRYINPUT"), "Registry Input");
             e.Result = Microsoft.Deployment.WindowsInstaller.ActionResult.Failure;
         };
 
@@ -32,24 +33,23 @@ public class Script
         var bootstrapper =
             new Bundle("My Product",
                        // new PackageGroupRef("NetFx40Web"),
-                       new ExePackage(@"hello.exe") //just a demo sample
-                       {
-                           Name = "WixCustomAction_cmd",
-                           InstallCommand = "-install",
-                           // Permanent = true,
-                           Compressed = true
-                       },
+                       // new ExePackage(@"hello.exe") //just a demo sample
+                       // {
+                       //     Name = "WixCustomAction_cmd",
+                       //     InstallCommand = "-install",
+                       //     // Permanent = true,
+                       //     Compressed = true
+                       // },
 
                        new MsiPackage(productMsi)
                        {
                            Id = "MyProductPackageId",
                            DisplayInternalUI = true,
-                           MsiProperties = "USERINPUT=[UserInput];"
+                           MsiProperties = "USERINPUT=[UserInput];REGISTRYINPUT=[RegistryInput];"
                        }
-
                       );
 
-        bootstrapper.Variables = new[] { new Variable("UserInput", "none") };
+        bootstrapper.Variables = "UserInput=none; RegistryInput=none".ToStringVariables();
         bootstrapper.Version = new Version("1.0.0.0");
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889a");
 
@@ -60,9 +60,11 @@ public class Script
                                         Root = RegistryHive.CurrentUser,
                                         Result = SearchResult.value,
                                         Key = @"SOFTWARE\WixSharp\BootstrapperData\My Product",
-                                        Value = "UserInput",
-                                        Variable = "UserInput"
+                                        Value = "RegistryInput",
+                                        Variable = "RegistryInput"
                                     });
+
+        bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
 
         // You can also use System.Reflection.Assembly.GetExecutingAssembly().Location instead of "%this%"
         // Note, passing BootstrapperCore.config is optional and if not provided the default BootstrapperCore.config
