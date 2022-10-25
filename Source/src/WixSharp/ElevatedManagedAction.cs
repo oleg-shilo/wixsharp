@@ -306,6 +306,7 @@ namespace WixSharp
         public ElevatedManagedAction(Id id, CustomActionMethod action, Return returnType, When when, Step step, Condition condition)
             : base(id, action, returnType, when, step, condition)
         {
+            Impersonate = false;
             Execute = Execute.deferred;
             UsesProperties = "INSTALLDIR";
         }
@@ -323,6 +324,7 @@ namespace WixSharp
         public ElevatedManagedAction(Id id, CustomActionMethod action, Return returnType, When when, Step step, Condition condition, CustomActionMethod rollback)
             : base(id, action, returnType, when, step, condition, rollback)
         {
+            Impersonate = false;
             Execute = Execute.deferred;
             UsesProperties = "INSTALLDIR";
         }
