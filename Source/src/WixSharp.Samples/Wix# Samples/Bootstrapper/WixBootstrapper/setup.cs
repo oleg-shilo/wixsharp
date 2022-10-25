@@ -6,9 +6,11 @@
 using System;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
+
 using io = System.IO;
 
 public class InstallScript
@@ -33,7 +35,7 @@ public class InstallScript
 
         var bootstrapper =
                 new Bundle("My Product",
-                    new PackageGroupRef("NetFx40Web"),
+                    // new PackageGroupRef("NetFx40Web"),
                     //new ExePackage(@"..\redist\dotNetFx40_Full_x86_x64.exe") //just a demo sample
                     //{
                     //     Name = "Microsoft .NET Framework 4.0",
@@ -50,7 +52,8 @@ public class InstallScript
                     {
                         DisplayInternalUI = true,
                         Visible = true,
-                        MsiProperties = "PACKAGE_PROPERTY=[BundleVariable]"
+                        MsiProperties = "INSTALLDIR=[InstallFolder]",
+                        InstallCondition = "MyCheckbox<>0"
                     },
                     // new MspPackage("Patch.msp")
                     // {
@@ -59,6 +62,7 @@ public class InstallScript
                     // },
                     new MsiPackage(productMsi)
                     {
+                        MsiProperties = "INSTALLDIR=c:\\",
                         DisplayInternalUI = true,
                         Payloads = new[] { "script.dll".ToPayload() }
                     });
@@ -69,6 +73,7 @@ public class InstallScript
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
         bootstrapper.Application.LogoFile = "logo.png";
         bootstrapper.Application.Payloads = new[] { "logo.png".ToPayload() };
+        bootstrapper.Application.ThemeFile = "Theme.xml".PathGetFullPath();
 
         // adding themes
         // var themes = new[]
@@ -86,7 +91,7 @@ public class InstallScript
         // you need to clear bootstrapper.Application.LicensePath and uncomment the next line
         // bootstrapper.Application.LogoSideFile = "logo.png";
 
-        bootstrapper.Application.AttributesDefinition = "ShowVersion=yes; ShowFilesInUse=yes";
+        bootstrapper.Application.AttributesDefinition = "ShowVersion=yes; ShowFilesInUse=yes"; // you can also use bootstrapper.Application.Show* = true;
         bootstrapper.Include(WixExtension.Util);
 
         bootstrapper.IncludeWixExtension(@"WixDependencyExtension.dll", "dep", "http://schemas.microsoft.com/wix/DependencyExtension");
@@ -111,8 +116,16 @@ public class InstallScript
 
         // bootstrapper.AddXml("Wix/Bundle", "<Log PathVariable=\"LogFileLocation\"/>");
 
+        string installDir = "%ProgramFiles(x86)%".PathJoin("CompanyName", "MyApp").ExpandEnvVars();
         bootstrapper.AddXmlElement("Wix/Bundle", "Log", "PathVariable=LogFileLocation");
-        bootstrapper.Variables = new[] { new Variable("LogFileLocation", @"C:\temp\setup.log") { Overridable = true } };
+        bootstrapper.Variables = new[]
+        {
+            new Variable("LogFileLocation", @"C:\temp\setup.log") { Overridable = true },
+            new Variable("MyCheckbox", "0", VariableType.numeric) { Overridable = true },
+            new Variable("MyCheckboxLabel", "Install CRT?", VariableType.@string) { Overridable = true },
+            // note 'InstallFolder' is a special built-in variable that can be changed by the user from the options page
+            new Variable("InstallFolder", installDir) { Overridable = true }
+        };
         // or
         // bootstrapper.Variables = "BundleVariable=333".ToStringVariables();
         // bootstrapper.Variables = Variables.ToStringVariables("BundleVariable=333");
@@ -162,7 +175,16 @@ public class InstallScript
                 new Dir(@"%ProgramFiles%\My Company\CRT",
                     new File("readme.txt")))
             { InstallScope = InstallScope.perMachine };
+        crtProj.UI = WUI.WixUI_InstallDir;
         crtProj.Load += CrtProj_Load;
+
+        // crtProj.BeforeInstall += args =>
+        // {
+        //     if (args.IsUninstalling)
+        //         MessageBox.Show(args.InstallDir, "Uninstalling...");
+        //     else
+        //         MessageBox.Show(args.InstallDir, "Installing...");
+        // };
         return crtProj.BuildMsi();
     }
 
