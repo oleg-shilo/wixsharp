@@ -2127,12 +2127,19 @@ namespace WixSharp
                 string dummyDir = @"%ProgramFiles%";
 
                 if (AutoElements.LegacyDummyDirAlgorithm)
+                {
                     dummyDir = @"%ProgramFiles%\WixSharp\DummyDir";
 
-                if (wProject.Platform == Platform.x64)
-                    dummyDir = dummyDir.Map64Dirs();
+                    if (wProject.Platform == Platform.x64)
+                        dummyDir = dummyDir.Map64Dirs();
 
-                wProject.Dirs = new[] { new Dir(dummyDir) };
+                    wProject.Dirs = new[] { new Dir(dummyDir) };
+                }
+                else
+                {
+                    // need to set ID so it's not replaced with "INSTALLDIR"
+                    wProject.Dirs = new[] { new Dir(new Id("ProgramFilesFolder"), dummyDir) };
+                }
             }
 
             Dir[] wDirs = wProject.Dirs;
