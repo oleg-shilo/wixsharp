@@ -1,0 +1,1 @@
+start ManagedSetup.exe /x

@@ -50,7 +50,7 @@ public static class Script
 
         //project.ManagedUI = ManagedUI.Empty;
         project.ManagedUI = ManagedUI.Default; //Wix# ManagedUI
-        //project.UI = WUI.WixUI_ProgressOnly; //native MSI UI
+        // project.UI = WUI.WixUI_ProgressOnly; //native MSI UI
 
         project.UILoaded += project_UIInit;
         project.UIInitialized += Project_UIInitialized;
@@ -63,7 +63,6 @@ public static class Script
 
         project.BeforeInstall += args =>
         {
-            
             if (!args.IsUninstalling)
                 Tasks.StopService("some_service", throwOnError: false);
         };
