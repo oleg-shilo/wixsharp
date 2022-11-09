@@ -82,6 +82,8 @@ namespace WixSharp
         /// <summary>
         /// Gets the UIlevel.
         /// <para>UILevel > 4 lead to displaying modal dialogs. See https://msdn.microsoft.com/en-us/library/aa369487(v=vs.85).aspx. </para>
+        /// <para>Note, `UILevel` reflects UI aspects of MSI native UI. Thus if MSI is using embedded UI (ManagedUI) then MSI runtime 
+        /// always sets this variable to value `2` (silent).</para>
         /// </summary>
         /// <value>
         /// The UI level.
