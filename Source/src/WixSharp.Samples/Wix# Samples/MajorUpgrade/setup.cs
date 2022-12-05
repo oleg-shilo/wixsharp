@@ -67,7 +67,7 @@ class Script
     {
         ManagedProject project = CreateProject();
 
-        // Note the `project.UIInitialized += ...` code below is for demo purpose only. It to demonstrates custom handling
+        // Note the `project.UIInitialized += ...` code below is for demo purpose only. It demonstrates custom handling
         // of downgrade condition. This code can be replaced with a single equivalent call `project.ScheduleDowngradeUICheck();`
 
         project.ManagedUI = ManagedUI.Default;

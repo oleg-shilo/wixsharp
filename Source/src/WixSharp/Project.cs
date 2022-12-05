@@ -492,7 +492,7 @@ namespace WixSharp
                 UpgradeCode = GUID;
 
             if (!ProductId.HasValue)
-                ProductId = CalculateProductId(guid.Value, Version);
+                ProductId = CalculateProductId(GUID.Value, Version);
         }
 
         /// <summary>
