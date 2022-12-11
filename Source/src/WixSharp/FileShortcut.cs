@@ -120,9 +120,9 @@ namespace WixSharp
         /// <param name="location">The ID of the directory where the shortcut should be installed.
         /// <para>
         /// Note it is not a path expression but an ID (e.g. "INSTALLDIR"). Though if you pass path expression
-        /// (e.g. @"%ProgramFiles%\My Company\My Product") WixSharp will try to find the <see cref="Dir"/> that corresponds this exprression
-        /// and use the <see cref="Dir"/>.Id for the <see cref="FileShortcut"/>.Location. If <c>location</c> is null or empty the shortcutr will be created in the parent
-        /// directory.
+        /// (e.g. @"%ProgramFiles%\My Company\My Product") WixSharp will try to find the <see cref="Dir"/> that corresponds this expression
+        /// and use the <see cref="Dir"/>.Id for the <see cref="FileShortcut"/>.Location. If <c>location</c> is null or empty the shortcut
+        /// will be created in the parent directory.
         /// </para>
         /// </param>
         public FileShortcut(string name, string location)
