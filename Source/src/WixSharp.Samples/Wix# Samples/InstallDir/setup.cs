@@ -29,7 +29,7 @@ class Script
                 new ManagedProject("My Product",
                     new Dir(@"%ProgramFiles%\My Product",
                         new WixSharp.File(@"myapp.exe",
-                            new FileShortcut("My App", @"%ProgramMenu%\My Product") { Advertise = true })));
+                            new FileShortcut("My App", "INSTALLDIR") { Advertise = true })));
 
         project.UI = WUI.WixUI_InstallDir;
         project.PreserveTempFiles = true;
