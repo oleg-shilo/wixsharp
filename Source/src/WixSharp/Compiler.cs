@@ -3442,7 +3442,9 @@ namespace WixSharp
                 }
                 else
                 {
-                    wDir.Id = parent.Attribute("Id").Value + "." + wDir.Name.Expand(doNotFixStartDigit: true);
+                    if(AutoElements.LegacyDirIdAlgorithm)
+                        wDir.Id = parent.Attribute("Id").Value + "." + wDir.Name.Expand(doNotFixStartDigit: true);
+                    // otherwise the id will be auto-assigned the same way as for other WixEntities
                 }
             }
 

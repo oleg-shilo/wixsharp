@@ -103,6 +103,17 @@ namespace WixSharp
         public static bool DisableAutoKeyPath = false;
 
         /// <summary>
+        /// <para>
+        /// Flag indicating if the legacy algorithm should be used for auto-assigning directory IDs when they are not defined by user.
+        /// </para>
+        /// The old(historical) algorithm composes the id value as a "path-like" chain of the names of a directory and his parent directories.
+        /// This can lead sometimes to excessively long values.
+        /// If this flag is <c>false</c> (default) the  default ID assignment algorithm is used as for any other <see cref="WixEntity"/>
+        /// ("&lt;dir_name&gt;[.unique_index]").
+        /// </summary>
+        public static bool LegacyDirIdAlgorithm = false;
+
+        /// <summary>
         /// Enables expanding Wix environment constants in <see cref="WixSharp.RegValue.Value"/>.
         /// <para>This flag was introduced as a fall back mechanism for legacy action of expanding Wix
         /// constants in registry values. This work around was triggered by issue #774.</para>
