@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.WPF</id>
-    <version>1.20.2.0</version>
+    <version>1.20.3.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,17 +16,28 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.20.2.0
+    <releaseNotes>Release v1.20.3.0
 
-- PR #1197: Fix BuildMsiCmd generating incorrect custom action dll
-- Issue #1178: WelcomeDialog doesn't show title.
-- Issue #1170: Generate only small Installer.exe file to binary (enhancement)
-- Issue #1171: RegFileImporter does not support hex(b): REG_QWORD Partial fix as WiX still does not support REG_QWORD===integer64</releaseNotes>
+- Issue #1244: The directory Id generated can be too long
+- Issue #1223: Non LegacyDummyDirAlgorithm creates C:\ProgramFilesFolder empty folder
+- Issue #1220: ElevatedManagedAction issue
+- Feature #1204: Feature - RegisterCom class to ease the registration of COM files
+- Issue #1203: SilentBootstrapperApplication
+- Issue #182 (extended solution): RegistrySearch has "Win64=no" when building x64 installers
+- Added Self-executable_Msi sample
+- Added WixBootstrapper_EmbeddedUI to demonstrate how to show managed UI if the bundled MSI
+- Added sample for customization of the stock Burn UI. Triggered by #1219
+- Added sample for "Issue #1218: Dynamic custom UI sequence"
+- Resurrected setting user input from BA UI and passing it to the msi. RegistrySearch input is also retained.
+- Added validation for `Issue #1075: [FEAT] Add error if LaunchApplicationFromExitDialog using in common Project` error.
+- Fixed problem with RegKey being placed in the x86 root XML dir for the x64 project
+
+</releaseNotes>
     <copyright>Copyright (C) 2008-2021 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.20.2.0" />
+      <dependency id="WixSharp.bin" version="1.20.3.0" />
       <dependency id="Caliburn.Micro" version="3.2.0" />
     </dependencies>
     <references>

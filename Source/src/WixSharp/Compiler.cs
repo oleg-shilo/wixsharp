@@ -27,7 +27,9 @@ THE SOFTWARE.
 
 #endregion Licence...
 
+using Microsoft.Deployment.WindowsInstaller;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -35,7 +37,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 using IO = System.IO;
 
@@ -2247,7 +2248,7 @@ namespace WixSharp
                         {
                             if (wProject.Platform != Platform.x86)
                                 regVal.AttributesDefinition += ";Component:Win64=yes";
-                        } 
+                        }
                     }
                     else //equivalent of wProject.Platform == Platform.x86 as MSI will be hosted by x86 msiexec.exe
                     {
@@ -2275,7 +2276,7 @@ namespace WixSharp
                     // that is a system wide to the directory. But the containment is slightly better in this case.
 
                     bool is64 = regVal.Win64 ?? (wProject.Platform == Platform.x64);
-                    
+
                     XElement topLevelDir = GetTopLevelPermanentDir(product, is64);
 
                     XElement comp = topLevelDir.AddElement(
@@ -3085,8 +3086,14 @@ namespace WixSharp
                 if (asm != System.Reflection.Assembly.GetExecutingAssembly())
                 {
                     if (asm == "".GetType().Assembly || asm.FullName.StartsWith("mscorlib."))
+                    {
                         // being executed as a release-compiled script
-                        return Environment.GetEnvironmentVariable("EntryScriptAssembly");
+                        string compiledScriptLocation = Environment.GetEnvironmentVariables().Keys.Cast<string>().FirstOrDefault(x => x.StartsWith("location:"));
+
+                        return Environment.GetEnvironmentVariable("EntryScriptAssembly")
+                            ?? Environment.GetEnvironmentVariable(compiledScriptLocation)
+                            ;
+                    }
                     else
                         return asm.GetLocation();
                 }
@@ -3442,7 +3449,7 @@ namespace WixSharp
                 }
                 else
                 {
-                    if(AutoElements.LegacyDirIdAlgorithm)
+                    if (AutoElements.LegacyDirIdAlgorithm)
                         wDir.Id = parent.Attribute("Id").Value + "." + wDir.Name.Expand(doNotFixStartDigit: true);
                     // otherwise the id will be auto-assigned the same way as for other WixEntities
                 }

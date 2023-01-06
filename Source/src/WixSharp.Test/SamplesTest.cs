@@ -20,7 +20,7 @@ namespace WixSharp.Test
                                                ASP.NETApp,
                                                EnvVariables,
                                                WixBootstrapper"
-                                             .Split(',').Select(x => x.Trim());
+                                .Split(',').Select(x => x.Trim());
 
         int completedSamples = 0;
         int samplesTotal = 0;
@@ -123,9 +123,11 @@ namespace WixSharp.Test
             {
                 var dir = Path.GetDirectoryName(batchFile);
 
+                bool ignorePresentMsi = (dir.EndsWith("Self-executable_Msi", true));
+
                 bool nonMsi = nonMsiProjects.Where(x => batchFile.Contains(x)).Any();
 
-                if (!nonMsi)
+                if (!nonMsi && !ignorePresentMsi)
                 {
                     DeleteAllMsis(dir);
                     Assert.False(HasAnyMsis(dir), "Cannot clear directory for the test...");
@@ -155,7 +157,7 @@ namespace WixSharp.Test
                     else
                         lock (failedSamples)
                         {
-                            failedSamples.Add(currentStep + ":" + batchFile);
+                            failedSamples.Add((currentStep - 1) + ":" + batchFile); // print index so it's easy to find it in the log
                         }
                 }
 
