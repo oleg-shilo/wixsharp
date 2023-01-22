@@ -1,3 +1,7 @@
+v1.17.2.0
+- Issue #511: Compile error CustomDialog
+  Updated Project template VS extension
+
 v1.17.0.0
 * Added "WixSharp Managed Setup - Custom WPF UI" project template
 	
