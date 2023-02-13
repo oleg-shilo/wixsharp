@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-
 using System.Diagnostics;
-
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -266,7 +264,7 @@ namespace WixSharp
                 Return = Return.check,
                 When = When.Before,
                 Step = Step.InstallFinalize,
-                Condition = Condition.NOT_BeingRemoved,
+                Condition = Condition.Always,
                 UsesProperties = "UpgradeCode"
             });
         }
