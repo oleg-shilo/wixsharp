@@ -114,7 +114,7 @@ namespace WixSharp
         /// <exception cref="ValidationException"></exception>
         public void Process(ProcessingContext context)
         {
-            string[] AdvertiseParents = { "Fragment", "Module", "Product" };
+            string[] AdvertiseParents = { "Fragment", "Module", Compiler.ProductElementName };
 
             // If the parent element is a Fragment, Module, or Product, ensure Advertised is true.
             if (!Advertise && AdvertiseParents.Any(s => s == context.XParent.Name.LocalName))

@@ -4,12 +4,12 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using System.Linq;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using File = WixSharp.File;
-using Microsoft.Deployment.WindowsInstaller;
 
 public class Script
 {
@@ -44,7 +44,7 @@ public class Script
                             new XAttribute("ProductCode", Guid.NewGuid()),
                             new XAttribute("ProductName", "My Product " + instance)));
 
-                document.Root.Select("Product").Add(instanceTransforms);
+                document.Root.Select(Compiler.ProductElementName).Add(instanceTransforms);
             };
 
         Compiler.BuildMsi(project);

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using static System.Environment;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -656,9 +657,9 @@ namespace WixSharp
         /// <para>
         /// This method is nothing else but a 'syntactic sugar' method, which wraps the following code:
         /// <code>
-        ///document.Root.Select("Product")
+        ///document.Root.Select(Compiler.ProductElementName)
         ///             .Add(XDocument.Load(wxsFile)
-        ///             .Root.Select("Product").Elements());
+        ///             .Root.Select(Compiler.ProductElementName).Elements());
         /// </code>
         /// </para>
         /// <example>The following is an example of using InjectWxs.
@@ -684,9 +685,9 @@ namespace WixSharp
         /// <returns></returns>
         public static XDocument InjectWxs(this XDocument document, string wxsFile)
         {
-            document.Root.Select("Product")
+            document.Root.Select(Compiler.ProductElementName)
                          .Add(XDocument.Load(wxsFile)
-                                       .Root.Select("Product").Elements());
+                                       .Root.Select(Compiler.ProductElementName).Elements());
             return document;
         }
 
@@ -3893,6 +3894,117 @@ namespace WixSharp
     /// </summary>
     public static class ProcessExtensions
     {
+        // public static string[] FindAssembliesOf(IEnumerable<string> packages)
+        //         {
+        //             // TODO
+        //             // - create a project template based on "dotnet new classlib" output
+        //             // - analyse only directories that are listed in `*.nuget.cache` file (e.g. test\obj\project.nuget.cache)
+
+        //             var result = new List<string>();
+
+        //             var projectDir = SpecialFolder.LocalApplicationData.GetPath("Temp", "csscript.core", "nuget", Guid.NewGuid().ToString());
+        //             Directory.CreateDirectory(projectDir);
+
+        //             var packagsSection = "";
+        //             var restoreArgs = "";
+
+        //             try
+        //             {
+        //                 var projectFile = projectDir.PathJoin("nuget.ref.csproj");
+
+        //                 File.WriteAllText(projectFile, $@"<Project Sdk=""Microsoft.NET.Sdk"">
+        //   <PropertyGroup>
+        //     <TargetFramework>net472</TargetFramework>
+        //   </PropertyGroup>
+
+        //   <ItemGroup>
+        //     <Content Include=""CustomAction.config"" CopyToOutputDirectory=""PreserveNewest"" />
+        //   </ItemGroup>
+
+        //   <ItemGroup>
+        //     <PackageReference Include=""WixToolset.Dtf.CustomAction"" Version=""*"" />
+        //     <PackageReference Include=""WixToolset.Dtf.WindowsInstaller"" Version=""*"" />
+        //   </ItemGroup>
+        // </Project>");
+
+        //                 packages = packages.OrderBy(x => x).ToArray();
+
+        //                 var sw = Stopwatch.StartNew();
+        //                 Console.WriteLine("Restoring packages...");
+        //                 // Console.WriteLine(packages.JoinBy(NewLine));
+
+        //                 var p = new Process();
+        //                 p.StartInfo.FileName = "dotnet";
+        //                 p.StartInfo.Arguments = "restore " + restoreArgs.Trim();
+        //                 p.StartInfo.WorkingDirectory = projectDir;
+        //                 p.StartInfo.RedirectStandardOutput = true;
+        //                 p.Start();
+        //                 p.WaitForExit();
+
+        //                 p = new Process();
+        //                 p.StartInfo.FileName = "dotnet";
+        //                 p.StartInfo.Arguments = "publish --no-restore -o ./publish";
+        //                 p.StartInfo.WorkingDirectory = projectDir;
+        //                 p.StartInfo.RedirectStandardOutput = true;
+        //                 p.Start();
+        //                 p.WaitForExit();
+
+        //                 var allRefAssemblies = Directory.GetFiles(Path.Combine(projectDir, "publish"), "*.dll")
+        //                                            .Concat(
+        //                                        Directory.GetFiles(Path.Combine(projectDir, "publish"), "*.exe"))
+        //                                            .Where(x => !x.EndsWith("nuget.ref.dll"))
+        //                                            .OrderBy(x => x);
+
+        //                 bool isSameData(byte[] a, byte[] b)
+        //                 {
+        //                     if (a.Length == b.Length)
+        //                     {
+        //                         for (int i = 0; i < a.Length; i++)
+        //                             if (a[i] != b[i])
+        //                                 return false;
+        //                         return true;
+        //                     }
+        //                     else
+        //                         return false;
+        //                 }
+
+        //                 // Console.WriteLine("    " + sw.Elapsed.ToString());
+        //                 sw.Restart();
+        //                 Console.WriteLine("Mapping packages to assemblies1111...");
+        //                 // Debug.Assert(false);
+
+        //                 foreach (var x in allRefAssemblies)
+        //                 {
+        //                     var packageName = Path.GetFileNameWithoutExtension(x);
+
+        //                     var refAssemblyVersion = FileVersionInfo.GetVersionInfo(x).FileVersion;
+        //                     var refAssemblySize = new FileInfo(x).Length;
+        //                     byte[] refAssemblyBytes = File.ReadAllBytes(x);
+
+        //                     var matchingAssemblies = Directory
+        //                             // .GetDirectories(nugetRepo, $"{packageName}*") // quicker but less reliable as the package name may not be the same as the assembly name. IE `ICSharpCode.SharpZipLib.dll` vs `SharpZipLib.dll`
+        //                             .GetDirectories(NuGetCache, $"*")
+        //                             .SelectMany(d => Directory
+        //                                                  .GetFiles(d, Path.GetFileName(x), SearchOption.AllDirectories)
+        //                                                  .Where(f =>
+        //                                                         refAssemblyVersion == FileVersionInfo.GetVersionInfo(f).FileVersion
+        //                                                         && refAssemblySize == new FileInfo(f).Length
+        //                                                         && isSameData(refAssemblyBytes, File.ReadAllBytes(f))
+        //                                                        ));
+
+        //                     var assembly = matchingAssemblies.FirstOrDefault() ?? $"{packageName} - not found";
+        //                     result.Add(assembly);
+        //                 }
+        //                 // Console.WriteLine("    " + sw.Elapsed.ToString());
+        //             }
+        //             finally
+        //             {
+        //                 try { Directory.Delete(projectDir, true); }
+        //                 catch { }
+        //             }
+        //             return result.ToArray();
+        //         }
+
         /// <summary>
         /// Starts a process resource by specifying the name of an application and a set of
         /// command-line arguments, and associates the resource with a new

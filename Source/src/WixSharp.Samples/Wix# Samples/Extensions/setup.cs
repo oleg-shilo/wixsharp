@@ -36,7 +36,6 @@ using WixSharp;
 /// </code>
 ///
 /// </summary>
-
 class Script
 {
     static public void Main()
@@ -145,7 +144,7 @@ public class RemoveFolderEx : WixEntity, IGenericEntity
                .Add(element);
 
         context.XParent
-               .Parent("Product")
+               .Parent(Compiler.ProductElementName)
                .AddElement("Feature", "Id=TestFeature;Title=Test Feature;Absent=allow;Level=1")
                .AddElement("ComponentRef", "Id=TestComponent");
     }

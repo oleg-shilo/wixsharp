@@ -434,9 +434,9 @@ namespace WixSharp.Test
 
             var doc = XDocument.Load(wsxfile);
 
-            var product = doc.FindSingle("Product");
+            var product = doc.FindSingle(Compiler.ProductElementName);
 
-            var rootFeature = doc.Select("Wix/Product/Feature");
+            var rootFeature = doc.Select($"Wix/{Compiler.ProductElementName}/Feature");
             Assert.NotNull(rootFeature);
 
             var docsFeature = rootFeature.Elements()

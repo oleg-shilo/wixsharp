@@ -415,7 +415,7 @@ namespace WixSharp
                 shortcut.Attribute("Icon").Value = iconId;
             }
 
-            XElement product = doc.Root.Select("Product");
+            XElement product = doc.Root.Select(Compiler.ProductElementName);
 
             foreach (string file in icons.Keys)
                 product.AddElement(
@@ -426,7 +426,7 @@ namespace WixSharp
 
         static void InjectPlatformAttributes(XDocument doc)
         {
-            var is64BitPlatform = doc.Root.Select("Product/Package").HasAttribute("Platform", val => val == "x64");
+            var is64BitPlatform = doc.Root.Select(Compiler.IsWix4 ? "Package" : "Product/Package").HasAttribute("Platform", val => val == "x64");
 
             if (is64BitPlatform)
             {
@@ -599,7 +599,7 @@ namespace WixSharp
 
         static void CreateEmptyComponentsInDirectoriesToRemove(XDocument doc)
         {
-            XElement product = doc.Root.Select("Product");
+            XElement product = doc.Root.Select(Compiler.ProductElementName);
 
             // Create new empty components in parent directories of components with no files or registry
             var dirsWithNoFilesOrRegistryComponents = product.Descendants("Directory")
@@ -615,7 +615,7 @@ namespace WixSharp
 
         internal static void HandleEmptyDirectories(XDocument doc)
         {
-            XElement product = doc.Root.Select("Product");
+            XElement product = doc.Root.Select(Compiler.ProductElementName);
 
             var dummyDirs = product.Descendants("Directory")
                                    .SelectMany(x => x.Elements("Component"))
@@ -683,7 +683,7 @@ namespace WixSharp
             InjectShortcutIcons(doc);
             HandleEmptyDirectories(doc);
 
-            XElement product = doc.Root.Select("Product");
+            XElement product = doc.Root.Select(Compiler.ProductElementName);
 
             int? absPathCount = null;
             foreach (XElement dir in product.Element("Directory").Elements("Directory"))

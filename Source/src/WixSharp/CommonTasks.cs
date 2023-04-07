@@ -768,7 +768,7 @@ namespace WixSharp.CommonTasks
 
         //         progId.SetAttribute("Icon", iconId);
 
-        //         doc.FindSingle("Product")
+        //         doc.FindSingle(Compiler.ProductElementName)
         //                 .AddElement("Icon", $@"Id={iconId};SourceFile={iconPath}");
         //     };
         // }
@@ -1055,7 +1055,7 @@ namespace WixSharp.CommonTasks
         {
             project.SetVersionFromIdValue = fileId;
             project.WixSourceGenerated += document =>
-                document.FindSingle("Product")
+                document.FindSingle(Compiler.ProductElementName)
                         .AddAttributes("Version=!(bind.FileVersion." + fileId + ")");
 
             if (setProjectVersionAsWell)
