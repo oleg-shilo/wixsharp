@@ -17,11 +17,15 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using Microsoft.Win32;
 using WixSharp.CommonTasks;
 using static WixSharp.SetupEventArgs;
+#if WIX3
+using Microsoft.Deployment.WindowsInstaller;
+#else
+using WixToolset.Dtf.WindowsInstaller;
+#endif
 
 using IO = System.IO;
 
@@ -2806,7 +2810,7 @@ namespace WixSharp
         {
             try
             {
-                session.Message(Microsoft.Deployment.WindowsInstaller.InstallMessage.ActionData, new Record());
+                session.Message(WixToolset.Dtf.WindowsInstaller.InstallMessage.ActionData, new Record());
             }
             catch (InstallCanceledException)
             {

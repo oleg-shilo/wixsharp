@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+#if WIX3
 using Microsoft.Deployment.WindowsInstaller;
+#else
+using WixToolset.Dtf.WindowsInstaller;
+#endif
 using Reflection = System.Reflection;
 
 #pragma warning disable 1591

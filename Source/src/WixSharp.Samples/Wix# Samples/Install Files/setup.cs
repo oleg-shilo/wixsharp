@@ -43,6 +43,8 @@ class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
+        project.UI = WUI.WixUI_InstallDir;
+
         project.EmitConsistentPackageId = true;
         project.PreserveTempFiles = true;
         project.PreserveDbgFiles = true;

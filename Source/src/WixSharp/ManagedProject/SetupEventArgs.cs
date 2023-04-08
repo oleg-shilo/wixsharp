@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
+
+#if WIX3
+using Microsoft.Deployment.WindowsInstaller;
+#else
+using WixToolset.Dtf.WindowsInstaller;
+#endif
 
 namespace WixSharp
 {

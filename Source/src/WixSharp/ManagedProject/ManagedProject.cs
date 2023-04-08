@@ -6,8 +6,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
+
+#if WIX3
+using Microsoft.Deployment.WindowsInstaller;
+#else
+using WixToolset.Dtf.WindowsInstaller;
+#endif
 
 using IO = System.IO;
 

@@ -2,9 +2,15 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 using WixSharp.Utilities;
+
+#if WIX3
+using Microsoft.Deployment.WindowsInstaller;
+#else
+using WixToolset.Dtf.WindowsInstaller;
+#endif
+
 using IO = System.IO;
 
 namespace WixSharp
@@ -65,7 +71,7 @@ namespace WixSharp
                     Return.check,
                     When.Before, Step.PublishProduct,
                     Condition.NOT_Installed)
-            );
+                              );
 
             var assembly = typeof(ResilientPackage).Assembly.Location;
 
@@ -93,7 +99,7 @@ namespace WixSharp
                 {
                     UsesProperties = $"UserSID,OriginalDatabase,ALLUSERS,{WIXSHARP_RESILIENT_SOURCE_DIR}"
                 }
-            );
+                              );
         }
 
         /// <summary>

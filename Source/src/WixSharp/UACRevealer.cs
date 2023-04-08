@@ -11,10 +11,14 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using WixSharp;
 using WixSharp.Controls;
+#if WIX3
+using Microsoft.Deployment.WindowsInstaller;
+#else
+using WixToolset.Dtf.WindowsInstaller;
+#endif
 
 namespace WixSharp.CommonTasks
 {
