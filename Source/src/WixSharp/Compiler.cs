@@ -32,6 +32,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -594,15 +595,17 @@ namespace WixSharp
 
             string wixLocationEnvVar = $"set WixLocation={WixLocation}";
             string compiler = Utils.PathCombine(WixLocation, "candle.exe");
-            string wix = Utils.PathCombine(WixLocation, "wix.exe");
             string linker = Utils.PathCombine(WixLocation, "light.exe");
             string batchFile = path;
 
-            if ((Compiler.IsWix4 && !IO.File.Exists(wix)) ||
-                (!Compiler.IsWix4 && (!IO.File.Exists(compiler) || !IO.File.Exists(linker))))
+            if (Compiler.IsWix4)
+            {
+                // && !IO.File.Exists(wix)) ||
+            }
+            else if (!IO.File.Exists(compiler) || !IO.File.Exists(linker))
             {
                 Compiler.OutputWriteLine("Wix binaries cannot be found. Expected location is " + IO.Path.GetDirectoryName(compiler));
-                throw new ApplicationException("Wix tools cannot be found");
+                throw new ApplicationException("Wix compiler/linker cannot be found");
             }
 
             if (Compiler.IsWix4)
@@ -612,20 +615,12 @@ namespace WixSharp
                 string outDir = IO.Path.GetDirectoryName(wxsFile);
                 string msiFile = IO.Path.ChangeExtension(wxsFile, "." + type.ToString().ToLower());
 
-                string wixCmd = GenerateWixCommand(project, wxsFile, out string extensionDlls);
+                string wixCmd = GenerateWixCommand(project, wxsFile);
 
                 using (var sw = new IO.StreamWriter(batchFile))
                 {
                     sw.WriteLine("echo off");
-                    // sw.WriteLine("@setlocal");
-                    // sw.WriteLine(wixLocationEnvVar);
-                    sw.WriteLine($"\"{wix}\" build {wixCmd} -o \"{outDir.PathJoin(msiFile)}\"");
-                    // sw.WriteLine("if ERRORLEVEL 1 @echo wix.exe failed & GOTO ERROR");
-                    // sw.WriteLine("@endlocal");
-                    // sw.WriteLine("EXIT /B 0");
-                    // sw.WriteLine(":ERROR");
-                    // sw.WriteLine("@endlocal");
-                    // sw.WriteLine("EXIT /B 1");
+                    sw.WriteLine($"wix build {wixCmd} -o \"{outDir.PathJoin(msiFile)}\"");
                 }
             }
             else
@@ -728,22 +723,26 @@ namespace WixSharp
             IO.File.WriteAllLines(dest, content.ToArray());
         }
 
-        static string GenerateWixCommand(Project project, string wxsFile, out string extensionDlls)
+        static string GenerateWixCommand(Project project, string wxsFile)
         {
             // Debug.Assert(false);
             // objFile = IO.Path.ChangeExtension(wxsFile, ".wixobj");
 
-            extensionDlls = project.WixExtensions
+            string extensionDlls = project.WixExtensions
+#if WIX3
                                    .Select(x => x.ExpandEnvVars().PathGetFullPath())
+#else
+                                   .Select(x => x.ExpandEnvVars())
+#endif
                                    .Distinct()
-                                   .JoinBy(" ", dll => " -ext \"" + dll + "\"");
+                                   .JoinBy(" ", dll => "-ext \"" + dll + "\"");
 
             string wxsFiles = project.WxsFiles
                                      .Select(x => x.ExpandEnvVars().PathGetFullPath())
                                      .Distinct()
                                      .JoinBy(" ", file => "\"" + file + "\"");
 
-            var candleOptions = WixOptions + " " + project.WixOptions;
+            var candleOptions = (WixOptions + " " + project.WixOptions).Trim();
 
             var candleCmdLineParams = new StringBuilder();
             candleCmdLineParams.AppendFormat("{0} {1} \"{2}\" ", candleOptions, extensionDlls, wxsFile);
@@ -1276,7 +1275,14 @@ namespace WixSharp
             ProcessLaunchConditions(project, product);
 
             //extend wDir
-            XElement dirs = product.AddElement(
+
+            XElement dirs;
+
+
+            if (Compiler.IsWix4)
+                dirs = product;
+            else
+                dirs = product.AddElement(
                         new XElement("Directory",
                             new XAttribute("Id", "TARGETDIR"),
                             new XAttribute("Name", "SourceDir")));
@@ -1342,10 +1348,10 @@ namespace WixSharp
                            .SetAttribute("Value", installDirId);
                 }
 
-                // to avoid "error WIX0094: The identifier 'WixUI:WixUI_Minimal' is inaccessible due to its protection level."
-                if (!Compiler.IsWix4 || project.UI != WUI.WixUI_Minimal)
+                if (Compiler.IsWix4)
+                    product.AddElement(WixExtension.UI.XElement("WixUI", $"Id={project.UI}"));
+                else
                     product.AddElement("UIRef", $"Id={project.UI}");
-
 
                 product.AddElement("UIRef", "Id=WixUI_ErrorProgressText");
 
@@ -2280,6 +2286,10 @@ namespace WixSharp
             var absolutePathDirs = wProject.AllDirs.Where(x => !x.IsIdSet() && x.Name.IsAbsolutePath()).ToArray();
             foreach (var item in absolutePathDirs)
                 item.Id = $"TARGETDIR{absolutePathDirs.FindIndex(item) + 1}";
+
+            if (wDirs.Any())
+                wDirs.First().IsStandardDir = true;
+
 
             foreach (Dir wDir in wDirs)
             {
@@ -3577,9 +3587,13 @@ namespace WixSharp
                 }
             }
 
-            var newSubDir = new XElement("Directory",
-                                         new XAttribute("Id", wDir.Id),
-                                         new XAttribute("Name", name));
+            var newSubDir = wDir.IsStandardDir ?
+                                new XElement("StandardDirectory",
+                                    new XAttribute("Id", wDir.Id))
+                                :
+                                new XElement("Directory",
+                                    new XAttribute("Id", wDir.Id),
+                                    new XAttribute("Name", name));
 
             if (!wDir.IsAutoParent())
                 newSubDir.AddAttributes(wDir.Attributes);

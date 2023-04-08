@@ -686,7 +686,9 @@ namespace WixSharp
             XElement product = doc.Root.Select(Compiler.ProductElementName);
 
             int? absPathCount = null;
-            foreach (XElement dir in product.Element("Directory").Elements("Directory"))
+            string firstDirElementName = Compiler.IsWix4 ? "StandardDirectory" : "Directory";
+
+            foreach (XElement dir in product.Element(firstDirElementName).Elements("Directory"))
             {
                 XElement installDir = dir;
 

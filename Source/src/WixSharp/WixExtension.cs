@@ -202,8 +202,13 @@ namespace WixSharp
 #if WIX3
         public static WixExtension UI = new WixExtension("%WixLocation%\\WixUIExtension.dll", null, null);
 #else
-        public static WixExtension UI = new WixExtension(@"C:\Users\oleg.shilo\.nuget\packages\wixtoolset.ui.wixext\4.0.0\wixext4\WixToolset.UI.wixext.dll", null, null);
+        public static WixExtension UI = new WixExtension(@"WixToolset.UI.wixext", "ui", UiNamespace);
 #endif
+        /// <summary>
+        /// The `UI` extension namespace
+        /// </summary>
+        public const string UiNamespace = "http://wixtoolset.org/schemas/v4/wxs/ui";
+
     }
 
     /// <summary>

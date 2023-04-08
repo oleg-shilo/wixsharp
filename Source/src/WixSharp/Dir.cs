@@ -80,6 +80,7 @@ namespace WixSharp
         /// </summary>
         protected Dir lastDir;
 
+        internal bool IsStandardDir;
         /// <summary>
         /// Initializes a new instance of the <see cref="Dir"/> class.
         /// </summary>
