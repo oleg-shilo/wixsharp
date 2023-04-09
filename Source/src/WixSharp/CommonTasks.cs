@@ -1763,6 +1763,7 @@ namespace WixSharp.CommonTasks
             return possibleLocations.FirstOrDefault(IO.File.Exists);
         }
 
+
         /// <summary>
         /// The default console out handler. It can be used when you want to have fine control over
         /// STD output of the external tool.
@@ -1883,7 +1884,7 @@ namespace WixSharp.CommonTasks
             {
                 Environment.SetEnvironmentVariable("PATH", Environment.ExpandEnvironmentVariables(this.WellKnownLocations ?? "") + ";" + "%WIXSHARP_PATH%;" + systemPathOriginal);
 
-                string exePath = GetFullPath(this.ExePath);
+                string exePath = Locate(this.ExePath);
 
                 if (exePath == null)
                 {
@@ -1928,29 +1929,14 @@ namespace WixSharp.CommonTasks
             }
         }
 
-        string GetFullPath(string path)
-        {
-            if (IO.File.Exists(path))
-                return IO.Path.GetFullPath(path);
 
-            foreach (string dir in Environment.GetEnvironmentVariable("PATH").Split(';'))
-            {
-                if (IO.Directory.Exists(dir))
-                {
-                    string fullPath = IO.Path.Combine(Environment.ExpandEnvironmentVariables(dir).Trim(), path);
-                    if (IO.File.Exists(fullPath))
-                        return fullPath;
-                }
-            }
-
-            return null;
-        }
     }
 
     static class WixTools
     {
         static public string NuGetDir => @"%userprofile%\.nuget\packages".ExpandEnvVars();
         static public string WixSharpToolDir => @"%userprofile%\.wix\.wixsharp".ExpandEnvVars();
+        static public string WixExtensionsDir => @"%userprofile%\.wix\extensions".ExpandEnvVars();
 
         static string PackageDir(string name)
             => Directory.GetDirectories(NuGetDir.PathCombine(name))
@@ -1985,6 +1971,12 @@ namespace WixSharp.CommonTasks
             return PackageDir("wixtoolset.dtf.customaction").PathCombine($@"tools\{platformDir}\SfxCA.dll");
         }
 
+        public static void EnsureWixExtension(string name)
+        {
+            if (!Directory.Exists(WixExtensionsDir.PathCombine(name)))
+                Compiler.Run("wix", $"extension add -g {name}");
+        }
+
         public static void EnsureDtfTool()
         {
             var projectDir = WixSharpToolDir.PathCombine("wix.tools");
@@ -1998,16 +1990,17 @@ namespace WixSharp.CommonTasks
 
             var projectFile = projectDir.PathJoin("wix.tools.csproj");
 
-            IO.File.WriteAllText(projectFile, $@"<Project Sdk=""Microsoft.NET.Sdk"">
-                                                  <PropertyGroup>
-                                                    <TargetFramework>net472</TargetFramework>
-                                                  </PropertyGroup>
+            if (!IO.File.Exists(projectFile))
+                IO.File.WriteAllText(projectFile, $@"<Project Sdk=""Microsoft.NET.Sdk"">
+                                                      <PropertyGroup>
+                                                        <TargetFramework>net472</TargetFramework>
+                                                      </PropertyGroup>
 
-                                                  <ItemGroup>
-                                                    <PackageReference Include=""WixToolset.Dtf.CustomAction"" Version=""*"" />
-                                                    <PackageReference Include=""WixToolset.Dtf.WindowsInstaller"" Version=""*"" />
-                                                  </ItemGroup>
-                                                </Project>");
+                                                      <ItemGroup>
+                                                        <PackageReference Include=""WixToolset.Dtf.CustomAction"" Version=""*"" />
+                                                        <PackageReference Include=""WixToolset.Dtf.WindowsInstaller"" Version=""*"" />
+                                                      </ItemGroup>
+                                                    </Project>");
 
             IO.File.WriteAllText(projectDir.PathJoin("dummy.cs"),
                  $@"using WixToolset.Dtf.WindowsInstaller;
@@ -2020,23 +2013,12 @@ namespace WixSharp.CommonTasks
             var sw = Stopwatch.StartNew();
             Console.WriteLine("Restoring packages...");
 
-            using (var p = new Process())
-            {
-                p.StartInfo.FileName = "dotnet";
-                p.StartInfo.Arguments = "restore";
-                p.StartInfo.WorkingDirectory = projectDir;
-                p.Start();
-                p.WaitForExit();
-            }
+            // need to publish to restore even if we are going to "publish"
+            // It is to handle the cases when in user updated project file manually (e.g. to get different version of tools)
+            Compiler.Run("dotnet", "restore", projectDir);
 
-            using (var p = new Process())
-            {
-                p.StartInfo.FileName = "dotnet";
-                p.StartInfo.Arguments = @"publish -o .\publish";
-                p.StartInfo.WorkingDirectory = projectDir;
-                p.Start();
-                p.WaitForExit();
-            }
+            // need to publish to isolate assemblies
+            Compiler.Run("dotnet", @"publish -o .\publish", projectDir);
         }
     }
 }

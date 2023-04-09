@@ -616,7 +616,6 @@ namespace WixSharp
 
             if (Compiler.IsWix4)
             {
-
                 string wxsFile = BuildWxs(project, type);
 
                 string outDir = IO.Path.GetDirectoryName(wxsFile);
@@ -734,6 +733,8 @@ namespace WixSharp
         {
             // Debug.Assert(false);
             // objFile = IO.Path.ChangeExtension(wxsFile, ".wixobj");
+
+            project.WixExtensions.ForEach(x => WixTools.EnsureWixExtension(x));
 
             string extensionDlls = project.WixExtensions
 #if WIX3
@@ -3632,7 +3633,7 @@ namespace WixSharp
 
         internal static object WiX_Tools = new object();
 
-        internal static void Run(string file, string args)
+        internal static void Run(string file, string args, string workingDir = null)
         {
             lock (WiX_Tools)
             {
@@ -3642,7 +3643,7 @@ namespace WixSharp
                 p.StartInfo.FileName = file;
                 p.StartInfo.Arguments = args;
                 p.StartInfo.UseShellExecute = false;
-                p.StartInfo.WorkingDirectory = Environment.CurrentDirectory;
+                p.StartInfo.WorkingDirectory = workingDir ?? Environment.CurrentDirectory;
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.RedirectStandardError = true;
                 p.StartInfo.CreateNoWindow = true;

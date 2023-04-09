@@ -1268,6 +1268,11 @@ namespace WixSharp
         {
             return IO.Path.Combine(path1, path2);
         }
+        public static string PathCombine(this string path1, params object[] parts)
+        {
+            var allParts = new[] { path1 }.Concat(parts.Select(x => x?.ToString() ?? "")).ToArray();
+            return IO.Path.Combine(allParts);
+        }
 
         /// <summary>
         /// Gets the special folder path combined with an array of strings into a path.
