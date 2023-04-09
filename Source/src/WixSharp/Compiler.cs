@@ -600,16 +600,23 @@ namespace WixSharp
 
             if (Compiler.IsWix4)
             {
-                // && !IO.File.Exists(wix)) ||
+                if (ExternalTool.Locate("wix.exe") == null)
+                {
+                    var error = "`wix.exe` cannot be found. Ensure you installed it with `dotnet tool install --global wix`";
+                    Compiler.OutputWriteLine("Error: " + error);
+                    throw new ApplicationException(error);
+                }
             }
             else if (!IO.File.Exists(compiler) || !IO.File.Exists(linker))
             {
+
                 Compiler.OutputWriteLine("Wix binaries cannot be found. Expected location is " + IO.Path.GetDirectoryName(compiler));
                 throw new ApplicationException("Wix compiler/linker cannot be found");
             }
 
             if (Compiler.IsWix4)
             {
+
                 string wxsFile = BuildWxs(project, type);
 
                 string outDir = IO.Path.GetDirectoryName(wxsFile);
@@ -3329,9 +3336,9 @@ namespace WixSharp
 
             if (Compiler.IsWix4) // zos
             {
-                makeSfxCA = @"C:\Users\oleg.shilo\.nuget\packages\wixtoolset.dtf.customaction\4.0.0\tools\WixToolset.Dtf.MakeSfxCA.exe";
-                sfxcaDll = $@"C:\Users\oleg.shilo\.nuget\packages\wixtoolset.dtf.customaction\4.0.0\tools\{platformDir}\SfxCA.dll";
-                dtfWinInstaller = @"C:\Users\oleg.shilo\source\repos\CustomAction1\CustomAction1\publish\WixToolset.Dtf.WindowsInstaller.dll";
+                makeSfxCA = WixTools.MakeSfxCA;
+                sfxcaDll = WixTools.SfxCAFor(platformDir);
+                dtfWinInstaller = WixTools.DtfWindowsInstaller;
             }
             else
             {

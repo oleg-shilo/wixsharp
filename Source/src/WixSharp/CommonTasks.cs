@@ -25,7 +25,9 @@ THE SOFTWARE.
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -39,6 +41,7 @@ using WixSharp.Controls;
 using Microsoft.Deployment.WindowsInstaller;
 #else
 using WixToolset.Dtf.WindowsInstaller;
+using static System.Environment;
 #endif
 using IO = System.IO;
 
@@ -1752,6 +1755,14 @@ namespace WixSharp.CommonTasks
     /// </summary>
     public class ExternalTool
     {
+        public static string Locate(string file)
+        {
+            var possibleLocations = new[] { Environment.CurrentDirectory }.Combine(Environment.GetEnvironmentVariable("PATH").Split(';'))
+                              .Select(x => x.Trim().PathCombine(file));
+
+            return possibleLocations.FirstOrDefault(IO.File.Exists);
+        }
+
         /// <summary>
         /// The default console out handler. It can be used when you want to have fine control over
         /// STD output of the external tool.
@@ -1933,6 +1944,99 @@ namespace WixSharp.CommonTasks
             }
 
             return null;
+        }
+    }
+
+    static class WixTools
+    {
+        static public string NuGetDir => @"%userprofile%\.nuget\packages".ExpandEnvVars();
+        static public string WixSharpToolDir => @"%userprofile%\.wix\.wixsharp".ExpandEnvVars();
+
+        static string PackageDir(string name)
+            => Directory.GetDirectories(NuGetDir.PathCombine(name))
+                        .Select(x => new { Directory = x, Version = x.ToRawVersion() })
+                        .OrderBy(x => x.Version)
+                        .LastOrDefault()?.Directory;
+
+        public static string MakeSfxCA
+        {
+            get
+            {
+                EnsureDtfTool();
+                return Directory.GetFiles(PackageDir("wixtoolset.dtf.customaction"), "WixToolset.Dtf.MakeSfxCA.exe", SearchOption.AllDirectories).FirstOrDefault();
+            }
+        }
+        public static string DtfWindowsInstaller
+        {
+            get
+            {
+                var localAsm = System.Reflection.Assembly.GetExecutingAssembly().GetLocation().PathChangeFileName("WixToolset.Dtf.WindowsInstaller.dll");
+                if (IO.File.Exists(localAsm))
+                    return localAsm;
+
+                EnsureDtfTool();
+                return WixSharpToolDir.PathCombine(@"wix.tools\publish\WixToolset.Dtf.WindowsInstaller.dll");
+            }
+        }
+
+        public static string SfxCAFor(string platformDir)
+        {
+            EnsureDtfTool();
+            return PackageDir("wixtoolset.dtf.customaction").PathCombine($@"tools\{platformDir}\SfxCA.dll");
+        }
+
+        public static void EnsureDtfTool()
+        {
+            var projectDir = WixSharpToolDir.PathCombine("wix.tools");
+            var publishDir = projectDir.PathCombine("publish");
+
+            if (Directory.Exists(NuGetDir.PathCombine("wixtoolset.dtf.customaction")) &&
+                Directory.Exists(publishDir))
+                return;
+
+            Directory.CreateDirectory(projectDir);
+
+            var projectFile = projectDir.PathJoin("wix.tools.csproj");
+
+            IO.File.WriteAllText(projectFile, $@"<Project Sdk=""Microsoft.NET.Sdk"">
+                                                  <PropertyGroup>
+                                                    <TargetFramework>net472</TargetFramework>
+                                                  </PropertyGroup>
+
+                                                  <ItemGroup>
+                                                    <PackageReference Include=""WixToolset.Dtf.CustomAction"" Version=""*"" />
+                                                    <PackageReference Include=""WixToolset.Dtf.WindowsInstaller"" Version=""*"" />
+                                                  </ItemGroup>
+                                                </Project>");
+
+            IO.File.WriteAllText(projectDir.PathJoin("dummy.cs"),
+                 $@"using WixToolset.Dtf.WindowsInstaller;
+                    public class CustomActions
+                    {{
+                        [CustomAction] public static ActionResult CustomAction1(Session session) => ActionResult.Success;
+                    }}");
+
+
+            var sw = Stopwatch.StartNew();
+            Console.WriteLine("Restoring packages...");
+
+            using (var p = new Process())
+            {
+                p.StartInfo.FileName = "dotnet";
+                p.StartInfo.Arguments = "restore";
+                p.StartInfo.WorkingDirectory = projectDir;
+                p.Start();
+                p.WaitForExit();
+            }
+
+            using (var p = new Process())
+            {
+                p.StartInfo.FileName = "dotnet";
+                p.StartInfo.Arguments = @"publish -o .\publish";
+                p.StartInfo.WorkingDirectory = projectDir;
+                p.Start();
+                p.WaitForExit();
+            }
         }
     }
 }

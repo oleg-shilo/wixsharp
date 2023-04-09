@@ -1270,6 +1270,18 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Gets the special folder path combined with an array of strings into a path.
+        /// </summary>
+        /// <param name="folder">The folder.</param>
+        /// <param name="parts">The parts.</param>
+        /// <returns></returns>
+        public static string GetPath(this Environment.SpecialFolder folder, params object[] parts)
+        {
+            var allParts = new[] { Environment.GetFolderPath(folder) }.Concat(parts.Select(x => x?.ToString() ?? ""));
+            return Path.Combine(allParts.ToArray());
+        }
+
+        /// <summary>
         /// The change the file name of the file path.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -2464,6 +2476,7 @@ namespace WixSharp
         {
             return string.IsNullOrEmpty(obj);
         }
+
 
         /// <summary>
         /// Determines whether the specified <see
