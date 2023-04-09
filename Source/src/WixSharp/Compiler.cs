@@ -388,6 +388,7 @@ namespace WixSharp
         /// </para>
         /// </summary>
         /// <value>The WiX binaries' location.</value>
+        [Obsolete("This property is not used for WiX 4.0.")]
         static public string WixLocation
         {
             get
@@ -845,12 +846,22 @@ namespace WixSharp
                 string compiler = Utils.PathCombine(WixLocation, @"candle.exe");
                 string linker = Utils.PathCombine(WixLocation, @"light.exe");
 
-                if (!IO.File.Exists(compiler) || !IO.File.Exists(linker))
+                if (Compiler.IsWix4)
                 {
+                    if (ExternalTool.Locate("wix.exe") == null)
+                    {
+                        var error = "`wix.exe` cannot be found. Ensure you installed it with `dotnet tool install --global wix`";
+                        Compiler.OutputWriteLine("Error: " + error);
+                        throw new ApplicationException(error);
+                    }
+                }
+                else if (!IO.File.Exists(compiler) || !IO.File.Exists(linker))
+                {
+
                     Compiler.OutputWriteLine("Wix binaries cannot be found. Expected location is " + IO.Path.GetDirectoryName(compiler));
                     throw new ApplicationException("Wix compiler/linker cannot be found");
                 }
-                else
+
                 {
                     string wxsFile = BuildWxs(project, type);
 
@@ -860,12 +871,28 @@ namespace WixSharp
                     if (!project.SourceBaseDir.IsEmpty())
                         Environment.CurrentDirectory = project.SourceBaseDir;
 
-                    string extensionDlls, objFile;
+                    string extensionDlls = null, objFile = null;
 
                     string outDir = IO.Path.GetDirectoryName(wxsFile);
+                    string outFile = IO.Path.ChangeExtension(wxsFile, "." + type.ToString().ToLower());
 
-                    string candleCmd = GenerateCandleCommand(project, wxsFile, outDir, out objFile, out extensionDlls);
+                    if (path.IsNotEmpty())
+                        outFile = IO.Path.GetFullPath(path);
 
+                    if (IO.File.Exists(outFile))
+                        IO.File.Delete(outFile);
+
+                    string candleCmd;
+                    if (Compiler.IsWix4)
+                    {
+                        compiler = "wix";
+                        candleCmd = $"build {GenerateWixCommand(project, wxsFile)} -o \"{outFile}\"";
+
+                    }
+                    else
+                    {
+                        candleCmd = GenerateCandleCommand(project, wxsFile, outDir, out objFile, out extensionDlls);
+                    }
 #if DEBUG
                     Compiler.OutputWriteLine("<- Compiling");
                     Compiler.OutputWriteLine(compiler + " " + candleCmd);
@@ -874,24 +901,21 @@ namespace WixSharp
 
                     Run(compiler, candleCmd);
 
-                    if (IO.File.Exists(objFile))
+                    if (Compiler.IsWix4 || IO.File.Exists(objFile))
                     {
-                        string outFile = IO.Path.ChangeExtension(wxsFile, "." + type.ToString().ToLower());
 
-                        if (path.IsNotEmpty())
-                            outFile = IO.Path.GetFullPath(path);
 
-                        if (IO.File.Exists(outFile))
-                            IO.File.Delete(outFile);
-
-                        string lightCmd = GenerateLightCommand(project, outFile, outDir, objFile, extensionDlls);
+                        if (!Compiler.IsWix4)
+                        {
+                            string lightCmd = GenerateLightCommand(project, outFile, outDir, objFile, extensionDlls);
 #if DEBUG
-                        Compiler.OutputWriteLine("<- Linking");
-                        Compiler.OutputWriteLine(linker + " " + lightCmd);
-                        Compiler.OutputWriteLine("->");
+                            Compiler.OutputWriteLine("<- Linking");
+                            Compiler.OutputWriteLine(linker + " " + lightCmd);
+                            Compiler.OutputWriteLine("->");
 #endif
 
-                        Run(linker, lightCmd);
+                            Run(linker, lightCmd);
+                        }
 
                         if (IO.File.Exists(outFile))
                         {
