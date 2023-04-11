@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.Deployment.Samples.EmbeddedUI;
+using System;
 using System.Collections.Generic;
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -9,11 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using Microsoft.Deployment.Samples.EmbeddedUI;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
-
+using WixToolset.Dtf.WindowsInstaller;
 using forms = System.Windows.Forms;
 
 namespace WixSharp
@@ -26,7 +24,7 @@ namespace WixSharp
     interface IUIContainer
     {
         /// <summary>
-        /// Shows the modal window of the MSI UI. This method is called by the <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI"/>
+        /// Shows the modal window of the MSI UI. This method is called by the <see cref="T:WixToolset.Dtf.WindowsInstaller.IEmbeddedUI"/>
         /// when it is initialized at runtime.
         /// </summary>
         /// <param name="runtime">The MSI runtime.</param>
@@ -440,8 +438,8 @@ namespace WixSharp
 
                 project.AddBinaries(new Binary(new Id("WixSharp_UIText"), localization),
                                     new Binary(new Id("WixSharp_LicenceFile"), licence),
-                                    new Binary(new Id("WixUI_Bmp_Dialog"), bitmap),
-                                    new Binary(new Id("WixUI_Bmp_Banner"), banner));
+                                    new Binary(new Id("WixSharpUI_Bmp_Dialog"), bitmap),
+                                    new Binary(new Id("WixSharpUI_Bmp_Banner"), banner));
 
                 project.UI = WUI.WixUI_ProgressOnly;
                 return project.BuildMsi();

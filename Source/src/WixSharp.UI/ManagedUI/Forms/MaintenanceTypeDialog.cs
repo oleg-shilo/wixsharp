@@ -72,7 +72,7 @@ namespace WixSharp.UI.Forms
 
         void MaintenanceTypeDialog_Load(object sender, System.EventArgs e)
         {
-            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner");
 
             ResetLayout();
         }

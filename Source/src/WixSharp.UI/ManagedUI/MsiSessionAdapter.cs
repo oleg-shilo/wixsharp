@@ -1,8 +1,8 @@
 using System;
 using System.Drawing;
 using System.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.UI.Forms;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp
 {

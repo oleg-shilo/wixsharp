@@ -1,9 +1,9 @@
+using Caliburn.Micro;
 using System.Security.Principal;
 using System.Windows.Media.Imaging;
-using Microsoft.Deployment.WindowsInstaller;
-using Caliburn.Micro;
 using WixSharp.CommonTasks;
 using WixSharp.UI.Forms;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp.UI.WPF
 {
@@ -111,7 +111,7 @@ namespace WixSharp.UI.WPF
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource();
 
         public bool UacPromptIsVisible => (!WindowsIdentity.GetCurrent().IsAdmin() && Uac.IsEnabled() && !uacPromptActioned);
 

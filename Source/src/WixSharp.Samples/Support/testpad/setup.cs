@@ -7,11 +7,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
+using WixToolset.Dtf.WindowsInstaller;
 
 #pragma warning disable S1075 // URIs should not be hardcoded
 #pragma warning disable S1118 // Utility classes should not have public constructors
@@ -370,6 +370,17 @@ static class Script
         project.BuildMsi();
     }
 
+    static void Wix4()
+    {
+        var project = new ManagedProject("MyProductSetup",
+                new Dir(@"%ProgramFiles%\MyCompany\MyProduct\MyApp",
+                        new Dir(@"Logs"))); // after adding this, the install folder will NOT be removed at uninstall
+
+        project.ManagedUI = ManagedUI.Default;
+        project.PreserveTempFiles = true;
+
+        project.BuildMsi();
+    }
 #pragma warning disable
 
     static public void Main()
@@ -382,6 +393,7 @@ static class Script
 
         // HiTeach_MSI.Program.Main1(); return;
         // MsiInstaller.MyMsi.Build(); return;
+        Wix4(); return;
         issue_1075(); return;
         Issue_298(); return;
         Issue_1114(); return;

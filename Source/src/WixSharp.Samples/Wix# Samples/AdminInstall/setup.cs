@@ -1,16 +1,16 @@
 //css_ref ..\..\WixSharp.dll;
 //css_ref System.Core.dll;
 //css_ref ..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
-using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
-using WixSharp;
 using Microsoft.Win32;
 using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using System.Xml;
-using System.Diagnostics;
+using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 
 static class Script
 {

@@ -132,7 +132,7 @@
             Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.FeatureItem"/> class.
             </summary>
         </member>
-        <member name="M:WixSharp.UI.Forms.FeatureItem.#ctor(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.UI.Forms.FeatureItem.#ctor(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.UI.Forms.FeatureItem"/> class.
             </summary>
@@ -147,7 +147,7 @@
             A <see cref="T:System.String" /> that represents this instance.
             </returns>
         </member>
-        <member name="M:WixSharp.UI.Forms.FeatureItem.DetectFeatureState(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.UI.Forms.FeatureItem.DetectFeatureState(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
             Detects the state of the feature.
             </summary>
@@ -233,7 +233,7 @@
             
                  void CustomDialog_Load(object sender, EventArgs e)
                  {
-                     banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
+                     banner.Image = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner");
                  }
             
                  void back_Click(object sender, EventArgs e)
@@ -279,7 +279,7 @@
             The installer runtime.
             </value>
         </member>
-        <member name="M:WixSharp.UI.Forms.ManagedForm.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+        <member name="M:WixSharp.UI.Forms.ManagedForm.ProcessMessage(WixToolset.Dtf.WindowsInstaller.InstallMessage,WixToolset.Dtf.WindowsInstaller.Record,WixToolset.Dtf.WindowsInstaller.MessageButtons,WixToolset.Dtf.WindowsInstaller.MessageIcon,WixToolset.Dtf.WindowsInstaller.MessageDefaultButton)">
             <summary>
             Processes information and progress messages sent to the user interface.
             <para> This method directly mapped to the
@@ -530,7 +530,7 @@
             (e.g. localize the view).
             </summary>
         </member>
-        <member name="M:WixSharp.UI.Forms.ProgressDialog.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+        <member name="M:WixSharp.UI.Forms.ProgressDialog.ProcessMessage(WixToolset.Dtf.WindowsInstaller.InstallMessage,WixToolset.Dtf.WindowsInstaller.Record,WixToolset.Dtf.WindowsInstaller.MessageButtons,WixToolset.Dtf.WindowsInstaller.MessageIcon,WixToolset.Dtf.WindowsInstaller.MessageDefaultButton)">
             <summary>
             Processes the message.
             </summary>
@@ -606,12 +606,12 @@
             &quot;Contri [rest of string was truncated]&quot;;.
              </summary>
         </member>
-        <member name="P:WixSharp.UI.ManagedUI.Resources.WixUI_Bmp_Banner">
+        <member name="P:WixSharp.UI.ManagedUI.Resources.WixSharpUI_Bmp_Banner">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
-        <member name="P:WixSharp.UI.ManagedUI.Resources.WixUI_Bmp_Dialog">
+        <member name="P:WixSharp.UI.ManagedUI.Resources.WixSharpUI_Bmp_Dialog">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
@@ -735,7 +735,7 @@
             The MSI session object.
             </summary>
         </member>
-        <member name="M:WixSharp.MsiSessionAdapter.#ctor(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.MsiSessionAdapter.#ctor(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.MsiSessionAdapter"/> class.
             </summary>
@@ -929,7 +929,7 @@
             A window icon that appears in the left top corner of the UI shell window.
             </summary>
         </member>
-        <member name="M:WixSharp.ManagedUI.Initialize(Microsoft.Deployment.WindowsInstaller.Session,System.String,Microsoft.Deployment.WindowsInstaller.InstallUIOptions@)">
+        <member name="M:WixSharp.ManagedUI.Initialize(WixToolset.Dtf.WindowsInstaller.Session,System.String,WixToolset.Dtf.WindowsInstaller.InstallUIOptions@)">
             <summary>
             Initializes the specified session.
             </summary>
@@ -937,9 +937,9 @@
             <param name="resourcePath">The resource path.</param>
             <param name="uiLevel">The UI level.</param>
             <returns></returns>
-            <exception cref="T:Microsoft.Deployment.WindowsInstaller.InstallCanceledException"></exception>
+            <exception cref="T:WixToolset.Dtf.WindowsInstaller.InstallCanceledException"></exception>
         </member>
-        <member name="M:WixSharp.ManagedUI.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+        <member name="M:WixSharp.ManagedUI.ProcessMessage(WixToolset.Dtf.WindowsInstaller.InstallMessage,WixToolset.Dtf.WindowsInstaller.Record,WixToolset.Dtf.WindowsInstaller.MessageButtons,WixToolset.Dtf.WindowsInstaller.MessageIcon,WixToolset.Dtf.WindowsInstaller.MessageDefaultButton)">
             <summary>
             Processes information and progress messages sent to the user interface.
             </summary>
@@ -1070,7 +1070,7 @@
             The session object.
             </summary>
         </member>
-        <member name="M:WixSharp.MsiRuntime.#ctor(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.MsiRuntime.#ctor(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.MsiRuntime"/> class.
             </summary>
@@ -1348,7 +1348,7 @@
             <param name="dialog">The dialog.</param>
             <returns></returns>
         </member>
-        <member name="M:WixSharp.UIExtensions.GetDirectoryPath(Microsoft.Deployment.WindowsInstaller.Session,System.String)">
+        <member name="M:WixSharp.UIExtensions.GetDirectoryPath(WixToolset.Dtf.WindowsInstaller.Session,System.String)">
             <summary>
             Gets the target system directory path based on specified directory name (MSI Directory table).
             </summary>
@@ -1394,7 +1394,7 @@
         </member>
         <member name="M:WixSharp.IUIContainer.ShowModal(WixSharp.InstallerRuntime,WixSharp.IManagedUI)">
             <summary>
-            Shows the modal window of the MSI UI. This method is called by the <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI"/>
+            Shows the modal window of the MSI UI. This method is called by the <see cref="T:WixToolset.Dtf.WindowsInstaller.IEmbeddedUI"/>
             when it is initialized at runtime.
             </summary>
             <param name="runtime">The MSI runtime.</param>
@@ -1410,7 +1410,7 @@
             Called when MSI execute started.
             </summary>
         </member>
-        <member name="M:WixSharp.IUIContainer.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+        <member name="M:WixSharp.IUIContainer.ProcessMessage(WixToolset.Dtf.WindowsInstaller.InstallMessage,WixToolset.Dtf.WindowsInstaller.Record,WixToolset.Dtf.WindowsInstaller.MessageButtons,WixToolset.Dtf.WindowsInstaller.MessageIcon,WixToolset.Dtf.WindowsInstaller.MessageDefaultButton)">
             <summary>
              Processes information and progress messages sent to the user interface.
             <para> This method directly mapped to the
@@ -1597,7 +1597,7 @@
             Message dialog handler.
             </summary>
         </member>
-        <member name="M:WixSharp.UIShell.ProcessMessage(Microsoft.Deployment.WindowsInstaller.InstallMessage,Microsoft.Deployment.WindowsInstaller.Record,Microsoft.Deployment.WindowsInstaller.MessageButtons,Microsoft.Deployment.WindowsInstaller.MessageIcon,Microsoft.Deployment.WindowsInstaller.MessageDefaultButton)">
+        <member name="M:WixSharp.UIShell.ProcessMessage(WixToolset.Dtf.WindowsInstaller.InstallMessage,WixToolset.Dtf.WindowsInstaller.Record,WixToolset.Dtf.WindowsInstaller.MessageButtons,WixToolset.Dtf.WindowsInstaller.MessageIcon,WixToolset.Dtf.WindowsInstaller.MessageDefaultButton)">
             <summary>
             Processes information and progress messages sent to the user interface.
             <para> This method directly mapped to the
@@ -1737,7 +1737,7 @@
             </remarks>
             </summary>
         </member>
-        <member name="M:WixSharp.WixCLRDialog.#ctor(Microsoft.Deployment.WindowsInstaller.Session)">
+        <member name="M:WixSharp.WixCLRDialog.#ctor(WixToolset.Dtf.WindowsInstaller.Session)">
             <summary>
             Initializes a new instance of the <see cref="T:WixSharp.WixCLRDialog"/> class.
             </summary>

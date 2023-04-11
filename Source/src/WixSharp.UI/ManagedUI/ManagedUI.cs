@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 using WixSharp.UI.Forms;
 using WixSharp.UI.ManagedUI;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp
 {
@@ -107,8 +107,8 @@ namespace WixSharp
             ValidateUITextFile(file);
             project.AddBinary(new Binary(new Id("WixSharp_UIText"), file));
             project.AddBinary(new Binary(new Id("WixSharp_LicenceFile"), LicenceFileFor(project)));
-            project.AddBinary(new Binary(new Id("WixUI_Bmp_Dialog"), DialogBitmapFileFor(project)));
-            project.AddBinary(new Binary(new Id("WixUI_Bmp_Banner"), DialogBannerFileFor(project)));
+            project.AddBinary(new Binary(new Id("WixSharpUI_Bmp_Dialog"), DialogBitmapFileFor(project)));
+            project.AddBinary(new Binary(new Id("WixSharpUI_Bmp_Banner"), DialogBannerFileFor(project)));
         }
 
         /// <summary>
@@ -156,12 +156,12 @@ namespace WixSharp
 
         internal string DialogBitmapFileFor(Project project)
         {
-            return UIExtensions.UserOrDefaultContentOf(project.BackgroundImage, project.SourceBaseDir, project.OutDir, project.Name + ".dialog_bmp.png", Resources.WixUI_Bmp_Dialog);
+            return UIExtensions.UserOrDefaultContentOf(project.BackgroundImage, project.SourceBaseDir, project.OutDir, project.Name + ".dialog_bmp.png", Resources.WixSharpUI_Bmp_Dialog);
         }
 
         internal string DialogBannerFileFor(Project project)
         {
-            return UIExtensions.UserOrDefaultContentOf(project.BannerImage, project.SourceBaseDir, project.OutDir, project.Name + ".dialog_banner.png", Resources.WixUI_Bmp_Banner);
+            return UIExtensions.UserOrDefaultContentOf(project.BannerImage, project.SourceBaseDir, project.OutDir, project.Name + ".dialog_banner.png", Resources.WixSharpUI_Bmp_Banner);
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace WixSharp
         /// <param name="resourcePath">The resource path.</param>
         /// <param name="uiLevel">The UI level.</param>
         /// <returns></returns>
-        /// <exception cref="Microsoft.Deployment.WindowsInstaller.InstallCanceledException"></exception>
+        /// <exception cref="WixToolset.Dtf.WindowsInstaller.InstallCanceledException"></exception>
         public bool Initialize(Session session, string resourcePath, ref InstallUIOptions uiLevel)
         {
             if (session != null && (session.IsUninstalling() || uiLevel.IsBasic()))

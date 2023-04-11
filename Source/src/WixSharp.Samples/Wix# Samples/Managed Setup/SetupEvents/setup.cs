@@ -10,9 +10,9 @@ using System.Linq;
 using System.Security.Principal;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 public static class Script
 {

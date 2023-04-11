@@ -20,10 +20,10 @@ namespace WixSharp.UI.Forms
         // do any good anyway as WinForm containers holding the dialog elements (e.g. textPanel)
         // do not support transparency so the image will be largely hidden/overlapped anyway.
         // The only true solution can be the WPF migration. 
-         
+
         void Alternative_Load(object sender, EventArgs e)
         {
-            image.Image = Runtime.Session.GetEmbeddedBitmap("WixUI_Bmp_LeftBanner");
+            image.Image = Runtime.Session.GetEmbeddedBitmap("WixSharpUI_Bmp_Dialog");
             //background additional picturebox occupying the background area 
             //background.Image = Runtime.Session.GetEmbeddedBitmap("WixUI_Bmp_Dialog");
 
@@ -36,7 +36,7 @@ namespace WixSharp.UI.Forms
             // resizing. However the initial sizing by WinForm runtime doesn't a do good job with DPI 
             // other than 96. Thus manual resizing is the only reliable option apart from going WPF.  
 
-            var bHeight = (int) (next.Height * 2.3);
+            var bHeight = (int)(next.Height * 2.3);
 
             var upShift = bHeight - bottomPanel.Height;
             bottomPanel.Top -= upShift;
@@ -49,12 +49,12 @@ namespace WixSharp.UI.Forms
                 image.Visible = false;
                 float ratio = 156f / 312f; //matching default WiX dialog image
                 ratio = 164f / 497f; //found by experiment
-                image.Width = (int) (imgPanel.Width * ratio);
+                image.Width = (int)(imgPanel.Width * ratio);
             }
             else
             {
-                float ratio = (float) image.Image.Width / (float) image.Image.Height;
-                image.Width = (int) (image.Height * ratio);
+                float ratio = (float)image.Image.Width / (float)image.Image.Height;
+                image.Width = (int)(image.Height * ratio);
             }
 
             textPanel.Left = image.Right + 5;

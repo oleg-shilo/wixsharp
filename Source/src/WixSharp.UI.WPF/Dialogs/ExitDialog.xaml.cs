@@ -1,10 +1,9 @@
-﻿using System.Diagnostics;
+﻿using Caliburn.Micro;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Media.Imaging;
-using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
-
 using IO = System.IO;
 
 namespace WixSharp.UI.WPF
@@ -72,7 +71,7 @@ namespace WixSharp.UI.WPF
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Dialog").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Dialog").ToImageSource();
 
         public void GoExit()
             => shell?.Exit();

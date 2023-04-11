@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
-using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
 
@@ -76,7 +76,7 @@ namespace WixSharp.UI.WPF
             BuildFeaturesHierarchy();
         }
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource();
 
         public string SelectedNodeDescription
         {

@@ -1,5 +1,5 @@
-using System.Windows.Media.Imaging;
 using Caliburn.Micro;
+using System.Windows.Media.Imaging;
 using WixSharp;
 using WixSharp.UI.Forms;
 
@@ -45,7 +45,7 @@ namespace WixSharp.UI.WPF
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Dialog").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Dialog").ToImageSource();
 
         public bool CanGoPrev => false;
 

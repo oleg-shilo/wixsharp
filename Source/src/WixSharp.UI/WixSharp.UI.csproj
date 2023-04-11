@@ -52,9 +52,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\WixSharp.Samples\Wix_bin\SDK\BootstrapperCore.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Deployment.WindowsInstaller">
-      <HintPath>..\WixSharp.Samples\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
@@ -221,6 +218,11 @@
       <Project>{8860b29b-749f-4925-86c8-f9c4b93c9da5}</Project>
       <Name>WixSharp</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Dtf.WindowsInstaller">
+      <Version>4.0.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

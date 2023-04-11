@@ -1,6 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using Caliburn.Micro;
+using System.Windows.Forms;
 using System.Windows.Media.Imaging;
-using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
 
@@ -45,7 +45,7 @@ namespace WixSharp.UI.WPF
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource();
 
         string installDirProperty => session?.Property("WixSharp_UI_INSTALLDIR");
 

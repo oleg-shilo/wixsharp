@@ -119,7 +119,7 @@ namespace WixSharp.UI.WPF
     {
         public ManagedForm Host { get; set; }
 
-        public BitmapImage Banner => Host?.Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => Host?.Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource();
 
         bool canProceed;
 

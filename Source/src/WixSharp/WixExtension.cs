@@ -119,96 +119,152 @@ namespace WixSharp
         /// <summary>
         /// Well-known Wix Extension: difx
         /// </summary>
-        public static WixExtension Difx = new WixExtension("%WixLocation%\\WixDifxAppExtension.dll", "difx", DifxNamespace);
+        public static WixExtension Difx = new WixExtension("WixToolset.DifxApp.wixext", "difx", DifxNamespace);
 
         /// <summary>
         /// The `Difx` extension namespace
         /// </summary>
-        public const string DifxNamespace = "http://schemas.microsoft.com/wix/DifxAppExtension";
+        public const string DifxNamespace = "http://wixtoolset.org/schemas/v4/wxs/difxapp";
 
         /// <summary>
         /// Well-known Wix Extension: Fire (Firewall)
         /// </summary>
-        public static WixExtension Fire = new WixExtension("%WixLocation%\\WixFirewallExtension.dll", "fire", FireNamespace);
+        public static WixExtension Fire = new WixExtension("WixToolset.Firewall.wixext", "fire", FireNamespace);
 
         /// <summary>
         /// The `Firewall` extension namespace
         /// </summary>
-        public const string FireNamespace = "http://schemas.microsoft.com/wix/FirewallExtension";
+        public const string FireNamespace = "http://wixtoolset.org/schemas/v4/wxs/firewall";
 
         /// <summary>
         /// Well-known Wix Extension: Util
         /// </summary>
-        public static WixExtension Util = new WixExtension("%WixLocation%\\WixUtilExtension.dll", "util", UtilNamespace);
+        public static WixExtension Util = new WixExtension("WixToolset.Util.wixext", "util", UtilNamespace);
 
         /// <summary>
         /// The `Util` extension namespace
         /// </summary>
-        public const string UtilNamespace = "http://schemas.microsoft.com/wix/UtilExtension";
+        public const string UtilNamespace = "http://wixtoolset.org/schemas/v4/wxs/util";
 
         /// <summary>
         /// Well-known Wix Extension: Bal
         /// </summary>
-        public static WixExtension Bal = new WixExtension("%WixLocation%\\WixBalExtension.dll", "bal", BalNamespace);
+        public static WixExtension Bal = new WixExtension("WixToolset.Bal.wixext", "bal", BalNamespace);
 
         /// <summary>
         /// The `Bal` extension namespace
         /// </summary>
-        public const string BalNamespace = "http://schemas.microsoft.com/wix/BalExtension";
+        public const string BalNamespace = "http://wixtoolset.org/schemas/v4/wxs/bal";
 
         /// <summary>
         /// Well-known Wix Extension IIs
         /// </summary>
-        public static WixExtension IIs = new WixExtension("%WixLocation%\\WixIIsExtension.dll", "iis", IisNamespace);
+        public static WixExtension IIs = new WixExtension("WixToolset.Iis.wixext", "iis", IisNamespace);
 
         /// <summary>
         /// The `Iis` extension namespace
         /// </summary>
-        public const string IisNamespace = "http://schemas.microsoft.com/wix/IIsExtension";
+        public const string IisNamespace = "http://wixtoolset.org/schemas/v4/wxs/iis";
 
         /// <summary>
         /// Well-known Wix Extension Sql
         /// </summary>
-        public static WixExtension Sql = new WixExtension("%WixLocation%\\WixSqlExtension.dll", "sql", SqlNamespace);
+        public static WixExtension Sql = new WixExtension("WixToolset.Sql.wixext", "sql", SqlNamespace);
 
         /// <summary>
         /// The `Sql` extension namespace
         /// </summary>
-        public const string SqlNamespace = "http://schemas.microsoft.com/wix/SqlExtension";
+        public const string SqlNamespace = "http://wixtoolset.org/schemas/v4/wxs/sql";
 
         /// <summary>
         /// Well-known Wix Extension NetFx
         /// </summary>
-        public static WixExtension NetFx = new WixExtension("%WixLocation%\\WiXNetFxExtension.dll", "netfx", NetFxNamespace);
+        public static WixExtension NetFx = new WixExtension("WixToolset.Netfx.wixext", "netfx", NetFxNamespace);
 
         /// <summary>
         /// The `NetFx` extension namespace
         /// </summary>
-        public const string NetFxNamespace = "http://schemas.microsoft.com/wix/NetFxExtension";
+        public const string NetFxNamespace = "http://wixtoolset.org/schemas/v4/wxs/netfx";
 
         /// <summary>
         /// Well-known Wix Extension Http
         /// </summary>
-        public static WixExtension Http = new WixExtension("%WixLocation%\\WiXHttpExtension.dll", "http", HttpNamespace);
+        public static WixExtension Http = new WixExtension("WixToolset.Http.wixext", "http", HttpNamespace);
 
         /// <summary>
         /// The `Http` extension namespace
         /// </summary>
-        public const string HttpNamespace = "http://schemas.microsoft.com/wix/HttpExtension";
+        public const string HttpNamespace = "http://wixtoolset.org/schemas/v4/wxs/http";
 
         /// <summary>
         /// Well-known Wix Extension UI
         /// </summary>
-#if WIX3
-        public static WixExtension UI = new WixExtension("%WixLocation%\\WixUIExtension.dll", null, null);
-#else
-        public static WixExtension UI = new WixExtension(@"WixToolset.UI.wixext", "ui", UiNamespace);
-#endif
+        public static WixExtension UI = new WixExtension("WixToolset.UI.wixext", "ui", UiNamespace);
+
         /// <summary>
         /// The `UI` extension namespace
         /// </summary>
         public const string UiNamespace = "http://wixtoolset.org/schemas/v4/wxs/ui";
 
+        /// <summary>
+        /// Well-known Wix Extension PowerShell
+        /// </summary>
+        public static WixExtension PowerShell = new WixExtension("WixToolset.PowerShell.wixext", "ps", PowerShellNamespace);
+
+        /// <summary>
+        /// The `PowerShell` extension namespace
+        /// </summary>
+        public const string PowerShellNamespace = "http://wixtoolset.org/schemas/v4/wxs/powershell";
+
+        /// <summary>
+        /// Well-known Wix Extension VisualStudio
+        /// </summary>
+        public static WixExtension VisualStudio = new WixExtension("WixToolset.VisualStudio.wixext", "vs", VisualStudioNamespace);
+
+        /// <summary>
+        /// The `VisualStudio` extension namespace
+        /// </summary>
+        public const string VisualStudioNamespace = "http://wixtoolset.org/schemas/v4/wxs/vs";
+
+        /// <summary>
+        /// Well-known Wix Extension MSMQ
+        /// </summary>
+        public static WixExtension Msmq = new WixExtension("WixToolset.Msmq.wixext", "msmq", MsmqNamespace);
+
+        /// <summary>
+        /// The `Msmq` extension namespace
+        /// </summary>
+        public const string MsmqNamespace = "http://wixtoolset.org/schemas/v4/wxs/msmq";
+
+
+        /// <summary>
+        /// Well-known Wix Extension ComPLus
+        /// </summary>
+        public static WixExtension ComPlus = new WixExtension("WixToolset.ComPlus.wixext", "complus", MsmqNamespace);
+        /// <summary>
+        /// The `ComPLus` extension namespace
+        /// </summary>
+        public const string ComPlusNamespace = "http://wixtoolset.org/schemas/v4/wxs/complus";
+
+        /// <summary>
+        /// Well-known Wix Extension Dependency
+        /// </summary>
+        public static WixExtension Dependency = new WixExtension("WixToolset.Dependency.wixext", "dep", MsmqNamespace);
+
+        /// <summary>
+        /// The `Dependency` extension namespace
+        /// </summary>
+        public const string DependencyNamespace = "http://wixtoolset.org/schemas/v4/wxs/dependency";
+
+        /// <summary>
+        /// Well-known Wix Extension DirectX
+        /// </summary>
+        public static WixExtension DirectX = new WixExtension("WixToolset.DirectX.wixext", "?", MsmqNamespace);
+
+        /// <summary>
+        /// The `DirectX` extension namespace
+        /// </summary>
+        public const string DirectXNamespace = "http://wixtoolset.org/schemas/v4/wxs/directx";
     }
 
     /// <summary>

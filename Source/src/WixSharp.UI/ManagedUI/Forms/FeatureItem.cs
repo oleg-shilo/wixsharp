@@ -1,7 +1,7 @@
-using Microsoft.Deployment.WindowsInstaller;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp.UI.Forms
 {
@@ -137,7 +137,7 @@ namespace WixSharp.UI.Forms
         {
             var productCode = session["ProductCode"];
 
-            var installedPackage = new Microsoft.Deployment.WindowsInstaller.ProductInstallation(productCode);
+            var installedPackage = new ProductInstallation(productCode);
             if (installedPackage.IsInstalled)
                 return installedPackage.Features
                                        .First(x => x.FeatureName == name)

@@ -3,8 +3,8 @@
 //css_ref System.Core.dll;
 using System;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {

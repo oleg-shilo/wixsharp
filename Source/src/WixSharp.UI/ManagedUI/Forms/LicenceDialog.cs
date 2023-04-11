@@ -24,7 +24,7 @@ namespace WixSharp.UI.Forms
 
         void LicenceDialog_Load(object sender, EventArgs e)
         {
-            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner");
             agreement.Rtf = Runtime.Session.GetResourceString("WixSharp_LicenceFile");
             accepted.Checked = Runtime.Session["LastLicenceAcceptedChecked"] == "True";
 

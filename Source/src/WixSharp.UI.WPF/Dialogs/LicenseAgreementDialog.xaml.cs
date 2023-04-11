@@ -1,14 +1,13 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
-
 using IO = System.IO;
 
 namespace WixSharp.UI.WPF
@@ -92,7 +91,7 @@ namespace WixSharp.UI.WPF
 
         public string LicenceText => session?.GetResourceString("WixSharp_LicenceFile");
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource();
 
         public bool LicenseAcceptedChecked
         {

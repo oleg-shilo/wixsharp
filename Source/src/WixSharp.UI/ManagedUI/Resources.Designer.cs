@@ -81,9 +81,9 @@ namespace WixSharp.UI.ManagedUI {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WixUI_Bmp_Banner {
+        public static System.Drawing.Bitmap WixSharpUI_Bmp_Banner {
             get {
-                object obj = ResourceManager.GetObject("WixUI_Bmp_Banner", resourceCulture);
+                object obj = ResourceManager.GetObject("WixSharpUI_Bmp_Banner", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -91,9 +91,9 @@ namespace WixSharp.UI.ManagedUI {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WixUI_Bmp_Dialog {
+        public static System.Drawing.Bitmap WixSharpUI_Bmp_Dialog {
             get {
-                object obj = ResourceManager.GetObject("WixUI_Bmp_Dialog", resourceCulture);
+                object obj = ResourceManager.GetObject("WixSharpUI_Bmp_Dialog", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

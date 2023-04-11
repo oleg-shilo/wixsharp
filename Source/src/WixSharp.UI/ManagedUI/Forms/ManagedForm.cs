@@ -1,7 +1,7 @@
-using Microsoft.Deployment.WindowsInstaller;
 using System.Drawing;
 using System.Windows.Forms;
 using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp.UI.Forms
 {
@@ -21,7 +21,7 @@ namespace WixSharp.UI.Forms
     ///
     ///     void CustomDialog_Load(object sender, EventArgs e)
     ///     {
-    ///         banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
+    ///         banner.Image = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner");
     ///     }
     ///
     ///     void back_Click(object sender, EventArgs e)

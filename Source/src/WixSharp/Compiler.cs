@@ -2689,13 +2689,16 @@ namespace WixSharp
                         RegistrySearchElement.SetAttribute("Name", rvProp.EntryName);
 
                     if (rvProp.win64_SetByUser)
-                        RegistrySearchElement.SetAttribute("Win64", rvProp.Win64);
+                    {
+                        RegistrySearchElement.SetAttribute("Bitness", rvProp.Win64 ? "always64" : "always32");
+                    }
                     else
                     {
+                        // otherwise `default` - the same as package x64/x32 
                         if (wProject.Platform == Platform.x64)
-                            RegistrySearchElement.SetAttribute("Win64", true.ToYesNo());
+                            RegistrySearchElement.SetAttribute("Bitness", "always64");
                         else
-                            RegistrySearchElement.SetAttribute("Win64", rvProp.Win64);
+                            RegistrySearchElement.SetAttribute("Bitness", rvProp.Win64 ? "always64" : "always32");
                     }
                 }
                 else
@@ -3489,7 +3492,7 @@ namespace WixSharp
         /// <value>
         ///   <c>true</c> if this instance is wix4; otherwise, <c>false</c>.
         /// </value>
-        public static bool IsWix4 { get; set; }
+        public static bool IsWix4 { get; set; } = true;
 
         /// <summary>
         /// This property contains the name of the logical 'Product' XML element. The need for this property arises 

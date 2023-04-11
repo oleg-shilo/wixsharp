@@ -3,14 +3,14 @@
 //css_ref WixSharp.UI.dll;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 using io = System.IO;
 
 public class Script
@@ -32,7 +32,7 @@ public class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
-        // project.PreserveTempFiles = true;
+        project.PreserveTempFiles = true;
         project.ManagedUI = ManagedUI.Default;
         project.UIInitialized += Project_UIInitialized;
         project.Load += msi_Load;

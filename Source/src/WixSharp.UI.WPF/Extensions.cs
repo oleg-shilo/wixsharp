@@ -7,9 +7,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.UI.Forms;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp.UI.WPF
 {
