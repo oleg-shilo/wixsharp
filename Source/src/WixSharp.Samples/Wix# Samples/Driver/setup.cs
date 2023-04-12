@@ -1,6 +1,6 @@
 //css_dir ..\..\;
 //css_ref System.Core.dll;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 using System;
 using io = System.IO;
 using System.Linq;

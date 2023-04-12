@@ -12,7 +12,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
 #if WIX3
-using Microsoft.Deployment.WindowsInstaller;
+using WixToolset.Dtf.WindowsInstaller;
 #else
 using WixToolset.Dtf.WindowsInstaller;
 #endif

@@ -2,7 +2,7 @@
 //css_ref WixSharp.dll;
 //css_ref WixSharp.UI.dll;
 //css_ref System.Core.dll;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 
 using System;
 using System.Diagnostics;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
+using WixToolset.Dtf.WindowsInstaller;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using sys = System.Reflection;

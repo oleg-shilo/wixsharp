@@ -40,7 +40,7 @@ using System.Threading;
 using System.Xml.Linq;
 using WixSharp.CommonTasks;
 #if WIX3
-using Microsoft.Deployment.WindowsInstaller;
+using WixToolset.Dtf.WindowsInstaller;
 #else
 using WixToolset.Dtf.WindowsInstaller;
 #endif

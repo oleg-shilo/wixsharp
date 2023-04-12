@@ -39,7 +39,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using WixSharp.Bootstrapper;
 #if WIX3
-using Microsoft.Deployment.WindowsInstaller;
+using WixToolset.Dtf.WindowsInstaller;
 #else
 using WixToolset.Dtf.WindowsInstaller;
 #endif

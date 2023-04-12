@@ -6,7 +6,7 @@ using WixSharp.CommonTasks;
 using WixSharp.Utilities;
 
 #if WIX3
-using Microsoft.Deployment.WindowsInstaller;
+using WixToolset.Dtf.WindowsInstaller;
 #else
 using WixToolset.Dtf.WindowsInstaller;
 #endif

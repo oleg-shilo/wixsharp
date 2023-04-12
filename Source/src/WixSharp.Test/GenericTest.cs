@@ -1,19 +1,17 @@
 ﻿extern alias WixSharpMsi;
-
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
-using static WixSharp.SetupEventArgs;
 using WixSharp.UI;
+using WixToolset.Dtf.WindowsInstaller;
 using Xunit;
+using static WixSharp.SetupEventArgs;
 using io = System.IO;
-
 using WixMsi = WixSharpMsi::WixSharp;
 
 namespace WixSharp.Test
@@ -315,8 +313,7 @@ namespace WixSharp.Test
         //[Fact]
         public void FeaturesAPI()
         {
-            //var installedPackage = new Microsoft.Deployment.WindowsInstaller.ProductInstallation("{A6801CC8-AC2A-4BF4-BEAA-6EE4DCF17056}");
-            var installedPackage = new Microsoft.Deployment.WindowsInstaller.ProductInstallation("A6801CC8-AC2A-4BF4-BEAA-6EE4DCF17056");
+            var installedPackage = new WixToolset.Dtf.WindowsInstaller.ProductInstallation("A6801CC8-AC2A-4BF4-BEAA-6EE4DCF17056");
             if (!installedPackage.IsInstalled)
             {
             }

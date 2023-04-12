@@ -5,7 +5,7 @@ using System.Security.Principal;
 using WixSharp.CommonTasks;
 
 #if WIX3
-using Microsoft.Deployment.WindowsInstaller;
+using WixToolset.Dtf.WindowsInstaller;
 #else
 using WixToolset.Dtf.WindowsInstaller;
 #endif

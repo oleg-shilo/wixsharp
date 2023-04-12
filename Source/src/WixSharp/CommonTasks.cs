@@ -38,7 +38,7 @@ using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.Controls;
 #if WIX3
-using Microsoft.Deployment.WindowsInstaller;
+using WixToolset.Dtf.WindowsInstaller;
 #else
 using WixToolset.Dtf.WindowsInstaller;
 using static System.Environment;

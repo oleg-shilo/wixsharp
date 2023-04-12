@@ -15,7 +15,7 @@ using Microsoft.Win32;
 using WixSharp;
 using WixSharp.Controls;
 #if WIX3
-using Microsoft.Deployment.WindowsInstaller;
+using WixToolset.Dtf.WindowsInstaller;
 #else
 using WixToolset.Dtf.WindowsInstaller;
 #endif
