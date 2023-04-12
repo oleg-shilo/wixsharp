@@ -7,7 +7,7 @@
     LICENSE.TXT at the root directory of the distribution.
   </copyright>
 -->
-<WixLocalization Culture="en-US" Codepage="1252" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+<WixLocalization Culture="en-US" Codepage="1252" xmlns="http://wixtoolset.org/schemas/v4/wxl">
     <!-- _locID@Culture="en-US" _locComment="American English" -->
     <!-- _locID@Codepage="1252" _locComment="Windows-1252" -->
 

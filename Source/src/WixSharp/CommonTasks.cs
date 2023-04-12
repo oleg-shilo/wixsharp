@@ -713,7 +713,7 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Creates a new <see cref="Version"/> object from based on <c>version</c> with the revision part omitted.
+        /// Creates a new <see cref="T:System.Version"/> object from based on <c>version</c> with the revision part omitted.
         /// </summary>
         /// <param name="version">The version.</param>
         /// <returns></returns>

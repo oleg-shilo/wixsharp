@@ -44,7 +44,6 @@ public class Script
 
         project.SourceBaseDir = @"..\..\";
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-        //project.LocalizationFile = "MyProduct.en-us.wxl";
         project.LocalizationFile = "WixUI_de-de.wxl";
         project.Language = "de-de";
         project.SetNetFxPrerequisite("NETFRAMEWORK35='#1'", "Please install .NET 3.5 first.");

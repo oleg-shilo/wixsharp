@@ -71,10 +71,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>System.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Deployment.WindowsInstaller">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>System.Xml.dll</HintPath>

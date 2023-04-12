@@ -2476,10 +2476,11 @@ namespace WixSharp
 
         static void ProcessLaunchConditions(Project project, XElement product)
         {
+            //<Launch Condition="NETFRAMEWORK35=&quot;#1&quot;" Message="Please install .NET 3.5 first." />
             foreach (var condition in project.LaunchConditions)
-                product.Add(new XElement("Condition",
-                                new XAttribute("Message", condition.Message),
-                                condition.ToXValue())
+                product.Add(new XElement("Launch",
+                                new XAttribute("Condition", condition.Value),
+                                new XAttribute("Message", condition.Message))
                                 .AddAttributes(condition.Attributes));
         }
 

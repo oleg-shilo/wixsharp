@@ -103,7 +103,10 @@ namespace WixSharp
         /// <param name="project">The project.</param>
         public void BeforeBuild(ManagedProject project)
         {
-            var file = LocalizationFileFor(project);
+            // it's important to use full path for `file` as CerrentDir will be reset before compiling msi
+            // and `file` is the only path that user may specify as relative.
+            // All other bin files are always returned as full path already (e.g. LicenceFileFor)
+            var file = LocalizationFileFor(project).PathGetFullPath();
             ValidateUITextFile(file);
             project.AddBinary(new Binary(new Id("WixSharp_UIText"), file));
             project.AddBinary(new Binary(new Id("WixSharp_LicenceFile"), LicenceFileFor(project)));
