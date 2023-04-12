@@ -7,17 +7,13 @@ using System.Drawing;
 using System.Security.Principal;
 using System.Text;
 using System.Xml.Linq;
+using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using static WixSharp.SetupEventArgs;
 using WixSharp.CommonTasks;
-#if WIX3
-using Microsoft.Deployment.WindowsInstaller;
-#else
-using WixToolset.Dtf.WindowsInstaller;
-#endif
 
 namespace WixSharp
 {

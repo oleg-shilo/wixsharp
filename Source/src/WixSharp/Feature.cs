@@ -223,7 +223,7 @@ namespace WixSharp
         /// <summary>
         /// The default path of the feature <c>ConfigurableDirectory</c>. If set to non-empty string, MSI runtime will place
         /// <c>Configure</c> button for the feature in the <c>Feature Selection</c> dialog.
-        /// <para>Specify the Id of a Directory that can be configured by the user at installation
+        /// <para>Specify the Id of a Directory that can be configured by the user at installation 
         /// time. This identifier must be a public property and therefore completely uppercase. </para>
         /// </summary>
         public string ConfigurableDir = "";
@@ -274,16 +274,12 @@ namespace WixSharp
             var element = new XElement("Feature");
             element.SetAttribute("Id", Id)
                    .SetAttribute("Title", Name)
+                   .SetAttribute("Absent", AllowChange ? "allow" : "disallow")
                    .SetAttribute("Level", IsEnabled ? "1" : "2")
                    .SetAttribute("Description", Description)
                    .SetAttribute("Display", Display)
                    .SetAttribute("ConfigurableDirectory", ConfigurableDir)
                    .AddAttributes(Attributes);
-
-            if (Compiler.IsWix4)
-                element.SetAttribute("AllowAbsent", AllowChange.ToYesNo());
-            else
-                element.SetAttribute("Absent", AllowChange ? "allow" : "disallow");
 
             if (Condition != null)
                 element.Add( //intentionally leaving out AddAttributes(...) as Level is the only valid attribute on */Feature/Condition

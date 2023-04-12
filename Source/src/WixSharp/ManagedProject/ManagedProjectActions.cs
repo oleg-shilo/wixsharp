@@ -4,12 +4,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using WixSharp.CommonTasks;
-#if WIX3
 using Microsoft.Deployment.WindowsInstaller;
-#else
-using WixToolset.Dtf.WindowsInstaller;
-#endif
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {

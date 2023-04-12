@@ -32,14 +32,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.Controls;
-#if WIX3
-using Microsoft.Deployment.WindowsInstaller;
-#else
-using WixToolset.Dtf.WindowsInstaller;
-#endif
 using IO = System.IO;
 
 namespace WixSharp.CommonTasks
@@ -772,7 +768,7 @@ namespace WixSharp.CommonTasks
 
         //         progId.SetAttribute("Icon", iconId);
 
-        //         doc.FindSingle(Compiler.ProductElementName)
+        //         doc.FindSingle("Product")
         //                 .AddElement("Icon", $@"Id={iconId};SourceFile={iconPath}");
         //     };
         // }
@@ -1059,7 +1055,7 @@ namespace WixSharp.CommonTasks
         {
             project.SetVersionFromIdValue = fileId;
             project.WixSourceGenerated += document =>
-                document.FindSingle(Compiler.ProductElementName)
+                document.FindSingle("Product")
                         .AddAttributes("Version=!(bind.FileVersion." + fileId + ")");
 
             if (setProjectVersionAsWell)

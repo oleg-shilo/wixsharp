@@ -37,12 +37,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using WixSharp.Bootstrapper;
-#if WIX3
 using Microsoft.Deployment.WindowsInstaller;
-#else
-using WixToolset.Dtf.WindowsInstaller;
-#endif
+using WixSharp.Bootstrapper;
 using IO = System.IO;
 
 namespace WixSharp

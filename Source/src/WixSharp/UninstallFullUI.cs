@@ -1,12 +1,7 @@
 ﻿using System.Linq;
+using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using WixSharp.CommonTasks;
-
-#if WIX3
-using Microsoft.Deployment.WindowsInstaller;
-#else
-using WixToolset.Dtf.WindowsInstaller;
-#endif
 
 namespace WixSharp
 {
@@ -84,7 +79,7 @@ namespace WixSharp
                 {
                     return;
                 }
-
+                
                 var comp = doc.FindAll("RegistryValue")
                     .First(x => x.HasAttribute("Id", "WixSharp_RegValue_DisplayIcon"))
                     .Parent

@@ -15,9 +15,6 @@ class Script
 {
     static public void Main()
     {
-        Compiler.WixLocation = @"C:\Users\oleg.shilo\.dotnet\tools\.store\wix\4.0.0\wix\4.0.0\tools\net6.0\any";
-        Compiler.IsWix4 = true;
-
         File f;
         var project =
             new Project("MyProduct",
@@ -43,8 +40,6 @@ class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
-        project.UI = WUI.WixUI_InstallDir;
-
         project.EmitConsistentPackageId = true;
         project.PreserveTempFiles = true;
         project.PreserveDbgFiles = true;
@@ -58,7 +53,7 @@ class Script
 
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
-        project.BuildMsiCmd();
+        project.BuildMsi();
     }
 
     private static void Compiler_WixSourceGenerated(XDocument document)
