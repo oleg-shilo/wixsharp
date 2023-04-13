@@ -66,6 +66,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -104,6 +105,9 @@
     <Reference Include="WindowsFormsIntegration" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WixToolset.Dtf.WindowsInstaller, Version=4.0.0.0, Culture=neutral, PublicKeyToken=a7d136314861246c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\WixToolset.Dtf.WindowsInstaller.4.0.0\lib\net20\WixToolset.Dtf.WindowsInstaller.dll</HintPath>
+    </Reference>
     <!-- <Reference Include="WpfControlLibrary2">
       <HintPath>C:\Users\oleg.shilo\source\repos\WindowsFormsApp2\WixSharp Setup1\bin\Debug\WpfControlLibrary2.dll</HintPath>
     </Reference>
