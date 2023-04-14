@@ -4,11 +4,7 @@ using System.Linq;
 using System.Security.Principal;
 using WixSharp.CommonTasks;
 
-#if WIX3
 using WixToolset.Dtf.WindowsInstaller;
-#else
-using WixToolset.Dtf.WindowsInstaller;
-#endif
 
 namespace WixSharp
 {

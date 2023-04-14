@@ -280,10 +280,7 @@ namespace WixSharp
                    .SetAttribute("ConfigurableDirectory", ConfigurableDir)
                    .AddAttributes(Attributes);
 
-            if (Compiler.IsWix4)
-                element.SetAttribute("AllowAbsent", AllowChange.ToYesNo());
-            else
-                element.SetAttribute("Absent", AllowChange ? "allow" : "disallow");
+            element.SetAttribute("AllowAbsent", AllowChange.ToYesNo());
 
             if (Condition != null)
                 element.Add( //intentionally leaving out AddAttributes(...) as Level is the only valid attribute on */Feature/Condition

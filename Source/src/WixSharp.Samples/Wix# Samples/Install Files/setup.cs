@@ -15,9 +15,6 @@ class Script
 {
     static public void Main()
     {
-        // Compiler.WixLocation = @"C:\Users\oleg.shilo\.dotnet\tools\.store\wix\4.0.0\wix\4.0.0\tools\net6.0\any";
-        Compiler.IsWix4 = true;
-
         File f;
         var project =
             new Project("MyProduct",

@@ -6,16 +6,40 @@
 using System;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using WixToolset.Dtf.WindowsInstaller;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
-
+using WixToolset.Dtf.WindowsInstaller;
 using io = System.IO;
 
 public class InstallScript
 {
     static public void Main()
+    {
+        var crt = BuildCrtMsi();
+        Simple(crt);
+        // Complex();
+    }
+
+    static public void Simple(string msi)
+    {
+        var bundle = new Bundle("My Product")
+        {
+            Version = Version.Parse("1.0.0.0"),
+            UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb24889b")
+        };
+
+        bundle.Application = new WixInternalUIBootstrapperApplication
+        {
+            LogoFile = "logo.png"
+        };
+
+        bundle.Chain.Add(new MsiPackage(msi));
+
+        bundle.Build("my.exe");
+    }
+
+    static public void Complex()
     {
         string productMsi = BuildMainMsi();
         string crtMsi = BuildCrtMsi();
@@ -26,7 +50,6 @@ public class InstallScript
         {
             Vital = true,
             Compressed = false,
-            DisplayInternalUI = true,
             DownloadUrl = @"https://dl.dropboxusercontent.com/....../CRT.msi"
         };
 
@@ -50,20 +73,17 @@ public class InstallScript
 
                     new MsiPackage(crtMsi)
                     {
-                        DisplayInternalUI = true,
                         Visible = true,
                         MsiProperties = "INSTALLDIR=[InstallFolder]",
                         InstallCondition = "MyCheckbox<>0"
                     },
                     // new MspPackage("Patch.msp")
                     // {
-                    //     DisplayInternalUI = true,
                     //     Slipstream = false
                     // },
                     new MsiPackage(productMsi)
                     {
                         MsiProperties = "INSTALLDIR=c:\\",
-                        DisplayInternalUI = true,
                         Payloads = new[] { "script.dll".ToPayload() }
                     });
 
@@ -152,8 +172,7 @@ public class InstallScript
             new Project("My Product",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("readme.txt"),
-                    new File("logo.png")))
-            { InstallScope = InstallScope.perMachine };
+                    new File("logo.png")));
 
         productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         productProj.Version = new Version("2.0.0.0");
@@ -173,8 +192,7 @@ public class InstallScript
         var crtProj =
             new ManagedProject("CRT",
                 new Dir(@"%ProgramFiles%\My Company\CRT",
-                    new File("readme.txt")))
-            { InstallScope = InstallScope.perMachine };
+                    new File("readme.txt")));
         crtProj.UI = WUI.WixUI_InstallDir;
         crtProj.Load += CrtProj_Load;
 

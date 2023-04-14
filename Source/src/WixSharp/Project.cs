@@ -418,6 +418,7 @@ namespace WixSharp
         /// <summary>
         /// Use this attribute if you need to specify the installation scope of this package: per-machine or per-user.
         /// </summary>
+        [Obsolete("Not supported in WiX4", true)]
         public InstallScope? InstallScope;
 
         /// <summary>
@@ -565,8 +566,6 @@ namespace WixSharp
         /// </para>
         /// </summary>
         public bool EmitConsistentPackageId = false;
-
-        internal bool SuppressSettingPackageLanguages = false;
 
         /// <summary>
         /// Collection of WiX/MSI <see cref="Binary"/> objects to be embedded into MSI database.

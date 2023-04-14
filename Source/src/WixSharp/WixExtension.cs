@@ -236,11 +236,11 @@ namespace WixSharp
         /// </summary>
         public const string MsmqNamespace = "http://wixtoolset.org/schemas/v4/wxs/msmq";
 
-
         /// <summary>
         /// Well-known Wix Extension ComPLus
         /// </summary>
-        public static WixExtension ComPlus = new WixExtension("WixToolset.ComPlus.wixext", "complus", MsmqNamespace);
+        public static WixExtension ComPlus = new WixExtension("WixToolset.ComPlus.wixext", "complus", ComPlusNamespace);
+
         /// <summary>
         /// The `ComPLus` extension namespace
         /// </summary>
@@ -249,7 +249,7 @@ namespace WixSharp
         /// <summary>
         /// Well-known Wix Extension Dependency
         /// </summary>
-        public static WixExtension Dependency = new WixExtension("WixToolset.Dependency.wixext", "dep", MsmqNamespace);
+        public static WixExtension Dependency = new WixExtension("WixToolset.Dependency.wixext", "dep", DependencyNamespace);
 
         /// <summary>
         /// The `Dependency` extension namespace
@@ -259,7 +259,7 @@ namespace WixSharp
         /// <summary>
         /// Well-known Wix Extension DirectX
         /// </summary>
-        public static WixExtension DirectX = new WixExtension("WixToolset.DirectX.wixext", "?", MsmqNamespace);
+        public static WixExtension DirectX = new WixExtension("WixToolset.DirectX.wixext", "direct", DirectXNamespace);
 
         /// <summary>
         /// The `DirectX` extension namespace

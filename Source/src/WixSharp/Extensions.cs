@@ -1,3 +1,5 @@
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,7 +7,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using static System.Environment;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -17,15 +18,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-using Microsoft.Win32;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
+using static System.Environment;
 using static WixSharp.SetupEventArgs;
-#if WIX3
-using WixToolset.Dtf.WindowsInstaller;
-#else
-using WixToolset.Dtf.WindowsInstaller;
-#endif
 
 using IO = System.IO;
 
@@ -1268,6 +1264,7 @@ namespace WixSharp
         {
             return IO.Path.Combine(path1, path2);
         }
+
         public static string PathCombine(this string path1, params object[] parts)
         {
             var allParts = new[] { path1 }.Concat(parts.Select(x => x?.ToString() ?? "")).ToArray();
@@ -2482,7 +2479,6 @@ namespace WixSharp
             return string.IsNullOrEmpty(obj);
         }
 
-
         /// <summary>
         /// Determines whether the specified <see
         /// cref="T:Microsoft.Deployment.WindowsInstaller.Session"/> is active.
@@ -3403,7 +3399,6 @@ namespace WixSharp
         static public string BuildMultilanguageMsi(this WixSharp.Project project, string path = null)
         {
             project.VerifyLanguage();
-            project.SuppressSettingPackageLanguages = true;
 
             string productMsi = project.BuildMsi(path);
 

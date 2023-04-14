@@ -39,11 +39,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml.Linq;
 using WixSharp.CommonTasks;
-#if WIX3
 using WixToolset.Dtf.WindowsInstaller;
-#else
-using WixToolset.Dtf.WindowsInstaller;
-#endif
 using IO = System.IO;
 
 /*
@@ -599,62 +595,24 @@ namespace WixSharp
             string linker = Utils.PathCombine(WixLocation, "light.exe");
             string batchFile = path;
 
-            if (Compiler.IsWix4)
+            if (ExternalTool.Locate("wix.exe") == null)
             {
-                if (ExternalTool.Locate("wix.exe") == null)
-                {
-                    var error = "`wix.exe` cannot be found. Ensure you installed it with `dotnet tool install --global wix`";
-                    Compiler.OutputWriteLine("Error: " + error);
-                    throw new ApplicationException(error);
-                }
-            }
-            else if (!IO.File.Exists(compiler) || !IO.File.Exists(linker))
-            {
-
-                Compiler.OutputWriteLine("Wix binaries cannot be found. Expected location is " + IO.Path.GetDirectoryName(compiler));
-                throw new ApplicationException("Wix compiler/linker cannot be found");
+                var error = "`wix.exe` cannot be found. Ensure you installed it with `dotnet tool install --global wix`";
+                Compiler.OutputWriteLine("Error: " + error);
+                throw new ApplicationException(error);
             }
 
-            if (Compiler.IsWix4)
+            string wxsFile = BuildWxs(project, type);
+
+            string outDir = IO.Path.GetDirectoryName(wxsFile);
+            string msiFile = IO.Path.ChangeExtension(wxsFile, "." + type.ToString().ToLower());
+
+            string wixCmd = GenerateWixCommand(project, wxsFile);
+
+            using (var sw = new IO.StreamWriter(batchFile))
             {
-                string wxsFile = BuildWxs(project, type);
-
-                string outDir = IO.Path.GetDirectoryName(wxsFile);
-                string msiFile = IO.Path.ChangeExtension(wxsFile, "." + type.ToString().ToLower());
-
-                string wixCmd = GenerateWixCommand(project, wxsFile);
-
-                using (var sw = new IO.StreamWriter(batchFile))
-                {
-                    sw.WriteLine("echo off");
-                    sw.WriteLine($"wix build {wixCmd} -o \"{outDir.PathJoin(msiFile)}\"");
-                }
-            }
-            else
-            {
-                string wxsFile = BuildWxs(project, type);
-
-                string outDir = IO.Path.GetDirectoryName(wxsFile);
-                string msiFile = IO.Path.ChangeExtension(wxsFile, "." + type.ToString().ToLower());
-
-                string candleCmd = GenerateCandleCommand(project, wxsFile, outDir, out string objFile, out string extensionDlls);
-                string lightCmd = GenerateLightCommand(project, msiFile, outDir, objFile, extensionDlls);
-
-                using (var sw = new IO.StreamWriter(batchFile))
-                {
-                    sw.WriteLine("echo off");
-                    sw.WriteLine("@setlocal");
-                    sw.WriteLine(wixLocationEnvVar);
-                    sw.WriteLine("call \"" + compiler + "\" " + candleCmd);
-                    sw.WriteLine("if ERRORLEVEL 1 @echo candle.exe failed & GOTO ERROR");
-                    sw.WriteLine("call \"" + linker + "\" " + lightCmd);
-                    sw.WriteLine("if ERRORLEVEL 1 @echo light.exe failed & GOTO ERROR");
-                    sw.WriteLine("@endlocal");
-                    sw.WriteLine("EXIT /B 0");
-                    sw.WriteLine(":ERROR");
-                    sw.WriteLine("@endlocal");
-                    sw.WriteLine("EXIT /B 1");
-                }
+                sw.WriteLine("echo off");
+                sw.WriteLine($"wix build {wixCmd} -o \"{outDir.PathJoin(msiFile)}\"");
             }
         }
 
@@ -730,7 +688,7 @@ namespace WixSharp
             IO.File.WriteAllLines(dest, content.ToArray());
         }
 
-        static string GenerateWixCommand(Project project, string wxsFile)
+        static string GenerateWixCommand(WixProject project, string wxsFile)
         {
             // Debug.Assert(false);
             // objFile = IO.Path.ChangeExtension(wxsFile, ".wixobj");
@@ -738,11 +696,7 @@ namespace WixSharp
             project.WixExtensions.ForEach(x => WixTools.EnsureWixExtension(x));
 
             string extensionDlls = project.WixExtensions
-#if WIX3
-                                   .Select(x => x.ExpandEnvVars().PathGetFullPath())
-#else
                                    .Select(x => x.ExpandEnvVars())
-#endif
                                    .Distinct()
                                    .JoinBy(" ", dll => "-ext \"" + dll + "\"");
 
@@ -762,70 +716,7 @@ namespace WixSharp
             return candleCmdLineParams.ToString().ExpandEnvVars();
         }
 
-        static string GenerateCandleCommand(Project project, string wxsFile, string outDir, out string objFile, out string extensionDlls)
-        {
-            // Debug.Assert(false);
-            objFile = IO.Path.ChangeExtension(wxsFile, ".wixobj");
 
-            extensionDlls = project.WixExtensions
-                                   .Select(x => x.ExpandEnvVars().PathGetFullPath())
-                                   .Distinct()
-                                   .JoinBy(" ", dll => " -ext \"" + dll + "\"");
-
-            string wxsFiles = project.WxsFiles
-                                     .Select(x => x.ExpandEnvVars().PathGetFullPath())
-                                     .Distinct()
-                                     .JoinBy(" ", file => "\"" + file + "\"");
-
-            var candleOptions = CandleOptions + " " + project.CandleOptions;
-
-            var candleCmdLineParams = new StringBuilder();
-            candleCmdLineParams.AppendFormat("{0} {1} \"{2}\" ", candleOptions, extensionDlls, wxsFile);
-
-            if (wxsFiles.IsNotEmpty())
-            {
-                candleCmdLineParams.Append(wxsFiles);
-
-                // if multiple files are specified candle expect a path for the -out switch
-                // or no path at all (use current directory)
-                // note the '\' character must be escaped twice: as a C# string and as a CMD char
-                if (outDir.IsNotEmpty())
-                    candleCmdLineParams.AppendFormat(" -out \"{0}\\\\\"", outDir);
-            }
-            else
-                candleCmdLineParams.AppendFormat(" -out \"{0}\"", objFile);
-
-            return candleCmdLineParams.ToString().ExpandEnvVars();
-        }
-
-        static string GenerateLightCommand(Project project, string msiFile, string outDir, string objFile, string extensionDlls)
-        {
-            string lightOptions = LightOptions + " " + project.LightOptions;
-
-            string libFiles = project.LibFiles
-                                     .Distinct()
-                                     .JoinBy(" ", x => x.Enquote());
-
-            string fragmentObjectFiles = project.WxsFiles
-                                                .Distinct()
-                                                .JoinBy(" ", file => "\"" + outDir.PathCombine(IO.Path.GetFileNameWithoutExtension(file)) + ".wixobj\"");
-
-            var lightCmdLineParams = new StringBuilder();
-
-            lightCmdLineParams.AppendFormat("{0} -b \"{1}\" \"{2}\" {3}", lightOptions, outDir, objFile, libFiles);
-
-            if (fragmentObjectFiles.IsNotEmpty())
-                lightCmdLineParams.Append(fragmentObjectFiles);
-
-            lightCmdLineParams.Append(" -out \"" + msiFile + "\"" + extensionDlls + " -cultures:\"" + project.Language + "\"");
-
-            if (project.IsLocalized && IO.File.Exists(project.LocalizationFile))
-            {
-                lightCmdLineParams.Append(" -loc \"" + project.LocalizationFile + "\"");
-            }
-
-            return lightCmdLineParams.ToString().ExpandEnvVars();
-        }
 
         static string Build(Project project, string path, OutputType type)
         {
@@ -843,120 +734,77 @@ namespace WixSharp
             {
                 // System.Diagnostics.Debug.Assert(false);
                 Compiler.TempFiles.Clear();
-                string compiler = Utils.PathCombine(WixLocation, @"candle.exe");
-                string linker = Utils.PathCombine(WixLocation, @"light.exe");
+                string compiler = "wix";
 
-                if (Compiler.IsWix4)
+                if (ExternalTool.Locate("wix.exe") == null)
                 {
-                    if (ExternalTool.Locate("wix.exe") == null)
-                    {
-                        var error = "`wix.exe` cannot be found. Ensure you installed it with `dotnet tool install --global wix`";
-                        Compiler.OutputWriteLine("Error: " + error);
-                        throw new ApplicationException(error);
-                    }
-                }
-                else if (!IO.File.Exists(compiler) || !IO.File.Exists(linker))
-                {
-
-                    Compiler.OutputWriteLine("Wix binaries cannot be found. Expected location is " + IO.Path.GetDirectoryName(compiler));
-                    throw new ApplicationException("Wix compiler/linker cannot be found");
+                    var error = "`wix.exe` cannot be found. Ensure you installed it with `dotnet tool install --global wix`";
+                    Compiler.OutputWriteLine("Error: " + error);
+                    throw new ApplicationException(error);
                 }
 
-                {
-                    string wxsFile = BuildWxs(project, type);
 
-                    if (autogeneratedWxsForVS != null && MSBuild.EmitAutoGenFiles)
-                        CopyAsAutogen(wxsFile, autogeneratedWxsForVS);
+                string wxsFile = BuildWxs(project, type);
 
-                    if (!project.SourceBaseDir.IsEmpty())
-                        Environment.CurrentDirectory = project.SourceBaseDir;
+                if (autogeneratedWxsForVS != null && MSBuild.EmitAutoGenFiles)
+                    CopyAsAutogen(wxsFile, autogeneratedWxsForVS);
 
-                    string extensionDlls = null, objFile = null;
+                if (!project.SourceBaseDir.IsEmpty())
+                    Environment.CurrentDirectory = project.SourceBaseDir;
 
-                    string outDir = IO.Path.GetDirectoryName(wxsFile);
-                    string outFile = IO.Path.ChangeExtension(wxsFile, "." + type.ToString().ToLower());
+                string outDir = IO.Path.GetDirectoryName(wxsFile);
+                string outFile = IO.Path.ChangeExtension(wxsFile, "." + type.ToString().ToLower());
 
-                    if (path.IsNotEmpty())
-                        outFile = IO.Path.GetFullPath(path);
+                if (path.IsNotEmpty())
+                    outFile = IO.Path.GetFullPath(path);
 
-                    if (IO.File.Exists(outFile))
-                        IO.File.Delete(outFile);
+                if (IO.File.Exists(outFile))
+                    IO.File.Delete(outFile);
 
-                    string candleCmd;
-                    if (Compiler.IsWix4)
-                    {
-                        compiler = "wix";
-                        candleCmd = $"build {GenerateWixCommand(project, wxsFile)} -o \"{outFile}\"";
-
-                    }
-                    else
-                    {
-                        candleCmd = GenerateCandleCommand(project, wxsFile, outDir, out objFile, out extensionDlls);
-                    }
+                string compileCmd;
+                compileCmd = $"build {GenerateWixCommand(project, wxsFile)} -o \"{outFile}\"";
 #if DEBUG
-                    Compiler.OutputWriteLine("<- Compiling");
-                    Compiler.OutputWriteLine(compiler + " " + candleCmd);
-                    Compiler.OutputWriteLine("->");
+                Compiler.OutputWriteLine("<- Compiling");
+                Compiler.OutputWriteLine(compiler + " " + compileCmd);
+                Compiler.OutputWriteLine("->");
 #endif
 
-                    Run(compiler, candleCmd);
+                Run(compiler, compileCmd);
 
-                    if (Compiler.IsWix4 || IO.File.Exists(objFile))
-                    {
+                if (IO.File.Exists(outFile))
+                {
+                    Compiler.TempFiles.Add(wxsFile);
 
+                    Compiler.OutputWriteLine("\n----------------------------------------------------------\n");
+                    Compiler.OutputWriteLine(type + " file has been built: " + path + "\n");
+                    Compiler.OutputWriteLine((type == OutputType.MSI ? " ProductName: " : " ModuleName: ") + project.Name);
 
-                        if (!Compiler.IsWix4)
-                        {
-                            string lightCmd = GenerateLightCommand(project, outFile, outDir, objFile, extensionDlls);
-#if DEBUG
-                            Compiler.OutputWriteLine("<- Linking");
-                            Compiler.OutputWriteLine(linker + " " + lightCmd);
-                            Compiler.OutputWriteLine("->");
-#endif
-
-                            Run(linker, lightCmd);
-                        }
-
-                        if (IO.File.Exists(outFile))
-                        {
-                            Compiler.TempFiles.Add(wxsFile);
-
-                            Compiler.OutputWriteLine("\n----------------------------------------------------------\n");
-                            Compiler.OutputWriteLine(type + " file has been built: " + path + "\n");
-                            Compiler.OutputWriteLine((type == OutputType.MSI ? " ProductName: " : " ModuleName: ") + project.Name);
-
-                            if (project.SetVersionFromIdValue.IsEmpty())
-                                Compiler.OutputWriteLine(" Version    : " + project.Version);
-                            else
-                                Compiler.OutputWriteLine($" Version    : {project.ExtractVersionFrom(project.SetVersionFromIdValue)} (overwritten from {project.SetVersionFromIdValue} file)");
-                            //Compiler.OutputWriteLine($" Version    : {project.Version} (will be overwritten from {project.SetVersionFromIdValue} file)");
-
-                            Compiler.OutputWriteLine(" ProductId  : {" + project.ProductId + "}");
-                            Compiler.OutputWriteLine(" UpgradeCode: {" + project.UpgradeCode + "}\n");
-                            if (!project.AutoAssignedInstallDirPath.IsEmpty())
-                            {
-                                Compiler.OutputWriteLine(" Auto-generated InstallDir ID:");
-                                Compiler.OutputWriteLine("   " + Compiler.AutoGeneration.InstallDirDefaultId + "=" + project.AutoAssignedInstallDirPath);
-                            }
-
-                            if (!PreserveDbgFiles && !project.PreserveDbgFiles)
-                            {
-                                IO.Directory.GetFiles(outDir, "*.wixobj")
-                                            .ForEach(file => file.DeleteIfExists());
-
-                                IO.Path.ChangeExtension(wxsFile, ".wixpdb").DeleteIfExists();
-                                IO.Path.ChangeExtension(path, ".wixpdb").DeleteIfExists();
-                            }
-
-                            project.DigitalSignature?.Apply(outFile);
-                        }
-                    }
+                    if (project.SetVersionFromIdValue.IsEmpty())
+                        Compiler.OutputWriteLine(" Version    : " + project.Version);
                     else
+                        Compiler.OutputWriteLine($" Version    : {project.ExtractVersionFrom(project.SetVersionFromIdValue)} (overwritten from {project.SetVersionFromIdValue} file)");
+                    //Compiler.OutputWriteLine($" Version    : {project.Version} (will be overwritten from {project.SetVersionFromIdValue} file)");
+
+                    Compiler.OutputWriteLine(" ProductId  : {" + project.ProductId + "}");
+                    Compiler.OutputWriteLine(" UpgradeCode: {" + project.UpgradeCode + "}\n");
+                    if (!project.AutoAssignedInstallDirPath.IsEmpty())
                     {
-                        Compiler.OutputWriteLine("Cannot build " + wxsFile);
-                        Trace.WriteLine("Cannot build " + wxsFile);
+                        Compiler.OutputWriteLine(" Auto-generated InstallDir ID:");
+                        Compiler.OutputWriteLine("   " + Compiler.AutoGeneration.InstallDirDefaultId + "=" + project.AutoAssignedInstallDirPath);
                     }
+
+                    if (!PreserveDbgFiles && !project.PreserveDbgFiles)
+                    {
+                        IO.Directory.GetFiles(outDir, "*.wixobj")
+                                    .ForEach(file => file.DeleteIfExists());
+
+                        IO.Path.ChangeExtension(wxsFile, ".wixpdb").DeleteIfExists();
+                        IO.Path.ChangeExtension(path, ".wixpdb").DeleteIfExists();
+                    }
+
+                    project.DigitalSignature?.Apply(outFile);
                 }
+
 
                 if (!PreserveTempFiles && !project.PreserveTempFiles)
                     Compiler.TempFiles.ForEach(file => file.DeleteIfExists());
@@ -1246,31 +1094,15 @@ namespace WixSharp
             XDocument doc;
             XElement product;
 
-            if (Compiler.IsWix4)
-            {
-                doc = XDocument.Parse($@"<?xml version=""1.0"" encoding=""utf-8""?>
+            doc = XDocument.Parse($@"<?xml version=""1.0"" encoding=""utf-8""?>
                                          <Wix xmlns=""http://wixtoolset.org/schemas/v4/wxs"" {extraNamespaces}>
                                              <Package Compressed=""yes"">
                                                 <SummaryInformation Codepage=""{project.Codepage}"" />
                                              </Package>
                                          </Wix>");
 
-                product = doc.Root.Select("Package"); // in WiX v4 `Product` is merged with `Package`
-                product.SetAttribute("ProductCode", project.ProductId);
-            }
-            else
-            {
-                doc = XDocument.Parse($@"<?xml version=""1.0"" encoding=""utf-8""?>
-                                         <Wix xmlns=""http://schemas.microsoft.com/wix/2006/wi"" {extraNamespaces}>
-                                             <Product>
-                                                 <Package Compressed=""yes""/>
-                                             </Product>
-                                         </Wix>");
-
-                product = doc.Root.Select("Product")
-                                  .SetAttribute("Codepage", project.Codepage)
-                                  .SetAttribute("id", project.ProductId);
-            }
+            product = doc.Root.Select("Package"); // in WiX v4 `Product` is merged with `Package`
+            product.SetAttribute("ProductCode", project.ProductId);
 
             product.SetAttribute("Name", project.Name)
                    .SetAttribute("Language", project.Language.FirstLcid())
@@ -1287,14 +1119,7 @@ namespace WixSharp
             package.SetAttribute("Description", project.Description)
                    .SetAttribute("Platform", project.Platform)
                    .SetAttribute("InstallPrivileges", project.InstallPrivileges)
-                   .SetAttribute("InstallerVersion", project.InstallerVersion)
-                   .SetAttribute("InstallScope", project.InstallScope);
-
-            if (!Compiler.IsWix4)
-                package.SetAttribute("SummaryCodepage", project.Codepage);
-
-            if (!project.SuppressSettingPackageLanguages && !Compiler.IsWix4)
-                package.SetAttribute("Languages", project.Language.ToLcidList());
+                   .SetAttribute("InstallerVersion", project.InstallerVersion);
 
             if (project.EmitConsistentPackageId)
                 package.CopyAttributeFrom(product, "Id");
@@ -1308,16 +1133,7 @@ namespace WixSharp
 
             //extend wDir
 
-            XElement dirs;
-
-
-            if (Compiler.IsWix4)
-                dirs = product;
-            else
-                dirs = product.AddElement(
-                        new XElement("Directory",
-                            new XAttribute("Id", "TARGETDIR"),
-                            new XAttribute("Name", "SourceDir")));
+            XElement dirs = product;
 
             var featureComponents = new Dictionary<Feature, List<string>>(); //feature vs. component IDs
             var autoGeneratedComponents = new List<string>(); //component IDs
@@ -1380,10 +1196,7 @@ namespace WixSharp
                            .SetAttribute("Value", installDirId);
                 }
 
-                if (Compiler.IsWix4)
-                    product.AddElement(WixExtension.UI.XElement("WixUI", $"Id={project.UI}"));
-                else
-                    product.AddElement("UIRef", $"Id={project.UI}");
+                product.AddElement(WixExtension.UI.XElement("WixUI", $"Id={project.UI}"));
 
                 product.AddElement("UIRef", "Id=WixUI_ErrorProgressText");
 
@@ -3363,18 +3176,9 @@ namespace WixSharp
             string sfxcaDll;
             string dtfWinInstaller;
 
-            if (Compiler.IsWix4) // zos
-            {
-                makeSfxCA = WixTools.MakeSfxCA;
-                sfxcaDll = WixTools.SfxCAFor(platformDir);
-                dtfWinInstaller = WixTools.DtfWindowsInstaller;
-            }
-            else
-            {
-                makeSfxCA = Utils.PathCombine(WixSdkLocation, @"MakeSfxCA.exe");
-                sfxcaDll = Utils.PathCombine(WixSdkLocation, platformDir + "\\sfxca.dll");
-                dtfWinInstaller = WixSdkLocation.PathCombine("WixToolset.Dtf.WindowsInstaller.dll");
-            }
+            makeSfxCA = WixTools.MakeSfxCA;
+            sfxcaDll = WixTools.SfxCAFor(platformDir);
+            dtfWinInstaller = WixTools.DtfWindowsInstaller;
 
             outDir = IO.Path.GetFullPath(outDir);
 
@@ -3488,21 +3292,13 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Gets a value indicating whether the compiler supports WiX version 4 (and above) toolset.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is wix4; otherwise, <c>false</c>.
-        /// </value>
-        public static bool IsWix4 { get; set; } = true;
-
-        /// <summary>
         /// This property contains the name of the logical 'Product' XML element. The need for this property arises 
         /// from the changes in WiX v4.0 where 'Product' element was merged with "Package" element.
         /// <p>ThiOn WiX v4.* it is <c>Package</c></p>
         /// <p>On WiX v3.* it is <c>Product</c></p>
         /// <p>On WiX v4.* it is <c>Package</c></p>
         /// </summary>
-        public static string ProductElementName => Compiler.IsWix4 ? "Package" : "Product";
+        public static string ProductElementName => "Package";
 
         /// <summary>
         /// This property contains the name of the logical 'BinaryKey' XML atribute of the Custom Action element. The need for this property arises 
@@ -3511,7 +3307,7 @@ namespace WixSharp
         /// <p>On WiX v3.* it is <c></c></p>
         /// <p>On WiX v4.* it is <c></c></p>
         /// </summary>
-        internal static string CABinarykeyAttrName => Compiler.IsWix4 ? "BinaryRef" : "BinaryKey";
+        internal static string CABinarykeyAttrName => "BinaryRef";
 
         /// <summary>
         /// Gets list of the mapped WiX constants.

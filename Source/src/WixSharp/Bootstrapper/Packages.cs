@@ -303,6 +303,7 @@ namespace WixSharp.Bootstrapper
         /// that prevents EmbeddedUI (ManagedUI) to be displayed even if 'DisplayInternalUI' is set to <c>true</c>. The issue is scheduled to be
         /// resolved in WiX v4.x.</para>
         /// </summary>
+        [Obsolete("`DisplayInternalUI` is no longer supported in WiX4. Use `Bundle.Application = new WixInternalUIBootstrapperApplication(...)` instead.", true)]
         [Xml]
         public bool? DisplayInternalUI;
 
@@ -660,6 +661,21 @@ namespace WixSharp.Bootstrapper
         /// force reboot on specified error code
         /// </summary>
         forceReboot,
+    }
+
+    public class Theme : StringEnum<Theme>
+    {
+        public Theme(string value) : base(value)
+        {
+        }
+
+        public static Theme hyperlinkLargeLicense = new Theme(nameof(hyperlinkLargeLicense));
+        public static Theme hyperlinkLicense = new Theme(nameof(hyperlinkLicense));
+        public static Theme hyperlinkSidebarLicense = new Theme(nameof(hyperlinkSidebarLicense));
+        public static Theme none = new Theme(nameof(none));
+        public static Theme standard = new Theme(nameof(standard));
+        public static Theme rtfLargeLicense = new Theme(nameof(rtfLargeLicense));
+        public static Theme rtfLicense = new Theme(nameof(rtfLicense));
     }
 
     public enum SearchResult

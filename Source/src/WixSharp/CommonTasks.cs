@@ -37,12 +37,8 @@ using System.Xml.XPath;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.Controls;
-#if WIX3
 using WixToolset.Dtf.WindowsInstaller;
-#else
-using WixToolset.Dtf.WindowsInstaller;
-using static System.Environment;
-#endif
+
 using IO = System.IO;
 
 namespace WixSharp.CommonTasks
@@ -1763,7 +1759,6 @@ namespace WixSharp.CommonTasks
             return possibleLocations.FirstOrDefault(IO.File.Exists);
         }
 
-
         /// <summary>
         /// The default console out handler. It can be used when you want to have fine control over
         /// STD output of the external tool.
@@ -1928,8 +1923,6 @@ namespace WixSharp.CommonTasks
                 Environment.SetEnvironmentVariable("PATH", systemPathOriginal);
             }
         }
-
-
     }
 
     static class WixTools
@@ -1952,6 +1945,7 @@ namespace WixSharp.CommonTasks
                 return Directory.GetFiles(PackageDir("wixtoolset.dtf.customaction"), "WixToolset.Dtf.MakeSfxCA.exe", SearchOption.AllDirectories).FirstOrDefault();
             }
         }
+
         public static string DtfWindowsInstaller
         {
             get
@@ -2008,7 +2002,6 @@ namespace WixSharp.CommonTasks
                     {{
                         [CustomAction] public static ActionResult CustomAction1(Session session) => ActionResult.Success;
                     }}");
-
 
             var sw = Stopwatch.StartNew();
             Console.WriteLine("Restoring packages...");

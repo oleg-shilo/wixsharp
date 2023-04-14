@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
 using io = System.IO;
 
 public class Script
@@ -16,14 +17,13 @@ public class Script
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("readme.txt")));
 
-        productProj.InstallScope = InstallScope.perMachine;
         productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
 
         productProj.Load += (SetupEventArgs e) =>
         {
             MessageBox.Show(e.Session.Property("USERINPUT"), "User Input");
             MessageBox.Show(e.Session.Property("REGISTRYINPUT"), "Registry Input");
-            e.Result = Microsoft.Deployment.WindowsInstaller.ActionResult.Failure;
+            e.Result = ActionResult.Failure;
         };
 
         string productMsi = productProj.BuildMsi();
@@ -44,7 +44,6 @@ public class Script
                        new MsiPackage(productMsi)
                        {
                            Id = "MyProductPackageId",
-                           DisplayInternalUI = true,
                            MsiProperties = "USERINPUT=[UserInput];REGISTRYINPUT=[RegistryInput];"
                        }
                       );
@@ -79,6 +78,7 @@ public class Script
         //        bootstrapper.SuppressWixMbaPrereqVars = true;
 
         bootstrapper.OutFileName = "my_app";
+        // bootstrapper.BuildCmd("my_app.exe.cmd");
         bootstrapper.Build("my_app.exe");
         io.File.Delete(productMsi);
     }

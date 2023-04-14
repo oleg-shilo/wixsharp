@@ -426,7 +426,7 @@ namespace WixSharp
 
         static void InjectPlatformAttributes(XDocument doc)
         {
-            var is64BitPlatform = doc.Root.Select(Compiler.IsWix4 ? "Package" : "Product/Package").HasAttribute("Platform", val => val == "x64");
+            var is64BitPlatform = doc.Root.Select("Package").HasAttribute("Platform", val => val == "x64");
 
             if (is64BitPlatform)
             {
@@ -686,7 +686,7 @@ namespace WixSharp
             XElement product = doc.Root.Select(Compiler.ProductElementName);
 
             int? absPathCount = null;
-            string firstDirElementName = Compiler.IsWix4 ? "StandardDirectory" : "Directory";
+            string firstDirElementName = "StandardDirectory";
 
             foreach (XElement dir in product.Element(firstDirElementName).Elements("Directory"))
             {

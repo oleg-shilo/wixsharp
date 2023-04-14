@@ -7,12 +7,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using WixSharp.CommonTasks;
-
-#if WIX3
 using WixToolset.Dtf.WindowsInstaller;
-#else
-using WixToolset.Dtf.WindowsInstaller;
-#endif
 
 using IO = System.IO;
 

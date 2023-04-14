@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-#if WIX3
 using WixToolset.Dtf.WindowsInstaller;
-#else
-using WixToolset.Dtf.WindowsInstaller;
-#endif
 
 using sys = System.IO;
 
@@ -243,8 +239,11 @@ namespace WixSharp.Bootstrapper
         public bool? SuppressRepair;
 
         /// <summary>
-        /// Source file of the theme XML.
+        /// The bootstrapper Application theme.
         /// </summary>
+        [Xml]
+        public Theme Theme = Theme.hyperlinkLargeLicense;
+
         [Xml]
         public string ThemeFile;
 
@@ -466,11 +465,9 @@ namespace WixSharp.Bootstrapper
         /// <returns></returns>
         public override XContainer[] ToXml()
         {
-            XNamespace bal = Compiler.IsWix4 ?
-                                "http://wixtoolset.org/schemas/v4/wxs/bal" :
-                                "http://schemas.microsoft.com/wix/BalExtension";
+            XNamespace bal = "http://wixtoolset.org/schemas/v4/wxs/bal";
 
-            var root = new XElement("BootstrapperApplicationRef");
+            var root = new XElement("BootstrapperApplication");
 
             var app = this.ToXElement(bal + "WixStandardBootstrapperApplication");
 
@@ -492,6 +489,8 @@ namespace WixSharp.Bootstrapper
                     root.SetAttribute("Id", "WixStandardBootstrapperApplication.HyperlinkSidebarLicense");
                 }
 
+                app.AddAttributes("Theme=" + this.Theme);
+
                 if (LicensePath.IsEmpty())
                 {
                     //cannot use SetAttribute as we want to preserve empty attrs
@@ -512,6 +511,37 @@ namespace WixSharp.Bootstrapper
             }
 
             foreach (Payload item in payloads)
+            {
+                var xml = item.ToXElement("Payload");
+                root.AddElement(xml);
+            }
+
+            root.Add(app);
+
+            return new[] { root };
+        }
+    }
+
+    public class WixInternalUIBootstrapperApplication : WixStandardBootstrapperApplication
+    {
+        public WixInternalUIBootstrapperApplication()
+        {
+            this.Theme = Bootstrapper.Theme.standard;
+        }
+
+        /// <summary>
+        /// Emits WiX XML.
+        /// </summary>
+        /// <returns></returns>
+        public override XContainer[] ToXml()
+        {
+            XNamespace bal = "http://wixtoolset.org/schemas/v4/wxs/bal";
+
+            var root = new XElement("BootstrapperApplication");
+
+            var app = this.ToXElement(bal + "WixInternalUIBootstrapperApplication");
+
+            foreach (Payload item in this.Payloads)
             {
                 var xml = item.ToXElement("Payload");
                 root.AddElement(xml);

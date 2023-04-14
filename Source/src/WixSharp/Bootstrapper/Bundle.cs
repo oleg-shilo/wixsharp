@@ -424,23 +424,23 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         public void Validate()
         {
-            var msiPackages = this.Chain.Where(x => (x is MsiPackage) && (x as MsiPackage).DisplayInternalUI == true);
-            foreach (MsiPackage item in msiPackages)
-            {
-                try
-                {
-                    if (Tasks.IsEmbeddedUIPackage(item.SourceFile))
-                    {
-                        Compiler.OutputWriteLine("");
-                        Compiler.OutputWriteLine("WARNING: You have selected enabled DisplayInternalUI for EmbeddedUI-based '"
-                            + sys.Path.GetFileName(item.SourceFile) + "'. Currently Burn (WiX) " +
-                            "doesn't support integration with EmbeddedUI packages. Read more here: https://github.com/oleg-shilo/wixsharp/wiki/Wix%23-Bootstrapper-(Burn)-integration-notes");
+            // var msiPackages = this.Chain.Where(x => (x is MsiPackage) && (x as MsiPackage).DisplayInternalUI == true);
+            // foreach (MsiPackage item in msiPackages)
+            // {
+            //     try
+            //     {
+            //         if (Tasks.IsEmbeddedUIPackage(item.SourceFile))
+            //         {
+            //             Compiler.OutputWriteLine("");
+            //             Compiler.OutputWriteLine("WARNING: You have selected enabled DisplayInternalUI for EmbeddedUI-based '"
+            //                 + sys.Path.GetFileName(item.SourceFile) + "'. Currently Burn (WiX) " +
+            //                 "doesn't support integration with EmbeddedUI packages. Read more here: https://github.com/oleg-shilo/wixsharp/wiki/Wix%23-Bootstrapper-(Burn)-integration-notes");
 
-                        Compiler.OutputWriteLine("");
-                    }
-                }
-                catch { }
-            }
+            //             Compiler.OutputWriteLine("");
+            //         }
+            //     }
+            //     catch { }
+            // }
         }
 
         internal void ResetAutoIdGeneration(bool supressWarning)
