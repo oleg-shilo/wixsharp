@@ -6,18 +6,19 @@
 
 		<BootstrapperApplication>
 			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\mbanative.dll" />
-			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\WixBA.BootstrapperCore.config" />
+			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\WixToolset.Mba.Host.config" />
 			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\WixToolset.Mba.Core.dll" />
 			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\WixToolset.WixBA.dll" />
-			<bal:WixManagedBootstrapperApplicationHost />
+			<bal:WixManagedBootstrapperApplicationHost AlwaysInstallPrereqs="yes" />
 		</BootstrapperApplication>
 
 		<!--
 		The description of the MBA building algorithm is here:
 		https://wixtoolset.org/docs/fourthree/faqs/#upgrading-v3-managed-bootstrapper-applications
 
-		Though there is no single COMPLETE example of exists. Example that would show how to create a working bundle with MBA.
-		This one can be build built it fails to install prerequisite and load the MBA.
+		Though there is no a single COMPLETE WORKING example that exists as of 15-Apr-2023.
+		The example that would show how to create a working bundle with MBA.
+		This one can be build built but it fails to load the MBA.
 		-->
 
 		<Chain>

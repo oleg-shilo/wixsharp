@@ -13,7 +13,7 @@ namespace WixToolset.WixBA
     {
         protected override IBootstrapperApplication Create(IEngine engine, IBootstrapperCommand command)
         {
-            MessageBox.Show("Loading WixBAFactory");
+            // MessageBox.Show("Loading WixBAFactory");
             return new WixBA(engine, command);
         }
     }

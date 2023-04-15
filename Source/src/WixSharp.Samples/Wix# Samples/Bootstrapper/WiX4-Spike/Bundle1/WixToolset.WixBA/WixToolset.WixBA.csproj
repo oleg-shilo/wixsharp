@@ -21,7 +21,7 @@
 		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
 	<ItemGroup Condition=" '$(TargetFrameworkIdentifier)'=='.NETFramework' ">
-		<Content Include="WixBA.BootstrapperCore.config" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="WixToolset.Mba.Host.config" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 	<ItemGroup>
 		<Resource Include="Resources\logo-white-hollow.png" />
@@ -36,10 +36,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="WixToolset.Mba.Core" Version="*"/>
+		<PackageReference Include="WixToolset.Mba.Core" Version="*" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFrameworkIdentifier)'!='.NETFramework' ">
 		<PackageReference Include="WixToolset.Dnc.HostGenerator" />
 	</ItemGroup>
+
 </Project>
