@@ -1,9 +1,8 @@
-﻿using Microsoft.Deployment.WindowsInstaller;
+﻿using System;
 using System.Diagnostics;
-using sys = System.Reflection;
 using WixSharp;
 using WixSharp.CommonTasks;
-using System;
+using sys = System.Reflection;
 
 public class Script
 {

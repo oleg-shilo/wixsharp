@@ -1,19 +1,20 @@
 //css_ref ..\..\..\WixSharp.dll;
 //css_ref System.Core.dll;
 //css_ref ..\..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
-using System;
-using System.Windows.Forms;
-using WixToolset.Dtf.WindowsInstaller;
-using System.Diagnostics;
 using Microsoft.Win32;
+using System;
+using System.Diagnostics;
 using System.IO;
+using System.Windows.Forms;
 using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 
 public class InstallScript
 {
     static public void Main()
     {
-        var tt = WixBinLocator.FindWixBinLocation(throwOnError: false);
+        // THIS SAMPLE IS NOT PORTED TO WIX4 YET
+        var test = WixBinLocator.FindWixBinLocation(throwOnError: false);
 
         var project =
             new Project("MyProduct",

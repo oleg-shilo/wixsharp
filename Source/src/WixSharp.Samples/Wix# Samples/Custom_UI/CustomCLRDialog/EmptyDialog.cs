@@ -1,13 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
-using System.Diagnostics;
+using WixToolset.Dtf.WindowsInstaller;
 
 public partial class EmptyDialog : WixCLRDialog
 {
-
     public EmptyDialog()
     {
         InitializeComponent();
@@ -22,7 +21,6 @@ public partial class EmptyDialog : WixCLRDialog
     void backBtn_Click(object sender, EventArgs e)
     {
         MSIBack();
-
     }
 
     void nextBtn_Click(object sender, EventArgs e)

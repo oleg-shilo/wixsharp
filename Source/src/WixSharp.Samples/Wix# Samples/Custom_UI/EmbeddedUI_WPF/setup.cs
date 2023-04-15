@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 using sys = System.Reflection;

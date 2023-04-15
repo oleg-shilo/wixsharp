@@ -9,6 +9,8 @@ public class Script
 {
     static public void Main()
     {
+        // THIS SAMPLE IS NOT PORTED TO WIX4 YET (interface)
+
         var bootstrapper =
             new Bundle("My Product",
                        new ExePackage(@"..\..\..\..\Managed Setup\Self-executable_Msi\ManagedSetup.exe")

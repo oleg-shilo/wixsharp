@@ -10,9 +10,9 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using WixToolset.Dtf.WindowsInstaller;
 using WixSharp;
 using WixSharp.Bootstrapper;
+using WixToolset.Dtf.WindowsInstaller;
 using sys = System.Reflection;
 
 public class InstallScript
@@ -22,10 +22,7 @@ public class InstallScript
         var productProj =
             new Project("My Product",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File("readme.txt")))
-            {
-                InstallScope = InstallScope.perMachine
-            };
+                    new File("readme.txt")));
 
         productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
         productProj.LicenceFile = "License.rtf";
@@ -38,7 +35,6 @@ public class InstallScript
                        new MsiPackage(productMsi)
                        {
                            Id = "MyProductPackageId",
-                           DisplayInternalUI = true,
                            Visible = true // show MSI entry in ARP
                        });
 
