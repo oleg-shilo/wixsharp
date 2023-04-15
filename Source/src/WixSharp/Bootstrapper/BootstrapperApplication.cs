@@ -163,6 +163,14 @@ namespace WixSharp.Bootstrapper
             set { primaryPackageId = value; }
         }
 
+        /*
+          <BootstrapperApplication>
+              <Payload SourceFile="WixBootstrapper_UI.exe" />
+              <Payload SourceFile="BootstrapperCore.config" />
+              <Payload SourceFile="WixToolset.Dtf.WindowsInstaller.dll" />
+              <bal:WixManagedBootstrapperApplicationHost />
+          </BootstrapperApplication>
+         */
         //public ChainItem DependencyPackage { get; set; }
     }
 

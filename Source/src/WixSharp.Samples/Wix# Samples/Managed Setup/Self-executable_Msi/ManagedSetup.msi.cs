@@ -10,7 +10,6 @@ using System.Linq;
 using System.Security.Principal;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 
@@ -23,7 +22,7 @@ public static class Script
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(@"..\Files\bin\MyApp.exe")));
 
-        project.ManagedUI = ManagedUI.Default; //Wix# ManagedUI
+        // project.ManagedUI = ManagedUI.Default; //Wix# ManagedUI
 
         Compiler.BuildMsi(project);
     }

@@ -51,6 +51,7 @@ public class Script
         bootstrapper.Variables = "UserInput=none; RegistryInput=none".ToStringVariables();
         bootstrapper.Version = new Version("1.0.0.0");
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889a");
+        //WixVariables["WixMbaPrereqPackageId"] = "Netfx4Full";
 
         bootstrapper.Include(WixExtension.Util);
         bootstrapper.AddWixFragment("Wix/Bundle",
@@ -75,11 +76,12 @@ public class Script
         // bootstrapper.Application = new ManagedBootstrapperApplication("%this%", "BootstrapperCore.config");
 
         bootstrapper.PreserveTempFiles = true;
-        //        bootstrapper.SuppressWixMbaPrereqVars = true;
+        // bootstrapper.SuppressWixMbaPrereqVars = true;
 
         bootstrapper.OutFileName = "my_app";
         // bootstrapper.BuildCmd("my_app.exe.cmd");
-        bootstrapper.Build("my_app.exe");
-        io.File.Delete(productMsi);
+        bootstrapper.BuildCmd("my_app.exe.cmd");
+        // bootstrapper.Build("my_app.exe");
+        // io.File.Delete(productMsi);
     }
 }

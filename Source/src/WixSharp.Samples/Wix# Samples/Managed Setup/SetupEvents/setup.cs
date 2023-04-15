@@ -79,6 +79,8 @@ public static class Script
         project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project);
+
+        var ttt = AppDomain.CurrentDomain.GetAssemblies();
     }
 
     static ManagedProject UnelevateAfterInstallEvent(this ManagedProject project)

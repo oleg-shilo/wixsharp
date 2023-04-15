@@ -1,0 +1,30 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:bal="http://wixtoolset.org/schemas/v4/wxs/bal">
+	<Bundle Name="Bundle1" Manufacturer="TODO Manufacturer" Version="1.0.0.0" UpgradeCode="fc4f0354-a1f2-4f01-99d1-eec5f77ab98b">
+		<!--<BootstrapperApplication>
+			<bal:WixStandardBootstrapperApplication LicenseUrl="https://www.example.com/license" Theme="hyperlinkLicense" />
+		</BootstrapperApplication>-->
+
+		<BootstrapperApplication>
+			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\mbanative.dll" />
+			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\WixBA.BootstrapperCore.config" />
+			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\WixToolset.Mba.Core.dll" />
+			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\WixToolset.WixBA.dll" />
+			<bal:WixManagedBootstrapperApplicationHost />
+		</BootstrapperApplication>
+
+		<!--
+		The description of the MBA building algorithm is here:
+		https://wixtoolset.org/docs/fourthree/faqs/#upgrading-v3-managed-bootstrapper-applications
+
+		Though there is no single COMPLETE example of exists. Example that would show how to create a working bundle with MBA.
+		This one can be build built it fails to install prerequisite and load the MBA.
+		-->
+
+		<Chain>
+			<!-- TODO: Define the list of chained packages. -->
+
+			<MsiPackage bal:PrereqPackage="yes"
+						SourceFile="..\Package1\bin\x64\Debug\en-US\Package1.msi" />
+		</Chain>
+	</Bundle>
+</Wix>

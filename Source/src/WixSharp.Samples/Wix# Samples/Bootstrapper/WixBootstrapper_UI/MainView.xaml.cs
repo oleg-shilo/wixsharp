@@ -1,16 +1,18 @@
 ﻿using System.Windows;
+
 #if WIX4
 using WixToolset.Bootstrapper;
 #else
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-#endif
 
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+
+#endif
 
 public partial class MainView : Window
 {
     MainViewModel viewModel;
 
-    public MainView(BootstrapperApplication bootstrapper)
+    public MainView(ManagedBA bootstrapper)
     {
         InitializeComponent();
         DataContext =

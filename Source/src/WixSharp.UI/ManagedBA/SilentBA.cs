@@ -12,6 +12,8 @@ using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 
 #endif
 
+// TEMPORARY DISABLED AS TEHER IS NO WIX4 WORKING SAMPLE FOR MANAGED BA (15-04-2023)
+
 [assembly: BootstrapperApplication(typeof(WixSharp.Bootstrapper.SilentManagedBA))]
 
 namespace WixSharp.Bootstrapper

@@ -1,26 +1,43 @@
-﻿using System.ComponentModel;
+﻿// using WixToolset.Mba.Core;
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
+using WixToolset.Mba.Core;
 
-#if WIX4
-using WixToolset.Bootstrapper;
-#else
+using mba = WixToolset.Mba.Core;
 
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+[assembly: WixToolset.Mba.Core.BootstrapperApplicationFactory(typeof(WixToolset.WixBA.WixBAFactory))]
 
-#endif
-
-[assembly: BootstrapperApplication(typeof(ManagedBA))]
-
-public class ManagedBA : BootstrapperApplication
+namespace WixToolset.WixBA
 {
+    public class WixBAFactory : BaseBootstrapperApplicationFactory
+    {
+        protected override mba.IBootstrapperApplication Create(mba.IEngine engine, mba.IBootstrapperCommand command)
+        {
+            MessageBox.Show("TETETETET");
+            return new ManagedBA(engine, command);
+        }
+    }
+}
+
+public class ManagedBA : mba.BootstrapperApplication
+{
+    public ManagedBA(mba.IEngine engine, mba.IBootstrapperCommand command) : base(engine)
+    {
+        this.Command = command;
+    }
+
+    public mba.IEngine Engine => base.engine;
+    public mba.IBootstrapperCommand Command;
+
     /// <summary>
     /// Entry point that is called when the bootstrapper application is ready to run.
     /// </summary>
     protected override void Run()
     {
         new MainView(this).ShowDialog();
-        Engine.Quit(0);
+        engine.Quit(0);
     }
 }
 
@@ -34,7 +51,7 @@ public class MainViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public MainViewModel(BootstrapperApplication bootstrapper)
+    public MainViewModel(ManagedBA bootstrapper)
 
     {
         this.IsBusy = false;
@@ -48,7 +65,7 @@ public class MainViewModel : INotifyPropertyChanged
         this.Bootstrapper.Engine.Detect();
     }
 
-    void OnError(object sender, ErrorEventArgs e)
+    void OnError(object sender, mba.ErrorEventArgs e)
     {
         MessageBox.Show(e.ErrorMessage);
     }
@@ -102,20 +119,20 @@ public class MainViewModel : INotifyPropertyChanged
         }
     }
 
-    public BootstrapperApplication Bootstrapper { get; set; }
+    public ManagedBA Bootstrapper { get; set; }
 
     public void InstallExecute()
     {
         IsBusy = true;
 
-        Bootstrapper.Engine.StringVariables["UserInput"] = UserInput;
-        Bootstrapper.Engine.Plan(LaunchAction.Install);
+        Bootstrapper.Engine.SetVariableString("UserInput", UserInput, false);
+        Bootstrapper.Engine.Plan(mba.LaunchAction.Install);
     }
 
     public void UninstallExecute()
     {
         IsBusy = true;
-        Bootstrapper.Engine.Plan(LaunchAction.Uninstall);
+        Bootstrapper.Engine.Plan(mba.LaunchAction.Uninstall);
     }
 
     public void ExitExecute()
@@ -127,7 +144,7 @@ public class MainViewModel : INotifyPropertyChanged
     /// Method that gets invoked when the Bootstrapper ApplyComplete event is fired.
     /// This is called after a bundle installation has completed. Make sure we updated the view.
     /// </summary>
-    void OnApplyComplete(object sender, ApplyCompleteEventArgs e)
+    void OnApplyComplete(object sender, mba.ApplyCompleteEventArgs e)
     {
         IsBusy = false;
         InstallEnabled = false;
@@ -140,13 +157,13 @@ public class MainViewModel : INotifyPropertyChanged
     /// specified in one of the package elements (msipackage, exepackage, msppackage,
     /// msupackage) in the WiX bundle.
     /// </summary>
-    void OnDetectPackageComplete(object sender, DetectPackageCompleteEventArgs e)
+    void OnDetectPackageComplete(object sender, mba.DetectPackageCompleteEventArgs e)
     {
         if (e.PackageId == "MyProductPackageId")
         {
-            if (e.State == PackageState.Absent)
+            if (e.State == mba.PackageState.Absent)
                 InstallEnabled = true;
-            else if (e.State == PackageState.Present)
+            else if (e.State == mba.PackageState.Present)
                 UninstallEnabled = true;
         }
     }
@@ -156,7 +173,7 @@ public class MainViewModel : INotifyPropertyChanged
     /// If the planning was successful, it instructs the Bootstrapper Engine to
     /// install the packages.
     /// </summary>
-    void OnPlanComplete(object sender, PlanCompleteEventArgs e)
+    void OnPlanComplete(object sender, mba.PlanCompleteEventArgs e)
     {
         if (e.Status >= 0)
             Bootstrapper.Engine.Apply(System.IntPtr.Zero);

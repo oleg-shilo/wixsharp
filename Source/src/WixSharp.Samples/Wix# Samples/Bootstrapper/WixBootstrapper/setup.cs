@@ -17,6 +17,7 @@ public class InstallScript
     static public void Main()
     {
         var crt = BuildCrtMsi();
+
         Simple(crt);
         // Complex();
     }
@@ -29,11 +30,7 @@ public class InstallScript
             UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb24889b")
         };
 
-        bundle.Application = new WixInternalUIBootstrapperApplication
-        {
-            LogoFile = "logo.png"
-        };
-
+        bundle.Application = new WixInternalUIBootstrapperApplication { LogoFile = "logo.png" };
         bundle.Chain.Add(new MsiPackage(msi));
 
         bundle.Build("my.exe");
