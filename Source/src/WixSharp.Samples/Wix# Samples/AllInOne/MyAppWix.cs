@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
+
 using WixToolset.Dtf.WindowsInstaller;
 
 internal static class Script
@@ -46,7 +47,8 @@ internal static class Script
                     new InstalledFileAction("registrator_exe", "", Return.check, When.After, Step.InstallExecute, Condition.NOT_Installed),
                     new InstalledFileAction("registrator_exe", "/u", Return.check, When.Before, Step.InstallExecute, Condition.Installed),
 
-                    new ScriptAction(@"MsgBox ""Executing VBScript code...""", Return.ignore, When.After, Step.InstallFinalize, Condition.NOT_Installed),
+                    // obsolete in WiX4
+                    // new ScriptAction(@"MsgBox ""Executing VBScript code...""", Return.ignore, When.After, Step.InstallFinalize, Condition.NOT_Installed),
 
                     new ScriptFileAction(@"CustomActions\Sample.vbs", "Execute", Return.ignore, When.After, Step.InstallFinalize, Condition.NOT_Installed),
 
@@ -63,8 +65,7 @@ internal static class Script
             project.UI = WUI.WixUI_Mondo;
             project.SourceBaseDir = Environment.CurrentDirectory;
             project.OutFileName = "MyApp";
-
-            project.InstallPrivileges = InstallPrivileges.elevated;
+            project.Include(WixExtension.Util);
 
             // Optionally enable an ability to repair the installation even when the original MSI is no longer available.
             project.EnableResilientPackage();
@@ -75,7 +76,7 @@ internal static class Script
             // project.EnableUninstallFullUIWithExtraParameters(@"/L*V [TempFolder]CustomMsiLog.log PARAM1=VALUE1 PARAM2=VALUE2");
             // project.EnableUninstallFullUI("[#myapp_exe],0", @"/L*V [TempFolder]CustomMsiLog.log");
 
-            // project.PreserveTempFiles = true;
+            project.PreserveTempFiles = true;
             project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
             project.BuildMsi();

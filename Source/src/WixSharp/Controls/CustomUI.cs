@@ -401,7 +401,7 @@ namespace WixSharp.Controls
                     var element = ui.AddElement(new XElement("Publish",
                                                     new XAttribute("Dialog", info.Dialog),
                                                     new XAttribute("Control", info.Control),
-                                                    action.Condition));
+                                                     new XAttribute("Condition", action.Condition)));
 
                     Action<string, string> AddAttribute = (name, value) =>
                     {

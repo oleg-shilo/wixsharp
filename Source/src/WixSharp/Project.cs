@@ -424,6 +424,7 @@ namespace WixSharp
         /// <summary>
         /// Use this attribute to specify the privileges required to install the package on Windows Vista and above.
         /// </summary>
+        [Obsolete("This attribute is depriciated in WiX4", true)]
         public InstallPrivileges? InstallPrivileges;
 
         /// <summary>

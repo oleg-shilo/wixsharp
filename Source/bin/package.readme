@@ -3,4 +3,11 @@
 2.1 Execute src\build.cmd              (Builds all solutions)
 2.2 Execute src\aggregate
 
+===============================
+WiX4 Issues:
 
+Made obsolete without any duidance on how to deal with it: 
+- Package.InstallPrivileges 
+- Publish.Condition
+- <CustomAction Id="VBScript" Script="vbscript" ...><![CDATA[MsgBox "Executing VBScript code..."]]>
+- <CustomAction Id="LaunchApplication" DllEntry="WixShellExec" Impersonate="yes" BinaryRef="WixCA" /> // WixCA -> WixUiCa_X86 (just a guess)

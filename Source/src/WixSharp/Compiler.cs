@@ -1118,7 +1118,6 @@ namespace WixSharp
 
             package.SetAttribute("Description", project.Description)
                    .SetAttribute("Platform", project.Platform)
-                   .SetAttribute("InstallPrivileges", project.InstallPrivileges)
                    .SetAttribute("InstallerVersion", project.InstallerVersion);
 
             if (project.EmitConsistentPackageId)
@@ -2132,9 +2131,6 @@ namespace WixSharp
             foreach (var item in absolutePathDirs)
                 item.Id = $"TARGETDIR{absolutePathDirs.FindIndex(item) + 1}";
 
-            if (wDirs.Any())
-                wDirs.First().IsStandardDir = true;
-
 
             foreach (Dir wDir in wDirs)
             {
@@ -2857,7 +2853,7 @@ namespace WixSharp
                     product.AddElement(
                         new XElement("CustomAction")
                             .SetAttribute("Id", cmdLineActionId)
-                            .SetAttribute(CABinarykeyAttrName, "WixCA")
+                            .SetAttribute(CABinarykeyAttrName, "WixCA") // in WiX4: WixCA -> WixUiCa_X86 (just a guess)
                             .SetAttribute("DllEntry", quietExecAction.ActionName)
                             .SetAttribute("Return", wAction.Return)
                             .SetAttribute("Impersonate", wAction.Impersonate)
@@ -2892,7 +2888,7 @@ namespace WixSharp
                         product.AddElement(
                             new XElement("CustomAction")
                                 .SetAttribute("Id", roollbackActionId)
-                                .SetAttribute(CABinarykeyAttrName, "WixCA")
+                                .SetAttribute(CABinarykeyAttrName, "WixCA") // in WiX4: WixCA -> WixUiCa_X86 (just a guess)
                                 .SetAttribute("DllEntry", quietExecAction.ActionName)
                                 .SetAttribute("Return", wAction.Return)
                                 .SetAttribute("Impersonate", wAction.Impersonate)
@@ -2916,7 +2912,7 @@ namespace WixSharp
                         new XElement("CustomAction",
                                 new XAttribute("Id", wAction.Id),
                                 new XAttribute("ExeCommand", fileAction.Args.ExpandCommandPath()),
-                                new XAttribute("FileKey", fileAction.Key))
+                                new XAttribute("FileRef", fileAction.Key))
                             .SetAttribute("Return", wAction.Return)
                             .SetAttribute("Impersonate", wAction.Impersonate)
                             .SetAttribute("Execute", wAction.Execute)
@@ -2935,7 +2931,7 @@ namespace WixSharp
                                     new XAttribute("ExeCommand", fileAction.RollbackArg == null
                                         ? fileAction.Args.ExpandCommandPath()
                                         : fileAction.RollbackArg.ExpandCommandPath()),
-                                    new XAttribute("FileKey", fileAction.Rollback))
+                                    new XAttribute("FileRef", fileAction.Rollback))
                                 .SetAttribute("Return", wAction.Return)
                                 .SetAttribute("Impersonate", wAction.Impersonate)
                                 .SetAttribute("Execute", Execute.rollback)
@@ -3419,13 +3415,9 @@ namespace WixSharp
                 }
             }
 
-            var newSubDir = wDir.IsStandardDir ?
-                                new XElement("StandardDirectory",
-                                    new XAttribute("Id", wDir.Id))
-                                :
-                                new XElement("Directory",
-                                    new XAttribute("Id", wDir.Id),
-                                    new XAttribute("Name", name));
+            var newSubDir = new XElement("Directory",
+                                new XAttribute("Id", wDir.Id),
+                                new XAttribute("Name", name));
 
             if (!wDir.IsAutoParent())
                 newSubDir.AddAttributes(wDir.Attributes);

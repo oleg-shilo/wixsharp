@@ -35,7 +35,7 @@ class Script
                 new PathFileAction(@"%WindowsFolder%\notepad.exe", @"C:\boot.ini", "INSTALLDIR", Return.asyncNoWait, When.After, Step.PreviousAction, Condition.NOT_Installed),
 
                 // execute VBS code
-                new ScriptAction(@"MsgBox ""Executing VBScript code...""", Return.ignore, When.After, Step.PreviousAction, Condition.NOT_Installed),
+                // new ScriptAction(@"MsgBox ""Executing VBScript code...""", Return.ignore, When.After, Step.PreviousAction, Condition.NOT_Installed),
 
                 // execute embedded VBS file
                 new ScriptFileAction(@"Files\Sample.vbs", "Execute" , Return.ignore, When.After, Step.PreviousAction, "NOT Installed"), //raw string can be used as Condition as well

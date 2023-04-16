@@ -233,6 +233,22 @@ namespace WixSharp
             return null;
         }
 
+        internal static void SetStandardDirs(this XElement product)
+        {
+            var topLevelDirs = product.Elements("Directory").ToArray();
+
+            var standardFiolderNames = Compiler.EnvironmentConstantsMapping.Values;
+            foreach (var item in topLevelDirs)
+            {
+                var id = item.Attribute("Id")?.Value;
+                if (standardFiolderNames.Contains(id))
+                {
+                    item.Name = "StandardDirectory";
+                    item.Attribute("Name")?.Remove();
+                }
+            }
+        }
+
         internal static bool HasKeyPathElements(this XElement xComponent)
         {
             return xComponent.Descendants()
@@ -350,23 +366,20 @@ namespace WixSharp
             return xComponent;
         }
 
-        private static string[] GetUserProfileFolders()
-        {
-            return new[]
-                   {
-                       "ProgramMenuFolder",
-                       "AppDataFolder",
-                       "LocalAppDataFolder",
-                       "TempFolder",
-                       "PersonalFolder",
-                       "DesktopFolder",
-                       "StartupFolder"
-                   };
-        }
+        private static string[] UserProfileFolders = new[]
+                                                        {
+                                                            "ProgramMenuFolder",
+                                                            "AppDataFolder",
+                                                            "LocalAppDataFolder",
+                                                            "TempFolder",
+                                                            "PersonalFolder",
+                                                            "DesktopFolder",
+                                                            "StartupFolder"
+                                                        };
 
         static bool InUserProfile(this XElement xDir)
         {
-            string[] userProfileFolders = GetUserProfileFolders();
+            string[] userProfileFolders = UserProfileFolders;
 
             XElement xParentDir = xDir;
             do
@@ -387,7 +400,7 @@ namespace WixSharp
 
         static bool IsUserProfileRoot(this XElement xDir)
         {
-            string[] userProfileFolders = GetUserProfileFolders();
+            string[] userProfileFolders = UserProfileFolders;
 
             return userProfileFolders.Contains(xDir.Attribute("Name").Value);
         }
@@ -686,9 +699,8 @@ namespace WixSharp
             XElement product = doc.Root.Select(Compiler.ProductElementName);
 
             int? absPathCount = null;
-            string firstDirElementName = "StandardDirectory";
 
-            foreach (XElement dir in product.Element(firstDirElementName).Elements("Directory"))
+            foreach (XElement dir in product.Element("Directory").Elements("Directory"))
             {
                 XElement installDir = dir;
 
@@ -834,6 +846,7 @@ namespace WixSharp
             }
 
             InjectPlatformAttributes(doc);
+            SetStandardDirs(product);
         }
 
         internal static void NormalizeFilePaths(XDocument doc, string sourceBaseDir, bool emitRelativePaths)
