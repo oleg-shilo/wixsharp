@@ -4,8 +4,8 @@
 
 using System;
 using System.Windows.Forms;
-using WixToolset.Dtf.WindowsInstaller;
 using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {
@@ -27,7 +27,7 @@ class Script
                 },
 
                 new ManagedAction(@"ShowGritting"),
-                new WixQuietExecAction("notepad.exe", "[NOTEPAD_FILE]"),
+                // new WixQuietExecAction("notepad.exe", "[NOTEPAD_FILE]"),
             },
             Properties = new[]
             {

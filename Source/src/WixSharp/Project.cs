@@ -257,7 +257,7 @@ namespace WixSharp
 
         /// <summary>
         /// Collection of Media generic <see cref="T:WixSharp.WixEntity"/> containers for defining WiX <c>Media</c> elements
-        /// attributes. Project is always initialized with a sinle Media item. Though if you add multiples media items via
+        /// attributes. Project is always initialized with a single Media item. Though if you add multiples media items via
         /// <see cref="T:WixSharp.Project"/> constructor it removes the initial Media item before adding any new items.
         /// <para>These attributes describe a disk that makes up the source media for the installation.</para>
         ///<example>The following is an example of defining the <c>Package</c> attributes.

@@ -11,3 +11,4 @@ Made obsolete without any duidance on how to deal with it:
 - Publish.Condition
 - <CustomAction Id="VBScript" Script="vbscript" ...><![CDATA[MsgBox "Executing VBScript code..."]]>
 - <CustomAction Id="LaunchApplication" DllEntry="WixShellExec" Impersonate="yes" BinaryRef="WixCA" /> // WixCA -> WixUiCa_X86 (just a guess)
+- <CustomAction Id="WixQuietExec_notepad.exe" BinaryRef="WixCA" DllEntry="WixQuietExec" ... />

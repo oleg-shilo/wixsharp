@@ -7,17 +7,9 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-
-#if Wix4
-using WixToolset.Dtf.WindowsInstaller;
-#else
-
-using WixToolset.Dtf.WindowsInstaller;
-
-#endif
-
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 public class Script
 {
@@ -36,8 +28,7 @@ public class Script
                     new ManagedAction(CustomActions.InvokeRemoveFiles, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed),
                     new Error("9000", "Hello World! (CLR: v[2]) Embedded Managed CA ([3])"));
 
-            //project.Platform = Platform.x64;
-            project.PreserveTempFiles = true;
+            // project.PreserveTempFiles = true;
             // project.OutDir = "bin";
 
             project.BuildMsi();

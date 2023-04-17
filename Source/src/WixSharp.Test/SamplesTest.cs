@@ -17,6 +17,7 @@ namespace WixSharp.Test
         IEnumerable<string> nonMsiProjects = @"CustomAttributes,
                                                External_UI,
                                                Custom_IDs,
+                                               Self-executable_Msi,
                                                ASP.NETApp,
                                                EnvVariables,
                                                WixBootstrapper"

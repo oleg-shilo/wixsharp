@@ -8,11 +8,12 @@ class Script
 {
     static public void Main()
     {
+        // WixQuietExecAction is not supported in WiX4
         var project = new Project()
         {
             UI = WUI.WixUI_ProgressOnly,
             Name = "CustomActionTest",
-            Actions = new[] { new WixQuietExecAction("notepad.exe", @"C:\boot.ini") }
+            // Actions = new[] { new WixQuietExecAction("notepad.exe", @"C:\boot.ini") }
         };
 
         project.BuildMsi();

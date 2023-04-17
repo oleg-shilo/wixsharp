@@ -523,7 +523,7 @@ namespace WixSharp
                         if (data.StartsWith("base64_"))
                             data = data.Replace("base64_", "").Base64Decode();
 
-                        destElement.AddElement(name, null, data);
+                        destElement.AddAttributes($"{name}={data}");
                     }
                     else if (key == "Id")
                     {

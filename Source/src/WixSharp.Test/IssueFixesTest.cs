@@ -219,19 +219,21 @@ namespace WixSharp.Test
         [Description("Issue #60")]
         public void Fix_Issue_60()
         {
-            var project = new Project("MyProduct",
-                              new Dir("%ProgramFiles%",
-                              new File("abc.txt", new FilePermission("Guest", GenericPermission.All))));
+            // WixQuietExecAction is not supported in WiX4
 
-            project.AddAction(new WixQuietExecAction("cmd.exe", "/c \"echo abc\""));
+            // var project = new Project("MyProduct",
+            //                   new Dir("%ProgramFiles%",
+            //                   new File("abc.txt", new FilePermission("Guest", GenericPermission.All))));
 
-            var batchFile = project.BuildMsiCmd();
-            string cmd = System.IO.File.ReadAllLines(batchFile).First();
+            // project.AddAction(new WixQuietExecAction("cmd.exe", "/c \"echo abc\""));
 
-            int firstPos = cmd.IndexOf("WixUtilExtension.dll");
-            int lastPos = cmd.LastIndexOf("WixUtilExtension.dll");
+            // var batchFile = project.BuildMsiCmd();
+            // string cmd = System.IO.File.ReadAllLines(batchFile).First();
 
-            Assert.Equal(firstPos, lastPos);
+            // int firstPos = cmd.IndexOf("WixUtilExtension.dll");
+            // int lastPos = cmd.LastIndexOf("WixUtilExtension.dll");
+
+            // Assert.Equal(firstPos, lastPos);
         }
 
         [Fact]

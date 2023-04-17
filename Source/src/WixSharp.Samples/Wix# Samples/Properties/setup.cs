@@ -4,9 +4,9 @@
 
 using System;
 using System.Windows.Forms;
-using WixToolset.Dtf.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {
@@ -22,7 +22,7 @@ class Script
             Actions = new WixSharp.Action[]
             {
                 new ManagedAction(CustomActions.ShowGritting),
-                new WixQuietExecAction("notepad.exe", "[NOTEPAD_FILE]"),
+                // new WixQuietExecAction("notepad.exe", "[NOTEPAD_FILE]"),
             },
 
             Properties = new[]
@@ -33,6 +33,7 @@ class Script
             }
         };
 
+        project.Include(WixExtension.UI);
         project.PreserveTempFiles = true;
         project.BuildMsi();
     }

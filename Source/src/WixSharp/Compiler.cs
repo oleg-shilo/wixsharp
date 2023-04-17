@@ -1641,9 +1641,8 @@ namespace WixSharp
                         new XAttribute("Guid", WixGuid.NewGuid(compId))));
 
                 if (wFile.Condition != null)
-                    comp.AddElement(
-                        new XElement("Condition", wFile.Condition.ToXValue())
-                            .AddAttributes(wFile.Condition.Attributes));
+                    comp.AddAttributes("Condition=" + wFile.Condition.ToXValue())
+                        .AddAttributes(wFile.Condition.Attributes);
 
                 XElement file = comp.AddElement(
                     new XElement("File",
@@ -1810,9 +1809,8 @@ namespace WixSharp
                        new XAttribute("Guid", WixGuid.NewGuid(compId))));
 
                 if (wShortcut.Condition != null)
-                    comp.AddElement(
-                        new XElement("Condition", wShortcut.Condition.ToXValue())
-                            .AddAttributes(wShortcut.Condition.Attributes));
+                    comp.AddAttributes("Condition=" + wShortcut.Condition.ToXValue())
+                        .AddAttributes(wShortcut.Condition.Attributes);
 
                 string workingDir = wShortcut.WorkingDirectory.IsNotEmpty() ? wShortcut.WorkingDirectory : GetShortcutWorkingDirectopry(wShortcut.Target);
 
@@ -2229,9 +2227,8 @@ namespace WixSharp
                                                        new XAttribute("Guid", WixGuid.NewGuid(compId))));
 
                     if (regVal.Condition != null)
-                        comp.AddElement(
-                            new XElement("Condition", regVal.Condition.ToXValue())
-                                .AddAttributes(regVal.Condition.Attributes));
+                        comp.AddAttributes("Condition=" + regVal.Condition.ToXValue())
+                            .AddAttributes(regVal.Condition.Attributes);
 
                     XElement regValEl;
                     XElement regKeyEl;
@@ -2853,7 +2850,7 @@ namespace WixSharp
                     product.AddElement(
                         new XElement("CustomAction")
                             .SetAttribute("Id", cmdLineActionId)
-                            .SetAttribute(CABinarykeyAttrName, "WixCA") // in WiX4: WixCA -> WixUiCa_X86 (just a guess)
+                            .SetAttribute(CABinarykeyAttrName, "WixUiCa_X86") // in WiX4: WixCA -> WixUiCa_X86 (just a guess)
                             .SetAttribute("DllEntry", quietExecAction.ActionName)
                             .SetAttribute("Return", wAction.Return)
                             .SetAttribute("Impersonate", wAction.Impersonate)
@@ -2888,7 +2885,7 @@ namespace WixSharp
                         product.AddElement(
                             new XElement("CustomAction")
                                 .SetAttribute("Id", roollbackActionId)
-                                .SetAttribute(CABinarykeyAttrName, "WixCA") // in WiX4: WixCA -> WixUiCa_X86 (just a guess)
+                                .SetAttribute(CABinarykeyAttrName, "WixUiCa_X86") // in WiX4: WixCA -> WixUiCa_X86 (just a guess)
                                 .SetAttribute("DllEntry", quietExecAction.ActionName)
                                 .SetAttribute("Return", wAction.Return)
                                 .SetAttribute("Impersonate", wAction.Impersonate)

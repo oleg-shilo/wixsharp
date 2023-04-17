@@ -1,10 +1,10 @@
 //css_dir ..\..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 
 using System;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
+using WixToolset.Dtf.WindowsInstaller;
 using WixSharp;
 using Microsoft.Win32;
 using System.Diagnostics;
@@ -17,7 +17,9 @@ class Script
                 new ElevatedManagedAction(CustonActions.RegisterFileType, Return.ignore, When.After, Step.InstallInitialize, Condition.NOT_BeingRemoved),
                 new ElevatedManagedAction(CustonActions.UnRegisterFileType, Return.ignore, When.After, Step.InstallInitialize, Condition.Installed));
 
-        Compiler.BuildMsi(project);
+        Compiler.PreserveTempFiles = true;
+
+        Compiler.BuildMsiCmd(project);
     }
 }
 
@@ -26,6 +28,7 @@ public class CustonActions
     static RegistryKey OpenOrCreateKey(string path)
     {
         var key = Registry.ClassesRoot.OpenSubKey(path, true);
+
         if (key == null)
         {
             Registry.ClassesRoot.CreateSubKey(path);
@@ -63,6 +66,3 @@ public class CustonActions
         return ActionResult.Success;
     }
 }
-
-
-
