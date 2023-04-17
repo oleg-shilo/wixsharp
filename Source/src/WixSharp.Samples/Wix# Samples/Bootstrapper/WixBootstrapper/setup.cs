@@ -169,7 +169,8 @@ public class InstallScript
             new Project("My Product",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("readme.txt"),
-                    new File("logo.png")));
+                    new File("logo.png")))
+            { InstallScope = InstallScope.perMachine };
 
         productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         productProj.Version = new Version("2.0.0.0");
@@ -189,7 +190,9 @@ public class InstallScript
         var crtProj =
             new ManagedProject("CRT",
                 new Dir(@"%ProgramFiles%\My Company\CRT",
-                    new File("readme.txt")));
+                    new File("readme.txt")))
+            { InstallScope = InstallScope.perMachine };
+
         crtProj.UI = WUI.WixUI_InstallDir;
         crtProj.Load += CrtProj_Load;
 

@@ -1,5 +1,5 @@
-<Include>
-    <Property Id="Prop5" Value="5" />
-    <Property Id="Prop6" Value="6" />
+<Include xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<Property Id="Prop5" Value="5" />
+	<Property Id="Prop6" Value="6" />
 </Include>
 

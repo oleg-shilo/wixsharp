@@ -4,8 +4,8 @@
 
 using System;
 using System.Windows.Forms;
-using WixToolset.Dtf.WindowsInstaller;
 using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {

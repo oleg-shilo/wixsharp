@@ -1118,6 +1118,7 @@ namespace WixSharp
 
             package.SetAttribute("Description", project.Description)
                    .SetAttribute("Platform", project.Platform)
+                   .SetAttribute("Scope", project.InstallScope)
                    .SetAttribute("InstallerVersion", project.InstallerVersion);
 
             if (project.EmitConsistentPackageId)

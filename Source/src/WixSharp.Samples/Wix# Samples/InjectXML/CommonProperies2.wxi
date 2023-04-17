@@ -1,4 +1,4 @@
-<Include>
+<Include xmlns="http://wixtoolset.org/schemas/v4/wxs">
 	<Property Id="Prop7" Value="7" />
 	<Property Id="Prop8" Value="8" />
 </Include>

@@ -2,12 +2,12 @@
 //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 
-using System;
-using System.Windows.Forms;
-using WixToolset.Dtf.WindowsInstaller;
-using WixSharp;
 using Microsoft.Win32;
+using System;
 using System.Diagnostics;
+using System.Windows.Forms;
+using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {
@@ -19,7 +19,7 @@ class Script
 
         Compiler.PreserveTempFiles = true;
 
-        Compiler.BuildMsiCmd(project);
+        Compiler.BuildMsi(project);
     }
 }
 

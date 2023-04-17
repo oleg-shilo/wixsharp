@@ -43,6 +43,7 @@ class Script
         project.UI = WUI.WixUI_InstallDir;
 
         project.EmitConsistentPackageId = true;
+        project.InstallScope = InstallScope.perMachine;
         project.PreserveTempFiles = true;
         project.PreserveDbgFiles = true;
 

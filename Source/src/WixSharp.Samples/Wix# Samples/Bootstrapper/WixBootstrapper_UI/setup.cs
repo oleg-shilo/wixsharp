@@ -17,6 +17,7 @@ public class Script
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("readme.txt")));
 
+        productProj.InstallScope = InstallScope.perMachine;
         productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
 
         productProj.Load += (SetupEventArgs e) =>

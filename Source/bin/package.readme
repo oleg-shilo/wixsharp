@@ -14,3 +14,5 @@ Made obsolete without any duidance on how to deal with it:
 - <CustomAction Id="WixQuietExec_notepad.exe" BinaryRef="WixCA" DllEntry="WixQuietExec" ... />
 - <CustomActionRef Id="WixFailWhenDeferred" - from WixToolset.Util.wixext 
 - <Package Platform="x64" is illegal but not even picked by `wix convert`; doc says Component.Bitness may have value `default` that means "will be installed using the same bitness as the package". But package element does not have bitness
+- <Feature ...> <Condition ...> triggers compile error and yet the documentatin is stating that 
+  Meaning that the condition can only be set via the child Condition element (https://wixtoolset.org/docs/schema/wxs/feature/)

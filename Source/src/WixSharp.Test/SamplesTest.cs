@@ -19,9 +19,14 @@ namespace WixSharp.Test
                                                Custom_IDs,
                                                Self-executable_Msi,
                                                ASP.NETApp,
-                                               EnvVariables,
-                                               WixBootstrapper"
+                                               EnvVariables"
                                 .Split(',').Select(x => x.Trim());
+
+        string[] nonPortedWix4Projects = @"Rollback,
+                                           Driver,
+                                           InjectXML,
+                                           FeatureConditions,
+                                           WixBootstrapper".Split(',').Select(x => x.Trim()).ToArray();
 
         int completedSamples = 0;
         int samplesTotal = 0;
@@ -127,6 +132,9 @@ namespace WixSharp.Test
                 bool ignorePresentMsi = (dir.EndsWith("Self-executable_Msi", true));
 
                 bool nonMsi = nonMsiProjects.Where(x => batchFile.Contains(x)).Any();
+                bool ignoreSample = nonPortedWix4Projects.Where(x => batchFile.Contains(x)).Any();
+                if (ignoreSample)
+                    return;
 
                 if (!nonMsi && !ignorePresentMsi)
                 {
