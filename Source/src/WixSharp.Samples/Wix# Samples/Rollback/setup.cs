@@ -10,6 +10,9 @@ class Script
 {
     static public void Main()
     {
+        // not ported to WiX4.
+        // <CustomActionRef Id="WixFailWhenDeferred" - from WixToolset.Util.wixext
+        return;
         var project = new Project
         {
             Name = "CustomActionTest",
@@ -36,6 +39,7 @@ class Script
         };
 
         project.Include(WixExtension.Util);
+        project.Include(WixExtension.UI);
 
         Compiler.PreserveTempFiles = true;
 

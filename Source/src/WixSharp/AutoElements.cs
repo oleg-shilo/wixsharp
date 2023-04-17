@@ -29,7 +29,9 @@ THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Xml.Linq;
 using IO = System.IO;
 using Path = System.IO.Path;
@@ -443,11 +445,18 @@ namespace WixSharp
 
             if (is64BitPlatform)
             {
+                var platform = doc.Root.Select("Package").Attribute("Platform");
+                platform.Remove();
+                // doc says Component.Bitness may have value `default` that means "will be
+                // installed using the same bitness as the package".But package element does not have `bitness`.
+
+                // doc.Root.Select("Package").SetAttribute("Bitness", "always64");
+
                 doc.Descendants("Component")
                    .ForEach(comp =>
                    {
-                       if (!comp.HasAttribute("Win64"))
-                           comp.SetAttributeValue("Win64", "yes");
+                       if (!comp.HasAttribute("Bitness"))
+                           comp.SetAttributeValue("Bitness", "always64");
                    });
             }
         }

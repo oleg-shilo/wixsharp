@@ -652,8 +652,8 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Injects the Wxs (WiX source) into Wxs document. It merges 'Wix/Product' elements of
-        /// document with 'Wix/Product' elements of wxsFile.
+        /// Injects the Wxs (WiX source) into Wxs document. It merges 'Wix/Package' elements of
+        /// document with 'Wix/Package' elements of wxsFile.
         /// <para>
         /// This method is nothing else but a 'syntactic sugar' method, which wraps the following code:
         /// <code>

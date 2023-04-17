@@ -281,6 +281,7 @@ namespace WixSharp
     /// <summary>
     /// Use this attribute to specify the priviliges required to install the package on Windows Vista and above.
     /// </summary>
+    [Obsolete("Not supported in WiX4", false)]
     public enum InstallScope
     {
         /// <summary>
@@ -291,7 +292,33 @@ namespace WixSharp
         /// <summary>
         /// Set this value to declare that the package is a per-user installation and does not require elevated privileges to install. Sets the package's InstallPrivileges attribute to "limited."
         /// </summary>
-        perUser
+        perUser,
+
+        /// <summary>
+        ///  Set this value to declare that the package is dual-purpose that can install per-user or per-machine. Sets the ALLUSERS property to 2 and MSIINSTALLPERUSER property to 1.
+        /// </summary>
+        perUserOrMachine
+    }
+
+    /// <summary>
+    /// Use this attribute to specify the installation scope of this package: per-machine or per-user.
+    /// </summary>
+    public enum Scope
+    {
+        /// <summary>
+        /// Set this value to declare that the package is a per-machine installation and requires elevated privileges to install. Sets the ALLUSERS property to 1.
+        /// </summary>
+        perMachine,
+
+        /// <summary>
+        /// Set this value to declare that the package is a per-user installation and does not require elevated privileges to install. Sets the package's InstallPrivileges attribute to "limited."
+        /// </summary>
+        perUser,
+
+        /// <summary>
+        ///  Set this value to declare that the package is dual-purpose that can install per-user or per-machine. Sets the ALLUSERS property to 2 and MSIINSTALLPERUSER property to 1.
+        /// </summary>
+        perUserOrMachine
     }
 
     /// <summary>

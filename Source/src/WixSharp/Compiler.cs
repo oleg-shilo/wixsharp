@@ -2182,20 +2182,20 @@ namespace WixSharp
                         if (regVal.Win64.HasValue)
                         {
                             if (regVal.IsWin64 && wProject.Platform == Platform.x86)
-                                regVal.AttributesDefinition += ";Component:Win64=yes";
+                                regVal.AttributesDefinition += ";Component:Bitness=always64";
                             else if (!regVal.IsWin64 && wProject.Platform == Platform.x64)
-                                regVal.AttributesDefinition += ";Component:Win64=no";
+                                regVal.AttributesDefinition += ";Component:Bitness=always32";
                         }
                         else
                         {
                             if (wProject.Platform != Platform.x86)
-                                regVal.AttributesDefinition += ";Component:Win64=yes";
+                                regVal.AttributesDefinition += ";Component:Bitness=always64";
                         }
                     }
                     else //equivalent of wProject.Platform == Platform.x86 as MSI will be hosted by x86 msiexec.exe
                     {
                         if (regVal.IsWin64)
-                            regVal.AttributesDefinition += ";Component:Win64=yes";
+                            regVal.AttributesDefinition += ";Component:Bitness=always64";
                     }
 
                     count++;
