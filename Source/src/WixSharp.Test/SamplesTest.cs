@@ -24,7 +24,7 @@ namespace WixSharp.Test
 
         string[] nonPortedWix4Projects = @"Rollback,
                                            Driver,
-                                           InjectXML,
+                                           ASP.NETApp,
                                            FeatureConditions,
                                            WixBootstrapper".Split(',').Select(x => x.Trim()).ToArray();
 
@@ -48,28 +48,34 @@ namespace WixSharp.Test
             int? whichOneToRun = null; //null - all
             int sampleDirIndex = 0;
 
-            var files = Directory.GetFiles(@"..\..\..\WixSharp.Samples\Wix# Samples", "build*.cmd", SearchOption.AllDirectories);
+            var files = Directory.GetFiles(@"..\..\..\WixSharp.Samples\Wix# Samples", "build*.cmd", SearchOption.AllDirectories)
+                                 .OrderBy(x => x)
+                                 .ToArray();
+
             var compiled_scripts = Directory.GetFiles(@"..\..\..\WixSharp.Samples\Wix# Samples", "setup*.cs.dll", SearchOption.AllDirectories);
 
             compiled_scripts.ForEach(x => System.IO.File.Delete(x));
 
             files = files.Where(f => !exclude.Any(y => f.EndsWith(y, ignoreCase: true))).ToArray();
 
-            files = files.Skip(startStep).ToArray();
-
-            if (whichOneToRun.HasValue)
-                files = new[] { files[whichOneToRun.Value] };
-
-            if (howManyToRun.HasValue)
-                files = files.Take(howManyToRun.Value).ToArray();
-
-            samplesTotal = files.Count();
             testTime.Reset();
             testTime.Start();
 
             var samples = files.GroupBy(x => Path.GetDirectoryName(x));
 
-            var allSamples = samples.Select(g => new { Category = g.Key, Items = g, Index = ++sampleDirIndex }).ToArray();
+            var allSamples = samples.Select(g => new { Category = g.Key, Items = g, Index = ++sampleDirIndex })
+                                    .OrderBy(x => x.Index)
+                                    .ToArray();
+
+            allSamples = allSamples.Skip(startStep).ToArray();
+
+            if (whichOneToRun.HasValue)
+                allSamples = new[] { allSamples[whichOneToRun.Value] };
+
+            if (howManyToRun.HasValue)
+                allSamples = allSamples.Take(howManyToRun.Value).ToArray();
+
+            samplesTotal = allSamples.Count();
 
             var parallel = false;
 
@@ -88,7 +94,6 @@ namespace WixSharp.Test
                 var sampleFiles = Directory.GetFiles(sampleDir, "build*.cmd")
                                            .Select(x => Path.GetFullPath(x))
                                            .ToArray();
-
                 foreach (string batchFile in sampleFiles)
                 {
                     BuildSample(batchFile, group.Index, failedSamples);
@@ -151,11 +156,6 @@ namespace WixSharp.Test
                     $"Cmd: {batchFile}{Environment.NewLine}" +
                     $"======================================{Environment.NewLine}" +
                     $"{output}");
-
-                if (batchFile.Contains("InjectXml"))
-                {
-                    Debug.Assert(false);
-                }
 
                 if (output.Contains(" : error") || output.Contains("Error: ") || (!nonMsi && !HasAnyMsis(dir)))
                 {

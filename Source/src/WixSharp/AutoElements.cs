@@ -709,7 +709,7 @@ namespace WixSharp
 
             int? absPathCount = null;
 
-            foreach (XElement dir in product.Element("Directory").Elements("Directory"))
+            foreach (XElement dir in product.Elements("Directory"))
             {
                 XElement installDir = dir;
 
@@ -718,7 +718,7 @@ namespace WixSharp
                 {
                     string absolutePath = installDirName.Value;
 
-                    if (dir == product.Element("Directory").Elements("Directory").First()) //only for the first root dir
+                    if (dir == product.Elements("Directory").First()) //only for the first root dir
                     {
                         //ManagedUI will need some hint on the install dir as it cannot rely on the session action (e.g. Set_INSTALLDIR_AbsolutePath)
                         //because it is running outside of the sequence and analyses the tables directly for the INSTALLDIR
@@ -740,12 +740,14 @@ namespace WixSharp
                                 new XAttribute("Value", absolutePath)));
 
                     product.SelectOrCreate("InstallExecuteSequence").Add(
-                            new XElement("Custom", $"(NOT Installed) AND (UILevel < 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
+                            new XElement("Custom",
+                                new XAttribute("Condition", $"(NOT Installed) AND (UILevel < 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})"),
                                 new XAttribute("Action", customAction),
                                 new XAttribute("Before", "AppSearch")));
 
                     product.SelectOrCreate("InstallUISequence").Add(
-                            new XElement("Custom", $"(NOT Installed) AND (UILevel = 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
+                            new XElement("Custom",
+                                new XAttribute("Condition", $"(NOT Installed) AND (UILevel = 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})"),
                                 new XAttribute("Action", customAction),
                                 new XAttribute("Before", "AppSearch")));
 

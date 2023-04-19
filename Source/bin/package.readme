@@ -11,8 +11,10 @@ Made obsolete without any duidance on how to deal with it:
 - Publish.Condition
 - <CustomAction Id="VBScript" Script="vbscript" ...><![CDATA[MsgBox "Executing VBScript code..."]]>
 - <CustomAction Id="LaunchApplication" DllEntry="WixShellExec" Impersonate="yes" BinaryRef="WixCA" /> // WixCA -> WixUiCa_X86 (just a guess)
-- <CustomAction Id="WixQuietExec_notepad.exe" BinaryRef="WixCA" DllEntry="WixQuietExec" ... />
+- <CustomAction Id="WixQuietExec_notepad.exe" BinaryRef="WixCA" DllEntry="WixQuietExec" ... /> (see https://wixtoolset.org/docs/tools/wixext/quietexec/)
 - <CustomActionRef Id="WixFailWhenDeferred" - from WixToolset.Util.wixext 
 - <Package Platform="x64" is illegal but not even picked by `wix convert`; doc says Component.Bitness may have value `default` that means "will be installed using the same bitness as the package". But package element does not have bitness
 - <Feature ...> <Condition ...> triggers compile error and yet the documentatin is stating that 
   Meaning that the condition can only be set via the child Condition element (https://wixtoolset.org/docs/schema/wxs/feature/)
+- <Property Id="ALLUSERS" Value="1" /> triggers error WIX0091: Duplicate symbol 'Property:ALLUSERS' found. and yet Package.Scope requires it to be set.
+  Opted to drop it all together as Package.Scope does controll it anyway.

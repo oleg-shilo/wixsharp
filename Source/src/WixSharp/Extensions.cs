@@ -270,6 +270,9 @@ namespace WixSharp
             return IO.Path.IsPathRooted(path);
         }
 
+        internal static bool IsPublicWixProperty(this string name)
+            => name == name.ToUpper();
+
         /// <summary>
         /// Determines whether the character is a digit.
         /// </summary>

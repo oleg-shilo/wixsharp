@@ -1,11 +1,11 @@
 //css_dir ..\..\..\;
 //css_ref WixSharp.dll;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using System.Linq;
 using WixSharp;
 
 class Script
@@ -50,7 +50,7 @@ class Script
         project.UI = WUI.WixUI_ProgressOnly;
         project.OutFileName = "setup";
         project.PreserveTempFiles = true;
-        
+
         Compiler.BuildMsi(project);
     }
 

@@ -419,8 +419,15 @@ namespace WixSharp
         /// Use this attribute if you need to specify the installation scope of this package: per-machine or per-user.
         /// </summary>
         [Obsolete("Not supported in WiX4", false)]
-        public InstallScope? InstallScope;
+        public InstallScope? InstallScope
+        {
+            get => Scope;
+            set => Scope = value;
+        }
 
+        /// <summary>
+        /// Use this attribute if you need to specify the installation scope of this package: per-machine or per-user.
+        /// </summary>
         public InstallScope? Scope;
 
         /// <summary>

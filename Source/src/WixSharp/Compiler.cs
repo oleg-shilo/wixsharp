@@ -37,6 +37,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Xml;
 using System.Xml.Linq;
 using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
@@ -896,12 +897,14 @@ namespace WixSharp
 
             doc.AddDefaultNamespaces();
 
-            string xml = "";
-            using (IO.StringWriter sw = new StringWriterWithEncoding(project.Encoding))
-            {
-                doc.Save(sw, SaveOptions.None);
-                xml = sw.ToString();
-            }
+            string xml = doc.ToString(); // this will remove XML declaration line (`<?xml...`) as WiX4 requires. Otherwise use XmlWriter
+                                         // 
+                                         // var sb = new StringBuilder();
+                                         // var settings = new XmlWriterSettings { OmitXmlDeclaration = true, Encoding = project.Encoding, Indent = true };
+                                         // using (XmlWriter xw = XmlWriter.Create(sb, settings))
+                                         //     doc.Save(xw);
+                                         // string xml = sb.ToString();
+
 
             DefaultWixSourceFormatedHandler(ref xml);
 
@@ -995,11 +998,10 @@ namespace WixSharp
                   .CopyAttributeFrom(product, "Codepage")
                   .CopyAttributeFrom(product, "Language")
                   .CopyAttributeFrom(product, "Version");
+            module.SetAttributeValue("Guid", product.Attribute("ProductCode").Value);
 
-            XElement package = module.Select("Package");
-            package.CopyAttributeFrom(product, "Id")
-                   .CopyAttributeFrom(product, "Manufacturer")
-                   .Attribute("Compressed").Remove();
+            XElement info = module.Select("SummaryInformation");
+            info.CopyAttributeFrom(product, "Manufacturer");
         }
 
         /// <summary>
@@ -1989,8 +1991,8 @@ namespace WixSharp
             {
                 XElement product = dirItem.Parent(Compiler.ProductElementName);
 
-                //note Wix# expects package.Attribute("Languages") to have a single value (yes it is a temporary limitation)
-                string language = product.Select("Package").Attribute("Languages").Value;
+                // In WiX4 package.Attribute("Languages") does not longer exist. It is  only
+                string language = product.Attribute("Language").Value;
                 string diskId = product.Select("Media")?.Attribute("Id")?.Value ?? "1"; // see Issue #362 (Merge Modules cause NullRefException when MediaTemplate is used) discussion
 
                 XElement merge = dirItem.AddElement(
@@ -2126,9 +2128,10 @@ namespace WixSharp
             // MSI doesn't allow absolute path to be assigned via name. Instead it requires it to be set via
             // SetProperty custom action. And what is even more weird the id of such a dir has to be public
             // (capitalized). Thus the id auto-assignment cannot be used as it creates non public id(s).
-            var absolutePathDirs = wProject.AllDirs.Where(x => !x.IsIdSet() && x.Name.IsAbsolutePath()).ToArray();
+            var absolutePathDirs = wProject.AllDirs.Where(x => (!x.IsIdSet() || x.RawId.IsPublicWixProperty()) && x.Name.IsAbsolutePath()).ToArray();
             foreach (var item in absolutePathDirs)
-                item.Id = $"TARGETDIR{absolutePathDirs.FindIndex(item) + 1}";
+                if (!item.Id.IsPublicWixProperty())
+                    item.Id = $"TARGETDIR{absolutePathDirs.FindIndex(item) + 1}";
 
 
             foreach (Dir wDir in wDirs)
