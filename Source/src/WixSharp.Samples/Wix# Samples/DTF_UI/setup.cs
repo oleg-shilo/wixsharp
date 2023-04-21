@@ -19,7 +19,7 @@ internal class Script
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                          new File(@"readme.txt")),
 
-                // new WixQuietExecAction("notepad.exe", "[WEBPOOL_NAME]"),
+                new WixQuietExecAction("notepad.exe", "[WEBPOOL_NAME]"),
                 new ManagedAction(CustonActions.MyAction, Return.ignore, When.After, Step.InstallInitialize, Condition.NOT_Installed));
 
         project.Properties = new[] { new Property("WEBPOOL_NAME", "empty") };

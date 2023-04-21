@@ -106,10 +106,11 @@ namespace WixSharp.Test
 
             var xml = bootstrapper.ToXml().First().ToString();
 
-            var expected = @"<Bundle Name=""My Product"" AboutUrl=""https://github.com/oleg-shilo/wixsharp/"" IconSourceFile=""icon.ico"" UpgradeCode=""00000000-0000-0000-0000-000000000007"" Version=""1.0.0.0"">
-  <BootstrapperApplicationRef Id=""WixStandardBootstrapperApplication.RtfLicense"">
-    <WixStandardBootstrapperApplication LogoFile=""app_logo.png"" LocalizationFile=""en-us.wxl"" LicenseFile=""readme.rtf"" xmlns=""http://schemas.microsoft.com/wix/BalExtension"" />
-  </BootstrapperApplicationRef>
+            var expected =
+@"<Bundle Name=""My Product"" AboutUrl=""https://github.com/oleg-shilo/wixsharp/"" IconSourceFile=""icon.ico"" UpgradeCode=""00000000-0000-0000-0000-000000000007"" Version=""1.0.0.0"">
+  <BootstrapperApplication Id=""WixStandardBootstrapperApplication.RtfLicense"">
+    <WixStandardBootstrapperApplication Theme=""hyperlinkLargeLicense"" LogoFile=""app_logo.png"" LocalizationFile=""en-us.wxl"" LicenseFile=""readme.rtf"" xmlns=""http://wixtoolset.org/schemas/v4/wxs/bal"" />
+  </BootstrapperApplication>
   <Chain>
     <PackageGroupRef Id=""NetFx40Web"" />
     <ExePackage InstallCommand=""/q /norestart"" PerMachine=""yes"" SourceFile=""Samples\Setup1.exe"">
@@ -138,9 +139,9 @@ namespace WixSharp.Test
             var xml = bootstrapper.ToXml().First().ToString();
 
             var expected = @"<Bundle Name=""My Product"" UpgradeCode=""00000000-0000-0000-0000-000000000007"">
-  <BootstrapperApplicationRef Id=""WixStandardBootstrapperApplication.RtfLicense"">
-    <WixStandardBootstrapperApplication LicenseFile=""readme.rtf"" xmlns=""http://schemas.microsoft.com/wix/BalExtension"" />
-  </BootstrapperApplicationRef>
+  <BootstrapperApplication Id=""WixStandardBootstrapperApplication.RtfLicense"">
+    <WixStandardBootstrapperApplication Theme=""hyperlinkLargeLicense"" LicenseFile=""readme.rtf"" xmlns=""http://wixtoolset.org/schemas/v4/wxs/bal"" />
+  </BootstrapperApplication>
   <Chain />
 </Bundle>";
             Assert.Equal(expected, xml);
@@ -157,10 +158,10 @@ namespace WixSharp.Test
             var xml = bootstrapper.ToXml().First().ToString();
 
             var expected = @"<Bundle Name=""My Product"" UpgradeCode=""00000000-0000-0000-0000-000000000007"">
-  <BootstrapperApplicationRef Id=""WixStandardBootstrapperApplication.HyperlinkLicense"">
+  <BootstrapperApplication Id=""WixStandardBootstrapperApplication.HyperlinkLicense"">
     <Payload SourceFile=""Resource\License.html"" />
-    <WixStandardBootstrapperApplication LicenseUrl=""License.html"" xmlns=""http://schemas.microsoft.com/wix/BalExtension"" />
-  </BootstrapperApplicationRef>
+    <WixStandardBootstrapperApplication Theme=""hyperlinkLargeLicense"" LicenseUrl=""License.html"" xmlns=""http://wixtoolset.org/schemas/v4/wxs/bal"" />
+  </BootstrapperApplication>
   <Chain />
 </Bundle>";
             Assert.Equal(expected, xml);
@@ -177,9 +178,9 @@ namespace WixSharp.Test
             var xml = bootstrapper.ToXml().First().ToString();
 
             var expected = @"<Bundle Name=""My Product"" UpgradeCode=""00000000-0000-0000-0000-000000000007"">
-  <BootstrapperApplicationRef Id=""WixStandardBootstrapperApplication.HyperlinkLicense"">
-    <WixStandardBootstrapperApplication LicenseUrl=""http://opensource.org/licenses/MIT"" xmlns=""http://schemas.microsoft.com/wix/BalExtension"" />
-  </BootstrapperApplicationRef>
+  <BootstrapperApplication Id=""WixStandardBootstrapperApplication.HyperlinkLicense"">
+    <WixStandardBootstrapperApplication Theme=""hyperlinkLargeLicense"" LicenseUrl=""http://opensource.org/licenses/MIT"" xmlns=""http://wixtoolset.org/schemas/v4/wxs/bal"" />
+  </BootstrapperApplication>
   <Chain />
 </Bundle>";
             Assert.Equal(expected, xml);
@@ -196,9 +197,9 @@ namespace WixSharp.Test
             var xml = bootstrapper.ToXml().First().ToString();
 
             var expected = @"<Bundle Name=""My Product"" UpgradeCode=""00000000-0000-0000-0000-000000000007"">
-  <BootstrapperApplicationRef Id=""WixStandardBootstrapperApplication.HyperlinkLicense"">
-    <WixStandardBootstrapperApplication LicenseUrl="""" xmlns=""http://schemas.microsoft.com/wix/BalExtension"" />
-  </BootstrapperApplicationRef>
+  <BootstrapperApplication Id=""WixStandardBootstrapperApplication.HyperlinkLicense"">
+    <WixStandardBootstrapperApplication Theme=""hyperlinkLargeLicense"" LicenseUrl="""" xmlns=""http://wixtoolset.org/schemas/v4/wxs/bal"" />
+  </BootstrapperApplication>
   <Chain />
 </Bundle>";
             Assert.Equal(expected, xml);

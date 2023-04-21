@@ -362,6 +362,7 @@ static class Script
 
         project.BuildMsi();
     }
+
 #pragma warning disable
 
     static public void Main()

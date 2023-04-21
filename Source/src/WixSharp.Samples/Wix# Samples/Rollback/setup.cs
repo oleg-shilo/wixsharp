@@ -10,9 +10,9 @@ class Script
 {
     static public void Main()
     {
-        // not ported to WiX4.
-        // <CustomActionRef Id="WixFailWhenDeferred" - from WixToolset.Util.wixext
-        return;
+        // Ported to WiX4 but fails to build due to the WiX4 defect.
+        // <CustomActionRef Id="FailWhenDeferred" - from WixToolset.Util.wixext
+
         var project = new Project
         {
             Name = "CustomActionTest",
@@ -34,7 +34,7 @@ class Script
                     RollbackArg = "Prop=Rollback"
                 },
 
-                new CustomActionRef("WixFailWhenDeferred", When.Before, Step.InstallFinalize, "1"),
+                new CustomActionRef("FailWhenDeferred", When.Before, Step.InstallFinalize, "1"),
             }
         };
 
@@ -43,7 +43,7 @@ class Script
 
         Compiler.PreserveTempFiles = true;
 
-        Compiler.BuildMsi(project);
+        Compiler.BuildMsiCmd(project);
     }
 }
 

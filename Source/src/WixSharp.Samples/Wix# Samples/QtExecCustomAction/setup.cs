@@ -13,9 +13,9 @@ class Script
         {
             UI = WUI.WixUI_ProgressOnly,
             Name = "CustomActionTest",
-            // Actions = new[] { new WixQuietExecAction("notepad.exe", @"C:\boot.ini") }
+            Actions = new[] { new WixQuietExecAction("notepad.exe", @"C:\boot.ini") }
         };
 
-        project.BuildMsi();
+        project.BuildMsiCmd();
     }
 }

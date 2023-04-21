@@ -27,7 +27,7 @@ class Script
                 },
 
                 new ManagedAction(@"ShowGritting"),
-                // new WixQuietExecAction("notepad.exe", "[NOTEPAD_FILE]"),
+                new WixQuietExecAction("notepad.exe", "[NOTEPAD_FILE]"),
             },
             Properties = new[]
             {

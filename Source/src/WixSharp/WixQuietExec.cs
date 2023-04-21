@@ -77,7 +77,6 @@ namespace WixSharp
         /// </summary>
         /// <param name="appPath">Path to the application to be executed. This can be a file name only if the location of the application is well-known.</param>
         /// <param name="args">The arguments to be passed to the application during the execution.</param>
-        [Obsolete("Is not supported in WiX4.", true)]
         public WixQuietExecAction(string appPath, string args)
             : base()
         {

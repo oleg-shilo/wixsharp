@@ -2856,7 +2856,7 @@ namespace WixSharp
                     product.AddElement(
                         new XElement("CustomAction")
                             .SetAttribute("Id", cmdLineActionId)
-                            .SetAttribute(CABinarykeyAttrName, "WixUiCa_X86") // in WiX4: WixCA -> WixUiCa_X86 (just a guess)
+                            .SetAttribute(CABinarykeyAttrName, "Wix4UtilCA_X86") // in WiX4: WixCA -> WixUiCa_X86 (just a guess)
                             .SetAttribute("DllEntry", quietExecAction.ActionName)
                             .SetAttribute("Return", wAction.Return)
                             .SetAttribute("Impersonate", wAction.Impersonate)

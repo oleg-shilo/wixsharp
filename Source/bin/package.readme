@@ -6,15 +6,19 @@
 ===============================
 WiX4 Issues:
 
-Made obsolete without any duidance on how to deal with it: 
-- Package.InstallPrivileges 
+Made obsolete without any guidance on how to deal with it: 
+
+WixSharp just drops these features:
+- Package.InstallPrivileges
 - Publish.Condition
 - <CustomAction Id="VBScript" Script="vbscript" ...><![CDATA[MsgBox "Executing VBScript code..."]]>
-- <CustomAction Id="LaunchApplication" DllEntry="WixShellExec" Impersonate="yes" BinaryRef="WixCA" /> // WixCA -> WixUiCa_X86 (just a guess)
-- <CustomAction Id="WixQuietExec_notepad.exe" BinaryRef="WixCA" DllEntry="WixQuietExec" ... /> (see https://wixtoolset.org/docs/tools/wixext/quietexec/)
-- <CustomActionRef Id="WixFailWhenDeferred" - from WixToolset.Util.wixext 
-- <Package Platform="x64" is illegal but not even picked by `wix convert`; doc says Component.Bitness may have value `default` that means "will be installed using the same bitness as the package". But package element does not have bitness
-- <Feature ...> <Condition ...> triggers compile error and yet the documentatin is stating that 
-  Meaning that the condition can only be set via the child Condition element (https://wixtoolset.org/docs/schema/wxs/feature/)
-- <Property Id="ALLUSERS" Value="1" /> triggers error WIX0091: Duplicate symbol 'Property:ALLUSERS' found. and yet Package.Scope requires it to be set.
-  Opted to drop it all together as Package.Scope does controll it anyway.
+- <Package Platform="x64" is illegal but not even picked by wix convert; doc says Component.Bitness may have the value default which means "will be installed using the same bitness as the package". But the package element does not have bitness attribute. WixSharp maintains Project.Platform property but does not convert it in the Package.Platform while still cascades it to the Component.Bitness
+
+
+This needs to be addressed before the production release:
+- <CustomActionRef Id="FailWhenDeferred" - from WixToolset.Util.wixext; Just cannot be found in the extension even if the documentation states that it is there: https://wixtoolset.org/docs/schema/util/failwhendeferred/
+- <Feature ...> <Condition ...> triggers compile error and yet the documentation is stating that
+Meaning that the condition can only be set via the child Condition element (https://wixtoolset.org/docs/schema/wxs/feature/)
+- <Property Id="ALLUSERS" Value="1" /> triggers error WIX0091: Duplicate symbol 'Property:ALLUSERS' found. and yet if you use Package.Scope=perUserOrMachine it is required that ALLUSERS needs to be set.
+Opted to drop it all together as other values of Package.Scope do control the scope anyway.
+- Managed Custom BA. Still need to find out how to build a working sample. The ported sample builds but does not show the custom UI.

@@ -97,7 +97,7 @@ namespace WixSharp
             context.XParent
                 .Add(new XElement("CustomAction")
                     .SetAttribute("Id", "LaunchApplication")
-                    .SetAttribute("BinaryRef", "Wix4UtilCA_X86") // in WiX4: WixCA -> WixUiCa_X86 (just a guess)
+                    .SetAttribute("BinaryRef", "Wix4UtilCA_X86")
                     .SetAttribute("DllEntry", "WixShellExec")
                     .SetAttribute("Impersonate", "yes"));
         }

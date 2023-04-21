@@ -42,7 +42,7 @@ class Script
 
                 // see http://wixtoolset.org/documentation/manual/v3/customactions/wixfailwhendeferred.html
                 // Commented for demo purposes. If enabled WixExtension.Util will need to be added to the project.
-                // new CustomActionRef ("WixFailWhenDeferred", When.Before, Step.InstallFinalize, "WIXFAILWHENDEFERRED=1"),
+                // new CustomActionRef ("FailWhenDeferred", When.Before, Step.InstallFinalize, "WIXFAILWHENDEFERRED=1"),
 
                 new BinaryFileAction("EchoBin", "Executing Binary file...", Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed)
                 {

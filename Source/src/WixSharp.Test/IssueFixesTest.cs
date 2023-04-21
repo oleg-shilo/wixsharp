@@ -154,25 +154,25 @@ namespace WixSharp.Test
             assert(projPlatform: null, is64Reg1: true, is64Reg2: true,
                    assertHandler: (doc, reg, reg2, file) =>
                    {
-                       Assert.True(reg.HasAttribute("Win64", "yes"));
-                       Assert.True(reg2.HasAttribute("Win64", "yes"));
-                       Assert.False(file.HasAttribute("Win64", "yes"));
+                       Assert.True(reg.HasAttribute("Bitness", "always64"));
+                       Assert.True(reg2.HasAttribute("Bitness", "always64"));
+                       Assert.False(file.HasAttribute("Bitness", "always64"));
                    });
 
             assert(projPlatform: Platform.x64, is64Reg1: null, is64Reg2: null,
                    assertHandler: (doc, reg, reg2, file) =>
                    {
-                       Assert.True(reg.HasAttribute("Win64", "yes"));
-                       Assert.True(reg2.HasAttribute("Win64", "yes"));
-                       Assert.True(file.HasAttribute("Win64", "yes"));
+                       Assert.True(reg.HasAttribute("Bitness", "always64"));
+                       Assert.True(reg2.HasAttribute("Bitness", "always64"));
+                       Assert.True(file.HasAttribute("Bitness", "always64"));
                    });
 
             assert(projPlatform: Platform.x64, is64Reg1: false, is64Reg2: false,
                    assertHandler: (doc, reg, reg2, file) =>
                    {
-                       Assert.False(reg.HasAttribute("Win64", "yes"));
-                       Assert.False(reg2.HasAttribute("Win64", "yes"));
-                       Assert.True(file.HasAttribute("Win64", "yes"));
+                       Assert.False(reg.HasAttribute("Bitness", "always64"));
+                       Assert.False(reg2.HasAttribute("Bitness", "always64"));
+                       Assert.True(file.HasAttribute("Bitness", "always64"));
                    });
         }
 
@@ -219,21 +219,19 @@ namespace WixSharp.Test
         [Description("Issue #60")]
         public void Fix_Issue_60()
         {
-            // WixQuietExecAction is not supported in WiX4
+            var project = new Project("MyProduct",
+                              new Dir("%ProgramFiles%",
+                              new File("abc.txt", new FilePermission("Guest", GenericPermission.All))));
 
-            // var project = new Project("MyProduct",
-            //                   new Dir("%ProgramFiles%",
-            //                   new File("abc.txt", new FilePermission("Guest", GenericPermission.All))));
+            project.AddAction(new WixQuietExecAction("cmd.exe", "/c \"echo abc\""));
 
-            // project.AddAction(new WixQuietExecAction("cmd.exe", "/c \"echo abc\""));
+            var batchFile = project.BuildMsiCmd();
+            string cmd = System.IO.File.ReadAllLines(batchFile).First();
 
-            // var batchFile = project.BuildMsiCmd();
-            // string cmd = System.IO.File.ReadAllLines(batchFile).First();
+            int firstPos = cmd.IndexOf("WixUtilExtension.dll");
+            int lastPos = cmd.LastIndexOf("WixUtilExtension.dll");
 
-            // int firstPos = cmd.IndexOf("WixUtilExtension.dll");
-            // int lastPos = cmd.LastIndexOf("WixUtilExtension.dll");
-
-            // Assert.Equal(firstPos, lastPos);
+            Assert.Equal(firstPos, lastPos);
         }
 
         [Fact]
