@@ -84,7 +84,7 @@ class Script
         project.PreserveTempFiles = true;
         // uncomment the line below if you want to associate the web site with the app pool via WebApplicaion element
         // project.WixSourceGenerated += Project_WixSourceGenerated;
-        project.BuildMsiCmd();
+        project.BuildMsi();
     }
 
     static void Project_WixSourceGenerated(XDocument document)

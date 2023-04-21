@@ -974,6 +974,8 @@ namespace WixSharp
                 e.Remove();
                 doc.Root.Select(Compiler.ProductElementName).Add(e);
             }
+
+            // Remove empty Cabs
         }
 
         static void ConvertMsiToMsm(XDocument doc)

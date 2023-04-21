@@ -18,9 +18,12 @@ namespace WixSharp.Test
                                                External_UI,
                                                Custom_IDs,
                                                Self-executable_Msi,
+                                               MultiLanguageUI,
                                                ASP.NETApp,
                                                EnvVariables"
                                 .Split(',').Select(x => x.Trim());
+
+        string[] nonTestableProjects = "MultiLanguageUI".Split(',').Select(x => x.Trim()).ToArray();
 
         string[] nonPortedWix4Projects = @"Rollback,
                                            Driver,
@@ -138,7 +141,7 @@ namespace WixSharp.Test
                 bool ignorePresentMsi = (dir.EndsWith("Self-executable_Msi", true));
 
                 bool nonMsi = nonMsiProjects.Where(x => batchFile.Contains(x)).Any();
-                bool ignoreSample = nonPortedWix4Projects.Where(x => batchFile.Contains(x)).Any();
+                bool ignoreSample = nonPortedWix4Projects.Concat(nonTestableProjects).Where(x => batchFile.Contains(x)).Any();
                 if (ignoreSample)
                     return;
 
@@ -195,7 +198,7 @@ namespace WixSharp.Test
             lock (failedSamples)
             {
                 var logFile = @"..\..\..\WixSharp.Samples\test_progress.txt";
-                var content = string.Format("Failed-{0}; Completed-{1}; Total-{2}; Time-{3}\r\n", failedSamples.Count, completedSamples, samplesTotal, testTime.Elapsed) + string.Join(Environment.NewLine, failedSamples.ToArray());
+                var content = string.Format("Failed-{0}; Total Completed-{1}; Scenarios-{2}; Time-{3}\r\n", failedSamples.Count, completedSamples, samplesTotal, testTime.Elapsed) + string.Join(Environment.NewLine, failedSamples.ToArray());
                 IO.File.WriteAllText(logFile, content);
             }
         }
