@@ -228,7 +228,7 @@ namespace WixSharp
 
             RemoteAddress.ForEach(address =>
             {
-                firewallElement.Add(WixExtension.Fire.XElement("RemoteAddress", (object)address.Trim()));
+                firewallElement.Add(WixExtension.Fire.XElement("RemoteAddress", new XAttribute("Value", address.Trim())));
             });
 
             var findComponent = context.XParent.FindFirst("Component");

@@ -26,21 +26,21 @@ namespace WixSharp
         /// <param name="name">The name.</param>
         /// <param name="storeLocation">The store location.</param>
         /// <param name="storeName">Name of the store.</param>
-        /// <param name="binaryKey">The binary key.</param>
+        /// <param name="binaryRef">The reference to the binary Id of the certificate file.</param>
         /// <exception cref="ArgumentNullException">
         /// name;name is a null reference or empty
         /// or
         /// binaryKey;binaryKey is a null reference or empty
         /// </exception>
-        public Certificate(string name, StoreLocation storeLocation, StoreName storeName, string binaryKey)
+        public Certificate(string name, StoreLocation storeLocation, StoreName storeName, string binaryRef)
         {
             if (name.IsEmpty()) throw new ArgumentNullException(nameof(name));
-            if (binaryKey.IsEmpty()) throw new ArgumentNullException(nameof(binaryKey));
+            if (binaryRef.IsEmpty()) throw new ArgumentNullException(nameof(binaryRef));
 
             base.Name = name;
 
             Name = name;
-            BinaryKey = binaryKey;
+            BinaryRef = binaryRef;
             StoreLocation = storeLocation;
             StoreName = storeName;
         }
@@ -52,9 +52,9 @@ namespace WixSharp
         /// <param name="name">The name.</param>
         /// <param name="storeLocation">The store location.</param>
         /// <param name="storeName">Name of the store.</param>
-        /// <param name="binaryKey">The binary key.</param>
-        public Certificate(Id id, string name, StoreLocation storeLocation, StoreName storeName, string binaryKey)
-        : this(name, storeLocation, storeName, binaryKey)
+        /// <param name="binaryRef">The reference to the binary Id of the certificate file.</param>
+        public Certificate(Id id, string name, StoreLocation storeLocation, StoreName storeName, string binaryRef)
+        : this(name, storeLocation, storeName, binaryRef)
         {
             Id = id;
         }
@@ -66,9 +66,9 @@ namespace WixSharp
         /// <param name="name">The name.</param>
         /// <param name="storeLocation">The store location.</param>
         /// <param name="storeName">Name of the store.</param>
-        /// <param name="binaryKey">The binary key.</param>
-        public Certificate(Feature feature, string name, StoreLocation storeLocation, StoreName storeName, string binaryKey)
-        : this(name, storeLocation, storeName, binaryKey)
+        /// <param name="binaryRef">The reference to the binary Id of the certificate file.</param>
+        public Certificate(Feature feature, string name, StoreLocation storeLocation, StoreName storeName, string binaryRef)
+        : this(name, storeLocation, storeName, binaryRef)
         {
             Feature = feature;
         }
@@ -81,9 +81,9 @@ namespace WixSharp
         /// <param name="name">The name.</param>
         /// <param name="storeLocation">The store location.</param>
         /// <param name="storeName">Name of the store.</param>
-        /// <param name="binaryKey">The binary key.</param>
-        public Certificate(Id id, Feature feature, string name, StoreLocation storeLocation, StoreName storeName, string binaryKey)
-        : this(name, storeLocation, storeName, binaryKey)
+        /// <param name="binaryRef">The reference to the binary Id of the certificate file.</param>
+        public Certificate(Id id, Feature feature, string name, StoreLocation storeLocation, StoreName storeName, string binaryRef)
+        : this(name, storeLocation, storeName, binaryRef)
         {
             Id = id;
             Feature = feature;
@@ -175,7 +175,7 @@ namespace WixSharp
         /// The Id of a Binary instance that is the certificate to be installed
         /// </summary>
         [Xml]
-        public string BinaryKey;
+        public string BinaryRef;
 
         /// <summary>
         /// If the Request attribute is <c>false</c> then this attribute is the path to the certificate file outside of the package.

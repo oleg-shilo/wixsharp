@@ -37,6 +37,7 @@ using System.Xml.XPath;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.Controls;
+using WixSharp.Nsis;
 using WixToolset.Dtf.WindowsInstaller;
 
 using IO = System.IO;
@@ -1946,6 +1947,16 @@ namespace WixSharp.CommonTasks
             }
         }
 
+        public static string Heat
+        {
+            get
+            {
+                EnsureDtfTool();
+                // C: \Users\user\.nuget\packages\wixtoolset.heat\4.0.0\tools\net472\x86\heat.exe
+                return Directory.GetFiles(PackageDir("wixtoolset.heat"), "heat.exe", SearchOption.AllDirectories).FirstOrDefault();
+            }
+        }
+
         public static string DtfWindowsInstaller
         {
             get
@@ -1993,6 +2004,7 @@ namespace WixSharp.CommonTasks
                                                       <ItemGroup>
                                                         <PackageReference Include=""WixToolset.Dtf.CustomAction"" Version=""*"" />
                                                         <PackageReference Include=""WixToolset.Dtf.WindowsInstaller"" Version=""*"" />
+                                                        <PackageReference Include=""WixToolset.Heat"" Version=""*"" />
                                                       </ItemGroup>
                                                     </Project>");
 

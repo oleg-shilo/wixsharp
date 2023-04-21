@@ -25,6 +25,7 @@ namespace WixSharp.Test
         string[] nonPortedWix4Projects = @"Rollback,
                                            Driver,
                                            ASP.NETApp,
+                                           SqlDatabase,
                                            FeatureConditions,
                                            WixBootstrapper".Split(',').Select(x => x.Trim()).ToArray();
 

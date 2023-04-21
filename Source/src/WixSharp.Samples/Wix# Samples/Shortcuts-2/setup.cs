@@ -43,7 +43,7 @@ class Script
         project.OutFileName = "setup";
         project.PreserveTempFiles = true;
 
-        Compiler.BuildMsiCmd(project);
+        Compiler.BuildMsi(project);
     }
 }
 

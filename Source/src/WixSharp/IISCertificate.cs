@@ -156,7 +156,7 @@ namespace WixSharp
         /// <summary>
         /// The location of the certificate file.
         /// <para>In a canonical WiX use-case the user must add a certificate file as a <c>Binary</c> XML element and then reference the element Id as
-        /// the <c>BinaryKey</c> attribute of the <c>Certificate</c> element. However with WixSharp you can simply assing <see cref="IISCertificate.File"/>
+        /// the <c>BinaryRef</c> attribute of the <c>Certificate</c> element. However with WixSharp you can simply assing <see cref="IISCertificate.File"/>
         /// property to the certificalte file path and the compiler will automatically insert the required <c>Binary</c> element and reference it in all
         /// required places in the XML document.
         /// </para>

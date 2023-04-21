@@ -3298,8 +3298,8 @@ namespace WixSharp
         public static string ProductElementName => "Package";
 
         /// <summary>
-        /// This property contains the name of the logical 'BinaryKey' XML atribute of the Custom Action element. The need for this property arises 
-        /// from the changes in WiX v4.0 where 'BinaryKey' attribute was been renamed into "BinaryRef".
+        /// This property contains the name of the logical 'BinaryRef' XML atribute of the Custom Action element. The need for this property arises 
+        /// from the changes in WiX v4.0 where 'BinaryRef' attribute was been renamed into "BinaryRef".
         /// <p>ThiOn WiX v4.* it is <c>Package</c></p>
         /// <p>On WiX v3.* it is <c></c></p>
         /// <p>On WiX v4.* it is <c></c></p>
