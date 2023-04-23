@@ -275,7 +275,7 @@ namespace WixSharp
         /// </code>
         /// </example>
         /// </summary>
-        public List<Media> Media = new List<Media>(new[] { new Media() });
+        public List<Media> Media = new List<Media>(new[] { new Media { IsSetByUser = false } });
 
         /// <summary>
         /// The REINSTALLMODE property is a string that contains letters specifying the type of reinstall to perform.

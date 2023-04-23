@@ -16,6 +16,6 @@ class Script
             Actions = new[] { new WixQuietExecAction("notepad.exe", @"C:\boot.ini") }
         };
 
-        project.BuildMsiCmd();
+        project.BuildMsi();
     }
 }

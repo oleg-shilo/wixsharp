@@ -119,8 +119,6 @@ namespace WixSharp
         public void Process(ProcessingContext context)
         {
             context.Project.Include(WixExtension.Difx);
-            context.Project.LibFiles.Add(System.IO.Path.Combine(Compiler.WixLocation, "difxapp_{0}.wixlib".FormatWith(Architecture)));
-
             context.XParent.Parent?.Add(this.ToXElement(WixExtension.Difx, "Driver"));
         }
     }

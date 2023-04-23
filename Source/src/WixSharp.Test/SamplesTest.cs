@@ -12,7 +12,7 @@ using IO = System.IO;
 
 namespace WixSharp.Test
 {
-    public class SamplesTest : WixLocator
+    public class SamplesTest
     {
         IEnumerable<string> nonMsiProjects = @"CustomAttributes,
                                                External_UI,
@@ -28,7 +28,9 @@ namespace WixSharp.Test
         string[] nonPortedWix4Projects = ("Rollback," +     // WiX4 defect (cannot find element from the valid extension)
                                           "Driver," +       // WiX4 defect (cannot find element from the valid extension)
                                           "ASP.NETApp," +   // WiX4 defect (cannot find element from the valid extension)
+                                          "WixBootstrapper_NoUI," +   // WiX4 defect no Managed Custom BA guide
                                           "SqlDatabase," +       // WiX4: no porting guidance for Feature.Condition
+                                          "WixBootstrapper," +   // it is a VSProject based build; hard to integrate with xUnit
                                           "FeatureConditions"  // WiX4: no porting guidance for Feature.Condition
                                           ).Split(',').Select(x => x.Trim()).ToArray();
 

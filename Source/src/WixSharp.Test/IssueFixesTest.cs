@@ -15,7 +15,7 @@ using Xunit.Sdk;
 
 namespace WixSharp.Test
 {
-    public class IssueFixesTest : WixLocator
+    public class IssueFixesTest
     {
         /// <summary>
         /// Fixes the issue 803.
@@ -378,7 +378,7 @@ namespace WixSharp.Test
 
         void Project_WixSourceGenerated(XDocument document)
         {
-            var dir = document.FindAll("Directory")
+            var dir = document.FindAll("StandardDirectory")
                               .Where(x => x.HasAttribute("Name", "Test Project") && x.Parent.HasAttribute("Name", "PersonalFolder"))
                               .First();
 

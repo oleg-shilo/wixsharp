@@ -134,6 +134,11 @@ namespace WixSharp
         public bool ForceComponentIdUniqueness = false;
 
         /// <summary>
+        /// Remove media if no files are included
+        /// </summary>
+        public bool RemoveMediaIfNoFiles = true;
+
+        /// <summary>
         /// The ignore empty directories during wild card resolution
         /// </summary>
         public bool IgnoreWildCardEmptyDirectories = false;
@@ -373,79 +378,6 @@ namespace WixSharp
             }
         }
 
-
-
-        /// <summary>
-        /// Gets or sets the location of WiX binaries (compiler/linker/dlls).
-        /// The default value is the content of environment variable <c>WIXSHARP_WIXDIR</c>.
-        /// <para>If user does not set this property explicitly and WIXSHARP_WIXDIR is not defined
-        /// <see cref="Compiler"/> will try to locate WiX binaries in well known locations in this order:
-        /// <para><c>&lt;solution_dir&gt;\packages\WixSharp.wix.bin.&lt;max_version&gt;\tools\bin</c></para>
-        /// <para><c>Program Files\Windows Installer XML v&lt;max_of 3*&gt;\bin</c></para>
-        /// </para>
-        /// </summary>
-        /// <value>The WiX binaries' location.</value>
-        [Obsolete("This property is not used for WiX 4.0.")]
-        static public string WixLocation
-        {
-            get
-            {
-                if (wixLocation.IsNotEmpty() && !IO.Directory.Exists(wixLocation))
-                {
-                    Console.Error.WriteLine($"The specified location {wixLocation} was not valid.  Trying other methods to find the Wix assemblies!");
-                    wixLocation = null;
-                }
-
-                if (wixLocation.IsEmpty()) // Not set from the installer - find it now
-                {
-                    wixLocation = WixBinLocator.FindWixBinLocation()?.PathGetFullPath();
-                    Environment.SetEnvironmentVariable("WixLocation", wixLocation);
-                }
-
-                return wixLocation;
-            }
-            set
-            {
-                wixLocation = value;
-
-                // prevent interfering with the user defined relative path WixLocation by setting custom CurrentDir 
-                if (wixLocation.IsNotEmpty() && !IO.Path.IsPathRooted(wixLocation) && IO.Directory.Exists(wixLocation))
-                    wixLocation = wixLocation.PathGetFullPath();
-
-                Environment.SetEnvironmentVariable("WixLocation", wixLocation);
-            }
-        }
-
-        static string wixLocation;
-
-
-        /// <summary>
-        /// Gets or sets the location of WiX SDK binaries (e.g. MakeSfxCA.exe).
-        /// The default value is the '..\SDK' or 'SDK' (whichever exist) sub-directory of WixSharp.Compiler.WixLocation directory.
-        /// <para>
-        /// If for whatever reason the default location is invalid, you can always set this property to the location of your choice.
-        /// </para>
-        /// </summary>
-        /// <value>
-        /// The WiX SDK location.
-        /// </value>
-        /// <exception cref="System.Exception">WiX SDK binaries cannot be found. Please set WixSharp.Compiler.WixSdkLocation to valid path to the Wix SDK binaries.</exception>
-        public static string WixSdkLocation
-        {
-            get
-            {
-                if (wixSdkLocation.IsEmpty())
-                    wixSdkLocation = WixBinLocator.FindWixSdkLocation(WixLocation);
-
-                return wixSdkLocation;
-            }
-            set
-            {
-                wixSdkLocation = value;
-            }
-        }
-        static string wixSdkLocation;
-
         /// <summary>
         /// Forces <see cref="Compiler"/> to preserve all temporary build files (e.g. *.wxs).
         /// <para>The default value is <c>false</c>: all temporary files are deleted at the end of the build/compilation.</para>
@@ -591,9 +523,6 @@ namespace WixSharp
         {
             path = path.ExpandEnvVars();
 
-            string wixLocationEnvVar = $"set WixLocation={WixLocation}";
-            string compiler = Utils.PathCombine(WixLocation, "candle.exe");
-            string linker = Utils.PathCombine(WixLocation, "light.exe");
             string batchFile = path;
 
             if (ExternalTool.Locate("wix.exe") == null)
@@ -976,7 +905,27 @@ namespace WixSharp
             }
 
             // Remove empty Cabs
+            //  warning WIX1079: The cabinet 'CustomActionTest.cab' does not contain any files. If
+            //  this installation contains no files, this warning can likely be safely ignored. Otherwise,
+            //  please add files to the cabinet or remove it.
+
+            if (!doc.Root.FindAll("File").Any() && Compiler.AutoGeneration.RemoveMediaIfNoFiles)
+                doc.Root
+                   .FindAll("Media")
+                   .Where(x => x.Attributes().Any(a => a.LocalName().StartsWith(WixSharpXmlContextPrefix)))
+                   .ForEach(x => x.Remove());
+
+            // Remove any WixSharp context elements
+
+            doc.Root
+                .Descendants()
+                .SelectMany(x => x.Attributes()
+                                  .Where(a => a.LocalName().StartsWith(WixSharpXmlContextPrefix))
+                .ForEach(a => a.Remove()));
+
         }
+
+        internal static string WixSharpXmlContextPrefix = "wixsharp_";
 
         static void ConvertMsiToMsm(XDocument doc)
         {
@@ -1122,7 +1071,7 @@ namespace WixSharp
 
             package.SetAttribute("Description", project.Description)
                    .SetAttribute("Platform", project.Platform)
-                   .SetAttribute("Scope", project.InstallScope)
+                   .SetAttribute("Scope", project.Scope)
                    .SetAttribute("InstallerVersion", project.InstallerVersion);
 
             if (project.EmitConsistentPackageId)
@@ -3559,27 +3508,6 @@ namespace WixSharp
                                        .Replace("[", "")
                                        .Replace("]", "");
             return workingDir;
-        }
-
-        static string ResolveExtensionFile(string file)
-        {
-            string path = file;
-
-            if (string.Compare(IO.Path.GetExtension(path), ".dll", true) != 0)
-                path += ".dll";
-
-            if (IO.File.Exists(path))
-                return IO.Path.GetFullPath(path);
-
-            if (!IO.Path.IsPathRooted(path))
-            {
-                path = IO.Path.Combine(WixLocation, path);
-
-                if (IO.File.Exists(path))
-                    return path;
-            }
-
-            return file;
         }
     }
 }

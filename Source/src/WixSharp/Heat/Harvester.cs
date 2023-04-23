@@ -161,7 +161,7 @@ namespace WixSharp
     /// </example>
     public class Harvester
     {
-        static string heat = Compiler.WixLocation.PathJoin("heat.exe");
+        static string heat = WixTools.Heat;
         Project project;
         string targetDir;
         IList<VsProject> components = new List<VsProject>();

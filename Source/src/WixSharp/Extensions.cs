@@ -160,6 +160,20 @@ namespace WixSharp
             return element;
         }
 
+        /// <summary>
+        /// Returns LocalName.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns></returns>
+        public static string LocalName(this XElement obj) => obj.Name.LocalName;
+
+        /// <summary>
+        /// Returns LocalName.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static string LocalName(this XAttribute obj) => obj.Name.LocalName;
+
         internal static AssemblyName[] GetWixSharpDependencies(this System.Reflection.Assembly asm)
             => asm.GetReferencedAssemblies()
                .Where(a => a.Name.StartsWith("WixSharp.") ||
@@ -3291,7 +3305,7 @@ namespace WixSharp
         /// Collection of localizations. At least one localization is expected.
         /// </param>
         /// <returns>Path to the built MSI file.</returns>
-        public static string BuildMultilanguageMsi(this Project project, ProjectLocalization defaultLocalization, params ProjectLocalization[] localizations)
+        public static string BuildMultilanguageMsi(this Project project, ProjectLocalization defaultLocalization, string torchPath, params ProjectLocalization[] localizations)
         {
             if (project is null)
                 throw new ArgumentNullException(nameof(project));
@@ -3304,8 +3318,6 @@ namespace WixSharp
 
             if (!localizations.Any())
                 throw new ArgumentException("At least one localization expected", nameof(localizations));
-
-            var torchCmd = Compiler.WixLocation.PathCombine("torch.exe");
 
             defaultLocalization.BindTo(project);
 
@@ -3324,7 +3336,7 @@ namespace WixSharp
                 var localizedMstFilePath = localizedMsiFilePath.PathChangeExtension(".mst");
 
                 Compiler.OutputWriteLine("> Preparing language transformations...");
-                Process.Start(torchCmd, $"-p -t language \"{msiFilePath}\" \"{localizedMsiFilePath}\" -out \"{localizedMstFilePath}\"")
+                Process.Start(torchPath, $"-p -t language \"{msiFilePath}\" \"{localizedMsiFilePath}\" -out \"{localizedMstFilePath}\"")
                        .WaitForExit();
 
                 msiFilePath.EmbedTransform(localizedMstFilePath);
@@ -3467,7 +3479,7 @@ namespace WixSharp
         /// <returns></returns>
         public static string BuildLanguageTransform(this Project project, string originalMsi, string language, string localizationFile = "")
         {
-            var torch = Compiler.WixLocation.PathCombine("torch.exe");
+            var torch = WixTools.Heat;
             var originalLng = project.Language;
             var originalLocalizationFile = project.LocalizationFile;
             try

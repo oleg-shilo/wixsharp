@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace WixSharp
@@ -102,10 +102,17 @@ namespace WixSharp
             if (Cabinet.IsNotEmpty())
                 Cabinet = Cabinet.Replace("{projectId}", projectId);
 
-            return new XElement("Media")
-                       .AddAttributes(this.MapToXmlAttributes())
-                       .AddAttributes(this.Attributes);
+            var mediaElement = new XElement("Media")
+                 .AddAttributes(this.MapToXmlAttributes())
+                 .AddAttributes(this.Attributes);
+
+            if (!this.IsSetByUser) // let XML cleaners know that it is an auto-element
+                mediaElement.AddAttributes($"{Compiler.WixSharpXmlContextPrefix}DefaultMedia=true");
+
+            return mediaElement;
         }
+
+        internal bool IsSetByUser = true;
     }
 
     /// <summary>
@@ -130,36 +137,43 @@ namespace WixSharp
         /// </summary>
         [WixSharp.Xml]
         public string CabinetTemplate;
+
         /// <summary>
         /// Indicates the compression level for the Media's cabinet. This attribute can only be used in conjunction with the Cabinet attribute. The default is 'mszip'.
         /// </summary>
         [WixSharp.Xml]
         public CompressionLevel? CompressionLevel;
+
         /// <summary>
         /// The disk name, which is usually the visible text printed on the disk. This localizable text is used to prompt the user when this disk needs to be inserted. This value will be used in the "[1]" of the DiskPrompt Property. Using this attribute will require you to define a DiskPrompt Property.
         /// </summary>
         [WixSharp.Xml]
         public string DiskPrompt;
+
         /// <summary>
         /// Instructs the binder to embed the cabinets in the product if 'true'.
         /// </summary>
         [WixSharp.Xml]
         public bool? EmbedCab;
+
         /// <summary>
         /// Maximum size of cabinet files in megabytes for large files. This attribute is used for packaging files that are larger than MaximumUncompressedMediaSize into smaller cabinets. If cabinet size exceed this value, then setting this attribute will cause the file to be split into multiple cabinets of this maximum size. For simply controlling cabinet size without file splitting use MaximumUncompressedMediaSize attribute. Setting this attribute will disable smart cabbing feature for this Fragment / Product. Setting WIX_MCSLFS environment variable can be used to override this value. Minimum allowed value of this attribute is 20 MB. Maximum allowed value and the Default value of this attribute is 2048 MB (2 GB).
         /// </summary>
         [WixSharp.Xml]
         public int? MaximumCabinetSizeForLargeFileSplitting;
+
         /// <summary>
         /// Size of uncompressed files in each cabinet, in megabytes. WIX_MUMS environment variable can be used to override this value. Default value is 200 MB.
         /// </summary>
         [WixSharp.Xml]
         public int? MaximumUncompressedMediaSize;
+
         /// <summary>
         /// The label attributed to the volume. This is the volume label returned by the GetVolumeInformation function. If the SourceDir property refers to a removable (floppy or CD-ROM) volume, then this volume label is used to verify that the proper disk is in the drive before attempting to install files. The entry in this column must match the volume label of the physical media.
         /// </summary>
         [WixSharp.Xml]
         public string VolumeLabel;
+
         /// <summary>
         /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project" />.
         /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.

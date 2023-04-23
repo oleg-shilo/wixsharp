@@ -364,9 +364,9 @@ namespace WixSharp.CommonTasks
         /// </code>
         /// </example>
         static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
-            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
+            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1,
+            string insigniaPath = "<unknown insignia.exe Path>")
         {
-            var insigniaPath = IO.Path.Combine(Compiler.WixLocation, "insignia.exe");
             string enginePath = IO.Path.GetTempFileName();
 
             try
@@ -1752,6 +1752,11 @@ namespace WixSharp.CommonTasks
     /// </summary>
     public class ExternalTool
     {
+        /// <summary>
+        /// Locates the specified file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns></returns>
         public static string Locate(string file)
         {
             var possibleLocations = new[] { Environment.CurrentDirectory }.Combine(Environment.GetEnvironmentVariable("PATH").Split(';'))
