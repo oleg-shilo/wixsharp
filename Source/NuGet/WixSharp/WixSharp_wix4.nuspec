@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>WixSharp_wix4</id>
+    <version>1.21.0.0-pre</version>
+    <title>Wix# (WixSharp) - managed interface for WiX</title>
+    <authors>Oleg Shilo</authors>
+    <owners>Oleg Shilo</owners>
+    <projectUrl>https://github.com/oleg-shilo/wixsharp</projectUrl>
+    <license type="expression">MIT</license>
+    <icon>wixsharp_logo.png</icon>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
+The package contains Wix# binaries, code sample and custom MSBuild target (to be merged with VS project and trigger building MSI during the project compilation).
+
+If you need only Wix# binaries you may want to use WixSharp.bin package instead.
+
+In order to use this package you need have WiX Toolset installed.
+The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
+    <summary>Wix# (WixSharp) - Binaries</summary>
+    <releaseNotes>Release Candidate v1.21.0.0
+- Ported to WiX4
+
+Limitations:
+- Rollback
+    WiX4 defect: cannot find WixFailWhenDeferred the Util extension)
+- Driver
+    WiX4 defect: cannot find CustomAction:MsiProcessDrivers the Difxapp extension
+- ASP.NETApp
+    WiX4 defect: cannot find WebVirtualDir the Iis extension
+- SqlDatabase
+    WiX4: no porting guidance for Feature.Condition
+- FeatureConditions
+    WiX4: no porting guidance for Feature.Condition
+- Port Managed BA (currently impossible; until WiX provides a tech solution)
+
+</releaseNotes>
+    <copyright>Copyright (C) 2008-2022 Oleg Shilo</copyright>
+    <language>en-AU</language>
+    <tags>C# scripting msi install setup wix</tags>
+    <dependencies>
+      <dependency id="WixSharp_wix4.bin" version="1.21.0.0-pre" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="build\WixSharp.targets" target="build\WixSharp.targets" />
+    <file src="..\..\Templates\WixSharpVSIX\WixSharpVSIX\wixsharp_logo.png" target="" />
+  </files>
+</package>
