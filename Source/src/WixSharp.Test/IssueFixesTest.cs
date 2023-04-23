@@ -378,8 +378,9 @@ namespace WixSharp.Test
 
         void Project_WixSourceGenerated(XDocument document)
         {
-            var dir = document.FindAll("StandardDirectory")
-                              .Where(x => x.HasAttribute("Name", "Test Project") && x.Parent.HasAttribute("Name", "PersonalFolder"))
+            // var dir = document.FindAll("StandardDirectory")
+            var dir = document.FindAll("Directory")
+                              .Where(x => x.HasAttribute("Name", "Test Project") && x.Parent.HasAttribute("Id", "PersonalFolder"))
                               .First();
 
             dir.FindFirst("Component")

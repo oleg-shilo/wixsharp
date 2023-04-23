@@ -1270,7 +1270,7 @@ namespace WixSharp
 #pragma warning disable CS0419 // Ambiguous reference in cref attribute
 
         /// <summary>
-        /// Combines path parts. Encapsulates <see cref="Path.Combine"/>
+        /// Combines path parts. Encapsulates <see cref="Path.Combine" />
         /// </summary>
         /// <param name="path1">The path1.</param>
         /// <param name="path2">The path2.</param>
@@ -1282,6 +1282,12 @@ namespace WixSharp
             return IO.Path.Combine(path1, path2);
         }
 
+        /// <summary>
+        /// Combines path parts. Encapsulates <see cref="Path.Combine" />
+        /// </summary>
+        /// <param name="path1">The path1.</param>
+        /// <param name="parts">The parts of the path.</param>
+        /// <returns></returns>
         public static string PathCombine(this string path1, params object[] parts)
         {
             var allParts = new[] { path1 }.Concat(parts.Select(x => x?.ToString() ?? "")).ToArray();
@@ -2855,20 +2861,20 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Determines whether the specified session is cancelled.
+        // /// Determines whether the specified session is canceled.
         /// <para>
         /// It is identical to <see cref="WixSharp.Extensions.IsCancelled(Session)"/> except it does
         /// not throw/handle internal exception This helps if it is preferred to keep MSI log clean
         /// from any messages triggered by handled exceptions.
         /// </para>
         /// <para>
-        /// Though this method relies on <see cref="Microsoft.Deployment.WindowsInstaller"/>
-        /// internal (non-public) implementation thus is not warranteed to stay unchanged in the
+        /// Though this method relies on <see cref="WixToolset.Dtf.WindowsInstaller"/>
+        /// internal (non-public) implementation thus is not warrantied to stay unchanged in the
         /// future WiX releases.
         /// </para>
         /// </summary>
         /// <param name="session">The session.</param>
-        /// <returns><c>true</c> if the specified session is cancelled; otherwise, <c>false</c>.</returns>
+        /// <returns><c>true</c> if the specified session is canceled; otherwise, <c>false</c>.</returns>
         public static bool IsCancelledRaw(this Session session)
         {
             // does not throw but will become broken if WiX team changes the implementation

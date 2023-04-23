@@ -400,7 +400,11 @@ namespace WixSharp
                     rawName = entity.GetType().Name;
 
                 if (IO.Path.IsPathRooted(entity.Name))
-                    rawName = IO.Path.GetFileName(entity.Name).Expand();
+                {
+                    var name = IO.Path.GetFileName(entity.Name).Expand();
+                    if (name.IsEmpty()) // new Dir(@"C:\",...
+                        rawName = entity.Name.Expand();
+                }
 
                 if (entity.GetType() != typeof(Dir) && entity.GetType().BaseType != typeof(Dir) && entity.Name.IsNotEmpty())
                     rawName = IO.Path.GetFileName(entity.Name).Expand();

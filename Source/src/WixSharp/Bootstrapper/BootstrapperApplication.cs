@@ -252,6 +252,9 @@ namespace WixSharp.Bootstrapper
         [Xml]
         public Theme Theme = Theme.hyperlinkLargeLicense;
 
+        /// <summary>
+        /// The theme file
+        /// </summary>
         [Xml]
         public string ThemeFile;
 
@@ -530,8 +533,15 @@ namespace WixSharp.Bootstrapper
         }
     }
 
+    /// <summary>
+    /// Custom BA UI that shows internal MSI UI dialogs
+    /// </summary>
+    /// <seealso cref="WixSharp.Bootstrapper.WixStandardBootstrapperApplication" />
     public class WixInternalUIBootstrapperApplication : WixStandardBootstrapperApplication
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WixInternalUIBootstrapperApplication"/> class.
+        /// </summary>
         public WixInternalUIBootstrapperApplication()
         {
             this.Theme = Bootstrapper.Theme.standard;

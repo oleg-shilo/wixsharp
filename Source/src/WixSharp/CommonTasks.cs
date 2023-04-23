@@ -351,6 +351,7 @@ namespace WixSharp.CommonTasks
         /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow
         /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
         /// </param>
+        /// <param name="signToolPath">Path to `signtool.exe` or an alternative signing tool (e.g. insignia.exe) </param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
         /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file engine.
@@ -365,7 +366,7 @@ namespace WixSharp.CommonTasks
         /// </example>
         static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1,
-            string insigniaPath = "<unknown insignia.exe Path>")
+            string signToolPath = "<unknown insignia.exe/signtool.exe Path>")
         {
             string enginePath = IO.Path.GetTempFileName();
 
@@ -373,7 +374,7 @@ namespace WixSharp.CommonTasks
             {
                 var tool = new ExternalTool
                 {
-                    ExePath = insigniaPath,
+                    ExePath = signToolPath,
                     Arguments = "-ib \"{0}\" -o \"{1}\"".FormatWith(bootstrapperFileToSign, enginePath)
                 };
 
@@ -387,7 +388,7 @@ namespace WixSharp.CommonTasks
 
                 tool = new ExternalTool
                 {
-                    ExePath = insigniaPath,
+                    ExePath = signToolPath,
                     Arguments = "-ab \"{1}\" \"{0}\" -o \"{0}\"".FormatWith(bootstrapperFileToSign, enginePath)
                 };
 

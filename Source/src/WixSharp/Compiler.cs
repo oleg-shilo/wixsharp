@@ -917,11 +917,12 @@ namespace WixSharp
 
             // Remove any WixSharp context elements
 
-            doc.Root
+            var temAttributes = doc.Root
                 .Descendants()
                 .SelectMany(x => x.Attributes()
-                                  .Where(a => a.LocalName().StartsWith(WixSharpXmlContextPrefix))
-                .ForEach(a => a.Remove()));
+                                  .Where(a => a.LocalName().StartsWith(WixSharpXmlContextPrefix)));
+
+            temAttributes.ForEach(a => a.Remove());
 
         }
 
