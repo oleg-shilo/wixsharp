@@ -1,8 +1,8 @@
+using Self_executable_Msi;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Self_executable_Msi;
 
 public static class Launcher
 {
@@ -15,10 +15,10 @@ public static class Launcher
             string msi_args = args.Any() ? string.Join(" ", args) : "/i";
 
             var p = Process.Start("msiexec.exe", $"{msi_args} \"{msi}\"");
-            p.WaitForExit(); 
+            p.WaitForExit();
             return p.ExitCode;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             // report the error
             return -1;
