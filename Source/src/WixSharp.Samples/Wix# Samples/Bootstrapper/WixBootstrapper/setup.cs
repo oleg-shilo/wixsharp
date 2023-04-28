@@ -117,19 +117,19 @@ public class InstallScript
         // The code below sets WiX variables 'Netfx4FullVersion' and 'AdobeInstalled'. Note it has no affect on
         //the runtime behaviour and 'FileSearch' and "RegistrySearch" are only provided as an example.
         bootstrapper.AddWixFragment("Wix/Bundle",
-                                    new UtilRegistrySearch
-                                    {
-                                        Root = RegistryHive.LocalMachine,
-                                        Key = @"SOFTWARE\Microsoft\Net Framework Setup\NDP\v4\Full",
-                                        Value = "Version",
-                                        Variable = "Netfx4FullVersion"
-                                    },
-                                    new UtilFileSearch
-                                    {
-                                        Path = @"[ProgramFilesFolder]Adobe\adobe.exe",
-                                        Result = SearchResult.exists,
-                                        Variable = "AdobeInstalled"
-                                    });
+                                            new UtilRegistrySearch
+                                            {
+                                                Root = RegistryHive.LocalMachine,
+                                                Key = @"SOFTWARE\Microsoft\Net Framework Setup\NDP\v4\Full",
+                                                Value = "Version",
+                                                Variable = "Netfx4FullVersion"
+                                            },
+                                            new UtilFileSearch
+                                            {
+                                                Path = @"[ProgramFilesFolder]Adobe\adobe.exe",
+                                                Result = SearchResult.exists,
+                                                Variable = "AdobeInstalled"
+                                            });
 
         // bootstrapper.AddXml("Wix/Bundle", "<Log PathVariable=\"LogFileLocation\"/>");
 
