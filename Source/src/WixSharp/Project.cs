@@ -699,15 +699,16 @@ namespace WixSharp
 
             while (iterator < dirList.Count)
             {
-                foreach (Files dirItems in dirList[iterator].FileCollections)
+                var dir = dirList[iterator];
+                foreach (Files dirItems in dir.FileCollections)
                 {
-                    foreach (WixEntity item in dirItems.GetAllItems(SourceBaseDir, dirList[iterator]))
+                    foreach (WixEntity item in dirItems.GetAllItems(SourceBaseDir, dir))
                     {
                         if (item is DirFiles)
                         {
                             dirList[iterator].AddDirFileCollection(item as DirFiles);
                         }
-                        else if (item is Dir discoveredDir && !dirList[iterator].Dirs.Contains(item))
+                        else if (item is Dir discoveredDir && !dir.Dirs.Contains(item))
                         {
                             WildCardDedup?.Invoke(discoveredDir);
                             dirList[iterator].AddDir(discoveredDir);
@@ -715,15 +716,18 @@ namespace WixSharp
                     }
                 }
 
-                foreach (Dir dir in dirList[iterator].Dirs)
-                    dirList.Add(dir);
+                foreach (Dir item in dir.Dirs)
+                    dirList.Add(item);
 
-                foreach (DirFiles coll in dirList[iterator].DirFileCollections)
-                    dirList[iterator].Files = dirList[iterator].Files.Combine(coll.GetFiles(SourceBaseDir));
+                foreach (DirFiles coll in dir.DirFileCollections)
+                {
+                    dir.Files = dir.Files.Combine(coll.GetFiles(SourceBaseDir));
+                    WildCardDedup?.Invoke(dir);
+                }
 
                 //clear resolved collections
-                dirList[iterator].FileCollections = new Files[0];
-                dirList[iterator].DirFileCollections = new DirFiles[0];
+                dir.FileCollections = new Files[0];
+                dir.DirFileCollections = new DirFiles[0];
 
                 iterator++;
             }
@@ -739,10 +743,10 @@ namespace WixSharp
                     foreach (Dir dirToRemove in emptyDirs)
                     {
                         AllDirs.ForEach(d =>
-                                        {
-                                            if (d.Dirs.Contains(dirToRemove))
-                                                d.Dirs = d.Dirs.Except(dirToRemove).ToArray();
-                                        });
+                        {
+                            if (d.Dirs.Contains(dirToRemove))
+                                d.Dirs = d.Dirs.Except(dirToRemove).ToArray();
+                        });
 
                         // check the root dirs too
                         if (this.Dirs.Contains(dirToRemove))
@@ -750,6 +754,10 @@ namespace WixSharp
                     }
                 }
             }
+
+            // not sure if I want to make it global
+            // if (WildCardDedup != null)
+            //     this.AllDirs.ForEach(WildCardDedup);
 
             return this;
         }

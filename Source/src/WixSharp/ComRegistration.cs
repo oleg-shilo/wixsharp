@@ -264,12 +264,12 @@ namespace WixSharp
         /// <summary>
         /// The threading model
         /// <list type="bullet">
-        /// <item><term>apartment</term></item>
-        /// <item><term>free     </term></item>
-        /// <item><term>both     </term></item>
-        /// <item><term>neutral  </term></item>
-        /// <item><term>single   </term></item>
-        /// <item><term>rental   </term></item>
+        /// <item>apartment</item>
+        /// <item>free     </item>
+        /// <item>both     </item>
+        /// <item>neutral  </item>
+        /// <item>single   </item>
+        /// <item>rental   </item>
         /// </list>
         /// </summary>
         [Xml]
