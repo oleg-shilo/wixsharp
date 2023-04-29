@@ -18,8 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{868894
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixSharp.Lab", "WixSharp\WixSharp.Lab.csproj", "{75342FEA-542C-4357-A3B0-97B6A3BB9A62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixSharp.Lab.New", "WixSharp\WixSharp.Lab.New.csproj", "{9A392885-B708-4803-847F-018E7F13E27B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,18 +72,6 @@ Global
 		{75342FEA-542C-4357-A3B0-97B6A3BB9A62}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{75342FEA-542C-4357-A3B0-97B6A3BB9A62}.Release|x86.ActiveCfg = Release|Any CPU
 		{75342FEA-542C-4357-A3B0-97B6A3BB9A62}.Release|x86.Build.0 = Release|Any CPU
-		{9A392885-B708-4803-847F-018E7F13E27B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A392885-B708-4803-847F-018E7F13E27B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A392885-B708-4803-847F-018E7F13E27B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{9A392885-B708-4803-847F-018E7F13E27B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{9A392885-B708-4803-847F-018E7F13E27B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{9A392885-B708-4803-847F-018E7F13E27B}.Debug|x86.Build.0 = Debug|Any CPU
-		{9A392885-B708-4803-847F-018E7F13E27B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A392885-B708-4803-847F-018E7F13E27B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9A392885-B708-4803-847F-018E7F13E27B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{9A392885-B708-4803-847F-018E7F13E27B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{9A392885-B708-4803-847F-018E7F13E27B}.Release|x86.ActiveCfg = Release|Any CPU
-		{9A392885-B708-4803-847F-018E7F13E27B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
