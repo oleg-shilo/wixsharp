@@ -3348,7 +3348,7 @@ namespace WixSharp
         /// <summary>
         /// Gets list of the mapped WiX constants.
         /// </summary>
-        /// <param name="include64Specific">if set to <c>true</c> [include64 specific].</param>
+        /// <param name="include64Specific">if set to <c>true</c>, include 64-bit specific constants.</param>
         /// <returns></returns>
         public static string[] GetMappedWixConstants(bool include64Specific)
         {
@@ -3567,8 +3567,7 @@ namespace WixSharp
             /// Initializes a wildcard with the given search pattern and options.
             /// </summary>
             /// <param name="pattern">The wildcard pattern to match.</param>
-            /// <param name="options">A combination of one or more
-            /// <see cref="T:System.Text.RegexOptions"/>.</param>
+            /// <param name="options">A combination of one or more System.Text.RegexOptions.</param>
             public Wildcard(string pattern, RegexOptions options)
                 : base(WildcardToRegex(pattern), options)
             {
