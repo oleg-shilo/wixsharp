@@ -16,7 +16,7 @@ class Script
                        new File(@"File3.txt")));
 
         project.UI = WUI.WixUI_ProgressOnly;
-
+        project.PreserveTempFiles = true;
         var msm = Compiler.BuildMsm(project);
     }
 }
