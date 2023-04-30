@@ -62,7 +62,9 @@ class Script
     }
 }
 ```
+
 One of the most intriguing features of Wix# is the ability to define/implement managed Custom Actions directly in the script file:
+
 ```C#
 using System;
 using System.Windows.Forms;
