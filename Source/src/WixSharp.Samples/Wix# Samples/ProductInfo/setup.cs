@@ -11,7 +11,8 @@ class Script
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File("readme.txt")));
+                    new File("readme.txt"),
+                    new File("app_icon.ico")));
 
         project.UI = WUI.WixUI_Minimal;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
@@ -27,6 +28,9 @@ class Script
         project.ControlPanelInfo.Manufacturer = "My Company";
         project.ControlPanelInfo.InstallLocation = "[INSTALLDIR]";
         project.ControlPanelInfo.NoModify = true;
+
+        project.EnableUninstallFullUI(@"[INSTALLDIR]\app_icon.ico");
+
         //project.ControlPanelInfo.NoRepair = true,
         //project.ControlPanelInfo.NoRemove = true,
         //project.ControlPanelInfo.SystemComponent = true, //if set will not be shown in Control Panel

@@ -30,7 +30,7 @@ class Script
         // Note: setting x64 is done via XML injection for demo purposes only.
         // The x64 install can be achieved by "project.Platform = Platform.x64;"
 
-        // AddXmlInclude can also be applied to any WixShari entity (e.g. new File("...").AddXmlInclude("FileCommonProperies.wxi")
+        // AddXmlInclude can also be applied to any WixSharp entity (e.g. new File("...").AddXmlInclude("FileCommonProperies.wxi")
 
         project.Include(WixExtension.Util)
                .AddXmlInclude("CommonProperies.wxi")
