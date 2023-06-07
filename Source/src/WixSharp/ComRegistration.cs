@@ -246,10 +246,10 @@ namespace WixSharp
         /// most common for there to be a single value for the Context attribute. This attribute's value should be a
         /// space-delimited list congaing one or more of the following:
         /// <list type="bullet">
-        /// <item> <term>LocalServer</term>  <description>A 16-bit local server application.</description></item>
-        /// <item><term>LocalServer32</term><description>A 32-bit local server application.</description></item>
-        /// <item><term>InprocServer</term><description>A 16-bit in-process server DLL.</description></item>
-        /// <item><term>InprocServer32</term><description>A 32-bit in-process server DLL.</description></item>
+        /// <item><c>LocalServer</c>  - A 16-bit local server application.</item>
+        /// <item><c>LocalServer32</c> - A 32-bit local server application.</item>
+        /// <item><c>InprocServer</c> - A 16-bit in-process server DLL.</item>
+        /// <item><c>InprocServer32</c> - A 32-bit in-process server DLL.</item>
         /// </list>
         /// </summary>
         [Xml]
