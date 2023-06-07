@@ -622,7 +622,8 @@ namespace WixSharp
         /// <summary>
         /// The wild card deduplication algorithm to be used during wild card resolution (<c>ResolveWildCards</c>).
         /// <para>The default implementation does nothing but you can assign a custom routine that
-        /// can be used to do post-resolving deduplication of the <see cref="Dir"/> items.</para>
+        /// can be used to do post-resolving deduplication of the <see cref="Dir"/> items.
+        /// </para>
         /// <para>
         /// The following sample demonstrates how to remove files with the same file name:
         /// </para>
@@ -639,7 +640,7 @@ namespace WixSharp
         /// ...
         /// Compiler.BuildMsi(project);
         /// </code>
-        /// <para>Note, the need for <c>project.WildCardDedup</c> may araise only for very specific
+        /// <para>Note, the need for <c>project.WildCardDedup</c> may arise only for very specific
         /// deployment scenarios. Some of them are discussed in this thread: https://github.com/oleg-shilo/wixsharp/issues/270
         /// </para>
         /// </summary>
@@ -690,15 +691,16 @@ namespace WixSharp
 
             while (iterator < dirList.Count)
             {
-                foreach (Files dirItems in dirList[iterator].FileCollections)
+                var dir = dirList[iterator];
+                foreach (Files dirItems in dir.FileCollections)
                 {
-                    foreach (WixEntity item in dirItems.GetAllItems(SourceBaseDir, dirList[iterator]))
+                    foreach (WixEntity item in dirItems.GetAllItems(SourceBaseDir, dir))
                     {
                         if (item is DirFiles)
                         {
                             dirList[iterator].AddDirFileCollection(item as DirFiles);
                         }
-                        else if (item is Dir discoveredDir && !dirList[iterator].Dirs.Contains(item))
+                        else if (item is Dir discoveredDir && !dir.Dirs.Contains(item))
                         {
                             WildCardDedup?.Invoke(discoveredDir);
                             dirList[iterator].AddDir(discoveredDir);
@@ -706,15 +708,18 @@ namespace WixSharp
                     }
                 }
 
-                foreach (Dir dir in dirList[iterator].Dirs)
-                    dirList.Add(dir);
+                foreach (Dir item in dir.Dirs)
+                    dirList.Add(item);
 
-                foreach (DirFiles coll in dirList[iterator].DirFileCollections)
-                    dirList[iterator].Files = dirList[iterator].Files.Combine(coll.GetFiles(SourceBaseDir));
+                foreach (DirFiles coll in dir.DirFileCollections)
+                {
+                    dir.Files = dirList[iterator].Files.Combine(coll.GetFiles(SourceBaseDir));
+                    WildCardDedup?.Invoke(dir);
+                }
 
                 //clear resolved collections
-                dirList[iterator].FileCollections = new Files[0];
-                dirList[iterator].DirFileCollections = new DirFiles[0];
+                dir.FileCollections = new Files[0];
+                dir.DirFileCollections = new DirFiles[0];
 
                 iterator++;
             }
@@ -741,6 +746,10 @@ namespace WixSharp
                     }
                 }
             }
+
+            // not sure if I want to make it global
+            // if (WildCardDedup != null)
+            //     this.AllDirs.ForEach(WildCardDedup);
 
             return this;
         }
