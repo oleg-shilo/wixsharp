@@ -4,13 +4,13 @@
 //css_ref System.Core.dll;
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 
+using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using sys = System.Reflection;
@@ -34,7 +34,7 @@ public class InstallScript
 
         var bootstrapper =
             new Bundle("My Product Suite",
-                       new PackageGroupRef("NetFx40Web"),
+                       new PackageGroupRef("NetFx461Web"),
                        new MsiPackage(productMsi)
                        {
                            Id = "MyProductPackageId",
@@ -42,7 +42,7 @@ public class InstallScript
                            Visible = true // show MSI entry in ARP
                        });
 
-        bootstrapper.SuppressWixMbaPrereqVars = true; //needed because NetFx40Web also defines WixMbaPrereqVars
+        bootstrapper.SuppressWixMbaPrereqVars = true; //needed because NetFx461Web also defines WixMbaPrereqVars
         bootstrapper.Version = new Version("1.0.0.0");
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889c");
 
@@ -59,6 +59,7 @@ public class InstallScript
         // You can implement your own extension types and add them to the Bundle
         // bootstrapper.GenericItems.Add(new BalCondition { Condition = "some condition", Message = "Warning: ..." });
 
+        bootstrapper.Include(WixExtension.NetFx);
         bootstrapper.PreserveTempFiles = true;
         bootstrapper.Build("app_setup");
     }

@@ -2,6 +2,7 @@
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
+using System.Security.Cryptography;
 using WixSharp;
 using WixSharp.CommonTasks;
 
@@ -19,6 +20,7 @@ class Script
                     PfxFilePath = "wixsharp.pfx",
                     Password = "my_password",
                     Description = "MyProduct",
+                    HashAlgorithm = HashAlgorithmType.sha256,
                     TimeUrl = new Uri("http://timestamp.verisign.com/scripts/timstamp.dll")
                 }
 
@@ -35,6 +37,8 @@ class Script
 
         project.UI = WUI.WixUI_ProgressOnly;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
+
+        project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project);
     }
