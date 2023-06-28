@@ -1,6 +1,8 @@
-using System;
-using System.Linq;
 using ConsoleApplication1;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
 using WixSharp;
 using WixSharp.UI.WPF;
 
@@ -24,6 +26,8 @@ public class Script
 
         project.ManagedUI.ModifyDialogs.Add<ProgressDialog>()
                                        .Add<ExitDialog>();
+
+        project.ManagedUI.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 
         project.PreserveTempFiles = true;
         project.SourceBaseDir = @"..\..\";

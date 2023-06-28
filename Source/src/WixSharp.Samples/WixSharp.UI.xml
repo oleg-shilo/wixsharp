@@ -929,6 +929,15 @@
             A window icon that appears in the left top corner of the UI shell window.
             </summary>
         </member>
+        <member name="P:WixSharp.ManagedUI.AutoScaleMode">
+            <summary>
+            Gets or sets the AutoScaleMode scale mode of the UI shell window.
+            <para>Note, even for the WPF dialogs the top level window (shell) is a WinForm object.</para>
+            </summary>
+            <value>
+            The default AutoScaleMode.
+            </value>
+        </member>
         <member name="M:WixSharp.ManagedUI.Initialize(Microsoft.Deployment.WindowsInstaller.Session,System.String,Microsoft.Deployment.WindowsInstaller.InstallUIOptions@)">
             <summary>
             Initializes the specified session.

@@ -160,31 +160,6 @@ namespace WixSharp.Test
             Assert.Equal(xmlFilesFound, xmlFilesCounter);
         }
 
-        // [Fact]
-        // [Description("Issue #270 (WildCardDedup)")]
-        // public void Fix_Issue_270_WildCardDedup_for_discovered_dirs()
-        // {
-        //     System.IO.Directory.CreateDirectory(Environment.CurrentDirectory.PathJoin("dummydir1"));
-        //     System.IO.Directory.CreateDirectory(Environment.CurrentDirectory.PathJoin("dummydir2"));
-
-        //     int dedupInvokeCounter = 0;
-
-        //     var project = new Project("MyProduct",
-        //        new Dir(@"%ProgramFiles%\MyCompany\MyProduct",
-        //            // new File("testpad.exe")
-        //            // new DirFiles("*.*")
-        //            new Files(@"*.dll", file )));
-
-        //     project.WildCardDedup = dir =>
-        //     {
-        //         dedupInvokeCounter++;
-        //     };
-
-        //     var file = project.BuildWxs();
-
-        //     Assert.Equal(2, dedupInvokeCounter);
-        // }
-
         [Fact]
         [Description("Issue #182")]
         public void Fix_Issue_182()

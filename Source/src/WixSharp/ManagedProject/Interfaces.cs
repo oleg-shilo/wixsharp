@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Microsoft.Deployment.WindowsInstaller;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using Reflection = System.Reflection;
 
 #pragma warning disable 1591
@@ -252,6 +252,15 @@ namespace WixSharp
         /// A window icon that appears in the left top corner of the UI shell window.
         /// </summary>
         string Icon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the AutoScaleMode scale mode of the UI shell window.
+        /// <para>Note, even for the WPF dialogs the top level window (shell) is a WinForm object.</para>
+        /// </summary>
+        /// <value>
+        /// The default AutoScaleMode.
+        /// </value>
+        System.Windows.Forms.AutoScaleMode AutoScaleMode { get; set; }
 
         /// <summary>
         /// Sequence of the dialogs to be displayed during the installation of the product.
