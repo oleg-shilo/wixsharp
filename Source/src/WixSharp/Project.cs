@@ -622,7 +622,7 @@ namespace WixSharp
         /// <summary>
         /// The wild card deduplication algorithm to be used during wild card resolution (<c>ResolveWildCards</c>).
         /// <para>The default implementation does nothing but you can assign a custom routine that
-        /// can be used to do post-resolving deduplication of the <see cref="Dir"/> items.</para>
+        /// can be used to do post-resolving deduplication of the <see cref="Dir"/> items (files).</para>
         /// <para>
         /// The following sample demonstrates how to remove files with the same file name:
         /// </para>
@@ -639,10 +639,13 @@ namespace WixSharp
         /// ...
         /// Compiler.BuildMsi(project);
         /// </code>
-        /// <para>Note, the need for <c>project.WildCardDedup</c> may araise only for very specific
+        /// <para>Note, the need for <c>project.WildCardDedup</c> may arise only for very specific
         /// deployment scenarios. Some of them are discussed in this thread: https://github.com/oleg-shilo/wixsharp/issues/270
         /// </para>
         /// </summary>
+        /// <remarks>`WildCardDedup` is only invoked for the <see cref="Dir"/> that is added as the result of
+        /// the WixSharp compiler resolving <see cref="Files"/> definition and finding nested directory(ies).
+        /// It is not invoked for the items of the <see cref="Dir"/> that is added by user.</remarks>
         public Action<Dir> WildCardDedup = dir =>
             {
                 // Issue #270: Deduplication of files added with wildcards

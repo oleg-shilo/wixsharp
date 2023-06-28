@@ -1,5 +1,6 @@
 //css_ref ..\..\WixSharp.dll;
 //css_ref System.Core.dll;
+using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Diagnostics;
 
@@ -7,7 +8,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
@@ -71,7 +71,7 @@ static class Script
         }
     }
 
-    static void Issue_865()
+    static void issue_865()
     {
         // Compiler.AutoGeneration.InstallDirDefaultId = "CommonAppDataFolder";
 
@@ -84,7 +84,7 @@ static class Script
         Console.WriteLine(wix);
     }
 
-    static void Issue_386()
+    static void issue_386()
     {
         var project =
             new ManagedProject("ElevatedSetup",
@@ -121,7 +121,7 @@ static class Script
         Compiler.BuildMsi(project);
     }
 
-    static void Issue_825()
+    static void issue_825()
     {
         var client = new Feature("Feature_Client");
         var server = new Feature("Feature_Server");
@@ -150,7 +150,7 @@ static class Script
         project.BuildMsiCmd();
     }
 
-    static void Issue_825_a()
+    static void issue_825_a()
     {
         var client = new Feature("Feature_Client");
         var server = new Feature("Feature_Server");
@@ -173,7 +173,7 @@ static class Script
         project.BuildMsi();
     }
 
-    static void Issue_374()
+    static void issue_374()
     {
         string inDir = @"C:\temp\wixIn\";
         string outDir = @"C:\temp\wixOut\";
@@ -195,7 +195,23 @@ static class Script
         Compiler.BuildMsi(project);
     }
 
-    static void Issue_609()
+    static void issue_270()
+    {
+        var project =
+           new Project("MyProduct",
+               new Dir(@"%ProgramFiles%\MyCompany\MyProduct",
+                   // new File("testpad.exe")
+                   // new DirFiles("*.*")
+                   new Files(@"obj\*.*")
+                   ));
+
+        project.WildCardDedup = dir =>
+         {
+         };
+        project.BuildWxs();
+    }
+
+    static void issue_609()
     {
         AutoElements.DisableAutoKeyPath = true;
 
@@ -207,7 +223,7 @@ static class Script
         project.BuildMsi();
     }
 
-    static void Issue_377()
+    static void issue_377()
     {
         var project = new Project("someProject",
             new Dir(new Id("someDirId"), "someDirPath",
@@ -224,7 +240,7 @@ static class Script
         Compiler.BuildMsi(project);
     }
 
-    static void Issue_606()
+    static void issue_606()
     {
         var aisFeature = new Feature("AIS", "Allied Information Services")
         {
@@ -263,7 +279,7 @@ static class Script
         project.BuildMsi();
     }
 
-    static void Issue_551()
+    static void issue_551()
     {
         var bundle = new Bundle("MyBundle", new PackageGroupRef("NetFx471Web"))
         {
@@ -280,10 +296,10 @@ static class Script
         bundle.BuildCmd();
     }
 
-    static void Issue_440()
+    static void issue_440()
     {
-        Compiler.WixLocation = @"E:\Projects\WixSharp\Support\Issue_#440\wix_error\packages\WiX.4.0.0.5512-pre\tools";
-        Compiler.WixSdkLocation = @"E:\Projects\WixSharp\Support\Issue_#440\wix_error\packages\WiX.4.0.0.5512-pre\tools\sdk";
+        Compiler.WixLocation = @"E:\Projects\WixSharp\Support\issue_#440\wix_error\packages\WiX.4.0.0.5512-pre\tools";
+        Compiler.WixSdkLocation = @"E:\Projects\WixSharp\Support\issue_#440\wix_error\packages\WiX.4.0.0.5512-pre\tools\sdk";
 
         var project = new ManagedProject("TestMsi")
         {
@@ -299,7 +315,7 @@ static class Script
         Compiler.BuildMsi(project);
     }
 
-    static void Issue_378()
+    static void issue_378()
     {
         AutoElements.DisableAutoUserProfileRegistry = true;
         // Compiler.LightOptions += " -sice:ICE38";
@@ -315,7 +331,7 @@ static class Script
         project.BuildMsi();
     }
 
-    static void Issue_298()
+    static void issue_298()
     {
         var project = new Project("MyProduct",
             new Dir(@"%ProgramFiles%\My Company\My Product",
@@ -342,7 +358,7 @@ static class Script
         project.BuildMsiCmd();
     }
 
-    static void Issue_298b()
+    static void issue_298b()
     {
         var project =
             new Project("MyProduct",
@@ -359,7 +375,7 @@ static class Script
         // project.BuildMsiCmd();
     }
 
-    static void Issue_1114()
+    static void issue_1114()
     {
         var project = new ManagedProject("MyProductSetup",
                 new Dir(@"%ProgramFiles%\MyCompany\MyProduct\MyApp",
@@ -382,19 +398,20 @@ static class Script
 
         // HiTeach_MSI.Program.Main1(); return;
         // MsiInstaller.MyMsi.Build(); return;
+        issue_270(); return;
         issue_1075(); return;
-        Issue_298(); return;
-        Issue_1114(); return;
-        Issue_865(); return;
-        Issue_825(); return;
-        Issue_609(); return;
-        Issue_551(); return;
-        Issue_606(); return;
-        Issue_377(); return;
-        Issue_440(); return;
-        Issue_386(); return;
-        Issue_378(); return;
-        Issue_374(); return;
+        issue_298(); return;
+        issue_1114(); return;
+        issue_865(); return;
+        issue_825(); return;
+        issue_609(); return;
+        issue_551(); return;
+        issue_606(); return;
+        issue_377(); return;
+        issue_440(); return;
+        issue_386(); return;
+        issue_378(); return;
+        issue_374(); return;
         // Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = true;
 
         var serverFeature = new Feature("Server");

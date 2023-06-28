@@ -118,6 +118,74 @@ namespace WixSharp.Test
         }
 
         [Fact]
+        [Description("Issue #270 (WildCardDedup)")]
+        public void Fix_Issue_270_WildCardDedup_for_discovered_dirs()
+        {
+            System.IO.Directory.CreateDirectory(Environment.CurrentDirectory.PathJoin("dummydir1"));
+            System.IO.Directory.CreateDirectory(Environment.CurrentDirectory.PathJoin("dummydir2"));
+
+            int dedupInvokeCounter = 0;
+            int rootLevelXmlFilesCounter = 0;
+
+            var project = new Project("MyProduct",
+               new Dir(@"%ProgramFiles%\MyCompany\MyProduct",
+                   new Files(@"*.xml", x => { rootLevelXmlFilesCounter++; return true; })));
+
+            project.WildCardDedup = dir =>
+            {
+                dedupInvokeCounter++;
+            };
+
+            var file = project.BuildWxs();
+
+            Assert.Equal(2, dedupInvokeCounter);
+        }
+
+        [Fact]
+        [Description("Issue #270 (predicate discovered files)")]
+        public void Fix_Issue_270_Predicate_for_discovered_files()
+        {
+            int xmlFilesCounter = 0;
+
+            var project = new Project("MyProduct",
+               new Dir(@"%ProgramFiles%\MyCompany\MyProduct",
+                   new Files(@"*.xml", x => { xmlFilesCounter++; return true; })));
+
+            var file = project.BuildWxs(Compiler.OutputType.MSI, "Fix_Issue_270_Predicate_for_discovered_files.wsx");
+
+            var xmlFilesFound = System.IO.Directory.GetFiles(
+                Environment.CurrentDirectory, "*.xml",
+                System.IO.SearchOption.AllDirectories).Length;
+
+            Assert.Equal(xmlFilesFound, xmlFilesCounter);
+        }
+
+        // [Fact]
+        // [Description("Issue #270 (WildCardDedup)")]
+        // public void Fix_Issue_270_WildCardDedup_for_discovered_dirs()
+        // {
+        //     System.IO.Directory.CreateDirectory(Environment.CurrentDirectory.PathJoin("dummydir1"));
+        //     System.IO.Directory.CreateDirectory(Environment.CurrentDirectory.PathJoin("dummydir2"));
+
+        //     int dedupInvokeCounter = 0;
+
+        //     var project = new Project("MyProduct",
+        //        new Dir(@"%ProgramFiles%\MyCompany\MyProduct",
+        //            // new File("testpad.exe")
+        //            // new DirFiles("*.*")
+        //            new Files(@"*.dll", file )));
+
+        //     project.WildCardDedup = dir =>
+        //     {
+        //         dedupInvokeCounter++;
+        //     };
+
+        //     var file = project.BuildWxs();
+
+        //     Assert.Equal(2, dedupInvokeCounter);
+        // }
+
+        [Fact]
         [Description("Issue #182")]
         public void Fix_Issue_182()
         {
