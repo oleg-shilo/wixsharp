@@ -27,7 +27,7 @@ public class Script
         project.ManagedUI.ModifyDialogs.Add<ProgressDialog>()
                                        .Add<ExitDialog>();
 
-        project.ManagedUI.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+        project.ManagedUI.AutoScaleMode = AutoScaleMode.Dpi;
 
         project.PreserveTempFiles = true;
         project.SourceBaseDir = @"..\..\";

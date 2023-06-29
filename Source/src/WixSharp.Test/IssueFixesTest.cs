@@ -3,7 +3,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ConstrainedExecution;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Xml.Linq;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
@@ -139,6 +141,38 @@ namespace WixSharp.Test
             var file = project.BuildWxs();
 
             Assert.Equal(2, dedupInvokeCounter);
+        }
+
+        [Fact]
+        [Description("Issue #270 (WildCardDedup2)")]
+        public void Fix_Issue_270_WildCardDedup_for_discovered_dirs2()
+        {
+            var file1 = Environment.CurrentDirectory.PathJoin("dummydir3", "test.txt");
+            var file2 = Environment.CurrentDirectory.PathJoin("dummydir4", "test.txt");
+
+            System.IO.Directory.CreateDirectory(file1.PathGetDirName());
+            System.IO.Directory.CreateDirectory(file2.PathGetDirName());
+
+            int dedupInvokeCounter = 0;
+
+            var project = new Project("MyProduct");
+
+            project.AddDir(new Dir("TestDir",
+                      new Files(file1.PathGetDirName().PathJoin(@"*.txt")),
+                      new Files(file1.PathGetDirName().PathJoin(@"*.txt"))));
+
+            project.WildCardDedup = dir =>
+            {
+                dedupInvokeCounter++;
+            };
+
+            project.ResolveWildCards();
+
+            // '0' because there are no sub-folders in the dummydir3 and dummydir3 dirs
+            // WildCardDedup is only used to handle duplications in the source folders discovered by `Files(...)`
+            // Though if user defines source directories explicitly then it is his / her responsibility to handle
+            // potential duplications.
+            Assert.Equal(0, dedupInvokeCounter);
         }
 
         [Fact]

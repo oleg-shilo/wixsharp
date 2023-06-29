@@ -621,6 +621,9 @@ namespace WixSharp
 
         /// <summary>
         /// The wild card deduplication algorithm to be used during wild card resolution (<c>ResolveWildCards</c>).
+        /// <para>WildCardDedup is only used to handle duplications in the source folders discovered by `Files(...)`.
+        /// Though if user defines source directories explicitly then it is his/her responsibility to handle potential duplications.
+        /// </para>
         /// <para>The default implementation does nothing but you can assign a custom routine that
         /// can be used to do post-resolving deduplication of the <see cref="Dir"/> items (files).</para>
         /// <para>
