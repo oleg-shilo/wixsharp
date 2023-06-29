@@ -274,7 +274,7 @@ namespace WixSharp.UI.Forms
             this.Controls.Add(this.bottomPanel);
             this.KeyPreview = true;
             this.Name = "FeaturesDialog";
-            this.Text = "    [CustomizeDlg_Title]";
+            this.Text = "[CustomizeDlg_Title]";
             this.Load += new System.EventHandler(this.FeaturesDialog_Load);
             this.middlePanel.ResumeLayout(false);
             this.middlePanel.PerformLayout();
