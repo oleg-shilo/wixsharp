@@ -3,13 +3,13 @@
 //css_ref WixSharp.UI.dll;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
+using Microsoft.Deployment.WindowsInstaller;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
@@ -55,6 +55,7 @@ public static class Script
             Text = "Language Selection",
             FormBorderStyle = FormBorderStyle.FixedToolWindow,
             ShowIcon = false,
+            KeyPreview = true,
             StartPosition = FormStartPosition.CenterScreen
         };
 
@@ -66,6 +67,13 @@ public static class Script
         langSelection.SelectedIndexChanged += (s, e) => input.Close();
 
         input.Controls.Add(langSelection);
+
+        input.Load += (s, e) => Win32.SetForegroundWindow(input.Handle);
+        langSelection.KeyDown += (s, e) =>
+        {
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
+                input.Close();
+        };
 
         input.ShowDialog();
 
@@ -80,6 +88,9 @@ public static class Script
         project.UIInitialized += (SetupEventArgs e) =>
         {
             MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
+
+            // runtime.UIText.Add("Copy", "C-O-P-Y");
+            //runtime.Session["Copy"] = "C.O.P.Y";
 
             switch (DetectLanguage())
             {

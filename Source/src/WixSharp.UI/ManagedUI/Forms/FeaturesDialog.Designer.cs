@@ -57,8 +57,8 @@ namespace WixSharp.UI.Forms
             // 
             // middlePanel
             // 
-            this.middlePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.middlePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.middlePanel.Controls.Add(this.descriptionPanel);
             this.middlePanel.Controls.Add(this.featuresTree);
@@ -71,7 +71,7 @@ namespace WixSharp.UI.Forms
             // 
             // descriptionPanel
             // 
-            this.descriptionPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.descriptionPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.descriptionPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.descriptionPanel.Controls.Add(this.description);
@@ -82,8 +82,8 @@ namespace WixSharp.UI.Forms
             // 
             // description
             // 
-            this.description.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.description.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.description.BackColor = System.Drawing.SystemColors.Control;
             this.description.Location = new System.Drawing.Point(0, 0);
@@ -93,8 +93,8 @@ namespace WixSharp.UI.Forms
             // 
             // featuresTree
             // 
-            this.featuresTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.featuresTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.featuresTree.CheckBoxes = true;
             this.featuresTree.Location = new System.Drawing.Point(14, 28);
@@ -130,7 +130,7 @@ namespace WixSharp.UI.Forms
             // 
             // topBorder
             // 
-            this.topBorder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.topBorder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.topBorder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.topBorder.Location = new System.Drawing.Point(0, 58);
@@ -140,7 +140,7 @@ namespace WixSharp.UI.Forms
             // 
             // topPanel
             // 
-            this.topPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.topPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.topPanel.BackColor = System.Drawing.SystemColors.Control;
             this.topPanel.Controls.Add(this.label2);
@@ -174,8 +174,8 @@ namespace WixSharp.UI.Forms
             // 
             // banner
             // 
-            this.banner.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.banner.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.banner.BackColor = System.Drawing.Color.White;
             this.banner.Location = new System.Drawing.Point(0, 0);
@@ -187,7 +187,7 @@ namespace WixSharp.UI.Forms
             // 
             // bottomPanel
             // 
-            this.bottomPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.bottomPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bottomPanel.BackColor = System.Drawing.SystemColors.Control;
             this.bottomPanel.Controls.Add(this.tableLayoutPanel1);
@@ -257,7 +257,7 @@ namespace WixSharp.UI.Forms
             // 
             // border1
             // 
-            this.border1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.border1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.border1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.border1.Location = new System.Drawing.Point(0, 0);

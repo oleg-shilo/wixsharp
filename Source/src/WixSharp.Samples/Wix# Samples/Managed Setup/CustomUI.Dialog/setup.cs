@@ -59,12 +59,34 @@ public class Script
                                        .Add<ExitDialog>();
 
         project.UILoaded += msi_UILoaded;
+        project.UIInitialized += msi_UIInitialized;
+
         project.BeforeInstall += msi_BeforeInstall;
         project.AfterInstall += Project_AfterInstall;
 
         project.PreserveTempFiles = true;
 
         project.BuildMsi();
+    }
+
+    private static void msi_UIInitialized(SetupEventArgs e)
+    {
+        // WixUI_de-de.wxl does not contain UI data for the custom dialog but for the stock dialogs only.
+        // This is how you can install localization if you prefer not to edit wxl file.
+
+        MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
+
+        bool isGerman = (CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "de");
+
+        runtime.UIText["UserNameDlgTitle"] = isGerman ? "Benutzeranmeldeinformationen" : "User Credentials";
+        runtime.UIText["UserNameDlgDescription"] = isGerman ? "Einstellungen für Anwendungsanmeldeinformationen" : "Application credentials settings";
+        runtime.UIText["UserNameDlgNameLabel"] = isGerman ? "Nutzername" : "User Name";
+        runtime.UIText["UserNameDlgPasswordLabel"] = isGerman ? "Passwort" : "Password";
+        runtime.UIText["UserNameDlgDomainLabel"] = isGerman ? "Domain" : "Domain";
+        runtime.UIText["UserNameDlgDomainTypeLabel"] = isGerman ? "Domänentyp" : "Domain Type";
+        runtime.UIText["UserNameDlgLocalDomainLabel"] = isGerman ? "Lokal" : "Local";
+        runtime.UIText["UserNameDlgNetworkDomainLabel"] = isGerman ? "Netzwerk" : "Network";
+        runtime.UIText["CopyDataMenu"] = isGerman ? "Daten kopieren" : "Copy Data";
     }
 
     static void msi_UILoaded(SetupEventArgs e)

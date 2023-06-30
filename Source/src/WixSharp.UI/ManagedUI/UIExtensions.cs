@@ -1,24 +1,21 @@
+using Microsoft.Deployment.WindowsInstaller;
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
-
-using io = System.IO;
-
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
-using sys = System.Windows.Forms;
-using System.Drawing.Imaging;
-
-using System.Windows.Forms;
-
-using WixSharp.UI.Forms;
 using System.Threading;
-using System.Diagnostics;
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using System.Windows.Forms;
+using System.Xml.Linq;
+using WixSharp.UI.Forms;
+
+using io = System.IO;
+using sys = System.Windows.Forms;
 
 namespace WixSharp
 {
@@ -278,9 +275,13 @@ namespace WixSharp
 
                 item.Text = item.Text.LocalizeWith(localize);
 
+                if (item.ContextMenuStrip != null)
+                    foreach (ToolStripItem menu in item.ContextMenuStrip?.Items.OfType<ToolStripItem>())
+                        menu.Text = menu.Text.LocalizeWith(localize);
+
                 item.Controls
-                .OfType<sys.Control>()
-                .ForEach(x => controls.Enqueue(x));
+                    .OfType<sys.Control>()
+                    .ForEach(x => controls.Enqueue(x));
             }
             return control;
         }
