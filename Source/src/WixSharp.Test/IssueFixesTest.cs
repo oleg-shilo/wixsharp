@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -120,59 +122,88 @@ namespace WixSharp.Test
         }
 
         [Fact]
-        [Description("Issue #270 (WildCardDedup)")]
-        public void Fix_Issue_270_WildCardDedup_for_discovered_dirs()
+        [Description("Issue #270 (WildCardDedup1)")]
+        public void Fix_Issue_270_WildCardDedup_uninvoked_if_no_files_discovered()
         {
-            System.IO.Directory.CreateDirectory(Environment.CurrentDirectory.PathJoin("dummydir1"));
-            System.IO.Directory.CreateDirectory(Environment.CurrentDirectory.PathJoin("dummydir2"));
+            var dir1 = Environment.CurrentDirectory.PathJoin("Issue_270-1", "dummydir1").EnsureDirExists();
+            var dir2 = Environment.CurrentDirectory.PathJoin("Issue_270-1", "dummydir2").EnsureDirExists();
 
-            int dedupInvokeCounter = 0;
-            int rootLevelXmlFilesCounter = 0;
+            // note the dirs are empty
+
+            var processedDirs = new List<string>();
 
             var project = new Project("MyProduct",
-               new Dir(@"%ProgramFiles%\MyCompany\MyProduct",
-                   new Files(@"*.xml", x => { rootLevelXmlFilesCounter++; return true; })));
+                new Dir("TestDir",
+                      new Files(dir1.PathJoin(@"*.txt")),
+                      new Files(dir2.PathJoin(@"*.txt"))));
 
-            project.WildCardDedup = dir =>
-            {
-                dedupInvokeCounter++;
-            };
+            project.WildCardDedup = dir => processedDirs.Add(project.GetTargetPathOf(dir));
 
-            var file = project.BuildWxs();
+            project.ResolveWildCards();
 
-            Assert.Equal(2, dedupInvokeCounter);
+            Assert.Equal(0, processedDirs.Count);
         }
 
         [Fact]
         [Description("Issue #270 (WildCardDedup2)")]
-        public void Fix_Issue_270_WildCardDedup_for_discovered_dirs2()
+        public void Fix_Issue_270_WildCardDedup_invoked_for_impacted_user_and_discovered_dirs_2()
         {
-            var file1 = Environment.CurrentDirectory.PathJoin("dummydir3", "test.txt");
-            var file2 = Environment.CurrentDirectory.PathJoin("dummydir4", "test.txt");
+            var dir1 = Environment.CurrentDirectory.PathJoin("Issue_270-2", "dummydir1");
+            var dir2 = Environment.CurrentDirectory.PathJoin("Issue_270-2", "dummydir2");
+            var dir3 = Environment.CurrentDirectory.PathJoin("Issue_270-2", "dummydir1", "subdir", "subdir2");
+            var dir4 = Environment.CurrentDirectory.PathJoin("Issue_270-2", "dummydir2", "subdir");
 
-            System.IO.Directory.CreateDirectory(file1.PathGetDirName());
-            System.IO.Directory.CreateDirectory(file2.PathGetDirName());
+            var file1 = dir1.PathJoin("test.txt").EnsureFileExists();
+            var file2 = dir2.PathJoin("test.txt").EnsureFileExists();
+            var file3 = dir3.PathJoin("test.txt").EnsureFileExists();
+            var file4 = dir4.PathJoin("test.txt").EnsureFileExists();
 
-            int dedupInvokeCounter = 0;
+            var processedDirs = new List<string>();
 
-            var project = new Project("MyProduct");
-
-            project.AddDir(new Dir("TestDir",
-                      new Files(file1.PathGetDirName().PathJoin(@"*.txt")),
-                      new Files(file1.PathGetDirName().PathJoin(@"*.txt"))));
+            var project = new Project("MyProduct",
+                new Dir("TestDir",
+                      new Files(dir1.PathJoin(@"*.txt")),
+                      new Files(dir2.PathJoin(@"*.txt"))));
 
             project.WildCardDedup = dir =>
             {
-                dedupInvokeCounter++;
+                processedDirs.Add(project.GetTargetPathOf(dir));
             };
 
             project.ResolveWildCards();
 
-            // '0' because there are no sub-folders in the dummydir3 and dummydir3 dirs
-            // WildCardDedup is only used to handle duplications in the source folders discovered by `Files(...)`
-            // Though if user defines source directories explicitly then it is his / her responsibility to handle
-            // potential duplications.
-            Assert.Equal(0, dedupInvokeCounter);
+            Assert.Equal(3, processedDirs.Count);
+            Assert.Contains(@"TestDir", processedDirs);
+            Assert.Contains(@"TestDir\subdir", processedDirs);
+            Assert.Contains(@"TestDir\subdir\subdir2", processedDirs);
+        }
+
+        [Fact]
+        [Description("Issue #270 (WildCardDedup3)")]
+        public void Fix_Issue_270_WildCardDedup_invoked_for_impacted_user_and_discovered_dirs()
+        {
+            var dir1 = Environment.CurrentDirectory.PathJoin("Issue_270-3", "dummydir1");
+            var dir2 = Environment.CurrentDirectory.PathJoin("Issue_270-3", "dummydir2");
+            var dir3 = Environment.CurrentDirectory.PathJoin("Issue_270-3", "dummydir2", "subdir");
+
+            var file1 = dir1.PathJoin("test.txt").EnsureFileExists();
+            var file2 = dir2.PathJoin("test.txt").EnsureFileExists();
+            var file3 = dir3.PathJoin("test.txt").EnsureFileExists();
+
+            var processedDirs = new List<string>();
+
+            var project = new Project("MyProduct",
+                new Dir("TestDir",
+                      new Files(dir1.PathJoin(@"*.txt")),
+                      new Files(dir2.PathJoin(@"*.txt"))));
+
+            project.WildCardDedup = dir => processedDirs.Add(project.GetTargetPathOf(dir));
+
+            project.ResolveWildCards();
+
+            Assert.Equal(2, processedDirs.Count);
+            Assert.Contains(@"TestDir", processedDirs);
+            Assert.Contains(@"TestDir\subdir", processedDirs);
         }
 
         [Fact]

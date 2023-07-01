@@ -195,22 +195,6 @@ static class Script
         Compiler.BuildMsi(project);
     }
 
-    static void issue_270()
-    {
-        var project =
-           new Project("MyProduct",
-               new Dir(@"%ProgramFiles%\MyCompany\MyProduct",
-                   // new File("testpad.exe")
-                   // new DirFiles("*.*")
-                   new Files(@"obj\*.*")
-                   ));
-
-        project.WildCardDedup = dir =>
-         {
-         };
-        project.BuildWxs();
-    }
-
     static void issue_609()
     {
         AutoElements.DisableAutoKeyPath = true;
@@ -390,15 +374,6 @@ static class Script
 
     static public void Main()
     {
-        // var file = @"E:\PrivateData\Galos\Projects\WixSharp\Source\src\WixSharp.Samples\Support\testpad\test_asm.dll";
-
-        // file = @"E:\PrivateData\Galos\Projects\WixSharp\Source\src\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll";
-        //
-        // var asm = System.Reflection.Assembly.ReflectionOnlyLoad(System.IO.File.ReadAllBytes(file));
-
-        // HiTeach_MSI.Program.Main1(); return;
-        // MsiInstaller.MyMsi.Build(); return;
-        issue_270(); return;
         issue_1075(); return;
         issue_298(); return;
         issue_1114(); return;

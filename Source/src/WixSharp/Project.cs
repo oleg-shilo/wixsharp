@@ -621,12 +621,14 @@ namespace WixSharp
 
         /// <summary>
         /// The wild card deduplication algorithm to be used during wild card resolution (<c>ResolveWildCards</c>).
-        /// <para>WildCardDedup is only used to handle duplications in the source folders discovered by `Files(...)`.
-        /// Though if user defines source directories explicitly then it is his/her responsibility to handle potential duplications.
+        /// <para>When ResolveWildCards is invoked, it inserts the files discovered from project's DirFiles and Files
+        /// definitions. The dedup delegate Project.WildCardDedup will be invoked or every Dir, which gets new
+        /// discovered files,
         /// </para>
-        /// <para>The default implementation does nothing but you can assign a custom routine that
-        /// can be used to do post-resolving deduplication of the <see cref="Dir"/> items (files).</para>
         /// <para>
+        /// <para>The default implementation does nothing but you can assign a custom routine that
+        /// can be used to do post-resolving deduplication of the <see cref="Dir"/> items.
+        /// </para>
         /// The following sample demonstrates how to remove files with the same file name:
         /// </para>
         /// <code>
@@ -643,17 +645,16 @@ namespace WixSharp
         /// Compiler.BuildMsi(project);
         /// </code>
         /// <para>Note, the need for <c>project.WildCardDedup</c> may arise only for very specific
-        /// deployment scenarios. Some of them are discussed in this thread: https://github.com/oleg-shilo/wixsharp/issues/270
+        /// deployment scenarios when the same files exist in multiple source locations.
         /// </para>
         /// </summary>
-        /// <remarks>`WildCardDedup` is only invoked for the <see cref="Dir"/> that is added as the result of
-        /// the WixSharp compiler resolving <see cref="Files"/> definition and finding nested directory(ies).
-        /// It is not invoked for the items of the <see cref="Dir"/> that is added by user.</remarks>
+        /// <remarks>
+        ///
+        /// </remarks>
         public Action<Dir> WildCardDedup = dir =>
-            {
-                // Issue #270: Deduplication of files added with wildcards
-                // sample dedup
-            };
+        {
+            // sample dedup
+        };
 
         /// <summary>
         /// The unique file name deduplication algorithm to be used as <see cref="Project.WildCardDedup"/>.
@@ -691,39 +692,51 @@ namespace WixSharp
             int iterator = 0;
             var dirList = new List<Dir>();
             var fileList = new List<File>();
+            var impactedDirs = new List<Dir>();
 
             dirList.AddRange(Dirs);
 
             while (iterator < dirList.Count)
             {
-                foreach (Files dirItems in dirList[iterator].FileCollections)
+                var dir = dirList[iterator];
+
+                foreach (Files dirItems in dir.FilesCollections)
                 {
-                    foreach (WixEntity item in dirItems.GetAllItems(SourceBaseDir, dirList[iterator]))
+                    var discoveredItems = dirItems.GetAllItems(SourceBaseDir, dir);
+                    foreach (WixEntity item in discoveredItems)
                     {
                         if (item is DirFiles)
                         {
-                            dirList[iterator].AddDirFileCollection(item as DirFiles);
+                            dir.AddDirFileCollection(item as DirFiles);
                         }
-                        else if (item is Dir discoveredDir && !dirList[iterator].Dirs.Contains(item))
+                        else if (item is Dir discoveredDir && !dir.Dirs.Contains(item))
                         {
-                            WildCardDedup?.Invoke(discoveredDir);
-                            dirList[iterator].AddDir(discoveredDir);
+                            // WildCardDedup?.Invoke(discoveredDir);
+                            dir.AddDir(discoveredDir);
                         }
                     }
                 }
 
-                foreach (Dir dir in dirList[iterator].Dirs)
-                    dirList.Add(dir);
+                foreach (Dir item in dir.Dirs)
+                    dirList.Add(item);
 
-                foreach (DirFiles coll in dirList[iterator].DirFileCollections)
-                    dirList[iterator].Files = dirList[iterator].Files.Combine(coll.GetFiles(SourceBaseDir));
+                foreach (DirFiles coll in dir.DirFilesCollections)
+                {
+                    dir.Files = dir.Files.Combine(coll.GetFiles(SourceBaseDir));
+
+                    if (dir.Files.Any() && !impactedDirs.Contains(dir))
+                        impactedDirs.Add(dir);
+                }
 
                 //clear resolved collections
-                dirList[iterator].FileCollections = new Files[0];
-                dirList[iterator].DirFileCollections = new DirFiles[0];
+                dir.FilesCollections = new Files[0];
+                dir.DirFilesCollections = new DirFiles[0];
 
                 iterator++;
             }
+
+            foreach (var dir in impactedDirs)
+                WildCardDedup?.Invoke(dir);
 
             if (pruneEmptyDirectories)
             {
@@ -736,10 +749,10 @@ namespace WixSharp
                     foreach (Dir dirToRemove in emptyDirs)
                     {
                         AllDirs.ForEach(d =>
-                                        {
-                                            if (d.Dirs.Contains(dirToRemove))
-                                                d.Dirs = d.Dirs.Except(dirToRemove).ToArray();
-                                        });
+                        {
+                            if (d.Dirs.Contains(dirToRemove))
+                                d.Dirs = d.Dirs.Except(dirToRemove).ToArray();
+                        });
 
                         // check the root dirs too
                         if (this.Dirs.Contains(dirToRemove))
@@ -747,6 +760,10 @@ namespace WixSharp
                     }
                 }
             }
+
+            // not sure if I want to make it global
+            // if (WildCardDedup != null)
+            //     this.AllDirs.ForEach(WildCardDedup);
 
             return this;
         }
