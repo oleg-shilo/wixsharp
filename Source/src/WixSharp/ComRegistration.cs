@@ -246,10 +246,10 @@ namespace WixSharp
         /// most common for there to be a single value for the Context attribute. This attribute's value should be a
         /// space-delimited list congaing one or more of the following:
         /// <list type="bullet">
-        /// <item> <term>LocalServer</term>  <description>A 16-bit local server application.</description></item>
-        /// <item><term>LocalServer32</term><description>A 32-bit local server application.</description></item>
-        /// <item><term>InprocServer</term><description>A 16-bit in-process server DLL.</description></item>
-        /// <item><term>InprocServer32</term><description>A 32-bit in-process server DLL.</description></item>
+        /// <item>LocalServer</item>
+        /// <item>LocalServer32</item>
+        /// <item>InprocServer</item>
+        /// <item>InprocServer32</item>
         /// </list>
         /// </summary>
         [Xml]
@@ -264,12 +264,12 @@ namespace WixSharp
         /// <summary>
         /// The threading model
         /// <list type="bullet">
-        /// <item><term>apartment</term></item>
-        /// <item><term>free     </term></item>
-        /// <item><term>both     </term></item>
-        /// <item><term>neutral  </term></item>
-        /// <item><term>single   </term></item>
-        /// <item><term>rental   </term></item>
+        /// <item>apartment</item>
+        /// <item>free     </item>
+        /// <item>both     </item>
+        /// <item>neutral  </item>
+        /// <item>single   </item>
+        /// <item>rental   </item>
         /// </list>
         /// </summary>
         [Xml]
