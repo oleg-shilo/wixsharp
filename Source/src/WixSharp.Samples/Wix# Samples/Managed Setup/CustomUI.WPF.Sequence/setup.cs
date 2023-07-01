@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 using WixSharp;
 using WixSharp.UI.WPF;
 
@@ -46,6 +47,8 @@ public class Script
 
         project.PreserveTempFiles = true;
         project.SourceBaseDir = @"..\..\";
+
+        project.ManagedUI.AutoScaleMode = AutoScaleMode.Dpi;
 
         project.BuildMsi();
     }

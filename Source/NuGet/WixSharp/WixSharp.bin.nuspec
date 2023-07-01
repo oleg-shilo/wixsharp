@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>1.20.4.0</version>
+    <version>1.20.3.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,8 +16,23 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.20.4.0-hotfix 
-- Issue #270: Deduplication of files added with wildcards</releaseNotes>
+    <releaseNotes>Release v1.20.3.0
+
+- Issue #1244: The directory Id generated can be too long
+- Issue #1223: Non LegacyDummyDirAlgorithm creates C:\ProgramFilesFolder empty folder
+- Issue #1220: ElevatedManagedAction issue
+- Feature #1204: Feature - RegisterCom class to ease the registration of COM files
+- Issue #1203: SilentBootstrapperApplication
+- Issue #182 (extended solution): RegistrySearch has "Win64=no" when building x64 installers
+- Added Self-executable_Msi sample
+- Added WixBootstrapper_EmbeddedUI to demonstrate how to show managed UI if the bundled MSI
+- Added sample for customization of the stock Burn UI. Triggered by #1219
+- Added sample for "Issue #1218: Dynamic custom UI sequence"
+- Resurrected setting user input from BA UI and passing it to the msi. RegistrySearch input is also retained.
+- Added validation for `Issue #1075: [FEAT] Add error if LaunchApplicationFromExitDialog using in common Project` error.
+- Fixed problem with RegKey being placed in the x86 root XML dir for the x64 project
+
+</releaseNotes>
     <copyright>Copyright (C) 2008-2022 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>

@@ -1,9 +1,13 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ConstrainedExecution;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Xml.Linq;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
@@ -115,6 +119,110 @@ namespace WixSharp.Test
             project.LicenceFile = "license.rtf";
 
             var file = project.BuildWxs();
+        }
+
+        [Fact]
+        [Description("Issue #270 (WildCardDedup1)")]
+        public void Fix_Issue_270_WildCardDedup_uninvoked_if_no_files_discovered()
+        {
+            var dir1 = Environment.CurrentDirectory.PathJoin("Issue_270-1", "dummydir1").EnsureDirExists();
+            var dir2 = Environment.CurrentDirectory.PathJoin("Issue_270-1", "dummydir2").EnsureDirExists();
+
+            // note the dirs are empty
+
+            var processedDirs = new List<string>();
+
+            var project = new Project("MyProduct",
+                new Dir("TestDir",
+                      new Files(dir1.PathJoin(@"*.txt")),
+                      new Files(dir2.PathJoin(@"*.txt"))));
+
+            project.WildCardDedup = dir => processedDirs.Add(project.GetTargetPathOf(dir));
+
+            project.ResolveWildCards();
+
+            Assert.Equal(0, processedDirs.Count);
+        }
+
+        [Fact]
+        [Description("Issue #270 (WildCardDedup2)")]
+        public void Fix_Issue_270_WildCardDedup_invoked_for_impacted_user_and_discovered_dirs_2()
+        {
+            var dir1 = Environment.CurrentDirectory.PathJoin("Issue_270-2", "dummydir1");
+            var dir2 = Environment.CurrentDirectory.PathJoin("Issue_270-2", "dummydir2");
+            var dir3 = Environment.CurrentDirectory.PathJoin("Issue_270-2", "dummydir1", "subdir", "subdir2");
+            var dir4 = Environment.CurrentDirectory.PathJoin("Issue_270-2", "dummydir2", "subdir");
+
+            var file1 = dir1.PathJoin("test.txt").EnsureFileExists();
+            var file2 = dir2.PathJoin("test.txt").EnsureFileExists();
+            var file3 = dir3.PathJoin("test.txt").EnsureFileExists();
+            var file4 = dir4.PathJoin("test.txt").EnsureFileExists();
+
+            var processedDirs = new List<string>();
+
+            var project = new Project("MyProduct",
+                new Dir("TestDir",
+                      new Files(dir1.PathJoin(@"*.txt")),
+                      new Files(dir2.PathJoin(@"*.txt"))));
+
+            project.WildCardDedup = dir =>
+            {
+                processedDirs.Add(project.GetTargetPathOf(dir));
+            };
+
+            project.ResolveWildCards();
+
+            Assert.Equal(3, processedDirs.Count);
+            Assert.Contains(@"TestDir", processedDirs);
+            Assert.Contains(@"TestDir\subdir", processedDirs);
+            Assert.Contains(@"TestDir\subdir\subdir2", processedDirs);
+        }
+
+        [Fact]
+        [Description("Issue #270 (WildCardDedup3)")]
+        public void Fix_Issue_270_WildCardDedup_invoked_for_impacted_user_and_discovered_dirs()
+        {
+            var dir1 = Environment.CurrentDirectory.PathJoin("Issue_270-3", "dummydir1");
+            var dir2 = Environment.CurrentDirectory.PathJoin("Issue_270-3", "dummydir2");
+            var dir3 = Environment.CurrentDirectory.PathJoin("Issue_270-3", "dummydir2", "subdir");
+
+            var file1 = dir1.PathJoin("test.txt").EnsureFileExists();
+            var file2 = dir2.PathJoin("test.txt").EnsureFileExists();
+            var file3 = dir3.PathJoin("test.txt").EnsureFileExists();
+
+            var processedDirs = new List<string>();
+
+            var project = new Project("MyProduct",
+                new Dir("TestDir",
+                      new Files(dir1.PathJoin(@"*.txt")),
+                      new Files(dir2.PathJoin(@"*.txt"))));
+
+            project.WildCardDedup = dir => processedDirs.Add(project.GetTargetPathOf(dir));
+
+            project.ResolveWildCards();
+
+            Assert.Equal(2, processedDirs.Count);
+            Assert.Contains(@"TestDir", processedDirs);
+            Assert.Contains(@"TestDir\subdir", processedDirs);
+        }
+
+        [Fact]
+        [Description("Issue #270 (predicate discovered files)")]
+        public void Fix_Issue_270_Predicate_for_discovered_files()
+        {
+            int xmlFilesCounter = 0;
+
+            var project = new Project("MyProduct",
+               new Dir(@"%ProgramFiles%\MyCompany\MyProduct",
+                   new Files(@"*.xml", x => { xmlFilesCounter++; return true; })));
+
+            var file = project.BuildWxs(Compiler.OutputType.MSI, "Fix_Issue_270_Predicate_for_discovered_files.wsx");
+
+            var xmlFilesFound = System.IO.Directory.GetFiles(
+                Environment.CurrentDirectory, "*.xml",
+                System.IO.SearchOption.AllDirectories).Length;
+
+            Assert.Equal(xmlFilesFound, xmlFilesCounter);
         }
 
         [Fact]

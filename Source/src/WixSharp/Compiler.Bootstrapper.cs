@@ -27,7 +27,6 @@ THE SOFTWARE.
 
 #endregion Licence...
 
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,6 +37,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.Bootstrapper;
 using IO = System.IO;
 
@@ -47,11 +47,10 @@ namespace WixSharp
     public partial class Compiler
     {
         /// <summary>
-        /// Builds WiX Bootstrapper application from the specified <see cref="Bundle" /> project instance.
+        /// Builds WiX Bootstrapper application from the specified <see cref="Bundle"/> project instance.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="path">The path.</param>
-        /// <returns></returns>
         /// <exception cref="System.ApplicationException">Wix compiler/linker cannot be found</exception>
         public static string Build(Bundle project, string path)
         {
@@ -181,7 +180,6 @@ namespace WixSharp
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="path">The path to the batch file to be created.</param>
-        /// <returns></returns>
         /// <exception cref="System.ApplicationException">Wix compiler/linker cannot be found</exception>
         public static string BuildCmd(Bundle project, string path = null)
         {
@@ -357,7 +355,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Builds WiX Bootstrapper application from the specified <see cref="T:WixSharp.Bootstrapper.Bundle" /> project instance.
+        /// Builds WiX Bootstrapper application from the specified <see cref="Bundle"/> project instance.
         /// </summary>
         /// <param name="project">The project.</param>
         /// <returns></returns>

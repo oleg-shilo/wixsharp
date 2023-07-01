@@ -16,7 +16,10 @@ class Script
                        new File(@"File3.txt")));
 
         project.UI = WUI.WixUI_ProgressOnly;
-        project.PreserveTempFiles = true;
+
+        // see https://stackoverflow.com/questions/3800958/wix-mysterious-and-hard-to-diagnose-ice-validation-errors-on-build-server-build
+        Compiler.LightOptions += "-sice:ICE103 ";
+
         var msm = Compiler.BuildMsm(project);
     }
 }

@@ -1,12 +1,12 @@
 //css_dir ..\..\;
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 //css_ref System.Core.dll;
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 
@@ -74,7 +74,7 @@ internal static class Script
             // project.EnableUninstallFullUIWithExtraParameters(@"/L*V [TempFolder]CustomMsiLog.log PARAM1=VALUE1 PARAM2=VALUE2");
             // project.EnableUninstallFullUI("[#myapp_exe],0", @"/L*V [TempFolder]CustomMsiLog.log");
 
-            project.PreserveTempFiles = true;
+            // project.PreserveTempFiles = true;
             project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
             project.BuildMsi();

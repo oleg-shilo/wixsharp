@@ -23,8 +23,10 @@ THE SOFTWARE.
 
 #endregion Licence...
 
+using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -32,7 +34,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.Controls;
@@ -967,7 +968,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Dir AddFileCollections(this Dir dir, params Files[] items)
         {
-            dir.FileCollections = dir.FileCollections.Combine(items).Distinct().ToArray();
+            dir.FilesCollections = dir.FilesCollections.Combine(items).Distinct().ToArray();
             return dir;
         }
 
@@ -1001,7 +1002,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Dir AddDirFileCollections(this Dir dir, params DirFiles[] items)
         {
-            dir.DirFileCollections = dir.DirFileCollections.Combine(items).Distinct().ToArray();
+            dir.DirFilesCollections = dir.DirFilesCollections.Combine(items).Distinct().ToArray();
             return dir;
         }
 
@@ -1126,6 +1127,36 @@ namespace WixSharp.CommonTasks
         {
             project.Version = project.ExtractVersionFrom(fileId).ToRawVersion();
             return project;
+        }
+
+        /// <summary>
+        /// Gets the target path of a give <see cref="Dir" /> object within <see cref="Project" />.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="directory">The <see cref="Dir" />.</param>
+        /// <returns></returns>
+        static public string GetTargetPathOf(this Project project, Dir directory)
+        {
+            int iterator = 0;
+
+            var dirList = new List<Tuple<string, Dir>>();
+            dirList.AddRange(project.Dirs.Select(x => new Tuple<string, Dir>(x.Name, x)));
+
+            while (iterator < dirList.Count)
+            {
+                var currentDir = dirList[iterator].Item2;
+                var path = dirList[iterator].Item1;
+
+                if (currentDir == directory)
+                    return path;
+
+                foreach (Dir item in currentDir.Dirs)
+                    dirList.Add(new Tuple<string, Dir>(path.PathCombine(item.Name), item));
+
+                iterator++;
+            }
+
+            return "";
         }
 
         /// <summary>

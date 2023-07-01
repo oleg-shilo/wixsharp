@@ -28,7 +28,6 @@ class Script
         project.UI = WUI.WixUI_FeatureTree;
         project.GUID = new Guid("{AC19C6E4-9724-4e90-8AC7-6E69B4AB7562}");
 
-        project.WildCardDedup = Project.UniqueFileNameDedup;
         project.ResolveWildCards();
 
         project.AllFiles

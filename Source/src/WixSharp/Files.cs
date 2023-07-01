@@ -234,7 +234,7 @@ namespace WixSharp
                 }
             };
 
-            var items = new List<WixEntity>
+            var result = new List<WixEntity>
             {
                 new DirFiles(IO.Path.Combine(rootDirPath, this.IncludeMask))
                 {
@@ -259,7 +259,7 @@ namespace WixSharp
                 if (subDir == null)
                 {
                     subDir = new Dir(dirName);
-                    items.Add(subDir);
+                    result.Add(subDir);
                 }
 
                 subDir.AddFeatures(this.ActualFeatures);
@@ -277,7 +277,7 @@ namespace WixSharp
                 AgregateSubDirs(subDir, subDirPath);
             }
 
-            return items.ToArray();
+            return result.ToArray();
         }
     }
 }

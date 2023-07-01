@@ -1,3 +1,7 @@
+v1.17.4.0
+- Issue #1301: Make more elements translateable
+  Updated Project template VS extension to support context menu localization
+
 v1.17.2.0
 - Issue #511: Compile error CustomDialog
   Updated Project template VS extension

@@ -1,3 +1,4 @@
+using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,7 +7,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 
 using IO = System.IO;
@@ -351,6 +351,11 @@ namespace WixSharp
                 if (ManagedUI?.Icon != null)
                 {
                     this.AddBinary(new Binary(new Id("ui_shell_icon"), ManagedUI.Icon));
+                }
+
+                if (ManagedUI != null)
+                {
+                    this.AddProperty(new Property("UI_AUTOSCALEMODE", ManagedUI.AutoScaleMode.ToString()));
                 }
 
                 string dllEntry = "WixSharp_InitRuntime_Action";

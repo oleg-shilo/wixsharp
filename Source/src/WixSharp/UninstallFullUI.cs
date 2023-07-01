@@ -1,7 +1,6 @@
-﻿using Microsoft.Deployment.WindowsInstaller;
+﻿using System.Linq;
+using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
-using System;
-using System.Linq;
 using WixSharp.CommonTasks;
 
 namespace WixSharp
@@ -18,12 +17,7 @@ namespace WixSharp
     public static class UninstallFullUI
     {
         /// <summary>
-        /// Enables the full UI for unintralling.
-        /// <p>Setting up a custom uninstall UI interferes with the product icon in the ARP dialog if it is
-        /// set to the <see cref="Project.ControlPanelInfo.ProductIcon"/>.
-        /// </p>
-        /// <p>In such cases you need to pass icon target that as a second parameter
-        /// <c>project.EnableUninstallFullUI(@"[INSTALLDIR]\app_icon.ico")</c></p>
+        /// Enables the full UI.
         /// </summary>
         /// <param name="project">The project.</param>
         public static void EnableUninstallFullUI(this Project project)
@@ -85,7 +79,7 @@ namespace WixSharp
                 {
                     return;
                 }
-
+                
                 var comp = doc.FindAll("RegistryValue")
                     .First(x => x.HasAttribute("Id", "WixSharp_RegValue_DisplayIcon"))
                     .Parent

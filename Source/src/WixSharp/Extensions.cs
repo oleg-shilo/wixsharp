@@ -1,3 +1,6 @@
+using Microsoft.Deployment.WindowsInstaller;
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,9 +19,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-using Microsoft.Win32;
 using WixSharp.CommonTasks;
 using static WixSharp.SetupEventArgs;
 
@@ -1331,6 +1331,34 @@ namespace WixSharp
                 return path;
             else
                 return path + extension;
+        }
+
+        /// <summary>
+        /// Ensures the directory exists.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static string EnsureDirExists(this string path)
+        {
+            Directory.CreateDirectory(path);
+            return path;
+        }
+
+        /// <summary>
+        /// Ensures the file exists.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static string EnsureFileExists(this string path)
+        {
+            var filePath = path.PathGetFullPath();
+
+            if (!IO.File.Exists(filePath))
+            {
+                filePath.PathGetDirName().EnsureDirExists();
+                IO.File.WriteAllBytes(filePath, new byte[0]);
+            }
+            return path;
         }
 
         /// <summary>

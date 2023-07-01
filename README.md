@@ -31,7 +31,7 @@ same language (C#). This also allows homogeneous, simplified and more consistent
 
 If you are planing to use Wix# on Linux you may find this [article](https://github.com/oleg-shilo/wixsharp/wiki/WixSharp-on-Linux) being useful. Please note that Wix# builds MSI deployment packages and while MSI can be build on Linux it cannot be run on Linux as MSI is a pure Windows technology.   
 
-Please note that WixSharp NuGet packages are targeting .NET Framework only. This is due to the fact that WiX does not support integration with any other .NET flavours but .NET Framework only. 
+Please note that WixSharp NuGet packages are targeting .NET Framework only. This is due to the fact that WiX does not support integration with anoy other .NET flavours but .NET Framework only. 
 
 You can find the instructions on how to author MSI setups with WixSharp in the [Documentation](https://github.com/oleg-shilo/wixsharp/wiki) section. And this section only highlights 
 some of the available features.
@@ -62,9 +62,7 @@ class Script
     }
 }
 ```
-
 One of the most intriguing features of Wix# is the ability to define/implement managed Custom Actions directly in the script file:
-
 ```C#
 using System;
 using System.Windows.Forms;

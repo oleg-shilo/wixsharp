@@ -246,10 +246,10 @@ namespace WixSharp
         /// most common for there to be a single value for the Context attribute. This attribute's value should be a
         /// space-delimited list congaing one or more of the following:
         /// <list type="bullet">
-        /// <item><c>LocalServer</c>  - A 16-bit local server application.</item>
-        /// <item><c>LocalServer32</c> - A 32-bit local server application.</item>
-        /// <item><c>InprocServer</c> - A 16-bit in-process server DLL.</item>
-        /// <item><c>InprocServer32</c> - A 32-bit in-process server DLL.</item>
+        /// <item> <term>LocalServer</term>  <description>A 16-bit local server application.</description></item>
+        /// <item><term>LocalServer32</term><description>A 32-bit local server application.</description></item>
+        /// <item><term>InprocServer</term><description>A 16-bit in-process server DLL.</description></item>
+        /// <item><term>InprocServer32</term><description>A 32-bit in-process server DLL.</description></item>
         /// </list>
         /// </summary>
         [Xml]
@@ -264,12 +264,12 @@ namespace WixSharp
         /// <summary>
         /// The threading model
         /// <list type="bullet">
-        /// <item>apartment</item>
-        /// <item>free     </item>
-        /// <item>both     </item>
-        /// <item>neutral  </item>
-        /// <item>single   </item>
-        /// <item>rental   </item>
+        /// <item><term>apartment</term></item>
+        /// <item><term>free     </term></item>
+        /// <item><term>both     </term></item>
+        /// <item><term>neutral  </term></item>
+        /// <item><term>single   </term></item>
+        /// <item><term>rental   </term></item>
         /// </list>
         /// </summary>
         [Xml]
@@ -318,9 +318,7 @@ namespace WixSharp
         public bool? Programmable;
 
         /// <summary>
-        /// When the value is "yes", the bare file name can be used for COM servers. The installer registers the file
-        /// name only instead of the complete path. This enables the server in the current directory to take precedence
-        /// and allows multiple copies of the same component.
+        /// When the value is "yes", the bare file name can be used for COM servers. The installer registers the file name only instead of the complete path. This enables the server in the current directory to take precedence and allows multiple copies of the same component.
         /// </summary>
         [Xml]
         public bool? RelativePath;
@@ -338,17 +336,13 @@ namespace WixSharp
         public bool? SafeForScripting;
 
         /// <summary>
-        /// Specifies whether or not to use the short path for the COM server. This can only apply when Advertise is
-        /// set to 'no'. The default is 'no' meaning that it will use the long file name for the COM server.
+        /// Specifies whether or not to use the short path for the COM server. This can only apply when Advertise is set to 'no'. The default is 'no' meaning that it will use the long file name for the COM server.
         /// </summary>
         [Xml]
         public bool? ShortPath;
 
         /// <summary>
-        /// May only be specified if the value of the Advertise attribute is "no" and the ForeignServer attribute is
-        /// not specified. File Id of the COM server file. If this element is nested under a File element, this value
-        ///
-        /// defaults to the value of the parent File/@Id.
+        /// May only be specified if the value of the Advertise attribute is "no" and the ForeignServer attribute is not specified. File Id of the COM server file. If this element is nested under a File element, this value defaults to the value of the parent File/@Id.
         /// </summary>
         [Xml]
         public string Server;
@@ -606,8 +600,7 @@ namespace WixSharp
     }
 
     /// <summary>
-    /// Verb definition for an Extension. When advertised, this element creates a row in the Verb table. When not
-    /// advertised, this element creates the appropriate rows in Registry table.
+    /// Verb definition for an Extension. When advertised, this element creates a row in the Verb table. When not advertised, this element creates the appropriate rows in Registry table.
     /// </summary>
     public class Verb : WixEntity, IGenericEntity
     {
@@ -634,11 +627,8 @@ namespace WixSharp
         /// </summary>
         /// <remarks>
         /// The resolution of properties in the Argument field is limited.
-        /// A property formatted as [Property] in this field can only be resolved if the property already has the
-        /// intended value when the component owning the verb is installed. For example, for the argument "[#MyDoc.doc]"
-        /// to resolve to the correct value, the same process must be installing the file MyDoc.doc and the component
-        ///
-        /// that owns the verb.
+        /// A property formatted as [Property] in this field can only be resolved if the property already has the intended value when the component owning the verb is installed.
+        /// For example, for the argument "[#MyDoc.doc]" to resolve to the correct value, the same process must be installing the file MyDoc.doc and the component that owns the verb.
         /// </remarks>
         [Xml]
         public string Argument;
@@ -653,23 +643,21 @@ namespace WixSharp
         /// The sequence of the commands.
         /// </summary>
         /// <remarks>
-        /// Only verbs for which the Sequence is specified are used to prepare an ordered list for the default value of
-        /// the shell key. The Verb with the lowest value in this column becomes the default verb. Used only for Advertised verbs.
+        /// Only verbs for which the Sequence is specified are used to prepare an ordered list for the default value of the shell key.
+        /// The Verb with the lowest value in this column becomes the default verb. Used only for Advertised verbs.
         /// </remarks>
         [Xml]
         public int? Sequence;
 
         /// <summary>
-        /// Either this attribute or the <see cref="TargetProperty"/> attribute must be specified for a non-advertised
-        /// verb. The value should be the identifier of the target file to be executed for the verb.
+        /// Either this attribute or the <see cref="TargetProperty"/> attribute must be specified for a non-advertised verb. The value should be the identifier of the target file to be executed for the verb.
         /// </summary>
         [Xml]
         public string TargetFile;
 
         /// <summary>
         /// Either this attribute or the <see cref="TargetFile"/> attribute must be specified for a non-advertised verb.
-        /// The value should be the identifier of the property which will resolve to the path to the target file to be
-        /// executed for the verb.
+        /// The value should be the identifier of the property which will resolve to the path to the target file to be executed for the verb.
         /// </summary>
         [Xml]
         public string TargetProperty;
@@ -920,22 +908,19 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Value of 'true' will create a row in the TypeLib table. Value of 'false' will create rows in the Registry
-        /// table. The default value is 'false'.
+        /// Value of 'true' will create a row in the TypeLib table. Value of 'false' will create rows in the Registry table. The default value is 'false'.
         /// </summary>
         [Xml]
         public bool? Advertise;
 
         /// <summary>
-        /// Value of 'true' means the type library describes controls, and should not be displayed in type browsers
-        /// intended for non-visual objects. This attribute can only be set if Advertise='false'.
+        /// Value of 'true' means the type library describes controls, and should not be displayed in type browsers intended for nonvisual objects. This attribute can only be set if Advertise='false'.
         /// </summary>
         [Xml]
         public bool? Control;
 
         /// <summary>
-        /// The cost associated with the registration of the type library in bytes. This attribute cannot be set if
-        /// Advertise='no'.
+        /// The cost associated with the registration of the type library in bytes. This attribute cannot be set if Advertise='no'.
         /// </summary>
         [Xml]
         public int? Cost;
@@ -959,9 +944,7 @@ namespace WixSharp
         public string HelpDirectory;
 
         /// <summary>
-        /// Value of 'true' means the type library should not be displayed to users, although its use is not restricted.
-        /// Should be used by controls. Hosts should create a new type library that wraps the control with extended properties.
-        /// This attribute can only be set if Advertise='false'.
+        /// Value of 'true' means the type library should not be displayed to users, although its use is not restricted. Should be used by controls. Hosts should create a new type library that wraps the control with extended properties. This attribute can only be set if Advertise='false'.
         /// </summary>
         [Xml]
         public bool? Hidden;
@@ -991,8 +974,7 @@ namespace WixSharp
         public int? ResourceId;
 
         /// <summary>
-        /// Value of 'true' means the type library is restricted, and should not be displayed to users. This attribute
-        /// can only be set if Advertise='false'.
+        /// Value of 'true' means the type library is restricted, and should not be displayed to users. This attribute can only be set if Advertise='false'.
         /// </summary>
         [Xml]
         public bool? Restricted;

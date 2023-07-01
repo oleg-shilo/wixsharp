@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Microsoft.Deployment.Samples.EmbeddedUI;
+using Microsoft.Deployment.WindowsInstaller;
+using System;
 using System.Collections.Generic;
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -9,8 +10,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using Microsoft.Deployment.Samples.EmbeddedUI;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
 
@@ -285,7 +284,15 @@ namespace WixSharp
                 Dialogs = ui.ModifyDialogs;
 
             if (Dialogs.Any())
+            {
                 shellView = new ShellView { Shell = this };
+
+                var scalingModeValue = runtime.Session.Property("UI_AUTOSCALEMODE");
+                if (scalingModeValue.IsNotEmpty())
+                {
+                    (shellView as ShellView).AutoScaleMode = (AutoScaleMode)Enum.Parse(typeof(AutoScaleMode), scalingModeValue);
+                }
+            }
 
             try
             {

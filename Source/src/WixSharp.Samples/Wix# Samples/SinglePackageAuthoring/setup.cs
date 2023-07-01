@@ -29,7 +29,6 @@ class Script
         project.ManagedUI.ModifyDialogs.Add(Dialogs.Progress)
                                        .Add(Dialogs.Exit);
 
-        project.PreserveTempFiles = true;
         project.BuildMsi();
     }
 
