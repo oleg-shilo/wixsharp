@@ -945,7 +945,7 @@ namespace WixSharp
             XElement product = doc.Root.Select(Compiler.ProductElementName);
             product.Remove();
 
-            XElement module = doc.Root.AddElement(new XElement("Module", product.Elements()));
+            XElement module = doc.Root.AddElement(new XElement("Module", product.Elements())); // wix4
             module.CopyAttributeFrom("Id", product, "Name")
                   .CopyAttributeFrom(product, "Codepage")
                   .CopyAttributeFrom(product, "Language")
@@ -1068,9 +1068,12 @@ namespace WixSharp
 
             product.AddAttributes(project.Attributes);
 
+            product.Select("SummaryInformation")
+                   .SetAttribute("Description", project.Description);
+
             XElement package = doc.Root.Select("Package");
 
-            package.SetAttribute("Description", project.Description)
+            package
                    .SetAttribute("Platform", project.Platform)
                    .SetAttribute("Scope", project.Scope)
                    .SetAttribute("InstallerVersion", project.InstallerVersion);
