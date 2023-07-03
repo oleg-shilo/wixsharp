@@ -26,7 +26,7 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
 - Issue #1301: Make more elements translatable
 - RC preparation
 - Issues #1304: Improve the  usability of Project.WildCardDedup</releaseNotes>
-    <copyright>Copyright (C) 2008-2022 Oleg Shilo</copyright>
+    <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <references>
