@@ -1,5 +1,7 @@
 // Copyright (c) .NET Foundation and contributors. All rights reserved. Licensed under the Microsoft Reciprocal License. See LICENSE.TXT file in the project root for full license information.
 
+using WixToolset.Mba.Core;
+
 namespace WixToolset.WixBA
 {
     using System;
@@ -41,6 +43,7 @@ namespace WixToolset.WixBA
         /// Gets the global view.
         /// </summary>
         static public RootView View { get; private set; }
+
         // TODO: We should refactor things so we dont have a global View.
 
         /// <summary>
@@ -125,7 +128,7 @@ namespace WixToolset.WixBA
                 // Ask the user for layout folder if one wasn't provided and we're in full UI mode
                 if (WixBA.Model.Command.Display == Display.Full)
                 {
-                    WixBA.Dispatcher.Invoke((Action)delegate()
+                    WixBA.Dispatcher.Invoke((Action)delegate ()
                     {
                         WinForms.FolderBrowserDialog browserDialog = new WinForms.FolderBrowserDialog();
                         browserDialog.RootFolder = Environment.SpecialFolder.MyComputer;

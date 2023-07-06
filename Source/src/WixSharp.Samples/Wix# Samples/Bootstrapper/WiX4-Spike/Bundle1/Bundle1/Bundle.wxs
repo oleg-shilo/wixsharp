@@ -34,7 +34,7 @@
 
 		<Chain>
 			<!-- TODO: Define the list of chained packages. -->
-			<PackageGroupRef Id="NetFx481Web" />
+			<PackageGroupRef Id="NetFx481WebAsPrereq" />
 			<MsiPackage bal:PrereqPackage="yes" SourceFile="..\Package1\bin\x64\Debug\en-US\Package1.msi" />
 		</Chain>
 	</Bundle>
