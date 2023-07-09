@@ -1472,11 +1472,13 @@ namespace WixSharp
                                         new XAttribute("Id", "PreventDowngrading"),
                                         new XAttribute("Error", project.MajorUpgradeStrategy.NewerProductInstalledErrorMessage)));
 
-                        installExec.Add(new XElement("Custom", "NEWPRODUCTFOUND",
+                        installExec.Add(new XElement("Custom",
+                                            new XAttribute("Condition", "NEWPRODUCTFOUND"),
                                             new XAttribute("Action", "PreventDowngrading"),
                                             new XAttribute("After", "FindRelatedProducts")));
 
-                        installUI.Add(new XElement("Custom", "NEWPRODUCTFOUND",
+                        installUI.Add(new XElement("Custom",
+                                          new XAttribute("Condition", "NEWPRODUCTFOUND"),
                                           new XAttribute("Action", "PreventDowngrading"),
                                           new XAttribute("After", "FindRelatedProducts")));
                     }
@@ -2527,7 +2529,7 @@ namespace WixSharp
         {
             foreach (Action wAction in wProject.Actions)
             {
-                object wActionCondition = wAction.ToXmlCondition();
+                object wActionCondition = wAction.ToXmlCondition().Value;
 
                 string step = wAction.Step.ToString();
                 string roollbackActionId = wAction.Id + "_Rollback";
@@ -2590,7 +2592,8 @@ namespace WixSharp
                             .AddAttributes(wAction.Attributes));
 
                     sequences.ForEach(sequence =>
-                        sequence.Add(new XElement("Custom", wActionCondition,
+                        sequence.Add(new XElement("Custom",
+                                         new XAttribute("Condition", wActionCondition),
                                          new XAttribute("Action", actionId),
                                          sequenceNumberAttr)));
                 }
@@ -2599,7 +2602,8 @@ namespace WixSharp
                     var wScriptAction = (ScriptFileAction)wAction;
 
                     sequences.ForEach(sequence =>
-                         sequence.Add(new XElement("Custom", wActionCondition,
+                         sequence.Add(new XElement("Custom",
+                                          new XAttribute("Condition", wActionCondition),
                                           new XAttribute("Action", wAction.Id),
                                           sequenceNumberAttr)));
 
@@ -2619,7 +2623,8 @@ namespace WixSharp
                     if ((wScriptAction.Execute == Execute.deferred) && wScriptAction.Rollback.IsNotEmpty())
                     {
                         sequences.ForEach(sequence =>
-                            sequence.Add(new XElement("Custom", wActionCondition,
+                            sequence.Add(new XElement("Custom",
+                                new XAttribute("Condition", wActionCondition),
                                 new XAttribute("Action", roollbackActionId),
                                 new XAttribute("Before", wAction.Id))));
 
@@ -2655,7 +2660,8 @@ namespace WixSharp
                     if ((wScriptAction.Execute == Execute.deferred) && wScriptAction.Rollback.IsNotEmpty())
                     {
                         sequences.ForEach(sequence =>
-                            sequence.Add(new XElement("Custom", wActionCondition,
+                            sequence.Add(new XElement("Custom",
+                                new XAttribute("Condition", wActionCondition),
                                 new XAttribute("Action", roollbackActionId),
                                 new XAttribute("Before", wAction.Id))));
 
@@ -2739,7 +2745,8 @@ namespace WixSharp
                         }
                     }
 
-                    sequences.ForEach(item => item.Add(new XElement("Custom", wActionCondition,
+                    sequences.ForEach(item => item.Add(new XElement("Custom",
+                                                           new XAttribute("Condition", wActionCondition),
                                                            new XAttribute("Action", wAction.Id),
                                                            sequenceNumberAttr)));
 
@@ -2767,7 +2774,8 @@ namespace WixSharp
                         }
 
                         sequences.ForEach(sequence =>
-                            sequence.Add(new XElement("Custom", wActionCondition,
+                            sequence.Add(new XElement("Custom",
+                                new XAttribute("Condition", wActionCondition),
                                 new XAttribute("Action", roollbackActionId),
                                 new XAttribute("Before", wAction.Id))));
 
@@ -2786,7 +2794,8 @@ namespace WixSharp
                 {
                     var wCustomActionRef = (CustomActionRef)wAction;
                     sequences.ForEach(sequence =>
-                        sequence.Add(new XElement("Custom", wActionCondition,
+                        sequence.Add(new XElement("Custom",
+                            new XAttribute("Condition", wActionCondition),
                             new XAttribute("Action", wCustomActionRef.Id),
                             new XAttribute(wCustomActionRef.When.ToString(), wCustomActionRef.Step))));
 
@@ -2818,13 +2827,15 @@ namespace WixSharp
 
                     sequences.ForEach(sequence =>
                         sequence.Add(
-                            new XElement("Custom", wActionCondition,
+                            new XElement("Custom",
+                                new XAttribute("Condition", wActionCondition),
                                 new XAttribute("Action", setCmdLineActionId),
                                 sequenceNumberAttr)));
 
                     sequences.ForEach(sequence =>
                         sequence.Add(
-                            new XElement("Custom", wActionCondition,
+                            new XElement("Custom",
+                                new XAttribute("Condition", wActionCondition),
                                 new XAttribute("Action", cmdLineActionId),
                                 new XAttribute("After", setCmdLineActionId))));
 
@@ -2837,7 +2848,8 @@ namespace WixSharp
                             new XAttribute("Value", "\"" + quietExecAction.Rollback.ExpandCommandPath() + "\" " + quietExecAction.RollbackArg.ExpandCommandPath())));
 
                         sequences.ForEach(sequence =>
-                            sequence.Add(new XElement("Custom", wActionCondition,
+                            sequence.Add(new XElement("Custom",
+                                new XAttribute("Condition", wActionCondition),
                                 new XAttribute("Action", roollbackActionId),
                                 new XAttribute("Before", wAction.Id))));
 
@@ -2860,7 +2872,8 @@ namespace WixSharp
 
                     sequences.ForEach(sequence =>
                         sequence.Add(
-                            new XElement("Custom", wActionCondition,
+                            new XElement("Custom",
+                                new XAttribute("Condition", wActionCondition),
                                 new XAttribute("Action", wAction.Id),
                                 sequenceNumberAttr)));
 
@@ -2877,7 +2890,8 @@ namespace WixSharp
                     if ((fileAction.Execute == Execute.deferred) && fileAction.Rollback.IsNotEmpty())
                     {
                         sequences.ForEach(sequence =>
-                            sequence.Add(new XElement("Custom", wActionCondition,
+                            sequence.Add(new XElement("Custom",
+                                new XAttribute("Condition", wActionCondition),
                                 new XAttribute("Action", roollbackActionId),
                                 new XAttribute("Before", wAction.Id))));
 
@@ -2900,7 +2914,8 @@ namespace WixSharp
 
                     sequences.ForEach(sequence =>
                         sequence.Add(
-                            new XElement("Custom", wActionCondition,
+                            new XElement("Custom",
+                                new XAttribute("Condition", wActionCondition),
                                 new XAttribute("Action", wAction.Id),
                                 sequenceNumberAttr)));
 
@@ -2917,7 +2932,8 @@ namespace WixSharp
                     if ((binaryAction.Execute == Execute.deferred) && binaryAction.Rollback.IsNotEmpty())
                     {
                         sequences.ForEach(sequence =>
-                            sequence.Add(new XElement("Custom", wActionCondition,
+                            sequence.Add(new XElement("Custom",
+                                new XAttribute("Condition", wActionCondition),
                                 new XAttribute("Action", roollbackActionId),
                                 new XAttribute("Before", wAction.Id))));
 
@@ -2940,7 +2956,8 @@ namespace WixSharp
 
                     sequences.ForEach(sequence =>
                         sequence.Add(
-                            new XElement("Custom", wActionCondition,
+                            new XElement("Custom",
+                                new XAttribute("Condition", wActionCondition),
                                 new XAttribute("Action", wAction.Id),
                                 sequenceNumberAttr)));
 
@@ -2961,7 +2978,8 @@ namespace WixSharp
                     if ((fileAction.Execute == Execute.deferred) && fileAction.Rollback.IsNotEmpty())
                     {
                         sequences.ForEach(sequence =>
-                            sequence.Add(new XElement("Custom", wActionCondition,
+                            sequence.Add(new XElement("Custom",
+                                new XAttribute("Condition", wActionCondition),
                                 new XAttribute("Action", roollbackActionId),
                                 new XAttribute("Before", wAction.Id))));
 
