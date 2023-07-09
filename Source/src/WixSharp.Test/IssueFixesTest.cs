@@ -177,6 +177,27 @@ namespace WixSharp.Test
         }
 
         [Fact]
+        [Description("WiX 4 Bugs (Feature condition) #1282")]
+        public void WiX4_Issue_1_1282()
+        {
+            var feature1 = new Feature("feature1")
+            {
+                Condition = new FeatureCondition("PROP1 = 1", level: 2)
+            };
+
+            var project = new Project("MyProduct",
+                                   new Dir(@"%ProgramFiles%\My Company\My Product",
+                                       new File("setup.cs")
+                                       {
+                                           Feature = feature1
+                                       }));
+
+            var xmlFile = project.BuildMsiCmd();
+
+            // string wxs = System.IO.File.ReadAllText(xmlFile);
+        }
+
+        [Fact]
         [Description("Issue #995")]
         public void Fix_Issue_995()
         {

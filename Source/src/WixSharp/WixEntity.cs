@@ -341,6 +341,11 @@ namespace WixSharp
         public string Name = "";
 
         /// <summary>
+        /// Schedules the FailWhenDeferred custom action for the current platform.
+        /// </summary>
+        public bool FailWhenDeferred = false;
+
+        /// <summary>
         /// Gets or sets the <c>Id</c> value of the <see cref="WixEntity"/>.
         /// <para>This value is used as a <c>Id</c> for the corresponding WiX XML element.</para>
         /// <para>If the <see cref="Id"/> value is not specified explicitly by the user the Wix# compiler

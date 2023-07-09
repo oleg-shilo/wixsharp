@@ -1066,6 +1066,12 @@ namespace WixSharp
             if (project.ControlPanelInfo.Manufacturer.IsNotEmpty())
                 product.SetAttribute("Manufacturer", project.ControlPanelInfo.Manufacturer);
 
+            if (project.FailWhenDeferred)
+            {
+                product.AddElement(WixExtension.Util.XElement("FailWhenDeferred", null));
+                project.Include(WixExtension.Util);
+            }
+
             product.AddAttributes(project.Attributes);
 
             product.Select("SummaryInformation")

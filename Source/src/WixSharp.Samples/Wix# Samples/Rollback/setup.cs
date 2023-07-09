@@ -17,6 +17,7 @@ class Script
         {
             Name = "CustomActionTest",
             UI = WUI.WixUI_ProgressOnly,
+            FailWhenDeferred = true,
 
             Dirs = new[]
             {
@@ -33,17 +34,14 @@ class Script
                     UsesProperties = "Prop=Install", // need to tunnel properties since ElevatedManagedAction is a deferred action
                     RollbackArg = "Prop=Rollback"
                 },
-
-                new CustomActionRef("FailWhenDeferred", When.Before, Step.InstallFinalize, "1"),
             }
         };
 
         project.Include(WixExtension.Util);
-        project.Include(WixExtension.UI);
 
         Compiler.PreserveTempFiles = true;
 
-        Compiler.BuildMsiCmd(project);
+        Compiler.BuildMsi(project);
     }
 }
 

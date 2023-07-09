@@ -25,8 +25,7 @@ namespace WixSharp.Test
 
         string[] nonTestableProjects = "MultiLanguageUI".Split(',').Select(x => x.Trim()).ToArray();
 
-        string[] nonPortedWix4Projects = ("Rollback," +     // WiX4 defect (cannot find element from the valid extension)
-                                          "Driver," +       // WiX4 defect (cannot find element from the valid extension)
+        string[] nonPortedWix4Projects = ("Driver," +       // WiX4 defect (cannot find element from the valid extension)
                                           "ASP.NETApp," +   // WiX4 defect (cannot find element from the valid extension)
                                           "WixBootstrapper_NoUI," +   // WiX4 defect no Managed Custom BA guide
                                           "SqlDatabase," +       // WiX4: no porting guidance for Feature.Condition

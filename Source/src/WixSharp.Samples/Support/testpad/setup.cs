@@ -353,14 +353,19 @@ static class Script
 
     static void Wix4()
     {
-        var project = new ManagedProject("MyProductSetup",
-                new Dir(@"%ProgramFiles%\MyCompany\MyProduct\MyApp",
-                        new Dir(@"Logs"))); // after adding this, the install folder will NOT be removed at uninstall
+        var feature1 = new Feature("feature1")
+        {
+            Condition = new FeatureCondition("PROP1 = 1", level: 2)
+        };
 
-        project.ManagedUI = ManagedUI.Default;
-        project.PreserveTempFiles = true;
+        var proj = new Project("MyProduct",
+                               new Dir(@"%ProgramFiles%\My Company\My Product",
+                                   new File("setup.cs")
+                                   {
+                                       Feature = feature1
+                                   }));
 
-        project.BuildMsi();
+        var cmd = proj.BuildMsiCmd();
     }
 
 #pragma warning disable
