@@ -30,7 +30,6 @@ namespace WixSharp.Test
                                           "WixBootstrapper_NoUI," +   // WiX4 defect no Managed Custom BA guide
                                           "SqlDatabase," +       // WiX4: no porting guidance for Feature.Condition
                                           "WixBootstrapper," +   // it is a VSProject based build; hard to integrate with xUnit
-                                          "FeatureConditions"  // WiX4: no porting guidance for Feature.Condition
                                           ).Split(',').Select(x => x.Trim()).ToArray();
 
         int completedSamples = 0;

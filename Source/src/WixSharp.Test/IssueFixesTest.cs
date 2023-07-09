@@ -192,7 +192,7 @@ namespace WixSharp.Test
                                            Feature = feature1
                                        }));
 
-            var xmlFile = project.BuildMsiCmd();
+            var xmlFile = project.BuildWxs();
 
             // string wxs = System.IO.File.ReadAllText(xmlFile);
         }

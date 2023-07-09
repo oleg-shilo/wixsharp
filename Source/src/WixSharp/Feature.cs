@@ -283,10 +283,10 @@ namespace WixSharp
             element.SetAttribute("AllowAbsent", AllowChange.ToYesNo());
 
             if (Condition != null)
-                element.Add( //intentionally leaving out AddAttributes(...) as Level is the only valid attribute on */Feature/Condition
-                    new XElement("Condition",
-                        new XAttribute("Level", Condition.Level),
-                        new XCData(Condition.ToCData())));
+                element.Add(
+                    new XElement("Level",
+                        new XAttribute("Value", Condition.Level),
+                        new XAttribute("Condition", Condition.ToString())));
 
             return element;
         }

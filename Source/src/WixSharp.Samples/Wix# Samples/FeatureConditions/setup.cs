@@ -23,10 +23,6 @@ class Script
     /// </remarks>
     static public void Main()
     {
-        // Not supported by WiX4
-        // Placing condition element as a child of `Feature` element triggers.
-        // "error WIX0005: The Feature element contains an unexpected child element 'Condition'."
-        // And yet the new WiX4 documentation is stating:
         /*
          * Feature.Level attribute:
          * Level (Integer) : Sets the install level of this feature. A value of 0 will disable the feature.
@@ -36,8 +32,6 @@ class Script
          * Meaning that the condition can only be set via the child Condition element
          * https://wixtoolset.org/docs/schema/wxs/feature/
          */
-        return;
-
         //featureA - a normal feature
         var featureA = new Feature("Feature A");
 
