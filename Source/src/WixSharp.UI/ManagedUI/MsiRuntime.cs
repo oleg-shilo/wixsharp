@@ -1,15 +1,14 @@
+using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 
 using io = System.IO;
 
@@ -260,10 +259,13 @@ namespace WixSharp
         /// Initializes from WiX localization data (*.wxl).
         /// </summary>
         /// <param name="wxlData">The WXL file bytes.</param>
-        /// <returns></returns>
-        public void InitFromWxl(byte[] wxlData)
+        /// <param name="merge">if set to <c>true</c> merge with existing content instead of replacing.</param>
+        /// <exception cref="System.Exception">The localization XML data is in invalid format.</exception>
+        public void InitFromWxl(byte[] wxlData, bool merge = false)
         {
-            this.Clear();
+            if (!merge)
+                this.Clear();
+
             if (wxlData != null && wxlData.Any())
             {
                 XDocument doc;
@@ -288,7 +290,10 @@ namespace WixSharp
                               .ToDictionary(x => x.Attribute("Id").Value, x => x.Value);
 
                 foreach (var item in data)
-                    this.Add(item.Key, item.Value);
+                    if (merge)
+                        this[item.Key] = item.Value;
+                    else
+                        this.Add(item.Key, item.Value);
             }
         }
 

@@ -95,11 +95,11 @@ public static class Script
             switch (DetectLanguage())
             {
                 case SupportedLanguages.German:
-                    runtime.UIText.InitFromWxl(e.Session.ReadBinary("de_xsl"));
+                    runtime.UIText.InitFromWxl(e.Session.ReadBinary("de_xsl"), merge: true);
                     break;
 
                 case SupportedLanguages.Greek:
-                    runtime.UIText.InitFromWxl(e.Session.ReadBinary("gr_xsl"));
+                    runtime.UIText.InitFromWxl(e.Session.ReadBinary("gr_xsl"), merge: true);
                     break;
             }
         };

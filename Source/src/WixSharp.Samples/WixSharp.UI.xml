@@ -1179,7 +1179,7 @@
             Localization map. It is nothing else but a specialized version of a generic string-to-string Dictionary.
             </summary>
         </member>
-        <member name="M:WixSharp.ResourcesData.InitFromWxl(System.Byte[])">
+        <member name="M:WixSharp.ResourcesData.InitFromWxl(System.Byte[],System.Boolean)">
             <summary>
             Initializes from WiX localization data (*.wxl).
             </summary>
