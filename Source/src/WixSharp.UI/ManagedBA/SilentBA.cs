@@ -15,7 +15,6 @@ using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 // TEMPORARY DISABLED AS TEHER IS NO WIX4 WORKING SAMPLE FOR MANAGED BA (15-04-2023)
 
 [assembly: BootstrapperApplication(typeof(WixSharp.Bootstrapper.SilentManagedBA))]
-
 namespace WixSharp.Bootstrapper
 {
     /// <summary>
@@ -29,7 +28,7 @@ namespace WixSharp.Bootstrapper
     /// <code>
     ///  var bootstrapper =
     ///      new Bundle("My Product",
-    ///          new PackageGroupRef("NetFx40Web"),
+    ///          new PackageGroupRef("NetFx462Web"),
     ///          new MsiPackage("product.msi"));
     ///
     /// bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";

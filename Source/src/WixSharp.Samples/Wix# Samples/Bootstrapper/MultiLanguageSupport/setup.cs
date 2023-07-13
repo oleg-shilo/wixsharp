@@ -55,7 +55,7 @@ public static class Script
 
         var bootstrapper =
                 new Bundle("My Product",
-                    new PackageGroupRef("NetFx40Web"),
+                    new PackageGroupRef("NetFx462Web"),
                     new MsiPackage(msiFile)
                     {
                         Id = BA.MainPackageId,

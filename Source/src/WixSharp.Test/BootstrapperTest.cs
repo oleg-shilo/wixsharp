@@ -85,7 +85,7 @@ namespace WixSharp.Test
         {
             var bootstrapper =
                 new Bundle("My Product",
-                    new PackageGroupRef("NetFx40Web"),
+                    new PackageGroupRef("NetFx462Web"),
                     new ExePackage(@"Samples\Setup1.exe")
                     {
                         Payloads = new[] { @"Samples\setup1.dll".ToPayload() },
@@ -112,7 +112,7 @@ namespace WixSharp.Test
     <WixStandardBootstrapperApplication Theme=""hyperlinkLargeLicense"" LogoFile=""app_logo.png"" LocalizationFile=""en-us.wxl"" LicenseFile=""readme.rtf"" xmlns=""http://wixtoolset.org/schemas/v4/wxs/bal"" />
   </BootstrapperApplication>
   <Chain>
-    <PackageGroupRef Id=""NetFx40Web"" />
+    <PackageGroupRef Id=""NetFx462Web"" />
     <ExePackage InstallCommand=""/q /norestart"" PerMachine=""yes"" SourceFile=""Samples\Setup1.exe"">
       <Payload SourceFile=""Samples\setup1.dll"" />
     </ExePackage>

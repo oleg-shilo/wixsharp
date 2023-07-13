@@ -19,7 +19,7 @@ namespace WixSharp.Bootstrapper
     /// <code>
     ///  var bootstrapper =
     ///      new Bundle("My Product",
-    ///          new PackageGroupRef("NetFx40Web"),
+    ///          new PackageGroupRef("NetFx462Web"),
     ///          new MsiPackage("productA.msi"),
     ///          new MsiPackage("productB.msi"));
     ///
@@ -198,13 +198,13 @@ namespace WixSharp.Bootstrapper
         /// The suppress auto insertion of WixMbaPrereq* variables in the bundle definition (WixMbaPrereqPackageId and WixMbaPrereqLicenseUrl).
         /// <para>BA is relying on two internal variables that reflect .NET version (and license) that BA requires at runtime. If user defines
         /// custom Wix# based BA the required variables are inserted automatically, similarly to the standards WiX/Burn BA. However some other
-        /// bundle packages (e.g. new PackageGroupRef("NetFx40Web")) may also define these variables so some duplication/collision is possible.
+        /// bundle packages (e.g. new PackageGroupRef("NetFx462Web")) may also define these variables so some duplication/collision is possible.
         /// To avoid this you can suppress variables auto-insertion and define them manually as needed.</para>
         /// </summary>
         ///<example>The following is an example of suppressing auto-insertion:
         /// <code>
         /// var bootstrapper = new Bundle("My Product Suite",
-        ///                        new PackageGroupRef("NetFx40Web"),
+        ///                        new PackageGroupRef("NetFx462Web"),
         ///                        new MsiPackage(productMsi)
         ///                        {
         ///                            Id = "MyProductPackageId",
@@ -483,7 +483,7 @@ namespace WixSharp.Bootstrapper
 
         <Chain>
             <!-- Install .Net 4 Full -->
-            <PackageGroupRef Id="NetFx40Web"/>
+            <PackageGroupRef Id="NetFx462Web"/>
             <!--<ExePackage
                 Id="Netfx4FullExe"
                 Cache="no"

@@ -34,14 +34,14 @@ public class InstallScript
 
         var bootstrapper =
             new Bundle("My Product Suite",
-                       new PackageGroupRef("NetFx40Web"),
+                       new PackageGroupRef("NetFx462Web"),
                        new MsiPackage(productMsi)
                        {
                            Id = "MyProductPackageId",
                            Visible = true // show MSI entry in ARP
                        });
 
-        bootstrapper.SuppressWixMbaPrereqVars = true; //needed because NetFx40Web also defines WixMbaPrereqVars
+        bootstrapper.SuppressWixMbaPrereqVars = true; //needed because NetFx462Web also defines WixMbaPrereqVars
         bootstrapper.Version = new Version("1.0.0.0");
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889c");
 

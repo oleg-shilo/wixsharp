@@ -485,7 +485,7 @@ namespace WixSharp.Bootstrapper
     /// embedded HTML file.
     /// <code>
     /// var bootstrapper = new Bundle("My Product",
-    ///                         new PackageGroupRef("NetFx40Web"),
+    ///                         new PackageGroupRef("NetFx462Web"),
     ///                         new MsiPackage(productMsi) { DisplayInternalUI = true });
     ///
     /// bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";

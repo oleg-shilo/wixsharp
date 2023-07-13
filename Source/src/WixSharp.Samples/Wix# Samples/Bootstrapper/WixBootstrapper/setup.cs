@@ -55,7 +55,7 @@ public class InstallScript
 
         var bootstrapper =
                 new Bundle("My Product",
-                    // new PackageGroupRef("NetFx40Web"),
+                    // new PackageGroupRef("NetFx462Web"),
                     //new ExePackage(@"..\redist\dotNetFx40_Full_x86_x64.exe") //just a demo sample
                     //{
                     //     Name = "Microsoft .NET Framework 4.0",

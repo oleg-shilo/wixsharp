@@ -33,7 +33,7 @@ public class Script
 
         var bootstrapper =
             new Bundle("My Product",
-                       // new PackageGroupRef("NetFx40Web"),
+                       new PackageGroupRef("NetFx462Web"),
                        // new ExePackage(@"hello.exe") //just a demo sample
                        // {
                        //     Name = "WixCustomAction_cmd",
