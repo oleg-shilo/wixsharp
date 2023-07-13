@@ -25,11 +25,10 @@ namespace WixSharp.Test
 
         string[] nonTestableProjects = "MultiLanguageUI".Split(',').Select(x => x.Trim()).ToArray();
 
-        string[] nonPortedWix4Projects = ("Driver," +       // WiX4 defect (cannot find element from the valid extension)
-                                          "ASP.NETApp," +   // WiX4 defect (cannot find element from the valid extension)
+        string[] nonPortedWix4Projects = ("Driver," +                 // WiX4 defect (cannot find element from the valid extension) "warning WIX1130: The Driver element has been deprecated."
+                                          "ASP.NETApp," +             // WiX4 defect (cannot find element from the valid extension)
                                           "WixBootstrapper_NoUI," +   // WiX4 defect no Managed Custom BA guide
-                                          "SqlDatabase," +       // WiX4: no porting guidance for Feature.Condition
-                                          "WixBootstrapper,"   // it is a VSProject based build; hard to integrate with xUnit
+                                          "WixBootstrapper,"          // it is a VSProject based build; hard to integrate with xUnit
                                           ).Split(',').Select(x => x.Trim()).ToArray();
 
         int completedSamples = 0;
