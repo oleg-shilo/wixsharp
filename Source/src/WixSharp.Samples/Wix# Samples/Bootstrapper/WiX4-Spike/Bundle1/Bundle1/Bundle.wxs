@@ -5,8 +5,8 @@
 		</BootstrapperApplication>-->
 
 		<BootstrapperApplication>
-			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\mbanative.dll" />
 			<Payload Name="WixToolset.Mba.Host.config" SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\WixBA.BootstrapperCore.config" />
+			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\mbanative.dll" />
 			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\WixToolset.Mba.Core.dll" />
 			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\WixToolset.WixBA.dll" />
 			<bal:WixManagedBootstrapperApplicationHost />

@@ -15,7 +15,6 @@ namespace WixToolset.WixBA
     {
         protected override mba.IBootstrapperApplication Create(mba.IEngine engine, mba.IBootstrapperCommand command)
         {
-            MessageBox.Show("TETETETET");
             return new ManagedBA(engine, command);
         }
     }

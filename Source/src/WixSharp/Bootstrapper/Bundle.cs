@@ -214,7 +214,8 @@ namespace WixSharp.Bootstrapper
         /// bootstrapper.SuppressWixMbaPrereqVars = true;
         /// </code>
         /// </example>
-        public bool SuppressWixMbaPrereqVars = false;
+        [Obsolete("Not needed for WiX4")]
+        public bool SuppressWixMbaPrereqVars = true;
 
         /// <summary>
         /// The version of the bundle. Newer versions upgrade earlier versions of the bundles with matching UpgradeCodes. If the bundle is registered in Programs and Features then this attribute will be displayed in the Programs and Features user interface.
@@ -322,6 +323,9 @@ namespace WixSharp.Bootstrapper
             var xChain = root.AddElement("Chain");
             foreach (var item in this.Chain)
                 xChain.Add(item.ToXml());
+
+            var lastPackge = xChain.Elements("MsiPackage").LastOrDefault();
+            lastPackge.SetAttributeValue(WixExtension.Bal.ToXName("PrereqPackage"), "yes");
 
             xChain.SetAttribute("DisableRollback", DisableRollback);
             xChain.SetAttribute("DisableSystemRestore", DisableSystemRestore);

@@ -80,7 +80,6 @@ public class Script
         // bootstrapper.SuppressWixMbaPrereqVars = true;
 
         bootstrapper.OutFileName = "my_app";
-        // bootstrapper.BuildCmd("my_app.exe.cmd");
         bootstrapper.Build("my_app.exe");
         io.File.Delete(productMsi);
     }

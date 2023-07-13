@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using WixSharp.CommonTasks;
+using WixSharp.Nsis;
 using WixToolset.Dtf.WindowsInstaller;
 
 using sys = System.IO;
@@ -98,24 +100,40 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         public static string DefaultBootstrapperCoreConfigContent = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <configuration>
-    <configSections>
-        <sectionGroup name=""wix.bootstrapper"" type=""Microsoft.Tools.WindowsInstallerXml.Bootstrapper.BootstrapperSectionGroup, BootstrapperCore"">
-            <section name=""host"" type=""Microsoft.Tools.WindowsInstallerXml.Bootstrapper.HostSection, BootstrapperCore"" />
-        </sectionGroup>
-    </configSections>
-    <startup useLegacyV2RuntimeActivationPolicy=""true"">
-        <supportedRuntime version=""v2.0.50727"" />
-        <supportedRuntime version=""v4.0"" />
-    </startup>
-    <wix.bootstrapper>
-        <host assemblyName=""{asmName}"">
-            <supportedFramework version=""v3.5"" runtimeVersion=""v2.0.50727"" />
-            <supportedFramework version=""v4\Full"" />
-            <supportedFramework version=""v4\Client"" />
-        </host>
-    </wix.bootstrapper>
+	<configSections>
+		<sectionGroup name=""wix.bootstrapper"" type=""WixToolset.Mba.Host.BootstrapperSectionGroup, WixToolset.Mba.Host"">
+			<section name=""host"" type=""WixToolset.Mba.Host.HostSection, WixToolset.Mba.Host"" />
+		</sectionGroup>
+	</configSections>
+	<startup>
+		<supportedRuntime version=""v4.0"" sku="".NETFramework,Version=v4.8"" />
+	</startup>
+	<wix.bootstrapper>
+		<host assemblyName=""{asmName}"" />
+	</wix.bootstrapper>
 </configuration>
 ";
+
+        static string LocateMbanative()
+        {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var mbanative = (assembly.Location ?? "").PathGetDirName().PathCombine("mbanative.dll");
+
+            if (System.IO.File.Exists(mbanative))
+                return mbanative;
+
+            var resourceName = $"{assembly.GetName().Name}.Bootstrapper.runtime.win_x86.mbanative.dll";
+
+            using (var input = assembly.GetManifestResourceStream(resourceName))
+            using (var output = System.IO.File.Create(mbanative))
+            {
+                input.Seek(0, SeekOrigin.Begin);
+                input.CopyTo(output);
+            }
+
+            Compiler.TempFiles.Add(mbanative);
+            return mbanative;
+        }
 
         /// <summary>
         /// Emits WiX XML.
@@ -123,16 +141,28 @@ namespace WixSharp.Bootstrapper
         /// <returns></returns>
         public override XContainer[] ToXml()
         {
-            string winInstaller = typeof(Session).Assembly.Location;
+            var frameworkAssemblies = new[]
+            {
+                typeof(Session).Assembly.Location,
+                LocateMbanative(),
+                typeof(WixToolset.Mba.Core.BaseBootstrapperApplicationFactory).Assembly.Location
+            };
 
-            var root = new XElement("BootstrapperApplicationRef");
-            root.SetAttribute("Id", "ManagedBootstrapperApplicationHost");
+            var root = new XElement("BootstrapperApplication");
+            root.AddElement(WixExtension.Bal.ToXName("WixManagedBootstrapperApplicationHost"));
 
-            var files = new List<Payload> { rawAppAssembly.ToPayload(), bootstrapperCoreConfig.ToPayload() };
+            var files = new List<Payload>
+            {
+                rawAppAssembly.ToPayload(),
+                bootstrapperCoreConfig.ToPayload("WixToolset.Mba.Host.config")
+            };
             files.AddRange(this.Payloads.DistinctBy(x => x.SourceFile)); //note %this% it already resolved at this stage into an absolute path
 
-            if (!Payloads.Any(x => Path.GetFileName(x.SourceFile).SameAs(Path.GetFileName(winInstaller))))
-                files.Add(winInstaller.ToPayload());
+            foreach (var item in frameworkAssemblies)
+            {
+                if (!Payloads.Any(x => Path.GetFileName(x.SourceFile).SameAs(Path.GetFileName(item))))
+                    files.Add(item.ToPayload());
+            }
 
             if (files.Any())
                 files.DistinctBy(x => x.SourceFile).ForEach(p => root.Add(p.ToXElement("Payload")));

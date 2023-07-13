@@ -1067,14 +1067,15 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an Instance of <see cref="WixSharp.Bootstrapper.Payload"/> for the specified `sourceFile`.
+        /// Creates an Instance of <see cref="WixSharp.Bootstrapper.Payload" /> for the specified `sourceFile`.
         /// </summary>
         /// <param name="sourceFile">The source file.</param>
+        /// <param name="name">The name f the payload.</param>
         /// <returns></returns>
-        public static Bootstrapper.Payload ToPayload(this string sourceFile)
+        public static Bootstrapper.Payload ToPayload(this string sourceFile, string name = null)
         {
             if (sourceFile.IsNotEmpty())
-                return new Bootstrapper.Payload { SourceFile = sourceFile };
+                return new Bootstrapper.Payload { SourceFile = sourceFile, Name = name };
             else
                 return null;
         }

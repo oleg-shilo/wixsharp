@@ -235,12 +235,7 @@ namespace WixSharp
                         if (WixSourceGenerated != null)
                             WixSourceGenerated(doc);
 
-                        string xml = "";
-                        using (IO.StringWriter sw = new StringWriterWithEncoding(Encoding.UTF8))
-                        {
-                            doc.Save(sw, SaveOptions.None);
-                            xml = sw.ToString();
-                        }
+                        string xml = doc.ToString(); // this will remove XML declaration line (`<?xml...`)
 
                         //of course you can use XmlTextWriter.WriteRaw but this is just a temporary quick'n'dirty solution
                         //http://forums.microsoft.com/MSDN/ShowPost.aspx?PostID=2657663&SiteID=1
