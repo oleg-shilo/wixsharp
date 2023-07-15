@@ -47,11 +47,6 @@ internal static class Script
                     new InstalledFileAction("registrator_exe", "", Return.check, When.After, Step.InstallExecute, Condition.NOT_Installed),
                     new InstalledFileAction("registrator_exe", "/u", Return.check, When.Before, Step.InstallExecute, Condition.Installed),
 
-                    // obsolete in WiX4
-                    // new ScriptAction(@"MsgBox ""Executing VBScript code...""", Return.ignore, When.After, Step.InstallFinalize, Condition.NOT_Installed),
-
-                    new ScriptFileAction(@"CustomActions\Sample.vbs", "Execute", Return.ignore, When.After, Step.InstallFinalize, Condition.NOT_Installed),
-
                     new PathFileAction(@"%WindowsFolder%\notepad.exe", "readme.txt", @"INSTALLDIR", Return.asyncNoWait, When.After, Step.InstallFinalize, Condition.NOT_Installed),
 
                     new ManagedAction(CustomActions.MyManagedAction, "%this%"),

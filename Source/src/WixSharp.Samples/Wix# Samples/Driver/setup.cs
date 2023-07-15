@@ -14,6 +14,7 @@ class Script
 {
     static void Main()
     {
+        // WIX4-TODO:
         // Not supported in WiX4: warning WIX1130: The Driver element has been deprecated.
         // WiX team has no work around. See https://github.com/orgs/wixtoolset/discussions/7571
 

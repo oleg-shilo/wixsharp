@@ -23,9 +23,7 @@ public class InstallScript
             new Project("My Product",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("readme.txt")))
-            {
-                InstallScope = InstallScope.perMachine
-            };
+            { };
 
         productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
         productProj.LicenceFile = "License.rtf";
@@ -41,7 +39,6 @@ public class InstallScript
                            Visible = true // show MSI entry in ARP
                        });
 
-        bootstrapper.SuppressWixMbaPrereqVars = true; //needed because NetFx462Web also defines WixMbaPrereqVars
         bootstrapper.Version = new Version("1.0.0.0");
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889c");
 

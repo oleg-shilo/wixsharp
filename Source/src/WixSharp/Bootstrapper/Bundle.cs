@@ -214,7 +214,7 @@ namespace WixSharp.Bootstrapper
         /// bootstrapper.SuppressWixMbaPrereqVars = true;
         /// </code>
         /// </example>
-        [Obsolete("Not needed for WiX4")]
+        [Obsolete("Not needed for WiX4", true)]
         public bool SuppressWixMbaPrereqVars = true;
 
         /// <summary>
@@ -282,13 +282,6 @@ namespace WixSharp.Bootstrapper
                         lastPackage.EnsureId();
                         app.PrimaryPackageId = lastPackage.Id;
                     }
-                }
-
-                //addresses https://wixsharp.codeplex.com/workitem/149
-                if (!SuppressWixMbaPrereqVars)
-                {
-                    WixVariables["WixMbaPrereqPackageId"] = "Netfx4Full";
-                    WixVariables.Add("WixMbaPrereqLicenseUrl", "NetfxLicense.rtf");
                 }
             }
 
@@ -389,27 +382,6 @@ namespace WixSharp.Bootstrapper
 
         void ValidateCompileOutput(string output)
         {
-            if (!this.SuppressWixMbaPrereqVars && output.Contains("'WixMbaPrereqPackageId' is declared in more than one location."))
-            {
-                Compiler.OutputWriteLine("======================================================");
-                Compiler.OutputWriteLine("");
-                Compiler.OutputWriteLine("WARNING: It looks like one of the packages defines " +
-                                         "WixMbaPrereqPackageId/WixMbaPrereqLicenseUrl in addition to the definition " +
-                                         "auto-inserted by Wix# managed BA. If it is the case set your Bundle project " +
-                                         "SuppressWixMbaPrereqVars to 'true' to fix the problem.");
-                Compiler.OutputWriteLine("");
-                Compiler.OutputWriteLine("======================================================");
-            }
-            else if (this.SuppressWixMbaPrereqVars && output.Contains("The Windows Installer XML variable !(wix.WixMbaPrereqPackageId) is unknown."))
-            {
-                Compiler.OutputWriteLine("======================================================");
-                Compiler.OutputWriteLine("");
-                Compiler.OutputWriteLine("WARNING: It looks like generation of WixMbaPrereqPackageId/WixMbaPrereqLicenseUrl " +
-                                         "was suppressed while none of other packages defines it. " +
-                                         "If it is the case set your Bundle project SuppressWixMbaPrereqVars to false to fix the problem.");
-                Compiler.OutputWriteLine("");
-                Compiler.OutputWriteLine("======================================================");
-            }
         }
 
         /// <summary>

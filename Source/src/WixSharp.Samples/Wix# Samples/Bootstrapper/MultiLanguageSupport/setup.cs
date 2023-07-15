@@ -41,8 +41,6 @@ public static class Script
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("readme.txt")));
 
-        product.InstallScope = InstallScope.perMachine;
-
         product.Version = new Version("1.0.0.0");
         product.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258771");
         product.Language = BA.Languages; // "en-US,de-DE,ru-RU";
@@ -67,7 +65,6 @@ public static class Script
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
         bootstrapper.Application = new ManagedBootstrapperApplication("%this%", "BootstrapperCore.config");
 
-        bootstrapper.SuppressWixMbaPrereqVars = true;
         bootstrapper.PreserveTempFiles = true;
 
         bootstrapper.Build(msiFile.PathChangeExtension(".exe"));

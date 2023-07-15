@@ -945,7 +945,7 @@ namespace WixSharp
             XElement product = doc.Root.Select(Compiler.ProductElementName);
             product.Remove();
 
-            XElement module = doc.Root.AddElement(new XElement("Module", product.Elements())); // wix4
+            XElement module = doc.Root.AddElement(new XElement("Module", product.Elements()));
             module.CopyAttributeFrom("Id", product, "Name")
                   .CopyAttributeFrom(product, "Codepage")
                   .CopyAttributeFrom(product, "Language")
@@ -1954,7 +1954,7 @@ namespace WixSharp
             {
                 XElement product = dirItem.Parent(Compiler.ProductElementName);
 
-                // In WiX4 package.Attribute("Languages") does not longer exist. It is  only
+                // In WiX4 package.Attribute("Languages") does not longer exist. 
                 string language = product.Attribute("Language").Value;
                 string diskId = product.Select("Media")?.Attribute("Id")?.Value ?? "1"; // see Issue #362 (Merge Modules cause NullRefException when MediaTemplate is used) discussion
 

@@ -77,7 +77,6 @@ public class Script
         // bootstrapper.Application = new ManagedBootstrapperApplication("%this%", "BootstrapperCore.config");
 
         bootstrapper.PreserveTempFiles = true;
-        // bootstrapper.SuppressWixMbaPrereqVars = true;
 
         bootstrapper.OutFileName = "my_app";
         bootstrapper.Build("my_app.exe");

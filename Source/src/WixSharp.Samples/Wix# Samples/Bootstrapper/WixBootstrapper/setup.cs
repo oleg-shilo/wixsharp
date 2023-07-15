@@ -168,9 +168,6 @@ public class InstallScript
         // bootstrapper.WixSourceGenerated += doc => doc.FindSingle("WixStandardBootstrapperApplication")
         //                                              .AddAttributes("ShowVersion=yes; ShowFilesInUse=no");
 
-        //in real life scenarios suppression may need to be enabled (see SuppressWixMbaPrereqVars documentation)
-        //bootstrapper.SuppressWixMbaPrereqVars = true;
-
         var setup = bootstrapper.Build("app_setup");
         Console.WriteLine(setup);
     }
@@ -203,7 +200,7 @@ public class InstallScript
             new ManagedProject("CRT",
                 new Dir(@"%ProgramFiles%\My Company\CRT",
                     new File("readme.txt")))
-            { InstallScope = InstallScope.perMachine };
+            { };
 
         crtProj.UI = WUI.WixUI_InstallDir;
         crtProj.Load += CrtProj_Load;
