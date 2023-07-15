@@ -10,8 +10,6 @@ using WixSharp;
 using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
 
-using WixToolset.Dtf.WindowsInstaller;
-
 internal static class Script
 {
     static public void Main()

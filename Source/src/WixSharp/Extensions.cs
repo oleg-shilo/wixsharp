@@ -1284,7 +1284,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Combines path parts. Encapsulates <see cref="Path.Combine" />
+        /// Combines path parts. Encapsulates <see cref="Path.Combine(string[])" />
         /// </summary>
         /// <param name="path1">The path1.</param>
         /// <param name="parts">The parts of the path.</param>
@@ -2862,20 +2862,21 @@ namespace WixSharp
         }
 
         /// <summary>
-        // /// Determines whether the specified session is canceled.
+        /// Determines whether the specified session is canceled.
         /// <para>
-        /// It is identical to <see cref="WixSharp.Extensions.IsCancelled(Session)"/> except it does
+        /// It is identical to <see cref="WixSharp.Extensions.IsCancelled(Session)" /> except it does
         /// not throw/handle internal exception This helps if it is preferred to keep MSI log clean
         /// from any messages triggered by handled exceptions.
-        /// </para>
-        /// <para>
-        /// Though this method relies on <see cref="WixToolset.Dtf.WindowsInstaller"/>
+        /// </para><para>
+        /// Though this method relies on <see cref="WixToolset.Dtf.WindowsInstaller" />
         /// internal (non-public) implementation thus is not warrantied to stay unchanged in the
         /// future WiX releases.
         /// </para>
         /// </summary>
         /// <param name="session">The session.</param>
-        /// <returns><c>true</c> if the specified session is canceled; otherwise, <c>false</c>.</returns>
+        /// <returns>
+        ///   <c>true</c> if the specified session is canceled; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsCancelledRaw(this Session session)
         {
             // does not throw but will become broken if WiX team changes the implementation
@@ -3284,34 +3285,39 @@ namespace WixSharp
     public static class LocalizationExtensions
     {
         /// <summary>
-        /// Produces multilanguage MSI with embedded transformations based on <paramref
-        /// name="localizations"/> collection. If this msi is executed on the OS, which language
+        /// Produces multilanguage MSI with embedded transformations based on <paramref name="localizations" /> collection. If this msi is executed on the OS, which language
         /// matches one of the embedded transformations, this transformation will be automatically
         /// triggered and effectively switch the setup UI language. Builds the localized msi.
         /// </summary>
+        /// <param name="project">Wix# project.</param>
+        /// <param name="defaultLocalization">Use your OS language as default localization. This will ensure that the all
+        /// transformations are embedded in such a way that the produced msi can switch to any
+        /// alternative language both automatically and manually.</param>
+        /// <param name="torchPath">The torch path.</param>
+        /// <param name="localizations">Collection of localizations. At least one localization is expected.</param>
+        /// <returns>
+        /// Path to the built MSI file.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// project
+        /// or
+        /// defaultLocalization
+        /// or
+        /// localizations
+        /// </exception>
+        /// <exception cref="System.ArgumentException">At least one localization expected - localizations</exception>
+        /// <exception cref="System.InvalidOperationException">Signing the file '{msiFilePath}' failed. Return code: {signingReturnCode}</exception>
         /// <example>
         /// The following is an example of building single .msi file with two localizations. With
-        /// one of trhen based on a custom localization file.
+        /// one of then based on a custom localization file.
         /// <p>
         /// During installation, language is automatically selected based on user's operating system
         /// region settings.
-        /// </p>
-        /// <code>
-        ///project.BuildMultilanguageMsi(
-        ///new ProjectLocalization("en-US"),
-        ///new ProjectLocalization("sk-SK", "WixUI_sk-SK.wxl"));
-        /// </code>
-        /// </example>
-        /// <param name="project">Wix# project.</param>
-        /// <param name="defaultLocalization">
-        /// Use your OS language as default localization. This will ensure that the all
-        /// transformations are embedded in such a way that the produced msi can switch to any
-        /// alternative language both automatically and manually.
-        /// </param>
-        /// <param name="localizations">
-        /// Collection of localizations. At least one localization is expected.
-        /// </param>
-        /// <returns>Path to the built MSI file.</returns>
+        /// </p><code>
+        /// project.BuildMultilanguageMsi(
+        /// new ProjectLocalization("en-US"),
+        /// new ProjectLocalization("sk-SK", "WixUI_sk-SK.wxl"));
+        /// </code></example>
         public static string BuildMultilanguageMsi(this Project project, ProjectLocalization defaultLocalization, string torchPath, params ProjectLocalization[] localizations)
         {
             if (project is null)

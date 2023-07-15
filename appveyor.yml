@@ -1,5 +1,5 @@
 version: 1.5.0.{build}
-image: Visual Studio 2017
+image: Visual Studio 2022
 
 
 environment:
@@ -19,7 +19,7 @@ install:
     - if "%platform%"=="Any CPU" set archi=x86
     - if "%platform%"=="Any CPU" set platform_input=Any CPU
 
-    - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %archi%
+    - call "C:\Program Files (x86)\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" %archi%
     - nuget restore "%APPVEYOR_BUILD_FOLDER%"\Source\src\WixSharp.Test\packages.config -PackagesDirectory "%APPVEYOR_BUILD_FOLDER%"\Source\src\packages
     - nuget restore "%APPVEYOR_BUILD_FOLDER%"\Source\src\WixSharp.UI.WPF\packages.config -PackagesDirectory "%APPVEYOR_BUILD_FOLDER%"\Source\src\packages
 
