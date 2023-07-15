@@ -8,7 +8,6 @@ class Script
 {
     static public void Main()
     {
-        // WixQuietExecAction is not supported in WiX4
         var project = new Project()
         {
             UI = WUI.WixUI_ProgressOnly,

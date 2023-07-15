@@ -10,9 +10,6 @@ class Script
 {
     static public void Main()
     {
-        // Ported to WiX4 but fails to build due to the WiX4 defect.
-        // <CustomActionRef Id="FailWhenDeferred" - from WixToolset.Util.wixext
-
         var project = new Project
         {
             Name = "CustomActionTest",

@@ -8,7 +8,6 @@ public static class Script
     static public void Main()
     {
         // THIS SAMPLE IS NOT PORTED TO WIX4 yet
-        Compiler.WixLocation = @"..\..\..\..\..\Wix_bin\bin";
 
         ProductActivationDialogSetup.Build();
         //MultiStepDialogSetup.Build();
