@@ -59,7 +59,6 @@ public static class Script
                     new MsiPackage(msiFile)
                     {
                         Id = BA.MainPackageId,
-                        DisplayInternalUI = true,
                         Visible = true,
                         MsiProperties = "TRANSFORMS=[TRANSFORMS]"
                     });

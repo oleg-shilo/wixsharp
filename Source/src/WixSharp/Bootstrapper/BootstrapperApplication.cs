@@ -213,6 +213,11 @@ namespace WixSharp.Bootstrapper
     {
         /// <summary>
         /// Source file of the RTF license file or URL target of the license link.
+        /// <para>
+        /// In opposite to WiX, WixSharp does not require you specify source of license through different API path (LicenceUrl and LicenceFile).
+        /// With WixSharp you only need to set LicencePath to either a file or URL and the compiler will automatically redirect
+        /// the value to the correct XML attribute and also set the appropriate BA application theme (if user did not specify one.).
+        /// </para>
         /// </summary>
         public string LicensePath;
 
@@ -227,6 +232,12 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         [Xml]
         public string LaunchTarget;
+
+        /// <summary>
+        /// Id of the target ApprovedExeForElevation element. If set with LaunchTarget, WixStdBA will launch the application through the Engine's LaunchApprovedExe method instead of through ShellExecute.
+        /// </summary>
+        [Xml]
+        public string LaunchTargetElevatedId;
 
         /// <summary>
         /// WixStdBA will use this working folder when launching the specified application. The string value can be formatted using Burn variables enclosed in brackets, to refer to installation directories and so forth. This attribute is ignored when the LaunchTargetElevatedId attribute is specified.
@@ -244,6 +255,7 @@ namespace WixSharp.Bootstrapper
         /// If set to "true", WixStdBA will show a page allowing the user to restart applications when files are in use.
         /// </summary>
         [Xml]
+        [Obsolete("Note supported by WiX schema")]
         public bool? ShowFilesInUse;
 
         /// <summary>
@@ -280,7 +292,7 @@ namespace WixSharp.Bootstrapper
         /// The bootstrapper Application theme.
         /// </summary>
         [Xml]
-        public Theme Theme = Theme.hyperlinkLargeLicense;
+        public Theme Theme;
 
         /// <summary>
         /// The theme file
@@ -516,21 +528,15 @@ namespace WixSharp.Bootstrapper
 
             if (LicensePath.IsNotEmpty() && LicensePath.EndsWith(".rtf", StringComparison.OrdinalIgnoreCase))
             {
-                root.SetAttribute("Id", "WixStandardBootstrapperApplication.RtfLicense");
-                app.SetAttribute("LicenseFile", LicensePath);
+                app.SetAttribute("Theme", this.Theme ?? Theme.rtfLargeLicense)
+                   .SetAttribute("LicenseFile", LicensePath);
             }
             else
             {
                 if (LogoSideFile.IsEmpty())
-                {
-                    root.SetAttribute("Id", "WixStandardBootstrapperApplication.HyperlinkLicense");
-                }
+                    app.SetAttribute("Theme", this.Theme ?? Theme.hyperlinkLicense);
                 else
-                {
-                    root.SetAttribute("Id", "WixStandardBootstrapperApplication.HyperlinkSidebarLicense");
-                }
-
-                app.AddAttributes("Theme=" + this.Theme);
+                    app.SetAttribute("Theme", this.Theme ?? Theme.hyperlinkSidebarLicense);
 
                 if (LicensePath.IsEmpty())
                 {

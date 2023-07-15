@@ -16,10 +16,12 @@ public class InstallScript
 {
     static public void Main()
     {
-        var crt = BuildCrtMsi();
+        var crtMsi = BuildCrtMsi();
+        var productMsi = BuildMainMsi();
 
-        Simple(crt);
-        // Complex();
+        // Simple(crtMsi);
+        Standard(crtMsi, productMsi);
+        // Complex(crtMsi, productMsi);
     }
 
     static public void Simple(string msi)
@@ -30,19 +32,36 @@ public class InstallScript
             UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb24889b")
         };
 
-        bundle.Application = new WixInternalUIBootstrapperApplication { LogoFile = "logo.png" };
+        // will show MSI UI instead of BA UI
+        bundle.Application = new WixInternalUIBootstrapperApplication { LogoFile = "product_logo.png" };
         bundle.Chain.Add(new MsiPackage(msi));
 
         bundle.Build("my.exe");
     }
 
-    static public void Complex()
+    static public void Standard(string dependencyMsi, string productMsi)
     {
-        string productMsi = BuildMainMsi();
-        string crtMsi = BuildCrtMsi();
+        var bundle = new Bundle("My Product")
+        {
+            Version = Version.Parse("1.0.0.0"),
+            UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb24889b")
+        };
 
-        //---------------------------------------------------------
+        bundle.Chain.Add(new PackageGroupRef("NetFx462Web"));
+        bundle.Chain.Add(new MsiPackage(dependencyMsi));
+        bundle.Chain.Add(new MsiPackage(productMsi));
 
+        bundle.Application.Theme = Theme.rtfLicense;
+        bundle.Application.LicensePath = "licence.rtf";
+        bundle.Application.LogoFile = "product_logo.png";
+
+        bundle.PreserveTempFiles = true;
+
+        bundle.Build("my.exe");
+    }
+
+    static public void Complex(string crtMsi, string productMsi)
+    {
         var msiOnlinePackage = new MsiPackage(crtMsi) //demo for downloadable msi package
         {
             Vital = true,
@@ -88,9 +107,9 @@ public class InstallScript
         bootstrapper.IconFile = "app_icon.ico";
         bootstrapper.Version = Tasks.GetVersionFromFile(productMsi); //will extract "product version"
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
-        bootstrapper.Application.LogoFile = "logo.png";
-        bootstrapper.Application.Payloads = new[] { "logo.png".ToPayload() };
-        bootstrapper.Application.ThemeFile = "Theme.xml".PathGetFullPath();
+        bootstrapper.Application.LogoFile = "product_logo.png";
+        bootstrapper.Application.Theme = Theme.rtfLicense;
+        // bootstrapper.Application.Payloads = new[] { "product_logo.png".ToPayload() };
 
         // adding themes
         // var themes = new[]
@@ -99,20 +118,17 @@ public class InstallScript
         //     };
         // bootstrapper.Application.Payloads = themes;
 
-        bootstrapper.Application.LicensePath = "licence.html"; //HyperlinkLicense app with embedded license file
+        // bootstrapper.Application.LicensePath = "licence.html"; //HyperlinkLicense app with embedded license file
         bootstrapper.Application.LicensePath = "licence.rtf"; // RtfLicense app with embedded license file
-                                                              // bootstrapper.Application.LicensePath = "http://opensource.org/licenses/MIT"; //HyperlinkLicense app with online license file
-                                                              // bootstrapper.Application.LicensePath = null; //HyperlinkLicense app with no license
+        //                                                       // bootstrapper.Application.LicensePath = "http://opensource.org/licenses/MIT"; //HyperlinkLicense app with online license file
+        //                                                       // bootstrapper.Application.LicensePath = null; //HyperlinkLicense app with no license
 
         // if you want to use `WixStandardBootstrapperApplication.HyperlinkSidebarLicense`
         // you need to clear bootstrapper.Application.LicensePath and uncomment the next line
         // bootstrapper.Application.LogoSideFile = "logo.png";
 
-        bootstrapper.Application.AttributesDefinition = "ShowVersion=yes; ShowFilesInUse=yes"; // you can also use bootstrapper.Application.Show* = true;
+        bootstrapper.Application.AttributesDefinition = "ShowVersion=yes"; // you can also use bootstrapper.Application.Show* = true;
         bootstrapper.Include(WixExtension.Util);
-
-        bootstrapper.IncludeWixExtension(@"WixDependencyExtension.dll", "dep", "http://schemas.microsoft.com/wix/DependencyExtension");
-        bootstrapper.AttributesDefinition = "{dep}ProviderKey=01234567-8901-2345-6789-012345678901";
 
         // The code below sets WiX variables 'Netfx4FullVersion' and 'AdobeInstalled'. Note it has no affect on
         //the runtime behaviour and 'FileSearch' and "RegistrySearch" are only provided as an example.
@@ -157,10 +173,6 @@ public class InstallScript
 
         var setup = bootstrapper.Build("app_setup");
         Console.WriteLine(setup);
-        //---------------------------------------------------------
-
-        if (io.File.Exists(productMsi)) io.File.Delete(productMsi);
-        if (io.File.Exists(crtMsi)) io.File.Delete(crtMsi);
     }
 
     static public string BuildMainMsi()
@@ -169,8 +181,8 @@ public class InstallScript
             new Project("My Product",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("readme.txt"),
-                    new File("logo.png")))
-            { InstallScope = InstallScope.perMachine };
+                    new File("product_logo.png")))
+            { };
 
         productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         productProj.Version = new Version("2.0.0.0");

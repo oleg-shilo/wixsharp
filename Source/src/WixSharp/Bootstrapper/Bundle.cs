@@ -324,8 +324,11 @@ namespace WixSharp.Bootstrapper
             foreach (var item in this.Chain)
                 xChain.Add(item.ToXml());
 
-            var lastPackge = xChain.Elements("MsiPackage").LastOrDefault();
-            lastPackge.SetAttributeValue(WixExtension.Bal.ToXName("PrereqPackage"), "yes");
+            if (Application is ManagedBootstrapperApplication)
+            {
+                var lastPackge = xChain.Elements("MsiPackage").LastOrDefault();
+                lastPackge.SetAttributeValue(WixExtension.Bal.ToXName("PrereqPackage"), "yes");
+            }
 
             xChain.SetAttribute("DisableRollback", DisableRollback);
             xChain.SetAttribute("DisableSystemRestore", DisableSystemRestore);
