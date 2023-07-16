@@ -1,27 +1,40 @@
 //using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using WixSharp;
+using WixToolset.Mba.Core;
 
-#if WIX4
-using WixToolset.Bootstrapper;
-#else
+[assembly: BootstrapperApplicationFactory(typeof(WixToolset.WixBA.WixBAFactory))]
 
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+namespace WixToolset.WixBA
+{
+    public class WixBAFactory : BaseBootstrapperApplicationFactory
+    {
+        protected override IBootstrapperApplication Create(IEngine engine, IBootstrapperCommand command)
+        {
+            return new CustomSilentBA(engine, command);
+        }
+    }
+}
 
-#endif
-
-[assembly: BootstrapperApplication(typeof(CustomSilentBA))]
-
-public class CustomSilentBA : BootstrapperApplication
+public class CustomSilentBA : WixToolset.Mba.Core.BootstrapperApplication
 {
     string DowngradeWarningMessage = "A later version of the package (PackageId: {0}) is already installed. Setup will now exit.";
 
+    public CustomSilentBA(IEngine engine, IBootstrapperCommand command) : base(engine)
+    {
+        this.Command = command;
+    }
+
+    public IEngine Engine => base.engine;
+    public IBootstrapperCommand Command;
+
     protected override void Run()
     {
-        // MessageBox.Show("CustomSilentBA just starting...");
+        MessageBox.Show("Starting...", "CustomSilentBA");
 
         try
         {
@@ -37,7 +50,7 @@ public class CustomSilentBA : BootstrapperApplication
                     {
                         case PackageState.Obsolete:
                             this.Engine.Log(LogLevel.Error, string.Format(DowngradeWarningMessage, e.PackageId));
-                            MessageBox.Show(string.Format(DowngradeWarningMessage, e.PackageId), this.Engine.StringVariables["WixBundleName"], MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            MessageBox.Show(string.Format(DowngradeWarningMessage, e.PackageId), this.Engine.GetVariableString("WixBundleName"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             Engine.Quit(0);
                             break;
 
@@ -46,6 +59,7 @@ public class CustomSilentBA : BootstrapperApplication
                             break;
 
                         case PackageState.Present:
+                        case PackageState.Cached:
                             this.Engine.Plan(LaunchAction.Uninstall);
                             break;
                     }
@@ -65,7 +79,7 @@ public class CustomSilentBA : BootstrapperApplication
             PlanComplete += (s, e) =>
             {
                 if (e.Status >= 0)
-                    this.Engine.Apply(IntPtr.Zero);
+                    this.Engine.Apply(GetForegroundWindow()); // IntPtr.Zero is no longer valid value in WiX4
             };
 
             ApplyComplete += (s, e) =>
@@ -81,6 +95,10 @@ public class CustomSilentBA : BootstrapperApplication
         {
             MessageBox.Show(e.ToString());
         }
+        MessageBox.Show("Done...", "CustomSilentBA");
         Engine.Quit(0);
     }
+
+    [DllImport("User32.dll")]
+    static extern IntPtr GetForegroundWindow();
 }

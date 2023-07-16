@@ -36,7 +36,7 @@ public class ManagedBA : mba.BootstrapperApplication
     /// </summary>
     protected override void Run()
     {
-        // Debug.Assert(false);
+        System.Diagnostics.Debug.Assert(false);
         new MainView(this).ShowDialog();
         engine.Quit(0);
     }
@@ -165,10 +165,16 @@ public class MainViewModel : INotifyPropertyChanged
         if (e.PackageId == "MyProductPackageId")
         {
             if (e.State == PackageState.Absent)
+            {
                 InstallEnabled = true;
-            else if (e.State == PackageState.Present ||
-                e.State == PackageState.Cached) // need to add cache because of the bug in WiX https://github.com/wixtoolset/issues/issues/7399
+            }
+            else if (e.State == PackageState.Present || e.State == PackageState.Cached)
+            {
+                // need to add cache because of the bug in WiX https://github.com/wixtoolset/issues/issues/7399
+                // interestingly enough WiX v4.0.1 marks `PackageState.Cached` as obsolete but...
+                // still does not set e.State to present (to cached instead) if the product is installed
                 UninstallEnabled = true;
+            }
         }
     }
 
