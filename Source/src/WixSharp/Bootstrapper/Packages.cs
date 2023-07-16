@@ -175,7 +175,14 @@ namespace WixSharp.Bootstrapper
         /// is absent the executable will be launched with no command-line arguments
         /// </summary>
         [Xml]
-        public string InstallCommand;
+        public string InstallArguments;
+
+        [Obsolete("Use `InstallArguments` instead")]
+        public string InstallCommand
+        {
+            set => InstallArguments = value;
+            get => InstallArguments;
+        }
 
         /// <summary>
         /// The command-line arguments to specify to indicate a repair. If the executable package can be repaired but does not require any
@@ -183,14 +190,28 @@ namespace WixSharp.Bootstrapper
         /// omit this attribute.
         /// </summary>
         [Xml]
-        public string RepairCommand;
+        public string RepairArguments;
+
+        [Obsolete("Use `RepairArguments` instead")]
+        public string RepairCommand
+        {
+            set => RepairArguments = value;
+            get => RepairArguments;
+        }
 
         /// <summary>
         /// The command-line arguments provided to the ExePackage during uninstall. If this attribute is absent the executable will be launched
         /// with no command-line arguments. To prevent an ExePackage from being uninstalled set the Permanent attribute to "yes".
         /// </summary>
         [Xml]
-        public string UninstallCommand;
+        public string UninstallArguments;
+
+        [Obsolete("Use `UninstallArguments` instead")]
+        public string UninstallCommand
+        {
+            set => UninstallArguments = value;
+            get => UninstallArguments;
+        }
 
         /// <summary>
         /// Indicates the package must be executed elevated. The default is "no".

@@ -9,17 +9,18 @@ public class Script
 {
     static public void Main()
     {
-        // WIX4-TODO:
-        // THIS SAMPLE IS NOT PORTED TO WIX4 YET (interface)
+        // This sample shows how to embed an executable wrapper around MSI file
+        // It was the only way to display MSI own managed UI from the bootstrapper in WiX3
+        // WIX4 does solve this problem but the example itself is still valid and potentially useful.
 
         var bootstrapper =
             new Bundle("My Product",
                        new ExePackage(@"..\..\..\..\Managed Setup\Self-executable_Msi\ManagedSetup.exe")
                        {
                            Name = "ManagedSetup",
-                           InstallCommand = "/i",
-                           UninstallCommand = "/x",
-                           RepairCommand = "/fa",
+                           InstallArguments = "/i",
+                           UninstallArguments = "/x",
+                           RepairArguments = "/fa",
                            DetectCondition = "MyAppInstalled",
                            Compressed = true
                        });
