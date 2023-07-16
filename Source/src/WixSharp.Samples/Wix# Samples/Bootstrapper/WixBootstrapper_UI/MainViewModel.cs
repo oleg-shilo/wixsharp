@@ -1,19 +1,20 @@
-﻿// using WixToolset.Mba.Core;
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+﻿using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
 using WixToolset.Mba.Core;
 
 using mba = WixToolset.Mba.Core;
 
-[assembly: WixToolset.Mba.Core.BootstrapperApplicationFactory(typeof(WixToolset.WixBA.WixBAFactory))]
+using PackageState = WixToolset.Mba.Core.PackageState;
+
+[assembly: BootstrapperApplicationFactory(typeof(WixToolset.WixBA.WixBAFactory))]
 
 namespace WixToolset.WixBA
 {
     public class WixBAFactory : BaseBootstrapperApplicationFactory
     {
-        protected override mba.IBootstrapperApplication Create(mba.IEngine engine, mba.IBootstrapperCommand command)
+        protected override mba.IBootstrapperApplication Create(IEngine engine, IBootstrapperCommand command)
         {
             return new ManagedBA(engine, command);
         }
@@ -35,6 +36,7 @@ public class ManagedBA : mba.BootstrapperApplication
     /// </summary>
     protected override void Run()
     {
+        // Debug.Assert(false);
         new MainView(this).ShowDialog();
         engine.Quit(0);
     }
@@ -49,6 +51,8 @@ public class MainViewModel : INotifyPropertyChanged
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
+
+    public IntPtr ViewHandle;
 
     public MainViewModel(ManagedBA bootstrapper)
 
@@ -160,9 +164,10 @@ public class MainViewModel : INotifyPropertyChanged
     {
         if (e.PackageId == "MyProductPackageId")
         {
-            if (e.State == mba.PackageState.Absent)
+            if (e.State == PackageState.Absent)
                 InstallEnabled = true;
-            else if (e.State == mba.PackageState.Present)
+            else if (e.State == PackageState.Present ||
+                e.State == PackageState.Cached) // need to add cache because of the bug in WiX https://github.com/wixtoolset/issues/issues/7399
                 UninstallEnabled = true;
         }
     }
@@ -175,6 +180,6 @@ public class MainViewModel : INotifyPropertyChanged
     void OnPlanComplete(object sender, mba.PlanCompleteEventArgs e)
     {
         if (e.Status >= 0)
-            Bootstrapper.Engine.Apply(System.IntPtr.Zero);
+            Bootstrapper.Engine.Apply(ViewHandle);
     }
 }

@@ -22,18 +22,28 @@ public class Script
 
         productProj.Load += (SetupEventArgs e) =>
         {
-            MessageBox.Show(e.Session.Property("USERINPUT"), "User Input");
-            MessageBox.Show(e.Session.Property("REGISTRYINPUT"), "Registry Input");
-            e.Result = ActionResult.Failure;
+            if (e.IsInstalling)
+            {
+                MessageBox.Show("Installing...", "My Product");
+                MessageBox.Show(e.Session.Property("USERINPUT"), "User Input");
+                MessageBox.Show(e.Session.Property("REGISTRYINPUT"), "Registry Input");
+            }
+            else if (e.IsUninstalling)
+            {
+                MessageBox.Show("Uninstalling...", "My Product");
+            }
         };
+        productProj.AfterInstall += (SetupEventArgs e) => MessageBox.Show("MSI session is completed", "My Product");
 
         string productMsi = productProj.BuildMsi();
 
         //------------------------------------
 
         var bootstrapper =
-            new Bundle("My Product",
-                       new PackageGroupRef("NetFx462Web"),
+            new Bundle("My Product 2",
+                       // if you enable any of the disabled packages below, you may need to update `OnDetectPackageComplete`
+
+                       // new PackageGroupRef("NetFx462Web"),
                        // new ExePackage(@"hello.exe") //just a demo sample
                        // {
                        //     Name = "WixCustomAction_cmd",

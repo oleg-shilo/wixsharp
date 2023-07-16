@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Interop;
 
 #if WIX4
 using WixToolset.Bootstrapper;
@@ -15,8 +16,10 @@ public partial class MainView : Window
     public MainView(ManagedBA bootstrapper)
     {
         InitializeComponent();
+        var vindowHandle = new WindowInteropHelper(this).EnsureHandle();
+
         DataContext =
-        viewModel = new MainViewModel(bootstrapper);
+        viewModel = new MainViewModel(bootstrapper) { ViewHandle = vindowHandle };
     }
 
     void Install_Click(object sender, RoutedEventArgs e)
