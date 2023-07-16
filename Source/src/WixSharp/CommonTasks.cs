@@ -299,14 +299,13 @@ namespace WixSharp.CommonTasks
         /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
         /// <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
         /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
-        /// <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
-        /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
+        /// <param name="certificateStore">Type of the certificate store to load it from.</param>
         /// <param name="outputLevel">A flag indicating the output level</param>
         /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow
         /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
         /// </param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
-        ///
+        /// 
         /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file.
         /// <code>
         /// WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(
@@ -318,13 +317,13 @@ namespace WixSharp.CommonTasks
         /// </code>
         /// </example>
         static public int DigitalySignBootstrapper(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
-            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
+            string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
-            var retval = DigitalySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore, outputLevel, hashAlgorithm);
+            var retval = DigitalySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
             if (retval != 0)
                 return retval;
 
-            return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore ? StoreType.commonName : StoreType.file, outputLevel, hashAlgorithm);
+            return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
         }
 
         /// <summary>
@@ -342,8 +341,7 @@ namespace WixSharp.CommonTasks
         /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
         /// <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
         /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
-        /// <param name="useCertificateStore">A flag indicating if the value of <c>pfxFile</c> is a name of the subject of the signing certificate
-        /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
+        /// <param name="certificateStore">Type of the certificate store to load it from.</param>
         /// <param name="outputLevel">A flag indicating the output level</param>
         /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow
         /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
@@ -361,7 +359,7 @@ namespace WixSharp.CommonTasks
         /// </code>
         /// </example>
         static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
-            string optionalArguments = null, string wellKnownLocations = null, bool useCertificateStore = false, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
+            string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
             var insigniaPath = IO.Path.Combine(Compiler.WixLocation, "insignia.exe");
             string enginePath = IO.Path.GetTempFileName();
@@ -378,7 +376,7 @@ namespace WixSharp.CommonTasks
                 if (retval != 0)
                     return retval;
 
-                retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, useCertificateStore ? StoreType.commonName : StoreType.file, outputLevel, hashAlgorithm);
+                retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
                 if (retval != 0)
                     return retval;
 
