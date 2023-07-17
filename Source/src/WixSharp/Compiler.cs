@@ -537,11 +537,13 @@ namespace WixSharp
             string outDir = IO.Path.GetDirectoryName(wxsFile);
             string msiFile = IO.Path.ChangeExtension(wxsFile, "." + type.ToString().ToLower());
 
+
             string wixCmd = GenerateWixCommand(project, wxsFile);
 
             using (var sw = new IO.StreamWriter(batchFile))
             {
                 sw.WriteLine("echo off");
+
                 sw.WriteLine($"wix build {wixCmd} -o \"{outDir.PathJoin(msiFile)}\"");
             }
         }
@@ -628,25 +630,28 @@ namespace WixSharp
             string extensionDlls = project.WixExtensions
                                    .Select(x => x.ExpandEnvVars())
                                    .Distinct()
-                                   .JoinBy(" ", dll => "-ext \"" + dll + "\"");
+                                   .JoinBy(" ", dll => $"-ext \"{dll}\"");
 
-            string wxsFiles = project.WxsFiles
-                                     .Select(x => x.ExpandEnvVars().PathGetFullPath())
+            string libFiles = project.LibFiles
+                                     .Select(x => x.ExpandEnvVars())
                                      .Distinct()
-                                     .JoinBy(" ", file => "\"" + file + "\"");
+                                     .JoinBy(" ", x => $"-lib \"{x}\"");
+
+            string extraWxsFiles = project.WxsFiles
+                                          .Select(x => x.ExpandEnvVars().PathGetFullPath())
+                                          .Distinct()
+                                          .JoinBy(" ", file => $"\"{file}\"");
 
             var candleOptions = (WixOptions + " " + project.WixOptions).Trim();
 
             var candleCmdLineParams = new StringBuilder();
-            candleCmdLineParams.AppendFormat("{0} {1} \"{2}\" ", candleOptions, extensionDlls, wxsFile);
+            candleCmdLineParams.AppendFormat("{0} {1} {2} \"{3}\" ", candleOptions, extensionDlls, libFiles, wxsFile);
 
-            if (wxsFiles.IsNotEmpty())
-                candleCmdLineParams.Append(wxsFiles);
+            if (extraWxsFiles.IsNotEmpty())
+                candleCmdLineParams.Append(extraWxsFiles);
 
             return candleCmdLineParams.ToString().ExpandEnvVars();
         }
-
-
 
         static string Build(Project project, string path, OutputType type)
         {

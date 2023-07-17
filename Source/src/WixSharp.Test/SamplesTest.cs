@@ -25,10 +25,7 @@ namespace WixSharp.Test
 
         string[] nonTestableProjects = "MultiLanguageUI".Split(',').Select(x => x.Trim()).ToArray();
 
-        string[] nonPortedWix4Projects = ("Driver," +                 // WIX4-TODO: WiX4 defect (cannot find element from the valid extension) "warning WIX1130: The Driver element has been deprecated."
-                                          "ASP.NETApp," +             // WIX4-TODO: WiX4 defect (cannot find element from the valid extension)
-                                          "WixBootstrapper_NoUI,"     // WIX4-TODO: WiX4 defect no Managed Custom BA guide
-                                                                      // "WixBootstrapper,"          //WIX4-TODO: it is a VSProject based build; hard to integrate with xUnit
+        string[] nonPortedWix4Projects = ("ASP.NETApp"             // WIX4-TODO: WiX4 defect (cannot find element from the valid extension)
                                           ).Split(',').Select(x => x.Trim()).ToArray();
 
         int completedSamples = 0;
@@ -53,6 +50,7 @@ namespace WixSharp.Test
 
             var files = Directory.GetFiles(@"..\..\..\WixSharp.Samples\Wix# Samples", "build*.cmd", SearchOption.AllDirectories)
                                  .OrderBy(x => x)
+                                 .Where(x => !x.PathGetFileName().ToLower().Contains("build_"))
                                  .ToArray();
 
             var compiled_scripts = Directory.GetFiles(@"..\..\..\WixSharp.Samples\Wix# Samples", "setup*.cs.dll", SearchOption.AllDirectories);
@@ -96,6 +94,7 @@ namespace WixSharp.Test
 
                 var sampleFiles = Directory.GetFiles(sampleDir, "build*.cmd")
                                            .Select(x => Path.GetFullPath(x))
+                                           .Where(x => !x.PathGetFileName().ToLower().Contains("build_"))
                                            .ToArray();
                 foreach (string batchFile in sampleFiles)
                 {

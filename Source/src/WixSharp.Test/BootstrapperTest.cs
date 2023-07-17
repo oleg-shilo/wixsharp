@@ -45,12 +45,12 @@ namespace WixSharp.Test
                 Id = "package1",
                 Name = "Setup1",
                 Payloads = new[] { @"Samples\setup1.dll".ToPayload(), @"Samples\setup2.dll".ToPayload(), },
-                InstallCommand = "/q /norestart",
+                InstallArguments = "/q /norestart",
                 Permanent = true,
             };
 
             var xml = entity.ToXml().First().ToString();
-            var expected = "<ExePackage Name=\"Setup1\" Id=\"package1\" InstallCommand=\"/q /norestart\" Permanent=\"yes\" SourceFile=\"Samples\\Setup1.exe\">\r\n" +
+            var expected = "<ExePackage Name=\"Setup1\" Id=\"package1\" InstallArguments=\"/q /norestart\" Permanent=\"yes\" SourceFile=\"Samples\\Setup1.exe\">\r\n" +
                     "  <Payload SourceFile=\"Samples\\setup1.dll\" />\r\n" +
                         "  <Payload SourceFile=\"Samples\\setup2.dll\" />\r\n" +
                             "</ExePackage>";
@@ -89,7 +89,7 @@ namespace WixSharp.Test
                     new ExePackage(@"Samples\Setup1.exe")
                     {
                         Payloads = new[] { @"Samples\setup1.dll".ToPayload() },
-                        InstallCommand = "/q /norestart",
+                        InstallArguments = "/q /norestart",
                         PerMachine = true
                     },
                     new MsiPackage(@"Samples\SetupB.msi") { Vital = false },
@@ -113,7 +113,7 @@ namespace WixSharp.Test
   </BootstrapperApplication>
   <Chain>
     <PackageGroupRef Id=""NetFx462Web"" />
-    <ExePackage InstallCommand=""/q /norestart"" PerMachine=""yes"" SourceFile=""Samples\Setup1.exe"">
+    <ExePackage InstallArguments=""/q /norestart"" PerMachine=""yes"" SourceFile=""Samples\Setup1.exe"">
       <Payload SourceFile=""Samples\setup1.dll"" />
     </ExePackage>
     <MsiPackage SourceFile=""Samples\SetupB.msi"" Vital=""no"">

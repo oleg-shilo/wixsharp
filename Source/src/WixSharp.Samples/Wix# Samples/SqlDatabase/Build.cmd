@@ -1,2 +1,2 @@
-..\..\cscs.exe setup.cs //x
+..\..\cscs.exe setup.cs 
 pause

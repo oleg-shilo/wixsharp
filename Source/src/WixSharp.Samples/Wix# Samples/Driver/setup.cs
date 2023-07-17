@@ -14,11 +14,6 @@ class Script
 {
     static void Main()
     {
-        // WIX4-TODO:
-        // Not supported in WiX4: warning WIX1130: The Driver element has been deprecated.
-        // WiX team has no work around. See https://github.com/orgs/wixtoolset/discussions/7571
-
-        //NOTE: 'driver.sys' is a mock but not a real driver. Thus running msi will fail.
         var project = new Project("MyProduct",
                           new Dir(@"%ProgramFiles%\My Company\My Device",
                               new File("driver.sys",
@@ -34,7 +29,9 @@ class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
-        project.Include(WixExtension.Difx);
+        // project.Include(WixExtension.Difx);
+        project.LibFiles.Add(@"%userprofile%\.wix\extensions\WixToolset.DifxApp.wixext\4.0.0\wixext4\difxapp_x64.wixlib");
+
         project.PreserveTempFiles = true;
 
         project.BuildMsi();
