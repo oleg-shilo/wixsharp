@@ -317,7 +317,7 @@ namespace WixSharp
                             WixSourceGenerated(doc);
 
                         string xml = "";
-                        using (IO.StringWriter sw = new StringWriterWithEncoding(Encoding.Default))
+                        using (IO.StringWriter sw = new StringWriterWithEncoding(project.Encoding))
                         {
                             doc.Save(sw, SaveOptions.None);
                             xml = sw.ToString();
@@ -333,7 +333,7 @@ namespace WixSharp
                         if (WixSourceFormated != null)
                             WixSourceFormated(ref xml);
 
-                        using (var sw = new IO.StreamWriter(file, false, Encoding.Default))
+                        using (var sw = new IO.StreamWriter(file, false, project.Encoding))
                             sw.WriteLine(xml);
 
                         Compiler.OutputWriteLine("\n----------------------------------------------------------\n");

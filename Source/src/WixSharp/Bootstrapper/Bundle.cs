@@ -258,6 +258,12 @@ namespace WixSharp.Bootstrapper
         public List<IGenericEntity> GenericItems = new List<IGenericEntity>();
 
         /// <summary>
+        /// The Encoding to be used for generating WXS files. If not specified the
+        /// <c>System.Text.Encoding.UTF8</c> will be used.
+        /// </summary>
+        public Encoding Encoding = Encoding.UTF8;
+
+        /// <summary>
         /// Emits WiX XML.
         /// </summary>
         /// <returns></returns>
