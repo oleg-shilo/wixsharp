@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 #endregion Licence...
 
+using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -37,7 +38,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.Bootstrapper;
 using IO = System.IO;
 
@@ -317,7 +317,7 @@ namespace WixSharp
                             WixSourceGenerated(doc);
 
                         string xml = "";
-                        using (IO.StringWriter sw = new StringWriterWithEncoding(Encoding.Default))
+                        using (IO.StringWriter sw = new StringWriterWithEncoding(Encoding.UTF8))
                         {
                             doc.Save(sw, SaveOptions.None);
                             xml = sw.ToString();
