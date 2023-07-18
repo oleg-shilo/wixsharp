@@ -62,18 +62,18 @@ after_build:
         # }
 
 artifacts:
-  - path: Source\src\WixSharp.Samples\WixSharp.*
-    name: binaries
+  # - path: Source\src\WixSharp.Samples\WixSharp.*
+  #   name: binaries
 
 deploy:
-    provider: GitHub
-    auth_token:
-        secure: !!TODO, see https://www.appveyor.com/docs/deployment/github/#provider-settings!!
-    artifact: releases
-    draft: false
-    prerelease: false
-    force_update: true
-    on:
-        appveyor_repo_tag: true
-        PlatformToolset: v141
-        configuration: Release
+    # provider: GitHub
+    # auth_token:
+    #     secure: !!TODO, see https://www.appveyor.com/docs/deployment/github/#provider-settings!!
+    # artifact: releases
+    # draft: false
+    # prerelease: false
+    # force_update: true
+    # on:
+    #     appveyor_repo_tag: true
+    #     PlatformToolset: v141
+    #     configuration: Release
