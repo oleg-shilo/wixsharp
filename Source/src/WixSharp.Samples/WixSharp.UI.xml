@@ -1184,7 +1184,8 @@
             Initializes from WiX localization data (*.wxl).
             </summary>
             <param name="wxlData">The WXL file bytes.</param>
-            <returns></returns>
+            <param name="merge">if set to <c>true</c> merge with existing content instead of replacing.</param>
+            <exception cref="T:System.Exception">The localization XML data is in invalid format.</exception>
         </member>
         <member name="P:WixSharp.ResourcesData.Item(System.String)">
             <summary>

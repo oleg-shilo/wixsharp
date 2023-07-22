@@ -109,8 +109,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>IF EXIST "$(ProjectDir)ManagedSetup.msi" (
+  echo "ManagedSetup.msi already exists..."
+) ELSE (
+  "$(ProjectDir)..\..\..\cscs.exe" /l /d "$(ProjectDir)ManagedSetup.msi.cs"
+)
+</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(ProjectDir)ManagedSetup.exe"</PostBuildEvent>

@@ -301,9 +301,9 @@ namespace WixSharp
                         var wixNamespace = Compiler.IsWix4 ? wix4Namespace : wix3Namespace;
 
                         var doc = XDocument.Parse(
-                                @"<?xml version=""1.0"" encoding=""utf-8""?>
+                            @"<?xml version=""1.0"" encoding=""utf-8""?>
                              " + $"<Wix xmlns=\"{wixNamespace}\" {extraNamespaces} " + @" >
-                        </Wix>");
+                             </Wix>");
 
                         doc.Root.Add(project.ToXml());
 
