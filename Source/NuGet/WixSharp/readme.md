@@ -1,4 +1,4 @@
-In order to builk the packages executhe the following steps:
+In order to build the packages execute the following steps:
 - Update the files to be included in the package
   ```
   css updatepackage

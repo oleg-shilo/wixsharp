@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 #endregion Licence...
 
+using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -37,7 +38,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.Bootstrapper;
 using IO = System.IO;
 
@@ -301,9 +301,9 @@ namespace WixSharp
                         var wixNamespace = Compiler.IsWix4 ? wix4Namespace : wix3Namespace;
 
                         var doc = XDocument.Parse(
-                                @"<?xml version=""1.0"" encoding=""utf-8""?>
+                            @"<?xml version=""1.0"" encoding=""utf-8""?>
                              " + $"<Wix xmlns=\"{wixNamespace}\" {extraNamespaces} " + @" >
-                        </Wix>");
+                             </Wix>");
 
                         doc.Root.Add(project.ToXml());
 
@@ -316,8 +316,10 @@ namespace WixSharp
                         if (WixSourceGenerated != null)
                             WixSourceGenerated(doc);
 
+                        var xmlEncoding = Encoding.UTF8;
+
                         string xml = "";
-                        using (IO.StringWriter sw = new StringWriterWithEncoding(Encoding.Default))
+                        using (IO.StringWriter sw = new StringWriterWithEncoding(xmlEncoding))
                         {
                             doc.Save(sw, SaveOptions.None);
                             xml = sw.ToString();
@@ -333,7 +335,7 @@ namespace WixSharp
                         if (WixSourceFormated != null)
                             WixSourceFormated(ref xml);
 
-                        using (var sw = new IO.StreamWriter(file, false, Encoding.Default))
+                        using (var sw = new IO.StreamWriter(file, false, xmlEncoding))
                             sw.WriteLine(xml);
 
                         Compiler.OutputWriteLine("\n----------------------------------------------------------\n");
