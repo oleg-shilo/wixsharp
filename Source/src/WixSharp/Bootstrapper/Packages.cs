@@ -177,6 +177,12 @@ namespace WixSharp.Bootstrapper
         [Xml]
         public string InstallArguments;
 
+        /// <summary>
+        /// Gets or sets the install command.
+        /// </summary>
+        /// <value>
+        /// The install command.
+        /// </value>
         [Obsolete("Use `InstallArguments` instead")]
         public string InstallCommand
         {
@@ -192,6 +198,12 @@ namespace WixSharp.Bootstrapper
         [Xml]
         public string RepairArguments;
 
+        /// <summary>
+        /// Gets or sets the repair command.
+        /// </summary>
+        /// <value>
+        /// The repair command.
+        /// </value>
         [Obsolete("Use `RepairArguments` instead")]
         public string RepairCommand
         {
@@ -206,6 +218,12 @@ namespace WixSharp.Bootstrapper
         [Xml]
         public string UninstallArguments;
 
+        /// <summary>
+        /// Gets or sets the uninstall command.
+        /// </summary>
+        /// <value>
+        /// The uninstall command.
+        /// </value>
         [Obsolete("Use `UninstallArguments` instead")]
         public string UninstallCommand
         {

@@ -14,9 +14,18 @@ class Script
 {
     static void Main()
     {
+        // As of 22 Jul 2023
+        // `Driver` support in WiX4 is somewhat incomplete.
+        // The sample can build but it may fail during the install.
+        // Please follow this discussion: https://github.com/orgs/wixtoolset/discussions/7571
+        // It is related to the open defect https://github.com/wixtoolset/issues/issues/7625
+        //
+        // Bu careful if you want to ask WiX team questions there. They can get defensive and
+        // down vote you if you reference WixSharp syntax in your questions or suggestions.
+
         var project = new Project("MyProduct",
-                          new Dir(@"%ProgramFiles%\My Company\My Device",
-                              new File("driver.sys",
+                            new Dir(@"%ProgramFiles%\My Company\My Device",
+                                new File("driver.sys",
                                         new DriverInstaller
                                         {
                                             AddRemovePrograms = false,
@@ -29,7 +38,6 @@ class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
-        // project.Include(WixExtension.Difx);
         project.LibFiles.Add(@"%userprofile%\.wix\extensions\WixToolset.DifxApp.wixext\4.0.0\wixext4\difxapp_x64.wixlib");
 
         project.PreserveTempFiles = true;
