@@ -28,7 +28,7 @@
     </SandcastlePath>
     <WorkingPath>
     </WorkingPath>
-    <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.7.2</FrameworkVersion>
     <PresentationStyle>VS2013</PresentationStyle>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.dll" />
@@ -45,7 +45,7 @@
       <NamespaceSummaryItem name="CSScriptLibrary.ThirdpartyLibraries.Rubenhak.Utils" isDocumented="True">Namespace Summary: N/A</NamespaceSummaryItem>
     </NamespaceSummaries>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
-    <SyntaxFilters>C#, Visual Basic</SyntaxFilters>
+    <SyntaxFilters>None</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <Preliminary>False</Preliminary>
@@ -78,9 +78,8 @@
     <Reference Include="BootstrapperCore">
       <HintPath>..\WixSharp.Samples\Wix_bin\SDK\BootstrapperCore.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Deployment.WindowsInstaller, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad">
-      <HintPath>..\WixSharp.Samples\Wix_bin\bin\Microsoft.Deployment.WindowsInstaller.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="WixToolset.Dtf.WindowsInstaller">
+      <HintPath>..\WixSharp.Samples\Wix_bin\WixToolset.Dtf.WindowsInstaller.dll</HintPath>
     </Reference>
   </ItemGroup>
   <!-- Import the SHFB build targets -->

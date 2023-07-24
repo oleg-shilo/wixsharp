@@ -10,8 +10,10 @@ class Script
     {
         Build();          // explicit definition of the COM registration info
 
-        BuildWithHeat();  // definition of the COM registration info is automatically produced by the WiX tools
-                          // (e.g. new File("<path to COM server file").RegisterAsCom())
+        // WiX4 does not have heat utility distributed
+        // so disabling
+        // BuildWithHeat();  // definition of the COM registration info is automatically produced by the WiX tools
+        // (e.g. new File("<path to COM server file").RegisterAsCom())
     }
 
     static public void Build()
@@ -55,7 +57,7 @@ class Script
                              })));
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }
@@ -135,7 +137,7 @@ class Script
                        );
 
         project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }

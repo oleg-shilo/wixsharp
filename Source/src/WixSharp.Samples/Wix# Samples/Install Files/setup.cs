@@ -3,10 +3,7 @@
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
@@ -51,8 +48,6 @@ class Script
         project.EnableResilientPackage();
 
         project.Language = "en-US";
-
-        // project.PreserveTempFiles = true;
 
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 

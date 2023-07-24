@@ -9,6 +9,8 @@ class Script
 {
     static public void Main()
     {
+        // WiX4: not ported yet
+        return;
         Project project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",

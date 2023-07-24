@@ -13,7 +13,7 @@ copy /Y "..\readme.txt" "..\bin\WixSharp\readme.txt"
 copy /Y "WixSharp.Samples\WixSharp.Lab.dll" "..\bin\WixSharp\WixSharp.Lab.dll"
 copy /Y "WixSharp.Samples\WixSharp.Lab.xml" "..\bin\WixSharp\WixSharp.Lab.xml"
 
-set msbuild=C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe
+set msbuild=C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe
 
 "%msbuild%" /nologo /verbosity:minimal /t:Clean,Build /p:Configuration=Release /p:Platform="Any CPU" "Docs\WixSharp.Docs.sln"
 
