@@ -3492,7 +3492,7 @@ namespace WixSharp
         /// <returns></returns>
         public static string BuildLanguageTransform(this Project project, string originalMsi, string language, string localizationFile = "")
         {
-            var torch = WixTools.Heat;
+            var torch = WixTools.Torch;
             var originalLng = project.Language;
             var originalLocalizationFile = project.LocalizationFile;
             try

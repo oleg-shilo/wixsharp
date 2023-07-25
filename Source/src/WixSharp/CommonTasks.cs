@@ -1929,7 +1929,7 @@ namespace WixSharp.CommonTasks
         }
     }
 
-    static class WixTools
+    public static class WixTools
     {
         static public string NuGetDir => @"%userprofile%\.nuget\packages".ExpandEnvVars();
         static public string WixSharpToolDir => @"%userprofile%\.wix\.wixsharp".ExpandEnvVars();
@@ -1941,7 +1941,7 @@ namespace WixSharp.CommonTasks
                         .OrderBy(x => x.Version)
                         .LastOrDefault()?.Directory;
 
-        public static string MakeSfxCA
+        internal static string MakeSfxCA
         {
             get
             {
@@ -1950,17 +1950,38 @@ namespace WixSharp.CommonTasks
             }
         }
 
-        public static string Heat
+        internal static string Heat
         {
             get
             {
-                EnsureDtfTool();
-                // C: \Users\user\.nuget\packages\wixtoolset.heat\4.0.0\tools\net472\x86\heat.exe
+                EnsureDtfTool("wixtoolset.heat");
                 return Directory.GetFiles(PackageDir("wixtoolset.heat"), "heat.exe", SearchOption.AllDirectories).FirstOrDefault();
             }
         }
 
-        public static string DtfWindowsInstaller
+        static string torch = null;
+
+        public static string Torch
+        {
+            set
+            {
+                torch = value?.ExpandEnvVars();
+            }
+
+            get
+            {
+                if (torch != null)
+                    return torch;
+
+                EnsureDtfTool();
+                // C:\Users\user\.nuget\packages\wixsharp.wix.bin\3.14.0\tools\bin\torch.exe
+                // there is no equivalent of torch.exe in WiX4 like:
+                // C: \Users\user\.nuget\packages\wixtoolset.heat\4.0.0\tools\net472\x86\torch.exe
+                return Directory.GetFiles(PackageDir("wixtoolset.torch"), "torch.exe", SearchOption.AllDirectories).FirstOrDefault();
+            }
+        }
+
+        internal static string DtfWindowsInstaller
         {
             get
             {
@@ -1973,24 +1994,24 @@ namespace WixSharp.CommonTasks
             }
         }
 
-        public static string SfxCAFor(string platformDir)
+        internal static string SfxCAFor(string platformDir)
         {
             EnsureDtfTool();
             return PackageDir("wixtoolset.dtf.customaction").PathCombine($@"tools\{platformDir}\SfxCA.dll");
         }
 
-        public static void EnsureWixExtension(string name)
+        internal static void EnsureWixExtension(string name)
         {
             if (!Directory.Exists(WixExtensionsDir.PathCombine(name)))
                 Compiler.Run("wix", $"extension add -g {name}");
         }
 
-        public static void EnsureDtfTool()
+        internal static void EnsureDtfTool(string package = null)
         {
             var projectDir = WixSharpToolDir.PathCombine("wix.tools");
             var publishDir = projectDir.PathCombine("publish");
 
-            if (Directory.Exists(NuGetDir.PathCombine("wixtoolset.dtf.customaction")) &&
+            if (Directory.Exists(NuGetDir.PathCombine(package ?? "wixtoolset.dtf.customaction")) &&
                 Directory.Exists(publishDir))
                 return;
 
@@ -1998,8 +2019,8 @@ namespace WixSharp.CommonTasks
 
             var projectFile = projectDir.PathJoin("wix.tools.csproj");
 
-            if (!IO.File.Exists(projectFile))
-                IO.File.WriteAllText(projectFile, $@"<Project Sdk=""Microsoft.NET.Sdk"">
+            // if (!IO.File.Exists(projectFile))
+            IO.File.WriteAllText(projectFile, $@"<Project Sdk=""Microsoft.NET.Sdk"">
                                                       <PropertyGroup>
                                                         <TargetFramework>net472</TargetFramework>
                                                       </PropertyGroup>

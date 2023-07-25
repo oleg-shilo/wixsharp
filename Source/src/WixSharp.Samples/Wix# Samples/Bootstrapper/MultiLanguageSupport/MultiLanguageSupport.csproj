@@ -91,6 +91,7 @@
     <Compile Include="BA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="setup.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>

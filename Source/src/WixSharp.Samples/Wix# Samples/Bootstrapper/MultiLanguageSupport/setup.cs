@@ -14,9 +14,15 @@ public static class Script
 {
     static void Main()
     {
+        // WiX4: does note have torch.exe distributed neither with SDK or any nuget package or a tool
+        // Thus this sample does not work unless you specify location of the torch.exe
+        // For example from the WiX3 nuget package
+
+        WixTools.Torch = @"%userprofile%\.nuget\packages\wixsharp.wix.bin\3.14.0\tools\bin\torch.exe";
+
         var project = new Project("MyProduct",
                           new Dir(@"%ProgramFiles%\My Company\My Product",
-                              new File("Program.cs")));
+                              new File("setup.cs")));
 
         project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
         //project.SourceBaseDir = "<input dir path>";

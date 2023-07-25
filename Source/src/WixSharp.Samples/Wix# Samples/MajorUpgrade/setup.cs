@@ -5,11 +5,11 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using WixToolset.Dtf.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.UI;
 using WixSharp.UI.Forms;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {
