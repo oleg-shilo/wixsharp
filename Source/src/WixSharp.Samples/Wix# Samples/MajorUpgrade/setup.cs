@@ -2,10 +2,10 @@
 
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 //css_ref System.Core.dll;
+using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.UI;
@@ -15,8 +15,8 @@ class Script
 {
     static public void Main(string[] args)
     {
-        ManagedUIAproach();
-        // NativeUIApproach();
+        // ManagedUIAproach();
+        NativeUIApproach();
         // ManagedUICustomCheckAproach();
     }
 
@@ -30,7 +30,7 @@ class Script
                     new File(@"Files\1\readme.txt")));
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-        project.Version = new Version("1.0.209.10040");
+        project.Version = new Version("1.1.209.10040");
 
         project.MajorUpgrade = new MajorUpgrade
         {
@@ -38,8 +38,9 @@ class Script
             DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
         };
 
-        project.Load +=
-            e => MessageBox.Show(e.Session.GetMainWindow(), e.ToString(), "Before (Install/Uninstall) - " + e.Session.QueryProductVersion());
+        // enable the Load even handler if you want to see session properties
+        // project.Load +=
+        //     e => MessageBox.Show(e.Session.GetMainWindow(), e.ToString(), "Before (Install/Uninstall) - " + e.Session.QueryProductVersion());
 
         // project.PreserveTempFiles = true;
 
@@ -50,7 +51,7 @@ class Script
     {
         ManagedProject project = CreateProject();
 
-        Compiler.BuildMsi(project, "setup.msi");
+        Compiler.BuildMsi(project, "setup." + project.Version + ".msi");
     }
 
     static public void ManagedUIAproach()
@@ -60,7 +61,7 @@ class Script
         project.ManagedUI = ManagedUI.Default;
         project.MajorUpgrade = MajorUpgrade.Default;
 
-        Compiler.BuildMsi(project, "setup.msi");
+        Compiler.BuildMsi(project, "setup." + project.Version + ".msi");
     }
 
     static public void ManagedUICustomCheckAproach()
@@ -89,6 +90,6 @@ class Script
             }
         };
 
-        Compiler.BuildMsi(project, "setup.msi");
+        Compiler.BuildMsi(project, "setup." + project.Version + ".msi");
     }
 }
