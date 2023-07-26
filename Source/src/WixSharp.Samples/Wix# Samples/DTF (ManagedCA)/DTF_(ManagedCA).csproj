@@ -23,7 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="WixSharp_wix4.bin" Version="1.21.0-pre" />
+		<ProjectReference Include="..\..\..\WixSharp\WixSharp.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -33,7 +33,7 @@
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="cd .\&#xD;&#xA;set keep_wxs=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
+		<Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
 	</Target>
 
 </Project>

@@ -1929,11 +1929,14 @@ namespace WixSharp.CommonTasks
         }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
     public static class WixTools
     {
-        static public string NuGetDir => @"%userprofile%\.nuget\packages".ExpandEnvVars();
-        static public string WixSharpToolDir => @"%userprofile%\.wix\.wixsharp".ExpandEnvVars();
-        static public string WixExtensionsDir => @"%userprofile%\.wix\extensions".ExpandEnvVars();
+        static internal string NuGetDir => @"%userprofile%\.nuget\packages".ExpandEnvVars();
+        static internal string WixSharpToolDir => @"%userprofile%\.wix\.wixsharp".ExpandEnvVars();
+        static internal string WixExtensionsDir => @"%userprofile%\.wix\extensions".ExpandEnvVars();
 
         static string PackageDir(string name)
             => Directory.GetDirectories(NuGetDir.PathCombine(name))

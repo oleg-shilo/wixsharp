@@ -55,7 +55,7 @@ public class InstallScript
         // You can implement your own extension types and add them to the Bundle
         // bootstrapper.GenericItems.Add(new BalCondition { Condition = "some condition", Message = "Warning: ..." });
 
-        bootstrapper.PreserveTempFiles = true;
+        // bootstrapper.PreserveTempFiles = true;
         bootstrapper.Build("app_setup");
     }
 }

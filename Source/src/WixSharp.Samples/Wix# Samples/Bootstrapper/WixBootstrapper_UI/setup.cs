@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Bootstrapper;
@@ -10,7 +11,42 @@ public class Script
     //The UI implementation is based on the work of BRYANPJOHNSTON
     //http://bryanpjohnston.com/2012/09/28/custom-wix-managed-bootstrapper-application/
 
+    // This WixSharp sample uses a simple (Hello-World style) custom BA implemented in the same assembly as the bundle builder
+    // You can also use System.Reflection.Assembly.GetExecutingAssembly().Location instead of "%this%"
+
+    // Alternatively you can use a sample BA application from WiX Toolset codebase
+    // https://github.com/wixtoolset/wix/tree/develop/src/test/burn/WixToolset.WixBA
+    // bootstrapper.Application = new ManagedBootstrapperApplication(@"..\WiX4-Spike\Bundle1\WixToolset.WixBA\bin\Debug\net472\win-x86\WixToolset.WixBA.dll");
+
+    // Note, passing BootstrapperCore.config is optional and if not provided the default BootstrapperCore.config
+    // will be used. The content of the default BootstrapperCore.config can be accessed via
+    // ManagedBootstrapperApplication.DefaultBootstrapperCoreConfigContent.
+    //
+    // Note that the DefaultBootstrapperCoreConfigContent may not be suitable for all build and runtime scenarios.
+    // In such cases you may need to use custom BootstrapperCore.config as demonstrated below.
+    // bootstrapper.Application = new ManagedBootstrapperApplication("%this%", "BootstrapperCore.config");
+
+    // If you add any more packages, you may need to update `OnDetectPackageComplete` (i.g. to show 'install' button
+    // even if one package is already installed).
+
     static public void Main()
+    {
+        string productMsi = BuildMsi();
+
+        var bundle = new Bundle("My Product Bundle",
+                         new MsiPackage(productMsi)
+                         {
+                             Id = "MyProductPackageId"
+                         });
+
+        bundle.Version = new Version("1.0.0.0");
+        bundle.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889a");
+        bundle.Application = new ManagedBootstrapperApplication("%this%");
+
+        bundle.Build("my_app.exe");
+    }
+
+    static string BuildMsi()
     {
         var productProj =
             new ManagedProject("My Product",
@@ -25,71 +61,17 @@ public class Script
             if (e.IsInstalling)
             {
                 MessageBox.Show("Installing...", "My Product");
-                MessageBox.Show(e.Session.Property("USERINPUT"), "User Input");
-                MessageBox.Show(e.Session.Property("REGISTRYINPUT"), "Registry Input");
             }
             else if (e.IsUninstalling)
             {
                 MessageBox.Show("Uninstalling...", "My Product");
             }
         };
-        productProj.AfterInstall += (SetupEventArgs e) => MessageBox.Show("MSI session is completed", "My Product");
+        productProj.AfterInstall += (SetupEventArgs e) =>
+        {
+            MessageBox.Show("MSI session is completed", "My Product");
+        };
 
-        string productMsi = productProj.BuildMsi();
-
-        //------------------------------------
-
-        var bootstrapper =
-            new Bundle("My Product 2",
-                       // if you enable any of the disabled packages below, you may need to update `OnDetectPackageComplete`
-
-                       // new PackageGroupRef("NetFx462Web"),
-                       // new ExePackage(@"hello.exe") //just a demo sample
-                       // {
-                       //     Name = "WixCustomAction_cmd",
-                       //     InstallCommand = "-install",
-                       //     // Permanent = true,
-                       //     Compressed = true
-                       // },
-
-                       new MsiPackage(productMsi)
-                       {
-                           Id = "MyProductPackageId",
-                           MsiProperties = "USERINPUT=[UserInput];REGISTRYINPUT=[RegistryInput];"
-                       }
-                      );
-
-        bootstrapper.Variables = "UserInput=none; RegistryInput=none".ToStringVariables();
-        bootstrapper.Version = new Version("1.0.0.0");
-        bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889a");
-        //WixVariables["WixMbaPrereqPackageId"] = "Netfx4Full";
-
-        bootstrapper.Include(WixExtension.Util);
-        bootstrapper.AddWixFragment("Wix/Bundle",
-                                    new UtilRegistrySearch
-                                    {
-                                        Root = RegistryHive.CurrentUser,
-                                        Result = SearchResult.value,
-                                        Key = @"SOFTWARE\WixSharp\BootstrapperData\My Product",
-                                        Value = "RegistryInput",
-                                        Variable = "RegistryInput"
-                                    });
-
-        bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
-
-        // You can also use System.Reflection.Assembly.GetExecutingAssembly().Location instead of "%this%"
-        // Note, passing BootstrapperCore.config is optional and if not provided the default BootstrapperCore.config
-        // will be used. The content of the default BootstrapperCore.config can be accessed via
-        // ManagedBootstrapperApplication.DefaultBootstrapperCoreConfigContent.
-        //
-        // Note that the DefaultBootstrapperCoreConfigContent may not be suitable for all build and runtime scenarios.
-        // In such cases you may need to use custom BootstrapperCore.config as demonstrated below.
-        // bootstrapper.Application = new ManagedBootstrapperApplication("%this%", "BootstrapperCore.config");
-
-        bootstrapper.PreserveTempFiles = true;
-
-        bootstrapper.OutFileName = "my_app";
-        bootstrapper.Build("my_app.exe");
-        io.File.Delete(productMsi);
+        return productProj.BuildMsi();
     }
 }

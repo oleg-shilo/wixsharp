@@ -12,19 +12,34 @@
 		<None Remove="*.pdb" />
 		<None Remove="*.wixpdb" />
 		<None Remove="*.msi" />
-		<Compile Remove="Files\Bin\MyApp.cs" />
+		<None Remove="MyProduct.wxs" />
+		<None Remove="readme.txt" />
 		<None Remove="readme.txt" />
 		<None Remove="*.CA.dll" />
 		<None Remove="*.cs.dll" />
+		<Compile Remove="Files\1\MyApp.cs" />
+		<Compile Remove="Files\2\MyApp.cs" />
+		<Compile Remove="setup.cs" />
+		<Compile Remove="setup.2.cs" />
 		<None Remove="Build.cmd.log" />
+		<None Remove="wix\*.g.wxs" />
+		<None Remove="wix\MajorUpgrade1.g.wxs" />
+		<None Include="wix\$(ProjectName).g.wxs" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="Files\Bin\MyApp.cs" />
+		<None Include="Files\1\MyApp.cs" />
+		<None Include="Files\2\MyApp.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\WixSharp\WixSharp.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="System.Windows.Forms">
+			<HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.Forms.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

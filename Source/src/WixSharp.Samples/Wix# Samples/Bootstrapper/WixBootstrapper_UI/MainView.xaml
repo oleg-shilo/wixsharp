@@ -29,7 +29,8 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top"
             FontSize="12"
-            Text="{Binding UserInput, Mode=TwoWay}" />
+            Text="{Binding UserInput, Mode=TwoWay}"
+            Visibility="Collapsed" />
         <Ellipse
             Width="50"
             Height="50"
@@ -89,5 +90,4 @@
             </Button>
         </StackPanel>
     </Grid>
-
 </Window>

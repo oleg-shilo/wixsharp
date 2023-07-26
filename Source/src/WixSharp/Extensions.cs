@@ -1124,6 +1124,13 @@ namespace WixSharp
             => IO.Directory.Exists(path);
 
         /// <summary>
+        /// Determines if the specified path exists.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static bool PathExists(this string path) => IO.File.Exists(path) ? true : IO.Directory.Exists(path);
+
+        /// <summary>
         /// Deletes File/Directory from by the specified path if it exists.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -1338,6 +1345,17 @@ namespace WixSharp
         public static string PathGetFileName(this string path)
         {
             return IO.Path.GetFileName(path);
+        }
+
+        /// <summary>
+        /// Identical to <see cref="System.IO.Path.GetFileNameWithoutExtension(string)"/>. It is useful for Wix#
+        /// consuming code as it allows avoiding "using System.IO;" directive, which interferes with
+        /// Wix# types.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        public static string PathGetFileNameWithoutExtension(this string path)
+        {
+            return IO.Path.GetFileNameWithoutExtension(path);
         }
 
         /// <summary>

@@ -55,6 +55,9 @@ class Script
 
     static public void ManagedUIAproach()
     {
+        // Debug.Assert(false);
+        MSBuild.EmitAutoGenFiles = true;
+
         ManagedProject project = CreateProject();
 
         project.ManagedUI = ManagedUI.Default;

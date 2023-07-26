@@ -34,7 +34,7 @@ class Script
         };
 
         project.Include(WixExtension.UI);
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }

@@ -1,14 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Interop;
 
-#if WIX4
-using WixToolset.Bootstrapper;
-#else
-
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-
-#endif
-
 public partial class MainView : Window
 {
     MainViewModel viewModel;

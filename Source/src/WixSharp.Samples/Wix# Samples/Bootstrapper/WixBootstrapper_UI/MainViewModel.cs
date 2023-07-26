@@ -1,6 +1,6 @@
-﻿using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-using System;
+﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using WixToolset.Mba.Core;
 
@@ -36,7 +36,6 @@ public class ManagedBA : mba.BootstrapperApplication
     /// </summary>
     protected override void Run()
     {
-        System.Diagnostics.Debug.Assert(false);
         new MainView(this).ShowDialog();
         engine.Quit(0);
     }
@@ -162,12 +161,14 @@ public class MainViewModel : INotifyPropertyChanged
     /// </summary>
     void OnDetectPackageComplete(object sender, mba.DetectPackageCompleteEventArgs e)
     {
+        // Debug.Assert(false);
         if (e.PackageId == "MyProductPackageId")
         {
             if (e.State == PackageState.Absent)
             {
                 InstallEnabled = true;
             }
+            // else if (e.State == PackageState.Present)
             else if (e.State == PackageState.Present || e.State == PackageState.Cached)
             {
                 // need to add cache because of the bug in WiX https://github.com/wixtoolset/issues/issues/7399

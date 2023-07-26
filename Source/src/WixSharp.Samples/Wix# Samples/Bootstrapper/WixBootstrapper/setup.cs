@@ -55,7 +55,7 @@ public class InstallScript
         bundle.Application.LicensePath = "licence.rtf";
         bundle.Application.LogoFile = "product_logo.png";
 
-        bundle.PreserveTempFiles = true;
+        // bundle.PreserveTempFiles = true;
 
         bundle.Build("my.exe");
     }
@@ -163,7 +163,7 @@ public class InstallScript
         // bootstrapper.Variables = "BundleVariable=333".ToStringVariables();
         // bootstrapper.Variables = Variables.ToStringVariables("BundleVariable=333");
 
-        bootstrapper.PreserveTempFiles = true;
+        // bootstrapper.PreserveTempFiles = true;
 
         // bootstrapper.WixSourceGenerated += doc => doc.FindSingle("WixStandardBootstrapperApplication")
         //                                              .AddAttributes("ShowVersion=yes; ShowFilesInUse=no");
@@ -189,7 +189,7 @@ public class InstallScript
             DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
         };
 
-        productProj.PreserveTempFiles = true;
+        // productProj.PreserveTempFiles = true;
 
         return productProj.BuildMsi();
     }

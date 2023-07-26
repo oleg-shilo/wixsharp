@@ -15,7 +15,7 @@ public class Script
 
         var bootstrapper =
             new Bundle("My Product",
-                       new ExePackage(@"..\..\..\..\Managed Setup\Self-executable_Msi\ManagedSetup.exe")
+                       new ExePackage(@"..\..\Managed Setup\Self-executable_Msi\ManagedSetup.exe")
                        {
                            Name = "ManagedSetup",
                            InstallArguments = "/i",
@@ -40,7 +40,7 @@ public class Script
                                         Variable = "MyAppInstalled"
                                     });
 
-        bootstrapper.PreserveTempFiles = true;
+        // bootstrapper.PreserveTempFiles = true;
         bootstrapper.Build("my_app.exe");
     }
 }
