@@ -41,7 +41,7 @@ class Script
         project.UI = WUI.WixUI_ProgressOnly;
         project.Scope = InstallScope.perMachine;
         project.OutFileName = "setup";
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project);
     }

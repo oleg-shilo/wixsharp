@@ -30,7 +30,7 @@ class Script
                 new RegistrySearch(RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\services\SQLBrowser", "ImagePath", RegistrySearchType.file,
                     new FileSearch("sqlbrowser.exe"))));
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
         project.BuildMsi();
     }
 }

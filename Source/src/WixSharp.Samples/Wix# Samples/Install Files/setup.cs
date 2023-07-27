@@ -41,8 +41,8 @@ class Script
 
         project.EmitConsistentPackageId = true;
         project.Scope = InstallScope.perMachine;
-        project.PreserveTempFiles = true;
-        project.PreserveDbgFiles = true;
+        // project.PreserveTempFiles = true;
+        // project.PreserveDbgFiles = true;
 
         project.EnableUninstallFullUI();
         project.EnableResilientPackage();

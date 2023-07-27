@@ -2,11 +2,11 @@
 //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 
+using Microsoft.Win32;
 using System;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
 
@@ -48,7 +48,7 @@ class Script
 
             project.Platform = Platform.x64;
             // project.OutFileName = "setup";
-            project.PreserveTempFiles = true;
+            // project.PreserveTempFiles = true;
 
             Compiler.BuildMsi(project);
         }

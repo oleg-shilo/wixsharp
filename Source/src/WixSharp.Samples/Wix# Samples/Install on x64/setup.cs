@@ -26,7 +26,7 @@ class Script
                         new File(@"Files\Docs\Manual.txt"))),
                 new RegValue(RegistryHive.LocalMachine, @"Software\My Company\My Product", "Message", "Hello"));
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         // uncomment this line if you want to make the build of the x64 vs x86 controlled by the external condition.
         // if (Environment.GetEnvironmentVariable("buid_as_64") != null)

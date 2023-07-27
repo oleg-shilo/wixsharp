@@ -25,7 +25,7 @@ class Script
                    new Dir(@"Docs\Manual",
                        new File(new Id("Manual_File"), @"Files\Docs\Manual.txt"))));
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
         project.UI = WUI.WixUI_ProgressOnly;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
@@ -48,7 +48,7 @@ class Script
         // We need to set the Id to the 'My Product'
         project.AllDirs.Single(d => d.Name == "My Product").Id = "PRODUCT_INSTALLDIR";
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         Compiler.BuildWxs(project);
@@ -72,7 +72,7 @@ class Script
         // for project only via delegate
         project.CustomIdAlgorithm = WixEntity.IncrementalIdFor;
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         Compiler.BuildWxs(project);
@@ -109,7 +109,7 @@ class Script
         // for project only via delegate
         project.CustomIdAlgorithm = project.HashedTargetPathIdAlgorithm;
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         Compiler.BuildWxs(project);
@@ -142,7 +142,7 @@ class Script
             return null; // pass to default ID generator
         };
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         Compiler.BuildMsi(project);

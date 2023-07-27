@@ -21,7 +21,7 @@ class Script
                 });
 
         project.GUID = new Guid("99EF6ABA-14C4-47A8-903E-1AE82BF052CA");
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }

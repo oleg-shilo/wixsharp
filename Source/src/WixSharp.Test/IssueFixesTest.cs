@@ -54,7 +54,7 @@ namespace WixSharp.Test
                             // new Feature("extra"),
                             @"Logs")));
 
-            project.PreserveTempFiles = true;
+            // project.PreserveTempFiles = true;
             project.WixSourceGenerated += document =>
             {
                 var xml = document.ToString();

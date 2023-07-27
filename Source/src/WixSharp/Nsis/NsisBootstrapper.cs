@@ -57,7 +57,7 @@ namespace WixSharp.Nsis
     /// </example>
     public class NsisBootstrapper : NsisBootstrapperLegacy
     {
-        private const string PluginsDir = "$PLUGINSDIR";
+        const string PluginsDir = "$PLUGINSDIR";
 
         /// <summary>
         /// Describes a prerequisite package.
@@ -129,7 +129,7 @@ namespace WixSharp.Nsis
         /// </summary>
         // ReSharper disable once InconsistentNaming
         public OSValidation OSValidation { get; } = new OSValidation();
-        
+
         /// <summary>
         /// Gets or sets Compressor which is used for specifying Compression level via SetCompressor NSIS command
         /// </summary>
@@ -152,7 +152,7 @@ namespace WixSharp.Nsis
             }
         }
 
-        private string BuildInternal()
+        string BuildInternal()
         {
             var nsisMake = DetectNsisMake();
 
@@ -189,7 +189,7 @@ namespace WixSharp.Nsis
                 {
                     writer.WriteLine(Compressor.ToString());
                 }
-                
+
                 writer.WriteLine("Unicode true");
                 writer.WriteLine("ManifestSupportedOS all");
 
@@ -219,7 +219,7 @@ namespace WixSharp.Nsis
                 {
                     writer.Write(versionCheckScript);
                 }
-                
+
                 AddSplashScreen(writer);
 
                 AddPrerequisiteFile(writer, regRootKey, regSubKey, regValueName);
@@ -259,19 +259,19 @@ namespace WixSharp.Nsis
             return OutputFile;
         }
 
-        private void AddIncludes(IO.StringWriter writer)
+        void AddIncludes(IO.StringWriter writer)
         {
             writer.WriteLine("!include LogicLib.nsh");
             writer.WriteLine("!include x64.nsh");
             writer.WriteLine("!include FileFunc.nsh");
-            
+
             if (OSValidation.Any)
             {
                 writer.WriteLine("!include WinVer.nsh");
             }
         }
 
-        private static void AddMacros(IO.StringWriter writer)
+        static void AddMacros(IO.StringWriter writer)
         {
             var assembly = Reflection.Assembly.GetExecutingAssembly();
             var resourceName = $"{assembly.GetName().Name}.Nsis.macros.nsh";
@@ -283,7 +283,7 @@ namespace WixSharp.Nsis
             }
         }
 
-        private void AddPrerequisiteFile(IO.StringWriter writer, string regRootKey, string regSubKey, string regValueName)
+        void AddPrerequisiteFile(IO.StringWriter writer, string regRootKey, string regSubKey, string regValueName)
         {
             if (Prerequisite.FileName == null)
                 return;
@@ -312,7 +312,7 @@ namespace WixSharp.Nsis
             }
         }
 
-        private void AddPrimaryFile(IO.StringWriter writer)
+        void AddPrimaryFile(IO.StringWriter writer)
         {
             writer.WriteLine("primary:");
             if (Primary.OptionName != null)
@@ -336,7 +336,7 @@ namespace WixSharp.Nsis
             writer.WriteLine("goto end");
         }
 
-        private void AddVersionInformation(IO.StringWriter writer)
+        void AddVersionInformation(IO.StringWriter writer)
         {
             // Version Information
             if (VersionInfo != null)
@@ -368,7 +368,7 @@ namespace WixSharp.Nsis
             }
         }
 
-        private static string ExecuteNsisMake(string nsisMake, string arguments)
+        static string ExecuteNsisMake(string nsisMake, string arguments)
         {
             var compiler = new ExternalTool
             {
@@ -381,7 +381,7 @@ namespace WixSharp.Nsis
             return output;
         }
 
-        private static string DetectNsisMake()
+        static string DetectNsisMake()
         {
             const string makeNsisExe = "makensis.exe";
 
@@ -407,7 +407,7 @@ namespace WixSharp.Nsis
             throw new InvalidOperationException("Cannot detect NSIS location.");
         }
 
-        private static void AddVersionKey(IO.TextWriter writer, string name, object value)
+        static void AddVersionKey(IO.TextWriter writer, string name, object value)
         {
             if (value != null)
             {
@@ -415,7 +415,7 @@ namespace WixSharp.Nsis
             }
         }
 
-        private static void AddExecuteCommand(IO.TextWriter writer, Package package, string arguments, string exitCode)
+        static void AddExecuteCommand(IO.TextWriter writer, Package package, string arguments, string exitCode)
         {
             // Combine arguments and expand environment variables.
             arguments = AppendArgument(package.Arguments, arguments);
@@ -485,7 +485,7 @@ namespace WixSharp.Nsis
             }
         }
 
-        private static void AddFileCommand(IO.StringWriter writer, string sourcePath, string destinationPath = null)
+        static void AddFileCommand(IO.StringWriter writer, string sourcePath, string destinationPath = null)
         {
             if (destinationPath == null)
             {
@@ -504,7 +504,7 @@ namespace WixSharp.Nsis
         }
 
         // Returns the result in $R1 register.
-        private static void AddExpandEnvStringsCommand(IO.TextWriter writer, ref string arguments)
+        static void AddExpandEnvStringsCommand(IO.TextWriter writer, ref string arguments)
         {
             if (!arguments.IsNullOrEmpty())
             {
@@ -513,24 +513,28 @@ namespace WixSharp.Nsis
             }
         }
 
-        private static string ExecutionLevelToString(RequestExecutionLevel level)
+        static string ExecutionLevelToString(RequestExecutionLevel level)
         {
             switch (level)
             {
                 case RequestExecutionLevel.None:
                     return "none";
+
                 case RequestExecutionLevel.RunAsInvoker:
                     return "user";
+
                 case RequestExecutionLevel.HighestAvailable:
                     return "highest";
+
                 case RequestExecutionLevel.RequireAdministrator:
                     return "admin";
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        private static Version ParseNsisVersion(string text)
+        static Version ParseNsisVersion(string text)
         {
             var groups = Regex.Matches(text.ToUpperInvariant(), @"v?([\d\.]+)(A|B|RC)?(\d*)?(-.+)?")
                 .Cast<Match>()
@@ -573,23 +577,30 @@ namespace WixSharp.Nsis
                 revision);
         }
 
-        private static void VerifyMinimumSupportedVersion(string nsisMake)
+        static List<string> validLocations = new List<string>();
+
+        static void VerifyMinimumSupportedVersion(string nsisMake)
         {
-            const string MinimumSupportedVersion = "3.0b3";
-
-            var output = ExecuteNsisMake(nsisMake, "/VERSION").Trim();
-            if (output.IsEmpty())
+            if (!validLocations.Contains(nsisMake))
             {
-                throw new InvalidOperationException("Failed to detect the NSIS version.");
-            }
+                const string MinimumSupportedVersion = "3.0b3";
 
-            if (ParseNsisVersion(output) < ParseNsisVersion(MinimumSupportedVersion))
-            {
-                throw new ArgumentOutOfRangeException($"NSIS minimum supported version: \"{MinimumSupportedVersion}\", detected version: \"{output}\".");
+                var output = ExecuteNsisMake(nsisMake, "/VERSION").Trim();
+                if (output.IsEmpty())
+                {
+                    throw new InvalidOperationException("Failed to detect the NSIS version.");
+                }
+
+                if (ParseNsisVersion(output) < ParseNsisVersion(MinimumSupportedVersion))
+                {
+                    throw new ArgumentOutOfRangeException($"NSIS minimum supported version: \"{MinimumSupportedVersion}\", detected version: \"{output}\".");
+                }
+
+                validLocations.Add(nsisMake);
             }
         }
 
-        private static string AppendArgument(string s, string arg)
+        static string AppendArgument(string s, string arg)
         {
             if (!string.IsNullOrEmpty(arg))
             {
@@ -599,7 +610,7 @@ namespace WixSharp.Nsis
             return s;
         }
 
-        private void AddSplashScreen(IO.StringWriter writer)
+        void AddSplashScreen(IO.StringWriter writer)
         {
             if (SplashScreen != null)
             {
@@ -623,7 +634,7 @@ namespace WixSharp.Nsis
             }
         }
 
-        private void AddPayloads(IO.StringWriter writer, IList<Payload> payloads)
+        void AddPayloads(IO.StringWriter writer, IList<Payload> payloads)
         {
             payloads.ForEach(payload => AddFileCommand(writer, payload.SourceFile, payload.Name));
         }

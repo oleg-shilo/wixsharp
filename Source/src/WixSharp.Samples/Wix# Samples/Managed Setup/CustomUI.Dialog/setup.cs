@@ -61,7 +61,7 @@ public class Script
         project.BeforeInstall += msi_BeforeInstall;
         project.AfterInstall += Project_AfterInstall;
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }

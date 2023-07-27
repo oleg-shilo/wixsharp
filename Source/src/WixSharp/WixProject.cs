@@ -194,6 +194,7 @@ namespace WixSharp
         /// <para>Note: if <see cref="Compiler"/> fails to build MSI the <c>PreserveTempFiles</c>
         /// value is ignored and all temporary files are preserved.</para>
         /// </summary>
+        [Obsolete("dsfasdfsd")]
         public bool PreserveTempFiles = false;
 
         /// <summary>

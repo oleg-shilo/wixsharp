@@ -42,7 +42,7 @@ class Script
             new FileShortcut("some.exe", @"%Desktop%")
         };
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }

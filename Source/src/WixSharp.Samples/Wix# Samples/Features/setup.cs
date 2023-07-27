@@ -38,7 +38,7 @@ class Script
 
         project.DefaultFeature = binaries; //this line is optional
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }

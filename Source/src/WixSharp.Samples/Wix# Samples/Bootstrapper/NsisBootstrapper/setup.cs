@@ -5,15 +5,19 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
-using WixToolset.Dtf.WindowsInstaller;
 using WixSharp;
 using WixSharp.Nsis;
 using WixSharp.Nsis.WinVer;
+using WixToolset.Dtf.WindowsInstaller;
 
 public static class Script
 {
     public static void Main(string[] args)
     {
+        // if running the all under debugger (but not under msbuild) then the current dir needs to be adjusted
+        if (!@"Assets\script.ps1".PathExists())
+            Environment.CurrentDirectory = Environment.CurrentDirectory.PathCombine(@"..\..\..\");
+
         // If `Prerequisite.msi` does not exist yet execute <Wix# Samples>\Bootstrapper\NsisBootstrapper\Build.cmd
 
         var project = new ManagedProject("MainProduct",
@@ -45,16 +49,16 @@ public static class Script
 
             // JScript script sample
             BuildScriptSample(msiFile, @"Assets\script.js");
-            
+
             // BAT script sample with not supported win versions
             BuildScriptSampleWithOSValidationWin7(msiFile, @"Assets\script.bat");
-            
+
             // Another BAT script sample with not supported win versions
             BuildScriptSampleWithOsValidationMultiple(msiFile, @"Assets\script.bat");
 
             // Sample of Compressor usage
             BuildScriptWithCompressor(msiFile);
-            
+
             // Arguments sample
             BuildArgumentsSample(msiFile);
         }
@@ -71,7 +75,7 @@ public static class Script
                 RegKeyValue = @"HKLM:Software\My Company\My Product:Installed"
             },
 
-            Primary = {FileName = msiFile},
+            Primary = { FileName = msiFile },
 
             OutputFile = "MyProduct.exe",
             IconFile = "app_icon.ico",
@@ -91,7 +95,9 @@ public static class Script
             {
                 FadeIn = TimeSpan.FromMilliseconds(600),
                 FadeOut = TimeSpan.FromMilliseconds(400)
-            }
+            },
+
+            OptionalArguments = "  /V1"
         };
 
         bootstrapper.Build();
@@ -101,21 +107,23 @@ public static class Script
     {
         var bootstrapper = new NsisBootstrapper
         {
-            Prerequisite = {FileName = prerequisiteFile},
-            Primary = {FileName = msiFile},
-            OutputFile = "MyProduct" + Path.GetExtension(prerequisiteFile) + ".exe"
+            Prerequisite = { FileName = prerequisiteFile },
+            Primary = { FileName = msiFile },
+            OutputFile = "MyProduct" + Path.GetExtension(prerequisiteFile) + ".exe",
+            OptionalArguments = "  /V1"
         };
 
         bootstrapper.Build();
     }
-    
+
     public static void BuildScriptSampleWithOsValidationMultiple(string msiFile, string prerequisiteFile)
     {
         var bootstrapper = new NsisBootstrapper
         {
-            Prerequisite = {FileName = prerequisiteFile},
-            Primary = {FileName = msiFile},
-            OutputFile = "NotSupportedMultiple" + Path.GetExtension(prerequisiteFile) + ".exe"
+            Prerequisite = { FileName = prerequisiteFile },
+            Primary = { FileName = msiFile },
+            OutputFile = "NotSupportedMultiple" + Path.GetExtension(prerequisiteFile) + ".exe",
+            OptionalArguments = "  /V1"
         };
 
         bootstrapper.OSValidation.MinVersion = WindowsVersionNumber._7;
@@ -124,21 +132,22 @@ public static class Script
 
         bootstrapper.OSValidation.TerminateInstallation = false;
         bootstrapper.OSValidation.ErrorMessage = "Hello from custom error message!";
-        
+
         bootstrapper.Build();
     }
-    
+
     public static void BuildScriptSampleWithOSValidationWin7(string msiFile, string prerequisiteFile)
     {
         var bootstrapper = new NsisBootstrapper
         {
-            Prerequisite = {FileName = prerequisiteFile},
-            Primary = {FileName = msiFile},
-            OutputFile = "NotSupported7" + Path.GetExtension(prerequisiteFile) + ".exe"
+            Prerequisite = { FileName = prerequisiteFile },
+            Primary = { FileName = msiFile },
+            OutputFile = "NotSupported7" + Path.GetExtension(prerequisiteFile) + ".exe",
+            OptionalArguments = "  /V1"
         };
 
         bootstrapper.OSValidation.UnsupportedVersions.Add(new WindowsVersion(WindowsVersionNumber._7));
-        
+
         bootstrapper.Build();
     }
 
@@ -146,11 +155,12 @@ public static class Script
     {
         var bootstrapper = new NsisBootstrapper
         {
-            Primary = {FileName = msiFile},
-            OutputFile = "BuildScriptWithCompressor.exe"
+            Primary = { FileName = msiFile },
+            OutputFile = "BuildScriptWithCompressor.exe",
+            OptionalArguments = "  /V1"
         };
-        
-        // Uncomment following to see resulting NSIS script in console 
+
+        // Uncomment following to see resulting NSIS script in console
         // bootstrapper.NsiSourceGenerated += builder => Console.WriteLine(builder);
         bootstrapper.Compressor = new Compressor(Compressor.Method.Lzma, Compressor.Options.Final | Compressor.Options.Solid);
         bootstrapper.Build();
@@ -189,7 +199,8 @@ public static class Script
                 Arguments = @"/L*V %TEMP%\MyProductArgs_Msi.log EXEPATH=""$EXEPATH"""
             },
 
-            OutputFile = "MyProductArgs.exe"
+            OutputFile = "MyProductArgs.exe",
+            OptionalArguments = "  /V1"
         };
 
         bootstrapper.Build();

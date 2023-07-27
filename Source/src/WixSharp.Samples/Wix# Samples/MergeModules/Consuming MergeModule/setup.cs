@@ -4,12 +4,12 @@
 
 using System;
 using System.IO;
-using File = WixSharp.File;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using WixSharp;
-using System.Text.RegularExpressions;
+using File = WixSharp.File;
 
 class Script
 {
@@ -37,7 +37,7 @@ class Script
         project.UI = WUI.WixUI_FeatureTree;
         project.InstallerVersion = 200; //you may want to change it to match MSM module installer version
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }

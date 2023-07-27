@@ -33,7 +33,7 @@ class Script
         project.OutDir = @"%LATEST_RELEASE%\MSI";
         project.SourceBaseDir = "%LATEST_RELEASE%";
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }

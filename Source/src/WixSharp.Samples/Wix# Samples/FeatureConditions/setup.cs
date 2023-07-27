@@ -76,7 +76,7 @@ class Script
         project.UI = WUI.WixUI_FeatureTree;
 
         project.LaunchConditions.Add(new LaunchCondition("PROP1 or Installed", "PROP1 is required"));
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project);
     }

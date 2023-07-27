@@ -71,7 +71,7 @@ class Script
                 // document.FindSingle("Product").Add(new XProcessingInstruction("include", "CommonProperies.wxi"));
             };
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
         project.BuildMsi();
     }
 

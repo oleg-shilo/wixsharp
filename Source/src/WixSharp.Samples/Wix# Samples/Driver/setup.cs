@@ -40,7 +40,7 @@ class Script
 
         project.LibFiles.Add(@"%userprofile%\.wix\extensions\WixToolset.DifxApp.wixext\4.0.0\wixext4\difxapp_x64.wixlib");
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }

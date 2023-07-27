@@ -5,8 +5,8 @@
 
 using System;
 using System.Xml.Linq;
-using WixToolset.Dtf.WindowsInstaller;
 using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 
 /// <summary>
 /// <para>
@@ -47,7 +47,7 @@ class Script
 
         project.UI = WUI.WixUI_ProgressOnly;
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
         project.BuildMsi();
     }
 }

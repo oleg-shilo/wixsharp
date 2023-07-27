@@ -25,7 +25,7 @@ public class Script
         project.ManagedUI.ModifyDialogs.Add<ProgressDialog>()
                                        .Add<ExitDialog>();
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
         project.SourceBaseDir = @"..\..\";
 
         project.BuildMsi();

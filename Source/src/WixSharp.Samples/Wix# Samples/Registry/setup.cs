@@ -51,7 +51,9 @@ class Script
         //                     .ForEach(x => x.Add(WixExtension.Util.XElement("PermissionEx",
         //                                                                    "User=[WIX_ACCOUNT_USERS]; GenericAll=yes; CreateSubkeys=yes")));
         //              };
-        project.PreserveTempFiles = true;
+
+        // project.PreserveTempFiles = true;
+
         project.BuildMsi();
     }
 }

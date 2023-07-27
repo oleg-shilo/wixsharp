@@ -8,9 +8,9 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using WixToolset.Dtf.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {
@@ -32,7 +32,7 @@ class Script
                             new FileShortcut("My App", "INSTALLDIR") { Advertise = true })));
 
         project.UI = WUI.WixUI_InstallDir;
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BeforeInstall += args =>
         {
