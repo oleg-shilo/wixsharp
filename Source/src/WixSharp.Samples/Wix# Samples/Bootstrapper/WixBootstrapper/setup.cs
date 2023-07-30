@@ -19,20 +19,35 @@ public class InstallScript
         var crtMsi = BuildCrtMsi();
         var productMsi = BuildMainMsi();
 
-        // Simple(crtMsi);
-        Standard(crtMsi, productMsi);
+        SimpleMsiInternalUI(crtMsi);
+        // SimpleGlobalInternalUI(crtMsi);
+        // Standard(crtMsi, productMsi);
         // Complex(crtMsi, productMsi);
     }
 
-    static public void Simple(string msi)
+    static public void SimpleMsiInternalUI(string msi)
     {
-        var bundle = new Bundle("My Product")
+        var bundle = new Bundle("My Product Bundle")
         {
             Version = Version.Parse("1.0.0.0"),
             UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb24889b")
         };
 
-        // will show MSI UI instead of BA UI
+        // will show MSI UI instead
+        bundle.Chain.Add(new MsiPackage(msi) { DisplayInternalUI = true });
+
+        bundle.Build("my.exe");
+    }
+
+    static public void SimpleGlobalInternalUI(string msi)
+    {
+        var bundle = new Bundle("My Product Bundle")
+        {
+            Version = Version.Parse("1.0.0.0"),
+            UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb24889b")
+        };
+
+        // will show MSI UI instead for all MsiPackages
         bundle.Application = new WixInternalUIBootstrapperApplication { LogoFile = "product_logo.png" };
         bundle.Chain.Add(new MsiPackage(msi));
 
@@ -47,8 +62,8 @@ public class InstallScript
             UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb24889b")
         };
 
-        bundle.Chain.Add(new PackageGroupRef("NetFx462Web"));
-        bundle.Chain.Add(new MsiPackage(dependencyMsi));
+        // bundle.Chain.Add(new PackageGroupRef("NetFx462Web"));
+        // bundle.Chain.Add(new MsiPackage(dependencyMsi));
         bundle.Chain.Add(new MsiPackage(productMsi));
 
         bundle.Application.Theme = Theme.rtfLicense;

@@ -20,6 +20,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
+using WixToolset.Mba.Core;
 using static System.Environment;
 using static WixSharp.SetupEventArgs;
 
@@ -56,6 +57,18 @@ namespace WixSharp
             var p = new WindowsPrincipal(identity);
             return p.IsInRole(WindowsBuiltInRole.Administrator);
         }
+
+        /// <summary>
+        /// Safe version of <see cref="WixToolset.Mba.Core.IEngine.Apply(IntPtr)"/>. It allows passing
+        /// parent handle <c>null</c> or <c>IntPtr.Zero</c> to allow applying the "setup plan" when the bootstrapper
+        /// window is not available. In such case SafeApply will use the handle returned by the <see cref="GetForegroundWindow()"/>
+        /// </summary>
+        /// <param name="engine">The engine.</param>
+        /// <param name="hwndParent">The HWND parent.</param>
+        static public void SafeApply(this IEngine engine, IntPtr? hwndParent = null) => engine.Apply(GetForegroundWindow());
+
+        [DllImport("User32.dll")]
+        static extern IntPtr GetForegroundWindow();
 
         static internal IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> items, Func<TSource, TKey> keySelector)
         {
@@ -3401,69 +3414,81 @@ namespace WixSharp
         /// This method builds the msi with the default language support according
         /// `project.Language` setting. The additional languages can also be embedded into the
         /// resulting msi during the build.
-        /// </para>
-        /// <para>
+        /// </para><para>
         /// Invoking specific language UI is triggered either automatically based on the OS default
         /// language or by passing special MSI properties arguments to the <c>msiexec.exe</c>:
         /// </para>
         /// <list type="bullet">
-        /// <item>
-        /// <description><i>English</i>
-        /// <para><c>msiexec /i setup.msi</c></para>
-        /// </description>
-        /// </item>
-        /// <item>
-        /// <description><i>German</i>
-        /// <para><c>msiexec /i setup.msi TRANSFORMS=:1031</c></para>
-        /// </description>
-        /// </item>
-        /// <item>
-        /// <description><i>Russian</i>
-        /// <para><c>msiexec /i setup.msi TRANSFORMS=:1049</c></para>
-        /// </description>
-        /// </item>
+        ///   <item><description><i>English</i><para><c>msiexec /i setup.msi</c></para></description></item>
+        ///   <item><description><i>German</i><para><c>msiexec /i setup.msi TRANSFORMS=:1031</c></para></description>
+        ///   </item><item><description><i>Ukrainian</i><para><c>msiexec /i setup.msi TRANSFORMS=:1058</c></para></description></item>
         /// </list>
         /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="languages">The additional languages to embed. The value is a string of the coma-separated
+        /// language identifiers (e.g. `en-US,uk-UA,de-DE`). The first identifier will be used as the default language
+        /// of the msi to build. Any value of <see cref="WixSharp.Project.Language"/> wil be ignored.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        /// Path to the built MSI file.
+        /// </returns>
         /// <example>
         /// The following is an example of building <c>English</c> msi, which can also support
-        /// <c>German</c> and <c>Russian</c> UI.
+        /// <c>German</c> and <c>Ukrainian</c> UI.
         /// <code>
-        ///var project =
-        ///new ManagedProject("My Product",
-        ///new Dir(@"%ProgramFiles%\My Company\My Product",
-        ///new File("readme.txt")));
+        /// var project =
+        ///     new ManagedProject("My Product",
+        ///         new Dir(@"%ProgramFiles%\My Company\My Product",
+        ///             new File("readme.txt")));
         ///
-        ///project.Language = "en-US,ru-RU,de-DE";
-        ///project.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
-        ///
-        ///project.BuildLocalizedMsi();
-        /// </code>
-        /// </example>
-        /// <param name="project">The project.</param>
-        /// <param name="path">The path.</param>
-        /// <returns>Path to the built MSI file.</returns>
-        static public string BuildMultilanguageMsi(this WixSharp.Project project, string path = null)
+        /// project.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
+        /// project.BuildMultilanguageMsiFor(en-US,uk-UA,de-DE);
+        /// </code></example>
+        static public string BuildMultilanguageMsiFor(this WixSharp.Project project, string languages, string path = null)
         {
             project.VerifyLanguage();
 
-            string productMsi = project.BuildMsi(path);
-
-            Compiler.OutputWriteLine("> Preparing language transformations...");
-
-            var additionalLanguages = project.Language.Split(',', ';')
-                                             .Skip(1)
-                                             .Select(x => x.Trim());
-
-            foreach (string lang in additionalLanguages)
+            var originalLanguages = project.Language;
+            try
             {
-                string mstFile = project.BuildLanguageTransform(productMsi, lang);
-                productMsi.EmbedTransform(mstFile);
+                var allLanguages = languages.Split(',', ';').Select(x => x.Trim());
+                var additionalLanguages = allLanguages.Skip(1);
+
+                Compiler.OutputWriteLine("> Building msi with the default language...");
+                project.Language = allLanguages.FirstOrDefault();
+                string productMsi = project.BuildMsi(path);
+
+                Compiler.OutputWriteLine("> Preparing language transformations...");
+
+                foreach (string lang in additionalLanguages)
+                {
+                    string mstFile = project.BuildLanguageTransform(productMsi, lang);
+                    productMsi.EmbedTransform(mstFile);
+                }
+
+                productMsi.SetPackageLanguagesFrom(project);
+
+                // -------------------------------
+                Compiler.OutputWriteLine($"> Multi-language setup {productMsi} is completed.");
+                if (originalLanguages != project.Language)
+                    Compiler.OutputWriteLine(
+                        $"Warning: The project language `{originalLanguages}` is different to the " +
+                        $"first language specified in the transformations list `{allLanguages.FirstOrDefault()}`. " +
+                        $"The project language value will be ignored.");
+
+                Compiler.OutputWriteLine($"> {allLanguages.FirstOrDefault()} (default): msiexec /i {productMsi.PathGetFileName()}.");
+                foreach (string lang in additionalLanguages)
+                {
+                    Compiler.OutputWriteLine($"> {lang}          : msiexec /i {productMsi.PathGetFileName()} TRANSFORMS=:{new CultureInfo(lang).LCID}.");
+                }
+                // -------------------------------
+
+                return productMsi;
             }
-
-            productMsi.SetPackageLanguagesFrom(project);
-
-            Compiler.OutputWriteLine($"> Multi-language setup {productMsi} is completed.");
-            return productMsi;
+            finally
+            {
+                project.Language = originalLanguages;
+            }
         }
 
         /// <summary>

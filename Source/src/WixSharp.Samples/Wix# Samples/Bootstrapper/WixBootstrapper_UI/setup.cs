@@ -36,7 +36,8 @@ public class Script
         var bundle = new Bundle("My Product Bundle",
                          new MsiPackage(productMsi)
                          {
-                             Id = "MyProductPackageId"
+                             Id = "MyProductPackageId",
+                             DisplayInternalUI = true
                          });
 
         bundle.Version = new Version("1.0.0.0");

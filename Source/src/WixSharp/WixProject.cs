@@ -106,6 +106,21 @@ namespace WixSharp
         /// </summary>
         public List<string> LibFiles = new List<string>();
 
+        internal bool IsLocalized
+        {
+            get { return (Language.ToLower() != "en-us" && Language.ToLower() != "en") || !LocalizationFile.IsEmpty(); }
+        }
+
+        internal bool IsNonEnglish
+        {
+            get { return (Language.ToLower() != "en-us" && Language.ToLower() != "en"); }
+        }
+
+        /// <summary>
+        /// Path to the Localization file.
+        /// </summary>
+        public string LocalizationFile = "";
+
         /// <summary>
         /// Gets a value indicating whether this project supports multiple languages.
         /// </summary>
@@ -194,7 +209,6 @@ namespace WixSharp
         /// <para>Note: if <see cref="Compiler"/> fails to build MSI the <c>PreserveTempFiles</c>
         /// value is ignored and all temporary files are preserved.</para>
         /// </summary>
-        [Obsolete("dsfasdfsd")]
         public bool PreserveTempFiles = false;
 
         /// <summary>

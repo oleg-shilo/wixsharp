@@ -32,8 +32,8 @@ class Script
 
         // Localization technique from the #748 "error for FirewallException"
         project.Codepage = "1251";
-        project.Language = "ru-ru";
-        project.LocalizationFile = "FirewallExtension.ru.wxl"; // provided by the rus-speaking user
+        project.Language = "ru-RU";
+        project.LocalizationFile = "FirewallExtension.ru-RU.wxl"; // provided by the rus-speaking user
         project.Encoding = Encoding.UTF8;
 
         project.BuildMsi();

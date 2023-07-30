@@ -661,10 +661,18 @@ namespace WixSharp
                                           .Distinct()
                                           .JoinBy(" ", file => $"\"{file}\"");
 
+            string localization = "";
+
+            if (project.IsNonEnglish)
+                localization += $" -culture {project.Language}";
+
+            if (project.IsLocalized && project.LocalizationFile.PathExists())
+                localization += $" -loc \"{project.LocalizationFile}\"";
+
             var candleOptions = (WixOptions + " " + project.WixOptions).Trim();
 
             var candleCmdLineParams = new StringBuilder();
-            candleCmdLineParams.AppendFormat("{0} {1} {2} \"{3}\" ", candleOptions, extensionDlls, libFiles, wxsFile);
+            candleCmdLineParams.AppendFormat("{0} {1} {2} {3} \"{4}\" ", candleOptions, localization, extensionDlls, libFiles, wxsFile);
 
             if (extraWxsFiles.IsNotEmpty())
                 candleCmdLineParams.Append(extraWxsFiles);

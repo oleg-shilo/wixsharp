@@ -8,7 +8,6 @@
 		<DebugType>embedded</DebugType>
 		<RuntimeIdentifier>win-x86</RuntimeIdentifier>
 		<Description>WiX Bootstrapper Application</Description>
-
 		<EnableDynamicLoading>true</EnableDynamicLoading>
 		<UseWPF>true</UseWPF>
 		<RollForward>Major</RollForward>

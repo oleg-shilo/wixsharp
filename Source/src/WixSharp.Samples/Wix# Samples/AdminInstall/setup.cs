@@ -16,13 +16,12 @@ static class Script
 {
     static public void Main()
     {
-        var project = new Project("CustomActionTest",
-
+        var project =
+            new Project("CustomActionTest",
                 new ManagedAction(CustomActions.RunAsAdminInstall, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed, Sequence.InstallUISequence),
                 new ManagedAction(CustomActions.MyCheckSql, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed, Sequence.InstallUISequence),
                 new ManagedAction(CustomActions.MyCheckMvc4, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed, Sequence.InstallUISequence),
                 new ManagedAction(CustomActions.CompareVersionAtUpgrade, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed, Sequence.InstallUISequence),
-
                 new ManagedAction(CustomActions.MyAdminAction, Return.check, When.After, Step.InstallInitialize, Condition.NOT_Installed, Sequence.AdminExecuteSequence));
 
         Compiler.BuildMsi(project);

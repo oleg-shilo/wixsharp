@@ -587,6 +587,27 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Adds the payload.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public WixStandardBootstrapperApplication AddPayload(this WixStandardBootstrapperApplication project, Bootstrapper.Payload item)
+        {
+            project.Payloads = project.Payloads.Combine(item);
+            return project;
+        }
+
+        /// <summary>
+        /// Adds the payload.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="payloadFile">The payload file.</param>
+        /// <returns></returns>
+        static public WixStandardBootstrapperApplication AddPayload(this WixStandardBootstrapperApplication project, string payloadFile)
+         => project.AddPayload(new Bootstrapper.Payload(payloadFile));
+
+        /// <summary>
         /// Adds the directory items to the Project.
         /// </summary>
         /// <param name="project">The project.</param>
@@ -1964,6 +1985,12 @@ namespace WixSharp.CommonTasks
 
         static string torch = null;
 
+        /// <summary>
+        /// Gets or sets the location of the `torch.exe`. This method is property because WiX4 no longer distributed with the SDK.
+        /// </summary>
+        /// <value>
+        /// The torch.
+        /// </value>
         public static string Torch
         {
             set

@@ -348,7 +348,7 @@ namespace WixSharp
         /// </para>
         /// <remarks>This value should not be confused with MSI <c>ProductId</c>, which is in fact
         /// not an identifier of the product but rather an identifier of the product particular version.
-        /// MSI uses <c>UpgradeCode</c> as a common identification of the product regardless of it's version.
+        /// MSI uses <c>UpgradeCode</c> as a common identification of the product regardless of its version.
         /// <para>In a way <see cref="GUID"/> is an alias for <see cref="UpgradeCode"/>.</para>
         /// </remarks>
         /// </summary>
@@ -955,16 +955,6 @@ namespace WixSharp
                                                 .ToArray());
             }
         }
-
-        internal bool IsLocalized
-        {
-            get { return (Language.ToLower() != "en-us" && Language.ToLower() != "en") || !LocalizationFile.IsEmpty(); }
-        }
-
-        /// <summary>
-        /// Path to the Localization file.
-        /// </summary>
-        public string LocalizationFile = "";
 
         /// <summary>
         /// Name (path) of the directory which was assigned <see cref="T:WixSharp.Compiler.AutoGeneration.InstallDirDefaultId"/> ID as part of XML auto-generation (see <see cref="T:WixSharp.AutoGenerationOptions"/>).
