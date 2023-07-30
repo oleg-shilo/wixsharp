@@ -1,0 +1,13 @@
+<!--
+<WixLocalization Culture="en-US" Codepage="1251" xmlns="http://wixtoolset.org/schemas/v4/wxl">
+-->
+
+<WixLocalization Culture="ru-RU" xmlns="http://wixtoolset.org/schemas/v4/wxl">
+	<String Id="msierrFirewallCannotConnect"            Value="Не удалось подключиться к брандмауэру Windows.  ([2]   [3]   [4]   [5])" />
+	<String Id="WixSchedFirewallExceptionsInstall"      Value="Конфигурирование брандмауэра Windows" />
+	<String Id="WixSchedFirewallExceptionsUninstall"    Value="Конфигурирование брандмауэра Windows" />
+	<String Id="WixRollbackFirewallExceptionsInstall"   Value="Откат исключений для брандмауэра Windows" />
+	<String Id="WixExecFirewallExceptionsInstall"       Value="Установка исключений для брандмауэра Windows" />
+	<String Id="WixRollbackFirewallExceptionsUninstall" Value="Откат исключений для брандмауэра Windows" />
+	<String Id="WixExecFirewallExceptionsUninstall"     Value="Удаление исключений для брандмауэра Windows" />
+</WixLocalization>

@@ -1983,34 +1983,6 @@ namespace WixSharp.CommonTasks
             }
         }
 
-        static string torch = null;
-
-        /// <summary>
-        /// Gets or sets the location of the `torch.exe`. This method is property because WiX4 no longer distributed with the SDK.
-        /// </summary>
-        /// <value>
-        /// The torch.
-        /// </value>
-        public static string Torch
-        {
-            set
-            {
-                torch = value?.ExpandEnvVars();
-            }
-
-            get
-            {
-                if (torch != null)
-                    return torch;
-
-                EnsureDtfTool();
-                // C:\Users\user\.nuget\packages\wixsharp.wix.bin\3.14.0\tools\bin\torch.exe
-                // there is no equivalent of torch.exe in WiX4 like:
-                // C: \Users\user\.nuget\packages\wixtoolset.heat\4.0.0\tools\net472\x86\torch.exe
-                return Directory.GetFiles(PackageDir("wixtoolset.torch"), "torch.exe", SearchOption.AllDirectories).FirstOrDefault();
-            }
-        }
-
         internal static string DtfWindowsInstaller
         {
             get

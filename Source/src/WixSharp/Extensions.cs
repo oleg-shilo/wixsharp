@@ -3427,7 +3427,7 @@ namespace WixSharp
         /// <param name="project">The project.</param>
         /// <param name="languages">The additional languages to embed. The value is a string of the coma-separated
         /// language identifiers (e.g. `en-US,uk-UA,de-DE`). The first identifier will be used as the default language
-        /// of the msi to build. Any value of <see cref="WixSharp.Project.Language"/> wil be ignored.</param>
+        /// of the msi to build. Any value of <see cref="WixSharp.WixProject.Language"/> wil be ignored.</param>
         /// <param name="path">The path.</param>
         /// <returns>
         /// Path to the built MSI file.
@@ -3473,14 +3473,12 @@ namespace WixSharp
                 if (originalLanguages != project.Language)
                     Compiler.OutputWriteLine(
                         $"Warning: The project language `{originalLanguages}` is different to the " +
-                        $"first language specified in the transformations list `{allLanguages.FirstOrDefault()}`. " +
-                        $"The project language value will be ignored.");
+                        $"first language specified in the transformations list `{languages}`. " +
+                        $"The project language value will be ignored and `{allLanguages.FirstOrDefault()}` will be used instead.");
 
-                Compiler.OutputWriteLine($"> {allLanguages.FirstOrDefault()} (default): msiexec /i {productMsi.PathGetFileName()}.");
+                Compiler.OutputWriteLine($"> {allLanguages.FirstOrDefault()} (default): \"msiexec /i {productMsi.PathGetFileName()}\"");
                 foreach (string lang in additionalLanguages)
-                {
-                    Compiler.OutputWriteLine($"> {lang}          : msiexec /i {productMsi.PathGetFileName()} TRANSFORMS=:{new CultureInfo(lang).LCID}.");
-                }
+                    Compiler.OutputWriteLine($"> {lang}          : \"msiexec /i {productMsi.PathGetFileName()} TRANSFORMS=:{new CultureInfo(lang).LCID}\"");
                 // -------------------------------
 
                 return productMsi;
@@ -3524,18 +3522,17 @@ namespace WixSharp
         /// Builds a language transform (*.mst) file for a given msi file and its `Project`.
         /// <para>
         /// This method is not intended to be used directly (even though it's possible). The
-        /// developers are encouraged to use a <see
-        /// cref="LocalizationExtensions.BuildMultilanguageMsi(Project, string)"/> instead.
+        /// developers are encouraged to use a <see cref="LocalizationExtensions.BuildMultilanguageMsiFor(Project, string, string)" />
+        /// instead.
         /// </para>
         /// </summary>
-        /// <param name="project"></param>
-        /// <param name="originalMsi"></param>
-        /// <param name="language"></param>
-        /// <param name="localizationFile"></param>
+        /// <param name="project">The project.</param>
+        /// <param name="originalMsi">The original msi.</param>
+        /// <param name="language">The language.</param>
+        /// <param name="localizationFile">The localization file.</param>
         /// <returns></returns>
         public static string BuildLanguageTransform(this Project project, string originalMsi, string language, string localizationFile = "")
         {
-            var torch = WixTools.Torch;
             var originalLng = project.Language;
             var originalLocalizationFile = project.LocalizationFile;
             try
@@ -3546,7 +3543,8 @@ namespace WixSharp
                 string localizedMsi = project.BuildMsi(language).PathGetFullPath();
                 string langMst = localizedMsi.PathChangeExtension(".mst");
 
-                torch.Run($"-p -t language \"{originalMsi}\" \"{localizedMsi}\" -out \"{langMst}\"");
+                "wix.exe".Run($"msi transform -p -t language \"{originalMsi}\" \"{localizedMsi}\" -out \"{langMst}\"");
+
                 return langMst;
             }
             finally

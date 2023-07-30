@@ -75,11 +75,6 @@ public static class Script
 
     static string BuildMultilanguageMsi()
     {
-        // WiX4: does note have torch.exe distributed neither with SDK or any nuget package or a tool
-        // Thus this sample does not work unless you specify location of the torch.exe
-        // For example from the WiX3 nuget package
-        WixTools.Torch = @"%userprofile%\.nuget\packages\wixsharp.wix.bin\3.14.0\tools\bin\torch.exe";
-
         var project = new Project("MyProduct",
                           new Dir(@"%ProgramFiles%\My Company\My Product",
                               new File("setup.cs")));
@@ -106,7 +101,6 @@ public static class Script
     {
         // Compiler.PreserveTempFiles = true;
 
-        // WIX4: not ported yet
         var product =
             new Project("My Product",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
