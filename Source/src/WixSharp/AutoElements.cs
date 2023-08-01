@@ -190,6 +190,12 @@ namespace WixSharp
         /// </summary>
         public static bool DisableAutoUserProfileRegistry = false;
 
+        /// <summary>
+        /// Forces automatic insertion of the user profile registry. It is a controversial feature that is only required
+        /// for some exotic scenarios. See Issue #1326 (https://github.com/oleg-shilo/wixsharp/issues/1326)
+        /// </summary>
+        public static bool ForceUserProfileRegistry = false;
+
         static void InsertRemoveFolder(XElement xDir, XElement xComponent, string when = "uninstall")
         {
             if (!xDir.IsUserProfileRoot())
@@ -265,9 +271,16 @@ namespace WixSharp
             return false;
         }
 
-        internal static XElement InsertUserProfileRegValue(this XElement xComponent)
+        /// <summary>
+        /// Inserts the user profile reg value. It is a dummy registry value that is required for some
+        /// deployment scenarios to work correctly. See <see cref="WixSharp.AutoElements.DisableAutoUserProfileRegistry"/>
+        /// for details.
+        /// </summary>
+        /// <param name="xComponent">The component.</param>
+        /// <returns></returns>
+        public static XElement InsertUserProfileRegValue(this XElement xComponent)
         {
-            //UserProfileRegValue has to be a KeyPath fo need to remove any KeyPath on other elements
+            // UserProfileRegValue has to be a KeyPath so need to remove any KeyPath on other elements
             var keyPathes = xComponent.Descendants()
                                       .ForEach(e => e.ClearKeyPath());
 
@@ -842,6 +855,16 @@ namespace WixSharp
                 }
             }
 
+            if (ForceUserProfileRegistry)
+            {
+                product
+                    .FindAll("Component")
+                    .ForEach(x =>
+                            {
+                                if (!x.ContainsDummyUserProfileRegistry())
+                                    InsertUserProfileRegValue(x);
+                            });
+            }
             InjectPlatformAttributes(doc);
         }
 
