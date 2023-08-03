@@ -12,7 +12,7 @@ namespace WixSharp.UI.WPF
     {
         public UserNameDialog()
         {
-            MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - UserNameDialog");
+            // MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - UserNameDialog");
             InitializeComponent();
         }
 

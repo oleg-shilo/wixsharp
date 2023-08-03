@@ -1,9 +1,12 @@
 ﻿extern alias WixSharpMsi;
+
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
+using System.Windows.Controls;
 using System.Xml.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
@@ -111,6 +114,34 @@ namespace WixSharp.Test
             project.OutFileName = nameof(AttributesInjection2);
 
             var wxsFile = project.BuildWxs();
+        }
+
+        [Fact]
+        public void TestWxlCompatibilityOfCodebase()
+        {
+            // wixsharp\Source\src
+            var dir = @"..\..\..";
+
+            var files = io.Directory.GetFiles(dir, "*.wxl", io.SearchOption.AllDirectories)
+                                    .Where(x => !x.Contains("Wix_bin"))
+                                    .Where(x => XDocument.Load(x).Root.GetDefaultNamespace().NamespaceName == "http://schemas.microsoft.com/wix/2006/localization")
+                                    .ToArray();
+
+            files.ForEach(x => Debug.WriteLine(x));
+
+            // var file = @" ".Trim(); file.Wxl3_to_Wxl4(file);
+
+            Assert.Equal(0, files.Count());
+        }
+
+        [Fact]
+        public void Can_Init_ManagedUI_Licalization_From_WiX3_Wxl()
+        {
+            var data = new ResourcesData();
+
+            // var wxlFile = @"D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Managed Setup\MultiLanguageUI\WixUI_de-DE.wxl".MakeRelativeTo(Environment.CurrentDirectory);
+            var wxlFile = @"..\..\..\WixSharp.Samples\Wix# Samples\Managed Setup\MultiLanguageUI\WixUI_de-DE.wxl";
+            data.InitFromWxl(io.File.ReadAllBytes(wxlFile));
         }
 
         [Fact]

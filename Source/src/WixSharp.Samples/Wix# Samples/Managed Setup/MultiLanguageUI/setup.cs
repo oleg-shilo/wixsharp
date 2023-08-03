@@ -36,7 +36,6 @@ public static class Script
         project.SetNetFxPrerequisite(Condition.Net45_Installed, "Please install .Net 4.5 First");
 
         // project.PreserveTempFiles = true;
-        project.SourceBaseDir = @"..\..\";
 
         project.Localize();
 
@@ -45,7 +44,7 @@ public static class Script
 
     static SupportedLanguages DetectLanguage()
     {
-        // in production you can do something smarter like analysing OS language
+        // in production you can do something smarter like analyzing OS language
         // current thread UI culture most likely will not work as it will be set to the language of the project
 
         var input = new Form
@@ -54,6 +53,7 @@ public static class Script
             Text = "Language Selection",
             FormBorderStyle = FormBorderStyle.FixedToolWindow,
             ShowIcon = false,
+            TopMost = true,
             StartPosition = FormStartPosition.CenterScreen
         };
 
@@ -78,6 +78,8 @@ public static class Script
 
         project.UIInitialized += (SetupEventArgs e) =>
         {
+            // Debug.Assert(false);
+
             MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
 
             switch (DetectLanguage())

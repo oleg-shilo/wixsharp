@@ -1,109 +1,70 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{EA35436D-33FA-4710-B57D-C9F349D5EB26}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConsoleApplication1</RootNamespace>
-    <AssemblyName>setup</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;CSS_PROJECT</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <IntermediateOutputPath>bin\obj\</IntermediateOutputPath>
-    <DefineConstants>TRACE;CSS_PROJECT</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>System.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>System.Windows.Forms.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>System.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>System.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>System.Xml.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="setup.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\WixSharp.UI\WixSharp.UI.csproj">
-      <Project>{79033a3e-565e-47a3-93f6-d95789b024fc}</Project>
-      <Name>WixSharp.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\WixSharp\WixSharp.csproj">
-      <Project>{8860b29b-749f-4925-86c8-f9c4b93c9da5}</Project>
-      <Name>WixSharp</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="WixToolset.Dtf.WindowsInstaller">
-      <Version>4.0.0</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>"$(TargetDir)$(TargetFileName)"</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net472</TargetFramework>
+		<FileUpgradeFlags>
+		</FileUpgradeFlags>
+		<UpgradeBackupLocation>
+		</UpgradeBackupLocation>
+		<OldToolsVersion>2.0</OldToolsVersion>
+		<ProjectGuid>{8FE71ABB-2763-416D-A0D9-01C4629610E2}</ProjectGuid>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Remove="CustomUI.Dialog\**" />
+		<Compile Remove="CustomUI.Sequence\**" />
+		<Compile Remove="CustomUI.WPF.Sequence\**" />
+		<Compile Remove="CustomUI.WPF\**" />
+		<Compile Remove="CustomUIDialog\**" />
+		<Compile Remove="CustomUISequence\**" />
+		<Compile Remove="Files\**" />
+		<Compile Remove="MultiLanguageUI\**" />
+		<Compile Remove="Self-executable_Msi\**" />
+		<Compile Remove="SetupEvents\**" />
+		<Compile Remove="WpfControlLibrary1\**" />
+		<EmbeddedResource Remove="CustomUI.Dialog\**" />
+		<EmbeddedResource Remove="CustomUI.Sequence\**" />
+		<EmbeddedResource Remove="CustomUI.WPF.Sequence\**" />
+		<EmbeddedResource Remove="CustomUI.WPF\**" />
+		<EmbeddedResource Remove="CustomUIDialog\**" />
+		<EmbeddedResource Remove="CustomUISequence\**" />
+		<EmbeddedResource Remove="Files\**" />
+		<EmbeddedResource Remove="MultiLanguageUI\**" />
+		<EmbeddedResource Remove="Self-executable_Msi\**" />
+		<EmbeddedResource Remove="SetupEvents\**" />
+		<EmbeddedResource Remove="WpfControlLibrary1\**" />
+		<None Remove="*.cmd" />
+		<None Remove="CustomUI.Dialog\**" />
+		<None Remove="CustomUI.Sequence\**" />
+		<None Remove="CustomUI.WPF.Sequence\**" />
+		<None Remove="CustomUI.WPF\**" />
+		<None Remove="CustomUIDialog\**" />
+		<None Remove="CustomUISequence\**" />
+		<None Remove="Files\**" />
+		<None Remove="MultiLanguageUI\**" />
+		<None Remove="Self-executable_Msi\**" />
+		<None Remove="SetupEvents\**" />
+		<None Remove="WpfControlLibrary1\**" />
+		<None Remove="app.ico" />
+		<None Remove="CustomAction.config" />
+		<None Remove="*.exe" />
+		<None Remove="*.pdb" />
+		<None Remove="*.wixpdb" />
+		<None Remove="*.msi" />
+		<None Remove="readme.txt" />
+		<None Remove="*.CA.dll" />
+		<None Remove="*.cs.dll" />
+		<None Remove="Build.cmd.log" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\WixSharp.UI\WixSharp.UI.csproj" />
+		<ProjectReference Include="..\..\..\..\WixSharp\WixSharp.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="System.Windows.Forms">
+			<HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.Forms.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
+	</Target>
 </Project>

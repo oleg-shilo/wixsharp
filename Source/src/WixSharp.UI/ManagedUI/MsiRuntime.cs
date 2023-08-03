@@ -146,6 +146,7 @@ namespace WixSharp
         /// <param name="session">The session.</param>
         public InstallerRuntime(ISession session)
         {
+            // Debug.Assert(false);
             this.Session = session;
             try
             {
@@ -283,9 +284,20 @@ namespace WixSharp
                     System.IO.File.Delete(tempXmlFile);
                 }
 
+                Func<XElement, string> getValue;
+
+                // later do more restrictive WXL parsing
+                // if (doc.Root.GetDefaultNamespace().NamespaceName == "http://schemas.microsoft.com/wix/2006/localization")
+                //     getValue = element => element.Value;                                     // WiX3
+                // else
+                //     getValue = element => element.GetAttribute("Value") ?? element.Value;    // WiX4
+
+                // but for now, do fall back from WXL WiX4 format to WiX3
+                getValue = element => element.GetAttribute("Value") ?? element.Value;
+
                 var data = doc.Descendants()
                               .Where(x => x.Name.LocalName == "String")
-                              .ToDictionary(x => x.Attribute("Id").Value, x => x.Value);
+                              .ToDictionary(x => x.Attribute("Id").Value, getValue);
 
                 foreach (var item in data)
                     this.Add(item.Key, item.Value);

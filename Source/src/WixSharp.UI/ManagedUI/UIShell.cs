@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
 using WixToolset.Dtf.WindowsInstaller;
+
 using forms = System.Windows.Forms;
 
 namespace WixSharp

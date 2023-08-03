@@ -621,6 +621,11 @@
               Looks up a localized resource of type System.Byte[].
             </summary>
         </member>
+        <member name="P:WixSharp.UI.ManagedUI.Resources.WixUI_en_us1">
+            <summary>
+              Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
         <member name="T:WixSharp.ISession">
             <summary>
             The ISession interface controls the installation process.

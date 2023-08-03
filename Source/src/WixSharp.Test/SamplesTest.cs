@@ -32,9 +32,13 @@ namespace WixSharp.Test
         int samplesTotal = 0;
         Stopwatch testTime = new Stopwatch();
 
-        [Fact]
+        [Fact()]
         public void CanBuildAllSamples()
         {
+            // it's no longer holding any value to test building samples from shell as they are all now built as part of the
+            // solution build.
+            return;
+
             // if (Environment.GetEnvironmentVariable("APPVEYOR") != null)
             //     return;
 

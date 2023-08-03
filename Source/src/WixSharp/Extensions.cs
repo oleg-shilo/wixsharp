@@ -772,6 +772,22 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// A generic LINQ equivalent of C# foreach loop.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection">The collection.</param>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        public static IEnumerable<T> ForEach<T, T1>(this IEnumerable<T> collection, Func<T, T1> action)
+        {
+            foreach (T item in collection)
+            {
+                action(item);
+            }
+            return collection;
+        }
+
+        /// <summary>
         /// Returns all items from the collection except specified one.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -4107,7 +4123,7 @@ namespace WixSharp
         /// </returns>
         public static Process StartElevated(this string fileName, string args = "")
         {
-            bool isAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+            bool alreadyAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
             return Process.Start(new ProcessStartInfo
             {
@@ -4115,7 +4131,7 @@ namespace WixSharp
                 FileName = fileName,
                 Arguments = args,
                 UseShellExecute = true,
-                Verb = isAdmin ? "" : "runas"
+                Verb = alreadyAdmin ? "" : "runas"
             });
         }
 

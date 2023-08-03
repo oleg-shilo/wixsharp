@@ -1055,6 +1055,29 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Convert WXL file of WiX3 format to WiX4 format.
+        /// </summary>
+        /// <param name="source">The source file.</param>
+        /// <param name="destination">The destination file.</param>
+        static public void Wxl3_to_Wxl4(this string source, string destination)
+        {
+            var doc = XDocument.Parse(IO.File.ReadAllText(source));
+            doc.Descendants()
+               .Where(x => x.Name.LocalName == "String")
+               .ForEach(x =>
+               {
+                   x.SetAttribute("Value", x.Value);
+                   x.Value = "";
+               });
+
+            IO.File.WriteAllText(
+                destination,
+                doc.ToString().Replace("xmlns=\"http://schemas.microsoft.com/wix/2006/localization\"",
+                                       "xmlns=\"http://wixtoolset.org/schemas/v4/wxl\""),
+                Encoding.UTF8);
+        }
+
+        /// <summary>
         /// Sets the Project version from the file version of the file specified by it's ID.
         /// <para>This method sets project WixSourceGenerated event handler and injects
         /// "!(bind.FileVersion.&lt;file ID&gt;" into the XML Product's Version attribute.</para>
@@ -1961,7 +1984,7 @@ namespace WixSharp.CommonTasks
 
         static string PackageDir(string name)
             => Directory.GetDirectories(NuGetDir.PathCombine(name))
-                        .Select(x => new { Directory = x, Version = x.ToRawVersion() })
+                        .Select(x => new { Directory = x, Version = x.PathGetFileName().ToRawVersion() })
                         .OrderBy(x => x.Version)
                         .LastOrDefault()?.Directory;
 

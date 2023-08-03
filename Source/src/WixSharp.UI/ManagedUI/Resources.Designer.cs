@@ -107,5 +107,15 @@ namespace WixSharp.UI.ManagedUI {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] WixUI_en_us1 {
+            get {
+                object obj = ResourceManager.GetObject("WixUI_en_us1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

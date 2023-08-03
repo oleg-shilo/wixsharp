@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.UI.Forms;
@@ -20,7 +21,6 @@ public class Script
     {
         if (Environment.GetEnvironmentVariable("APPVEYOR") != null)
             return;
-        // Compiler.WixLocation = @"..\..\..\..\..\Wix_bin\bin";
 
         if (args.Contains("/test")) //for demo only
         {
@@ -42,7 +42,6 @@ public class Script
                           new Binary("CUSTOM_LNG".ToId(), "WixUI_fi-FI.wxl"),
                           new Property("PASSWORD", "pwd123") { IsDeferred = true });
 
-        project.SourceBaseDir = @"..\..\";
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.LocalizationFile = "WixUI_de-de.wxl";
         project.Language = "de-de";
@@ -58,6 +57,8 @@ public class Script
                                        .Add<ExitDialog>();
 
         project.UILoaded += msi_UILoaded;
+        project.UIInitialized += msi_UIInitialized;
+
         project.BeforeInstall += msi_BeforeInstall;
         project.AfterInstall += Project_AfterInstall;
 
@@ -82,6 +83,25 @@ public class Script
     //private static void ManagedUIShell_OnCurrentDialogChanged(IManagedDialog dialog)
     //{
     //}
+    static void msi_UIInitialized(SetupEventArgs e)
+    {
+        // WixUI_de-de.wxl does not contain UI data for the custom dialog but for the stock dialogs only.
+        // This is how you can install localization if you prefer not to edit wxl file.
+
+        MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
+
+        bool isGerman = (CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "de");
+
+        runtime.UIText["UserNameDlgTitle"] = isGerman ? "Benutzeranmeldeinformationen" : "User Credentials";
+        runtime.UIText["UserNameDlgDescription"] = isGerman ? "Einstellungen für Anwendungsanmeldeinformationen" : "Application credentials settings";
+        runtime.UIText["UserNameDlgNameLabel"] = isGerman ? "Nutzername" : "User Name";
+        runtime.UIText["UserNameDlgPasswordLabel"] = isGerman ? "Passwort" : "Password";
+        runtime.UIText["UserNameDlgDomainLabel"] = isGerman ? "Domain" : "Domain";
+        runtime.UIText["UserNameDlgDomainTypeLabel"] = isGerman ? "Domänentyp" : "Domain Type";
+        runtime.UIText["UserNameDlgLocalDomainLabel"] = isGerman ? "Lokal" : "Local";
+        runtime.UIText["UserNameDlgNetworkDomainLabel"] = isGerman ? "Netzwerk" : "Network";
+        runtime.UIText["CopyDataMenu"] = isGerman ? "Daten kopieren" : "Copy Data";
+    }
 
     static void Project_AfterInstall(SetupEventArgs e)
     {

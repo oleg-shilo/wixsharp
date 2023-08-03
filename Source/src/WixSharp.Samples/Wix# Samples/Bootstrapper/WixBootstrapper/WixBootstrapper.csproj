@@ -17,6 +17,7 @@
 		<None Remove="*.CA.dll" />
 		<None Remove="*.cs.dll" />
 		<None Remove="Build.cmd.log" />
+		<None Remove="script.dll" />
 	</ItemGroup>
 
 	<ItemGroup>

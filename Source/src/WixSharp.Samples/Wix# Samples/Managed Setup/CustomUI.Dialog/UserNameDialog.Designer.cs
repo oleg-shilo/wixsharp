@@ -57,13 +57,11 @@
             // 
             // banner
             // 
-            this.banner.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.banner.BackColor = System.Drawing.Color.White;
-            this.banner.Location = new System.Drawing.Point(-1, -2);
+            this.banner.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.banner.Location = new System.Drawing.Point(0, 0);
             this.banner.Name = "banner";
-            this.banner.Size = new System.Drawing.Size(501, 51);
+            this.banner.Size = new System.Drawing.Size(501, 59);
             this.banner.TabIndex = 0;
             this.banner.TabStop = false;
             // 
@@ -75,7 +73,8 @@
             this.topPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.topPanel.Controls.Add(this.label2);
             this.topPanel.Controls.Add(this.label1);
-            this.topPanel.Location = new System.Drawing.Point(12, -2);
+            this.topPanel.Controls.Add(this.banner);
+            this.topPanel.Location = new System.Drawing.Point(-1, 0);
             this.topPanel.Name = "topPanel";
             this.topPanel.Size = new System.Drawing.Size(503, 61);
             this.topPanel.TabIndex = 10;
@@ -84,7 +83,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(30, 40);
+            this.label2.Location = new System.Drawing.Point(23, 34);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(132, 13);
             this.label2.TabIndex = 1;
@@ -95,7 +94,7 @@
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.White;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(16, 16);
+            this.label1.Location = new System.Drawing.Point(9, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(117, 13);
             this.label1.TabIndex = 1;
@@ -279,17 +278,16 @@
             this.middlePanel.Controls.Add(this.label5);
             this.middlePanel.Controls.Add(this.password);
             this.middlePanel.Controls.Add(this.name);
-            this.middlePanel.Location = new System.Drawing.Point(-1, 112);
+            this.middlePanel.Location = new System.Drawing.Point(0, 66);
             this.middlePanel.Name = "middlePanel";
-            this.middlePanel.Size = new System.Drawing.Size(490, 194);
+            this.middlePanel.Size = new System.Drawing.Size(490, 240);
             this.middlePanel.TabIndex = 16;
             // 
             // UserNameDialog
             // 
             this.ClientSize = new System.Drawing.Size(494, 361);
-            this.Controls.Add(this.middlePanel);
-            this.Controls.Add(this.banner);
             this.Controls.Add(this.topPanel);
+            this.Controls.Add(this.middlePanel);
             this.Controls.Add(this.bottomPanel);
             this.Name = "UserNameDialog";
             this.Text = "[UserNameDlg_Title]";

@@ -14,7 +14,7 @@ class Script
                           new User("USER")
                           {
                               Domain = Environment.MachineName, //or a domain name your setup process has rights to add users to
-                              Password = "Password123",
+                              Password = "jshdgjASHGFDjwEhg",
                               PasswordNeverExpires = true,
                               CreateUser = true
                           });

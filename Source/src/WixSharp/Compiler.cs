@@ -3280,7 +3280,7 @@ namespace WixSharp
 
             ProjectValidator.ValidateCAAssembly(asmFile);
 #if DEBUG
-            Compiler.OutputWriteLine("<- Packing managed CA:");
+            Compiler.OutputWriteLine($"<- Packing managed CA ({asmFile.PathGetFileName()}):");
             Compiler.OutputWriteLine(makeSfxCA + " " + makeSfxCA_args);
             Compiler.OutputWriteLine("->");
 #endif

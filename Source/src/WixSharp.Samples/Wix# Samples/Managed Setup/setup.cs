@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using WixSharp;
 using WixToolset.Dtf.WindowsInstaller;
 using io = System.IO;
