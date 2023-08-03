@@ -192,7 +192,20 @@ namespace WixSharp
 
         /// <summary>
         /// Forces automatic insertion of the user profile registry. It is a controversial feature that is only required
-        /// for some exotic scenarios. See Issue #1326 (https://github.com/oleg-shilo/wixsharp/issues/1326)
+        /// for some exotic scenarios. See Issue #1326 (https://github.com/oleg-shilo/wixsharp/issues/1326).
+        /// <para>
+        /// If inserting user profile for all components is undesirable then you can do it for a specific component manually:
+        /// <code>
+        /// project.WixSourceGenerated += doc =>
+        /// {
+        ///     doc.FindAll("Component")
+        ///        .Where(x => x.HasAttribute("Id", val => val.Contains("my_component")))
+        ///        .ForEach(AutoElements.InsertUserProfileRegValue);
+        ///     };
+        /// </code>
+        /// </para>
+        /// <para>The problem this feature is trying to solve is closely related to the one handled by
+        /// <see cref="WixSharp.AutoElements.DisableAutoUserProfileRegistry"/> </para>
         /// </summary>
         public static bool ForceUserProfileRegistry = false;
 

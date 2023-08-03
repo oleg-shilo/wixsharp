@@ -741,6 +741,22 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// A generic LINQ equivalent of C# foreach loop.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection">The collection.</param>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        public static IEnumerable<T> ForEach<T, T1>(this IEnumerable<T> collection, Func<T, T1> action)
+        {
+            foreach (T item in collection)
+            {
+                action(item);
+            }
+            return collection;
+        }
+
+        /// <summary>
         /// Returns all items from the collection except specified one.
         /// </summary>
         /// <typeparam name="T"></typeparam>
