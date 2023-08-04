@@ -171,7 +171,18 @@ namespace WixSharp
         /// Enables scheduling deferred actions just after their corresponding
         /// "SetDeferredActionProperties" custom action. Enabled by default.
         /// </summary>
+        [Obsolete("This property obsolete. Its name is misspelled. Please use `ScheduleDeferredActionsAfterTunnellingTheirProperties` instead.")]
         public static bool ScheduleDeferredActionsAfterTunnellingTheirProperties = true;
+
+        /// <summary>
+        /// Enables scheduling deferred actions just after their corresponding
+        /// "SetDeferredActionProperties" custom action. Enabled by default.
+        /// </summary>
+        public static bool ScheduleDeferredActionsAfterTunnelingTheirProperties
+        {
+            get => ScheduleDeferredActionsAfterTunnellingTheirProperties;
+            set => ScheduleDeferredActionsAfterTunnellingTheirProperties = value;
+        }
 
         /// <summary>
         /// Disables automatic insertion of user profile registry elements.
@@ -180,6 +191,25 @@ namespace WixSharp
         /// <para>Can also be managed by disabling ICE validation via Light.exe command line arguments.</para>
         /// </summary>
         public static bool DisableAutoUserProfileRegistry = false;
+
+        /// <summary>
+        /// Forces automatic insertion of the user profile registry. It is a controversial feature that is only required
+        /// for some exotic scenarios. See Issue #1326 (https://github.com/oleg-shilo/wixsharp/issues/1326).
+        /// <para>
+        /// If inserting user profile for all components is undesirable then you can do it for a specific component manually:
+        /// <code>
+        /// project.WixSourceGenerated += doc =>
+        /// {
+        ///     doc.FindAll("Component")
+        ///        .Where(x => x.HasAttribute("Id", val => val.Contains("my_component")))
+        ///        .ForEach(AutoElements.InsertUserProfileRegValue);
+        ///     };
+        /// </code>
+        /// </para>
+        /// <para>The problem this feature is trying to solve is closely related to the one handled by
+        /// <see cref="WixSharp.AutoElements.DisableAutoUserProfileRegistry"/> </para>
+        /// </summary>
+        public static bool ForceUserProfileRegistry = false;
 
         static void InsertRemoveFolder(XElement xDir, XElement xComponent, string when = "uninstall")
         {
@@ -194,17 +224,6 @@ namespace WixSharp
                                                 new XAttribute("Id", xDir.Attribute("Id").Value),
                                                 new XAttribute("On", when)));
             }
-        }
-
-        internal static XElement InsertUserProfileRemoveFolder(this XElement xComponent)
-        {
-            var xDir = xComponent.Parent("Directory");
-            if (!xDir.Descendants("RemoveFolder").Any() && !xDir.IsUserProfileRoot())
-                xComponent.Add(new XElement("RemoveFolder",
-                                            new XAttribute("Id", xDir.Attribute("Id").Value),
-                                            new XAttribute("On", "uninstall")));
-
-            return xComponent;
         }
 
         static void InsertCreateFolder(XElement xComponent)
@@ -272,9 +291,16 @@ namespace WixSharp
             return false;
         }
 
-        internal static XElement InsertUserProfileRegValue(this XElement xComponent)
+        /// <summary>
+        /// Inserts the user profile reg value. It is a dummy registry value that is required for some
+        /// deployment scenarios to work correctly. See <see cref="WixSharp.AutoElements.DisableAutoUserProfileRegistry"/>
+        /// for details.
+        /// </summary>
+        /// <param name="xComponent">The component.</param>
+        /// <returns></returns>
+        public static XElement InsertUserProfileRegValue(this XElement xComponent)
         {
-            //UserProfileRegValue has to be a KeyPath fo need to remove any KeyPath on other elements
+            //UserProfileRegValue has to be a KeyPath so need to remove any KeyPath on other elements
             var keyPathes = xComponent.Descendants()
                                       .ForEach(e => e.ClearKeyPath());
 
@@ -854,6 +880,17 @@ namespace WixSharp
                         }
                     }
                 }
+            }
+
+            if (ForceUserProfileRegistry)
+            {
+                product
+                    .FindAll("Component")
+                    .ForEach(x =>
+                    {
+                        if (!x.ContainsDummyUserProfileRegistry())
+                            InsertUserProfileRegValue(x);
+                    });
             }
 
             InjectPlatformAttributes(doc);

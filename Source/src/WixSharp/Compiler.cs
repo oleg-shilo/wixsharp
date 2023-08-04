@@ -2765,7 +2765,7 @@ namespace WixSharp
                                                     new XAttribute("After", "InstallInitialize");
 
 
-                            if (AutoElements.ScheduleDeferredActionsAfterTunnellingTheirProperties || wAction.RawId == nameof(ManagedProjectActions.WixSharp_AfterInstall_Action))
+                            if (AutoElements.ScheduleDeferredActionsAfterTunnelingTheirProperties || wAction.RawId == nameof(ManagedProjectActions.WixSharp_AfterInstall_Action))
                             {
                                 // Inject fetching properties CA just before the deferred action AfterInstrallEventHandler.
                                 // This might be a good practice to do for all deferred actions. However it's hard to predict the
