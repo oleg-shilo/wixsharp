@@ -37,10 +37,10 @@ namespace WixSharp.Test
         {
             // it's no longer holding any value to test building samples from shell as they are all now built as part of the
             // solution build.
-            return;
+            // return;
 
-            // if (Environment.GetEnvironmentVariable("APPVEYOR") != null)
-            //     return;
+            if (Environment.GetEnvironmentVariable("APPVEYOR") != null)
+                return;
 
             // need to exclude some samples; for example the two samples from the same dir will interfere with each other;
             // or some other tests are built as a part of the solution
