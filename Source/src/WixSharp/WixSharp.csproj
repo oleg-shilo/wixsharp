@@ -115,6 +115,7 @@
     <Compile Include="Assembly.cs" />
     <Compile Include="AutoElements.cs" />
     <Compile Include="BalCondition.cs" />
+    <Compile Include="Bootstrapper\SilentBA.cs" />
     <Compile Include="Bootstrapper\UtilFileSearch.cs" />
     <Compile Include="Bootstrapper\UtilProductSearch.cs" />
     <Compile Include="Bootstrapper\UtilRegistrySearch.cs" />
@@ -135,7 +136,6 @@
     <Compile Include="Compiler.Bootstrapper.cs" />
     <Compile Include="Error.cs" />
     <Compile Include="FileSearch.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Heat\Harvester.cs" />
     <Compile Include="IconFile.cs" />
     <Compile Include="IISCertificate.cs" />

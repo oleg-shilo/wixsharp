@@ -1,20 +1,15 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-using System.Diagnostics;
+using WixSharp;
+using WixSharp.Bootstrapper;
+using WixToolset.Mba.Core;
 
-#if WIX4
-using WixToolset.Bootstrapper;
-#else
+[assembly: BootstrapperApplicationFactory(typeof(WixBAFactory))]
 
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-
-#endif
-
-// WIX4-TODO: TEMPORARY DISABLED AS TEHER IS NO WIX4 WORKING SAMPLE FOR MANAGED BA (15-04-2023)
-
-[assembly: BootstrapperApplication(typeof(WixSharp.Bootstrapper.SilentManagedBA))]
 namespace WixSharp.Bootstrapper
 {
     /// <summary>
@@ -52,13 +47,13 @@ namespace WixSharp.Bootstrapper
             PrimaryPackageId = primaryPackageId;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SilentBootstrapperApplication"/> class.
-        /// </summary>
-        public SilentBootstrapperApplication()
-            : base(typeof(SilentManagedBA).Assembly.Location)
-        {
-        }
+        // /// <summary>
+        // /// Initializes a new instance of the <see cref="SilentBootstrapperApplication"/> class.
+        // /// </summary>
+        // public SilentBootstrapperApplication()
+        //     : base(typeof(SilentManagedBA).Assembly.Location)
+        // {
+        // }
 
         /// <summary>
         /// Automatically generates required sources files for building the Bootstrapper. It is
@@ -91,17 +86,60 @@ namespace WixSharp.Bootstrapper
     }
 
     /// <summary>
+    ///
+    /// </summary>
+    /// <seealso cref="WixToolset.Mba.Core.BaseBootstrapperApplicationFactory" />
+    public class WixBAFactory : BaseBootstrapperApplicationFactory
+    {
+        /// <summary>
+        /// Creates the specified engine.
+        /// </summary>
+        /// <param name="engine">The engine.</param>
+        /// <param name="command">The command.</param>
+        /// <returns></returns>
+        protected override IBootstrapperApplication Create(IEngine engine, IBootstrapperCommand command)
+        {
+            return new SilentManagedBA(engine, command);
+        }
+    }
+
+    /// <summary>
     /// Implements canonical WiX managed bootstrapper application without any UI.
     /// </summary>
     public class SilentManagedBA : BootstrapperApplication
     {
         AutoResetEvent done = new AutoResetEvent(false);
 
-        static internal string PrimaryPackageIdVariableName = "_WixSharp.Bootstrapper.SilentManagedBA.PrimaryPackageId";
+        static internal string PrimaryPackageIdVariableName = "_WixSharp_Bootstrapper_SilentManagedBA_PrimaryPackageId";
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SilentManagedBA"/> class.
+        /// </summary>
+        /// <param name="engine">The engine.</param>
+        /// <param name="command">The command.</param>
+        public SilentManagedBA(IEngine engine, IBootstrapperCommand command) : base(engine)
+        {
+            Debug.Assert(false);
+            MessageBox.Show("WixSharp.SilentBA");
+            this.Command = command;
+        }
+
+        /// <summary>
+        /// Gets the engine.
+        /// </summary>
+        /// <value>
+        /// The engine.
+        /// </value>
+        public IEngine Engine => base.engine;
+
+        /// <summary>
+        /// The command
+        /// </summary>
+        public IBootstrapperCommand Command;
 
         string PrimaryPackageId
         {
-            get => this.Engine.StringVariables.Get(PrimaryPackageIdVariableName);
+            get => this.Engine.GetVariableString(PrimaryPackageIdVariableName);
         }
 
         /// <summary>
@@ -113,7 +151,7 @@ namespace WixSharp.Bootstrapper
 
             if (PrimaryPackageId == null)
             {
-                MessageBox.Show($"SilentBootstrapperApplication.PrimaryPackageId is not set", this.Engine.StringVariables["WixBundleName"], MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show($"SilentBootstrapperApplication.PrimaryPackageId is not set", this.Engine.GetVariableString("WixBundleName"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
             {
@@ -145,15 +183,17 @@ namespace WixSharp.Bootstrapper
         void OnPlanComplete(object sender, PlanCompleteEventArgs e)
         {
             if (e.Status >= 0)
-                this.Engine.Apply(System.IntPtr.Zero);
+                this.Engine.Apply(GetForegroundWindow());
         }
+
+        [DllImport("User32.dll")]
+        static extern IntPtr GetForegroundWindow();
 
         string DowngradeWarningMessage
         {
             get => this.Engine
-                       .StringVariables
-                       .Get("DowngradeWarningMessage") ??
-                            "A later version of the package (PackageId: {0}) is already installed. Setup will now exit.";
+                       .GetVariableString("DowngradeWarningMessage") ??
+                                          "A later version of the package (PackageId: {0}) is already installed. Setup will now exit.";
         }
 
         /// <summary>
@@ -170,7 +210,7 @@ namespace WixSharp.Bootstrapper
                 {
                     case PackageState.Obsolete:
                         this.Engine.Log(LogLevel.Error, string.Format(DowngradeWarningMessage, e.PackageId));
-                        MessageBox.Show(string.Format(DowngradeWarningMessage, e.PackageId), this.Engine.StringVariables["WixBundleName"], MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show(string.Format(DowngradeWarningMessage, e.PackageId), this.Engine.GetVariableString("WixBundleName"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         Engine.Quit(0);
                         break;
 

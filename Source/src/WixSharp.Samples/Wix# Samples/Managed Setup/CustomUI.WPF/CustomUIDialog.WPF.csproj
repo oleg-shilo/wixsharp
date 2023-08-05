@@ -108,6 +108,9 @@
     <Reference Include="WixToolset.Dtf.WindowsInstaller, Version=4.0.0.0, Culture=neutral, PublicKeyToken=a7d136314861246c, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\WixToolset.Dtf.WindowsInstaller.4.0.0\lib\net20\WixToolset.Dtf.WindowsInstaller.dll</HintPath>
     </Reference>
+    <Reference Include="WixToolset.Mba.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=a7d136314861246c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\WixToolset.Mba.Core.4.0.0\lib\net20\WixToolset.Mba.Core.dll</HintPath>
+    </Reference>
     <!-- <Reference Include="WpfControlLibrary2">
       <HintPath>C:\Users\oleg.shilo\source\repos\WindowsFormsApp2\WixSharp Setup1\bin\Debug\WpfControlLibrary2.dll</HintPath>
     </Reference>

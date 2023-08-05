@@ -66,7 +66,6 @@
     <Compile Include="..\WixSharp\Properties\AssemblyInfo.version.cs">
       <Link>Properties\AssemblyInfo.version.cs</Link>
     </Compile>
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ManagedUI\Forms\InstallScopeDialog.cs">
       <SubType>Form</SubType>
     </Compile>

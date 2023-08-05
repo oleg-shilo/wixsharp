@@ -78,7 +78,6 @@
     <Compile Include="BootstrapperTest.cs" />
     <Compile Include="CompressorTests.cs" />
     <Compile Include="GenericTest.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IssueFixesTest.cs" />
     <Compile Include="ManagedActionsTest.cs" />
     <Compile Include="ManagedProjectTest.cs" />

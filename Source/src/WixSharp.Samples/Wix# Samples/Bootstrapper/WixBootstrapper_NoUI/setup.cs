@@ -36,6 +36,7 @@ public class InstallScript
                        new MsiPackage(productMsi)
                        {
                            Id = "MyProductPackageId",
+                           DisplayInternalUI = true,
                            Visible = true // show MSI entry in ARP
                        });
 
@@ -50,7 +51,8 @@ public class InstallScript
         // bootstrapper.Application = new SilentBootstrapperApplication();
 
         // use this custom BA to modify its behavior in order to meet your requirements
-        bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
+        // bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
+        bootstrapper.Application = new SilentBootstrapperApplication("MyProductPackageId");
 
         // You can implement your own extension types and add them to the Bundle
         // bootstrapper.GenericItems.Add(new BalCondition { Condition = "some condition", Message = "Warning: ..." });

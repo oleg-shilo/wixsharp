@@ -366,8 +366,7 @@ namespace WixSharp.Test
                              .Where(x => x.HasAttribute("Name", "PersonalFolder"))
                              //.Where(x => x.HasAttribute("Name", v => v == "PersonalFolder"))
                              .SelectMany(x => x.FindAll("Component"))
-                             .ForEach(comp => comp.InsertUserProfileRegValue()
-                                                  .InsertUserProfileRemoveFolder());
+                             .ForEach(comp => comp.InsertUserProfileRegValue());
             };
             string wxs = project.BuildWxs();
 
