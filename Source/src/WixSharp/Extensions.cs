@@ -775,6 +775,7 @@ namespace WixSharp
         /// A generic LINQ equivalent of C# foreach loop.
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T1">The type of the 1.</typeparam>
         /// <param name="collection">The collection.</param>
         /// <param name="action">The action.</param>
         /// <returns></returns>

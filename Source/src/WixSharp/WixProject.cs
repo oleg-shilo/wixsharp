@@ -68,7 +68,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Collection of XML namespaces (e.g. <c>xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension"</c>) to be declared in the XML (WiX project) root.
+        /// Collection of XML namespaces (e.g. <c>xmlns:iis="http://wixtoolset.org/schemas/v4/wxs/iis"</c>) to be declared in the XML (WiX project) root.
         /// </summary>
         public List<string> WixNamespaces = new List<string>();
 

@@ -43,19 +43,6 @@ using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
 using IO = System.IO;
 
-/*
- Wix4 challenges
-
-- No samples
-- No API porting documentation (only for v3 vs v4 CLI). It's not clear how to port no longer existing attributes (e.g. Package.Languages) 
-- How v3 WiX extensions are mapped to the nuget packages for v4 
- 
- 
- 
- 
- */
-
-
 namespace WixSharp
 {
 
@@ -2299,7 +2286,7 @@ namespace WixSharp
 
         static void InsertWebSite(WebSite webSite, string dirID, XElement parent, Project project)
         {
-            XNamespace ns = "http://schemas.microsoft.com/wix/IIsExtension";
+            XNamespace ns = WixExtension.IIs.ToXNamespace();
 
             XElement xWebSite = parent.AddElement(new XElement(ns + "WebSite",
                                                        new XAttribute("Id", webSite.Id),
@@ -2360,7 +2347,7 @@ namespace WixSharp
 
             //http://ranjithk.com/2009/12/17/automating-web-deployment-using-windows-installer-xml-wix/
 
-            XNamespace ns = "http://schemas.microsoft.com/wix/IIsExtension";
+            XNamespace ns = WixExtension.IIs.ToXNamespace();
 
             string dirID = dirItem.Attribute("Id").Value;
             var xProduct = component.Parent(Compiler.ProductElementName);
