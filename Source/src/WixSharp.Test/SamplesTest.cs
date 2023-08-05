@@ -25,7 +25,7 @@ namespace WixSharp.Test
 
         string[] nonTestableProjects = "MultiLanguageUI".Split(',').Select(x => x.Trim()).ToArray();
 
-        string[] nonPortedWix4Projects = ("ASP.NETApp"             // WIX4-TODO: WiX4 defect (cannot find element from the valid extension)
+        string[] nonPortedWix4Projects = (""             // WIX4-TODO: WiX4 defect (cannot find element from the valid extension)
                                           ).Split(',').Select(x => x.Trim()).ToArray();
 
         int completedSamples = 0;

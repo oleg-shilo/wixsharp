@@ -178,11 +178,7 @@ namespace WixSharp
         /// Enables scheduling deferred actions just after their corresponding
         /// "SetDeferredActionProperties" custom action. Enabled by default.
         /// </summary>
-        public static bool ScheduleDeferredActionsAfterTunnelingTheirProperties
-        {
-            get => ScheduleDeferredActionsAfterTunnellingTheirProperties;
-            set => ScheduleDeferredActionsAfterTunnellingTheirProperties = value;
-        }
+        public static bool ScheduleDeferredActionsAfterTunnelingTheirProperties { get; set; } = true;
 
         /// <summary>
         /// Disables automatic insertion of user profile registry elements.
