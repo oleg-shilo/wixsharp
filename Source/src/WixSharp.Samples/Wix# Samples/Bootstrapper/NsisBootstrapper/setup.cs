@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using WixSharp;
+using WixSharp.CommonTasks;
 using WixSharp.Nsis;
 using WixSharp.Nsis.WinVer;
 using WixToolset.Dtf.WindowsInstaller;
@@ -14,6 +15,8 @@ public static class Script
 {
     public static void Main(string[] args)
     {
+        var ttt = WixTools.SignTool;
+
         // if running the all under debugger (but not under msbuild) then the current dir needs to be adjusted
         if (!@"Assets\script.ps1".PathExists())
             Environment.CurrentDirectory = Environment.CurrentDirectory.PathCombine(@"..\..\..\");

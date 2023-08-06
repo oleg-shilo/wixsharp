@@ -9,6 +9,7 @@ class ConsoleSetupUI
     [STAThread]
     static public void Main()
     {
+        // This is nothing else but an equivalent of a bootstrapper for a single msi file.
         string msiFile = SetupDependencies();
         RunSetup(msiFile);
     }

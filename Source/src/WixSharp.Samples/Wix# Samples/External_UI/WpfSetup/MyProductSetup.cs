@@ -2,6 +2,10 @@ using WixSharp.UI;
 
 namespace WpfSetup
 {
+    /// <summary>
+    /// This is nothing else but an equivalent of a bootstrapper for a single msi file.
+    /// </summary>
+    /// <seealso cref="WixSharp.UI.GenericSetup" />
     public class MyProductSetup : GenericSetup
     {
         bool installDocumentation;

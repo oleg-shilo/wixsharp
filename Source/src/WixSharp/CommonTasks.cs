@@ -247,16 +247,7 @@ namespace WixSharp.CommonTasks
 
             var tool = new ExternalTool
             {
-                WellKnownLocations = wellKnownLocations ??
-                                     @"C:\Program Files (x86)\Windows Kits\10\App Certification Kit;" +
-                                     @"C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x86;" +
-                                     @"C:\Program Files (x86)\Windows Kits\10\bin\x86;" +
-                                     @"C:\Program Files (x86)\Windows Kits\8.1\bin\x86;" +
-                                     @"C:\Program Files (x86)\Windows Kits\8.0\bin\x86;" +
-                                     @"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool;" +
-                                     @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin;" +
-                                     @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin",
-                ExePath = "signtool.exe",
+                ExePath = WixTools.SignTool,
                 Arguments = hash
             };
 
@@ -328,6 +319,8 @@ namespace WixSharp.CommonTasks
             return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
         }
 
+        const string unknown_sign_exe_location = "<unknown insignia.exe/signtool.exe Path>";
+
         /// <summary>
         /// Applies digital signature to a bootstrapper engine with MS <c>SignTool.exe</c> utility.
         /// Note : this method doesn't sign the bootstrapper file but the engine only.
@@ -348,7 +341,6 @@ namespace WixSharp.CommonTasks
         /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow
         /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
         /// </param>
-        /// <param name="signToolPath">Path to `signtool.exe` or an alternative signing tool (e.g. insignia.exe) </param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         ///
         /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file engine.
@@ -362,8 +354,7 @@ namespace WixSharp.CommonTasks
         /// </code>
         /// </example>
         static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
-            string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1,
-            string signToolPath = "<unknown insignia.exe/signtool.exe Path>")
+            string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
             string enginePath = IO.Path.GetTempFileName();
 
@@ -371,7 +362,7 @@ namespace WixSharp.CommonTasks
             {
                 var tool = new ExternalTool
                 {
-                    ExePath = signToolPath,
+                    ExePath = WixTools.SignTool,
                     Arguments = "-ib \"{0}\" -o \"{1}\"".FormatWith(bootstrapperFileToSign, enginePath)
                 };
 
@@ -385,7 +376,7 @@ namespace WixSharp.CommonTasks
 
                 tool = new ExternalTool
                 {
-                    ExePath = signToolPath,
+                    ExePath = WixTools.SignTool,
                     Arguments = "-ab \"{1}\" \"{0}\" -o \"{0}\"".FormatWith(bootstrapperFileToSign, enginePath)
                 };
 
@@ -1794,6 +1785,8 @@ namespace WixSharp.CommonTasks
     /// </summary>
     public class ExternalTool
     {
+        static string[] defaultLookupDirs => new[] { Environment.CurrentDirectory }.Combine(Environment.GetEnvironmentVariable("PATH").Split(';')).ToArray();
+
         /// <summary>
         /// Locates the specified file.
         /// </summary>
@@ -1801,9 +1794,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         public static string Locate(string file)
         {
-            var possibleLocations = new[] { Environment.CurrentDirectory }.Combine(Environment.GetEnvironmentVariable("PATH").Split(';'))
-                              .Select(x => x.Trim().PathCombine(file));
-
+            var possibleLocations = defaultLookupDirs.Select(x => x.Trim().PathCombine(file));
             return possibleLocations.FirstOrDefault(IO.File.Exists);
         }
 
@@ -1987,6 +1978,53 @@ namespace WixSharp.CommonTasks
                         .Select(x => new { Directory = x, Version = x.PathGetFileName().ToRawVersion() })
                         .OrderBy(x => x.Version)
                         .LastOrDefault()?.Directory;
+
+        /// <summary>
+        /// Gets or sets the well known locations for probing the tool's exe file.
+        /// <para>
+        /// By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>.
+        /// By setting <c>WellKnownLocations</c> you can add some extra probing locations. The directories must be separated by the ';' character.
+        /// </para>
+        /// </summary>
+        /// <value>The well known locations.</value>
+        static public List<string> WellKnownLocations = new List<string>
+        {
+                     @"C:\Program Files (x86)\Windows Kits\10\App Certification Kit",
+                     @"C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x86",
+                     @"C:\Program Files (x86)\Windows Kits\10\bin\x86",
+                     @"C:\Program Files (x86)\Windows Kits\8.1\bin\x86",
+                     @"C:\Program Files (x86)\Windows Kits\8.0\bin\x86",
+                     @"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool",
+                     @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin",
+                     @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin"
+        };
+
+        static string signTool;
+
+        /// <summary>
+        /// The path to the sign tool (sign.exe or insignia exe). It may not be distributed with WiX SDK.
+        /// </summary>
+        static public string SignTool
+        {
+            set => signTool = value;
+            get
+            {
+                if (signTool == null)
+                {
+                    var exe = "signtool.exe";
+                    signTool = ExternalTool.Locate(exe) ??
+                               WellKnownLocations.Select(x => x.Trim().PathCombine(exe)).FirstOrDefault(IO.File.Exists);
+
+                    if (signTool == null)
+                    {
+                        throw new Exception($"Cannot find {exe}. " +
+                            $"Please set its exact location either via `WixSharp.CommonTasks.WixTools.SignTool` property. " +
+                            $"Or help WixSharp locating it by adding possible path to `WixSharp.CommonTasks.WixTools.WellKnownLocations`");
+                    }
+                }
+                return signTool;
+            }
+        }
 
         internal static string MakeSfxCA
         {

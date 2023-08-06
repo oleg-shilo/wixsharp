@@ -26,7 +26,7 @@ class Script
         project.Include(WixExtension.IIs);
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }

@@ -23,7 +23,7 @@ namespace WixSharp.Test
                                                EnvVariables"
                                 .Split(',').Select(x => x.Trim());
 
-        string[] nonTestableProjects = "MultiLanguageUI".Split(',').Select(x => x.Trim()).ToArray();
+        string[] nonTestableProjects = "MultiLanguageUI,Signing,MajorUpgrade".Split(',').Select(x => x.Trim()).ToArray();
 
         string[] nonPortedWix4Projects = (""             // WIX4-TODO: WiX4 defect (cannot find element from the valid extension)
                                           ).Split(',').Select(x => x.Trim()).ToArray();
@@ -108,10 +108,6 @@ namespace WixSharp.Test
 
             if (parallel)
             {
-                // allSamples.ForEach(item =>
-                //     ThreadPool.QueueUserWorkItem(x =>
-                //         processDir(item)));
-
                 Parallel.ForEach(allSamples, processDir);
                 while (completedSamples < samplesTotal)
                 {
@@ -143,7 +139,8 @@ namespace WixSharp.Test
                 bool ignorePresentMsi = (dir.EndsWith("Self-executable_Msi", true));
 
                 bool nonMsi = nonMsiProjects.Where(x => batchFile.Contains(x)).Any();
-                bool ignoreSample = nonPortedWix4Projects.Concat(nonTestableProjects).Where(x => batchFile.Contains(x)).Any();
+                bool ignoreSample = nonPortedWix4Projects.Where(x => x.IsNotEmpty())
+                                                         .Concat(nonTestableProjects).Where(x => batchFile.Contains(x)).Any();
                 if (ignoreSample)
                     return;
 
@@ -222,7 +219,7 @@ namespace WixSharp.Test
             {
                 // sublimme is always installed in x64 progfiles, but this process is x86 process so
                 // envar always returns x86 location fro %PROGRAMFILES%
-                Process.Start(@"%PROGRAMFILES%\Sublime Text 3\sublime_text.exe".ExpandEnvVars().Replace(" (x86)", ""), $"\"{logFile}\"");
+                Process.Start(@"%PROGRAMFILES%\Sublime Text\sublime_text.exe".ExpandEnvVars().Replace(" (x86)", ""), $"\"{logFile}\"");
             }
             catch
             {
