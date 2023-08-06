@@ -9,8 +9,9 @@ class Script
 {
     static public void Main()
     {
-        // WiX4: not ported yet
-        return;
+        // The sample will fail as wixsharp.pfx is not a real certificate
+        // Uncomment last line of the code (`project.BuildMsi()`) if you want to run this sample
+
         Project project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
@@ -38,6 +39,6 @@ class Script
         project.UI = WUI.WixUI_ProgressOnly;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
-        Compiler.BuildMsi(project);
+        // project.BuildMsi();
     }
 }

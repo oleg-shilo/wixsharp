@@ -389,8 +389,7 @@ namespace WixSharp.Bootstrapper
             {
                 // bal:DisplayInternalUICondition="WixBundleAction = 6"
                 XNamespace bal = "http://wixtoolset.org/schemas/v4/wxs/bal";
-                // root.SetAttribute(bal + "DisplayInternalUICondition", "WixBundleAction = 6");
-                root.SetAttribute(bal + "DisplayInternalUICondition", "6 = 6");
+                root.SetAttribute(bal + "DisplayInternalUICondition", "WixBundleAction = 6");
             }
 
             if (Payloads.Any())

@@ -16,17 +16,20 @@ public static class Script
     static void Main()
     {
         if (appFileName == "setup.exe")
-            RunAsBA();          // msi running session
+            RunAsBA();          // msi-running session
         else
-            RunAsMsiBuilder();  // msi building session
+            RunAsMsiBuilder();  // msi-building session
     }
 
     static string appFileName => System.Reflection.Assembly.GetExecutingAssembly().Location.PathGetFileName();
 
     static void RunAsMsiBuilder()
     {
-        var appFile = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        // a custom msi launcher with the language selection will be prepared
         var msiFile = BuildMultilanguageMsi();
+
+        // aggregate deployment files
+        var appFile = System.Reflection.Assembly.GetExecutingAssembly().Location;
         io.File.Copy(msiFile, msiFile.PathGetDirName().PathCombine("bin", msiFile.PathGetFileName()), true);
         io.File.Copy(appFile, msiFile.PathGetDirName().PathCombine("bin", "setup.exe"), true);
         io.File.Copy(appFile.PathChangeFileName("WixSharp.dll"), msiFile.PathGetDirName().PathCombine("bin", "WixSharp.dll"), true);
@@ -36,6 +39,8 @@ public static class Script
         Console.WriteLine("=========================");
         Console.WriteLine($" The setup files are aggregated in {msiFile.PathGetDirName().PathCombine("bin")}.");
         Console.WriteLine("=========================");
+
+        // A custom BS with the language selection will be prepared
         // BuildMsiWithLanguageSelectionBootstrapper();
     }
 
@@ -128,6 +133,8 @@ public static class Script
         bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
 
         bootstrapper.Application.AddPayload(typeof(WixSharp.Extensions).Assembly.Location);
+
+        bootstrapper.PreserveTempFiles = true;
 
         bootstrapper.Build(msiFile.PathChangeExtension(".exe"));
     }

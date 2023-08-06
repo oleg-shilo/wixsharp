@@ -30,7 +30,7 @@ namespace WixSharp
         /// <summary>
         /// Selects the hash algorithm to apply. Default sha1
         /// </summary>
-        public HashAlgorithmType HashAlgorithm { get; set; } = HashAlgorithmType.sha1;
+        public HashAlgorithmType HashAlgorithm { get; set; } = HashAlgorithmType.sha256;
 
         /// <summary>The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
         /// A warning is generated if timestamping fails.

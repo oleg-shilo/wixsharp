@@ -139,7 +139,6 @@
     <Compile Include="ManagedUI\Forms\SetupTypeDialog.Designer.cs">
       <DependentUpon>SetupTypeDialog.cs</DependentUpon>
     </Compile>
-    <None Include="ManagedBA\SilentBA.cs" />
     <Compile Include="ManagedUI\Forms\ShellView.cs" />
     <Compile Include="ManagedUI\UIExtensions.cs" />
     <Compile Include="ManagedUI\UIShell.cs" />
