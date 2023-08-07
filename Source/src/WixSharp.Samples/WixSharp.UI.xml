@@ -1245,6 +1245,122 @@
             </summary>
             <value>The current dialog.</value>
         </member>
+        <member name="T:WixSharp.Bootstrapper.SilentBootstrapperApplication">
+             <summary>
+             Defines Wix# bootstrapper managed application with no User Interface.
+             <para>It is a design time 'adapter' for the canonical WiX managed bootstrapper application <see cref="T:WixSharp.Bootstrapper.SilentManagedBA"/>.</para>
+             <para><see cref="T:WixSharp.Bootstrapper.SilentManagedBA"/> automatically handles <see cref="T:WixToolset.Mba.Core.BootstrapperApplication"/> events and
+             detects the current package/product state (present vs. absent). The package state detection is based on the <see cref="T:WixSharp.Bootstrapper.SilentBootstrapperApplication.PrimaryPackageId"/>.
+             If this member is no t then the Id of the lats package in the Bundle will be used instead.</para>
+             </summary>
+             <example>
+             <code>
+              var bootstrapper =
+                  new Bundle("My Product",
+                      new PackageGroupRef("NetFx462Web"),
+                      new MsiPackage("product.msi"));
+            
+             bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";
+             bootstrapper.IconFile = "app_icon.ico";
+             bootstrapper.Version = new Version("1.0.0.0");
+             bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
+             bootstrapper.Application = new SilentBootstrapperApplication();
+            
+             bootstrapper.Build();
+             </code>
+             </example>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.SilentBootstrapperApplication.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.SilentBootstrapperApplication"/> class.
+            </summary>
+            <param name="primaryPackageId">The primary package identifier.</param>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.SilentBootstrapperApplication.AutoGenerateSources(System.String)">
+            <summary>
+            Automatically generates required sources files for building the Bootstrapper. It is
+            used to automatically generate the files which, can be generated automatically without
+            user involvement (e.g. BootstrapperCore.config).
+            </summary>
+            <param name="outDir">The output directory.</param>
+        </member>
+        <member name="P:WixSharp.Bootstrapper.SilentBootstrapperApplication.DowngradeWarningMessage">
+            <summary>
+            Gets or sets the downgrade warning message. The message is displayed when bundle
+            detects a newer version of primary package is installed and the setup is about to exit.
+            <para>The default value is  "A later version of the package (PackageId: {0}) is already
+            installed. Setup will now exit.".
+            </para>
+            </summary>
+            <value>
+            The downgrade warning message.
+            </value>
+        </member>
+        <member name="T:WixSharp.Bootstrapper.WixBAFactory">
+             <summary>
+            
+             </summary>
+             <seealso cref="T:WixToolset.Mba.Core.BaseBootstrapperApplicationFactory" />
+        </member>
+        <member name="M:WixSharp.Bootstrapper.WixBAFactory.Create(WixToolset.Mba.Core.IEngine,WixToolset.Mba.Core.IBootstrapperCommand)">
+            <summary>
+            Creates the specified engine.
+            </summary>
+            <param name="engine">The engine.</param>
+            <param name="command">The command.</param>
+            <returns></returns>
+        </member>
+        <member name="T:WixSharp.Bootstrapper.SilentManagedBA">
+            <summary>
+            Implements canonical WiX managed bootstrapper application without any UI.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.#ctor(WixToolset.Mba.Core.IEngine,WixToolset.Mba.Core.IBootstrapperCommand)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WixSharp.Bootstrapper.SilentManagedBA"/> class.
+            </summary>
+            <param name="engine">The engine.</param>
+            <param name="command">The command.</param>
+        </member>
+        <member name="P:WixSharp.Bootstrapper.SilentManagedBA.Engine">
+            <summary>
+            Gets the engine.
+            </summary>
+            <value>
+            The engine.
+            </value>
+        </member>
+        <member name="F:WixSharp.Bootstrapper.SilentManagedBA.Command">
+            <summary>
+            The command
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.Run">
+            <summary>
+            Entry point that is called when the Bootstrapper application is ready to run.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.OnPlanComplete(System.Object,WixToolset.Mba.Core.PlanCompleteEventArgs)">
+            <summary>
+            Method that gets invoked when the Bootstrapper PlanComplete event is fired.
+            If the planning was successful, it instructs the Bootstrapper Engine to
+            install the packages.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.OnDetectPackageComplete(System.Object,WixToolset.Mba.Core.DetectPackageCompleteEventArgs)">
+            <summary>
+            Method that gets invoked when the Bootstrapper DetectPackageComplete event is fired.
+            Checks the PackageId and sets the installation scenario. The PackageId is the ID
+            specified in one of the package elements (msipackage, exepackage, msppackage,
+            msupackage) in the WiX bundle.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Bootstrapper.SilentManagedBA.OnApplyComplete(System.Object,WixToolset.Mba.Core.ApplyCompleteEventArgs)">
+            <summary>
+            Method that gets invoked when the Bootstrapper ApplyComplete event is fired.
+            This is called after a bundle installation has completed. Make sure we updated the view.
+            </summary>
+        </member>
         <member name="M:WixSharp.UIExtensions.MsiRuntime(WixSharp.IManagedUIShell)">
             <summary>
             MsiRuntime object associated with the ManagedUI shell.
@@ -1273,6 +1389,15 @@
             <param name="session">The session.</param>
             <param name="name">The name.</param>
             <returns></returns>
+        </member>
+        <member name="M:WixSharp.UIExtensions.SafeApply(WixToolset.Mba.Core.IEngine,System.Nullable{System.IntPtr})">
+            <summary>
+            Safe version of <see cref="M:WixToolset.Mba.Core.IEngine.Apply(System.IntPtr)"/>. It allows passing
+            parent handle <c>null</c> or <c>IntPtr.Zero</c> to allow applying the "setup plan" when the bootstrapper
+            window is not available. In such case SafeApply will use the handle returned by the <see cref="M:WixSharp.UIExtensions.GetForegroundWindow"/>
+            </summary>
+            <param name="engine">The engine.</param>
+            <param name="hwndParent">The HWND parent.</param>
         </member>
         <member name="M:WixSharp.UIExtensions.LocalizeWith(System.Windows.Forms.Control,System.Func{System.String,System.String})">
             <summary>

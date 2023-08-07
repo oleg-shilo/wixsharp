@@ -46,6 +46,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="WixToolset.Mba.Core" Version="4.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\WixSharp\WixSharp.csproj" />
 	</ItemGroup>
 

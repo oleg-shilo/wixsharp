@@ -28,4 +28,9 @@ public partial class MainView : Window
     {
         Close();
     }
+
+    private void TextBlock_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        viewModel.ShowLog();
+    }
 }

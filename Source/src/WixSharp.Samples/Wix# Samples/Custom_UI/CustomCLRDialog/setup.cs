@@ -16,9 +16,11 @@ public static class Script
         // The currently recommended WixSharp UI customization technique is to use Managed UI (WinForm or WPF). Thus this
         // is a legacy sample for demo purposes only.
 
-        ProductActivationDialogSetup.Build();
+        // Ignore the warning about potential WiX ID duplication. In this case it is acceptable as we are accessing some
+        // of the IDs before the build and this causes their auto-generation.
 
-        //MultiStepDialogSetup.Build();
-        //EmptyDialogSetup.Build();
+        // ProductActivationDialogSetup.Build();
+        // MultiStepDialogSetup.Build();
+        // EmptyDialogSetup.Build();
     }
 }

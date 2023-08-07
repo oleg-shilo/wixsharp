@@ -61,10 +61,44 @@ public class MainViewModel : INotifyPropertyChanged
         this.Bootstrapper = bootstrapper;
         this.Bootstrapper.Error += this.OnError;
         this.Bootstrapper.ApplyComplete += this.OnApplyComplete;
+        this.Bootstrapper.DetectBegin += Bootstrapper_DetectBegin;
         this.Bootstrapper.DetectPackageComplete += this.OnDetectPackageComplete;
         this.Bootstrapper.PlanComplete += this.OnPlanComplete;
 
         this.Bootstrapper.Engine.Detect();
+
+        var cmd = this.Bootstrapper.Command.CommandLine;
+
+        if (cmd != null)
+        {
+            if (cmd.Contains("-install") || cmd.Contains("-i") || cmd.Contains("/install") || cmd.Contains("/i"))
+                this.InstallExecute();
+            if (cmd.Contains("-uninstall") || cmd.Contains("-u") || cmd.Contains("/uninstall") || cmd.Contains("/u"))
+                this.InstallExecute();
+        }
+    }
+
+    RegistrationType detecteRegistrationType = RegistrationType.None;
+
+    void Bootstrapper_DetectBegin(object sender, DetectBeginEventArgs e)
+    {
+        detecteRegistrationType = e.RegistrationType;
+    }
+
+    public void ShowLog()
+    {
+        try
+        {
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = new Uri(Bootstrapper.Engine.GetVariableString("WixBundleLog")).ToString();
+                process.StartInfo.UseShellExecute = true;
+                process.StartInfo.Verb = "open";
+
+                process.Start();
+            }
+        }
+        catch { }
     }
 
     void OnError(object sender, mba.ErrorEventArgs e)
@@ -126,6 +160,8 @@ public class MainViewModel : INotifyPropertyChanged
     public void InstallExecute()
     {
         IsBusy = true;
+        InstallEnabled = false;
+        UninstallEnabled = false;
 
         Bootstrapper.Engine.SetVariableString("UserInput", UserInput, false);
         Bootstrapper.Engine.Plan(mba.LaunchAction.Install);
@@ -134,7 +170,11 @@ public class MainViewModel : INotifyPropertyChanged
     public void UninstallExecute()
     {
         IsBusy = true;
-        Bootstrapper.Engine.Plan(mba.LaunchAction.Uninstall);
+        InstallEnabled = false;
+        UninstallEnabled = false;
+
+        Bootstrapper.Engine.Plan(mba.LaunchAction.UnsafeUninstall);
+        // Bootstrapper.Engine.Plan(mba.LaunchAction.Uninstall);
     }
 
     public void ExitExecute()
@@ -164,17 +204,24 @@ public class MainViewModel : INotifyPropertyChanged
         // Debug.Assert(false);
         if (e.PackageId == "MyProductPackageId")
         {
-            if (e.State == PackageState.Absent)
+            if (e.Cached)
             {
-                InstallEnabled = true;
+                InstallEnabled = detecteRegistrationType == RegistrationType.None;
+                UninstallEnabled = !InstallEnabled;
             }
-            // else if (e.State == PackageState.Present)
-            else if (e.State == PackageState.Present || e.State == PackageState.Cached)
+            else
             {
-                // need to add cache because of the bug in WiX https://github.com/wixtoolset/issues/issues/7399
-                // interestingly enough WiX v4.0.1 marks `PackageState.Cached` as obsolete but...
-                // still does not set e.State to present (to cached instead) if the product is installed
-                UninstallEnabled = true;
+                if (e.State == PackageState.Absent)
+                {
+                    InstallEnabled = true;
+                }
+                else if (e.State == PackageState.Present)
+                {
+                    // need to add cache because of the bug in WiX https://github.com/wixtoolset/issues/issues/7399
+                    // interestingly enough WiX v4.0.1 marks `PackageState.Cached` as obsolete but...
+                    // still does not set e.State to present/absent (to cached instead) if the product is installed (or uninstalled)
+                    UninstallEnabled = true;
+                }
             }
         }
     }

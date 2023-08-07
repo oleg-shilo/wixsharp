@@ -61,6 +61,16 @@
                 </EventTrigger>
             </Ellipse.Triggers>
         </Ellipse>
+        <TextBlock
+            Margin="10"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Foreground="Blue"
+            Cursor="Hand"
+            MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"
+            TextDecorations="Underline">
+            View Log
+        </TextBlock>
         <StackPanel
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"

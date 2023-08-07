@@ -1,4 +1,3 @@
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -13,6 +13,8 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using WixSharp.UI.Forms;
 using WixToolset.Dtf.WindowsInstaller;
+using WixToolset.Mba.Core;
+
 using io = System.IO;
 using sys = System.Windows.Forms;
 
@@ -252,6 +254,18 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Safe version of <see cref="WixToolset.Mba.Core.IEngine.Apply(IntPtr)"/>. It allows passing
+        /// parent handle <c>null</c> or <c>IntPtr.Zero</c> to allow applying the "setup plan" when the bootstrapper
+        /// window is not available. In such case SafeApply will use the handle returned by the <see cref="GetForegroundWindow()"/>
+        /// </summary>
+        /// <param name="engine">The engine.</param>
+        /// <param name="hwndParent">The HWND parent.</param>
+        static public void SafeApply(this IEngine engine, IntPtr? hwndParent = null) => engine.Apply(GetForegroundWindow());
+
+        [DllImport("User32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        /// <summary>
         /// Localizes the control its contained <see cref="T:System.Windows.Forms.Control.Text"/> from the specified localization
         /// delegate 'localize'.
         /// <para>The method substitutes both localization file (*.wxl) entries and MSI properties contained by the input string
@@ -324,14 +338,6 @@ namespace WixSharp
                     result.Append(text.Substring(lastEnd, text.Length - lastEnd));
             }
             return cleanRegex.Replace(result.ToString(), "");
-        }
-
-        internal static T Get<T>(this Engine.Variables<T> variables, string name)
-        {
-            if (!string.IsNullOrEmpty(name) && variables.Contains(name))
-                return variables[name];
-            else
-                return default(T);
         }
     }
 }

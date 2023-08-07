@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
 using WixSharp.CommonTasks;
 using WixSharp.Nsis;
@@ -34,6 +35,7 @@ namespace WixSharp.Bootstrapper
         public ManagedBootstrapperApplication(string appAssembly, params string[] dependencies)
         {
             AppAssembly = appAssembly;
+
             Payloads = Payloads.Combine(AppAssembly.ToPayload())
                                .Combine(dependencies.Select(x => x.ToPayload()));
         }
@@ -135,17 +137,53 @@ namespace WixSharp.Bootstrapper
             return mbanative;
         }
 
+        static string LocateMbaCore()
+        {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var mbanative = (assembly.Location ?? "").PathGetDirName().PathCombine("WixToolset.Mba.Core.dll");
+
+            if (System.IO.File.Exists(mbanative))
+                return mbanative;
+
+            mbanative = (assembly.Location ?? "").PathGetDirName().PathCombine("wix_bin", "WixToolset.Mba.Core.dll");
+            if (System.IO.File.Exists(mbanative))
+                return mbanative;
+
+            return null;
+        }
+
+        static void ValidateCustomBaAssembly(string assembly)
+        {
+            try
+            {
+                var valid = (bool)Utils.ExecuteInTempDomain<AsmReflector>(
+                                    asmReflector => asmReflector.ValidateCustomBaAssembly(assembly));
+
+                if (!valid)
+                    Compiler.OutputWriteLine(
+                            $"ERROR: The custom BA assembly (`{assembly}`) seems to have no attribute " +
+                            $"`WixToolset.Mba.Core.BootstrapperApplicationFactoryAttribute` defined " +
+                            $"for the BootstrapperApplication factory class.");
+            }
+            catch
+            {
+                Compiler.OutputWriteLine(
+                        $"WARNING: Cannot validate the custom BA assembly (`{assembly}`).");
+            }
+        }
+
         /// <summary>
         /// Emits WiX XML.
         /// </summary>
         /// <returns></returns>
         public override XContainer[] ToXml()
         {
+            ValidateCustomBaAssembly(rawAppAssembly);
+
             var frameworkAssemblies = new[]
             {
                 typeof(Session).Assembly.Location,
-                LocateMbanative(),
-                typeof(WixToolset.Mba.Core.BaseBootstrapperApplicationFactory).Assembly.Location
+                LocateMbanative()
             };
 
             var root = new XElement("BootstrapperApplication");
@@ -166,6 +204,17 @@ namespace WixSharp.Bootstrapper
 
             if (files.Any())
                 files.DistinctBy(x => x.SourceFile).ForEach(p => root.Add(p.ToXElement("Payload")));
+
+            // validate payloads
+            if (!files.Any(x => x.SourceFile.EndsWith("WixToolset.Mba.Core.dll")))
+            {
+                var possibleMbaCore = LocateMbaCore();
+
+                if (possibleMbaCore.PathExists())
+                    root.Add(new Payload(possibleMbaCore).ToXElement("Payload"));
+                else
+                    Compiler.OutputWriteLine("WARNING: Custom BA payloads are missing `WixToolset.Mba.Core.dll`");
+            }
 
             return new[] { root };
         }

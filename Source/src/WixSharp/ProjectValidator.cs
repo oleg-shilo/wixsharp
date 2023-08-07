@@ -219,6 +219,15 @@ namespace WixSharp
             return Reflection.Assembly.ReflectionOnlyLoad(System.IO.File.ReadAllBytes(file)).ManifestModule.ScopeName;
         }
 
+        public bool ValidateCustomBaAssembly(string assembly)
+        {
+            var asm = System.Reflection.Assembly.LoadFrom(assembly);
+            var valid = asm.GetCustomAttributes(false)
+                           .Any(x => x.GetType().FullName == "WixToolset.Mba.Core.BootstrapperApplicationFactoryAttribute");
+
+            return valid;
+        }
+
         public void ValidateCAAssembly(string file, string dtfAsm)
         {
             // `ValidateCAAssemblyImpl` will load assembly from `file` for validation. Though for this to happen

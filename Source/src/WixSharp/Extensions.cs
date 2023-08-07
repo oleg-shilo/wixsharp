@@ -1,4 +1,3 @@
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using Microsoft.Win32;
 using System;
 using System.Collections;
@@ -20,7 +19,6 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
-using WixToolset.Mba.Core;
 using static System.Environment;
 using static WixSharp.SetupEventArgs;
 
@@ -57,18 +55,6 @@ namespace WixSharp
             var p = new WindowsPrincipal(identity);
             return p.IsInRole(WindowsBuiltInRole.Administrator);
         }
-
-        /// <summary>
-        /// Safe version of <see cref="WixToolset.Mba.Core.IEngine.Apply(IntPtr)"/>. It allows passing
-        /// parent handle <c>null</c> or <c>IntPtr.Zero</c> to allow applying the "setup plan" when the bootstrapper
-        /// window is not available. In such case SafeApply will use the handle returned by the <see cref="GetForegroundWindow()"/>
-        /// </summary>
-        /// <param name="engine">The engine.</param>
-        /// <param name="hwndParent">The HWND parent.</param>
-        static public void SafeApply(this IEngine engine, IntPtr? hwndParent = null) => engine.Apply(GetForegroundWindow());
-
-        [DllImport("User32.dll")]
-        static extern IntPtr GetForegroundWindow();
 
         static internal IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> items, Func<TSource, TKey> keySelector)
         {

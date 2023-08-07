@@ -9,8 +9,8 @@ namespace WixToolset.WixBA
     using System.Reflection;
     using System.Windows;
     using System.Windows.Input;
-    using IO = System.IO;
     using WixToolset.Mba.Core;
+    using IO = System.IO;
 
     /// <summary>
     /// The states of detection.
@@ -28,8 +28,10 @@ namespace WixToolset.WixBA
     {
         // There are no Upgrade related bundles installed.
         None,
+
         // All Upgrade related bundles that are installed are older than or the same version as this bundle.
         Older,
+
         // At least one Upgrade related bundle is installed that is newer than this bundle.
         Newer,
     }
@@ -144,6 +146,7 @@ namespace WixToolset.WixBA
                 return WixDistribution.SupportUrl;
             }
         }
+
         public string VSExtensionUrl
         {
             get
@@ -335,7 +338,8 @@ namespace WixToolset.WixBA
 
         public bool UninstallEnabled
         {
-            get { return this.UninstallCommand.CanExecute(this); }
+            get { return true; }
+            // get { return this.UninstallCommand.CanExecute(this); }
         }
 
         public ICommand OpenLogCommand
@@ -384,12 +388,14 @@ namespace WixToolset.WixBA
         {
             get
             {
-                switch(this.root.InstallState)
+                switch (this.root.InstallState)
                 {
                     case InstallationState.Applied:
                         return "Complete";
+
                     case InstallationState.Failed:
                         return this.root.Canceled ? "Cancelled" : "Failed";
+
                     default:
                         return "Unknown"; // this shouldn't be shown in the UI.
                 }
@@ -537,6 +543,7 @@ namespace WixToolset.WixBA
                     case -2147024894: //HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)
                     case -2147012889: //HRESULT_FROM_WIN32(ERROR_INTERNET_NAME_NOT_RESOLVED)
                         break;
+
                     default:
                         e.Action = BOOTSTRAPPER_CACHEACQUIRECOMPLETE_ACTION.Retry;
                         break;
@@ -594,6 +601,7 @@ namespace WixToolset.WixBA
                                     case 0:
                                         msgbox = MessageBoxButton.OK;
                                         break;
+
                                     case 1:
                                         msgbox = MessageBoxButton.OKCancel;
                                         break;
@@ -601,14 +609,15 @@ namespace WixToolset.WixBA
                                     case 3:
                                         msgbox = MessageBoxButton.YesNoCancel;
                                         break;
+
                                     case 4:
                                         msgbox = MessageBoxButton.YesNo;
                                         break;
-                                    // default: stay with MBOK since an exact match is not available.
+                                        // default: stay with MBOK since an exact match is not available.
                                 }
 
                                 MessageBoxResult result = MessageBoxResult.None;
-                                WixBA.View.Dispatcher.Invoke((Action)delegate()
+                                WixBA.View.Dispatcher.Invoke((Action)delegate ()
                                     {
                                         result = MessageBox.Show(WixBA.View, e.ErrorMessage, "WiX Toolset", msgbox, MessageBoxImage.Error);
                                     }
@@ -684,7 +693,7 @@ namespace WixToolset.WixBA
                 if (args[i].StartsWith("InstallFolder=", StringComparison.InvariantCultureIgnoreCase))
                 {
                     // Allow relative directory paths. Also validates.
-                    string[] param = args[i].Split(new char[] {'='}, 2);
+                    string[] param = args[i].Split(new char[] { '=' }, 2);
                     this.root.InstallDirectory = IO.Path.Combine(Environment.CurrentDirectory, param[1]);
                 }
             }

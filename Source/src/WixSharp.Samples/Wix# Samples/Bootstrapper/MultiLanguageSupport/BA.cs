@@ -90,7 +90,7 @@ public class BA : BootstrapperApplication
                     Engine.SetVariableString("TRANSFORMS", $":{view.SelectedLanguage.LCID}", false);
 
                 Engine.Plan(launchAction);
-                Engine.SafeApply();
+                Engine.Apply(GetForegroundWindow());
 
                 Dispatcher.CurrentDispatcher.VerifyAccess();
                 Dispatcher.Run();
@@ -102,7 +102,7 @@ public class BA : BootstrapperApplication
             if (MessageBox.Show("Do you want to uninstall?", "My Product", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 Engine.Plan(LaunchAction.Uninstall);
-                Engine.SafeApply();
+                Engine.Apply(GetForegroundWindow());
 
                 Dispatcher.CurrentDispatcher.VerifyAccess();
                 Dispatcher.Run();
@@ -111,4 +111,7 @@ public class BA : BootstrapperApplication
 
         Engine.Quit(0);
     }
+
+    [DllImport("User32.dll")]
+    static extern IntPtr GetForegroundWindow();
 }

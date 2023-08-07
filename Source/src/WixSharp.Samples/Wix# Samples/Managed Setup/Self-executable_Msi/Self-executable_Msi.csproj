@@ -105,8 +105,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>cd "$(ProjectDir)"
+"$(ProjectDir)build_msi.cmd"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(ProjectDir)ManagedSetup.exe"</PostBuildEvent>

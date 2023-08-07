@@ -403,6 +403,8 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         public void Validate()
         {
+            // https://github.com/wixtoolset/issues/issues/7670
+
             // var msiPackages = this.Chain.Where(x => (x is MsiPackage) && (x as MsiPackage).DisplayInternalUI == true);
             // foreach (MsiPackage item in msiPackages)
             // {

@@ -14,6 +14,7 @@
 		<None Remove="*.msi" />
 		<Compile Remove="Files\Bin\MyApp.cs" />
 		<None Remove="readme.txt" />
+		<None Remove="*.cs.dll" />
 		<None Remove="WixSharp.CA.dll" />
 		<None Remove="wixsharp.ico" />
 	</ItemGroup>

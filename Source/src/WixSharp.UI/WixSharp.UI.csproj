@@ -48,10 +48,6 @@
     <AssemblyOriginatorKeyFile>WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BootstrapperCore, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\WixSharp.Samples\Wix_bin\SDK\BootstrapperCore.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
@@ -140,6 +136,7 @@
       <DependentUpon>SetupTypeDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="ManagedUI\Forms\ShellView.cs" />
+    <Compile Include="ManagedUI\SilentBA.cs" />
     <Compile Include="ManagedUI\UIExtensions.cs" />
     <Compile Include="ManagedUI\UIShell.cs" />
     <Compile Include="ManagedUI\UIShell.Designer.cs">
@@ -219,7 +216,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.Dtf.WindowsInstaller">
-      <Version>4.0.0</Version>
+      <Version>4.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="WixToolset.Mba.Core">
+      <Version>4.0.1</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

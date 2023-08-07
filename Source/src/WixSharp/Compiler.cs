@@ -3167,13 +3167,15 @@ namespace WixSharp
             if (platform.HasValue && platform.Value == Platform.x64)
                 platformDir = "x64";
 
-            string makeSfxCA;
-            string sfxcaDll;
-            string dtfWinInstaller;
+            string makeSfxCA = WixTools.MakeSfxCA;
+            string sfxcaDll = WixTools.SfxCAFor(platformDir);
+            // string wixToolsetMbaCore = WixTools.WixToolsetMbaCoreFor(platformDir);
+            string dtfWinInstaller = WixTools.DtfWindowsInstaller;
 
-            makeSfxCA = WixTools.MakeSfxCA;
-            sfxcaDll = WixTools.SfxCAFor(platformDir);
-            dtfWinInstaller = WixTools.DtfWindowsInstaller;
+            // if (dtfWinInstaller.PathChangeFileName("WixToolset.Mba.Core.dll").PathExists())
+            //     wixToolsetMbaCore = dtfWinInstaller.PathChangeFileName("WixToolset.Mba.Core.dll");
+
+
 
             outDir = IO.Path.GetFullPath(outDir);
 
@@ -3263,6 +3265,7 @@ namespace WixSharp
                         (pdbFileArgument ?? " ") +
                         referencedAssemblies;
 
+            // makeSfxCA_args += $" \"{dtfWinInstaller}\" \"{wixToolsetMbaCore}\"";
             makeSfxCA_args += $" \"{dtfWinInstaller}\"";
 
             ProjectValidator.ValidateCAAssembly(asmFile);

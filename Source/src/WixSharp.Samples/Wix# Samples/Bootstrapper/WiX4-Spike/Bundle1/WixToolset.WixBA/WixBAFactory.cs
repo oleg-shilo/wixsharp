@@ -6,6 +6,7 @@
 
 namespace WixToolset.WixBA
 {
+    using System.Diagnostics;
     using System.Windows;
     using WixToolset.Mba.Core;
 
@@ -14,6 +15,7 @@ namespace WixToolset.WixBA
         protected override IBootstrapperApplication Create(IEngine engine, IBootstrapperCommand command)
         {
             MessageBox.Show("Loading WixBAFactory");
+            Debug.Assert(false);
             return new WixBA(engine, command);
         }
     }

@@ -15,6 +15,7 @@ namespace WixToolset.WixBA
     {
         protected override IBootstrapperApplication Create(IEngine engine, IBootstrapperCommand command)
         {
+            MessageBox.Show("CustomSilentBA");
             return new CustomSilentBA(engine, command);
         }
     }
@@ -26,11 +27,18 @@ public class CustomSilentBA : WixToolset.Mba.Core.BootstrapperApplication
 
     public CustomSilentBA(IEngine engine, IBootstrapperCommand command) : base(engine)
     {
+        this.DetectBegin += OnDetectBegin;
         this.Command = command;
     }
 
-    public IEngine Engine => base.engine;
+    public IEngine Engine { get { return base.engine; } }
     public IBootstrapperCommand Command;
+    RegistrationType detecteRegistrationType = RegistrationType.None;
+
+    void OnDetectBegin(object sender, DetectBeginEventArgs e)
+    {
+        detecteRegistrationType = e.RegistrationType;
+    }
 
     protected override void Run()
     {
@@ -46,22 +54,31 @@ public class CustomSilentBA : WixToolset.Mba.Core.BootstrapperApplication
                 //for initializing BA in Install, Uninstall or Modify mode.
                 if (e.PackageId == "MyProductPackageId")
                 {
-                    switch (e.State)
+                    if (e.Cached)
                     {
-                        case PackageState.Obsolete:
-                            this.Engine.Log(LogLevel.Error, string.Format(DowngradeWarningMessage, e.PackageId));
-                            MessageBox.Show(string.Format(DowngradeWarningMessage, e.PackageId), this.Engine.GetVariableString("WixBundleName"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                            Engine.Quit(0);
-                            break;
-
-                        case PackageState.Absent:
+                        if (detecteRegistrationType == RegistrationType.None)
                             this.Engine.Plan(LaunchAction.Install);
-                            break;
-
-                        case PackageState.Present:
-                        case PackageState.Cached:
+                        else
                             this.Engine.Plan(LaunchAction.Uninstall);
-                            break;
+                    }
+                    else
+                    {
+                        switch (e.State)
+                        {
+                            case PackageState.Obsolete:
+                                this.Engine.Log(LogLevel.Error, string.Format(DowngradeWarningMessage, e.PackageId));
+                                MessageBox.Show(string.Format(DowngradeWarningMessage, e.PackageId), this.Engine.GetVariableString("WixBundleName"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                Engine.Quit(0);
+                                break;
+
+                            case PackageState.Absent:
+                                this.Engine.Plan(LaunchAction.Install);
+                                break;
+
+                            case PackageState.Present:
+                                this.Engine.Plan(LaunchAction.Uninstall);
+                                break;
+                        }
                     }
                 }
             };

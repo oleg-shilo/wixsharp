@@ -1,18 +1,23 @@
 //css_dir ..\..\..\;
+//css_inc CustomSilentBA.cs
 //css_ref WixSharp.dll;
 //css_ref WixSharp.UI.dll;
 //css_ref System.Core.dll;
+//css_ref Wix_bin\WixToolset.Mba.Core.dll
 //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixToolset.Dtf.WindowsInstaller;
+using WixToolset.Mba.Core;
+
 using sys = System.Reflection;
 
 public class InstallScript
@@ -51,13 +56,16 @@ public class InstallScript
         // bootstrapper.Application = new SilentBootstrapperApplication();
 
         // use this custom BA to modify its behavior in order to meet your requirements
-        // bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
-        bootstrapper.Application = new SilentBootstrapperApplication("MyProductPackageId");
+        bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
+
+        // alternatively you can simply set a default SilentBootstrapperApplication from the WixSharp.UI package
+        // bootstrapper.Application = new SilentBootstrapperApplication("MyProductPackageId");
 
         // You can implement your own extension types and add them to the Bundle
         // bootstrapper.GenericItems.Add(new BalCondition { Condition = "some condition", Message = "Warning: ..." });
 
         // bootstrapper.PreserveTempFiles = true;
+
         bootstrapper.Build("app_setup");
     }
 }

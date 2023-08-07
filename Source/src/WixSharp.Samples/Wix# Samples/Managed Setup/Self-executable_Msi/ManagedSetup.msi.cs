@@ -1,4 +1,5 @@
 //css_dir ..\..\..\;
+//css_ref Wix_bin\WixToolset.Mba.Core.dll;
 //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref WixSharp.UI;
 //css_ref System.Core;

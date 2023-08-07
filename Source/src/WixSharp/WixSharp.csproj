@@ -77,9 +77,6 @@
     <AssemblyOriginatorKeyFile>WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BootstrapperCore, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
-      <HintPath>../WixSharp.Samples/Wix_bin/SDK/BootstrapperCore.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -115,7 +112,6 @@
     <Compile Include="Assembly.cs" />
     <Compile Include="AutoElements.cs" />
     <Compile Include="BalCondition.cs" />
-    <Compile Include="Bootstrapper\SilentBA.cs" />
     <Compile Include="Bootstrapper\UtilFileSearch.cs" />
     <Compile Include="Bootstrapper\UtilProductSearch.cs" />
     <Compile Include="Bootstrapper\UtilRegistrySearch.cs" />
@@ -279,10 +275,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.Dtf.WindowsInstaller">
-      <Version>4.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="WixToolset.Mba.Core">
-      <Version>4.0.0</Version>
+      <Version>4.0.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

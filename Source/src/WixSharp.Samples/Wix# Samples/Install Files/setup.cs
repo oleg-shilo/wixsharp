@@ -1,8 +1,12 @@
 ﻿//css_dir ..\..\;
-//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
+// //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
+//css_ref D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\bin\Debug\net472\WixToolset.Dtf.WindowsInstaller.dll
+//css_ref D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\bin\Debug\net472\WixToolset.Mba.Core.dll
+
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
 using WixSharp;

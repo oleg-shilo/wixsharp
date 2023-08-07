@@ -24,9 +24,11 @@
 		<None Remove="license.rtf" />
 		<None Remove="readme.txt" />
 		<None Remove="WixSharp.CA.dll" />
+		<None Remove="*.cs.dll" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\WixSharp.UI\WixSharp.UI.csproj" />
 		<ProjectReference Include="..\..\..\..\WixSharp\WixSharp.csproj" />
 	</ItemGroup>
 
