@@ -73,10 +73,14 @@ public class MainViewModel : INotifyPropertyChanged
         {
             if (cmd.Contains("-install") || cmd.Contains("-i") || cmd.Contains("/install") || cmd.Contains("/i"))
                 this.InstallExecute();
-            if (cmd.Contains("-uninstall") || cmd.Contains("-u") || cmd.Contains("/uninstall") || cmd.Contains("/u"))
+            else if (cmd.Contains("-uninstall") || cmd.Contains("-u") || cmd.Contains("/uninstall") || cmd.Contains("/u"))
                 this.InstallExecute();
+            else if (cmd.Contains("-all") || cmd.Contains("/all"))
+                showAllCommands = true;
         }
     }
+
+    bool showAllCommands = false;
 
     RegistrationType detecteRegistrationType = RegistrationType.None;
 
@@ -173,8 +177,7 @@ public class MainViewModel : INotifyPropertyChanged
         InstallEnabled = false;
         UninstallEnabled = false;
 
-        Bootstrapper.Engine.Plan(mba.LaunchAction.UnsafeUninstall);
-        // Bootstrapper.Engine.Plan(mba.LaunchAction.Uninstall);
+        Bootstrapper.Engine.Plan(mba.LaunchAction.Uninstall);
     }
 
     public void ExitExecute()
@@ -217,12 +220,15 @@ public class MainViewModel : INotifyPropertyChanged
                 }
                 else if (e.State == PackageState.Present)
                 {
-                    // need to add cache because of the bug in WiX https://github.com/wixtoolset/issues/issues/7399
-                    // interestingly enough WiX v4.0.1 marks `PackageState.Cached` as obsolete but...
-                    // still does not set e.State to present/absent (to cached instead) if the product is installed (or uninstalled)
                     UninstallEnabled = true;
                 }
             }
+        }
+
+        if (showAllCommands)
+        {
+            InstallEnabled = true;
+            UninstallEnabled = true;
         }
     }
 

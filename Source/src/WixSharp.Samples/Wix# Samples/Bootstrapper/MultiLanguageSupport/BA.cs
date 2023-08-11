@@ -36,11 +36,23 @@ public class BA : BootstrapperApplication
     {
         this.Command = command;
         this.Error += (s, e) => MessageBox.Show(e.ErrorMessage);
-        this.ApplyComplete += (s, e) =>
+
+        this.DetectBegin += (s, e) =>
+            detectedRegistrationType = e.RegistrationType;
+
+        this.PlanMsiPackage += (s, e) =>
         {
-            Engine.Quit(0);
+            if (e.PackageId == BA.MainPackageId)
+                e.UiLevel = (e.Action == ActionState.Uninstall) ?
+                                INSTALLUILEVEL.ProgressOnly :
+                                INSTALLUILEVEL.Full;
         };
+
+        this.ApplyComplete += (s, e) =>
+            Engine.Quit(0);
     }
+
+    RegistrationType detectedRegistrationType = RegistrationType.None;
 
     LaunchAction Detect()
     {
@@ -52,10 +64,20 @@ public class BA : BootstrapperApplication
         {
             if (e.PackageId == BA.MainPackageId)
             {
-                if (e.State == PackageState.Absent)
-                    launchAction = LaunchAction.Install;
-                else if (e.State == PackageState.Present)
-                    launchAction = LaunchAction.Uninstall;
+                if (e.Cached)
+                {
+                    if (detectedRegistrationType == RegistrationType.None)
+                        launchAction = LaunchAction.Install;
+                    else
+                        launchAction = LaunchAction.Uninstall;
+                }
+                else
+                {
+                    if (e.State == PackageState.Absent)
+                        launchAction = LaunchAction.Install;
+                    else if (e.State == PackageState.Present)
+                        launchAction = LaunchAction.Uninstall;
+                }
 
                 done.Set();
             }
@@ -79,7 +101,7 @@ public class BA : BootstrapperApplication
 
         if (launchAction == LaunchAction.Install)
         {
-            var view = new MainView { DataContext = this };
+            var view = new MainView();
             var result = view.ShowDialog();
 
             if (result == true)

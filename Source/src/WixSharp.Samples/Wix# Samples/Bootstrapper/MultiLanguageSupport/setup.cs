@@ -25,23 +25,27 @@ public static class Script
 
     static void RunAsMsiBuilder()
     {
+        // A custom BA with the language selection will be prepared
+        BuildMsiWithLanguageSelectionBootstrapper();
+
         // a custom msi launcher with the language selection will be prepared
-        var msiFile = BuildMultilanguageMsi();
+        // It is an alternative technique for building a simplistic managed bootstrapper that is nothing else but simple
+        // .NET executable.
+        {
+            // var msiFile = BuildMultilanguageMsi();
 
-        // aggregate deployment files
-        var appFile = System.Reflection.Assembly.GetExecutingAssembly().Location;
-        io.File.Copy(msiFile, msiFile.PathGetDirName().PathCombine("bin", msiFile.PathGetFileName()), true);
-        io.File.Copy(appFile, msiFile.PathGetDirName().PathCombine("bin", "setup.exe"), true);
-        io.File.Copy(appFile.PathChangeFileName("WixSharp.dll"), msiFile.PathGetDirName().PathCombine("bin", "WixSharp.dll"), true);
-        io.File.Copy(appFile.PathChangeFileName("WixSharp.Msi.dll"), msiFile.PathGetDirName().PathCombine("bin", "WixSharp.Msi.dll"), true);
-        io.File.Copy(appFile.PathChangeFileName("WixToolset.Mba.Core.dll"), msiFile.PathGetDirName().PathCombine("bin", "WixToolset.Mba.Core.dll"), true);
+            // aggregate deployment files
+            // var appFile = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            // io.File.Copy(msiFile, msiFile.PathGetDirName().PathCombine("bin", msiFile.PathGetFileName()), true);
+            // io.File.Copy(appFile, msiFile.PathGetDirName().PathCombine("bin", "setup.exe"), true);
+            // io.File.Copy(appFile.PathChangeFileName("WixSharp.dll"), msiFile.PathGetDirName().PathCombine("bin", "WixSharp.dll"), true);
+            // io.File.Copy(appFile.PathChangeFileName("WixSharp.Msi.dll"), msiFile.PathGetDirName().PathCombine("bin", "WixSharp.Msi.dll"), true);
+            // io.File.Copy(appFile.PathChangeFileName("WixToolset.Mba.Core.dll"), msiFile.PathGetDirName().PathCombine("bin", "WixToolset.Mba.Core.dll"), true);
 
-        Console.WriteLine("=========================");
-        Console.WriteLine($" The setup files are aggregated in {msiFile.PathGetDirName().PathCombine("bin")}.");
-        Console.WriteLine("=========================");
-
-        // A custom BS with the language selection will be prepared
-        // BuildMsiWithLanguageSelectionBootstrapper();
+            // Console.WriteLine("=========================");
+            // Console.WriteLine($" The setup files are aggregated in {msiFile.PathGetDirName().PathCombine("bin")}.");
+            // Console.WriteLine("=========================");
+        }
     }
 
     static void RunAsBA()
@@ -134,7 +138,7 @@ public static class Script
 
         bootstrapper.Application.AddPayload(typeof(WixSharp.Extensions).Assembly.Location);
 
-        bootstrapper.PreserveTempFiles = true;
+        // bootstrapper.PreserveTempFiles = true;
 
         bootstrapper.Build(msiFile.PathChangeExtension(".exe"));
     }
