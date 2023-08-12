@@ -1,7 +1,7 @@
 1. Rebuild Release configuration       (Just to verify Release code correctness)
 
 2.1 Execute src\build.cmd              (Builds all solutions)
-2.2 Execute src\aggregate
+2.2 Execute src\aggregate.cmd
 
 ===============================
 WiX4 Issues:
@@ -15,10 +15,3 @@ WixSharp just drops these features:
 - <Package Platform="x64" is illegal but not even picked by wix convert; doc says Component.Bitness may have the value default which means "will be installed using the same bitness as the package". But the package element does not have bitness attribute. WixSharp maintains Project.Platform property but does not convert it in the Package.Platform while still cascades it to the Component.Bitness
 
 
-This needs to be addressed before the production release:
-- <CustomActionRef Id="FailWhenDeferred" - from WixToolset.Util.wixext; Just cannot be found in the extension even if the documentation states that it is there: https://wixtoolset.org/docs/schema/util/failwhendeferred/
-- <Feature ...> <Condition ...> triggers compile error and yet the documentation is stating that
-Meaning that the condition can only be set via the child Condition element (https://wixtoolset.org/docs/schema/wxs/feature/)
-- <Property Id="ALLUSERS" Value="1" /> triggers error WIX0091: Duplicate symbol 'Property:ALLUSERS' found. and yet if you use Package.Scope=perUserOrMachine it is required that ALLUSERS needs to be set.
-Opted to drop it all together as other values of Package.Scope do control the scope anyway.
-- Managed Custom BA. Still need to find out how to build a working sample. The ported sample builds but does not show the custom UI.

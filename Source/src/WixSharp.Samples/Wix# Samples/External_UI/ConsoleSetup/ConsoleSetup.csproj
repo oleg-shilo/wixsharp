@@ -43,4 +43,8 @@
 		</EmbeddedResource>
 	</ItemGroup>
 
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+	  <Exec Command="cd .\&#xD;&#xA;IF EXIST &quot;MyProduct.msi&quot; (&#xD;&#xA;  rem do nothing&#xD;&#xA;) ELSE (&#xD;&#xA;  ..\..\..\cscs.exe ..\msi\setup.cs&#xD;&#xA;)&#xD;&#xA;" />
+	</Target>
+
 </Project>

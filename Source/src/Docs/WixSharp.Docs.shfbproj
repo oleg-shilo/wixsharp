@@ -76,9 +76,6 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BootstrapperCore">
-      <HintPath>..\WixSharp.Samples\Wix_bin\BootstrapperCore.dll</HintPath>
-    </Reference>
     <Reference Include="WixToolset.Dtf.WindowsInstaller">
       <HintPath>..\WixSharp.Samples\Wix_bin\WixToolset.Dtf.WindowsInstaller.dll</HintPath>
     </Reference>
