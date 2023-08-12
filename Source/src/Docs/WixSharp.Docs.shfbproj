@@ -32,13 +32,14 @@
     <FrameworkVersion>.NET Framework 4.7.2</FrameworkVersion>
     <PresentationStyle>VS2013</PresentationStyle>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.dll" />
-      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.Msi.dll" />
-      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.Msi.xml" />
-      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.UI.dll" />
-      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.UI.xml" />
-      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.xml" />
-    </DocumentationSources>
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.dll" />
+<DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.Msi.dll" />
+<DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.Msi.xml" />
+<DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.dll" />
+<DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.xml" />
+<DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.xml" />
+<DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.WPF.dll" />
+<DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.WPF.xml" /></DocumentationSources>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="True">Namespace Summary: N/A</NamespaceSummaryItem>
       <NamespaceSummaryItem name="csscript" isDocumented="True">Namespace Summary: N/A</NamespaceSummaryItem>
@@ -76,6 +77,15 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Caliburn.Micro">
+      <HintPath>..\WixSharp.UI.WPF\bin\Release\Caliburn.Micro.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform">
+      <HintPath>..\WixSharp.UI.WPF\bin\Release\Caliburn.Micro.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform.Core">
+      <HintPath>..\WixSharp.UI.WPF\bin\Release\Caliburn.Micro.Platform.Core.dll</HintPath>
+    </Reference>
     <Reference Include="WixToolset.Dtf.WindowsInstaller">
       <HintPath>..\WixSharp.Samples\Wix_bin\WixToolset.Dtf.WindowsInstaller.dll</HintPath>
     </Reference>

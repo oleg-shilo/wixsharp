@@ -23,9 +23,9 @@ class Script
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.nuspec", releaseNotes, version.ToString());
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.WPF.nuspec", releaseNotes, version.ToString());
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.bin.nuspec", releaseNotes, version.ToString());
-        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.lab.nuspec", releaseNotes, version.ToString());
         //UpdateReleaseNotesAndVersion(@"E:\Galos\Projects\WixSharp\NuGet\WixSharp\WixSharp.ClrDialog.nuspec", releaseNotes, version.ToString());
 
+        CopyFiles(root + @"\bin\WixSharp", "nbsbuilder.exe", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.dll", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.xml", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.UI.dll", @"lib");
@@ -34,14 +34,6 @@ class Script
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.UI.WPF.xml", @"lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.Msi.dll", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.Msi.xml", @"lib");
-        CopyFiles(root + @"\bin\WixSharp", "WixSharp.Lab.dll", "lib");
-        CopyFiles(root + @"\bin\WixSharp", "WixSharp.Lab.xml", "lib");
-        CopyFiles(root + @"\bin\WixSharp\Wix_bin\SDK", "BootstrapperCore.dll", "lib");
-        CopyFiles(root + @"\bin\WixSharp\Wix_bin\SDK", "BootstrapperCore.xml", "lib");
-        CopyFiles(root + @"\bin\WixSharp\Wix_bin\SDK", "Microsoft.Deployment.WindowsInstaller.dll", "lib");
-        CopyFiles(root + @"\bin\WixSharp\Wix_bin\SDK", "Microsoft.Deployment.WindowsInstaller.xml", "lib");
-        CopyFiles(root + @"\NuGet\MSBuild_SetEnvVar", "SetEnvVar.dll", "build");
-        CopyFiles(root + @"\src\WixSharp.Samples", "nbsbuilder.exe", "lib");
 
         Console.WriteLine("Done!");
     }

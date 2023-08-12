@@ -3,17 +3,15 @@ echo off
 echo Aggregating all artifacts for the release package. Not all steps may succeed on all PCs (e.g. building chm)
 
 rd /S /Q .\..\bin\WixSharp
-
-xcopy /S /Y "WixSharp.Samples\Wix_bin" "..\bin\WixSharp\Wix_bin\"
+md "..\bin\WixSharp"
+md "..\bin\WixSharp\Wix_bin"
 xcopy /S /Y "WixSharp.Samples\Wix# Samples" "..\bin\WixSharp\Samples\"
-copy /Y "WixSharp.Samples\uninstall.cmd" "..\bin\WixSharp\uninstall.cmd"
-copy /Y "WixSharp.Samples\install.cmd" "..\bin\WixSharp\install.cmd"
-copy /Y "WixSharp.Samples\cscs.exe" "..\bin\WixSharp\cscs.exe"
-copy /Y "WixSharp.Samples\nbsbuilder.exe" "..\bin\WixSharp\nbsbuilder.exe"
+copy /Y "WixSharp.Samples\Wix_bin\*" "..\bin\WixSharp\Wix_bin\"
 copy /Y "..\license.txt" "..\bin\WixSharp\license.txt"
 copy /Y "..\readme.txt" "..\bin\WixSharp\readme.txt"
-copy /Y "WixSharp.Samples\WixSharp.Lab.dll" "..\bin\WixSharp\WixSharp.Lab.dll"
-copy /Y "WixSharp.Samples\WixSharp.Lab.xml" "..\bin\WixSharp\WixSharp.Lab.xml"
+copy /Y "WixSharp.Samples\*.exe" "..\bin\WixSharp\"
+copy /Y "WixSharp.Samples\WixSharp*.dll" "..\bin\WixSharp\"
+copy /Y "WixSharp.Samples\WixSharp*.xml" "..\bin\WixSharp\"
 
 .\WixSharp.Samples\cscs.exe -l .\..\bin\clean_bins.cs
 
