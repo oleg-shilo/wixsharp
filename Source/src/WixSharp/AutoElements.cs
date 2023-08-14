@@ -132,7 +132,7 @@ namespace WixSharp
         /// https://msdn.microsoft.com/en-us/library/bb756922.aspx
         /// </para>
         /// </summary>
-        public static bool EnableUACRevealer = true;
+        public static bool EnableUACRevealer = false;
 
         /// <summary>
         /// The UAC warning message to be displayed at the start of the actual installation (Progress dialog)
