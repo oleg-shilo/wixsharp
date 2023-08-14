@@ -130,7 +130,7 @@ namespace WixSharp
         /// https://msdn.microsoft.com/en-us/library/bb756922.aspx
         /// </para>
         /// </summary>
-        public static bool EnableUACRevealer = true;
+        public static bool EnableUACRevealer = false;
 
         /// <summary>
         /// The UAC warning message to be displayed at the start of the actual installation (Progress dialog)
@@ -201,11 +201,11 @@ namespace WixSharp
         ///     doc.FindAll("Component")
         ///        .Where(x => x.HasAttribute("Id", val => val.Contains("my_component")))
         ///        .ForEach(AutoElements.InsertUserProfileRegValue);
-        ///     };
+        /// };
         /// </code>
         /// </para>
         /// <para>The problem this feature is trying to solve is closely related to the one handled by
-        /// <see cref="WixSharp.AutoElements.DisableAutoUserProfileRegistry"/> </para>
+        /// <see cref="WixSharp.AutoElements.DisableAutoUserProfileRegistry"/>. </para>
         /// </summary>
         public static bool ForceUserProfileRegistry = false;
 
