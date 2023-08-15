@@ -1,205 +1,45 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{18EF7DE3-5726-46CF-A2F1-B168D84328B4}</ProjectGuid>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConsoleApplication1</RootNamespace>
-    <AssemblyName>setup</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;CSS_PROJECT</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <IntermediateOutputPath>bin\obj\</IntermediateOutputPath>
-    <DefineConstants>TRACE;CSS_PROJECT</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Caliburn.Micro, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Caliburn.Micro.Core.3.2.0\lib\net45\Caliburn.Micro.dll</HintPath>
-    </Reference>
-    <Reference Include="Caliburn.Micro.Platform, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Caliburn.Micro.3.2.0\lib\net45\Caliburn.Micro.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="Caliburn.Micro.Platform.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Caliburn.Micro.3.2.0\lib\net45\Caliburn.Micro.Platform.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>System.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Design" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>System.Windows.Forms.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>System.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>System.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Caliburn.Micro.3.2.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>System.Xml.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="WixToolset.Dtf.WindowsInstaller, Version=4.0.0.0, Culture=neutral, PublicKeyToken=a7d136314861246c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\WixToolset.Dtf.WindowsInstaller.4.0.0\lib\net20\WixToolset.Dtf.WindowsInstaller.dll</HintPath>
-    </Reference>
-    <Reference Include="WixToolset.Mba.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=a7d136314861246c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\WixToolset.Mba.Core.4.0.0\lib\net20\WixToolset.Mba.Core.dll</HintPath>
-    </Reference>
-    <!-- <Reference Include="WpfControlLibrary2">
-      <HintPath>C:\Users\oleg.shilo\source\repos\WindowsFormsApp2\WixSharp Setup1\bin\Debug\WpfControlLibrary2.dll</HintPath>
-    </Reference>
-    <Reference Include="WpfSetup">
-      <HintPath>..\..\..\..\WpfSetup\bin\Release\WpfSetup.exe</HintPath>
-    </Reference> -->
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Dialogs\FeaturesDialog.xaml.cs">
-      <DependentUpon>FeaturesDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\ProgressDialog.xaml.cs">
-      <DependentUpon>ProgressDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\MaintenanceTypeDialog.xaml.cs">
-      <DependentUpon>MaintenanceTypeDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\SetupTypeDialog.xaml.cs">
-      <DependentUpon>SetupTypeDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\InstallDirDialog.xaml.cs">
-      <DependentUpon>InstallDirDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\ExitDialog.xaml.cs">
-      <DependentUpon>ExitDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\WelcomeDialog.xaml.cs">
-      <DependentUpon>WelcomeDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="setup.cs" />
-    <Page Include="Dialogs\FeaturesDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Dialogs\ProgressDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Dialogs\MaintenanceTypeDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Dialogs\SetupTypeDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Dialogs\InstallDirDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Dialogs\ExitDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Dialogs\WelcomeDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Dialogs\LicenseAgreementDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Compile Include="Dialogs\LicenseAgreementDialog.xaml.cs">
-      <DependentUpon>LicenseAgreementDialog.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\WixSharp.UI.WPF\WixSharp.UI.WPF.csproj">
-      <Project>{b8efff07-76bc-4e6d-9a13-4e3a0777eb0c}</Project>
-      <Name>WixSharp.UI.WPF</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\WixSharp.UI\WixSharp.UI.csproj">
-      <Project>{79033a3e-565e-47a3-93f6-d95789b024fc}</Project>
-      <Name>WixSharp.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\WixSharp\WixSharp.csproj">
-      <Project>{8860b29b-749f-4925-86c8-f9c4b93c9da5}</Project>
-      <Name>WixSharp</Name>
-    </ProjectReference>
-    <!--     <ProjectReference Include="..\..\..\..\WixSharp\WixSharp.csproj">
-      <Project>{8860B29B-749F-4925-86C8-F9C4B93C9DA5}</Project>
-      <Name>WixSharp</Name>
-    </ProjectReference> -->
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>"$(TargetPath)"</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net472</TargetFramework>
+		<DebugType>embedded</DebugType>
+		<RuntimeIdentifier>win-x86</RuntimeIdentifier>
+		<Description>WiX Bootstrapper Application</Description>
+		<EnableDynamicLoading>true</EnableDynamicLoading>
+		<UseWPF>true</UseWPF>
+		<RollForward>Major</RollForward>
+		<!-- https://stackoverflow.com/questions/58844785/how-to-reference-system-windows-forms-in-net-core-3-0-for-wpf-apps -->
+		<UseWindowsForms>true</UseWindowsForms>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="*.cmd" />
+		<None Remove="CustomAction.config" />
+		<None Remove="*.exe" />
+		<None Remove="*.pdb" />
+		<None Remove="*.wxs" />
+		<None Remove="*.wixpdb" />
+		<None Remove="*.msi" />
+		<None Remove="readme.txt" />
+		<None Remove="*.CA.dll" />
+		<None Remove="*.cs.dll" />
+		<None Remove="*.cmd.log" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Caliburn.Micro" Version="3.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\WixSharp.UI.WPF\WixSharp.UI.WPF.csproj" />
+		<ProjectReference Include="..\..\..\..\WixSharp.UI\WixSharp.UI.csproj" />
+		<ProjectReference Include="..\..\..\..\WixSharp\WixSharp.csproj" />
+	</ItemGroup>
+
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
+	</Target>
+
 </Project>

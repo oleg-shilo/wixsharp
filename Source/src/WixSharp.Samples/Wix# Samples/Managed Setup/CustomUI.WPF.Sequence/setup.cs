@@ -45,7 +45,6 @@ public class Script
         // project.ManagedUI = ManagedUI.Default;      // WinForm based dialogs
 
         // project.PreserveTempFiles = true;
-        project.SourceBaseDir = @"..\..\";
 
         project.BuildMsi();
     }

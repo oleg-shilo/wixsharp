@@ -54,38 +54,68 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Cusom UI.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Cusom UI.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup %28WiX3%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup %28WiX3%29.zip</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Cusom UI %28WiX3%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Cusom UI %28WiX3%29.zip</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Custom Dialog %28WiX3%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Custom Dialog %28WiX3%29.zip</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI %28WiX3%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Custom WPF UI %28WiX3%29.zip</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\ProjectTemplates\WixSharp Setup %28WiX3%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Setup %28WiX3%29.zip</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\ProjectTemplates\WixSharp Setup %28WiX4%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Setup %28WiX4%29.zip</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\ProjectTemplates\WixSharp Setup - Bootstrapper %28WiX3%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Setup - Bootstrapper %28WiX3%29.zip</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\ProjectTemplates\WixSharp Setup - Custom CLR Dialog %28WiX3%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Setup - Custom CLR Dialog %28WiX3%29.zip</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup %28WiX4%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup %28WiX4%29.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Custom Dialog.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Custom Dialog.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Cusom UI %28WiX4%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Cusom UI %28WiX4%29.zip</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Custom Dialog %28WiX4%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Custom Dialog %28WiX4%29.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI %28WiX4%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Custom WPF UI %28WiX4%29.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Setup - Bootstrapper.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Setup - Bootstrapper.zip</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Setup.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Setup.zip</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Setup - Custom CLR Dialog.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Setup - Custom CLR Dialog.zip</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Custom WPF UI.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp Setup - Bootstrapper %28WiX4%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Setup - Bootstrapper %28WiX4%29.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

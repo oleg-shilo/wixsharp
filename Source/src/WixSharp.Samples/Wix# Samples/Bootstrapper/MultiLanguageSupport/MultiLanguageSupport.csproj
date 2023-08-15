@@ -39,7 +39,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="WixToolset.Mba.Core" Version="4.0.1" />
+		<PackageReference Include="WixToolset.Mba.Core" Version="4.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

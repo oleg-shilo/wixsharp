@@ -8,6 +8,7 @@
 	<ItemGroup>
 		<Compile Remove="CustomUI.Dialog\**" />
 		<Compile Remove="CustomUI.Sequence\**" />
+		<Compile Remove="CustomUI.WPF.Sequence - Copy\**" />
 		<Compile Remove="CustomUI.WPF.Sequence\**" />
 		<Compile Remove="CustomUI.WPF\**" />
 		<Compile Remove="CustomUIDialog\**" />
@@ -18,6 +19,7 @@
 		<Compile Remove="WpfControlLibrary1\**" />
 		<EmbeddedResource Remove="CustomUI.Dialog\**" />
 		<EmbeddedResource Remove="CustomUI.Sequence\**" />
+		<EmbeddedResource Remove="CustomUI.WPF.Sequence - Copy\**" />
 		<EmbeddedResource Remove="CustomUI.WPF.Sequence\**" />
 		<EmbeddedResource Remove="CustomUI.WPF\**" />
 		<EmbeddedResource Remove="CustomUIDialog\**" />
@@ -29,6 +31,7 @@
 		<None Remove="*.cmd" />
 		<None Remove="CustomUI.Dialog\**" />
 		<None Remove="CustomUI.Sequence\**" />
+		<None Remove="CustomUI.WPF.Sequence - Copy\**" />
 		<None Remove="CustomUI.WPF.Sequence\**" />
 		<None Remove="CustomUI.WPF\**" />
 		<None Remove="CustomUIDialog\**" />
