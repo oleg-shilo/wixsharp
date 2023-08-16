@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -305,7 +306,7 @@ namespace WixSharp.CommonTasks
         /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
         /// </param>
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
-        /// 
+        ///
         /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file.
         /// <code>
         /// WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(
@@ -1769,6 +1770,133 @@ namespace WixSharp.CommonTasks
             /// Gets the handle to the window represented by the implementer.
             /// </summary>
             public IntPtr Handle { get; }
+        }
+    }
+
+    /// <summary>
+    /// An utility class for persisting session data (dictionary) between installation sessions..
+    /// The data is persisted in the encrypted `C:\ProgramData\WixSharp\SessionData\&lt;UpgradeCode&gt;` file.
+    /// </summary>
+    /// <example>The following is an example of persisting session data at the end of setup from the project `AfterInstall` event handler:
+    /// <code>
+    /// // persist data at the end of the session
+    /// static void project_AfterInstall(SetupEventArgs e)
+    /// {
+    ///     try
+    ///     {
+    ///         var customData = new Dictionary&lt;string, string&gt;();
+    ///         customData[install_time] = DateTime.Now.ToString();
+    ///         e.Session.PersistData(customData);
+    ///     }
+    ///     catch { }
+    /// }
+    ///
+    /// . . .
+    /// // read the persisted data at the start of the next session
+    /// static void project_UIInit(SetupEventArgs e)
+    /// {
+    ///     try
+    ///     {
+    ///         var Dictionary&lt;string, string&gt; data = e.Session.ReadPersistedData());
+    ///     }
+    ///     catch { }
+    ///
+    ///
+    /// </code>
+    /// </example>
+    public static class SessionDataExtensions
+    {
+        static string persitentDataDir = System.IO.Path.Combine(
+                                              Environment.SpecialFolder.CommonApplicationData.ToPath(),
+                                              "WixSharp",
+                                              "SessionData")
+                                             .EnsureDirExists();
+
+        /// <summary>
+        /// Persists the data.
+        /// </summary>
+        /// <example>The following is an example of persisting session data at the end of setup from the project `AfterInstall` event handler:
+        /// <code>
+        /// static void project_AfterInstall(SetupEventArgs e)
+        /// {
+        ///     try
+        ///     {
+        ///         e.Session.PersistData(e.Data);
+        ///         // or
+        ///         var customData = new Dictionary&lt;string, string&gt;();
+        ///         customData[install_time] = DateTime.Now.ToString();
+        ///         e.Session.PersistData(customData);
+        ///     }
+        ///     catch { }
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="session">The session.</param>
+        /// <param name="data">The data.</param>
+        /// <param name="protectionScope">The protection scope.</param>
+        /// <returns></returns>
+        public static Session PersistData(this Session session, Dictionary<string, string> data, DataProtectionScope protectionScope = DataProtectionScope.LocalMachine)
+        {
+            var fileName = persitentDataDir.PathCombine(session.Property("UpgradeCode"));
+
+            var xml = data.ToXml();
+
+            var bytes = ProtectedData.Protect(Encoding.Unicode.GetBytes(xml), null, protectionScope);
+
+            System.IO.File.WriteAllBytes(fileName, bytes);
+
+            return session;
+        }
+
+        /// <summary>
+        /// Reads the persisted data.
+        /// </summary>
+        /// <example>The following is an example of reading persisted data from the project `Load` event handler:
+        /// <code>
+        ///
+        /// static void project_UIInit(SetupEventArgs e)
+        /// {
+        ///     try
+        ///     {
+        ///         e.Data.Merge(e.Session.ReadPersistedData());
+        ///     }
+        ///     catch { }
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="session">The session.</param>
+        /// <param name="protectionScope">The protection scope.</param>
+        /// <returns></returns>
+        public static Dictionary<string, string> ReadPersistedData(this Session session, DataProtectionScope protectionScope = DataProtectionScope.LocalMachine)
+        {
+            var fileName = persitentDataDir.PathCombine(session.Property("UpgradeCode"));
+
+            if (System.IO.File.Exists(fileName))
+            {
+                var bytes = System.IO.File.ReadAllBytes(fileName);
+                bytes = ProtectedData.Unprotect(bytes, null, protectionScope);
+                var xml = Encoding.Unicode.GetString(bytes);
+                return new Dictionary<string, string>().InitFromXml(xml);
+            }
+            else
+                return new Dictionary<string, string>();
+        }
+
+        static string ToXml(this Dictionary<string, string> data)
+        {
+            var xml = XDocument.Parse("<items/>");
+            foreach (var key in data.Keys)
+                xml.Root.AddElement("item")
+                        .SetAttribute("key", key)
+                        .SetAttribute("value", data[key] ?? "");
+            return xml.ToString();
+        }
+
+        static Dictionary<string, string> InitFromXml(this Dictionary<string, string> data, string xml)
+        {
+            foreach (var element in XDocument.Parse(xml).Root.Elements())
+                data[element.GetAttribute("key")] = element.GetAttribute("value");
+            return data;
         }
     }
 

@@ -292,7 +292,7 @@ namespace WixSharp
             }
         }
 
-        string defaultDeferredProperties = "INSTALLDIR,UILevel,ProductName,FOUNDPREVIOUSVERSION";
+        string defaultDeferredProperties = "INSTALLDIR,UILevel,ProductName,FOUNDPREVIOUSVERSION,UpgradeCode";
 
         /// <summary>
         /// Flags that indicates if <c>WixSharp_InitRuntime_Action</c> custom action should be
