@@ -1411,6 +1411,34 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Ensures the directory exists.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static string EnsureDirExists(this string path)
+        {
+            Directory.CreateDirectory(path);
+            return path;
+        }
+
+        /// <summary>
+        /// Ensures the file exists.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static string EnsureFileExists(this string path)
+        {
+            var filePath = path.PathGetFullPath();
+
+            if (!IO.File.Exists(filePath))
+            {
+                filePath.PathGetDirName().EnsureDirExists();
+                IO.File.WriteAllBytes(filePath, new byte[0]);
+            }
+            return path;
+        }
+
+        /// <summary>
         /// Gets the full path.
         /// </summary>
         /// <param name="path">The path.</param>
