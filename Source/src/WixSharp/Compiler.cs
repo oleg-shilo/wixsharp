@@ -661,6 +661,10 @@ namespace WixSharp
             var candleCmdLineParams = new StringBuilder();
             candleCmdLineParams.AppendFormat("{0} {1} {2} {3} \"{4}\" ", candleOptions, localization, extensionDlls, libFiles, wxsFile);
 
+            var msiProj = project as Project;
+            if (msiProj != null && msiProj.Platform != Platform.x86) // non-default architecture
+                candleCmdLineParams.Append($" -arch {Platform.x64}");
+
             if (extraWxsFiles.IsNotEmpty())
                 candleCmdLineParams.Append(extraWxsFiles);
 
