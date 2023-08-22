@@ -173,8 +173,8 @@ namespace WixSharp
         /// Occurs after InstallFiles standard action. The event is fired from the elevated
         /// execution context.
         /// <para>If it is required that the event handler is invoked without elevation then you can
-        /// call <see cref="WixSharp.Project.UnelevateAfterInstallEvent()"/> so the `Project.AfterInstall` event is
-        /// scheduled for unelevated execution.
+        /// call <see cref="WixSharp.CommonTasks.Tasks.UnelevateAfterInstallEvent(ManagedProject)"/> so the `Project.AfterInstall` event is
+        /// scheduled for unelevated execution.</para>
         /// </summary>
         public event SetupEventHandler AfterInstall;
 
@@ -443,7 +443,14 @@ namespace WixSharp
                 foreach (var item in dialogs)
                 {
                     if (!this.DefaultRefAssemblies.Contains(item.Assembly.GetLocation()))
+                    {
                         this.DefaultRefAssemblies.Add(item.Assembly.GetLocation());
+                        try
+                        {
+                            this.DefaultRefAssemblies.Add(Type.GetType("WixToolset.Mba.Core.Engine").Assembly.Location);
+                        }
+                        catch { }
+                    }
 
                     var info = GetDialogInfo(item);
 

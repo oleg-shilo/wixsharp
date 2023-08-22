@@ -49,16 +49,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomUI.Dialog", "WixSharp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmbeddedUI_WPF", "WixSharp.Samples\Wix# Samples\Custom_UI\EmbeddedUI_WPF\EmbeddedUI_WPF.csproj", "{29DF07CE-4648-47DE-8440-3DB54D49D5D2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C5DF539D-C0A0-45DF-BE5B-CEE8F1ACBA05}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomUI.WPF", "CustomUI.WPF", "{1CFD0B87-E292-41B3-A914-FF8254D4A32C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixSharp.UI.WPF", "WixSharp.UI.WPF\WixSharp.UI.WPF.csproj", "{B8EFFF07-76BC-4E6D-9A13-4E3A0777EB0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomUI.WPF.Sequence", "WixSharp.Samples\Wix# Samples\Managed Setup\CustomUI.WPF.Sequence\CustomUI.WPF.Sequence.csproj", "{18EF7DE3-5726-46CF-A2F1-B168D84328B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomUI.WPF.Sequence", "WixSharp.Samples\Wix# Samples\Managed Setup\CustomUI.WPF.Sequence\CustomUI.WPF.Sequence.csproj", "{18EF7DE3-5726-46CF-A2F1-B168D84328B4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Self-executable_Msi", "WixSharp.Samples\Wix# Samples\Managed Setup\Self-executable_Msi\Self-executable_Msi.csproj", "{C34D92EB-36E6-4405-8479-8218570D1F76}"
 	ProjectSection(ProjectDependencies) = postProject

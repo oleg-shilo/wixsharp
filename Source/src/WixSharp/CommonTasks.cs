@@ -2198,10 +2198,10 @@ namespace WixSharp.CommonTasks
             }
         }
 
-        internal static string WixToolsetMbaCoreFor(string platformDir)
+        internal static string WixToolsetMbaCoreFor()
         {
             EnsureDtfTool();
-            return PackageDir("wixtoolset.dtf.customaction").PathCombine($@"tools\{platformDir}\WixToolset.Mba.Core.dll");
+            return PackageDir("wixtoolset.mba.core").PathCombine(@"lib\netstandard2.0\WixToolset.Mba.Core.dll");
         }
 
         internal static string SfxCAFor(string platformDir)

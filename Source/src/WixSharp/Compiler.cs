@@ -3173,13 +3173,7 @@ namespace WixSharp
 
             string makeSfxCA = WixTools.MakeSfxCA;
             string sfxcaDll = WixTools.SfxCAFor(platformDir);
-            // string wixToolsetMbaCore = WixTools.WixToolsetMbaCoreFor(platformDir);
             string dtfWinInstaller = WixTools.DtfWindowsInstaller;
-
-            // if (dtfWinInstaller.PathChangeFileName("WixToolset.Mba.Core.dll").PathExists())
-            //     wixToolsetMbaCore = dtfWinInstaller.PathChangeFileName("WixToolset.Mba.Core.dll");
-
-
 
             outDir = IO.Path.GetFullPath(outDir);
 
@@ -3191,6 +3185,26 @@ namespace WixSharp
                 asmFile = clientAsmPath;
 
             var requiredAsms = new List<string>(refAssemblies);
+
+            if (refAssemblies.Any(x => x.PathGetFileName() == "WixSharp.UI.dll") &&
+                !refAssemblies.Any(x => x.PathGetFileName() == "WixToolset.Mba.Core.dll"))
+            {
+                string localWixToolsetMbaCore = dtfWinInstaller.PathChangeFileName("WixToolset.Mba.Core.dll");
+
+                if (localWixToolsetMbaCore.PathExists())
+                {
+                    requiredAsms.Add(localWixToolsetMbaCore);
+                }
+                else
+                {
+                    localWixToolsetMbaCore = WixTools.WixToolsetMbaCoreFor();
+                    if (localWixToolsetMbaCore.PathExists())
+                        requiredAsms.Add(localWixToolsetMbaCore);
+                    else
+                        requiredAsms.Add("WixToolset.Mba.Core.dll");
+
+                }
+            }
 
             //if WixSharp was "linked" with the client assembly not as script file but as external assembly
             string wixSharpAsm = System.Reflection.Assembly.GetExecutingAssembly().Location;
