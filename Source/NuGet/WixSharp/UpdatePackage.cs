@@ -23,7 +23,10 @@ class Script
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.nuspec", releaseNotes, version.ToString());
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.WPF.nuspec", releaseNotes, version.ToString());
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.bin.nuspec", releaseNotes, version.ToString());
-        //UpdateReleaseNotesAndVersion(@"E:\Galos\Projects\WixSharp\NuGet\WixSharp\WixSharp.ClrDialog.nuspec", releaseNotes, version.ToString());
+
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.nuspec", releaseNotes, version.ToString());
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.WPF.nuspec", releaseNotes, version.ToString());
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.bin.nuspec", releaseNotes, version.ToString());
 
         CopyFiles(root + @"\bin\WixSharp", "nbsbuilder.exe", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.dll", "lib");

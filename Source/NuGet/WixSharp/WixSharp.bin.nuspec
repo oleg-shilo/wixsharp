@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>2.0.0.0</version>
+    <version>2.0.1.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,24 +16,13 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.0.0.0
+    <releaseNotes>Release v2.0.1.0
 
-## WixSharp release for WiX4.
-
-### System Requirements:
-- .NET runtime v7.0 or higher must be installed.
-- WiX4 toolset: `dotnet tool install --global wix`
-
-Limitations:
-
-WixSharp just drops these features because they have no direct support in WiX4:
-- Package.InstallPrivileges
-- Publish.Condition
-- Package.Languages no longer exists
-- WixSharp.DriverInstaller is based on now deprecated &lt;Driver&gt; element. WiX4 offers no guidance on how to deal with it.
-- &lt;CustomAction Id="VBScript" Script="vbscript" ...&gt;&lt;![CDATA[MsgBox "Executing VBScript code..."]]&gt;
-- &lt;Package Platform="x64" is illegal but not even picked by wix convert; doc says Component.Bitness may have the value default which means "will be installed using the same bitness as the package". But the package element does not have bitness attribute. WixSharp maintains Project.Platform property but does not convert it in the Package.Platform while still cascades it to the Component.Bitness
-
+- Issue #1329: the sample of Install on x64 generate a msi which installs components to Program Files (x86)
+- Ported some method extensions from the WiX3 codebase.
+- Added `project.UnelevateAfterInstallEvent()` API
+- WixSharp binaries re-targeted for target runtime v4.7.2
+- Added `Session.PersistData` for securely persisting data between sessions; Triggered by Issue #1029.
 </releaseNotes>
     <copyright>Copyright (C) 2008-2022 Oleg Shilo</copyright>
     <language>en-AU</language>
