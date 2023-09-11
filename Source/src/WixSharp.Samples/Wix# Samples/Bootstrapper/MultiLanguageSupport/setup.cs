@@ -126,7 +126,7 @@ public static class Script
                     new MsiPackage(msiFile)
                     {
                         Id = BA.MainPackageId,
-                        DisplayInternalUI = true, // WiX4 bug: Internal UI is not displayed for custom BAs (https://github.com/orgs/wixtoolset/discussions/7655)
+                        DisplayInternalUI = true,
                         Visible = true,
                         MsiProperties = "TRANSFORMS=[TRANSFORMS]"
                     });
