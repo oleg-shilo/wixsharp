@@ -46,13 +46,6 @@ namespace WixSharp
     public enum CompilerSupportState
     {
         /// <summary>
-        /// The feature will be enabled automatically when needed
-        /// </summary>
-        [Obsolete(message: "This value is no longer used by any of the compiler features. " +
-                  "Use `CompilerSupportState.Enabled` instead.", error: false)]
-        Automatic = 0,
-
-        /// <summary>
         /// The feature will be enabled
         /// </summary>
         Enabled = 0,
@@ -166,13 +159,6 @@ namespace WixSharp
         /// is satisfied and yet there is no impact on the target file system.</para>
         /// </summary>
         public static bool LegacyDummyDirAlgorithm = false;
-
-        /// <summary>
-        /// Enables scheduling deferred actions just after their corresponding
-        /// "SetDeferredActionProperties" custom action. Enabled by default.
-        /// </summary>
-        [Obsolete("This property obsolete. Its name is misspelled. Please use `ScheduleDeferredActionsAfterTunnellingTheirProperties` instead.")]
-        public static bool ScheduleDeferredActionsAfterTunnellingTheirProperties = true;
 
         /// <summary>
         /// Enables scheduling deferred actions just after their corresponding
@@ -698,23 +684,9 @@ namespace WixSharp
                             //
                             // OMG!!!! If it is not over-engineering I don't know what is.
 
-                            bool oldAlgorithm = false;
-
-                            if (!oldAlgorithm)
-                            {
-                                //current approach
-                                InsertCreateFolder(item);
-                                if (!xDir.ContainsAnyRemoveFolder())
-                                    InsertRemoveFolder(xDir, item, "uninstall");
-                            }
-                            else
-                            {
-                                //old approach
-                                if (!item.Attribute("Id").Value.EndsWith(".EmptyDirectory"))
-                                    InsertCreateFolder(item);
-                                else if (!xDir.ContainsAnyRemoveFolder())
-                                    InsertRemoveFolder(xDir, item, "uninstall"); //to keep WiX/compiler happy and allow removal of the dummy directory
-                            }
+                            InsertCreateFolder(item);
+                            if (!xDir.ContainsAnyRemoveFolder())
+                                InsertRemoveFolder(xDir, item, "uninstall");
                         }
                     }
                 }

@@ -1538,13 +1538,7 @@ namespace WixSharp
             {
                 var existingCompElement = dirItem.Elements("Component");
 
-                // experimenting revealed that `AutoElements.SupportEmptyDirectories != CompilerSupportState.Disabled`
-                // may lead to empty folders remaining after uninstall in case of `CompilerSupportState.Auto`.
-                // The actual cause is not entirely clear but changing the code to `AutoElements.SupportEmptyDirectories == CompilerSupportState.Enabled`
-                // addresses the issue. Though, in turn, effectively disables auto mode and requires explicit declaration
-                // of `AutoElements.SupportEmptyDirectories = CompilerSupportState.Enabled` for empty dir scenarios.
-                // Restoring the original approach for now... (15/09/2018)
-                if (existingCompElement.Count() == 0 && AutoElements.SupportEmptyDirectories != CompilerSupportState.Disabled)
+                if (existingCompElement.Count() == 0 && AutoElements.SupportEmptyDirectories == CompilerSupportState.Enabled)
                 {
                     string compId = wDir.GenerateComponentId(wProject, ".EmptyDirectory");
 
