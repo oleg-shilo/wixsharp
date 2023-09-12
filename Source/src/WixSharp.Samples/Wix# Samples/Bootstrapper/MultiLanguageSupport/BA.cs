@@ -19,7 +19,7 @@ namespace WixToolset.WixBA
     {
         protected override IBootstrapperApplication Create(IEngine engine, IBootstrapperCommand command)
         {
-            Debug.Assert(false);
+            // Debug.Assert(false);
             return new BA(engine, command);
         }
     }
