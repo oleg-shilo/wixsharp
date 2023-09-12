@@ -1695,6 +1695,23 @@ namespace WixSharp.CommonTasks
             return ServiceDo("stop", service, throwOnError);
         }
 
+        /// <summary>
+        /// Changes the project configuration so `Project.AfterInstall` event is executed unelevated. Otherwise it is elevated.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns></returns>
+        public static ManagedProject UnelevateAfterInstallEvent(this ManagedProject project)
+        {
+            project.WixSourceGenerated +=
+                doc =>
+                {
+                    doc.FindAll("CustomAction")
+                       .FirstOrDefault(x => x.HasAttribute("Id", "WixSharp_AfterInstall_Action"))
+                      ?.SetAttribute("Execute", "immediate");
+                };
+            return project;
+        }
+
         static string ServiceDo(string action, string service, bool throwOnError)
         {
             var util = new ExternalTool { ExePath = "sc.exe", Arguments = action + " \"" + service + "\"" };
