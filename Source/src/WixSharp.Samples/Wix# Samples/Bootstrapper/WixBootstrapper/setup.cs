@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
+using WixSharp.Nsis;
 using WixToolset.Dtf.WindowsInstaller;
 using io = System.IO;
 
@@ -16,6 +17,8 @@ public class InstallScript
 {
     static public void Main()
     {
+        SimpleMsiInternalUI("test.msi"); return;
+
         var crtMsi = BuildCrtMsi();
         var productMsi = BuildMainMsi();
 
@@ -234,4 +237,17 @@ public class InstallScript
     {
         MessageBox.Show("DOINSTALL: " + e.Session["DOINSTALL"]);
     }
+}
+
+// This is an example of support for custom Bundle elements that are not directly implemented by WixSharp
+// Usage: `bundle.Chain.Add(new DotNetCoreSearch());`
+public class DotNetCoreSearch : ChainItem
+{
+    [Xml] public string RuntimeType = "aspnet";
+    [Xml] public string Platform = "x64";
+    [Xml] public string MajorVersion = "6";
+    [Xml] public string Variable = "AspNetCoreRuntimeVersion";
+
+    public override XContainer[] ToXml()
+         => new[] { this.ToXElement(WixExtension.NetFx.ToXName("DotNetCoreSearch")) };
 }
