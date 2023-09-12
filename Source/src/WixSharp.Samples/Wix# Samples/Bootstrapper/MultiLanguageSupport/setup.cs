@@ -14,9 +14,11 @@ public static class Script
 {
     static void Main()
     {
+        // Read more about localization here: https://github.com/oleg-shilo/wixsharp/wiki/Localization
+
         var project = new Project("MyProduct",
                           new Dir(@"%ProgramFiles%\My Company\My Product",
-                              new File("Program.cs")));
+                              new File("setup.cs")));
 
         project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
         //project.SourceBaseDir = "<input dir path>";
@@ -24,14 +26,17 @@ public static class Script
 
         //project.BuildMsi();
 
-        project.Language = "en-US";
-        string productMsi = project.BuildMsi();
+        project.Language = "en-US,uk-UA";
+        var msiFile = project.BuildMultilanguageMsi();
 
-        project.Language = "ru-RU";
-        string mstFile = project.BuildLanguageTransform(productMsi, "ru-RU");
+        // project.Language = "en-US";
+        // string productMsi = project.BuildMsi();
 
-        productMsi.EmbedTransform(mstFile);
-        productMsi.SetPackageLanguages("en-US,ru-RU".ToLcidList());
+        // project.Language = "uk-UA";
+        // string mstFile = project.BuildLanguageTransform(productMsi, project.Language);
+
+        // productMsi.EmbedTransform(mstFile);
+        // productMsi.SetPackageLanguages("en-US,uk-UA".ToLcidList());
     }
 
     static public void Main1()
@@ -45,13 +50,12 @@ public static class Script
 
         product.Version = new Version("1.0.0.0");
         product.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258771");
-        product.Language = BA.Languages; // "en-US,de-DE,ru-RU";
+        product.Language = BA.Languages; // "en-US,de-DE,uk-UA";
 
         product.PreserveTempFiles = true;
         product.OutFileName = $"{product.Name}.ml.v{product.Version}";
 
-        var msiFile = $"{product.OutFileName}.msi".PathGetFullPath();
-        //var msiFile = product.BuildMultilanguageMsi();
+        var msiFile = product.BuildMultilanguageMsi();
 
         var bootstrapper =
                 new Bundle("My Product",

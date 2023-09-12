@@ -1,0 +1,1 @@
+msiexec /i "MyProduct.msi" TRANSFORMS=:1058

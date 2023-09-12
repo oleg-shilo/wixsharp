@@ -51,6 +51,17 @@ class Script
         //                     .ForEach(x => x.Add(WixExtension.Util.XElement("PermissionEx",
         //                                                                    "User=[WIX_ACCOUNT_USERS]; GenericAll=yes; CreateSubkeys=yes")));
         //              };
+
+        // project.WixSourceGenerated += (doc) =>
+        //              {
+        //                  doc.FindAll("CreateFolder")
+        //                     .ForEach(x => x.Remove());
+        //                  doc.FindAll("RemoveFolder")
+        //                     .ForEach(x => x.Remove());
+        //              };
+
+        AutoElements.SupportEmptyDirectories = CompilerSupportState.Disabled;
+
         project.PreserveTempFiles = true;
         project.BuildMsi();
     }

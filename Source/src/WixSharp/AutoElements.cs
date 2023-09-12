@@ -691,23 +691,9 @@ namespace WixSharp
                             //
                             // OMG!!!! If it is not over-engineering I don't know what is.
 
-                            bool oldAlgorithm = false;
-
-                            if (!oldAlgorithm)
-                            {
-                                //current approach
-                                InsertCreateFolder(item);
-                                if (!xDir.ContainsAnyRemoveFolder())
-                                    InsertRemoveFolder(xDir, item, "uninstall");
-                            }
-                            else
-                            {
-                                //old approach
-                                if (!item.Attribute("Id").Value.EndsWith(".EmptyDirectory"))
-                                    InsertCreateFolder(item);
-                                else if (!xDir.ContainsAnyRemoveFolder())
-                                    InsertRemoveFolder(xDir, item, "uninstall"); //to keep WiX/compiler happy and allow removal of the dummy directory
-                            }
+                            InsertCreateFolder(item);
+                            if (!xDir.ContainsAnyRemoveFolder())
+                                InsertRemoveFolder(xDir, item, "uninstall");
                         }
                     }
                 }

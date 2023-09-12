@@ -4,15 +4,22 @@
 //css_ref System.Core;
 //css_ref System.Xml;
 
+using Microsoft.Deployment.WindowsInstaller;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using System.Security.Cryptography;
 using System.Security.Principal;
+using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
+using System.Xml.Serialization;
 using WixSharp;
 using WixSharp.CommonTasks;
+using static WixSharp.SetupEventArgs;
 
 public static class Script
 {
@@ -79,18 +86,6 @@ public static class Script
         project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project);
-    }
-
-    static ManagedProject UnelevateAfterInstallEvent(this ManagedProject project)
-    {
-        project.WixSourceGenerated +=
-            doc =>
-            {
-                doc.FindAll("CustomAction")
-                   .Single(x => x.HasAttribute("Id", "WixSharp_AfterInstall_Action"))
-                   .SetAttribute("Execute", "immediate");
-            };
-        return project;
     }
 
     static void Project_UIInitialized(SetupEventArgs e)
@@ -179,6 +174,7 @@ public static class Script
                         e.ToString() +
                         "\npersisted_data = " + e.Data["persisted_data"] +
                         "\nADDFEATURES = " + e.Session.Property("ADDFEATURES") +
+                        "\nUpgradeCode = " + e.Session.Property("UpgradeCode") +
                         "\n'MyApp_Binaries' enabled = " + e.Session.IsFeatureEnabled("MyApp Binaries") +
                         "\nEnvVar('INSTALLDIR') -> " + Environment.ExpandEnvironmentVariables("%INSTALLDIR%My App.exe"),
                         caption: "AfterInstall ");

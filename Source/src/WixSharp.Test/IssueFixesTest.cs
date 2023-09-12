@@ -453,7 +453,6 @@ namespace WixSharp.Test
             {
                 var dir = xml.FindAll("Directory")
                              .Where(x => x.HasAttribute("Name", "PersonalFolder"))
-                             //.Where(x => x.HasAttribute("Name", v => v == "PersonalFolder"))
                              .SelectMany(x => x.FindAll("Component"))
                              .ForEach(comp => comp.InsertUserProfileRegValue()
                                                   .InsertUserProfileRemoveFolder());

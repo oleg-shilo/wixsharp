@@ -21,7 +21,7 @@ using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 public class BA : BootstrapperApplication
 {
     public static string MainPackageId = "MyProductPackageId";
-    public static string Languages = "en-US,de-DE,ru-RU";
+    public static string Languages = "en-US,de-DE,uk-UA";
 
     public CultureInfo SelectedLanguage { get; set; }
 
@@ -31,6 +31,7 @@ public class BA : BootstrapperApplication
 
     public BA()
     {
+        Debug.Assert(false);
         SelectedLanguage = SupportedLanguages.FirstOrDefault();
         this.Error += (s, e) => MessageBox.Show(e.ErrorMessage);
         this.ApplyComplete += (s, e) =>
