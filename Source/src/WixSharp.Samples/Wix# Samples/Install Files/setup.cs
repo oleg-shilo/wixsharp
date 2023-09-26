@@ -16,10 +16,6 @@ class Script
 {
     static public void Main()
     {
-        var orca = AppSearch.GetProductCode("Spotify").FirstOrDefault();
-        var all = AppSearch.GetInstalledProducts().Order().ToArray();
-        // Debug.WriteLine(AppSearch.GetProductInfo(orca, "VersionString"));
-
         File f;
         var project =
             new Project("MyProduct",
