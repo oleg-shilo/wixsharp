@@ -17,7 +17,7 @@ public class InstallScript
 {
     static public void Main()
     {
-        SimpleMsiInternalUI("test.msi"); return;
+        // SimpleMsiInternalUI("test.msi"); return;
 
         var crtMsi = BuildCrtMsi();
         var productMsi = BuildMainMsi();
@@ -37,7 +37,7 @@ public class InstallScript
         };
 
         // will show MSI UI instead
-        bundle.Chain.Add(new MsiPackage(msi) { DisplayInternalUI = true });
+        bundle.Chain.Add(new MsiPackage(msi) { DisplayInternalUI = true, Visible = true });
 
         bundle.Build("my.exe");
     }

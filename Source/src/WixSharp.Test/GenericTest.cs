@@ -209,7 +209,7 @@ namespace WixSharp.Test
             Assert.Throws<Exception>(() => project.BuildWxs());
         }
 
-        //[Fact] //xUnit/VSTest runtime doesn't play nice with MSI interop
+        // [Fact] //xUnit/VSTest runtime doesn't play nice with MSI interop
         public void AppSearchTest()
         {
             var keyExist = AppSearch.RegKeyExists(Registry.LocalMachine, @"System\CurrentControlSet\services");

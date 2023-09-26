@@ -24,6 +24,7 @@ namespace WixSharp.CommonTasks
 
         [DllImport("msi")]
         static extern int MsiEnumRelatedProducts(string productCode, int reserved, int iProductIndex, StringBuilder lpProductBuf);
+
         /// <summary>
         /// Gets the 'product code' of the installed product.
         /// </summary>
@@ -33,7 +34,7 @@ namespace WixSharp.CommonTasks
         {
             var result = new List<string>();
 
-            var productCode = new StringBuilder();
+            var productCode = new StringBuilder(255);
 
             int i = 0;
             while (0 == MsiEnumProducts(i++, productCode))
@@ -42,12 +43,34 @@ namespace WixSharp.CommonTasks
                 var productName = new StringBuilder(productNameLen);
 
                 MsiGetProductInfo(productCode.ToString(), "ProductName", productName, ref productNameLen);
-
                 if (productName.ToString() == name)
                     result.Add(productCode.ToString());
             }
 
             return result.ToArray();
+        }
+
+        /// <summary>
+        /// Returns names of the all installed products.
+        /// </summary>
+        /// <returns></returns>
+        static public string[] GetInstalledProducts()
+        {
+            var result = new List<string>();
+
+            var productCode = new StringBuilder(255);
+
+            int i = 0;
+            while (0 == MsiEnumProducts(i++, productCode))
+            {
+                var productNameLen = 512;
+                var productName = new StringBuilder(productNameLen);
+
+                MsiGetProductInfo(productCode.ToString(), "ProductName", productName, ref productNameLen);
+                result.Add(productName.ToString());
+            }
+
+            return result.Order().ToArray();
         }
 
         /// <summary>
@@ -97,6 +120,7 @@ namespace WixSharp.CommonTasks
         {
             return GetProductInfo(productCode, "ProductName");
         }
+
         /// <summary>
         /// Gets the version of the installed product from its 'upgrade code'.
         /// <code>
@@ -121,7 +145,18 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Gets the 'product version' of the installed product.
+        /// Returns a raw version string of the product.
+        /// </summary>
+        /// <param name="productCode"></param>
+        /// <returns></returns>
+        static public string GetProductVersionString(string productCode)
+        {
+            return AppSearch.GetProductInfo(productCode, "VersionString");
+        }
+
+        /// <summary>
+        /// Gets the 'product version' of the installed product. This method will not work in for the
+        /// revision part of the version string. Use GetProductVersionString for such cases.
         /// </summary>
         /// <param name="productCode">The product code.</param>
         /// <returns></returns>
@@ -135,9 +170,9 @@ namespace WixSharp.CommonTasks
                 int value;
                 if (int.TryParse(versionStr, out value))
                 {
-                    var major = (int) (value & 0xFF000000) >> 8 * 3;
-                    var minor = (int) (value & 0x00FF0000) >> 8 * 2;
-                    var build = (int) (value & 0x0000FFFF);
+                    var major = (int)(value & 0xFF000000) >> 8 * 3;
+                    var minor = (int)(value & 0x00FF0000) >> 8 * 2;
+                    var build = (int)(value & 0x0000FFFF);
                     return new Version(major, minor, build);
                 }
             }
@@ -145,7 +180,7 @@ namespace WixSharp.CommonTasks
             return null;
         }
 
-        static string GetProductInfo(string productCode, string property)
+        public static string GetProductInfo(string productCode, string property)
         {
             var productNameLen = 512;
             var productName = new StringBuilder(productNameLen);
