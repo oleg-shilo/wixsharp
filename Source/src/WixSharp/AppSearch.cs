@@ -180,6 +180,12 @@ namespace WixSharp.CommonTasks
             return null;
         }
 
+        /// <summary>
+        /// Gets the product information.
+        /// </summary>
+        /// <param name="productCode">The product code.</param>
+        /// <param name="property">The property, which value is queried. .</param>
+        /// <returns></returns>
         public static string GetProductInfo(string productCode, string property)
         {
             var productNameLen = 512;

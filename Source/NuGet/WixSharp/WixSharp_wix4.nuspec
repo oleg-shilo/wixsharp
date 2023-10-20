@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp_wix4</id>
-    <version>2.0.1.0</version>
+    <version>2.0.2.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,19 +18,14 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed: `dotnet tool install --global wix`
 The package is tested against WIX (Windows Installer Xml) Toolset v4.0.1.0</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.0.1.0
+    <releaseNotes>Release v2.0.2.0
 
-- Issue #1329: the sample of Install on x64 generate a msi which installs components to Program Files (x86)
-- Ported some method extensions from the WiX3 codebase.
-- Added `project.UnelevateAfterInstallEvent()` API
-- WixSharp binaries re-targeted for target runtime v4.7.2
-- Added `Session.PersistData` for securely persisting data between sessions; Triggered by Issue #1029.
-</releaseNotes>
+- Added `Compiler.VerboseOutput`</releaseNotes>
     <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp_wix4.bin" version="2.0.0.0" />
+      <dependency id="WixSharp_wix4.bin" version="2.0.2.0" />
     </dependencies>
   </metadata>
   <files>

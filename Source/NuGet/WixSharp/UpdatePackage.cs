@@ -49,10 +49,12 @@ class Script
         doc.Descendants().Where(x => x.Name.LocalName == "version").First().Value = version;
         doc.Descendants().Where(x => x.Name.LocalName == "releaseNotes").First().Value = releaseNotes;
 
-        var wixSharp_bin = doc.Descendants().Where(x => x.Name.LocalName == "dependency" && x.Attribute("id").Value == "WixSharp.bin").FirstOrDefault();
+        var wixSharp_bins = doc.Descendants()
+                               .Where(x => x.Name.LocalName == "dependency" &&
+                                          (x.Attribute("id").Value == "WixSharp.bin" || x.Attribute("id").Value == "WixSharp_wix4.bin"));
 
-        if (wixSharp_bin != null)
-            wixSharp_bin.Attribute("version").Value = version;
+        foreach (var dependencyElement in wixSharp_bins)
+            dependencyElement.Attribute("version").Value = version;
 
         doc.Save(specFile);
     }

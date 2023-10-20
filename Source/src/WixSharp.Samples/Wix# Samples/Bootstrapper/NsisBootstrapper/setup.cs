@@ -15,8 +15,6 @@ public static class Script
 {
     public static void Main(string[] args)
     {
-        var ttt = WixTools.SignTool;
-
         // if running the all under debugger (but not under msbuild) then the current dir needs to be adjusted
         if (!@"Assets\script.ps1".PathExists())
             Environment.CurrentDirectory = Environment.CurrentDirectory.PathCombine(@"..\..\..\");

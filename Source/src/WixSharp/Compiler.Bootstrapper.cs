@@ -90,11 +90,13 @@ namespace WixSharp
 
                 string compileCmd;
                 compileCmd = $"build {GenerateWixCommand(project, wxsFile)} -o \"{outFile}\"";
-#if DEBUG
-                Compiler.OutputWriteLine("<- Compiling");
-                Compiler.OutputWriteLine(compiler + " " + compileCmd);
-                Compiler.OutputWriteLine("->");
-#endif
+
+                if (Compiler.VerboseOutput)
+                {
+                    Compiler.OutputWriteLine("<- Compiling");
+                    Compiler.OutputWriteLine(compiler + " " + compileCmd);
+                    Compiler.OutputWriteLine("->");
+                }
 
                 Run(compiler, compileCmd);
 

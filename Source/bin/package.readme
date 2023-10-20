@@ -2,6 +2,7 @@
 
 2.1 Execute src\build.cmd              (Builds all solutions)
 2.2 Execute src\aggregate.cmd
+2.2 Execute bin\package.cs
 
 ===============================
 WiX4 Issues:
