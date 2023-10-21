@@ -98,7 +98,7 @@ public class CustomActions
 Another important feature is the support for custom UI including WPF external UI:
 ![image](https://github.com/oleg-shilo/wixsharp/raw/master/Documentation/wiki_images/wpf_ui.png)
 
-The package in the [Releases](https://github.com/oleg-shilo/wixsharp/releases) section contains an extensive collection of Wix# samples covering the following development scenarios:
+The [Samples Folder](https://github.com/oleg-shilo/wixsharp/tree/master/Source/src/WixSharp.Samples/Wix%23%20Samples) an extensive collection of Wix# samples covering the following development scenarios:
 
 * Visual Studio integration including [NuGet](https://www.nuget.org/packages/WixSharp/) packages and VS2013/2015 [project templates extension](https://visualstudiogallery.msdn.microsoft.com/4e093ce7-be66-40ed-ab16-61a1186c530e)
 * Installing file(s) into Program Files directory
