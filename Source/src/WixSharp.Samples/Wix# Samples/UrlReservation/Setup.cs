@@ -26,6 +26,7 @@ namespace FutoRollbackGeneration
                                     RemoveOn = SvcEvent.Uninstall_Wait,
                                     DelayedAutoStart = true,
                                     ServiceSid = ServiceSid.none,
+                                    Start = SvcStartType.auto,
                                     FirstFailureActionType = FailureActionType.restart,
                                     SecondFailureActionType = FailureActionType.restart,
                                     ThirdFailureActionType = FailureActionType.runCommand,
