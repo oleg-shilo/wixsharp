@@ -55,7 +55,7 @@ namespace ConsoleApplication1
             this.wixLabel2.Size = new System.Drawing.Size(335, 20);
             this.wixLabel2.Text = "Please enter the activation code";
             this.wixLabel2.Tooltip = null;
-            this.wixLabel2.WixAttributes = "Transparent=yes;\r\n";
+            this.wixLabel2.WixAttributes = "Transparent=yes;";
             // 
             // wixLabel1
             // 
