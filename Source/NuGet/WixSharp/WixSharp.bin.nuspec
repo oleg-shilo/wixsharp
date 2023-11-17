@@ -19,8 +19,8 @@
     </description>
     <summary>Wix# (WixSharp) - Binaries</summary>
     <releaseNotes>
-      Release v1.22.1.0
-      - Added Support StoreType.sha1Hash in DigitalSignatureBootstrapper
+      Release v1.22.1.1
+      - Removed
       - Issue #1317: Bootstrapper bundle has bugs on wxs files generation.
       - Issue #1310: Problem during dynamic localization
     </releaseNotes>

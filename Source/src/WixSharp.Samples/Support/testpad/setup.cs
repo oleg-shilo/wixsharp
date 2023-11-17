@@ -374,6 +374,7 @@ static class Script
 
     static public void Main()
     {
+        issue_1336(); return;
         issue_1075(); return;
         issue_298(); return;
         issue_1114(); return;
@@ -514,6 +515,37 @@ static class Script
                     ModifyDialogs = { Dialogs.MaintenanceType, Dialogs.Progress, Dialogs.Exit, }
                 },
             };
+
+        project.PreserveTempFiles = true;
+        Compiler.BuildMsi(project);
+    }
+
+    static void issue_1336()
+    {
+        var fullSetup = new Feature("MyApp Binaries");
+
+        var project =
+            new Project("MyProduct",
+                new Dir(@"%ProgramFiles%\My Company\My Product",
+                    new File(fullSetup, @"setup.cs")),
+                new RegValue(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product", "LICENSE_KEY", "01020304")
+                {
+                    AttributesDefinition = "Type=binary",
+                    Permissions = new[] { new Permission { User = "usr", Read = true } }
+                });
+
+        project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
+        project.UI = WUI.WixUI_ProgressOnly;
+
+        project.WixSourceGenerated += (doc) =>
+                     {
+                         doc.FindAll("CreateFolder")
+                            .ForEach(x => x.Remove());
+                         doc.FindAll("RemoveFolder")
+                            .ForEach(x => x.Remove());
+                     };
+
+        AutoElements.SupportEmptyDirectories = CompilerSupportState.Disabled;
 
         project.PreserveTempFiles = true;
         Compiler.BuildMsi(project);
