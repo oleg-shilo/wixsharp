@@ -55,7 +55,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="WixToolset.Dtf.WindowsInstaller, Version=4.0.0.0, Culture=neutral, PublicKeyToken=a7d136314861246c, processorArchitecture=MSIL">
-      <HintPath>..\packages\WixToolset.Dtf.WindowsInstaller.4.0.0\lib\net20\WixToolset.Dtf.WindowsInstaller.dll</HintPath>
+      <HintPath>..\packages\WixToolset.Dtf.WindowsInstaller.4.0.2\lib\net20\WixToolset.Dtf.WindowsInstaller.dll</HintPath>
     </Reference>
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>

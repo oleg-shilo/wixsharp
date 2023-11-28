@@ -709,6 +709,10 @@ namespace WixSharp
                 if (!project.SourceBaseDir.IsEmpty())
                     Environment.CurrentDirectory = project.SourceBaseDir;
 
+                Compiler.OutputWriteLine($"Compiling {wxsFile.PathGetFileName()}");
+                Compiler.OutputWriteLine("Source base directory: " + Environment.CurrentDirectory);
+
+
                 string outDir = IO.Path.GetDirectoryName(wxsFile);
                 string outFile = IO.Path.ChangeExtension(wxsFile, "." + type.ToString().ToLower());
 

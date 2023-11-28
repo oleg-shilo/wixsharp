@@ -21,7 +21,7 @@ namespace Microsoft.Deployment.Samples.EmbeddedUI
     using System.Windows;
     using WixToolset.Dtf.WindowsInstaller;
 
-    public class SampleEmbeddedUI : IEmbeddedUI
+    public class SampleEmbeddedUI : IEmbeddedUI  
     {
         private Thread appThread;
         private SetupWizard setupWizard;

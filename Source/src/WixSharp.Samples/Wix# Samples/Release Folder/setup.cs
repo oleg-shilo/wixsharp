@@ -20,7 +20,7 @@ class Script
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new Files(@"..\Release Folder\test\*.exe")
+                    new Files(@"..\Release Folder\test\*.exe", x => x.PathGetFileName() != "app-I-do-not-like.exe")
                     {
                         OnProcess = file =>
                         {

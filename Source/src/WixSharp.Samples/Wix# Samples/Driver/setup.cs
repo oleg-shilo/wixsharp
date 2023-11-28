@@ -24,21 +24,21 @@ class Script
         // down vote you if you reference WixSharp syntax in your questions or suggestions.
 
         var project = new Project("MyProduct",
-                            new Dir(@"%ProgramFiles%\My Company\My Device",
-                                new File("driver.sys",
-                                        new DriverInstaller
-                                        {
-                                            AddRemovePrograms = false,
-                                            DeleteFiles = false,
-                                            Legacy = true,
-                                            PlugAndPlayPrompt = false,
-                                            Sequence = 1,
-                                            Architecture = DriverArchitecture.x64
-                                        })));
+                              new Dir(@"%ProgramFiles%\My Company\My Device",
+                                  new File("driver.sys",
+                                          new DriverInstaller
+                                          {
+                                              AddRemovePrograms = false,
+                                              DeleteFiles = false,
+                                              Legacy = true,
+                                              PlugAndPlayPrompt = false,
+                                              Sequence = 1,
+                                              Architecture = DriverArchitecture.x64
+                                          })));
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
-        project.LibFiles.Add(@"%userprofile%\.wix\extensions\WixToolset.DifxApp.wixext\4.0.0\wixext4\difxapp_x64.wixlib");
+        project.LibFiles.Add(@"%userprofile%\.wix\extensions\WixToolset.DifxApp.wixext\4.0.2\wixext4\difxapp_x64.wixlib");
 
         // project.PreserveTempFiles = true;
 
