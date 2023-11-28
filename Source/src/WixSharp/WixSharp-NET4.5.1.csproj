@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\xunit.runner.visualstudio.0.99.9-build1021\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.0.99.9-build1021\build\net20\xunit.runner.visualstudio.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A7EB816D-D158-454E-ACF1-D6B261A1D76A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WixSharp</RootNamespace>
+    <AssemblyName>WixSharp</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>6fe112be</NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\net4.5.1\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;CSS_PROJECT</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Debug\net4.5.1\WixSharp.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\net4.5.1\</OutputPath>
+    <DefineConstants>TRACE;CSS_PROJECT</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Release\net4.5.1\WixSharp.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BootstrapperCore, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
+      <HintPath>../WixSharp.Samples/Wix_bin/SDK/BootstrapperCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Deployment.WindowsInstaller, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
+      <HintPath>../WixSharp.Samples/Wix_bin/SDK/Microsoft.Deployment.WindowsInstaller.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System.Xml.Linq.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Action.cs" />
+    <Compile Include="AppSearch.cs" />
+    <Compile Include="Assembly.cs" />
+    <Compile Include="AutoElements.cs" />
+    <Compile Include="BalCondition.cs" />
+    <Compile Include="Bootstrapper\UtilFileSearch.cs" />
+    <Compile Include="Bootstrapper\UtilProductSearch.cs" />
+    <Compile Include="Bootstrapper\UtilRegistrySearch.cs" />
+    <Compile Include="Bootstrapper\Variable.cs" />
+    <Compile Include="CloseApplication.cs" />
+    <Compile Include="ComRegistration.cs" />
+    <Compile Include="CopyFile.cs" />
+    <Compile Include="CustomActionRef.cs" />
+    <Compile Include="DigitalSignature.cs" />
+    <Compile Include="DigitalSignatureBootstrapper.cs" />
+    <Compile Include="DriverInstaller.cs" />
+    <Compile Include="BinaryFileAction.cs" />
+    <Compile Include="Bootstrapper\Bundle.cs" />
+    <Compile Include="Bootstrapper\BootstrapperApplication.cs" />
+    <Compile Include="Bootstrapper\Packages.cs" />
+    <Compile Include="Certificate.cs" />
+    <Compile Include="CommonTasks.cs" />
+    <Compile Include="Compiler.Bootstrapper.cs" />
+    <Compile Include="Error.cs" />
+    <Compile Include="FileSearch.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Heat\Harvester.cs" />
+    <Compile Include="IconFile.cs" />
+    <Compile Include="IISCertificate.cs" />
+    <Compile Include="IISWebSite.cs" />
+    <Compile Include="IniFile.cs" />
+    <Compile Include="LaunchApplicationFromExitDialog.cs" />
+    <Compile Include="NativeImage.cs" />
+    <Compile Include="EventSource.cs" />
+    <Compile Include="FirewallException.cs" />
+    <Compile Include="FontFile.cs" />
+    <Compile Include="GenericEntity.cs" />
+    <Compile Include="InternetShortcut.cs" />
+    <Compile Include="MajorUpgrade.cs" />
+    <Compile Include="Media.cs" />
+    <Compile Include="Nsis\Compressor.cs" />
+    <Compile Include="Nsis\NsisBootstrapper.cs" />
+    <Compile Include="Nsis\NsisBootstrapperLegacy.cs" />
+    <Compile Include="Nsis\Package.cs" />
+    <Compile Include="Nsis\Payload.cs" />
+    <Compile Include="Nsis\RequestExecutionLevel.cs" />
+    <Compile Include="Nsis\SplashScreen.cs" />
+    <Compile Include="Nsis\VersionInformation.cs" />
+    <Compile Include="Nsis\WinVer\WindowsVersion.cs" />
+    <Compile Include="Nsis\WinVer\WindowsVersionNumber.cs" />
+    <Compile Include="Nsis\WinVer\OSValidation.cs" />
+    <Compile Include="ODBCDataSource.cs" />
+    <Compile Include="PermissionEx.cs" />
+    <Compile Include="Permissions.cs" />
+    <Compile Include="Properties\AssemblyInfo.version.cs" />
+    <Compile Include="Reboot.cs" />
+    <Compile Include="RegisterAsCom.cs" />
+    <Compile Include="RegistrySearch.cs" />
+    <Compile Include="RegKey.cs" />
+    <Compile Include="RemoveRegistryValue.cs" />
+    <Compile Include="RemoveRegistryKey.cs" />
+    <Compile Include="ResilientPackage.cs" />
+    <Compile Include="ServiceConfig.cs" />
+    <Compile Include="ServiceConfigUtil.cs" />
+    <Compile Include="SvcEvent.cs" />
+    <Compile Include="ServiceDependency.cs" />
+    <Compile Include="SharedExtensions.cs" />
+    <Compile Include="SqlDatabase.cs" />
+    <Compile Include="SqlScript.cs" />
+    <Compile Include="SqlString.cs" />
+    <Compile Include="StringEnum.cs" />
+    <Compile Include="UACRevealer.cs" />
+    <Compile Include="UninstallFullUI.cs" />
+    <Compile Include="UrlAce.cs" />
+    <Compile Include="UrlReservation.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="Utilities\RegistryWOW6432.cs" />
+    <Compile Include="Utilities\WixBinLocator.cs" />
+    <Compile Include="WixExtension.cs" />
+    <Compile Include="WixProject.cs" />
+    <Compile Include="Controls\Control.cs" />
+    <Compile Include="Controls\ControlType.cs" />
+    <Compile Include="Controls\CustomUI.cs" />
+    <Compile Include="Controls\Dialog.cs" />
+    <Compile Include="Controls\WixControlCondition.cs" />
+    <Compile Include="ElevatedManagedAction.cs" />
+    <Compile Include="EmbeddedFileAction.cs" />
+    <Compile Include="ExeFileShortcut.cs" />
+    <Compile Include="EnvironmentVariable.cs" />
+    <Compile Include="FileAssosiation.cs" />
+    <Compile Include="FileShortcut.cs" />
+    <Compile Include="LaunchCondition.cs" />
+    <Compile Include="ManagedProject\Interfaces.cs" />
+    <Compile Include="ManagedProject\ManagedProjectActions.cs" />
+    <Compile Include="ManagedProject\ManagedProject.cs" />
+    <Compile Include="ManagedProject\SetupEventArgs.cs" />
+    <Compile Include="Merge.cs" />
+    <Compile Include="NativeBootstrapper.cs" />
+    <Compile Include="ProductInfo.cs" />
+    <Compile Include="ProjectValidator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Binary.cs" />
+    <Compile Include="Compiler.cs" />
+    <Compile Include="Condition.cs" />
+    <Compile Include="Dir.cs" />
+    <Compile Include="Files.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Feature.cs" />
+    <Compile Include="File.cs" />
+    <Compile Include="DirFiles.cs" />
+    <Compile Include="InstalledFileAction.cs" />
+    <Compile Include="ManagedAction.cs" />
+    <Compile Include="PathFileAction.cs" />
+    <Compile Include="Project.cs" />
+    <Compile Include="Property.cs" />
+    <Compile Include="XmlFile.cs" />
+    <EmbeddedResource Include="Nsis\macros.nsh" />
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+    <None Include="QtCmdLineAction.cs" />
+    <Compile Include="RegFileImporter.cs" />
+    <Compile Include="RegValueProperty.cs" />
+    <Compile Include="RegValue.cs" />
+    <Compile Include="ScriptAction.cs" />
+    <Compile Include="ScriptFileAction.cs" />
+    <Compile Include="ServiceInstaller.cs" />
+    <Compile Include="SetPropertyAction.cs" />
+    <Compile Include="Shortcut.cs" />
+    <Compile Include="Step.cs" />
+    <Compile Include="UpgradeStrategy.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="VersionRange.cs" />
+    <Compile Include="WebSite.cs" />
+    <Compile Include="WixGuid.cs" />
+    <Compile Include="WixEntity.cs" />
+    <Compile Include="Id.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="WixQuietExec.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="WixSharpStrongName.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WixSharp.Msi\WixSharp.Msi\WixSharp.Msi-NET4.5.1.csproj">
+      <Project>{d91b7795-0392-46f2-b417-0a01900498b8}</Project>
+      <Name>WixSharp.Msi-NET4.5.1</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>md "$(ProjectDir)..\..\bin\WixSharp\net4.5.1"
+copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\bin\WixSharp\net4.5.1\$(TargetFileName)"
+copy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\bin\WixSharp\net4.5.1\$(TargetName).xml"
+copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\src\WixSharp.Samples\net4.5.1\$(TargetFileName)"
+copy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\src\WixSharp.Samples\net4.5.1\$(TargetName).xml"
+</PostBuildEvent>
+    <PreBuildEvent></PreBuildEvent>
+  </PropertyGroup>
+</Project>

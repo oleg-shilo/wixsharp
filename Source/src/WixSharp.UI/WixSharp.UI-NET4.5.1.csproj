@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FB9ACEF6-4F81-4FAA-B1BB-46FE63899AFA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WixSharp.UI</RootNamespace>
+    <AssemblyName>WixSharp.UI</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\net4.5.1\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>2</WarningLevel>
+    <DocumentationFile>bin\Debug\net4.5.1\WixSharp.UI.XML</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\net4.5.1\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\net4.5.1\WixSharp.UI.XML</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BootstrapperCore, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\WixSharp.Samples\Wix_bin\SDK\BootstrapperCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Deployment.WindowsInstaller">
+      <HintPath>..\WixSharp.Samples\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\WixSharp\Properties\AssemblyInfo.version.cs">
+      <Link>Properties\AssemblyInfo.version.cs</Link>
+    </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="ManagedUI\Forms\InstallScopeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\InstallScopeDialog.Designer.cs">
+      <DependentUpon>InstallScopeDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\ExitDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\ExitDialog.Designer.cs">
+      <DependentUpon>ExitDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\FeatureItem.cs" />
+    <Compile Include="ManagedUI\Forms\AdvancedFeaturesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\AdvancedFeaturesDialog.Designer.cs">
+      <DependentUpon>AdvancedFeaturesDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\FeaturesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\FeaturesDialog.Designer.cs">
+      <DependentUpon>FeaturesDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\ManagedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\ReadOnlyTreeNode.cs" />
+    <Compile Include="ManagedUI\Forms\MaintenanceTypeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\MaintenanceTypeDialog.Designer.cs">
+      <DependentUpon>MaintenanceTypeDialog.cs</DependentUpon>
+    </Compile>
+    <None Include="ManagedUI\Forms\WelcomeDialog.scaling.cs">
+      <SubType>Form</SubType>
+    </None>
+    <Compile Include="ManagedUI\ISession.cs" />
+    <Compile Include="ManagedUI\MsiSessionAdapter.cs" />
+    <Compile Include="ManagedUI\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\WelcomeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\WelcomeDialog.Designer.cs">
+      <DependentUpon>WelcomeDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\InstallDirDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\InstallDirDialog.Designer.cs">
+      <DependentUpon>InstallDirDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ManagedUI\InstallProgressCounter.cs" />
+    <Compile Include="ManagedUI\Forms\LicenceDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\LicenceDialog.Designer.cs">
+      <DependentUpon>LicenceDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ManagedUI\ManagedUI.cs" />
+    <Compile Include="ManagedAction.cs" />
+    <Compile Include="ManagedUI\MsiRuntime.cs" />
+    <Compile Include="ManagedUI\Forms\SetupTypeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\SetupTypeDialog.Designer.cs">
+      <DependentUpon>SetupTypeDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ManagedBA\SilentBA.cs" />
+    <Compile Include="ManagedUI\Forms\ShellView.cs" />
+    <Compile Include="ManagedUI\UIExtensions.cs" />
+    <Compile Include="ManagedUI\UIShell.cs" />
+    <Compile Include="ManagedUI\UIShell.Designer.cs">
+      <DependentUpon>UIShell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\ProgressDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManagedUI\Forms\ProgressDialog.Designer.cs">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Win32.Taskbar.cs" />
+    <Compile Include="Win32.cs" />
+    <Compile Include="WixCLRDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="WixSharpStrongName.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ManagedUI\Forms\InstallScopeDialog.resx">
+      <DependentUpon>InstallScopeDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManagedUI\Forms\ExitDialog.resx">
+      <DependentUpon>ExitDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManagedUI\Forms\AdvancedFeaturesDialog.resx">
+      <DependentUpon>AdvancedFeaturesDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManagedUI\Forms\FeaturesDialog.resx">
+      <DependentUpon>FeaturesDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManagedUI\Forms\InstallDirDialog.resx">
+      <DependentUpon>InstallDirDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManagedUI\Forms\LicenceDialog.resx">
+      <DependentUpon>LicenceDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManagedUI\Forms\MaintenanceTypeDialog.resx">
+      <DependentUpon>MaintenanceTypeDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManagedUI\Forms\SetupTypeDialog.resx">
+      <DependentUpon>SetupTypeDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManagedUI\Forms\ProgressDialog.resx">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManagedUI\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManagedUI\UIShell.resx">
+      <DependentUpon>UIShell.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManagedUI\Forms\WelcomeDialog.resx">
+      <DependentUpon>WelcomeDialog.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ManagedUI\Images\WixUI_Bmp_Dialog.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ManagedUI\Images\WixUI_Bmp_Banner.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ManagedUI\Images\WixUI_en-us.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WixSharp\WixSharp-NET4.5.1.csproj">
+      <Project>{8860b29b-749f-4925-86c8-f9c4b93c9da5}</Project>
+      <Name>WixSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+            copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\bin\WixSharp\net4.5.1\$(TargetFileName)"
+            copy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\bin\WixSharp\net4.5.1\$(TargetName).xml"
+            copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\src\WixSharp.Samples\net4.5.1\$(TargetFileName)"
+            copy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\src\WixSharp.Samples\net4.5.1\$(TargetName).xml"
+        </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
