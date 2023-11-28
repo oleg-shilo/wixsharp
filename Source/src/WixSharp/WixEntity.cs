@@ -31,7 +31,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
 using System.Xml.Linq;
+using WixSharp.Bootstrapper;
 using IO = System.IO;
 
 namespace WixSharp
@@ -366,7 +368,15 @@ namespace WixSharp
                     {
                         // break point parking spot
                     }
-                    id = Compiler.AutoGeneration.CustomIdAlgorithm?.Invoke(this) ?? IncrementalIdFor(this);
+                    try
+                    {
+                        id = Compiler.AutoGeneration.CustomIdAlgorithm?.Invoke(this) ?? IncrementalIdFor(this);
+                    }
+                    catch
+                    {
+                        Compiler.OutputWriteLine($"Cannot auto-generate id for {this.GetType()}");
+                        throw;
+                    }
                 }
 
                 return id;

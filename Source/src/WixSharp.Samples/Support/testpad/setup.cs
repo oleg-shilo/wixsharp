@@ -1,6 +1,5 @@
 //css_ref ..\..\WixSharp.dll;
 //css_ref System.Core.dll;
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Diagnostics;
 
@@ -8,6 +7,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
@@ -119,6 +120,89 @@ static class Script
 
         // project.PreserveTempFiles = true;
         Compiler.BuildMsi(project);
+    }
+
+    static void issue_1373()
+    {
+        var bootstrapper = new Bundle
+        {
+            AboutUrl = "#####",
+            Copyright = "#####",
+            DisableModify = "yes",
+            HelpUrl = "####",
+            Manufacturer = "######",
+            Name = "######",
+            Version = new Version("8.0.0.33101"),
+            UpgradeCode = Guid.Parse("DB6D7568-2923-4F83-B25C-96F4FD2E27E0")
+        };
+        //        dep: ProviderKey = "0B6D7568-2923-4F83-B25C-96F4FD2E27E0"
+
+        var app = bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
+
+        //app.LicensePath = "../../../Installation_Docs/EULA.rtf";
+        //app.LogoFile = "../../SRLESuiteInstaller/Logo.png";
+        //app.SuppressOptionsUI = true;
+        //app.ShowFilesInUse = true;
+        //app.ShowVersion = true;
+        //app.SuppressDowngradeFailure = true;
+        //app.ThemeFile = "../../SRLESuiteInstallerRtfLargeTheme.xml";
+        //app.LocalizationFile = "../../SRLESuiteInstallerRtfTheme.wxl";
+        //app.LogoSideFile = "../../SRLESuiteInstaller/LeftBar.png";
+
+        bootstrapper.Variables = new[]
+        {
+            new Variable("CheckNETRuntime_RequiredVER", "8.0.0.33101", VariableType.version)
+        };
+
+        bootstrapper.Include(WixExtension.Util);
+        var bundle = bootstrapper.AddWixFragment("Wix/Bundle",
+            new UtilRegistrySearch
+            {
+                Root = RegistryHive.LocalMachine,
+                Key = @"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{17316079-d65a-4f25-a9f3-56c32781b15d}",
+                Value = "DisplayVersion",
+                Result = SearchResult.value,
+                Variable = "CheckNETRuntime_Current"
+            }
+                                                );
+
+        //< bal:Condition Message = "Windows 10 21H2 (19044) or later is required. Found: '[WINDOWSBUILDNUM]'" >
+        //    < ! [CDATA[Installed OR(WINDOWSBUILDNUM >= 19044)]] >
+        //</ bal:Condition >
+
+        bootstrapper.ParallelCache = true;
+        bootstrapper.Chain.Add(new ExePackage
+        {
+            // Id = "winruntime_setup",
+            Name = "windowsdesktop-runtime-8.0.0-win-x64.exe",
+            DisplayName = "Windows Desktop Net Core Runtime V8.0.0 x64.exe",
+            Cache = true,
+            Compressed = false,
+            PerMachine = true,
+            Permanent = true,
+            //package.Protocol = "burn";
+            DetectCondition = "(CheckNETRuntime_Current &gt;= CheckNETRuntime_RequiredVER)",
+            DownloadUrl = "https://aka.ms/dotnet/8.0/windowsdesktop-runtime-win-x64.exe",
+            InstallCommand = "/install /quiet /norestart",
+            RepairCommand = "/repair /quiet /norestart",
+            UninstallCommand = "/uninstall /quiet /norestart",
+            RemotePayloads = new[]
+                {
+                    new RemotePayload
+                        {
+                            CertificatePublicKey = "B6CB0779F94590F051D04EE136C8C37E9A31BB3C",
+                            CertificateThumbprint = "4C7642E107BA2BECEEF6A20FCD00A3CD897B1459",
+                            Description = "Microsoft Windows Desktop Runtime - 8.0.0 (x64)",
+                            Hash = "23B9693369493909D082FB6C195854F644229B6A",
+                            ProductName = "Microsoft Windows Desktop Runtime - 8.0.0 (x64)",
+                            Size = 58183752,
+                            Version = new Version("8.0.0.33101"),
+                        }
+                }
+        });
+
+        bootstrapper.PreserveTempFiles = true;
+        bootstrapper.Build("SRLESuiteInstallerUI.exe");
     }
 
     static void issue_825()
@@ -374,6 +458,7 @@ static class Script
 
     static public void Main()
     {
+        issue_1373(); return;
         issue_1336(); return;
         issue_1075(); return;
         issue_298(); return;
@@ -538,12 +623,12 @@ static class Script
         project.UI = WUI.WixUI_ProgressOnly;
 
         project.WixSourceGenerated += (doc) =>
-                     {
-                         doc.FindAll("CreateFolder")
-                            .ForEach(x => x.Remove());
-                         doc.FindAll("RemoveFolder")
-                            .ForEach(x => x.Remove());
-                     };
+                {
+                    doc.FindAll("CreateFolder")
+                       .ForEach(x => x.Remove());
+                    doc.FindAll("RemoveFolder")
+                       .ForEach(x => x.Remove());
+                };
 
         AutoElements.SupportEmptyDirectories = CompilerSupportState.Disabled;
 
