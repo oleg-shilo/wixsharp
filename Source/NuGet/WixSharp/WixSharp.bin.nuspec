@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>1.23.0.0</version>
+    <version>1.23.0.2</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -43,17 +43,25 @@
     <file src="lib\net451\WixSharp.UI.dll" target="lib\net451\WixSharp.UI.dll" />
     <file src="lib\net451\WixSharp.UI.xml" target="lib\net451\WixSharp.UI.xml" />
     <file src="lib\net451\WixSharp.xml" target="lib\net451\WixSharp.xml" />
+    <file src="lib\BootstrapperCore.dll" target="lib\net451\BootstrapperCore.dll" />
+    <file src="lib\BootstrapperCore.xml" target="lib\net451\BootstrapperCore.xml" />
+    <file src="lib\Microsoft.Deployment.WindowsInstaller.xml" target="lib\net451\Microsoft.Deployment.WindowsInstaller.xml" />
+    <file src="lib\Microsoft.Deployment.WindowsInstaller.dll" target="lib\net451\Microsoft.Deployment.WindowsInstaller.dll" />
+    
+    <file src="lib\nbsbuilder.exe" target="lib\nbsbuilder.exe" />
+
     <file src="lib\net462\WixSharp.dll" target="lib\net462\WixSharp.dll" />
     <file src="lib\net462\WixSharp.Msi.dll" target="lib\net462\WixSharp.Msi.dll" />
     <file src="lib\net462\WixSharp.Msi.xml" target="lib\net462\WixSharp.Msi.xml" />
     <file src="lib\net462\WixSharp.UI.dll" target="lib\net462\WixSharp.UI.dll" />
     <file src="lib\net462\WixSharp.UI.xml" target="lib\net462\WixSharp.UI.xml" />
     <file src="lib\net462\WixSharp.xml" target="lib\net462\WixSharp.xml" />
-    <file src="lib\BootstrapperCore.dll" target="lib\BootstrapperCore.dll" />
-    <file src="lib\BootstrapperCore.xml" target="lib\BootstrapperCore.xml" />
-    <file src="lib\Microsoft.Deployment.WindowsInstaller.dll" target="lib\Microsoft.Deployment.WindowsInstaller.dll" />
-    <file src="lib\Microsoft.Deployment.WindowsInstaller.xml" target="lib\Microsoft.Deployment.WindowsInstaller.xml" />
-    <file src="lib\nbsbuilder.exe" target="lib\nbsbuilder.exe" />
+    <file src="lib\BootstrapperCore.dll" target="lib\net462\BootstrapperCore.dll" />
+    <file src="lib\BootstrapperCore.xml" target="lib\net462\BootstrapperCore.xml" />
+    <file src="lib\Microsoft.Deployment.WindowsInstaller.dll" target="lib\net462\Microsoft.Deployment.WindowsInstaller.dll" />
+    <file src="lib\Microsoft.Deployment.WindowsInstaller.xml" target="lib\net462\Microsoft.Deployment.WindowsInstaller.xml" />
+    
+
     <file src="..\..\Templates\WixSharpVSIX\WixSharpVSIX\wixsharp_logo.png" target="" />
   </files>
 </package>
