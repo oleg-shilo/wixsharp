@@ -251,8 +251,8 @@ namespace WixSharp
         /// not only a single level directory but all subdirectories as well.
         /// </para>
         /// </summary>
-        [Obsolete("This field is renamed to `DirFilesCollections` to address misspell in the member name.")]
-        public DirFiles[] DirFileCollections = new DirFiles[0];
+        [Obsolete("This field is renamed to `DirFilesCollections` to address misspell in the member name.", true)]
+        public DirFiles[] DirFileCollections;
 
         /// <summary>
         /// Collection of the <see cref="DirFiles"/> objects. <see cref="DirFiles"/> type is used to specify files
@@ -263,7 +263,7 @@ namespace WixSharp
         /// not only a single level directory but all subdirectories as well.
         /// </para>
         /// </summary>
-        public DirFiles[] DirFilesCollections { get => DirFileCollections; set => DirFileCollections = value; }
+        public DirFiles[] DirFilesCollections = new DirFiles[0];
 
         /// <summary>
         /// Collection of the <see cref="Files"/> objects. <see cref="Files"/> type is used to specify files
@@ -273,8 +273,8 @@ namespace WixSharp
         /// of a single level directory.
         /// </para>
         /// </summary>
-        [Obsolete("This field is renamed to `FilesCollections` to address misspell in the member name.")]
-        public Files[] FileCollections = new Files[0];
+        [Obsolete("This field is renamed to `FilesCollections` to address misspell in the member name.", true)]
+        public Files[] FileCollections;
 
         /// <summary>
         /// Collection of the <see cref="Files"/> objects. <see cref="Files"/> type is used to specify files
@@ -284,7 +284,7 @@ namespace WixSharp
         /// of a single level directory.
         /// </para>
         /// </summary>
-        public Files[] FilesCollections { get => FileCollections; set => FileCollections = value; }
+        public Files[] FilesCollections = new Files[0];
 
         /// <summary>
         /// Collection of WiX/MSI <see cref="ODBCDataSource"/> objects to be created during the installed.

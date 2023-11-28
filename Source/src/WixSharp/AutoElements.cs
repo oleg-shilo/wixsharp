@@ -169,18 +169,7 @@ namespace WixSharp
         /// Enables scheduling deferred actions just after their corresponding
         /// "SetDeferredActionProperties" custom action. Enabled by default.
         /// </summary>
-        [Obsolete("This property obsolete. Its name is misspelled. Please use `ScheduleDeferredActionsAfterTunnellingTheirProperties` instead.")]
-        public static bool ScheduleDeferredActionsAfterTunnellingTheirProperties = true;
-
-        /// <summary>
-        /// Enables scheduling deferred actions just after their corresponding
-        /// "SetDeferredActionProperties" custom action. Enabled by default.
-        /// </summary>
-        public static bool ScheduleDeferredActionsAfterTunnelingTheirProperties
-        {
-            get => ScheduleDeferredActionsAfterTunnellingTheirProperties;
-            set => ScheduleDeferredActionsAfterTunnellingTheirProperties = value;
-        }
+        public static bool ScheduleDeferredActionsAfterTunnelingTheirProperties = true;
 
         /// <summary>
         /// Disables automatic insertion of user profile registry elements.
@@ -859,10 +848,10 @@ namespace WixSharp
                 product
                     .FindAll("Component")
                     .ForEach(x =>
-                            {
-                                if (!x.ContainsDummyUserProfileRegistry())
-                                    InsertUserProfileRegValue(x);
-                            });
+                             {
+                                 if (!x.ContainsDummyUserProfileRegistry())
+                                     InsertUserProfileRegValue(x);
+                             });
             }
             InjectPlatformAttributes(doc);
         }

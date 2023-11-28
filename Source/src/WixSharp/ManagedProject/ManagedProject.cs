@@ -1,4 +1,3 @@
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 
 using IO = System.IO;
@@ -172,9 +172,11 @@ namespace WixSharp
         /// <summary>
         /// Occurs after InstallFiles standard action. The event is fired from the elevated
         /// execution context.
-        /// <para>If it is required that the event handler is invoked without elevation then you can
-        /// call <see cref="WixSharp.Project.UnelevateAfterInstallEvent()"/> so the `Project.AfterInstall` event is
+        /// <para>
+        /// If it is required that the event handler is invoked without elevation then you can
+        /// call <see cref="WixSharp.CommonTasks.Tasks.UnelevateAfterInstallEvent(ManagedProject)"/> so the `Project.AfterInstall` event is
         /// scheduled for unelevated execution.
+        /// </para>
         /// </summary>
         public event SetupEventHandler AfterInstall;
 

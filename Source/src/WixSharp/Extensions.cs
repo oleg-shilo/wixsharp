@@ -1,6 +1,3 @@
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,6 +16,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Microsoft.Deployment.WindowsInstaller;
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using Microsoft.Win32;
 using WixSharp.CommonTasks;
 using static WixSharp.SetupEventArgs;
 
@@ -744,6 +744,7 @@ namespace WixSharp
         /// A generic LINQ equivalent of C# foreach loop.
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T1"></typeparam>
         /// <param name="collection">The collection.</param>
         /// <param name="action">The action.</param>
         /// <returns></returns>

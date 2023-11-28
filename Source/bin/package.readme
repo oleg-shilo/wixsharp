@@ -2,5 +2,6 @@
 
 2.1 Execute src\build.cmd              (Builds all solutions)
 2.2 Execute src\aggregate
+3.  Execute bin\package.cs
 3.  Follow  NuGet\WixSharp\readme.md
 

@@ -112,7 +112,7 @@ namespace WixSharp.Test
 
             if (failedSamples.Any())
             {
-                string error = " Completed Samples: " + completedSamples + "\r\n Failed Samples:\r\n" + string.Join(Environment.NewLine, failedSamples.ToArray());
+                string error = "Log: " + logFile + "\r\n Completed Samples: " + completedSamples + "\r\n Failed Samples:\r\n" + string.Join(Environment.NewLine, failedSamples.ToArray());
                 Assert.True(false, error);
             }
         }
@@ -184,15 +184,15 @@ namespace WixSharp.Test
         {
             lock (failedSamples)
             {
-                var logFile = @"..\..\..\WixSharp.Samples\test_progress.txt";
                 var content = string.Format("Failed-{0}; Completed-{1}; Total-{2}; Time-{3}\r\n", failedSamples.Count, completedSamples, samplesTotal, testTime.Elapsed) + string.Join(Environment.NewLine, failedSamples.ToArray());
                 IO.File.WriteAllText(logFile, content);
             }
         }
 
+        string logFile = @"..\..\..\WixSharp.Samples\test_progress.txt";
+
         void LogAppend(string text)
         {
-            var logFile = @"..\..\..\WixSharp.Samples\test_progress.txt";
             using (var writer = new StreamWriter(logFile, true))
                 writer.WriteLine(text);
         }

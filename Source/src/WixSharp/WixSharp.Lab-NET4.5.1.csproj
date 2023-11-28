@@ -1,17 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\xunit.runner.visualstudio.0.99.9-build1021\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.0.99.9-build1021\build\net20\xunit.runner.visualstudio.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4DD90151-15D1-44F5-B11B-DCBA71F8F436}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{75342FEA-542C-4357-A3B0-97B6A3BB9A62}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Embedding_CA_Package</RootNamespace>
-    <AssemblyName>Embedding_CA_Package</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <RootNamespace>WixSharp</RootNamespace>
+    <AssemblyName>WixSharp.Lab</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
@@ -32,41 +35,57 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>6fe112be</NuGetPackageImportStamp>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Embedding_CA_Package\</OutputPath>
-    <IntermediateOutputPath>bin\Embedding_CA_Package\obj\</IntermediateOutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>bin\Debug\net4.5.1\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;CSS_PROJECT</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Debug\net4.5.1\WixSharp.Lab.xml</DocumentationFile>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Embedding_CA_Package\</OutputPath>
-    <IntermediateOutputPath>bin\Embedding_CA_Package\obj\</IntermediateOutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>bin\Release\net4.5.1\</OutputPath>
+    <DefineConstants>TRACE;CSS_PROJECT</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Release\net4.5.1\WixSharp.Lab.xml</DocumentationFile>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BootstrapperCore, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
+      <HintPath>../WixSharp.Samples/Wix_bin/SDK/BootstrapperCore.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Deployment.WindowsInstaller, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
+      <HintPath>../WixSharp.Samples/Wix_bin/SDK/Microsoft.Deployment.WindowsInstaller.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
-      <Private>True</Private>
-      <HintPath>..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -76,17 +95,42 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System.Xml.Linq.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\WixSharp\WixSharp.csproj">
-      <Project>{8860B29B-749F-4925-86C8-F9C4B93C9DA5}</Project>
-      <Name>WixSharp</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\Wix# Samples\DTF (ManagedCA)\Different Scenarios\Embedding_CA_Package\setup.cs">
-      <Link>setup.cs</Link>
+    <Compile Include="Controls\Extensions.cs" />
+    <Compile Include="Controls\WixButton.cs">
+      <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\WixCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\WixControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\WixControlDesigner.cs" />
+    <Compile Include="Controls\WixForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\WixLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\WixTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.version.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -106,7 +150,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="WixSharpStrongName.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="WixSharp-NET4.5.1.csproj">
+      <Project>{a7eb816d-d158-454e-acf1-d6b261a1d76a}</Project>
+      <Name>WixSharp-NET4.5.1</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -116,4 +166,13 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\bin\WixSharp\net4.5.1\$(TargetFileName)"
+copy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\bin\WixSharp\net4.5.1\$(TargetName).xml"
+copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\src\WixSharp.Samples\net4.5.1\$(TargetFileName)"
+copy "$(TargetDir)$(TargetName).xml" "$(ProjectDir)..\..\src\WixSharp.Samples\net4.5.1\$(TargetName).xml"
+</PostBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>

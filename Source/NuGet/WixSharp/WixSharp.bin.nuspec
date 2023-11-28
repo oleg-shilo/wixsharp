@@ -1,28 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>1.22.1.1</version>
+    <version>1.23.0.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <icon>wixsharp_logo.png</icon>
     <projectUrl>https://github.com/oleg-shilo/wixsharp</projectUrl>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>
-      Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
+    <description>Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
       The package contains Wix# binaries only.
 
       In order to use this package you need have WiX Toolset installed.
-      The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)
-    </description>
+      The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>
-Release v1.22.1.1
-- Issue #1366: What is the purpose of StartArguments in the .targets file
-- Removed `&lt;StartArguments&gt;` from the WixSharp.bin.targets.
-    </releaseNotes>
+    <releaseNotes>WiX3-Release v1.23.0.0
+- Issue #1366: What is the purpose of StartArguments in the .targets file (see linked code)
+- Issue #1358: XML exception when run CustomMSIDialog sample
+- Issue #1328: Strange focus on the taskbar
+- Issue #1326: Library erased after update 
+- Added `Tasks.UnelevateAfterInstallEvent`
+- Added `Session.PersistData` for securely persisting data between sessions; Triggered by Issue #1029.
+- Updated MajorUpgrade sample</releaseNotes>
     <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
@@ -36,17 +37,23 @@ Release v1.22.1.1
   </metadata>
   <files>
     <file src="build\WixSharp.bin.targets" target="build\WixSharp.bin.targets" />
+    <file src="lib\net451\WixSharp.dll" target="lib\net451\WixSharp.dll" />
+    <file src="lib\net451\WixSharp.Msi.dll" target="lib\net451\WixSharp.Msi.dll" />
+    <file src="lib\net451\WixSharp.Msi.xml" target="lib\net451\WixSharp.Msi.xml" />
+    <file src="lib\net451\WixSharp.UI.dll" target="lib\net451\WixSharp.UI.dll" />
+    <file src="lib\net451\WixSharp.UI.xml" target="lib\net451\WixSharp.UI.xml" />
+    <file src="lib\net451\WixSharp.xml" target="lib\net451\WixSharp.xml" />
+    <file src="lib\net462\WixSharp.dll" target="lib\net462\WixSharp.dll" />
+    <file src="lib\net462\WixSharp.Msi.dll" target="lib\net462\WixSharp.Msi.dll" />
+    <file src="lib\net462\WixSharp.Msi.xml" target="lib\net462\WixSharp.Msi.xml" />
+    <file src="lib\net462\WixSharp.UI.dll" target="lib\net462\WixSharp.UI.dll" />
+    <file src="lib\net462\WixSharp.UI.xml" target="lib\net462\WixSharp.UI.xml" />
+    <file src="lib\net462\WixSharp.xml" target="lib\net462\WixSharp.xml" />
     <file src="lib\BootstrapperCore.dll" target="lib\BootstrapperCore.dll" />
     <file src="lib\BootstrapperCore.xml" target="lib\BootstrapperCore.xml" />
     <file src="lib\Microsoft.Deployment.WindowsInstaller.dll" target="lib\Microsoft.Deployment.WindowsInstaller.dll" />
     <file src="lib\Microsoft.Deployment.WindowsInstaller.xml" target="lib\Microsoft.Deployment.WindowsInstaller.xml" />
     <file src="lib\nbsbuilder.exe" target="lib\nbsbuilder.exe" />
-    <file src="lib\WixSharp.dll" target="lib\WixSharp.dll" />
-    <file src="lib\WixSharp.Msi.dll" target="lib\WixSharp.Msi.dll" />
-    <file src="lib\WixSharp.Msi.xml" target="lib\WixSharp.Msi.xml" />
-    <file src="lib\WixSharp.UI.dll" target="lib\WixSharp.UI.dll" />
-    <file src="lib\WixSharp.UI.xml" target="lib\WixSharp.UI.xml" />
-    <file src="lib\WixSharp.xml" target="lib\WixSharp.xml" />
     <file src="..\..\Templates\WixSharpVSIX\WixSharpVSIX\wixsharp_logo.png" target="" />
   </files>
 </package>

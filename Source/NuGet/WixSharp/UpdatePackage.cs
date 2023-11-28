@@ -26,22 +26,34 @@ class Script
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.lab.nuspec", releaseNotes, version.ToString());
         //UpdateReleaseNotesAndVersion(@"E:\Galos\Projects\WixSharp\NuGet\WixSharp\WixSharp.ClrDialog.nuspec", releaseNotes, version.ToString());
 
-        CopyFiles(root + @"\bin\WixSharp", "WixSharp.dll", "lib");
-        CopyFiles(root + @"\bin\WixSharp", "WixSharp.xml", "lib");
-        CopyFiles(root + @"\bin\WixSharp", "WixSharp.UI.dll", @"lib");
-        CopyFiles(root + @"\bin\WixSharp", "WixSharp.UI.xml", @"lib");
-        CopyFiles(root + @"\bin\WixSharp", "WixSharp.UI.WPF.dll", @"lib");
-        CopyFiles(root + @"\bin\WixSharp", "WixSharp.UI.WPF.xml", @"lib");
-        CopyFiles(root + @"\bin\WixSharp", "WixSharp.Msi.dll", "lib");
-        CopyFiles(root + @"\bin\WixSharp", "WixSharp.Msi.xml", @"lib");
-        CopyFiles(root + @"\bin\WixSharp", "WixSharp.Lab.dll", "lib");
-        CopyFiles(root + @"\bin\WixSharp", "WixSharp.Lab.xml", "lib");
         CopyFiles(root + @"\bin\WixSharp\Wix_bin\SDK", "BootstrapperCore.dll", "lib");
         CopyFiles(root + @"\bin\WixSharp\Wix_bin\SDK", "BootstrapperCore.xml", "lib");
         CopyFiles(root + @"\bin\WixSharp\Wix_bin\SDK", "Microsoft.Deployment.WindowsInstaller.dll", "lib");
         CopyFiles(root + @"\bin\WixSharp\Wix_bin\SDK", "Microsoft.Deployment.WindowsInstaller.xml", "lib");
         CopyFiles(root + @"\NuGet\MSBuild_SetEnvVar", "SetEnvVar.dll", "build");
         CopyFiles(root + @"\src\WixSharp.Samples", "nbsbuilder.exe", "lib");
+
+        CopyFiles(root + @"\bin\WixSharp", @"WixSharp.dll", @"lib\net462");
+        CopyFiles(root + @"\bin\WixSharp", @"WixSharp.xml", @"lib\net462");
+        CopyFiles(root + @"\bin\WixSharp", @"WixSharp.UI.dll", @"lib\net462");
+        CopyFiles(root + @"\bin\WixSharp", @"WixSharp.UI.xml", @"lib\net462");
+        CopyFiles(root + @"\bin\WixSharp", @"WixSharp.UI.WPF.dll", @"lib\net462");
+        CopyFiles(root + @"\bin\WixSharp", @"WixSharp.UI.WPF.xml", @"lib\net462");
+        CopyFiles(root + @"\bin\WixSharp", @"WixSharp.Msi.dll", @"lib\net462");
+        CopyFiles(root + @"\bin\WixSharp", @"WixSharp.Msi.xml", @"lib\net462");
+        CopyFiles(root + @"\bin\WixSharp", @"WixSharp.Lab.dll", @"lib\net462");
+        CopyFiles(root + @"\bin\WixSharp", @"WixSharp.Lab.xml", @"lib\net462");
+
+        CopyFiles(root + @"\bin\WixSharp\net4.5.1", "WixSharp.dll", @"lib\net451");
+        CopyFiles(root + @"\bin\WixSharp\net4.5.1", "WixSharp.xml", @"lib\net451");
+        CopyFiles(root + @"\bin\WixSharp\net4.5.1", "WixSharp.UI.dll", @"lib\net451");
+        CopyFiles(root + @"\bin\WixSharp\net4.5.1", "WixSharp.UI.xml", @"lib\net451");
+        CopyFiles(root + @"\bin\WixSharp\net4.5.1", "WixSharp.UI.WPF.dll", @"lib\net451");
+        CopyFiles(root + @"\bin\WixSharp\net4.5.1", "WixSharp.UI.WPF.xml", @"lib\net451");
+        CopyFiles(root + @"\bin\WixSharp\net4.5.1", "WixSharp.Msi.dll", @"lib\net451");
+        CopyFiles(root + @"\bin\WixSharp\net4.5.1", "WixSharp.Msi.xml", @"lib\net451");
+        CopyFiles(root + @"\bin\WixSharp\net4.5.1", "WixSharp.Lab.dll", @"lib\net451");
+        CopyFiles(root + @"\bin\WixSharp\net4.5.1", "WixSharp.Lab.xml", @"lib\net451");
 
         Console.WriteLine("Done!");
     }
