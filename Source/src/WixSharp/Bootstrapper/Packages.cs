@@ -106,7 +106,8 @@ namespace WixSharp.Bootstrapper
         {
             if (!base.IsIdSet())
             {
-                Name = System.IO.Path.GetFileName(SourceFile);
+                if (Name.IsEmpty())
+                    Name = System.IO.Path.GetFileName(SourceFile);
             }
         }
     }
