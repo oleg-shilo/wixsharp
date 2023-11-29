@@ -122,6 +122,28 @@ static class Script
         Compiler.BuildMsi(project);
     }
 
+    static void issue_1372()
+    {
+        var p = new ManagedProject("WIX Test Project");
+        var aRootDir = new Dir(@"%ProgramFiles%\WIXTestProject");
+        p.AddDir(aRootDir);
+        var aAppDir = aRootDir.Dirs[0];
+        aAppDir.IsInstallDir = true;
+
+        aAppDir.AddFile(new File("SimpleMessageBox.exe",
+            new FileAssociation("wixtest", "application/custom", "open", "\"%1\"")
+            {
+                Description = "WIX Test File",
+                Advertise = false,
+                // Advertise = true,
+                Icon = @".\MyIcon.ico"
+            }));
+
+        // p.ResolveWildCards();
+        p.BuildWxs();
+        // p.BuildMsi("Test.msi");
+    }
+
     static void issue_1373()
     {
         var bootstrapper = new Bundle
@@ -458,6 +480,7 @@ static class Script
 
     static public void Main()
     {
+        issue_1372(); return;
         issue_1373(); return;
         issue_1336(); return;
         issue_1075(); return;
