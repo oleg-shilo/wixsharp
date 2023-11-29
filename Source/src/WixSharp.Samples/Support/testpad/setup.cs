@@ -134,8 +134,7 @@ static class Script
             new FileAssociation("wixtest", "application/custom", "open", "\"%1\"")
             {
                 Description = "WIX Test File",
-                Advertise = false,
-                // Advertise = true,
+                Advertise = true,
                 Icon = @".\MyIcon.ico"
             }));
 
@@ -220,7 +219,8 @@ static class Script
                             Size = 58183752,
                             Version = new Version("8.0.0.33101"),
                         }
-                }
+                },
+            AttributesDefinition = "Protocol= burn"
         });
 
         bootstrapper.PreserveTempFiles = true;

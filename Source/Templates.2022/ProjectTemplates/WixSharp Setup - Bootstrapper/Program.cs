@@ -12,7 +12,7 @@ namespace $safeprojectname$
 
             var bootstrapper =
               new Bundle("MyProduct",
-                  new PackageGroupRef("NetFx40Web"),
+                  // new PackageGroupRef("NetFx40Web"),
                   new MsiPackage(productMsi) { DisplayInternalUI = true });
 
             bootstrapper.Version = new Version("1.0.0.0");
