@@ -59,7 +59,7 @@ namespace WixSharp
         {
             get
             {
-                return outDir.IsEmpty() ? Environment.CurrentDirectory : outDir.ExpandEnvVars();
+                return (outDir.IsEmpty() ? Environment.CurrentDirectory : outDir.ExpandEnvVars()).EnsureDirExists(); ;
             }
             set
             {
