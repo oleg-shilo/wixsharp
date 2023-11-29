@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,9 +24,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+
 #endregion
-using IO = System.IO;
+
 using System.Collections.Generic;
+using IO = System.IO;
 
 namespace WixSharp
 {
@@ -34,14 +37,14 @@ namespace WixSharp
     /// </summary>
     ///<example>The following is an example of associating file extension ".my" with installed application MyViewer.exe.
     ///<code>
-    /// var project = 
+    /// var project =
     ///     new Project("My Product",
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
     ///             new Dir(@"Notepad",
     ///                 new File("MyViewer.exe",
-    ///                     new FileAssociation("my", "application/my", "open", "\"%1\"")))));  
+    ///                     new FileAssociation("my", "application/my", "open", "\"%1\"")))));
     ///         ...
-    ///         
+    ///
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
@@ -62,6 +65,7 @@ namespace WixSharp
             this.Description = extension + " file";
             this.ContentType = contentType;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FileAssociation"/> class.
         /// </summary>
@@ -78,33 +82,46 @@ namespace WixSharp
         /// </summary>
         /// <value>The extension.</value>
         public string Extension { get { return Name; } set { Name = value; } }
+
         /// <summary>
         /// The localized text displayed on the context menu. The default is <c>Open</c>.
         /// </summary>
         public string Command = "Open";
+
         /// <summary>
         /// Value for the command arguments.  The default is <c>"%1"</c>.
         /// </summary>
         public string Arguments = "\"%1\"";
+
         /// <summary>
-        /// The sequence of the commands. Only <see cref="FileAssociation"/> for which the SequenceNo is specified are 
-        /// used to prepare an ordered list for the default value of the shell key. 
-        /// The <see cref="FileAssociation"/> with the lowest value in this column becomes the default <see cref="FileAssociation"/>. 
+        /// The sequence of the commands. Only <see cref="FileAssociation"/> for which the SequenceNo is specified are
+        /// used to prepare an ordered list for the default value of the shell key.
+        /// The <see cref="FileAssociation"/> with the lowest value in this column becomes the default <see cref="FileAssociation"/>.
         /// Used only for Advertised <see cref="FileAssociation"/>.
         /// </summary>
         public int SequenceNo = 1;
+
         /// <summary>
         /// Optional localizable description of the <see cref="FileAssociation"/>.
         /// </summary>
         public string Description = "";
+
         /// <summary>
-        /// Reference to <c>Icon</c> element to be used to install the file association <c>DefaultIcon</c>. If the value is not set, Wix# compiler will use the <c>Id</c> of the <c>File</c> element of the parent component.<see cref="FileAssociation"/>.
+        /// Reference to <c>Icon</c> element to be used to install the file association <c>DefaultIcon</c>.
+        /// <para>
+        /// For an advertised <see cref="FileAssociation"/>, it is the value of an icon file path.
+        /// </para>
+        /// <para>
+        /// For a non-advertised <see cref="FileAssociation"/>, this is the Id of a file containing an icon resource.
+        /// If you do not specify it If the value is not set, Wix# compiler will use the <c>Id</c> of the <c>File</c>
+        /// element of the parent component of <see cref="FileAssociation"/>.
+        /// </para>
         /// <para>Set this value to <c>null</c> if you do not want to install <c>DefaultIcon</c> at all.</para>
         /// </summary>
         public string Icon = "";
 
         /// <summary>
-        /// The zero-based index of the icon associated with this ProgId. The default value is <c>0</c>. 
+        /// The zero-based index of the icon associated with this ProgId. The default value is <c>0</c>.
         /// </summary>
         public int IconIndex = 0;
 
@@ -112,6 +129,7 @@ namespace WixSharp
         /// The MIME type that is to be written. The default is <c>application/[extension]</c>.
         /// </summary>
         public string ContentType;
+
         /// <summary>
         /// Whether this extension is to be advertised. The default is <c>false</c>.
         /// </summary>
