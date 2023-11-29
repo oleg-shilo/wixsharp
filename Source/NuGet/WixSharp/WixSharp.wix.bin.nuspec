@@ -7,7 +7,7 @@
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <projectUrl>https://wixsharp.codeplex.com/</projectUrl>
+    <projectUrl>https://github.com/oleg-shilo/wixsharp/</projectUrl>
     <license type="expression">MIT</license>
     <icon>wixsharp_logo.png</icon>
     <description>The package containsWIX (Windows Installer Xml) Toolset v3.14.0  required for Wix#. Wix# is a framework for building a complete MSI by using build script files written with the C# syntax.
