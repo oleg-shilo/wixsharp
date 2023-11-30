@@ -43,7 +43,9 @@ namespace WixSharp.Test
             var entity = new ExePackage(@"Samples\Setup1.exe")
             {
                 Id = "package1",
+                After = "package2",
                 Name = "Setup1",
+                SuppressSignatureVerification = true,
                 Payloads = new[] { @"Samples\setup1.dll".ToPayload(), @"Samples\setup2.dll".ToPayload(), },
                 InstallArguments = "/q /norestart",
                 Permanent = true,
@@ -52,7 +54,7 @@ namespace WixSharp.Test
 
             var xml = entity.ToXml().First().ToString();
             var expected =
-                "<ExePackage Name=\"Setup1\" Id=\"package1\" InstallArguments=\"/q /norestart\" Protocol=\"burn\" Permanent=\"yes\" SourceFile=\"Samples\\Setup1.exe\">\r\n" +
+                "<ExePackage Name=\"Setup1\" Id=\"package1\" InstallArguments=\"/q /norestart\" Protocol=\"burn\" After=\"package2\" Permanent=\"yes\" SourceFile=\"Samples\\Setup1.exe\">\r\n" +
                 "  <Payload SourceFile=\"Samples\\setup1.dll\" />\r\n" +
                 "  <Payload SourceFile=\"Samples\\setup2.dll\" />\r\n" +
                 "</ExePackage>";
