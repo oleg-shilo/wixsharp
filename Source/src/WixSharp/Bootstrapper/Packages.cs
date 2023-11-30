@@ -154,7 +154,7 @@ namespace WixSharp.Bootstrapper
     /// <summary>
     /// Protocol enum for ExePackage. It's an equivalent of WiX `BurnExeProtocolType`
     /// </summary>
-    /// <seealso cref="WixSharp.StringEnum&lt;WixSharp.Bootstrapper.Protocol&gt;" />
+    /// <seealso cref="WixSharp.StringEnum{T}" />
     public class Protocol : StringEnum<Protocol>
     {
         /// <summary>
@@ -165,8 +165,19 @@ namespace WixSharp.Bootstrapper
         {
         }
 
+        /// <summary>
+        /// The executable package does not support a communication protocol.
+        /// </summary>
         public static Protocol none = new Protocol("none");
+
+        /// <summary>
+        /// The executable package implements the Burn communication protocol.
+        /// </summary>
         public static Protocol burn = new Protocol("burn");
+
+        /// <summary>
+        /// The executable package implements the .NET Framework v4.0 communication protocol.
+        /// </summary>
         public static Protocol netfx4 = new Protocol("netfx4");
     }
 
