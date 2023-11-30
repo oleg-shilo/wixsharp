@@ -802,6 +802,8 @@ namespace WixSharp
                         if (IO.File.Exists(outFile))
                             IO.File.Delete(outFile);
 
+                        WarnOnOutputPathCollision(outFile);
+
                         string lightCmd = GenerateLightCommand(project, outFile, outDir, objFile, extensionDlls);
 #if DEBUG
                         Compiler.OutputWriteLine("<- Linking");

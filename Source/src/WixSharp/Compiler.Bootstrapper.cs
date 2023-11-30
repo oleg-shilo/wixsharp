@@ -27,18 +27,20 @@ THE SOFTWARE.
 
 #endregion Licence...
 
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.Bootstrapper;
+
 using IO = System.IO;
 
 namespace WixSharp
@@ -46,6 +48,24 @@ namespace WixSharp
     //This code requires heavy optimization and refactoring. Toady it serves the purpose of refining the API.
     public partial class Compiler
     {
+        static void WarnOnOutputPathCollision(string outputPath)
+        {
+            if (outputPath.IsNotEmpty())
+            {
+                var collision = AppDomain
+                    .CurrentDomain
+                    .GetAssemblies()
+                    .Select(x => x.GetLocation())
+                    .Where(x => x.IsNotEmpty())
+                    .FirstOrDefault(x => outputPath.SamePathAs(x));
+
+                if (collision != null)
+                    Compiler.OutputWriteLine(
+                        $"Warning: an attempt to build the output file (\"{outputPath}\") at the same path the as " +
+                        $"the builder application \"{collision}\"");
+            }
+        }
+
         /// <summary>
         /// Builds WiX Bootstrapper application from the specified <see cref="Bundle"/> project instance.
         /// </summary>
@@ -55,6 +75,8 @@ namespace WixSharp
         public static string Build(Bundle project, string path)
         {
             path = path.ExpandEnvVars();
+
+            WarnOnOutputPathCollision(path);
 
             string oldCurrDir = Environment.CurrentDirectory;
 
