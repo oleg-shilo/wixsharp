@@ -132,21 +132,24 @@ namespace WixSharp.Bootstrapper
         abstract public XContainer[] ToXml();
     }
 
-    // /// <summary>
-    // /// The interface for the items that are XML-aware and capable of building
-    // /// XML elements based on the internal content.
-    // /// <para>YOu can use <see cref="IXmlBuilder"/> objects to extend WixSharp type system.
-    // /// See <see cref="Bundle.Items"/> for details.
-    // /// </para>
-    // /// </summary>
-    // public interface IXmlBuilder
-    // {
-    //     /// <summary>
-    //     /// Emits WiX XML.
-    //     /// </summary>
-    //     /// <returns></returns>
-    //     XContainer[] ToXml();
-    // }
+    /// <summary>
+    /// Protocol enum for ExePackage. It's an equivalent of WiX `BurnExeProtocolType`
+    /// </summary>
+    /// <seealso cref="WixSharp.StringEnum&lt;WixSharp.Bootstrapper.Protocol&gt;" />
+    public class Protocol : StringEnum<Protocol>
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Protocol"/> class.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public Protocol(string value) : base(value)
+        {
+        }
+
+        public static Protocol none = new Protocol("none");
+        public static Protocol burn = new Protocol("burn");
+        public static Protocol netfx4 = new Protocol("netfx4");
+    }
 
     /// <summary>
     /// Standard WiX ExePackage.
@@ -198,6 +201,12 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         [Xml]
         public bool? PerMachine;
+
+        /// <summary>
+        /// Indicates the communication protocol the package supports for extended progress and error reporting. The default is `none`.
+        /// </summary>
+        [Xml]
+        public Protocol Protocol;
 
         /// <summary>
         /// A condition that determines if the package is present on the target system.
