@@ -457,6 +457,8 @@ namespace WixSharp
 
             Utils.EnsureFileDir(outFile);
 
+            WarnOnOutputPathCollision(outFile);
+
             if (IO.File.Exists(outFile))
                 IO.File.Delete(outFile);
 

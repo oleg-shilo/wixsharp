@@ -47,6 +47,24 @@ namespace WixSharp
     //This code requires heavy optimization and refactoring. Toady it serves the purpose of refining the API.
     public partial class Compiler
     {
+        static void WarnOnOutputPathCollision(string outputPath)
+        {
+            if (outputPath.IsNotEmpty())
+            {
+                var collision = AppDomain
+                    .CurrentDomain
+                    .GetAssemblies()
+                    .Select(x => x.GetLocation())
+                    .Where(x => x.IsNotEmpty())
+                    .FirstOrDefault(x => outputPath.SamePathAs(x));
+
+                if (collision != null)
+                    Compiler.OutputWriteLine(
+                        $"Warning: An attempt to build the output file (\"{outputPath}\") at the same path the as " +
+                        $"the builder application \"{collision}\"");
+            }
+        }
+
         /// <summary>
         /// Builds WiX Bootstrapper application from the specified <see cref="Bundle"/> project instance.
         /// </summary>
@@ -87,6 +105,8 @@ namespace WixSharp
                     outFile = path.PathGetFullPath().PathEnsureExtension(".exe");
 
                 outFile.DeleteIfExists();
+
+                WarnOnOutputPathCollision(outFile);
 
                 string compileCmd;
                 compileCmd = $"build {GenerateWixCommand(project, wxsFile)} -o \"{outFile}\"";
