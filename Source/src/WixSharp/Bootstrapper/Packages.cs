@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Xml.Linq;
+using WixSharp.Nsis;
 
 namespace WixSharp.Bootstrapper
 {
@@ -468,13 +470,6 @@ namespace WixSharp.Bootstrapper
         }
 
         /// <summary>
-        /// The identifier of another package that this one should be installed after. By default the After attribute is set to the previous sibling
-        /// package in the Chain or PackageGroup element. If this attribute is specified ensure that a cycle is not created explicitly or implicitly.
-        /// </summary>
-        [Xml]
-        public string After;
-
-        /// <summary>
         /// The identifier to use when caching the package.
         /// </summary>
         [Xml]
@@ -507,15 +502,6 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         [Xml]
         public bool? Slipstream;
-
-        /// <summary>
-        ///  	By default, a Bundle will use the hash of a package to verify its contents. If this attribute is explicitly set to "no" and the package
-        ///  	is signed with an Authenticode signature the Bundle will verify the contents of the package using the signature instead. Therefore, the
-        ///  	default for this attribute could be considered to be "yes". It is unusual for "yes" to be the default of an attribute. In this case, the
-        ///  	default was changed in WiX v3.9 after experiencing real world issues with Windows verifying Authenticode signatures. Since the
-        ///  	Authenticode signatures are no more secure than hashing the packages directly, the default was changed.
-        /// </summary>
-        public bool? SuppressSignatureVerification;
 
         /// <summary>
         /// When set to "yes", the Prereq BA will plan the package to be installed if its InstallCondition is "true" or empty.
