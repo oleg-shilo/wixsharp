@@ -491,6 +491,15 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Adds the specified XML content as a WiX Fragment/FragmentRef elements combination.
+        /// </summary>
+        /// <param name="placementPath">The placement path to the element matching the specified path (e.g. <c>Select("Product/Package")</c>.</param>
+        /// <param name="wixFile">The file with the XML fragment content.</param>
+        /// <returns></returns>
+        static public WixProject AddWixFragmentFile(this Project project, string placementPath, string wixFile)
+            => project.AddWixFragment(placementPath, XElement.Parse(System.IO.File.ReadAllText(wixFile)));
+
+        /// <summary>
         /// Imports the reg file. It is nothing else but an extension method version of the 'plain' <see cref="T:WixSharp.CommonTasks.Tasks.ImportRegFile"/>.
         /// </summary>
         /// <param name="project">The project object.</param>
@@ -597,7 +606,7 @@ namespace WixSharp.CommonTasks
         /// <param name="payloadFile">The payload file.</param>
         /// <returns></returns>
         static public WixStandardBootstrapperApplication AddPayload(this WixStandardBootstrapperApplication project, string payloadFile)
-         => project.AddPayload(new Bootstrapper.Payload(payloadFile));
+        => project.AddPayload(new Bootstrapper.Payload(payloadFile));
 
         /// <summary>
         /// Adds the directory items to the Project.
@@ -1715,7 +1724,7 @@ namespace WixSharp.CommonTasks
                 {
                     doc.FindAll("CustomAction")
                        .FirstOrDefault(x => x.HasAttribute("Id", "WixSharp_AfterInstall_Action"))
-                      ?.SetAttribute("Execute", "immediate");
+                       ?.SetAttribute("Execute", "immediate");
                 };
             return project;
         }
@@ -2016,9 +2025,9 @@ namespace WixSharp.CommonTasks
     public static class SessionDataExtensions
     {
         static string persitentDataDir = System.IO.Path.Combine(
-                                              Environment.SpecialFolder.CommonApplicationData.ToPath(),
-                                              "WixSharp",
-                                              "SessionData")
+                                             Environment.SpecialFolder.CommonApplicationData.ToPath(),
+                                             "WixSharp",
+                                             "SessionData")
                                              .EnsureDirExists();
 
         /// <summary>
@@ -2130,14 +2139,14 @@ namespace WixSharp.CommonTasks
         /// <value>The well known locations.</value>
         static public List<string> WellKnownLocations = new List<string>
         {
-                     @"C:\Program Files (x86)\Windows Kits\10\App Certification Kit",
-                     @"C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x86",
-                     @"C:\Program Files (x86)\Windows Kits\10\bin\x86",
-                     @"C:\Program Files (x86)\Windows Kits\8.1\bin\x86",
-                     @"C:\Program Files (x86)\Windows Kits\8.0\bin\x86",
-                     @"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool",
-                     @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin",
-                     @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin"
+            @"C:\Program Files (x86)\Windows Kits\10\App Certification Kit",
+            @"C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x86",
+            @"C:\Program Files (x86)\Windows Kits\10\bin\x86",
+            @"C:\Program Files (x86)\Windows Kits\8.1\bin\x86",
+            @"C:\Program Files (x86)\Windows Kits\8.0\bin\x86",
+            @"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool",
+            @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin",
+            @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin"
         };
 
         static string signTool;
