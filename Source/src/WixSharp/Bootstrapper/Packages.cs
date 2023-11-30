@@ -156,7 +156,7 @@ namespace WixSharp.Bootstrapper
     /// <summary>
     /// Protocol enum for ExePackage. It's an equivalent of WiX `BurnExeProtocolType`
     /// </summary>
-    /// <seealso cref="WixSharp.StringEnum&lt;WixSharp.Bootstrapper.Protocol&gt;" />
+    /// <seealso cref="WixSharp.StringEnum{T}" />
     public class Protocol : StringEnum<Protocol>
     {
         /// <summary>

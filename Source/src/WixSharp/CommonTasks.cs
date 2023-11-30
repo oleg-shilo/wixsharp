@@ -493,6 +493,7 @@ namespace WixSharp.CommonTasks
         /// <summary>
         /// Adds the specified XML content as a WiX Fragment/FragmentRef elements combination.
         /// </summary>
+        /// <param name="project">The project.</param>
         /// <param name="placementPath">The placement path to the element matching the specified path (e.g. <c>Select("Product/Package")</c>.</param>
         /// <param name="wixFile">The file with the XML fragment content.</param>
         /// <returns></returns>
