@@ -11,6 +11,25 @@ namespace WixSharp.Bootstrapper
     public abstract class Package : ChainItem
     {
         /// <summary>
+        /// The identifier of another package that this one should be installed after. By default the After attribute is
+        /// set to the previous sibling package in the Chain or PackageGroup element. If this attribute is specified
+        /// ensure that a cycle is not created explicitly or implicitly.
+        /// </summary>
+        [Xml]
+        public string After;
+
+        /// <summary>
+        /// By default, a Bundle will use the hash of a package to verify its contents. If this attribute is explicitly
+        /// set to "no" and the package is signed with an Authenticode signature the Bundle will verify the contents of
+        /// the package using the signature instead. Therefore, the default for this attribute could be considered to be
+        /// "true". It is unusual for "true" to be the default of an attribute. In this case, the default was changed in
+        /// WiX v3.9 after experiencing real-world issues with Windows verifying Authenticode signatures. Since the
+        /// Authenticode signatures are no more secure than hashing the packages directly, the default was changed.
+        /// </summary>
+        [Xml]
+        public bool? SuppressSignatureVerification;
+
+        /// <summary>
         /// Specifies the display name to place in the bootstrapper application data manifest for the package.
         /// By default, ExePackages use the ProductName field from the version information, MsiPackages use the ProductName property, and MspPackages use the DisplayName patch metadata property.
         /// Other package types must use this attribute to define a display name in the bootstrapper application data manifest.
