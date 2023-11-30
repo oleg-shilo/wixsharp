@@ -23,7 +23,6 @@ THE SOFTWARE.
 
 #endregion Licence...
 
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,6 +34,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.Controls;
@@ -520,6 +520,15 @@ namespace WixSharp.CommonTasks
             project.RegValues = ImportRegFile(regFile);
             return project;
         }
+
+        /// <summary>
+        /// Adds the specified XML content as a WiX Fragment/FragmentRef elements combination.
+        /// </summary>
+        /// <param name="placementPath">The placement path to the element matching the specified path (e.g. <c>Select("Product/Package")</c>.</param>
+        /// <param name="wixFile">The file with the XML fragment content.</param>
+        /// <returns></returns>
+        static public WixProject AddWixFragmentFile(this Project project, string placementPath, string wixFile)
+            => project.AddWixFragment(placementPath, XElement.Parse(System.IO.File.ReadAllText(wixFile)));
 
         /// <summary>
         /// Adds the property items to the project.
@@ -1707,7 +1716,7 @@ namespace WixSharp.CommonTasks
                 {
                     doc.FindAll("CustomAction")
                        .FirstOrDefault(x => x.HasAttribute("Id", "WixSharp_AfterInstall_Action"))
-                      ?.SetAttribute("Execute", "immediate");
+                       ?.SetAttribute("Execute", "immediate");
                 };
             return project;
         }
@@ -1824,9 +1833,9 @@ namespace WixSharp.CommonTasks
     public static class SessionDataExtensions
     {
         static string persitentDataDir = System.IO.Path.Combine(
-                                              Environment.SpecialFolder.CommonApplicationData.ToPath(),
-                                              "WixSharp",
-                                              "SessionData")
+                                             Environment.SpecialFolder.CommonApplicationData.ToPath(),
+                                             "WixSharp",
+                                             "SessionData")
                                              .EnsureDirExists();
 
         /// <summary>
