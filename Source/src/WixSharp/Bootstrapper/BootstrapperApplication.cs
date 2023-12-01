@@ -157,7 +157,7 @@ namespace WixSharp.Bootstrapper
             try
             {
                 var valid = (bool)Utils.ExecuteInTempDomain<AsmReflector>(
-                                    asmReflector => asmReflector.ValidateCustomBaAssembly(assembly));
+                                        asmReflector => asmReflector.ValidateCustomBaAssembly(assembly));
 
                 if (!valid)
                     Compiler.OutputWriteLine(
@@ -388,6 +388,12 @@ namespace WixSharp.Bootstrapper
         /// Collection of paths to the package dependencies.
         /// </summary>
         public Payload[] Payloads = new Payload[0];
+
+        /// <summary>
+        /// Adds the payload.
+        /// </summary>
+        /// <param name="payload">The payload.</param>
+        public void AddPayload(Payload payload) => Payloads = Payloads.Combine(payload);
 
         /// <summary>
         /// The Bundle string variables associated with the Bootstrapper application.
