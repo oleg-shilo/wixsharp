@@ -28,7 +28,7 @@ namespace WixSharp.Bootstrapper
         /// Initializes a new instance of the <see cref="ManagedBootstrapperApplication"/> class.
         /// </summary>
         /// <param name="appAssembly">The application assembly.</param>
-        /// <param name="dependencies">The dependencies.</param>
+        /// <param name="dependencies">The dependencies (e.g. "BootstrapperCore.config").</param>
         public ManagedBootstrapperApplication(string appAssembly, params string[] dependencies)
         {
             AppAssembly = appAssembly;
@@ -285,6 +285,12 @@ namespace WixSharp.Bootstrapper
         public Payload[] Payloads = new Payload[0];
 
         /// <summary>
+        /// Adds the payload.
+        /// </summary>
+        /// <param name="payload">The payload.</param>
+        public void AddPayload(Payload payload) => Payloads = Payloads.Combine(payload);
+
+        /// <summary>
         /// The Bundle string variables associated with the Bootstrapper application.
         /// <para>The variables are defined as a named values map.</para>
         /// </summary>
@@ -463,8 +469,8 @@ namespace WixSharp.Bootstrapper
         public override XContainer[] ToXml()
         {
             XNamespace bal = Compiler.IsWix4 ?
-                                "http://wixtoolset.org/schemas/v4/wxs/bal" :
-                                "http://schemas.microsoft.com/wix/BalExtension";
+                                 "http://wixtoolset.org/schemas/v4/wxs/bal" :
+                                 "http://schemas.microsoft.com/wix/BalExtension";
 
             var root = new XElement("BootstrapperApplicationRef");
 

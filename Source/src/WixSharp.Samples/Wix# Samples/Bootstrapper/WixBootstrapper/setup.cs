@@ -75,6 +75,8 @@ public class InstallScript
         bootstrapper.Application.Payloads = new[] { "logo.png".ToPayload() };
         bootstrapper.Application.ThemeFile = "Theme.xml".PathGetFullPath();
 
+        bootstrapper.Application.Payloads =
+                                 bootstrapper.Application.Payloads.Combine("BootstrapperCore.config".ToPayload());
         // adding themes
         // var themes = new[]
         //     {
