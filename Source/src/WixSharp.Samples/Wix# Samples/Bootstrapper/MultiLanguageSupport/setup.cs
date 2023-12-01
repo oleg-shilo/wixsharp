@@ -36,6 +36,7 @@ public static class Script
             string productMsi = project.BuildMsi();
 
             project.Language = "uk-UA";
+            // uk-UA msi will be built (and used to create mst) in the next step
             string mstFile = project.BuildLanguageTransform(productMsi, project.Language);
 
             productMsi.EmbedTransform(mstFile);
