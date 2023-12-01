@@ -18,7 +18,7 @@ public class InstallScript
     static public void Main()
     {
         string productMsi = BuildMainMsi();
-        string crtMsi = BuildCrtMsi();
+        string crtMsi = BuildCrtMsi(); // will be localized in German. Just to illustrate the technique.
 
         //---------------------------------------------------------
 
@@ -75,8 +75,9 @@ public class InstallScript
         bootstrapper.Application.Payloads = new[] { "logo.png".ToPayload() };
         bootstrapper.Application.ThemeFile = "Theme.xml".PathGetFullPath();
 
-        bootstrapper.Application.Payloads =
-                                 bootstrapper.Application.Payloads.Combine("BootstrapperCore.config".ToPayload());
+        // you can add custom "BootstrapperCore.config"
+        // bootstrapper.Application.AddPayload("BootstrapperCore.config".ToPayload());
+
         // adding themes
         // var themes = new[]
         //     {
@@ -145,7 +146,7 @@ public class InstallScript
         //---------------------------------------------------------
 
         if (io.File.Exists(productMsi)) io.File.Delete(productMsi);
-        if (io.File.Exists(crtMsi)) io.File.Delete(crtMsi);
+        // if (io.File.Exists(crtMsi)) io.File.Delete(crtMsi);
     }
 
     static public string BuildMainMsi()
@@ -179,6 +180,8 @@ public class InstallScript
             { InstallScope = InstallScope.perMachine };
         crtProj.UI = WUI.WixUI_InstallDir;
         crtProj.Load += CrtProj_Load;
+        crtProj.LocalizationFile = "WixUI_de-de.wxl";
+        crtProj.Language = "de-de";
 
         // crtProj.BeforeInstall += args =>
         // {

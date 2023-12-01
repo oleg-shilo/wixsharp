@@ -24,19 +24,23 @@ public static class Script
         //project.SourceBaseDir = "<input dir path>";
         //project.OutDir = "<output dir path>";
 
-        //project.BuildMsi();
+        var oneStepTransform = false;
+        if (oneStepTransform)
+        {
+            project.Language = "en-US,uk-UA";
+            var msiFile = project.BuildMultilanguageMsi();
+        }
+        else
+        {
+            project.Language = "en-US";
+            string productMsi = project.BuildMsi();
 
-        project.Language = "en-US,uk-UA";
-        var msiFile = project.BuildMultilanguageMsi();
+            project.Language = "uk-UA";
+            string mstFile = project.BuildLanguageTransform(productMsi, project.Language);
 
-        // project.Language = "en-US";
-        // string productMsi = project.BuildMsi();
-
-        // project.Language = "uk-UA";
-        // string mstFile = project.BuildLanguageTransform(productMsi, project.Language);
-
-        // productMsi.EmbedTransform(mstFile);
-        // productMsi.SetPackageLanguages("en-US,uk-UA".ToLcidList());
+            productMsi.EmbedTransform(mstFile);
+            productMsi.SetPackageLanguages("en-US,uk-UA".ToLcidList());
+        }
     }
 
     static public void Main1()

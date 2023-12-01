@@ -30,11 +30,11 @@ class Script
                         TargetFileName = "app.exe"
                     },
                     new Dir(@"Docs\Manual",
-                        new File(@"Files\Docs\Manual.txt")
-                        {
-                            NeverOverwrite = true
-                        })),
-                    new Property("PropName", "<your value>"));
+new File(@"Files\Docs\Manual.txt")
+{
+    NeverOverwrite = true
+})),
+                     new Property("PropName", "<your value>"));
 
         project.SetVersionFrom("MyApp_file");
 
