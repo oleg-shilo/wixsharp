@@ -108,10 +108,20 @@ namespace WixSharp
             // All other bin files are always returned as full path already (e.g. LicenceFileFor)
             var file = LocalizationFileFor(project).PathGetFullPath();
             ValidateUITextFile(file);
-            project.AddBinary(new Binary(new Id("WixSharp_UIText"), file));
-            project.AddBinary(new Binary(new Id("WixSharp_LicenceFile"), LicenceFileFor(project)));
-            project.AddBinary(new Binary(new Id("WixSharpUI_Bmp_Dialog"), DialogBitmapFileFor(project)));
-            project.AddBinary(new Binary(new Id("WixSharpUI_Bmp_Banner"), DialogBannerFileFor(project)));
+
+            // The project may already have tis element injected.
+            // But calling "extraction" methods like `DialogBitmapFileFor` will ensure binary files exist.
+            // Otherwise they might be collected by the cleaning temp files routines.
+            void addBinary(string id, string path)
+            {
+                if (!project.Binaries.Any(x => x.Id == id))
+                    project.AddBinary(new Binary(new Id(id), path));
+            };
+
+            addBinary("WixSharp_UIText", file);
+            addBinary("WixSharp_LicenceFile", LicenceFileFor(project));
+            addBinary("WixSharpUI_Bmp_Dialog", DialogBitmapFileFor(project));
+            addBinary("WixSharpUI_Bmp_Banner", DialogBannerFileFor(project));
         }
 
         /// <summary>

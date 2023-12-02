@@ -102,17 +102,17 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         public static string DefaultBootstrapperCoreConfigContent = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <configuration>
-	<configSections>
-		<sectionGroup name=""wix.bootstrapper"" type=""WixToolset.Mba.Host.BootstrapperSectionGroup, WixToolset.Mba.Host"">
-			<section name=""host"" type=""WixToolset.Mba.Host.HostSection, WixToolset.Mba.Host"" />
-		</sectionGroup>
-	</configSections>
-	<startup>
-		<supportedRuntime version=""v4.0"" sku="".NETFramework,Version=v4.8"" />
-	</startup>
-	<wix.bootstrapper>
-		<host assemblyName=""{asmName}"" />
-	</wix.bootstrapper>
+    <configSections>
+        <sectionGroup name=""wix.bootstrapper"" type=""WixToolset.Mba.Host.BootstrapperSectionGroup, WixToolset.Mba.Host"">
+            <section name=""host"" type=""WixToolset.Mba.Host.HostSection, WixToolset.Mba.Host"" />
+        </sectionGroup>
+    </configSections>
+    <startup>
+        <supportedRuntime version=""v4.0"" sku="".NETFramework,Version=v4.8"" />
+    </startup>
+    <wix.bootstrapper>
+        <host assemblyName=""{asmName}"" />
+    </wix.bootstrapper>
 </configuration>
 ";
 

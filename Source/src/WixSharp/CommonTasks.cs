@@ -606,8 +606,8 @@ namespace WixSharp.CommonTasks
         /// <param name="project">The project.</param>
         /// <param name="payloadFile">The payload file.</param>
         /// <returns></returns>
-        static public WixStandardBootstrapperApplication AddPayload(this WixStandardBootstrapperApplication project, string payloadFile)
-        => project.AddPayload(new Bootstrapper.Payload(payloadFile));
+        static public void AddPayload(this WixStandardBootstrapperApplication project, string payloadFile)
+            => project.AddPayload(new Bootstrapper.Payload(payloadFile));
 
         /// <summary>
         /// Adds the directory items to the Project.

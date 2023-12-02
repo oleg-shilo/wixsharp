@@ -82,11 +82,17 @@ public static class Script
         }
     }
 
+    /// <summary>
+    /// This method is provided for demo purposes only
+    /// </summary>
+    /// <returns></returns>
     static string BuildMultilanguageMsi()
     {
-        var project = new Project("MyProduct",
+        var project = new ManagedProject("MyProduct",
                           new Dir(@"%ProgramFiles%\My Company\My Product",
                               new File("setup.cs")));
+
+        project.ManagedUI = ManagedUI.Default;
 
         project.ProductId = new Guid("6fe30b47-2577-43ad-9095-1861ca25889c");
         project.UpgradeCode = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
@@ -111,9 +117,11 @@ public static class Script
         // Compiler.PreserveTempFiles = true;
 
         var product =
-            new Project("My Product",
+            new ManagedProject("My Product",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("readme.txt")));
+
+        product.ManagedUI = ManagedUI.Default;
 
         product.Version = new Version("1.0.0.0");
         product.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258771");

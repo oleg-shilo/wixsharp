@@ -1,4 +1,3 @@
-using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using static System.Environment;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -17,10 +17,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Microsoft.Win32;
 using WixSharp.CommonTasks;
-using WixToolset.Dtf.WindowsInstaller;
-using static System.Environment;
 using static WixSharp.SetupEventArgs;
+using WixToolset.Dtf.WindowsInstaller;
 
 using IO = System.IO;
 
@@ -3115,20 +3115,25 @@ namespace WixSharp
                     sql.Execute();
 
                     using (var record = sql.Fetch())
-                    using (var stream = record.GetStream(1))
-                    using (var ms = new IO.MemoryStream())
                     {
-                        int Length = 256;
-                        var buffer = new Byte[Length];
-                        int bytesRead = stream.Read(buffer, 0, Length);
-                        while (bytesRead > 0)
-                        {
-                            ms.Write(buffer, 0, bytesRead);
-                            bytesRead = stream.Read(buffer, 0, Length);
-                        }
-                        ms.Seek(0, IO.SeekOrigin.Begin);
+                        if (record == null)
+                            return null;
 
-                        return (Bitmap)Bitmap.FromStream(ms);
+                        using (var stream = record.GetStream(1))
+                        using (var ms = new IO.MemoryStream())
+                        {
+                            int Length = 256;
+                            var buffer = new Byte[Length];
+                            int bytesRead = stream.Read(buffer, 0, Length);
+                            while (bytesRead > 0)
+                            {
+                                ms.Write(buffer, 0, bytesRead);
+                                bytesRead = stream.Read(buffer, 0, Length);
+                            }
+                            ms.Seek(0, IO.SeekOrigin.Begin);
+
+                            return (Bitmap)Bitmap.FromStream(ms);
+                        }
                     }
                 }
             }
