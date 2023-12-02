@@ -1,4 +1,3 @@
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -7,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 using WixSharp.UI.Forms;
 using WixSharp.UI.ManagedUI;
@@ -105,10 +105,20 @@ namespace WixSharp
         {
             var file = LocalizationFileFor(project);
             ValidateUITextFile(file);
-            project.AddBinary(new Binary(new Id("WixSharp_UIText"), file));
-            project.AddBinary(new Binary(new Id("WixSharp_LicenceFile"), LicenceFileFor(project)));
-            project.AddBinary(new Binary(new Id("WixUI_Bmp_Dialog"), DialogBitmapFileFor(project)));
-            project.AddBinary(new Binary(new Id("WixUI_Bmp_Banner"), DialogBannerFileFor(project)));
+
+            // The project may already have its element injected.
+            // But calling "extraction" methods like `DialogBitmapFileFor` will ensure binary files exist.
+            // Otherwise they might be collected by the cleaning temp files routines.
+            void addBinary(string id, string path)
+            {
+                if (!project.Binaries.Any(x => x.Id == id))
+                    project.AddBinary(new Binary(new Id(id), path));
+            };
+
+            addBinary("WixSharp_UIText", file);
+            addBinary("WixSharp_LicenceFile", LicenceFileFor(project));
+            addBinary("WixUI_Bmp_Dialog", DialogBitmapFileFor(project));
+            addBinary("WixUI_Bmp_Banner", DialogBannerFileFor(project));
         }
 
         /// <summary>

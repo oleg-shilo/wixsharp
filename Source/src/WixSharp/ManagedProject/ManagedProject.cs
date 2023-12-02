@@ -392,8 +392,6 @@ namespace WixSharp
                     if (AutoElements.UACWarning.IsNotEmpty())
                         this.AddProperty(new Property("UAC_WARNING", AutoElements.UACWarning));
 
-                    ManagedUI.BeforeBuild(this);
-
                     InjectDialogs("WixSharp_InstallDialogs", ManagedUI.InstallDialogs);
                     InjectDialogs("WixSharp_ModifyDialogs", ManagedUI.ModifyDialogs);
 
@@ -416,6 +414,9 @@ namespace WixSharp
                 Bind(() => BeforeInstall, When.Before, Step.InstallFiles);
                 Bind(() => AfterInstall, When.After, Step.InstallFiles, true);
             }
+
+            if (ManagedUI != null)
+                ManagedUI.BeforeBuild(this);
         }
 
         string[] GetUiDialogsDependencies(IManagedUI ui)
