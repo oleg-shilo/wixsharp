@@ -33,7 +33,8 @@ public class Script
                                         .Add<Custom.ProgressDialog>()
                                         .Add<Custom.ExitDialog>();
 
-        project.ManagedUI.ModifyDialogs.Add<Custom.ProgressDialog>()
+        project.ManagedUI.ModifyDialogs.Add<Custom.MaintenanceTypeDialog>()
+                                       .Add<Custom.ProgressDialog>()
                                        .Add<Custom.ExitDialog>();
 
         // custom WPF dialog (this project):        Custom.ProgressDialog

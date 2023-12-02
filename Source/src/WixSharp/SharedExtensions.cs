@@ -5,6 +5,7 @@ using System.IO;
 
 namespace WixSharp.Msi
 #else
+
 namespace WixSharp
 #endif
 {
@@ -68,6 +69,7 @@ namespace WixSharp
 
                 case "ProgramFiles64Folder": return Environment.SpecialFolder.ProgramFiles.ToPath().Replace(" (x86)", "");
                 case "ProgramFilesFolder": return Environment.SpecialFolder.ProgramFiles.ToPath();
+                case "PFiles": return Environment.SpecialFolder.ProgramFiles.ToPath(); // WiX4 introduced new constant
 
                 case "MyPicturesFolder": return Environment.SpecialFolder.MyPictures.ToPath();
                 case "SendToFolder": return Environment.SpecialFolder.SendTo.ToPath();
