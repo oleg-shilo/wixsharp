@@ -1,6 +1,6 @@
-using ConsoleApplication1;
 using System;
 using System.Linq;
+using ConsoleApplication1;
 using WixSharp;
 using WixSharp.UI.WPF;
 

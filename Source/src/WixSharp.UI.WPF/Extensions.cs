@@ -87,14 +87,36 @@ namespace WixSharp.UI.WPF
         /// </summary>
         /// <returns></returns>
         public static System.Reflection.AssemblyName[] GetRefAssemblies()
-            => new[]
+        {
+            var result = new List<System.Reflection.AssemblyName>();
+
+            // Caliburn.Micro renamed Caliburn.Micro.dll into Caliburn.Micro.Core.dll in the 4.0 version.
+
+            bool TryToLoad(string asmName)
+            {
+                try
                 {
-                    System.Reflection.Assembly.Load("System.Windows.Interactivity").GetName(),
-                    System.Reflection.Assembly.Load("Caliburn.Micro.Platform").GetName(),
-                    System.Reflection.Assembly.Load("Caliburn.Micro.Platform.Core").GetName(),
-                    System.Reflection.Assembly.Load("Caliburn.Micro").GetName(),
-                    System.Reflection.Assembly.Load("WixSharp.UI").GetName()
-                };
+                    result.Add(System.Reflection.Assembly.Load(asmName).GetName());
+                    return true;
+                }
+                catch { }
+                return false;
+            }
+
+            // Claliburn v4.*
+            TryToLoad("Caliburn.Micro.Core");
+            TryToLoad("Caliburn.Micro.Platform");
+            TryToLoad("Caliburn.Micro.Platform.Core");
+            TryToLoad("Microsoft.Xaml.Behaviors");
+
+            // Claliburn v3.*
+            TryToLoad("Caliburn.Micro");
+            TryToLoad("System.Windows.Interactivity");
+
+            TryToLoad("WixSharp.UI");
+
+            return result.ToArray();
+        }
     }
 
     /// <summary>
