@@ -20,11 +20,12 @@ public class ManagedBA : BootstrapperApplication
     /// </summary>
     protected override void Run()
     {
-        var useWpf = false;
+        var useWpf = true;
         if (useWpf)
             new MainView(this).ShowDialog();
         else
-            new MainDialog(this).ShowDialog(); // the implementation is incomplete. The sample is provided for demo purposes only.
+            new MainDialog(this).ShowDialog(); // The WinForm implementation is incomplete.
+                                               // The sample is provided for demo purposes only.
 
         Engine.Quit(0);
     }
