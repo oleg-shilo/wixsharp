@@ -156,7 +156,23 @@ namespace WixSharp
 
         internal string LocalizationFileFor(Project project)
         {
-            return UIExtensions.UserOrDefaultContentOf(project.LocalizationFile, project.SourceBaseDir, project.OutDir, project.Name + ".wxl", Resources.WixUI_en_us);
+            // - if localization file specified by the user then just return it
+            // - if user did not specify it then find the stock localization file (in SDK folder) for the language
+            //   of the project
+            // - if the stock localization file cannot be found then use the `en-US` localization data from the
+            //   WixSharp.UI.dll embedded resource.
+
+            var wxlFile = project.LocalizationFile;
+
+            if (wxlFile.IsEmpty() && project.Language.IsNotEmpty())
+            {
+                var stockLanguageFile = System.IO.Path.Combine(Compiler.WixSdkLocation, "wixui", $"WixUI_{project.Language}.wxl");
+                if (System.IO.File.Exists(stockLanguageFile))
+                    wxlFile = stockLanguageFile;
+            }
+
+            var defaultLocalizationData = Resources.WixUI_en_us;
+            return UIExtensions.UserOrDefaultContentOf(wxlFile, project.SourceBaseDir, project.OutDir, project.Name + ".wxl", defaultLocalizationData);
         }
 
         internal string LicenceFileFor(Project project)
