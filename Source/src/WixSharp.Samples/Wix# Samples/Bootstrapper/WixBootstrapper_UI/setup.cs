@@ -64,8 +64,6 @@ public class Script
                                         Variable = "RegistryInput"
                                     });
 
-        bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
-
         // You can also use System.Reflection.Assembly.GetExecutingAssembly().Location instead of "%this%"
         // Note, passing BootstrapperCore.config is optional and if not provided the default BootstrapperCore.config
         // will be used. The content of the default BootstrapperCore.config can be accessed via
@@ -73,13 +71,14 @@ public class Script
         //
         // Note that the DefaultBootstrapperCoreConfigContent may not be suitable for all build and runtime scenarios.
         // In such cases you may need to use custom BootstrapperCore.config as demonstrated below.
-        // bootstrapper.Application = new ManagedBootstrapperApplication("%this%", "BootstrapperCore.config");
+        bootstrapper.Application = new ManagedBootstrapperApplication("%this%", "BootstrapperCore.config");
 
         bootstrapper.PreserveTempFiles = true;
         //        bootstrapper.SuppressWixMbaPrereqVars = true;
 
         bootstrapper.OutFileName = "my_app";
         bootstrapper.Build("my_app.exe");
-        io.File.Delete(productMsi);
+        bootstrapper.BuildCmd("my_app.exe.cmd");
+        // io.File.Delete(productMsi);
     }
 }
