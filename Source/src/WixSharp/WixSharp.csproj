@@ -120,6 +120,7 @@
     <Compile Include="Assembly.cs" />
     <Compile Include="AutoElements.cs" />
     <Compile Include="BalCondition.cs" />
+    <Compile Include="Bootstrapper\CorFlagsReader.cs" />
     <Compile Include="Bootstrapper\UtilFileSearch.cs" />
     <Compile Include="Bootstrapper\UtilProductSearch.cs" />
     <Compile Include="Bootstrapper\UtilRegistrySearch.cs" />

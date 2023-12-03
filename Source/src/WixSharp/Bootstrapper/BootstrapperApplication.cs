@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using System.Xml.Xsl;
 using Microsoft.Deployment.WindowsInstaller;
 
 using sys = System.IO;
@@ -52,6 +53,14 @@ namespace WixSharp.Bootstrapper
                 rawAppAssembly = Compiler.ResolveClientAsm(outDir); //NOTE: if a new file is generated then the Compiler takes care for cleaning any temps
                 if (Payloads.FirstOrDefault(x => x.SourceFile == "%this%") is Payload payload_this)
                     payload_this.SourceFile = rawAppAssembly;
+            }
+
+            var metadata = CorFlagsReader.ReadAssemblyMetadata(rawAppAssembly);
+
+            if (metadata.ProcessorArchitecture != System.Reflection.ProcessorArchitecture.X86)
+            {
+                throw new Exception("Error: Custom BA assembly must be compiled for x86 CPU architecture.\n" +
+                    "Assembly: " + rawAppAssembly);
             }
 
             string asmName = Path.GetFileNameWithoutExtension(Utils.OriginalAssemblyFile(rawAppAssembly));

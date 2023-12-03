@@ -78,6 +78,7 @@ public class Script
 
         bootstrapper.OutFileName = "my_app";
         bootstrapper.Build("my_app.exe");
+
         // io.File.Delete(productMsi);
     }
 }
