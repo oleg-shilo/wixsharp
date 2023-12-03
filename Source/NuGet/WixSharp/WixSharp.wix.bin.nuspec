@@ -2,26 +2,26 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.wix.bin</id>
-    <version>3.14.0</version>
+    <version>3.14.0.1</version>
     <title>Wix# (WixSharp) - WiX Toolset Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <projectUrl>https://github.com/oleg-shilo/wixsharp/</projectUrl>
     <license type="expression">MIT</license>
     <icon>wixsharp_logo.png</icon>
+    <projectUrl>https://github.com/oleg-shilo/wixsharp/</projectUrl>
     <description>The package containsWIX (Windows Installer Xml) Toolset v3.14.0  required for Wix#. Wix# is a framework for building a complete MSI by using build script files written with the C# syntax.
 
 Note WiX binaries do not belong to WiX#  and they are licenced by their own licencing agreement.</description>
     <summary>Wix# (WixSharp) - WiX Toolset Binaries</summary>
-    <releaseNotes></releaseNotes>
+    <releaseNotes>It is the same WiX v3.14 SDK as in the WixSharp.wix.bin.v3.14.0.1.nupkg, plus localizationfiles in the wixui folder.</releaseNotes>
     <copyright>Wix# - Copyright (C) 2004-2017 Oleg Shilo;
 WiX - Copyright (C) .NET Foundation and contributors</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
   </metadata>
   <files>
-       <file src="..\..\src\WixSharp.Samples\Wix_bin\bin\x86\burn.exe" target="tools\bin\x86\burn.exe" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\bin\x86\burn.exe" target="tools\bin\x86\burn.exe" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\bin\candle.exe" target="tools\bin\candle.exe" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\bin\candle.exe.config" target="tools\bin\candle.exe.config" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\bin\darice.cub" target="tools\bin\darice.cub" />
@@ -101,9 +101,6 @@ WiX - Copyright (C) .NET Foundation and contributors</copyright>
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\balinfo.h" target="tools\sdk\inc\balinfo.h" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\balretry.h" target="tools\sdk\inc\balretry.h" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\balutil.h" target="tools\sdk\inc\balutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\BootstrapperCore.config" target="tools\sdk\BootstrapperCore.config" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\BootstrapperCore.dll" target="tools\sdk\BootstrapperCore.dll" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\BootstrapperCore.xml" target="tools\sdk\BootstrapperCore.xml" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\buffutil.h" target="tools\sdk\inc\buffutil.h" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\butil.h" target="tools\sdk\inc\butil.h" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\cabcutil.h" target="tools\sdk\inc\cabcutil.h" />
@@ -116,7 +113,6 @@ WiX - Copyright (C) .NET Foundation and contributors</copyright>
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\dictutil.h" target="tools\sdk\inc\dictutil.h" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\dirutil.h" target="tools\sdk\inc\dirutil.h" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\dlutil.h" target="tools\sdk\inc\dlutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\DocCompiler.exe" target="tools\sdk\DocCompiler.exe" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\dutil.h" target="tools\sdk\inc\dutil.h" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\eseutil.h" target="tools\sdk\inc\eseutil.h" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\fileutil.h" target="tools\sdk\inc\fileutil.h" />
@@ -130,10 +126,97 @@ WiX - Copyright (C) .NET Foundation and contributors</copyright>
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\jsonutil.h" target="tools\sdk\inc\jsonutil.h" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\locutil.h" target="tools\sdk\inc\locutil.h" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\logutil.h" target="tools\sdk\inc\logutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\MakeSfxCA.exe" target="tools\sdk\MakeSfxCA.exe" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\MakeSfxCA.exe.config" target="tools\sdk\MakeSfxCA.exe.config" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\memutil.h" target="tools\sdk\inc\memutil.h" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\metautil.h" target="tools\sdk\inc\metautil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\osutil.h" target="tools\sdk\inc\osutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\pathutil.h" target="tools\sdk\inc\pathutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\perfutil.h" target="tools\sdk\inc\perfutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\polcutil.h" target="tools\sdk\inc\polcutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\procutil.h" target="tools\sdk\inc\procutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\regutil.h" target="tools\sdk\inc\regutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\resrutil.h" target="tools\sdk\inc\resrutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\reswutil.h" target="tools\sdk\inc\reswutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\rexutil.h" target="tools\sdk\inc\rexutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\rmutil.h" target="tools\sdk\inc\rmutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\rssutil.h" target="tools\sdk\inc\rssutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\sceutil.h" target="tools\sdk\inc\sceutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\shelutil.h" target="tools\sdk\inc\shelutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\sqlutil.h" target="tools\sdk\inc\sqlutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\srputil.h" target="tools\sdk\inc\srputil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\strutil.h" target="tools\sdk\inc\strutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\svcutil.h" target="tools\sdk\inc\svcutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\thmutil.h" target="tools\sdk\inc\thmutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\timeutil.h" target="tools\sdk\inc\timeutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\uriutil.h" target="tools\sdk\inc\uriutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\userutil.h" target="tools\sdk\inc\userutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\wcalog.h" target="tools\sdk\inc\wcalog.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\wcautil.h" target="tools\sdk\inc\wcautil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\wcawow64.h" target="tools\sdk\inc\wcawow64.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\wcawrapquery.h" target="tools\sdk\inc\wcawrapquery.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\wiutil.h" target="tools\sdk\inc\wiutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\wuautil.h" target="tools\sdk\inc\wuautil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\xmlutil.h" target="tools\sdk\inc\xmlutil.h" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\themes\HyperlinkLargeTheme.xml" target="tools\sdk\themes\HyperlinkLargeTheme.xml" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\themes\HyperlinkSidebarTheme.xml" target="tools\sdk\themes\HyperlinkSidebarTheme.xml" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\themes\HyperlinkTheme.wxl" target="tools\sdk\themes\HyperlinkTheme.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\themes\HyperlinkTheme.xml" target="tools\sdk\themes\HyperlinkTheme.xml" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\themes\mbapreq.thm" target="tools\sdk\themes\mbapreq.thm" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\themes\mbapreq.wxl" target="tools\sdk\themes\mbapreq.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\themes\RtfLargeTheme.xml" target="tools\sdk\themes\RtfLargeTheme.xml" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\themes\RtfTheme.wxl" target="tools\sdk\themes\RtfTheme.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\themes\RtfTheme.xml" target="tools\sdk\themes\RtfTheme.xml" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_Advanced.wxs" target="tools\sdk\wixui\WixUI_Advanced.wxs" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_ar-SA.wxl" target="tools\sdk\wixui\WixUI_ar-SA.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_bg-BG.wxl" target="tools\sdk\wixui\WixUI_bg-BG.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_ca-ES.wxl" target="tools\sdk\wixui\WixUI_ca-ES.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_cs-CZ.wxl" target="tools\sdk\wixui\WixUI_cs-CZ.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_da-DK.wxl" target="tools\sdk\wixui\WixUI_da-DK.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_de-de.wxl" target="tools\sdk\wixui\WixUI_de-de.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_el-GR.wxl" target="tools\sdk\wixui\WixUI_el-GR.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_en-us.wxl" target="tools\sdk\wixui\WixUI_en-us.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_es-es.wxl" target="tools\sdk\wixui\WixUI_es-es.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_et-EE.wxl" target="tools\sdk\wixui\WixUI_et-EE.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_FeatureTree.wxs" target="tools\sdk\wixui\WixUI_FeatureTree.wxs" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_fi-FI.wxl" target="tools\sdk\wixui\WixUI_fi-FI.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_fr-fr.wxl" target="tools\sdk\wixui\WixUI_fr-fr.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_he-IL.wxl" target="tools\sdk\wixui\WixUI_he-IL.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_hi-IN.wxl" target="tools\sdk\wixui\WixUI_hi-IN.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_hr-HR.wxl" target="tools\sdk\wixui\WixUI_hr-HR.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_hu-HU.wxl" target="tools\sdk\wixui\WixUI_hu-HU.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_InstallDir.wxs" target="tools\sdk\wixui\WixUI_InstallDir.wxs" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_it-it.wxl" target="tools\sdk\wixui\WixUI_it-it.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_ja-jp.wxl" target="tools\sdk\wixui\WixUI_ja-jp.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_kk-KZ.wxl" target="tools\sdk\wixui\WixUI_kk-KZ.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_ko-KR.wxl" target="tools\sdk\wixui\WixUI_ko-KR.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_lt-LT.wxl" target="tools\sdk\wixui\WixUI_lt-LT.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_lv-LV.wxl" target="tools\sdk\wixui\WixUI_lv-LV.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_Minimal.wxs" target="tools\sdk\wixui\WixUI_Minimal.wxs" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_Mondo.wxs" target="tools\sdk\wixui\WixUI_Mondo.wxs" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_nb-NO.wxl" target="tools\sdk\wixui\WixUI_nb-NO.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_nl-NL.wxl" target="tools\sdk\wixui\WixUI_nl-NL.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_pl-pl.wxl" target="tools\sdk\wixui\WixUI_pl-pl.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_pt-BR.wxl" target="tools\sdk\wixui\WixUI_pt-BR.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_pt-PT.wxl" target="tools\sdk\wixui\WixUI_pt-PT.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_ro-RO.wxl" target="tools\sdk\wixui\WixUI_ro-RO.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_ru-ru.wxl" target="tools\sdk\wixui\WixUI_ru-ru.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_sk-SK.wxl" target="tools\sdk\wixui\WixUI_sk-SK.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_sl-SI.wxl" target="tools\sdk\wixui\WixUI_sl-SI.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_sr-Latn-CS.wxl" target="tools\sdk\wixui\WixUI_sr-Latn-CS.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_sv-SE.wxl" target="tools\sdk\wixui\WixUI_sv-SE.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_th-TH.wxl" target="tools\sdk\wixui\WixUI_th-TH.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_tr-TR.wxl" target="tools\sdk\wixui\WixUI_tr-TR.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_uk-UA.wxl" target="tools\sdk\wixui\WixUI_uk-UA.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_zh-CN.wxl" target="tools\sdk\wixui\WixUI_zh-CN.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_zh-HK.wxl" target="tools\sdk\wixui\WixUI_zh-HK.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wixui\WixUI_zh-TW.wxl" target="tools\sdk\wixui\WixUI_zh-TW.wxl" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\x64\sfxca.dll" target="tools\sdk\x64\sfxca.dll" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\x86\sfxca.dll" target="tools\sdk\x86\sfxca.dll" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\BootstrapperCore.config" target="tools\sdk\BootstrapperCore.config" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\BootstrapperCore.dll" target="tools\sdk\BootstrapperCore.dll" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\BootstrapperCore.xml" target="tools\sdk\BootstrapperCore.xml" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\DocCompiler.exe" target="tools\sdk\DocCompiler.exe" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\MakeSfxCA.exe" target="tools\sdk\MakeSfxCA.exe" />
+    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\MakeSfxCA.exe.config" target="tools\sdk\MakeSfxCA.exe.config" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\Microsoft.Deployment.Compression.Cab.dll" target="tools\sdk\Microsoft.Deployment.Compression.Cab.dll" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\Microsoft.Deployment.Compression.Cab.xml" target="tools\sdk\Microsoft.Deployment.Compression.Cab.xml" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\Microsoft.Deployment.Compression.dll" target="tools\sdk\Microsoft.Deployment.Compression.dll" />
@@ -149,38 +232,8 @@ WiX - Copyright (C) .NET Foundation and contributors</copyright>
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\Microsoft.Deployment.WindowsInstaller.Package.xml" target="tools\sdk\Microsoft.Deployment.WindowsInstaller.Package.xml" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\Microsoft.Deployment.WindowsInstaller.xml" target="tools\sdk\Microsoft.Deployment.WindowsInstaller.xml" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\MsgGen.exe" target="tools\sdk\MsgGen.exe" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\osutil.h" target="tools\sdk\inc\osutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\pathutil.h" target="tools\sdk\inc\pathutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\perfutil.h" target="tools\sdk\inc\perfutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\polcutil.h" target="tools\sdk\inc\polcutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\procutil.h" target="tools\sdk\inc\procutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\regutil.h" target="tools\sdk\inc\regutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\resrutil.h" target="tools\sdk\inc\resrutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\reswutil.h" target="tools\sdk\inc\reswutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\rexutil.h" target="tools\sdk\inc\rexutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\rmutil.h" target="tools\sdk\inc\rmutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\rssutil.h" target="tools\sdk\inc\rssutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\sceutil.h" target="tools\sdk\inc\sceutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\x64\sfxca.dll" target="tools\sdk\x64\sfxca.dll" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\x86\sfxca.dll" target="tools\sdk\x86\sfxca.dll" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\shelutil.h" target="tools\sdk\inc\shelutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\sqlutil.h" target="tools\sdk\inc\sqlutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\srputil.h" target="tools\sdk\inc\srputil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\strutil.h" target="tools\sdk\inc\strutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\svcutil.h" target="tools\sdk\inc\svcutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\thmutil.h" target="tools\sdk\inc\thmutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\timeutil.h" target="tools\sdk\inc\timeutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\uriutil.h" target="tools\sdk\inc\uriutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\userutil.h" target="tools\sdk\inc\userutil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\wcalog.h" target="tools\sdk\inc\wcalog.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\wcautil.h" target="tools\sdk\inc\wcautil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\wcawow64.h" target="tools\sdk\inc\wcawow64.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\wcawrapquery.h" target="tools\sdk\inc\wcawrapquery.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\wiutil.h" target="tools\sdk\inc\wiutil.h" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wix.ca.targets" target="tools\sdk\wix.ca.targets" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\wix.nativeca.targets" target="tools\sdk\wix.nativeca.targets" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\wuautil.h" target="tools\sdk\inc\wuautil.h" />
-    <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\inc\xmlutil.h" target="tools\sdk\inc\xmlutil.h" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\XsdGen.exe" target="tools\sdk\XsdGen.exe" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\sdk\XsdStitch.exe" target="tools\sdk\XsdStitch.exe" />
     <file src="..\..\src\WixSharp.Samples\Wix_bin\version.txt" target="tools\version.txt" />
