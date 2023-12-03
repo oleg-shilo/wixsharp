@@ -431,13 +431,34 @@ namespace WixSharp
                                         .Any(a => a.Assembly.GetName().Name == "WixSharp.UI.WPF");
 
             if (usngWpfStockDialogs || dependsOnWpfDialogsBase)
-                return new[]
+            {
+                var result = new List<string>();
+
+                // Caliburn.Micro renamed Caliburn.Micro.dll into Caliburn.Micro.Core.dll in the 4.0 version.
+
+                bool TryToLoad(string asmName)
                 {
-                    System.Reflection.Assembly.Load("Caliburn.Micro").Location,
-                    System.Reflection.Assembly.Load("Caliburn.Micro.Platform").Location,
-                    System.Reflection.Assembly.Load("Caliburn.Micro.Platform.Core").Location,
-                    System.Reflection.Assembly.Load("System.Windows.Interactivity").Location
-                };
+                    try
+                    {
+                        result.Add(System.Reflection.Assembly.Load(asmName).Location);
+                        return true;
+                    }
+                    catch { }
+                    return false;
+                }
+
+                // Claliburn v4.*
+                TryToLoad("Caliburn.Micro.Core");
+                TryToLoad("Caliburn.Micro.Platform");
+                TryToLoad("Caliburn.Micro.Platform.Core");
+                TryToLoad("Microsoft.Xaml.Behaviors");
+
+                // Claliburn v3.*
+                TryToLoad("Caliburn.Micro");
+                TryToLoad("System.Windows.Interactivity");
+
+                return result.ToArray();
+            }
             else
                 return new string[0];
         }

@@ -1,8 +1,8 @@
-using ConsoleApplication1;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
+using ConsoleApplication1;
 using WixSharp;
 using WixSharp.UI.WPF;
 
