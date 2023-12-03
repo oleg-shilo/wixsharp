@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -156,23 +157,64 @@ namespace WixSharp
 
         internal string LocalizationFileFor(Project project)
         {
-            // - if localization file specified by the user then just return it
+            // - if localization file specified by the user then just return it but merge with
+            //   the stock localization if found.
             // - if user did not specify it then find the stock localization file (in SDK folder) for the language
             //   of the project
             // - if the stock localization file cannot be found then use the `en-US` localization data from the
             //   WixSharp.UI.dll embedded resource.
 
-            var wxlFile = project.LocalizationFile;
+            var stockWxlFileForTheLanguage = Compiler.WixSdkLocation.PathCombine("wixui", $"WixUI_{project.Language}.wxl");
 
-            if (wxlFile.IsEmpty() && project.Language.IsNotEmpty())
+            var localizationFile = project.SourceBaseDir.PathCombine(project.LocalizationFile);
+
+            if (stockWxlFileForTheLanguage.FileExists())
             {
-                var stockLanguageFile = System.IO.Path.Combine(Compiler.WixSdkLocation, "wixui", $"WixUI_{project.Language}.wxl");
-                if (System.IO.File.Exists(stockLanguageFile))
-                    wxlFile = stockLanguageFile;
-            }
+                if (localizationFile.FileExists())
+                {
+                    try
+                    {
+                        var baseLocalization = XDocument.Load(stockWxlFileForTheLanguage);
+                        var userLocalization = XDocument.Load(localizationFile);
 
-            var defaultLocalizationData = Resources.WixUI_en_us;
-            return UIExtensions.UserOrDefaultContentOf(wxlFile, project.SourceBaseDir, project.OutDir, project.Name + ".wxl", defaultLocalizationData);
+                        var replacementIds = userLocalization.Root.Elements().Select(x => x.Attr("Id"));
+
+                        baseLocalization.Root
+                            .Elements()
+                            .Where(x => replacementIds.Contains(x.Attr("Id")))
+                            .ForEach(x => x.Remove());
+
+                        userLocalization.Root
+                            .Elements()
+                            .ForEach(x =>
+                            {
+                                x.Remove();
+                                baseLocalization.Root.Add(x);
+                            });
+
+                        var wxlFile = project.OutDir.PathCombine(project.Name + ".wxl");
+                        baseLocalization.Save(wxlFile);
+                        return wxlFile;
+                    }
+                    catch (Exception e)
+                    {
+                        Compiler.OutputWriteLine(
+                            $"Warning: Cannot merge user localization file ({project.LocalizationFile}) with " +
+                            $"the stock WXL file `{localizationFile}`");
+                        return localizationFile;
+                    }
+                }
+                else
+                    return stockWxlFileForTheLanguage;
+            }
+            else
+            {
+                var wxlFile = project.OutDir.PathCombine(project.Name + ".wxl");
+
+                System.IO.File.WriteAllBytes(wxlFile, Resources.WixUI_en_us);
+
+                return wxlFile;
+            }
         }
 
         internal string LicenceFileFor(Project project)

@@ -79,7 +79,11 @@ public static class Script
 
         project.PreserveTempFiles = true;
         project.SourceBaseDir = @"..\..\";
-        // project.Language = @"fr-FR";
+
+        // Set the whole UI to French.
+        // Replace the text of "Next" button (exta_fr-fr.wxl).
+        project.Language = "fr-FR";
+        project.LocalizationFile = "exta_fr-fr.wxl";
 
         project.BuildMsi();
     }

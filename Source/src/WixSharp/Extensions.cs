@@ -1114,6 +1114,22 @@ namespace WixSharp
             => IO.File.Exists(path);
 
         /// <summary>
+        /// Checks if the file exists.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static bool FileExists(this string path)
+            => IO.File.Exists(path);
+
+        /// <summary>
+        /// Checks if the path exists.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static bool PathExists(this string path)
+            => IO.File.Exists(path) || IO.Directory.Exists(path);
+
+        /// <summary>
         /// Determines whether this instance is directory.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -1276,9 +1292,9 @@ namespace WixSharp
         /// <returns></returns>
 #pragma warning restore CS0419 // Ambiguous reference in cref attribute
 
-        public static string PathCombine(this string path1, string path2)
+        public static string PathCombine(this string path1, params string[] path2)
         {
-            return IO.Path.Combine(path1, path2);
+            return IO.Path.Combine(new[] { path1 }.Concat(path2).ToArray());
         }
 
         /// <summary>
