@@ -200,7 +200,7 @@ namespace WixSharp
                     {
                         Compiler.OutputWriteLine(
                             $"Warning: Cannot merge user localization file ({project.LocalizationFile}) with " +
-                            $"the stock WXL file `{localizationFile}`");
+                            $"the stock WXL file `{localizationFile}`. \n {e.Message} ");
                         return localizationFile;
                     }
                 }
