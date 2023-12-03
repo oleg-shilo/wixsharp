@@ -157,7 +157,7 @@ namespace WixSharp.Test
                     else
                         lock (failedSamples)
                         {
-                            failedSamples.Add((currentStep - 1) + ":" + batchFile); // print index so it's easy to find it in the log
+                            failedSamples.Add((currentStep - 1) + ":" + batchFile + "\n" + output); // print index so it's easy to find it in the log
                         }
                 }
 

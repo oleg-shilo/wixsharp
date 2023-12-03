@@ -113,14 +113,14 @@ namespace WixSharp.Bootstrapper
         </sectionGroup>
     </configSections>
     <startup useLegacyV2RuntimeActivationPolicy=""true"">
-        <!--<supportedRuntime version=""v2.0.50727"" />-->
         <supportedRuntime version=""v4.0"" />
+        <supportedRuntime version=""v2.0.50727"" />
     </startup>
     <wix.bootstrapper>
         <host assemblyName=""{asmName}"">
       <supportedFramework version=""v4\Full"" />
-            <!--<supportedFramework version=""v3.5"" runtimeVersion=""v2.0.50727"" />-->
             <supportedFramework version=""v4\Client"" />
+            <!--<supportedFramework version=""v3.5"" runtimeVersion=""v2.0.50727"" />-->
         </host>
     </wix.bootstrapper>
 </configuration>

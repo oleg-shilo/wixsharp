@@ -71,7 +71,8 @@ public class Script
         //
         // Note that the DefaultBootstrapperCoreConfigContent may not be suitable for all build and runtime scenarios.
         // In such cases you may need to use custom BootstrapperCore.config as demonstrated below.
-        bootstrapper.Application = new ManagedBootstrapperApplication("%this%", "BootstrapperCore.config");
+        // bootstrapper.Application = new ManagedBootstrapperApplication("%this%", "BootstrapperCore.config");
+        bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
 
         bootstrapper.PreserveTempFiles = true;
         //        bootstrapper.SuppressWixMbaPrereqVars = true;
