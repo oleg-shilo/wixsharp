@@ -7,6 +7,7 @@ using WixToolset.Bootstrapper;
 #else
 
 using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using WixBootstrapper_UI;
 
 #endif
 
@@ -19,7 +20,12 @@ public class ManagedBA : BootstrapperApplication
     /// </summary>
     protected override void Run()
     {
-        new MainView(this).ShowDialog();
+        var useWpf = false;
+        if (useWpf)
+            new MainView(this).ShowDialog();
+        else
+            new MainDialog(this).ShowDialog(); // the implementation is incomplete. The sample is provided for demo purposes only.
+
         Engine.Quit(0);
     }
 }
