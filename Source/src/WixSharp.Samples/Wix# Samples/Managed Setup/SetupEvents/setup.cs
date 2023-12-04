@@ -19,7 +19,6 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using WixSharp;
 using WixSharp.CommonTasks;
-using static WixSharp.SetupEventArgs;
 
 public static class Script
 {
