@@ -59,9 +59,9 @@ namespace WixSharp
                     .FirstOrDefault(x => outputPath.SamePathAs(x));
 
                 if (collision != null)
-                    Compiler.OutputWriteLine(
-                        $"Warning: An attempt to build the output file (\"{outputPath}\") at the same path the as " +
-                        $"the builder application \"{collision}\"");
+                    throw new Exception(
+                       $"error WIXSH: an attempt to build the output file (\"{outputPath}\") at the same path the as " +
+                       $"the builder application \"{collision}\"");
             }
         }
 
