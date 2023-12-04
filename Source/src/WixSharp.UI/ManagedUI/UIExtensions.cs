@@ -37,6 +37,9 @@ namespace WixSharp
 
     public static class UIExtensions
     {
+        public static string GetVersion(this System.Reflection.Assembly assembly)
+            => assembly.GetName().Version.ToString();
+
         public static System.Drawing.Icon GetAssiciatedIcon(this string extension)
         {
             var dummy = Path.GetTempPath() + extension;
@@ -190,8 +193,8 @@ namespace WixSharp
         public static string GetDirectoryPath(this Session session, string name)
         {
             string[] subDirs = session.GetDirectoryPathParts(name)
-                                        .Select(x => x.AsWixVarToPath())
-                                        .ToArray();
+                                      .Select(x => x.AsWixVarToPath())
+                                          .ToArray();
             return string.Join(@"\", subDirs);
         }
 

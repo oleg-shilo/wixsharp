@@ -1,0 +1,3 @@
+<WixLocalization Culture="fr-fr" xmlns="http://wixtoolset.org/schemas/v4/wxl">
+  <String Id="WixUINext" Value="Next(pseudo-FR)" />
+</WixLocalization>

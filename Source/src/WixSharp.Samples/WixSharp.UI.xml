@@ -621,7 +621,7 @@
               Looks up a localized resource of type System.Byte[].
             </summary>
         </member>
-        <member name="P:WixSharp.UI.ManagedUI.Resources.WixUI_en_us1">
+        <member name="P:WixSharp.UI.ManagedUI.Resources.wixui_zip">
             <summary>
               Looks up a localized resource of type System.Byte[].
             </summary>
@@ -917,6 +917,14 @@
             </summary>
             <value>
             The install dir identifier.
+            </value>
+        </member>
+        <member name="P:WixSharp.ManagedUI.LocalizationFilesLocation">
+            <summary>
+            Gets the localization files location.
+            </summary>
+            <value>
+            The localization files location.
             </value>
         </member>
         <member name="P:WixSharp.ManagedUI.InstallDialogs">

@@ -130,7 +130,7 @@
   <data name="WixUI_en_us" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Images\WixUI_en-us.wxl;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="WixUI_en_us1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Images\WixUI_en-us.wxl;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="wixui_zip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\..\WixSharp.Samples\Wix_bin\wixui.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

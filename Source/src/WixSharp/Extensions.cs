@@ -1132,6 +1132,14 @@ namespace WixSharp
             => IO.File.Exists(path);
 
         /// <summary>
+        /// Checks if the file exists.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static bool FileExists(this string path)
+            => IO.File.Exists(path);
+
+        /// <summary>
         /// Determines whether this instance is directory.
         /// </summary>
         /// <param name="path">The path.</param>

@@ -47,6 +47,16 @@ public class Script
 
         // project.PreserveTempFiles = true;
 
+        // Localization example:
+        // Set the whole UI to French.
+        // Replace the text of "Next" button (exta_fr-fr.wxl).
+        //project.ManagedUI = null;
+        //project.UI = WUI.WixUI_InstallDir;
+        project.Language = "fr-FR";
+        project.LocalizationFile = "exta_fr-fr.wxl";
+
+        Compiler.VerboseOutput = true;
+
         project.BuildMsi();
     }
 
