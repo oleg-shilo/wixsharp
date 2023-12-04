@@ -34,7 +34,7 @@ namespace WixSharp.Test
 
             // need to exclude some samples; for example the two samples from the same dir will interfere with each other;
             // or some other tests are built as a part of the solution
-            string[] exclude = new string[] { };
+            string[] exclude = new string[] { "WixBootstrapper_NoUI" }; // WixBootstrapper_NoUI assembly needs to be x86 but CS-Script does it as AnyCPU
 
             var failedSamples = new List<string>();
             int startStep = 0;
@@ -47,7 +47,7 @@ namespace WixSharp.Test
 
             compiled_scripts.ForEach(x => System.IO.File.Delete(x));
 
-            files = files.Where(f => !exclude.Any(y => f.EndsWith(y, ignoreCase: true))).ToArray();
+            files = files.Where(f => !exclude.Any(y => f.PathGetDirName().PathGetFileName().EndsWith(y, ignoreCase: true))).ToArray();
 
             files = files.Skip(startStep).ToArray();
 
