@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Win32;
 
 namespace WixSharp
@@ -109,6 +109,7 @@ namespace WixSharp
         /// a .wixproj MSBuild project: For x86 and ARM, the default value is 'false'. For x64 and
         /// IA64, the default value is 'true'.
         /// </summary>
+        [Xml]
         public bool? Win64;
 
         /// <summary>
@@ -155,6 +156,10 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
+            var platform = (context.Project as Project)?.Platform;
+            if (this.Win64 == null && platform != null)
+                this.Win64 = platform == Platform.x64;
+
             base.Process(context, "RegistrySearch");
         }
     }
