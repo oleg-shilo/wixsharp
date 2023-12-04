@@ -3,6 +3,7 @@ using System.Windows.Media.Imaging;
 using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
+
 using WixSharp.UI.WPF;
 
 namespace $safeprojectname$

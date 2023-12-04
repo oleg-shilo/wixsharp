@@ -1,4 +1,4 @@
-﻿namespace WixSharpSetup
+﻿namespace $safeprojectname$
 {
     partial class CustomDialog
     {
@@ -144,7 +144,6 @@
             this.panel2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
 
         #endregion

@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using WixSharp;
 using WixSharp.UI.Forms;
 
-namespace WixSharpSetup.Dialogs
+namespace $safeprojectname$.Dialogs
 {
     /// <summary>
     /// The standard InstallDir dialog

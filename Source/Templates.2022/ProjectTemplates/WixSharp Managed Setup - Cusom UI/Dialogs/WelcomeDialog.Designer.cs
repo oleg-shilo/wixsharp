@@ -1,7 +1,7 @@
 using WixSharp;
 using WixSharp.UI.Forms;
 
-namespace WixSharpSetup.Dialogs
+namespace $safeprojectname$.Dialogs
 {
     partial class WelcomeDialog
     {

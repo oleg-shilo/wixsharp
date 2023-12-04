@@ -2,9 +2,9 @@ using System.Security.Principal;
 using System.Windows.Media.Imaging;
 using Microsoft.Deployment.WindowsInstaller;
 using Caliburn.Micro;
-using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.UI.Forms;
+
 using WixSharp.UI.WPF;
 
 namespace $safeprojectname$

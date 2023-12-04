@@ -7,7 +7,7 @@ using WixSharp.CommonTasks;
 using WixSharp;
 using WixSharp.UI.Forms;
 
-namespace WixSharpSetup.Dialogs
+namespace $safeprojectname$.Dialogs
 {
     /// <summary>
     /// The standard Installation Progress dialog

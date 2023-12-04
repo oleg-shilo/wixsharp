@@ -2,6 +2,7 @@ using System.Windows.Media.Imaging;
 using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
+
 using WixSharp.UI.WPF;
 
 namespace $safeprojectname$
@@ -14,7 +15,7 @@ namespace $safeprojectname$
     /// <seealso cref="WixSharp.UI.WPF.WpfDialog" />
     /// <seealso cref="WixSharp.IWpfDialog" />
     /// <seealso cref="System.Windows.Markup.IComponentConnector" />
-    public partial class WelcomeDialog : WpfDialog, IWpfDialog, IDialog
+    public partial class WelcomeDialog : WpfDialog, IWpfDialog
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="WelcomeDialog" /> class.

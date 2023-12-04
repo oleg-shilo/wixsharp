@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using WixSharp;
 using WixSharp.UI.Forms;
 
-namespace WixSharpSetup.Dialogs
+namespace $safeprojectname$.Dialogs
 {
     /// <summary>
     /// The logical equivalent of the standard Features dialog. Though it implement slightly

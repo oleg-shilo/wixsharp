@@ -8,7 +8,7 @@ using io = System.IO;
 using WixSharp;
 using WixSharp.UI.Forms;
 
-namespace WixSharpSetup.Dialogs
+namespace $safeprojectname$.Dialogs
 {
     /// <summary>
     /// The standard Licence dialog
