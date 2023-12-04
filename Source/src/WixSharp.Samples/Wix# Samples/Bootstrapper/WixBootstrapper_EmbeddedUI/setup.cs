@@ -16,6 +16,7 @@ public class Script
                            Name = "ManagedSetup",
                            InstallCommand = "/i",
                            UninstallCommand = "/x",
+                           // Protocol = Protocol.burn,
                            RepairCommand = "/fa",
                            DetectCondition = "MyAppInstalled",
                            Compressed = true
