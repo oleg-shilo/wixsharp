@@ -1,8 +1,8 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using System.Diagnostics;
 
 #if WIX4
 using WixToolset.Bootstrapper;
@@ -22,6 +22,9 @@ namespace WixSharp.Bootstrapper
     /// <para><see cref="T:WixSharp.Bootstrapper.SilentManagedBA"/> automatically handles <see cref="BootstrapperApplication"/> events and
     /// detects the current package/product state (present vs. absent). The package state detection is based on the <see cref="T:WixSharp.Bootstrapper.SilentBootstrapperApplication.PrimaryPackageId"/>.
     /// If this member is no t then the Id of the lats package in the Bundle will be used instead.</para>
+    /// <para>Note, the stock SilentManagedBA may have runtime hosting failure due to the fact that its assembly is compiled for AnyCPU.
+    /// While it is a valid hosting option that may or may not work with a specific WiX distro, you may find that you may need to take
+    /// this simple class and compile it into a separate x86 assembly. </para>
     /// </summary>
     /// <example>
     /// <code>
@@ -38,6 +41,7 @@ namespace WixSharp.Bootstrapper
     ///
     /// bootstrapper.Build();
     /// </code>
+    ///
     /// </example>
     public class SilentBootstrapperApplication : ManagedBootstrapperApplication, IWixSharpManagedBootstrapperApplication
     {

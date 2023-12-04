@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.WPF</id>
-    <version>1.23.1.0</version>
+    <version>1.24.0.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,15 +16,41 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>WiX3-Release v1.23.1.0
-- Issue #1373: [Bug] Need a clearer reason for the following Build exception: "System.NullReferenceException: Object reference not set to an instance of an object."
-- Fixed packaging problem with `Microsoft.Deployment.WindowsInstaller` assembly not being copied in the target output dir. </releaseNotes>
+    <releaseNotes>WiX3-Release v1.24.0.0
+- Issue #1392: Is it possible to inherit wxl files using managed UI?
+- Issue #1389: Multi language installer intermediate .msi not found error
+- Issue #1387: Cannot update to latest Caliburn.Micro
+- Issue #1384: When the bootstrapper.Build API uses the same name as the project, then misleading compile warnings are issued
+- Issue #1382: Package (all child elements of Chain) need to have the After field added
+- Issue #1383: Package (all child elements of Chain) need to have the SuppressSignatureVerification field added
+- Issue #1381: ExePackage needs to have the Protocol field implemented
+- Issue #1379: A way (Or create an example) of how to create a standalone fragment and insert into Projects / chains / etc
+- Issue #1377: WixSharp.wix.bin nuget references a url which is no longer available
+- Issue #1372: Creating a FileAssociation with Icon and Advertised = false does not work
+- Validation of the CPU architecture for the custom BA assembly.
+- Updated default `BootstrapperCore.config` content
+- Updated WixBootstrapper_UI sample to demonstrate how to use the WinForm-based custom BA (#1386)
+- Added support for ManagedUI to foll back on the stock WXL if one was not supplied by the user for non-English languages
+- Added WXL and theme files to be used in WixSharp.wix.bin package.
+- Added support for ManagedUI to fall back on the stock WXL if one was not supplied by the user for non-English languages
+- Improved multi-language sample
+- Updated project templates to comment out webref package for bootstrapper template
+- Added `WixStandardBootstrapperApplication.AddPayload`
+
+
+</releaseNotes>
     <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.23.1.0" />
-      <dependency id="Caliburn.Micro" version="3.2.0" />
+      <group targetFramework=".NETFramework4.5.1">
+        <dependency id="WixSharp.bin" version="1.24.0.0" />
+        <dependency id="Caliburn.Micro" version="3.2.0" />
+      </group>
+      <group targetFramework=".NETFramework4.6.2">
+        <dependency id="WixSharp.bin" version="1.24.0.0" />
+        <dependency id="Caliburn.Micro" version="4.0.212" />
+      </group>
     </dependencies>
     <references>
       <reference file="WixSharp.UI.WPF.dll" />
