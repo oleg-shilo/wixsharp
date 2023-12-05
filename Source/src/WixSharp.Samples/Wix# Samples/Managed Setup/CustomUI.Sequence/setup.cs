@@ -67,6 +67,7 @@ public static class Script
                                        .Add(Dialogs.Exit);
 
         project.ManagedUI.Icon = "app.ico";
+        project.UIInitialized += Project_UIInitialized;
         project.UILoaded += Project_UILoaded;
 
         project.MinimalCustomDrawing = true;
@@ -88,8 +89,14 @@ public static class Script
         project.BuildMsi();
     }
 
+    private static void Project_UIInitialized(SetupEventArgs e)
+    {
+        MessageBox.Show("Project_UIInitialized");
+    }
+
     static void Project_UILoaded(SetupEventArgs e)
     {
+        MessageBox.Show("Project_UILoaded");
         var msiFile = e.Session.Database.FilePath;
 
         // Simulate analyzing the runtime conditions with the message box.
