@@ -1,0 +1,48 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+	<TemplateData>
+		<Name>WixSharp Managed Setup - Custom UI (WiX4)</Name>
+		<Description>A WixSharp project for WiX/MSI setup. The project is based on the 'Managed Setup' WixSharp API model. Project allows customizing the complete UI dialogs sequence. The project uses WiX4 toolset compilers.</Description>
+		<ProjectType>CSharp</ProjectType>
+		<ProjectSubType>WixSharp</ProjectSubType>
+		<SortOrder>1000</SortOrder>
+		<CreateNewFolder>true</CreateNewFolder>
+		<DefaultName>WixSharp Setup</DefaultName>
+		<ProvideDefaultName>true</ProvideDefaultName>
+		<LocationField>Enabled</LocationField>
+		<EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+		<CreateInPlace>true</CreateInPlace>
+		<Icon>__TemplateIcon.ico</Icon>
+		<PreviewImage>__PreviewImage.png</PreviewImage>
+	</TemplateData>
+	<TemplateContent>
+		<Project TargetFileName="WixSharp Setup.csproj" File="WixSharp Setup.csproj" ReplaceParameters="true">
+			<Folder Name="Dialogs" TargetFolderName="Dialogs">
+				<ProjectItem ReplaceParameters="true" TargetFileName="ExitDialog.cs">ExitDialog.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="ExitDialog.Designer.cs">ExitDialog.Designer.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="ExitDialog.resx">ExitDialog.resx</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="FeaturesDialog.cs">FeaturesDialog.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="FeaturesDialog.Designer.cs">FeaturesDialog.Designer.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="FeaturesDialog.resx">FeaturesDialog.resx</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="InstallDirDialog.cs">InstallDirDialog.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="InstallDirDialog.Designer.cs">InstallDirDialog.Designer.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="InstallDirDialog.resx">InstallDirDialog.resx</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="LicenceDialog.cs">LicenceDialog.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="LicenceDialog.Designer.cs">LicenceDialog.Designer.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="LicenceDialog.resx">LicenceDialog.resx</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="MaintenanceTypeDialog.cs">MaintenanceTypeDialog.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="MaintenanceTypeDialog.Designer.cs">MaintenanceTypeDialog.Designer.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="MaintenanceTypeDialog.resx">MaintenanceTypeDialog.resx</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="ProgressDialog.cs">ProgressDialog.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="ProgressDialog.Designer.cs">ProgressDialog.Designer.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="ProgressDialog.resx">ProgressDialog.resx</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="SetupTypeDialog.cs">SetupTypeDialog.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="SetupTypeDialog.Designer.cs">SetupTypeDialog.Designer.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="SetupTypeDialog.resx">SetupTypeDialog.resx</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="WelcomeDialog.cs">WelcomeDialog.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="WelcomeDialog.Designer.cs">WelcomeDialog.Designer.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="WelcomeDialog.resx">WelcomeDialog.resx</ProjectItem>
+			</Folder>
+			<ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
+		</Project>
+	</TemplateContent>
+</VSTemplate>

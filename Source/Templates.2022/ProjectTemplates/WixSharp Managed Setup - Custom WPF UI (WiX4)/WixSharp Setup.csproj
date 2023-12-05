@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net472</TargetFramework>
+    <DebugType>embedded</DebugType>
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    <Description>WiX WPF CustomUI Application</Description>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <UseWPF>true</UseWPF>
+    <RollForward>Major</RollForward>
+    <!-- https://stackoverflow.com/questions/58844785/how-to-reference-system-windows-forms-in-net-core-3-0-for-wpf-apps -->
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="*.cmd" />
+    <None Remove="CustomAction.config" />
+    <None Remove="*.exe" />
+    <None Remove="*.pdb" />
+    <None Remove="*.wxs" />
+    <None Remove="*.wixpdb" />
+    <None Remove="*.msi" />
+    <None Remove="readme.txt" />
+    <None Remove="*.CA.dll" />
+    <None Remove="*.cs.dll" />
+    <None Remove="*.cmd.log" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixSharp-wix4.WPF" Version="2.0.0" />
+  </ItemGroup>
+
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
+  </Target>
+
+</Project>
