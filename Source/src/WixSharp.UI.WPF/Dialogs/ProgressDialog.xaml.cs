@@ -1,6 +1,7 @@
-using Caliburn.Micro;
 using System.Security.Principal;
 using System.Windows.Media.Imaging;
+using Caliburn.Micro;
+using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.UI.Forms;
 using WixToolset.Dtf.WindowsInstaller;
@@ -26,7 +27,7 @@ namespace WixSharp.UI.WPF
         }
 
         /// <summary>
-        /// This method is invoked by WixSHarp runtime when the custom dialog content is internally fully initialized.
+        /// This method is invoked by WixSharp runtime when the custom dialog content is internally fully initialized.
         /// This is a convenient place to do further initialization activities (e.g. localization).
         /// </summary>
         public void Init()

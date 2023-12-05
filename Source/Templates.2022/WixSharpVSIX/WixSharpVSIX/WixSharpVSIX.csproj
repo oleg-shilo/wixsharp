@@ -8,6 +8,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>14.0</OldToolsVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -20,7 +21,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WixSharpVSIX</RootNamespace>
     <AssemblyName>WixSharpVSIX</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
@@ -89,11 +90,6 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Setup - Custom CLR Dialog %28WiX3%29.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Setup - Custom CLR Dialog %28WiX3%29.zip</Link>
-      <IncludeInVSIX>true</IncludeInVSIX>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup %28WiX4%29.zip">
       <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup %28WiX4%29.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -116,6 +112,16 @@
     </Content>
     <Content Include="..\..\ProjectTemplates\WixSharp Setup - Bootstrapper %28WiX4%29.zip">
       <Link>ProjectTemplates\WixSharp\WixSharp Setup - Bootstrapper %28WiX4%29.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\..\ProjectTemplates\WixSharp Setup - Bootstrapper Custom BA %28WiX3%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Setup - Bootstrapper Custom BA %28WiX3%29.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\..\ProjectTemplates\WixSharp Setup - Bootstrapper Custom BA %28WiX4%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Setup - Bootstrapper Custom BA %28WiX4%29.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

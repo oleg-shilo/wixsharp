@@ -1,3 +1,7 @@
+v2.1.0
+- Made split on WiX3 vs WiX4 templates
+- Added Bootstrapper Custom BA templates
+
 v1.17.2.0
 - Issue #511: Compile error CustomDialog
   Updated Project template VS extension
