@@ -1,6 +1,7 @@
 using System;
 
 using WixSharp;
+
 using WixSharp.UI.Forms;
 
 namespace $safeprojectname$.Dialogs

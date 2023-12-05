@@ -3,8 +3,7 @@
     <Name>WixSharp Setup - Bootstrapper Custom BA (WiX3)</Name>
     <Description>A WixSharp template for building Custom BA application with WiX3.</Description>
     <ProjectType>CSharp</ProjectType>
-    <ProjectSubType>
-    </ProjectSubType>
+    <ProjectSubType>WixSharp</ProjectSubType>
     <SortOrder>1000</SortOrder>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>WixSharp Setup - Bootstrapper Custom BA (WiX3)</DefaultName>
@@ -13,12 +12,10 @@
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
     <CreateInPlace>true</CreateInPlace>
     <Icon>__TemplateIcon.ico</Icon>
+    <PreviewImage>__PreviewImage.png</PreviewImage>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="WixSharp Setup5.csproj" File="WixSharp Setup5.csproj" ReplaceParameters="true">
-      <Folder Name="wix" TargetFolderName="wix">
-        <ProjectItem ReplaceParameters="false" TargetFileName="WixSharp Setup5.g.wxs">WixSharp Setup5.g.wxs</ProjectItem>
-      </Folder>
+    <Project TargetFileName="WixSharp Setup.csproj" File="WixSharp Setup.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="MainView.xaml">MainView.xaml</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="MainView.xaml">vstg0001.xaml</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="MainView.xaml.cs">MainView.xaml.cs</ProjectItem>

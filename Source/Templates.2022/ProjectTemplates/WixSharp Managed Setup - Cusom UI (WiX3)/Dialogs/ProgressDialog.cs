@@ -2,9 +2,10 @@ using System;
 using System.Drawing;
 using System.Security.Principal;
 using WixSharp.CommonTasks;
-using WixToolset.Dtf.WindowsInstaller;
+using Microsoft.Deployment.WindowsInstaller;
 
 using WixSharp;
+
 using WixSharp.UI.Forms;
 
 namespace $safeprojectname$.Dialogs

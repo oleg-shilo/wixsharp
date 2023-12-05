@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 
 using WixSharp;
+
 using WixSharp.UI.Forms;
 
 namespace $safeprojectname$.Dialogs

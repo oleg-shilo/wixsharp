@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using io = System.IO;
 
 using WixSharp;
+
 using WixSharp.UI.Forms;
 
 namespace $safeprojectname$.Dialogs

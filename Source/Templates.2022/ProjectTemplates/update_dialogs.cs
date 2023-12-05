@@ -31,6 +31,8 @@ packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Cust
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI (WiX4)");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper (WiX3)");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper (WiX4)");
+packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper Custom BA (WiX3)");
+packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper Custom BA (WiX4)");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup (WiX3)");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup (WiX4)");
 "------------------------------------".print();
@@ -57,27 +59,34 @@ void packageDir(string inputDir)
     string workingDir = Path.GetFullPath(inputDir);
 
     var dir = Path.GetFullPath(inputDir);
-    var pcgName = dir + ".zip";
+    var pckgName = dir + ".zip";
 
-    string args = $"a -r -tzip \"{pcgName}\" \"{dir}\\*.*\"";
+    if (File.Exists(pckgName))
+        File.Delete(pckgName);
+
+    string args = $"a -r -tzip \"{pckgName}\" \"{dir}\\*.*\"";
 
     run(app, args, workingDir);
 }
 
 void processFile(string file)
 {
-    if (file.EndsWith(".cs"))
+    // if (file.EndsWith(".cs"))
     {
         var code = File.ReadAllText(file);
         File.WriteAllText(file, code
-            .Replace("namespace WixSharp.UI.Forms", @"using WixSharp;
-using WixSharp.UI.Forms;
+            .Replace("namespace WixSharp.UI.Forms", $"using WixSharp;{NewLine}{NewLine}" +
+                                                    $"using WixSharp.UI.Forms;{NewLine}{NewLine}" +
+                                                    $"namespace $safeprojectname$.Dialogs")
+            .Replace("namespace WixSharp.UI.WPF", $"using WixSharp.UI.WPF;{NewLine}{NewLine}" +
+                                                  $"namespace $safeprojectname$")
 
-namespace $safeprojectname$.Dialogs")
-
-            .Replace("namespace WixSharp.UI.WPF", @"using WixSharp.UI.WPF;
-
-namespace $safeprojectname$")
+            .Replace("xmlns:wixsharp=\"clr-namespace:WixSharp.UI.WPF\"", @"xmlns:wixsharp=""clr-namespace:WixSharp.UI.WPF;assembly=WixSharp.UI.WPF""")
+            .Replace("x:Class=\"WixSharp.UI.WPF", @"x:Class=""$safeprojectname$")
+            .Replace("using WixToolset.Dtf.WindowsInstaller;",
+                     file.Contains("WiX3", StringComparison.OrdinalIgnoreCase) ?
+                         "using Microsoft.Deployment.WindowsInstaller;" :
+                         "using WixToolset.Dtf.WindowsInstaller;")
                          );
     }
 }

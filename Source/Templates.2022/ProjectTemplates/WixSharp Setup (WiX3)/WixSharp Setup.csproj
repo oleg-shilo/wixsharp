@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+     <RootNamespace>WixSharp</RootNamespace>
     <TargetFramework>net462</TargetFramework>
   </PropertyGroup>
   

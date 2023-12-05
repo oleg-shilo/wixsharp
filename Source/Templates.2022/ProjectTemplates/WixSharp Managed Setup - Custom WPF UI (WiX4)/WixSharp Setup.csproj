@@ -6,6 +6,7 @@
     <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     <Description>WiX WPF CustomUI Application</Description>
     <EnableDynamicLoading>true</EnableDynamicLoading>
+    <RootNamespace>WixSharp</RootNamespace>
     <UseWPF>true</UseWPF>
     <RollForward>Major</RollForward>
     <!-- https://stackoverflow.com/questions/58844785/how-to-reference-system-windows-forms-in-net-core-3-0-for-wpf-apps -->

@@ -5,6 +5,7 @@ using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
 
 using WixSharp;
+
 using WixSharp.UI.Forms;
 
 namespace $safeprojectname$.Dialogs

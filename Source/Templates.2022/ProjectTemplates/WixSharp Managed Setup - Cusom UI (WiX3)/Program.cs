@@ -1,6 +1,6 @@
 ﻿using System;
 using WixSharp;
-using WixSharpSetup.Dialogs;
+using $safeprojectname$.Dialogs;
 
 namespace $safeprojectname$
 {
