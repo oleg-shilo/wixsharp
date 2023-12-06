@@ -33,13 +33,14 @@
     <PresentationStyle>VS2013</PresentationStyle>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.dll" />
-<DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.Msi.dll" />
-<DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.Msi.xml" />
-<DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.dll" />
-<DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.xml" />
-<DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.xml" />
-<DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.WPF.dll" />
-<DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.WPF.xml" /></DocumentationSources>
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.Msi.dll" />
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.Msi.xml" />
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.dll" />
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.xml" />
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.xml" />
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.WPF.dll" />
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.WPF.xml" />
+    </DocumentationSources>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="True">Namespace Summary: N/A</NamespaceSummaryItem>
       <NamespaceSummaryItem name="csscript" isDocumented="True">Namespace Summary: N/A</NamespaceSummaryItem>
@@ -69,6 +70,20 @@
       </Filter>
     </ApiFilter>
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <PlugInConfigurations>
+      <PlugInConfig id="Assembly Binding Redirection" enabled="True" xmlns="">
+        <configuration useGAC="false">
+  <assemblyBinding />
+  <ignoreIfUnresolved>
+    <assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" />
+    <assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" />
+    <assemblyIdentity name="Caliburn.Micro.Core" />
+  </ignoreIfUnresolved>
+</configuration>
+      </PlugInConfig>
+    </PlugInConfigurations>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
@@ -79,6 +94,9 @@
   <ItemGroup>
     <Reference Include="Caliburn.Micro">
       <HintPath>..\WixSharp.UI.WPF\bin\Release\Caliburn.Micro.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Core">
+      <HintPath>..\WixSharp.UI.WPF\bin\Release\Caliburn.Micro.Core.dll</HintPath>
     </Reference>
     <Reference Include="Caliburn.Micro.Platform">
       <HintPath>..\WixSharp.UI.WPF\bin\Release\Caliburn.Micro.Platform.dll</HintPath>

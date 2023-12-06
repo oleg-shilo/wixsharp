@@ -15,7 +15,7 @@ copy /Y "WixSharp.Samples\WixSharp*.xml" "..\bin\WixSharp\"
 
 .\WixSharp.Samples\cscs.exe -l .\..\bin\clean_bins.cs
 
-set msbuild=C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe
+set msbuild=C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe
 
 "%msbuild%" /nologo /verbosity:minimal /t:Clean,Build /p:Configuration=Release /p:Platform="Any CPU" "Docs\WixSharp.Docs.sln"
 
