@@ -8,6 +8,7 @@ public static class Launcher
 {
     static public int Main(string[] args)
     {
+        // you can check if you are elevated here
         var msi = Path.GetTempFileName();
         try
         {
