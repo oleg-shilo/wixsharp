@@ -37,7 +37,7 @@ public class InstallScript
 
         var bootstrapper =
             new Bundle("My Product Suite",
-                       new PackageGroupRef("NetFx462Web"),
+                       // new PackageGroupRef("NetFx462Web"),
                        new MsiPackage(productMsi)
                        {
                            Id = "MyProductPackageId",
@@ -52,13 +52,15 @@ public class InstallScript
         bootstrapper.DisableModify = "yes";
         bootstrapper.DisableRemove = true;
 
-        // if primary package Id is not defined then the last package will be treated as the primary one
-        // bootstrapper.Application = new SilentBootstrapperApplication();
-
         // use this custom BA to modify its behavior in order to meet your requirements
         bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
 
-        // alternatively you can simply set a default SilentBootstrapperApplication from the WixSharp.UI package
+        // alternatively you can use WiX stock BA that has no own UI but only shows MSI UI
+        // bootstrapper.Application = new WixInternalUIBootstrapperApplication();
+
+        // `SilentBootstrapperApplication` is WixSharp own older (from WiX3 stream) equivalent of
+        // the new WiX `WixInternalUIBootstrapperApplication`.
+        // bootstrapper.Application = new SilentBootstrapperApplication();
         // bootstrapper.Application = new SilentBootstrapperApplication("MyProductPackageId");
 
         // You can implement your own extension types and add them to the Bundle

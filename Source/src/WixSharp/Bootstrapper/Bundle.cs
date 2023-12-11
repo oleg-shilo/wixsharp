@@ -413,7 +413,7 @@ namespace WixSharp.Bootstrapper
                 if (msiPackages.Any())
                 {
                     Compiler.OutputWriteLine("");
-                    Compiler.OutputWriteLine("WARNING: DisplayInternalUI value of some MsiPackages will be ignored because " +
+                    Compiler.OutputWriteLine("WARNING: DisplayInternalUI value of MsiPackages will be ignored because " +
                         "you are using custom BA. For custom BA applications visibility of the individual MSI packages " +
                         "needs to be controlled from the PlanMsiPackage event handler of the BA.\n" +
                         "Read more here: https://github.com/oleg-shilo/wixsharp/issues/1396#issuecomment-1849731522");

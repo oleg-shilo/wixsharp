@@ -1,3 +1,6 @@
+//css_winapp
+//css_ng dotnet
+//css_args  -rx -netfx
 //css_dir ..\..\;
 //css_ref System.Core.dll;
 //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
