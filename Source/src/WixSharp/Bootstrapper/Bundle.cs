@@ -405,23 +405,21 @@ namespace WixSharp.Bootstrapper
         {
             // https://github.com/wixtoolset/issues/issues/7670
 
-            // var msiPackages = this.Chain.Where(x => (x is MsiPackage) && (x as MsiPackage).DisplayInternalUI == true);
-            // foreach (MsiPackage item in msiPackages)
-            // {
-            //     try
-            //     {
-            //         if (Tasks.IsEmbeddedUIPackage(item.SourceFile))
-            //         {
-            //             Compiler.OutputWriteLine("");
-            //             Compiler.OutputWriteLine("WARNING: You have selected enabled DisplayInternalUI for EmbeddedUI-based '"
-            //                 + sys.Path.GetFileName(item.SourceFile) + "'. Currently Burn (WiX) " +
-            //                 "doesn't support integration with EmbeddedUI packages. Read more here: https://github.com/oleg-shilo/wixsharp/wiki/Wix%23-Bootstrapper-(Burn)-integration-notes");
+            var customBA = this.Application as ManagedBootstrapperApplication;
+            if (customBA != null && customBA.GetType().Name != "SilentBootstrapperApplication")
+            {
+                var msiPackages = this.Chain.Where(x => (x is MsiPackage) && (x as MsiPackage).DisplayInternalUI == true);
 
-            //             Compiler.OutputWriteLine("");
-            //         }
-            //     }
-            //     catch { }
-            // }
+                if (msiPackages.Any())
+                {
+                    Compiler.OutputWriteLine("");
+                    Compiler.OutputWriteLine("WARNING: DisplayInternalUI value of some MsiPackages will be ignored because " +
+                        "you are using custom BA. For custom BA applications visibility of the individual MSI packages " +
+                        "needs to be controlled from the PlanMsiPackage event handler of the BA.\n" +
+                        "Read more here: https://github.com/oleg-shilo/wixsharp/issues/1396#issuecomment-1849731522");
+                    Compiler.OutputWriteLine("");
+                }
+            }
         }
 
         internal void ResetAutoIdGeneration(bool supressWarning)

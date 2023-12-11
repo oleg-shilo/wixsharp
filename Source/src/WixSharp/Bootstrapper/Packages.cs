@@ -377,9 +377,17 @@ namespace WixSharp.Bootstrapper
         }
 
         /// <summary>
-        /// Specifies whether the bundle will show the UI authored into the msi package. The default is "no" which means all information is routed to
-        /// the bootstrapper application to provide a unified installation experience. If "yes" is specified the UI authored into the msi package will be
-        /// displayed on top of any bootstrapper application UI.
+        /// Specifies whether the bundle will show the UI authored into the msi package. The default is "no" which means
+        /// all information is routed to the bootstrapper application to provide a unified installation experience.
+        /// If "yes" is specified the UI authored into the msi package will be displayed on top of any bootstrapper
+        /// application UI.
+        /// <para>Note, this field is only applicable for the stock bootstrapper applications.
+        /// This is because when standard BA is used, WixSharp compiler can detect DisplayInternalUI and inject a "magic"
+        /// attribute (bal:DisplayInternalUICondition="WixBundleAction = 6") into the bundle WXS definition. This condition
+        /// is evaluated at runtime by the standard BA and the msi UI is displayed accordingly.</para>
+        /// <para>However when custom UI is used, it is a responsibility of custom BA to manage msi UI visibility.
+        /// It is normally done by adjusting `PlanMsiPackageEventArgs.UiLevel` value of the specific MsiPackages from the
+        /// `BootstrapperApplication.PlanMsiPackage` event of the BA.</para>
         /// </summary>
         public bool? DisplayInternalUI;
 
