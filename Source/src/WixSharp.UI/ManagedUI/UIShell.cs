@@ -1,5 +1,4 @@
-﻿using Microsoft.Deployment.Samples.EmbeddedUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -9,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Microsoft.Deployment.Samples.EmbeddedUI;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
 using WixToolset.Dtf.WindowsInstaller;
@@ -432,10 +432,10 @@ namespace WixSharp
 
                 project.OutDir = dir;
 
-                string licence = ManagedUI.Default.LicenceFileFor(project);
-                string localization = ManagedUI.Default.LocalizationFileFor(project);
-                string bitmap = ManagedUI.Default.DialogBitmapFileFor(project);
-                string banner = ManagedUI.Default.DialogBannerFileFor(project);
+                string licence = ManagedUI.LicenceFileFor(project);
+                string localization = ManagedUI.LocalizationFileFor(project);
+                string bitmap = ManagedUI.DialogBitmapFileFor(project);
+                string banner = ManagedUI.DialogBannerFileFor(project);
 
                 project.AddBinaries(new Binary(new Id("WixSharp_UIText"), localization),
                                     new Binary(new Id("WixSharp_LicenceFile"), licence),

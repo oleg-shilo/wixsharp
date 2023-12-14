@@ -217,6 +217,32 @@ namespace WixSharp.Test
         }
 
         [Fact]
+        [Description("Issue #1398: Underscore in String Id in wxl breaks localization ")]
+        public void Fix_Issue_1398()
+        {
+            var project = new Project();
+
+            project.LocalizationFile = "WixUI_de-de.extra.wxl";
+            project.Language = "de-de";
+
+            System.IO.File.WriteAllText(project.LocalizationFile,
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<WixLocalization Culture=""de-de"" Codepage=""1252"" xmlns=""http://schemas.microsoft.com/wix/2006/localization"">
+    <String Id=""TestName"" >TheNextman</String>
+    <String Id=""TestNameX"" >TheNextman2 </String>
+    <String Id=""TestNameXX"" >TheNextman3 </String>
+</WixLocalization>");
+
+            var mergedFile = ManagedUI.LocalizationFileFor(project);
+
+            var items = XDocument.Load(mergedFile).Root.Elements().ToArray();
+
+            Assert.NotNull(items.Where(x => x.Attribute("Id").Value == "TestName" && x.Value == "TheNextman"));
+            Assert.NotNull(items.Where(x => x.Attribute("Id").Value == "TestNameX" && x.Value == "TheNextman2"));
+            Assert.NotNull(items.Where(x => x.Attribute("Id").Value == "TestNameXX" && x.Value == "TheNextman3"));
+        }
+
+        [Fact]
         [Description("Issue #656: ExeFileShortcut changing folder name ")]
         public void Fix_Issue_656()
         {
