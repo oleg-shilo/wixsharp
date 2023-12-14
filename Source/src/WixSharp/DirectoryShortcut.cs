@@ -30,58 +30,49 @@ THE SOFTWARE.
 namespace WixSharp
 {
     /// <summary>
-    /// Defines <see cref="ExeFileShortcut"/> to be installed. <para><see cref="ExeFileShortcut"/> is a specialized version of the <see cref="Shortcut"/> designed
+    /// Defines <see cref="DirectoryShortcut"/> to be installed. <para><see cref="ExeFileShortcut"/> is a specialized version of the <see cref="Shortcut"/> designed
     /// for using <see cref="Shortcut"/> as a <see cref="Dir"/> nested element</para>
-    /// <para>There are different ways of defining shortcuts of the Wix# project: </para>
-    /// <para> - It can be specified as a nested element of the <see cref="File"/>. In this case after
-    /// the installation the shortcut will point to the file it belongs to.</para>
-    /// <para> - Alternatively the <c>Shortcut</c> can be specified as a <see cref="Dir"/> nested
-    /// element. In this case after the installation the shortcut will point to the file
     /// it belongs to.</para>
     /// </summary>
     ///
     /// <example>
-    /// The following is an example of installing "Uninstall Product" shortcut to the product directory.
+    /// The following is an example of installing "Samples Folder" shortcut.
     /// <code>
     /// var project =
     ///     new Project("My Product",
     ///
     ///         new Dir(@"%ProgramFiles%\My Company\My Product",
-    ///             new ExeFileShortcut("Uninstall MyApp",
-    ///                                 "[System64Folder]msiexec.exe",
-    ///                                 "/x [ProductCode]")),
+    ///             new DirctoryShortcut("Samples Folder", "[Samples]")),
     ///
     ///         ...
     ///
     /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
-    public partial class ExeFileShortcut : Shortcut
+    public partial class DirectoryShortcut : ExeFileShortcut
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExeFileShortcut"/> class.
+        /// Initializes a new instance of the <see cref="DirectoryShortcut"/> class.
         /// </summary>
-        public ExeFileShortcut()
+        public DirectoryShortcut()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExeFileShortcut"/> class with properties/fields initialized with specified parameters.
+        /// Initializes a new instance of the <see cref="DirectoryShortcut"/> class with properties/fields initialized with specified parameters.
         /// <para>This constructor should be used to instantiate shortcuts which belong to the <see cref="Dir"/> element.</para>
         /// <para>The shortcut will be installed in the directory defined by the parent <see cref="Dir"/> element.</para>
         /// </summary>
         /// <param name="name">The name of the shortcut to be installed.</param>
         /// <param name="target">The path to the executable the shortcut is associated with.</param>
-        /// <param name="arguments">The shortcut arguments.</param>
-        public ExeFileShortcut(string name, string target, string arguments)
+        public DirectoryShortcut(string name, string target)
         {
             Name = name;
             Target = target;
-            Arguments = arguments;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExeFileShortcut"/> class with properties/fields initialized with specified parameters.
+        /// Initializes a new instance of the <see cref="DirectoryShortcut"/> class with properties/fields initialized with specified parameters.
         /// <para>This constructor should be used to instantiate shortcuts which belong to the <see cref="Dir"/> element.</para>
         /// <para>The shortcut will be installed in the directory defined by the parent <see cref="Dir"/> element.</para>
         /// </summary>
@@ -89,47 +80,44 @@ namespace WixSharp
         /// <param name="name">The name of the shortcut to be installed.</param>
         /// <param name="target">The path to the executable the shortcut is associated with.</param>
         /// <param name="arguments">The shortcut arguments.</param>
-        public ExeFileShortcut(Feature feature, string name, string target, string arguments)
+        public DirectoryShortcut(Feature feature, string name, string target)
         {
             Name = name;
             Target = target;
-            Arguments = arguments;
             Feature = feature;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExeFileShortcut"/> class with properties/fields initialized with specified parameters.
+        /// Initializes a new instance of the <see cref="DirectoryShortcut"/> class with properties/fields initialized with specified parameters.
         /// <para>This constructor should be used to instantiate shortcuts which belong to the <see cref="Dir"/> element.</para>
         /// <para>The shortcut will be installed in the directory defined by the parent <see cref="Dir"/> element.</para>
         /// </summary>
-        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ExeFileShortcut"/> instance.</param>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="DirectoryShortcut"/> instance.</param>
         /// <param name="name">The name of the shortcut to be installed.</param>
         /// <param name="target">The path to the executable the shortcut is associated with.</param>
         /// <param name="arguments">The shortcut arguments.</param>
-        public ExeFileShortcut(Id id, string name, string target, string arguments)
+        public DirectoryShortcut(Id id, string name, string target)
         {
             Id = id.Value;
             Name = name;
             Target = target;
-            Arguments = arguments;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExeFileShortcut"/> class with properties/fields initialized with specified parameters.
+        /// Initializes a new instance of the <see cref="DirectoryShortcut"/> class with properties/fields initialized with specified parameters.
         /// <para>This constructor should be used to instantiate shortcuts which belong to the <see cref="Dir"/> element.</para>
         /// <para>The shortcut will be installed in the directory defined by the parent <see cref="Dir"/> element</para>
         /// </summary>
-        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="ExeFileShortcut"/> instance.</param>
+        /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="DirectoryShortcut"/> instance.</param>
         /// <param name="feature"><see cref="Feature"></see> the shortcut should be included in.</param>
         /// <param name="name">The name of the shortcut to be installed.</param>
         /// <param name="target">The path to the executable the shortcut is associated with.</param>
         /// <param name="arguments">The shortcut arguments.</param>
-        public ExeFileShortcut(Id id, Feature feature, string name, string target, string arguments)
+        public DirectoryShortcut(Id id, Feature feature, string name, string target)
         {
             Id = id.Value;
             Name = name;
             Target = target;
-            Arguments = arguments;
             Feature = feature;
         }
     }

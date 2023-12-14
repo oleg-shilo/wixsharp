@@ -140,6 +140,7 @@
     <Compile Include="CommonTasks.cs" />
     <Compile Include="Compiler.Bootstrapper.cs" />
     <Compile Include="Error.cs" />
+    <Compile Include="DirectoryShortcut.cs" />
     <Compile Include="FileSearch.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Heat\Harvester.cs" />
