@@ -155,7 +155,7 @@ namespace WixSharp
         /// </value>
         public string InstallDirId { get; set; }
 
-        internal string LocalizationFileFor(Project project)
+        internal static string LocalizationFileFor(Project project)
         {
             // - if localization file specified by the user then just return it but merge with
             //   the stock localization if found.
@@ -180,12 +180,12 @@ namespace WixSharp
                         var replacementIds = userLocalization.Root.Elements().Select(x => x.Attr("Id"));
 
                         baseLocalization.Root
-                            .Elements()
+                            .Elements().ToArray() // clone the copy so the collection is not impacted
                             .Where(x => replacementIds.Contains(x.Attr("Id")))
                             .ForEach(x => x.Remove());
 
                         userLocalization.Root
-                            .Elements()
+                            .Elements().ToArray() // clone the copy so the collection is not impacted
                             .ForEach(x =>
                             {
                                 x.Remove();
@@ -217,17 +217,17 @@ namespace WixSharp
             }
         }
 
-        internal string LicenceFileFor(Project project)
+        internal static string LicenceFileFor(Project project)
         {
             return UIExtensions.UserOrDefaultContentOf(project.LicenceFile, project.SourceBaseDir, project.OutDir, project.Name + ".licence.rtf", Resources.WixSharp_LicenceFile);
         }
 
-        internal string DialogBitmapFileFor(Project project)
+        internal static string DialogBitmapFileFor(Project project)
         {
             return UIExtensions.UserOrDefaultContentOf(project.BackgroundImage, project.SourceBaseDir, project.OutDir, project.Name + ".dialog_bmp.png", Resources.WixUI_Bmp_Dialog);
         }
 
-        internal string DialogBannerFileFor(Project project)
+        internal static string DialogBannerFileFor(Project project)
         {
             return UIExtensions.UserOrDefaultContentOf(project.BannerImage, project.SourceBaseDir, project.OutDir, project.Name + ".dialog_banner.png", Resources.WixUI_Bmp_Banner);
         }
