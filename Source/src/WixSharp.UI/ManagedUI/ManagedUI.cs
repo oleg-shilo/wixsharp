@@ -216,12 +216,12 @@ namespace WixSharp
                         var replacementIds = userLocalization.Root.Elements().Select(x => x.Attr("Id"));
 
                         baseLocalization.Root
-                            .Elements().ToArray() // clone the copy so the collection is not impacted
+                            .Elements()
                             .Where(x => replacementIds.Contains(x.Attr("Id")))
                             .ForEach(x => x.Remove());
 
                         userLocalization.Root
-                            .Elements().ToArray() // clone the copy so the collection is not impacted
+                            .Elements()
                             .ForEach(x =>
                             {
                                 x.Remove();
