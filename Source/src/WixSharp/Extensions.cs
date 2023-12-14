@@ -733,7 +733,8 @@ namespace WixSharp
         /// <returns></returns>
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> collection, Action<T> action)
         {
-            foreach (T item in collection)
+            // clone the copy so the collection is not impacted by the action
+            foreach (T item in collection.ToArray())
             {
                 action(item);
             }
