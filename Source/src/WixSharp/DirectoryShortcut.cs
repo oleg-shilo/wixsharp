@@ -30,9 +30,8 @@ THE SOFTWARE.
 namespace WixSharp
 {
     /// <summary>
-    /// Defines <see cref="DirectoryShortcut"/> to be installed. <para><see cref="ExeFileShortcut"/> is a specialized version of the <see cref="Shortcut"/> designed
-    /// for using <see cref="Shortcut"/> as a <see cref="Dir"/> nested element</para>
-    /// it belongs to.</para>
+    /// Defines <see cref="DirectoryShortcut"/> to be installed. <para><see cref="DirectoryShortcut"/> is a specialized version of the <see cref="Shortcut"/> designed
+    /// for using <see cref="Shortcut"/> as a <see cref="Dir"/> nested element it belongs to.</para>
     /// </summary>
     ///
     /// <example>
@@ -79,7 +78,6 @@ namespace WixSharp
         /// <param name="feature"><see cref="Feature"></see> the shortcut should be included in.</param>
         /// <param name="name">The name of the shortcut to be installed.</param>
         /// <param name="target">The path to the executable the shortcut is associated with.</param>
-        /// <param name="arguments">The shortcut arguments.</param>
         public DirectoryShortcut(Feature feature, string name, string target)
         {
             Name = name;
@@ -95,7 +93,6 @@ namespace WixSharp
         /// <param name="id">The explicit <see cref="Id"></see> to be associated with <see cref="DirectoryShortcut"/> instance.</param>
         /// <param name="name">The name of the shortcut to be installed.</param>
         /// <param name="target">The path to the executable the shortcut is associated with.</param>
-        /// <param name="arguments">The shortcut arguments.</param>
         public DirectoryShortcut(Id id, string name, string target)
         {
             Id = id.Value;
@@ -112,7 +109,6 @@ namespace WixSharp
         /// <param name="feature"><see cref="Feature"></see> the shortcut should be included in.</param>
         /// <param name="name">The name of the shortcut to be installed.</param>
         /// <param name="target">The path to the executable the shortcut is associated with.</param>
-        /// <param name="arguments">The shortcut arguments.</param>
         public DirectoryShortcut(Id id, Feature feature, string name, string target)
         {
             Id = id.Value;

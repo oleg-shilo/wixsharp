@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp_wix4</id>
-    <version>2.0.3.0</version>
+    <version>2.0.4.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,35 +18,17 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed: `dotnet tool install --global wix`
 The package is tested against WIX (Windows Installer Xml) Toolset v4.0.1.0</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.0.3.0
-- Added `Compiler.VerboseOutput`
-- Release WixSharp.VSIX v2.1.0
-  - Made split on WiX3 vs WiX4 templates
-  - Added Bootstrapper Custom BA templates
-- `WarnOnOutputPathCollision` changed from Warning to Error (continuation of #1384).
-- Extended cascading `Project.Platform` to `RegistrySearch` (triggered by #1390 discussion).
-- Issue #1392: Is it possible to inherit wxl files using managed UI?
-- Added support for ManagedUI to foll back on the stock WXL if one was not supplied by the user for non-English languages
-- Added handling new WiX constant `PFiles` (same as old `ProgramFilesFolder`)
-- added `WixStandardBootstrapperApplication.AddPayload`
-- #1387: Cannot update to latest Caliburn.Micro
-- #1384: When the bootstrapper.Build API uses the same name as the project, then misleading compile warnings are issued
-- #1379: A way (Or create an example) of how to create a standalone fragment and insert into Projects / chains / etc
-- #1382: Package (all child elements of Chain) need to have the After field added (2)
-- #1382: Package (all child elements of Chain) need to have the After field added
-- #1383: Package (all child elements of Chain) need to have the SuppressSignatureVerification field added
-- #1381: ExePackage needs to have the Protocol field implemented
-- #1372: Creating a FileAssociation with Icon and Advertised = false does not work
-- #1373: Need a clearer reason for the following Build exception: "System.NullReferenceException: Object reference not set to an instance of an object."
-- Added ensuring `project.OutDir` exists.
-- Updated WixToolset.Dtf.WindowsInstaller to the latest version
+    <releaseNotes>WiX4-Release v2.0.4.0
+- #1363: Shortcut to Dir/Folder
+- #1398: Underscore in String Id in wxl breaks localization
+- reverted experimental change for x86 bitness of WixSharp.UI. Now it's back to AnyCPU but SilentUI BA will no longer work. It's acceptable as it's better to set x86 on the user codebase (e.g. custom BA) than on generic lib (WixSharp.UI) and put bitness pressure on all users of this lib.
 - `WarnOnOutputPathCollision` changed from Warning to Error (continuation of #1384).
 - Extended cascading `Project.Platform` to `RegistrySearch` (triggered by #1390 discussion).</releaseNotes>
     <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp_wix4.bin" version="2.0.3.0" />
+      <dependency id="WixSharp_wix4.bin" version="2.0.4.0" />
     </dependencies>
   </metadata>
   <files>
