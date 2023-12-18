@@ -1140,6 +1140,24 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Removes `RemoveFolder` element for the specific directory.
+        /// <para>This method is particularly useful when there is no parent `Component` element for a directory (default behaver).</para>
+        /// <para>This method subscribes for the post WXS generation event from which it removes the `RemoveFolder` XML element.</para>
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="directoryId">The directory identifier.</param>
+        /// <returns></returns>
+        static public Project SuppressRemovingFolderFor(this Project project, string directoryId)
+        {
+            project.WixSourceGenerated += (doc) =>
+            doc.FindAll("RemoveFolder")
+               .Single(x => x.HasAttribute("Id", directoryId))
+               .Remove();
+
+            return project;
+        }
+
+        /// <summary>
         /// Sets the version of the project to the version value retrieved from the file.
         /// <para>If the file is an assembly then the assembly version is returned.</para>
         /// <para>If the file is an MSI then the product version is returned.</para>
