@@ -60,6 +60,15 @@
                 </EventTrigger>
             </Ellipse.Triggers>
         </Ellipse>
+
+        <Image
+            Width="50"
+            Height="50"
+            Margin="10"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Source="{Binding Banner}" />
+
         <StackPanel
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
@@ -89,5 +98,4 @@
             </Button>
         </StackPanel>
     </Grid>
-
 </Window>

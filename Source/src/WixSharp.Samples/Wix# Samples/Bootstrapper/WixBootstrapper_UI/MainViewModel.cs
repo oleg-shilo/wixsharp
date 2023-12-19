@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 #if WIX4
 using WixToolset.Bootstrapper;
@@ -8,8 +11,23 @@ using WixToolset.Bootstrapper;
 
 using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using WixBootstrapper_UI;
+using WixBootstrapper_UI.Properties;
 
 #endif
+// using System.ComponentModel;
+// using System.Diagnostics;
+// using System.Windows;
+// using System.Windows.Media.Imaging;
+
+// #if WIX4
+// using WixToolset.Bootstrapper;
+// #else
+
+// using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+// using WixBootstrapper_UI;
+// using WixBootstrapper_UI.Properties;
+
+// #endif
 
 [assembly: BootstrapperApplication(typeof(ManagedBA))]
 
@@ -42,7 +60,6 @@ public class MainViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler PropertyChanged;
 
     public MainViewModel(BootstrapperApplication bootstrapper)
-
     {
         this.IsBusy = false;
 
@@ -59,6 +76,8 @@ public class MainViewModel : INotifyPropertyChanged
     {
         MessageBox.Show(e.ErrorMessage);
     }
+
+    public BitmapImage Banner => Resource1.wixsharp_logo.ToImageSource();
 
     bool installEnabled;
 
@@ -167,5 +186,20 @@ public class MainViewModel : INotifyPropertyChanged
     {
         if (e.Status >= 0)
             Bootstrapper.Engine.Apply(System.IntPtr.Zero);
+    }
+}
+
+static class WpfExtensions
+{
+    public static BitmapImage ToImageSource(this Bitmap src)
+    {
+        var ms = new System.IO.MemoryStream();
+        src.Save(ms, ImageFormat.Bmp);
+        BitmapImage image = new BitmapImage();
+        image.BeginInit();
+        ms.Seek(0, System.IO.SeekOrigin.Begin);
+        image.StreamSource = ms;
+        image.EndInit();
+        return image;
     }
 }
