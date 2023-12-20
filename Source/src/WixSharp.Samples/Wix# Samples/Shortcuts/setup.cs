@@ -40,7 +40,7 @@ class Script
                            ),
 
                     new Dir(@"%ProgramMenu%\My Company\My Product",
-                        new DirectoryShortcut("Samples", "[Samples]", ""),
+                        new DirectoryShortcut("Samples", "[Samples]"),
                         new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")));
 
             project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");

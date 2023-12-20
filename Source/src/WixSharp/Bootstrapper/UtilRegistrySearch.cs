@@ -2,7 +2,6 @@ using System.Xml.Linq;
 
 namespace WixSharp.Bootstrapper
 {
-
     /// <summary>
     /// Defines a registry search based on WiX RegistrySearch element (Util Extension).
     /// </summary>
@@ -57,9 +56,11 @@ namespace WixSharp.Bootstrapper
         public RegistryHive Root;
 
         /// <summary>
-        /// Instructs the search to look in the 64-bit registry when the value is 'yes'. When the value is 'no', the search looks in the 32-bit registry. The default value is 'no'.
+        /// Overrides the default registry to search. The <c>true</c> value (always64) will force the search to look in
+        /// the 64-bit registry even when building for 32-bit. Simliarly, the <c>false</c> value (always32) will force
+        /// the search to look in the 32-bit registry even when building for 64-bit. The default value is default where
+        /// the search will look in the same registry as the bitness of the package.
         /// </summary>
-        [Xml]
         public bool? Win64;
 
         /// <summary>
@@ -94,8 +95,8 @@ namespace WixSharp.Bootstrapper
         public XElement ToXml()
         {
             return this.ToXElement(WixExtension.Util.ToXName("RegistrySearch"))
-                       .SetAttribute("Root", Root);
+                       .SetAttribute("Root", Root)
+                       .SetAttribute("Bitness", Win64.HasValue ? (Win64.Value ? "always64" : "always32") : null);
         }
     }
-
 }
