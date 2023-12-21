@@ -110,6 +110,35 @@ namespace WixSharp.Test
         }
 
         [Fact]
+        [Description("Issue #1403")]
+        public void Fix_Issue_1403()
+        {
+            Project build(Predicate<string> filter)
+            {
+                var proj = new Project("Test",
+                    new Dir(@"%ProgramFiles%\Test",
+                        new File("Test.exe"),
+                        new Files($"{Environment.CurrentDirectory.PathCombine("..", "..")}\\*.*",
+                                   filter)),
+
+                    new Dir(@"%ProgramMenu%\Test",
+                            new ExeFileShortcut("Cable Scheduler", $"[INSTALLDIR]Test.exe", "")));
+
+                proj.ResolveWildCards(pruneEmptyDirectories: true);
+
+                return proj;
+            }
+
+            var project = build(path => true);
+
+            Assert.True(project.AllFiles.Count() > 1); // test.exe and other files discovered by `Files(...)
+
+            project = build(path => !path.Contains("src"));
+
+            Assert.True(project.AllFiles.Count() == 1); // test.exe only that we added explicitly
+        }
+
+        [Fact]
         [Description("Issue #67")]
         public void Fix_Issue_67()
         {
