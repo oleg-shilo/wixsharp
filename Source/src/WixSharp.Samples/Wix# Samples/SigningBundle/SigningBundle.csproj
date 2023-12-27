@@ -20,22 +20,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="Files\Bin\MyApp.cs">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+		<None Include="Files\Bin\MyApp.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\WixSharp\WixSharp.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="development_certificate.pfx">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Files\Bin\MyApp.exe">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
