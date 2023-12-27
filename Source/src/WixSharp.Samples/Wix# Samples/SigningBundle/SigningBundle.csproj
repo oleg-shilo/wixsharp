@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net472</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="*.cmd" />
+		<None Remove="CustomAction.config" />
+		<None Remove="*.exe" />
+		<None Remove="*.pdb" />
+		<None Remove="*.wixpdb" />
+		<None Remove="*.msi" />
+		<None Remove="readme.txt" />
+		<None Remove="*.CA.dll" />
+		<None Remove="*.cs.dll" />
+		<Compile Remove="Files\Bin\MyApp.cs" />
+		<None Remove="Build.cmd.log" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Files\Bin\MyApp.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\WixSharp\WixSharp.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="development_certificate.pfx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Files\Bin\MyApp.exe">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
+	</Target>
+
+</Project>
