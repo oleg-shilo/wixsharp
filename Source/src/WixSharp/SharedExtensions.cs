@@ -69,7 +69,12 @@ namespace WixSharp
 
                 case "ProgramFiles64Folder": return Environment.SpecialFolder.ProgramFiles.ToPath().Replace(" (x86)", "");
                 case "ProgramFilesFolder": return Environment.SpecialFolder.ProgramFiles.ToPath();
-                case "PFiles": return Environment.SpecialFolder.ProgramFiles.ToPath(); // WiX4 introduced new constant
+                // WiX4 introduced new constants `PFiles64` and `PFiles`
+                case "PFiles": return Environment.SpecialFolder.ProgramFiles.ToPath();
+                case "PFiles64":
+                    return Environment.GetEnvironmentVariable("ProgramW6432").IsNotEmpty() ? // ProgramW6432 returns PF64 even if it is called from the 32-bit process
+                        Environment.GetEnvironmentVariable("ProgramW6432") :
+                        Environment.SpecialFolder.ProgramFiles.ToPath();
 
                 case "MyPicturesFolder": return Environment.SpecialFolder.MyPictures.ToPath();
                 case "SendToFolder": return Environment.SpecialFolder.SendTo.ToPath();
