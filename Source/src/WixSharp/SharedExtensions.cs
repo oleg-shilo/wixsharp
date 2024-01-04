@@ -72,9 +72,8 @@ namespace WixSharp
                 // WiX4 introduced new constants `PFiles64` and `PFiles`
                 case "PFiles": return Environment.SpecialFolder.ProgramFiles.ToPath();
                 case "PFiles64":
-                    return Environment.GetEnvironmentVariable("ProgramW6432").IsNotEmpty() ? // ProgramW6432 returns PF64 even if it is called from the 32-bit process
-                        Environment.GetEnvironmentVariable("ProgramW6432") :
-                        Environment.SpecialFolder.ProgramFiles.ToPath();
+                    return "ProgramW6432".GetEnvVar(
+                                          defaultValue: Environment.SpecialFolder.ProgramFiles.ToPath()); // ProgramW6432 returns PF64 even if it is called from the 32-bit process
 
                 case "MyPicturesFolder": return Environment.SpecialFolder.MyPictures.ToPath();
                 case "SendToFolder": return Environment.SpecialFolder.SendTo.ToPath();
