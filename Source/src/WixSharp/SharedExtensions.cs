@@ -109,6 +109,15 @@ namespace WixSharp
         /// <returns></returns>
 #pragma warning restore CS0419 // Ambiguous reference in cref attribute
 
+        /// <summary>
+        /// Gets the environment variable by the `name`.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns></returns>
+        public static string GetEnvVar(this string name, string defaultValue = null)
+            => Environment.GetEnvironmentVariable(name) ?? defaultValue;
+
         public static string PathJoin(this string path, params string[] items)
         {
             foreach (var item in items)
