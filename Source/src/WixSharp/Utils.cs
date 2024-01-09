@@ -27,6 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using WixSharp.CommonTasks;
 using IO = System.IO;
 using Reflection = System.Reflection;
 
@@ -113,6 +114,33 @@ namespace WixSharp
                                   .ToArray();
 
             return fields;
+        }
+
+        /// <summary>
+        /// Gets the version of Windows. This method executes Windows command `ver` and returns the output string (version).
+        /// </summary>
+        /// <returns></returns>
+        public static string GetWinVer()
+        {
+            var version = "";
+            string batchFile = System.IO.Path.GetTempFileName().DeleteIfExists();
+            batchFile += ".cmd";
+            try
+            {
+                System.IO.File.WriteAllText(batchFile, "ver");
+                var ver = new ExternalTool
+                {
+                    EchoOn = false,
+                    ExePath = batchFile
+                }.ConsoleRun(x => version = x); // capture the last line
+
+                // Microsoft Windows [Version 10.0.22621.2861]
+                return version.Split(' ').Last().Trim(']');
+            }
+            finally
+            {
+                batchFile.DeleteIfExists();
+            }
         }
 
         internal static string GetTempDirectory()
