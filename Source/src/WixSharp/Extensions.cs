@@ -3669,15 +3669,6 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Gets the environment variable by the `name`.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="defaultValue">The default value.</param>
-        /// <returns></returns>
-        public static string GetEnvVar(this string name, string defaultValue = null)
-            => Environment.GetEnvironmentVariable(name) ?? defaultValue;
-
-        /// <summary>
         /// Converts a string in Base64 encoding.
         /// </summary>
         /// <param name="text">The text.</param>
