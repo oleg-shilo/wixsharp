@@ -1,9 +1,9 @@
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using Microsoft.Win32;
 using IO = System.IO;
 
 namespace WixSharp.CommonTasks
@@ -24,6 +24,7 @@ namespace WixSharp.CommonTasks
 
         [DllImport("msi")]
         static extern int MsiEnumRelatedProducts(string productCode, int reserved, int iProductIndex, StringBuilder lpProductBuf);
+
         /// <summary>
         /// Gets the 'product code' of the installed product.
         /// </summary>
@@ -97,6 +98,7 @@ namespace WixSharp.CommonTasks
         {
             return GetProductInfo(productCode, "ProductName");
         }
+
         /// <summary>
         /// Gets the version of the installed product from its 'upgrade code'.
         /// <code>
@@ -112,9 +114,12 @@ namespace WixSharp.CommonTasks
         {
             try
             {
-                var productCode = AppSearch.GetRelatedProducts(upgradeCode).FirstOrDefault();
-                if (productCode != null)
-                    return GetProductVersion(productCode);
+                Version installedVersion = GetRelatedProducts(upgradeCode)
+                    .Where(x => GetProductName(x).IsNotEmpty())
+                    .Select(GetProductVersion)
+                    .FirstOrDefault();
+
+                return installedVersion;
             }
             catch { }
             return null;
@@ -135,9 +140,9 @@ namespace WixSharp.CommonTasks
                 int value;
                 if (int.TryParse(versionStr, out value))
                 {
-                    var major = (int) (value & 0xFF000000) >> 8 * 3;
-                    var minor = (int) (value & 0x00FF0000) >> 8 * 2;
-                    var build = (int) (value & 0x0000FFFF);
+                    var major = (int)(value & 0xFF000000) >> 8 * 3;
+                    var minor = (int)(value & 0x00FF0000) >> 8 * 2;
+                    var build = (int)(value & 0x0000FFFF);
                     return new Version(major, minor, build);
                 }
             }
