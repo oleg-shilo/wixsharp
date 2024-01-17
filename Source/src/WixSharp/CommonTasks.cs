@@ -354,35 +354,37 @@ namespace WixSharp.CommonTasks
         ///      null);
         /// </code>
         /// </example>
+        /// <exception cref="ApplicationException">Thrown if <c>wix.exe</c> cannot be found.</exception>
+        /// <exception cref="Exception">Thrown if no engine file is found after detaching it from the bundle.</exception>
         static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
             string enginePath = IO.Path.GetTempFileName();
 
+            if (ExternalTool.Locate("wix.exe") == null)
+            {
+                var error = "`wix.exe` cannot be found. Ensure you installed it with `dotnet tool install --global wix`";
+                Compiler.OutputWriteLine("Error: " + error);
+                throw new ApplicationException(error);
+            }
+
             try
             {
-                var tool = new ExternalTool
-                {
-                    ExePath = WixTools.SignTool,
-                    Arguments = "-ib \"{0}\" -o \"{1}\"".FormatWith(bootstrapperFileToSign, enginePath)
-                };
+                // First detach the engine from the bundle
+                Compiler.Run("wix", "burn detach \"{0}\" -engine \"{1}\"".FormatWith(bootstrapperFileToSign, enginePath));
 
-                var retval = tool.ConsoleRun();
+                if (!IO.File.Exists(enginePath))
+                    throw new Exception($"The supposedly detached engine file appears to be missing. Expected location: '{enginePath}'");
+
+                // Then sign the detached engine
+                int retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
                 if (retval != 0)
                     return retval;
 
-                retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
-                if (retval != 0)
-                    return retval;
+                // Finally reattach the signed engine to the bundle
+                Compiler.Run("wix", "burn reattach \"{0}\" -engine \"{1}\" -o \"{0}\"".FormatWith(bootstrapperFileToSign, enginePath));
 
-                tool = new ExternalTool
-                {
-                    ExePath = WixTools.SignTool,
-                    Arguments = "-ab \"{1}\" \"{0}\" -o \"{0}\"".FormatWith(bootstrapperFileToSign, enginePath)
-                };
-
-                tool.ConsoleRun();
-                return retval;
+                return 0;
             }
             finally
             {
