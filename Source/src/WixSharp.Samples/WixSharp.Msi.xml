@@ -36,12 +36,12 @@
              <param name="path">The path.</param>
              <returns></returns>
         </member>
-        <member name="M:WixSharp.Msi.Extensions.PathJoin(System.String,System.String[])">
+        <member name="M:WixSharp.Msi.Extensions.GetEnvVar(System.String,System.String)">
             <summary>
-            Equivalent of <see cref="M:System.IO.Path.Combine(System.String,System.String)"/>.
+            Gets the environment variable by the `name`.
             </summary>
-            <param name="path"></param>
-            <param name="items"></param>
+            <param name="name">The name.</param>
+            <param name="defaultValue">The default value.</param>
             <returns></returns>
         </member>
         <member name="M:WixSharp.Msi.Extensions.PathGetDirName(System.String)">

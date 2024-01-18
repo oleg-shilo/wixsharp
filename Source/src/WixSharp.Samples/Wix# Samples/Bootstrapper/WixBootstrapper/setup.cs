@@ -4,6 +4,7 @@
 //css_ref System.Xml.Linq.dll;
 //css_ref ..\..\..\Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using WixSharp;
@@ -22,10 +23,10 @@ public class InstallScript
         var crtMsi = BuildCrtMsi();
         var productMsi = BuildMainMsi();
 
-        SimpleMsiInternalUI(crtMsi);
+        // SimpleMsiInternalUI(crtMsi);
         // SimpleGlobalInternalUI(crtMsi);
         // Standard(crtMsi, productMsi);
-        // Complex(crtMsi, productMsi);
+        Complex(crtMsi, productMsi);
     }
 
     static public void SimpleMsiInternalUI(string msi)
@@ -151,19 +152,19 @@ public class InstallScript
         // The code below sets WiX variables 'Netfx4FullVersion' and 'AdobeInstalled'. Note it has no affect on
         //the runtime behaviour and 'FileSearch' and "RegistrySearch" are only provided as an example.
         bootstrapper.AddWixFragment("Wix/Bundle",
-                                            new UtilRegistrySearch
-                                            {
-                                                Root = RegistryHive.LocalMachine,
-                                                Key = @"SOFTWARE\Microsoft\Net Framework Setup\NDP\v4\Full",
-                                                Value = "Version",
-                                                Variable = "Netfx4FullVersion"
-                                            },
-                                            new UtilFileSearch
-                                            {
-                                                Path = @"[ProgramFilesFolder]Adobe\adobe.exe",
-                                                Result = SearchResult.exists,
-                                                Variable = "AdobeInstalled"
-                                            });
+                                    new UtilRegistrySearch
+                                    {
+                                        Root = RegistryHive.LocalMachine,
+                                        Key = @"SOFTWARE\Microsoft\Net Framework Setup\NDP\v4\Full",
+                                        Value = "Version",
+                                        Variable = "Netfx4FullVersion"
+                                    },
+                                        new UtilFileSearch
+                                        {
+                                            Path = @"[ProgramFilesFolder]Adobe\adobe.exe",
+                                            Result = SearchResult.exists,
+                                            Variable = "AdobeInstalled"
+                                        });
 
         // bootstrapper.AddXml("Wix/Bundle", "<Log PathVariable=\"LogFileLocation\"/>");
 
@@ -186,6 +187,7 @@ public class InstallScript
         // bootstrapper.WixSourceGenerated += doc => doc.FindSingle("WixStandardBootstrapperApplication")
         //                                              .AddAttributes("ShowVersion=yes; ShowFilesInUse=no");
 
+        // Debug.Assert(false);
         var setup = bootstrapper.Build("app_setup");
         Console.WriteLine(setup);
     }
@@ -249,5 +251,5 @@ public class DotNetCoreSearch : ChainItem
     [Xml] public string Variable = "AspNetCoreRuntimeVersion";
 
     public override XContainer[] ToXml()
-         => new[] { this.ToXElement(WixExtension.NetFx.ToXName("DotNetCoreSearch")) };
+        => new[] { this.ToXElement(WixExtension.NetFx.ToXName("DotNetCoreSearch")) };
 }

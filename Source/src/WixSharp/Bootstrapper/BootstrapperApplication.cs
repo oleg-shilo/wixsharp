@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Xml.Linq;
 using WixSharp.CommonTasks;
 using WixSharp.Nsis;
@@ -410,52 +411,129 @@ namespace WixSharp.Bootstrapper
         public Variable[] Variables = new Variable[0];
     }
 
+    public class PayloadGeneration : StringEnum<PayloadGeneration>
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PayloadGeneration"/> class.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public PayloadGeneration(string value) : base(value)
+        {
+        }
+
+        /// <summary>
+        /// None of the bundle's payloads or containers are automatically included as payloads for the package.
+        /// </summary>
+        public static PayloadGeneration none = new PayloadGeneration("none");
+
+        /// <summary>
+        /// All detached containers from the bundle that have no download url are included as payloads for the package,
+        /// as well as all external payloads from the bundle that have no download url.
+        /// </summary>
+        public static PayloadGeneration externalWithoutDownloadUrl = new PayloadGeneration("externalWithoutDownloadUrl");
+
+        /// <summary>
+        /// All detached containers from the bundle are included as payloads for the package, as well as all external payloads from the bundle.
+        /// </summary>
+        public static PayloadGeneration external = new PayloadGeneration("external");
+
+        /// <summary>
+        /// All detached containers from the bundle are included as payloads for the package, as well as all other payloads
+        /// that are not compressed into the detached containers.This option normally requires extra work to use since it requires all attached containers to have been extracted.
+        /// </summary>
+        public static PayloadGeneration all = new PayloadGeneration("all");
+    }
+
+    /// <summary>
+    /// Describes information about the BundlePackage payload. Cannot be specified if the owning BundlePackage specified any of SourceFile, Name, DownloadUrl, or Compressed.
+    /// </summary>
+    /// <seealso cref="WixSharp.Bootstrapper.RemotePayload" />
+    public class BundlePackagePayload : RemotePayload
+    {
+        /// <summary>
+        /// Choose one of the supported payload generation types: none, externalWithoutDownloadUrl, external, all.This attribute's value must be one of the following:(enumeration) : Choose one of the supported payload generation types
+        /// </summary>
+        [Xml]
+        public PayloadGeneration PayloadGeneration = PayloadGeneration.none;
+    }
+
+    /// <summary>
+    /// Describes information about the MsuPackage payload. Cannot be specified if the owning MsuPackage specified any of SourceFile, Name, DownloadUrl, or Compressed.
+    /// </summary>
+    /// <seealso cref="WixSharp.Bootstrapper.RemotePayload" />
+    public class MsuPackagePayload : RemotePayload { }
+
+    /// <summary>
+    /// Describes information about the ExePackage payload. Cannot be specified if the owning ExePackage specified any of SourceFile, Name, DownloadUrl, or Compressed.
+    /// </summary>
+    /// <seealso cref="WixSharp.Bootstrapper.RemotePayload" />
+    public class ExePackagePayload : RemotePayload { }
+
+    /// <summary>
+    /// Describes information about the MsiPackage payload. Cannot be specified if the owning MsiPackage specified any of SourceFile, Name, DownloadUrl, or Compressed.
+    /// </summary>
+    /// <seealso cref="WixSharp.Bootstrapper.Payload" />
+    public class MsiPackagePayload : Payload
+    {
+    }
+
+    /// <summary>
+    /// Describes information about the MspPackage payload. Cannot be specified if the owning MspPackage specified any of SourceFile, Name, DownloadUrl, or Compressed.
+    /// </summary>
+    /// <seealso cref="WixSharp.Bootstrapper.Payload" />
+    public class MspPackagePayload : Payload
+    {
+    }
+
     /// <summary>
     /// Describes a remote payload to a bootstrapper.
     /// <para>Describes information about a remote file payload that is not
     /// available at the time of building the bundle. The parent must specify DownloadUrl
     /// and must not specify SourceFile when using this element.</para></summary>
-    /// <seealso cref="WixSharp.WixEntity" />
-    public class RemotePayload : WixEntity
+    public class RemotePayload : Payload
     {
-        /// <summary>
-        /// Description of the file from version resources.
-        /// </summary>
-        [Xml]
-        public string Description;
+        // [Obsolete("Use concrete RemotePayload entities instead. IE `ExePackagePayload` instead of `RemotePayloadPayload`", true)]
+        // public RemotePayload() { }
 
         /// <summary>
-        /// Public key of the authenticode certificate used to sign the RemotePayload.Include this attribute if the remote file is signed.
+        /// Optional public key of the certificate used to sign the payload. It is not recommended to use this attribute and rely on the Hash alone.
         /// </summary>
         [Xml]
         public string CertificatePublicKey;
 
         /// <summary>
-        /// Thumbprint of the authenticode certificate used to sign the RemotePayload.Include this attribute if the remote file is signed.
+        /// Optional thumbprint of the certificate used to sign the payload. It is not recommended to use this attribute and rely on the Hash alone.
         /// </summary>
         [Xml]
         public string CertificateThumbprint;
 
         /// <summary>
-        /// SHA-1 hash of the RemotePayload.Include this attribute if the remote file is unsigned or SuppressSignatureVerification is set to Yes.
+        /// Description of the file from version resources. If Hash is not specified, must not be specified.
+        /// </summary>
+        [Xml]
+        public string Description;
+
+        /// <summary>
+        /// SHA-512 hash of the RemotePayload. If SourceFile is specified, must not be specified. If specified then Name,
+        /// DownloadUrl, and Size are required
         /// </summary>
         [Xml]
         public string Hash;
 
         /// <summary>
-        /// Product name of the file from version resources.
+        /// Product name of the file from version resouces. If Hash is not specified, must not be specified.
         /// </summary>
         [Xml]
         public string ProductName;
 
         /// <summary>
-        /// Size of the remote file in bytes.
+        /// Size of the remote file in bytes. Required if Hash is specified, otherwise must not be specified.
         /// </summary>
         [Xml]
-        public int Size;
+        public int? Size;
 
         /// <summary>
-        /// Version of the remote file
+        /// Version of the remote file. If Hash is not specified, must not be specified.
         /// </summary>
         [Xml]
         public Version Version;

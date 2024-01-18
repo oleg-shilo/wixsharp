@@ -315,6 +315,7 @@ namespace WixSharp.Bootstrapper
         ///              ...
         /// </code>
         /// </example>
+        [Obsolete("Use `Payloads` instead.")]
         public RemotePayload[] RemotePayloads = new RemotePayload[0];
 
         /// <summary>
@@ -333,11 +334,8 @@ namespace WixSharp.Bootstrapper
             root.AddAttributes(this.Attributes)
                 .Add(this.MapToXmlAttributes());
 
-            if (Payloads.Any())
-                Payloads.ForEach(p => root.Add(p.ToXElement("Payload")));
-
-            if (RemotePayloads.Any())
-                RemotePayloads.ForEach(p => root.Add(p.ToXElement("RemotePayload")));
+            root.AddPayloads(this.Payloads);
+            root.AddPayloads(this.RemotePayloads);
 
             foreach (var exitCode in ExitCodes)
             {
@@ -442,8 +440,7 @@ namespace WixSharp.Bootstrapper
                 root.SetAttribute(bal + "DisplayInternalUICondition", "WixBundleAction = 6");
             }
 
-            if (Payloads.Any())
-                Payloads.ForEach(p => root.Add(p.ToXElement("Payload")));
+            root.AddPayloads(this.Payloads);
 
             string props = MsiProperties + ";" + DefaultMsiProperties;
 
@@ -521,6 +518,7 @@ namespace WixSharp.Bootstrapper
         /// <summary>
         /// The remote payloads
         /// </summary>
+        [Obsolete("Use `Payloads` instead.")]
         public RemotePayload[] RemotePayloads = new RemotePayload[0];
 
         /// <summary>
@@ -539,11 +537,8 @@ namespace WixSharp.Bootstrapper
             root.AddAttributes(this.Attributes)
                 .Add(this.MapToXmlAttributes());
 
-            if (Payloads.Any())
-                Payloads.ForEach(p => root.Add(p.ToXElement("Payload")));
-
-            if (RemotePayloads.Any())
-                RemotePayloads.ForEach(p => root.Add(p.ToXElement("RemotePayload")));
+            root.AddPayloads(this.Payloads);
+            root.AddPayloads(this.RemotePayloads);
 
             return new[] { root };
         }
@@ -592,6 +587,7 @@ namespace WixSharp.Bootstrapper
         /// <summary>
         /// The remote payloads
         /// </summary>
+        [Obsolete("Use `Payloads` instead.")]
         public RemotePayload[] RemotePayloads = new RemotePayload[0];
 
         /// <summary>
@@ -610,13 +606,24 @@ namespace WixSharp.Bootstrapper
             root.AddAttributes(this.Attributes)
                 .Add(this.MapToXmlAttributes());
 
-            if (Payloads.Any())
-                Payloads.ForEach(p => root.Add(p.ToXElement("Payload")));
-
-            if (RemotePayloads.Any())
-                RemotePayloads.ForEach(p => root.Add(p.ToXElement("RemotePayload")));
+            root.AddPayloads(this.Payloads);
+            root.AddPayloads(this.RemotePayloads);
 
             return new[] { root };
+        }
+    }
+
+    internal static class PackagesExtensions
+    {
+        public static void AddPayloads(this XElement parent, Payload[] payloads)
+        {
+            if (payloads.Any())
+                payloads.ForEach(p => parent.Add(p.ToXElement(p.GetType().Name)));
+
+            if (payloads.Any(x => x.GetType().Name == "RemotePayload"))
+                throw new Exception(
+                    "`RemotePayload` entity is obsolete. Use concrete (RemotePayload derived) entities instead. " +
+                    "IE `ExePackagePayload` instead of `RemotePayload`");
         }
     }
 
