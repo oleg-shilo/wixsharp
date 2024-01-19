@@ -20,7 +20,6 @@
             Margin="-1,-1,-1,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Background="White"
             BorderBrush="Gray"
             BorderThickness="1">
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -39,7 +38,6 @@
                     <TextBlock
                         x:Name="DialogTitleLabel"
                         Grid.Column="0"
-                        Background="White"
                         FontSize="12"
                         FontWeight="Bold">
                         [ProgressDlgTitleInstalling]

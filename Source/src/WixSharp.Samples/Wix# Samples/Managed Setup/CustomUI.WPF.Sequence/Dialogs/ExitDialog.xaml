@@ -40,7 +40,6 @@
             Margin="-1,-1,-1,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Background="White"
             BorderBrush="Gray"
             BorderThickness="1">
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -60,7 +59,6 @@
                     Grid.Column="1"
                     Margin="10,25,10,10"
                     VerticalAlignment="Top"
-                    Background="White"
                     FontSize="16"
                     FontWeight="Normal">
                     [ExitDialogTitle]
@@ -70,7 +68,6 @@
                     Grid.Row="2"
                     Grid.Column="1"
                     Margin="10"
-                    Background="White"
                     TextWrapping="WrapWithOverflow">
                     [ExitDialogDescription]
                 </TextBlock>

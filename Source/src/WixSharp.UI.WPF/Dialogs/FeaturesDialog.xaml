@@ -43,7 +43,6 @@
             Margin="-1,-1,-1,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Background="White"
             BorderBrush="Gray"
             BorderThickness="1">
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -61,7 +60,6 @@
                 <StackPanel Margin="9">
                     <TextBlock
                         Grid.Column="0"
-                        Background="White"
                         FontSize="12"
                         FontWeight="Bold">
                         [CustomizeDlgTitle]
@@ -70,7 +68,6 @@
                         x:Name="DialogDescription"
                         Margin="17,5"
                         VerticalAlignment="Stretch"
-                        Background="White"
                         TextWrapping="WrapWithOverflow">
                         [CustomizeDlgDescription]
                     </TextBlock>
@@ -104,7 +101,10 @@
                     <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
                         <StackPanel Orientation="Horizontal">
                             <CheckBox IsChecked="{Binding Checked}" IsEnabled="{Binding IsEditable}" />
-                            <TextBlock Margin="5, 0" VerticalAlignment="Center" Text="{Binding Name}" />
+                            <TextBlock
+                                Margin="5,0"
+                                VerticalAlignment="Center"
+                                Text="{Binding Name}" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>

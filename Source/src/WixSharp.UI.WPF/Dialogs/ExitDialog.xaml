@@ -40,7 +40,6 @@
             Margin="-1,-1,-1,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Background="White"
             BorderBrush="Gray"
             BorderThickness="1">
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -60,7 +59,6 @@
                     Grid.Column="1"
                     Margin="13,25,7,0"
                     VerticalAlignment="Top"
-                    Background="White"
                     FontSize="16"
                     FontWeight="Normal">
                     [ExitDialogTitle]
@@ -70,7 +68,6 @@
                     Grid.Row="2"
                     Grid.Column="1"
                     Margin="10"
-                    Background="White"
                     TextWrapping="WrapWithOverflow">
                     [ExitDialogDescription]
                 </TextBlock>
@@ -102,8 +99,8 @@
                 <Button
                     x:Name="GoPrev"
                     Height="23"
-                    IsEnabled="False"
-                    MinWidth="73">
+                    MinWidth="73"
+                    IsEnabled="False">
                     [WixUIBack]
                 </Button>
                 <Separator Width="10" Opacity="0" />
