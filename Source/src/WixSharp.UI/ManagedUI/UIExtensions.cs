@@ -297,7 +297,7 @@ namespace WixSharp
         /// Note that both localization entries and MSI properties must be enclosed in the square brackets
         /// (e.g. "[ProductName] Setup", "[InstallDirDlg_Title]").
         /// <code>
-        /// var localizer = e.ManagedUI.Shell.MsiRuntime().Localize;
+        /// Func&lt;string, string&gt; localizer = e.ManagedUI.Shell.MsiRuntime().Localize;
         /// var localizedText =  "[ProductName] Setup".LocalizeWith(localizer);
         /// </code>
         /// </remarks>

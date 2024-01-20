@@ -213,7 +213,7 @@ namespace WixSharp
         /// (e.g. "[ProductName] Setup"). For a deep/full localization it is better to use <see cref="WixSharp.UIExtensions.LocalizeWith(string, Func{string, string})"/>.
         /// <para>IE: "[ProductName] Setup".LocalizeWith(MsiRuntime.Localize)</para>
         /// <code>
-        /// var localizer = e.ManagedUI.Shell.MsiRuntime().Localize;
+        /// Func&lt;string, string&gt; localizer = e.ManagedUI.Shell.MsiRuntime().Localize;
         /// var localizedText =  "[ProductName] Setup".LocalizeWith(localizer);
         /// </code>
         /// </remarks>
