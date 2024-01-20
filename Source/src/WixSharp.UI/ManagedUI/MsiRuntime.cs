@@ -1,4 +1,3 @@
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Microsoft.Deployment.WindowsInstaller;
 
 using io = System.IO;
 
@@ -208,6 +208,15 @@ namespace WixSharp
         /// <para>The localization is performed according two possible scenarios. The method will return the match form the MSI embedded localization file.
         /// However if it cannot find the match the method will try to find the and return the match from the MSI session properties.</para>
         /// <para>This method is mainly used by 'LocalizeWith' extension for a single step localization of WinForm controls.</para>
+        /// <remarks>
+        /// Note, this method is a single step localization routine and does not resolve any properties embedded in the localization result text
+        /// (e.g. "[ProductName] Setup"). For a deep/full localization it is better to use <see cref="WixSharp.UIExtensions.LocalizeWith(string, Func{string, string})"/>.
+        /// <para>IE: "[ProductName] Setup".LocalizeWith(MsiRuntime.Localize)</para>
+        /// <code>
+        /// var localizer = e.ManagedUI.Shell.MsiRuntime().Localize;
+        /// var localizedText =  "[ProductName] Setup".LocalizeWith(localizer);
+        /// </code>
+        /// </remarks>
         /// </summary>
         /// <param name="text">The text.</param>
         /// <returns></returns>

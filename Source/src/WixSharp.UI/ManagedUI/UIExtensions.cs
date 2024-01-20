@@ -1,5 +1,3 @@
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,6 +10,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Microsoft.Deployment.WindowsInstaller;
+using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using WixSharp.UI.Forms;
 
 using io = System.IO;
@@ -189,8 +189,8 @@ namespace WixSharp
         public static string GetDirectoryPath(this Session session, string name)
         {
             string[] subDirs = session.GetDirectoryPathParts(name)
-                                        .Select(x => x.AsWixVarToPath())
-                                        .ToArray();
+                                      .Select(x => x.AsWixVarToPath())
+                                          .ToArray();
             return string.Join(@"\", subDirs);
         }
 
@@ -296,6 +296,10 @@ namespace WixSharp
         /// <remarks>
         /// Note that both localization entries and MSI properties must be enclosed in the square brackets
         /// (e.g. "[ProductName] Setup", "[InstallDirDlg_Title]").
+        /// <code>
+        /// var localizer = e.ManagedUI.Shell.MsiRuntime().Localize;
+        /// var localizedText =  "[ProductName] Setup".LocalizeWith(localizer);
+        /// </code>
         /// </remarks>
         /// </summary>
         /// <param name="textToLocalize">The text to localize.</param>
