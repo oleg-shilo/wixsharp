@@ -3185,26 +3185,36 @@ namespace WixSharp
             //}
 
             //however View approach is OK
-            using (var sql = session.Database.OpenView("select Data from Binary where Name = '" + binary + "'"))
+            try
             {
-                sql.Execute();
-
-                using (var record = sql.Fetch())
-                using (var stream = record.GetStream(1))
-                using (var ms = new IO.MemoryStream())
+                using (var sql = session.Database.OpenView("select Data from Binary where Name = '" + binary + "'"))
                 {
-                    int Length = 256;
-                    var buffer = new Byte[Length];
-                    int bytesRead = stream.Read(buffer, 0, Length);
-                    while (bytesRead > 0)
+                    sql.Execute();
+
+                    using (var record = sql.Fetch())
                     {
-                        ms.Write(buffer, 0, bytesRead);
-                        bytesRead = stream.Read(buffer, 0, Length);
+                        if (record == null)
+                            return null;
+
+                        using (var stream = record.GetStream(1))
+                        using (var ms = new IO.MemoryStream())
+                        {
+                            int Length = 256;
+                            var buffer = new Byte[Length];
+                            int bytesRead = stream.Read(buffer, 0, Length);
+                            while (bytesRead > 0)
+                            {
+                                ms.Write(buffer, 0, bytesRead);
+                                bytesRead = stream.Read(buffer, 0, Length);
+                            }
+                            ms.Seek(0, IO.SeekOrigin.Begin);
+                            return ms.ToArray();
+                        }
                     }
-                    ms.Seek(0, IO.SeekOrigin.Begin);
-                    return ms.ToArray();
                 }
             }
+            catch { }
+            return null;
         }
 
         /// <summary>
