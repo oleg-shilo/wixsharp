@@ -101,9 +101,12 @@ public static class Script
 
     static void Project_UIInitialized(SetupEventArgs e)
     {
-        MessageBox.Show(
-                   "Message localization example.",
-                   "[ProductName] Setup".LocalizeWith(e.ManagedUI.Shell.MsiRuntime().Localize));
+        Func<string, string> localizationRoutine = e.ManagedUI.Shell.MsiRuntime().Localize;
+
+        MessageBox.Show("This is the localized text:\n[WelcomeDlgDescription]".LocalizeWith(localizationRoutine),
+                        "Message localization example.");
+
+        ////////////////////////////
 
         // just an example of restarting the setup UI elevated. Old fashioned but... convenient and reliable.
         if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
