@@ -1,7 +1,7 @@
 using System;
-using Microsoft.Deployment.WindowsInstaller;
 using System.Collections.Generic;
 using System.Linq;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp.UI.Forms
 {
@@ -118,7 +118,7 @@ namespace WixSharp.UI.Forms
                 // and adjust state according to feature condition.
                 //
                 var defaultState = (Convert.ToInt32(row["Level"]) <= installLevel) ? InstallState.Local : InstallState.Absent;
-                if (session.IsInstalling() 
+                if (session.IsInstalling()
                     && conditionRow?["Condition"] != null
                     && session.EvaluateCondition(conditionRow["Condition"].ToString())  // If condition is true...
                     && Convert.ToInt32(conditionRow["Level"]) <= installLevel)          // ...set state according to condition level.
@@ -154,7 +154,7 @@ namespace WixSharp.UI.Forms
         {
             var productCode = session["ProductCode"];
 
-            var installedPackage = new Microsoft.Deployment.WindowsInstaller.ProductInstallation(productCode);
+            var installedPackage = new ProductInstallation(productCode);
             if (installedPackage.IsInstalled)
                 return installedPackage.Features
                                        .First(x => x.FeatureName == name)
