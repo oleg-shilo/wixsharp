@@ -78,7 +78,7 @@ namespace $safeprojectname$
             BuildFeaturesHierarchy();
         }
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
         public string SelectedNodeDescription
         {

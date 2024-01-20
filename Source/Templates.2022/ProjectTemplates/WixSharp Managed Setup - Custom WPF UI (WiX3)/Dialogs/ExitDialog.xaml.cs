@@ -73,7 +73,7 @@ namespace $safeprojectname$
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Dialog").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Dialog").ToImageSource();
 
         public void GoExit()
             => shell?.Exit();

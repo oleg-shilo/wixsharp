@@ -114,7 +114,7 @@ namespace $safeprojectname$
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
         public bool UacPromptIsVisible => (!WindowsIdentity.GetCurrent().IsAdmin() && Uac.IsEnabled() && !uacPromptActioned);
 
