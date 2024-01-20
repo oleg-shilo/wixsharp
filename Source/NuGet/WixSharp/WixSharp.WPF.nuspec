@@ -27,7 +27,7 @@ The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
       <dependency id="WixSharp.bin" version="2.0.4.0" />
-      <dependency id="Caliburn.Micro" version="3.2.0" />
+      <dependency id="Caliburn.Micro" version="4.0.212" />
     </dependencies>
     <references>
       <reference file="WixSharp.UI.WPF.dll" />
