@@ -1145,14 +1145,24 @@
             <returns></returns>
         </member>
         <member name="M:WixSharp.InstallerRuntime.Localize(System.String)">
-            <summary>
-            Localizes the specified text.
-            <para>The localization is performed according two possible scenarios. The method will return the match form the MSI embedded localization file.
-            However if it cannot find the match the method will try to find the and return the match from the MSI session properties.</para>
-            <para>This method is mainly used by 'LocalizeWith' extension for a single step localization of WinForm controls.</para>
-            </summary>
-            <param name="text">The text.</param>
-            <returns></returns>
+             <summary>
+             Localizes the specified text.
+             <para>The localization is performed according two possible scenarios. The method will return the match form the MSI embedded localization file.
+             However if it cannot find the match the method will try to find the and return the match from the MSI session properties.</para>
+             <para>This method is mainly used by 'LocalizeWith' extension for a single step localization of WinForm controls.</para>
+             <remarks>
+             Note, this method is a single step localization routine and does not resolve any properties embedded in the localization result text
+             (e.g. "[ProductName] Setup"). For a deep/full localization it is better to use <see cref="M:WixSharp.UIExtensions.LocalizeWith(System.String,System.Func{System.String,System.String})"/>.
+             <para>IE: "[ProductName] Setup".LocalizeWith(MsiRuntime.Localize)</para>
+             <code>
+             Func&lt;string, string&gt; localizer = e.ManagedUI.Shell.MsiRuntime().Localize;
+            
+             var localizedText =  "[ProductName] Setup".LocalizeWith(localizer);
+             </code>
+             </remarks>
+             </summary>
+             <param name="text">The text.</param>
+             <returns></returns>
         </member>
         <member name="F:WixSharp.InstallerRuntime.ProductName">
             <summary>
@@ -1393,6 +1403,10 @@
             <remarks>
             Note that both localization entries and MSI properties must be enclosed in the square brackets
             (e.g. "[ProductName] Setup", "[InstallDirDlg_Title]").
+            <code>
+            Func&lt;string, string&gt; localizer = e.ManagedUI.Shell.MsiRuntime().Localize;
+            var localizedText =  "[ProductName] Setup".LocalizeWith(localizer);
+            </code>
             </remarks>
             </summary>
             <param name="textToLocalize">The text to localize.</param>

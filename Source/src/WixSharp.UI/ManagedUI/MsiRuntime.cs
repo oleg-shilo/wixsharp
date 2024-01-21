@@ -214,6 +214,7 @@ namespace WixSharp
         /// <para>IE: "[ProductName] Setup".LocalizeWith(MsiRuntime.Localize)</para>
         /// <code>
         /// Func&lt;string, string&gt; localizer = e.ManagedUI.Shell.MsiRuntime().Localize;
+        ///
         /// var localizedText =  "[ProductName] Setup".LocalizeWith(localizer);
         /// </code>
         /// </remarks>
