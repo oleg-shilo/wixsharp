@@ -1,3 +1,7 @@
+v2.2.0
+- #1429: Transparent Background for ManagedUI.WPF Dialog-Banner TextBlock Controls 
+- #1387: Cannot update to latest Caliburn.Micro
+
 v2.1.0
 - Made split on WiX3 vs WiX4 templates
 - Added Bootstrapper Custom BA templates

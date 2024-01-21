@@ -19,7 +19,6 @@
             Margin="-1,-1,-1,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Background="White"
             BorderBrush="Gray"
             BorderThickness="1">
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -37,7 +36,6 @@
                 <StackPanel Margin="9">
                     <TextBlock
                         Grid.Column="0"
-                        Background="White"
                         FontSize="12"
                         FontWeight="Bold">
                         [MaintenanceTypeDlgTitle]
@@ -46,7 +44,6 @@
                         x:Name="DialogDescription"
                         Margin="17,5"
                         VerticalAlignment="Stretch"
-                        Background="White"
                         TextWrapping="WrapWithOverflow">
                         [MaintenanceTypeDlgDescription]
                     </TextBlock>
@@ -138,8 +135,8 @@
                 <Button
                     x:Name="GoNext"
                     Height="23"
-                    IsEnabled="false"
-                    MinWidth="73">
+                    MinWidth="73"
+                    IsEnabled="false">
                     [WixUINext]
                 </Button>
                 <Separator Width="20" Opacity="0" />

@@ -20,6 +20,13 @@ updateWpfDialogs(
     @"..\..\src\WixSharp.UI.WPF\Dialogs",
     @"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI (WiX4)\Dialogs");
 
+foreach (var file in Directory.GetFiles(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI (WiX3)\Dialogs",
+        "*.xaml.cs"))
+{
+    var code = File.ReadAllText(file);
+    File.WriteAllText(file, code.Replace("\"WixSharpUI_Bmp", "\"WixUI_Bmp"));
+}
+
 "------------------------------------".print();
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup (WiX3)");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup (WiX4)");
