@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>1.24.1.0</version>
+    <version>1.24.2.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,18 +18,21 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>WiX3-Release v1.24.1.0
-- #1363: Shortcut to Dir/Folder
-- #1398: Underscore in String Id in wxl breaks localization
-- reverted experimental change for x86 bitness of WixSharp.UI. Now it's back to AnyCPU but SilentUI BA will no longer work. It's acceptable as it's better to set x86 on the user codebase (e.g. custom BA) than on generic lib (WixSharp.UI) and put bitness pressure on all users of this lib.
-- `WarnOnOutputPathCollision` changed from Warning to Error (continuation of #1384).
-- Extended cascading `Project.Platform` to `RegistrySearch` (triggered by #1390 discussion).
+    <releaseNotes>WiX3-Release v1.24.2.0
+
+- WiX3: improvements triggered by #1424
+- Feature condition support in managed UI #1430
+- Added support for condition evaluation and custom installlevel settings.
+- Issue #1405: Can't make LookupInstalledVersion work
+- added test case for Issue #1403
+- updated the WPF BA sample to show the solution for #1400
+- Enhancement #1401: Can't mark directory as permanent
 </releaseNotes>
     <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.24.1.0" />
+      <dependency id="WixSharp.bin" version="1.24.2.0" />
     </dependencies>
   </metadata>
   <files>
