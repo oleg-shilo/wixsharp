@@ -2140,7 +2140,7 @@ namespace WixSharp.CommonTasks
     /// </summary>
     public static class WixTools
     {
-        static internal string NuGetDir => @"%userprofile%\.nuget\packages".ExpandEnvVars();
+        static internal string NuGetDir => Environment.GetEnvironmentVariable("NUGET_PACKAGES") ?? @"%userprofile%\.nuget\packages".ExpandEnvVars();
         static internal string WixSharpToolDir => @"%userprofile%\.wix\.wixsharp".ExpandEnvVars();
         static internal string WixExtensionsDir => @"%userprofile%\.wix\extensions".ExpandEnvVars();
 
