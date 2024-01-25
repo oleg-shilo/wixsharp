@@ -6,8 +6,16 @@ using System.Threading;
 
 namespace WixSharp
 {
+    /// <summary>
+    /// Container for signing context as well as the implementation of the signing algotrithm (<see cref="IDigitalSignature.Apply(string)"/> ).
+    /// </summary>
     public interface IDigitalSignature
     {
+        /// <summary>
+        /// Applies digital signature to a file
+        /// </summary>
+        /// <param name="fileToSign">The file to sign.</param>
+        /// <returns>Exit code of the signing tool.</returns>
         int Apply(string fileToSign);
     }
 

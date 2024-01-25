@@ -116,7 +116,7 @@ namespace WixSharp.Bootstrapper
         public string Condition;
 
         /// <summary>
-        /// Parameters of digitally sign
+        /// The implementation of the digital signing algorithm
         /// </summary>
         public IDigitalSignature DigitalSignature;
 
