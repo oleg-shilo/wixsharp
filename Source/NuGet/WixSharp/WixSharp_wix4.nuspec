@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp_wix4</id>
-    <version>2.0.5.0</version>
+    <version>2.0.6.0-pre</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,17 +18,16 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed: `dotnet tool install --global wix`
 The package is tested against WIX (Windows Installer Xml) Toolset v4.0.1.0</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.0.5.0
-- Feature condition support in managed UI #1430
-- Added support for condition evaluation and custom installlevel settings.
-- Issue #1431: Hidden NullReferenceException in Extensions.GetEmbeddedData
-- Enhancement #1401: Can't mark directory as permanent
+    <releaseNotes>WiX4-Pre-release v2.0.6.0-pre
+- #1436: NuGet config variable "globalPackagesFolder" is ignored
+- #1428: [Question] SetNetPrerequirements to NET 7 or better
+         Updated SetNetPrerequirements to allow using new WiX4 `DotNetCompatibilityCheck`
 </releaseNotes>
     <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp_wix4.bin" version="2.0.5.0" />
+      <dependency id="WixSharp_wix4.bin" version="2.0.6.0-pre" />
     </dependencies>
   </metadata>
   <files>
