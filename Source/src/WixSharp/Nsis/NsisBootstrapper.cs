@@ -116,7 +116,7 @@ namespace WixSharp.Nsis
         /// <summary>
         /// Gets or sets digital signature parameters for the bootstrapper.
         /// </summary>
-        public DigitalSignature DigitalSignature { get; set; }
+        public IDigitalSignature DigitalSignature { get; set; }
 
         /// <summary>
         /// Allows to validate Windows version
@@ -129,7 +129,7 @@ namespace WixSharp.Nsis
         /// </summary>
         // ReSharper disable once InconsistentNaming
         public OSValidation OSValidation { get; } = new OSValidation();
-        
+
         /// <summary>
         /// Gets or sets Compressor which is used for specifying Compression level via SetCompressor NSIS command
         /// </summary>
@@ -189,7 +189,7 @@ namespace WixSharp.Nsis
                 {
                     writer.WriteLine(Compressor.ToString());
                 }
-                
+
                 writer.WriteLine("Unicode true");
                 writer.WriteLine("ManifestSupportedOS all");
 
@@ -219,7 +219,7 @@ namespace WixSharp.Nsis
                 {
                     writer.Write(versionCheckScript);
                 }
-                
+
                 AddSplashScreen(writer);
 
                 AddPrerequisiteFile(writer, regRootKey, regSubKey, regValueName);
@@ -264,7 +264,7 @@ namespace WixSharp.Nsis
             writer.WriteLine("!include LogicLib.nsh");
             writer.WriteLine("!include x64.nsh");
             writer.WriteLine("!include FileFunc.nsh");
-            
+
             if (OSValidation.Any)
             {
                 writer.WriteLine("!include WinVer.nsh");
@@ -519,12 +519,16 @@ namespace WixSharp.Nsis
             {
                 case RequestExecutionLevel.None:
                     return "none";
+
                 case RequestExecutionLevel.RunAsInvoker:
                     return "user";
+
                 case RequestExecutionLevel.HighestAvailable:
                     return "highest";
+
                 case RequestExecutionLevel.RequireAdministrator:
                     return "admin";
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
