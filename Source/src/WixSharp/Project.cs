@@ -183,9 +183,11 @@ namespace WixSharp
         public string Description = "";
 
         /// <summary>
-        /// Parameters of digitally sign of this project
+        /// Parameters of digitally sign of this project.
+        /// <para>You can overwrite signing algorithm by implementing
+        /// <see cref="IDigitalSignature"/> in your own user defined class.</para>
         /// </summary>
-        public DigitalSignature DigitalSignature;
+        public IDigitalSignature DigitalSignature;
 
         internal virtual void Preprocess()
         {

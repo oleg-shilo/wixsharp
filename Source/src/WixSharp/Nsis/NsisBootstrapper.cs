@@ -115,8 +115,10 @@ namespace WixSharp.Nsis
 
         /// <summary>
         /// Gets or sets digital signature parameters for the bootstrapper.
+        /// <para>You can overwrite signing algorithm by implementing
+        /// <see cref="IDigitalSignature"/> in your own user defined class.</para>
         /// </summary>
-        public DigitalSignature DigitalSignature { get; set; }
+        public IDigitalSignature DigitalSignature { get; set; }
 
         /// <summary>
         /// Allows to validate Windows version

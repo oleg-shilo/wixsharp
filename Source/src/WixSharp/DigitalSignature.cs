@@ -6,10 +6,15 @@ using System.Threading;
 
 namespace WixSharp
 {
+    public interface IDigitalSignature
+    {
+        int Apply(string fileToSign);
+    }
+
     /// <summary>
     /// Container with the parameters of the digital signature
     /// </summary>
-    public class DigitalSignature
+    public class DigitalSignature1 : IDigitalSignature
     {
         private SecureString _password;
 

@@ -5,7 +5,7 @@ namespace WixSharp
     /// <summary>
     /// Container with the parameters of the digital signature of the Bootstrapper
     /// </summary>
-    public class DigitalSignatureBootstrapper : DigitalSignature
+    public class DigitalSignatureBootstrapper : DigitalSignature1
     {
         /// <summary>
         /// Applies digital signature to a Bootstrapper file

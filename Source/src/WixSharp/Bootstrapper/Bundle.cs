@@ -118,7 +118,7 @@ namespace WixSharp.Bootstrapper
         /// <summary>
         /// Parameters of digitally sign
         /// </summary>
-        public DigitalSignatureBootstrapper DigitalSignature;
+        public IDigitalSignature DigitalSignature;
 
         /// <summary>
         /// Determines whether the bundle can be removed via the Programs and Features (also known as Add/Remove Programs). If the value is
