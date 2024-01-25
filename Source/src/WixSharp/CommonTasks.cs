@@ -1423,6 +1423,34 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Sets the .Net prerequisite. This routine is based on `netfx:DotNetCompatibilityCheck` element
+        /// (https://wixtoolset.org/docs/schema/netfx/dotnetcompatibilitycheck/).
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="version">The version.</param>
+        /// <param name="runtimeType">Type of the runtime.</param>
+        /// <param name="rollForward">The roll forward.</param>
+        /// <param name="platform">The platform.</param>
+        /// <param name="errorMessage">The error message.</param>
+        /// <returns></returns>
+        static public Project SetNetPrerequisite(this WixSharp.Project project, string version, RuntimeType runtimeType, RollForward rollForward, Platform platform, string errorMessage = null)
+        {
+            var condition = Condition.Create("Installed OR DotNetCheckResult = 0");
+            string message = errorMessage ?? $"Please install .NET version {version} first.";
+
+            project.LaunchConditions.Add(new LaunchCondition(condition, message));
+
+            project.WixSourceGenerated += doc =>
+                doc.FindFirst("Package").AddElement(
+                    WixExtension.NetFx.ToXName("DotNetCompatibilityCheck"),
+                    $"Property=DotNetCheckResult; RuntimeType={runtimeType}; Version={version}; RollForward={rollForward}; Platform={platform}");
+
+            project.Include(WixExtension.NetFx);
+
+            return project;
+        }
+
+        /// <summary>
         /// Adds the XML fragment to the element specified by <c>placementPath</c>.
         /// <para>Note <c>placementPath</c> can only contain forward slashes.</para>
         /// <example>

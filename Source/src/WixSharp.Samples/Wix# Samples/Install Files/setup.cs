@@ -12,7 +12,7 @@ using System.Xml.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
 
-class Script
+static class Script
 {
     static public void Main()
     {
@@ -48,6 +48,8 @@ class Script
         // project.PreserveTempFiles = true;
         // project.PreserveDbgFiles = true;
 
+        project.SetNetPrerequisite("7.0.0", RuntimeType.desktop, RollForward.minor, Platform.x64);
+
         project.EnableUninstallFullUI();
         project.EnableResilientPackage();
 
@@ -66,4 +68,21 @@ class Script
                 .Single(x => x.HasAttribute("Id", value => value.Contains("MyApp_file")))
                 .AddElement("CreateFolder/Permission", "User=Everyone;GenericAll=yes");
     }
+
+    // static public Project SetNetPrerequisite(this WixSharp.Project project, string version, string runtimeType, string rollForward, string platform, string errorMessage = null)
+    // {
+    //     var condition = Condition.Create("Installed OR DotNetCheckResult = 0");
+    //     string message = errorMessage ?? $"Please install .NET version {version} first.";
+
+    //     project.LaunchConditions.Add(new LaunchCondition(condition, message));
+
+    //     project.WixSourceGenerated += doc =>
+    //         doc.FindFirst("Package").AddElement(
+    //             WixExtension.NetFx.ToXName("DotNetCompatibilityCheck"),
+    //             $"Property=DotNetCheckResult; RuntimeType={runtimeType}; Version={version}; RollForward={rollForward}; Platform={platform}");
+
+    //     project.Include(WixExtension.NetFx);
+
+    //     return project;
+    // }
 }

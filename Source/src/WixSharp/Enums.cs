@@ -374,6 +374,35 @@ namespace WixSharp
     }
 
     /// <summary>
+    /// The roll forward policy to use while validating.
+    /// <para>
+    /// To be used with DotNetCompatibilityCheck element (Netfx extension).
+    /// </para>
+    /// </summary>
+    public enum RollForward
+    {
+        latestMajor,
+        major,
+        latestMinor,
+        minor,
+        latestPatch,
+        disable
+    }
+
+    /// <summary>
+    /// The .NET runtime to check against.
+    /// <para>
+    /// To be used with DotNetCompatibilityCheck element (Netfx extension).
+    /// </para>
+    /// </summary>
+    public enum RuntimeType
+    {
+        aspnet,
+        core,
+        desktop
+    }
+
+    /// <summary>
     /// Indicates the compression level for a cabinet.
     /// </summary>
     public enum CompressionLevel
