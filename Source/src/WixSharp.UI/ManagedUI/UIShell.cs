@@ -185,6 +185,13 @@ namespace WixSharp
                 {
                     if (currentViewIndex >= 0 && currentViewIndex < Dialogs.Count)
                     {
+                        Form oldForm = shellView.Controls.OfType<Form>().FirstOrDefault();
+
+                        if (oldForm != null)
+                        {
+                            oldForm.TextChanged -= View_TextChanged;
+                        }
+
                         shellView.ClearChildren();
 
                         Type viewType = Dialogs[currentViewIndex];
@@ -242,12 +249,13 @@ namespace WixSharp
                         shellView.Text = view.Text; // the title is already set in `SetDialogContent` for WPF but for winform dialogs
                                                     // it needs to be set now
 
-                        if (shellView is ShellView)
-                        {
-                            (shellView as ShellView).CurrentDialog = CurrentDialog;
-                            (shellView as ShellView).RaiseCurrentDialogChanged(CurrentDialog);
-                        }
+                        view.TextChanged += View_TextChanged;
 
+                        if (shellView is ShellView sv)
+                        {
+                            sv.CurrentDialog = CurrentDialog;
+                            sv.RaiseCurrentDialogChanged(CurrentDialog);
+                        }
                         try
                         {
                             Runtime.Session["WIXSHARP_RUNTIME_DATA"] = Runtime.Data.Serialize();
@@ -256,6 +264,14 @@ namespace WixSharp
                     }
                 }
                 catch { }
+            }
+        }
+
+        void View_TextChanged(object sender, EventArgs e)
+        {
+            if (sender is Form view)
+            {
+                this.shellView.Text = view.Text;
             }
         }
 
