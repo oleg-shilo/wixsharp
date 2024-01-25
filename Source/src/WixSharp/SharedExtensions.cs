@@ -99,16 +99,6 @@ namespace WixSharp
             }
         }
 
-#pragma warning disable CS0419 // Ambiguous reference in cref attribute
-
-        /// <summary>
-        /// Equivalent of <see cref="Path.Combine"/>.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="items"></param>
-        /// <returns></returns>
-#pragma warning restore CS0419 // Ambiguous reference in cref attribute
-
         /// <summary>
         /// Gets the environment variable by the `name`.
         /// </summary>
@@ -118,6 +108,12 @@ namespace WixSharp
         public static string GetEnvVar(this string name, string defaultValue = null)
             => Environment.GetEnvironmentVariable(name) ?? defaultValue;
 
+        /// <summary>
+        /// Equivalent of <see cref="Path.Combine(string[])"/>.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
         public static string PathJoin(this string path, params string[] items)
         {
             foreach (var item in items)

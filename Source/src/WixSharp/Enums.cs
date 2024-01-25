@@ -381,6 +381,8 @@ namespace WixSharp
     /// </summary>
     public enum RollForward
     {
+        // no WiX4 documentation is available for the values
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         latestMajor,
         major,
         latestMinor,
@@ -397,10 +399,14 @@ namespace WixSharp
     /// </summary>
     public enum RuntimeType
     {
+        // mo WiX4 documentation is available for the values
         aspnet,
+
         core,
         desktop
     }
+
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
     /// <summary>
     /// Indicates the compression level for a cabinet.

@@ -44,6 +44,14 @@
             <param name="defaultValue">The default value.</param>
             <returns></returns>
         </member>
+        <member name="M:WixSharp.Msi.Extensions.PathJoin(System.String,System.String[])">
+            <summary>
+            Equivalent of <see cref="M:System.IO.Path.Combine(System.String[])"/>.
+            </summary>
+            <param name="path"></param>
+            <param name="items"></param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.Msi.Extensions.PathGetDirName(System.String)">
             <summary>
             Identical to <see cref="M:System.IO.Path.GetDirectoryName(System.String)"/>. It is useful for Wix# consuming code as it allows avoiding

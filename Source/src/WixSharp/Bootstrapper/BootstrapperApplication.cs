@@ -411,6 +411,9 @@ namespace WixSharp.Bootstrapper
         public Variable[] Variables = new Variable[0];
     }
 
+    /// <summary>
+    /// PayloadGeneration string enum
+    /// </summary>
     public class PayloadGeneration : StringEnum<PayloadGeneration>
     {
         /// <summary>
