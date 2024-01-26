@@ -16,22 +16,22 @@ _In July 2014 Wix# was migrated to CodePlex [Wix#](https://wixsharp.codeplex.com
 
 ## Project Description
 
-Wix# (WixSharp) is a member in the [CS-Script](https://www.cs-script.net/) family. Wix# allows building a complete MSI or WiX source code by executing script files written with 
-the plain C# syntax. Wix# engine uses a C# class structure to mimic WiX entities and their relationships in order to produce a valid deployment model.
+Wix# (WixSharp) is a member of the [CS-Script](https://www.cs-script.net/) family. Wix# allows building a complete MSI or WiX source code by executing script files written with 
+the plain C# syntax. Wix# engine uses a C# class structure to mimic WiX entities and their relationships to produce a valid deployment model.
 
-Wix# answers many MSI authoring challenges. It solves the common MSI/WiX authoring limitations in a very elegant and yet unorthodox way. Wix# follows the steps of other 
+Wix# answers many MSI authoring challenges. It solves the common MSI/WiX authoring limitations in a very elegant yet unorthodox way. Wix# follows the steps of other 
 [transcompilers](http://en.wikipedia.org/wiki/Source-to-source_compiler) like Script#, CoffeeScript or GWT by using source code of a more manageable syntax (C# in this case) to produce 
 the desired source code of a less manageable syntax (WiX). A "more manageable syntax" in this context means less verbose and more readable code, better compile-time error checking and 
 availability of more advanced tools.
 
-Wix# also removes necessity to develop MSI sub-modules (Custom Actions) in the completely different language (e.g. C++) by allowing both the components and behaviour to be defined in the 
+Wix# also removes the necessity to develop MSI sub-modules (Custom Actions) in a completely different language (e.g. C++) by allowing both the components and behaviour to be defined in the 
 same language (C#). This also allows homogeneous, simplified and more consistent source code structure.
 
 **_Overview_**
 
-If you are planing to use Wix# on Linux you may find this [article](https://github.com/oleg-shilo/wixsharp/wiki/WixSharp-on-Linux) being useful. Please note that Wix# builds MSI deployment packages and while MSI can be build on Linux it cannot be run on Linux as MSI is a pure Windows technology.   
+If you are planning to use Wix# on Linux you may find this [article](https://github.com/oleg-shilo/wixsharp/wiki/WixSharp-on-Linux) useful. Please note that Wix# builds MSI deployment packages and while MSI can be built on Linux it cannot be run on Linux as MSI is a pure Windows technology.   
 
-Please note that WixSharp NuGet packages are targeting .NET Framework only. This is due to the fact that WiX does not support integration with anoy other .NET flavours but .NET Framework only. 
+Please note that WixSharp NuGet packages are targeting .NET Framework only. This is because WiX does not support integration with any other .NET flavours but .NET Framework only. 
 
 You can find the instructions on how to author MSI setups with WixSharp in the [Documentation](https://github.com/oleg-shilo/wixsharp/wiki) section. And this section only highlights 
 some of the available features.
@@ -42,7 +42,7 @@ some of the available features.
 > _Alternatively you can install ["WixSharp Project Templates"](https://visualstudiogallery.msdn.microsoft.com/4e093ce7-be66-40ed-ab16-61a1186c530e) Visual Studio extension. Read more 
 about the Wix# VS templates [here](https://github.com/oleg-shilo/wixsharp/wiki/VS2013-%E2%80%93-2015-Templates)._
 
-Wix# allows very simple and expressive deployment definition. This is an example of a simple Wix# script:
+Wix# allows a very simple and expressive deployment definition. This is an example of a simple Wix# script:
 ```C#
 using System;
 using WixSharp;
