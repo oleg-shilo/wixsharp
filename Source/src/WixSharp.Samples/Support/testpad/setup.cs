@@ -93,6 +93,7 @@ static class Script
             UI = WUI.WixUI_ProgressOnly,
             Name = "CustomActionTest"
         };
+
         var test = new ManagedAction(
             CustomActions.MyAction, Return.check, When.After, Step.InstallFinalize, Condition.NOT_Installed);
         testProject.AddAction(test);

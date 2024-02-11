@@ -1,8 +1,8 @@
 //css_dir ..\..\;
+//css_ref WixSharp.UI.dll;
 //css_ref System.Core.dll;
 //css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
 using System;
-using static System.Collections.Specialized.BitVector32;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
