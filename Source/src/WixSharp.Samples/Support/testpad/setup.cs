@@ -5,6 +5,7 @@ using System.Diagnostics;
 
 // using System.IO;
 using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 using System.Security.Principal;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -83,6 +84,19 @@ static class Script
 
         var wix = System.IO.File.ReadAllText(project.BuildWxs());
         Console.WriteLine(wix);
+    }
+
+    static void issue_1449()
+    {
+        var testProject = new Project()
+        {
+            UI = WUI.WixUI_ProgressOnly,
+            Name = "CustomActionTest"
+        };
+        var test = new ManagedAction(
+            CustomActions.MyAction, Return.check, When.After, Step.InstallFinalize, Condition.NOT_Installed);
+        testProject.AddAction(test);
+        Compiler.BuildMsi(testProject);
     }
 
     static void issue_386()
@@ -480,22 +494,7 @@ static class Script
 
     static public void Main()
     {
-        issue_1372(); return;
-        issue_1373(); return;
-        issue_1336(); return;
-        issue_1075(); return;
-        issue_298(); return;
-        issue_1114(); return;
-        issue_865(); return;
-        issue_825(); return;
-        issue_609(); return;
-        issue_551(); return;
-        issue_606(); return;
-        issue_377(); return;
-        issue_440(); return;
-        issue_386(); return;
-        issue_378(); return;
-        issue_374(); return;
+        issue_1449(); return;
         // Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = true;
 
         var serverFeature = new Feature("Server");
