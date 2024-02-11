@@ -1801,8 +1801,10 @@ namespace WixSharp
         /// </summary>
         /// <typeparam name="TSource">The type of the T source.</typeparam>
         /// <param name="source">The source.</param>
+        /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns></returns>
-        public static bool None<TSource>(this IEnumerable<TSource> source) => !source.Any();
+        public static bool None<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate = null)
+            => predicate != null ? !source.Any(predicate) : !source.Any();
 
         /// <summary>
         /// Determines if the collection contains a single item.

@@ -536,7 +536,9 @@ namespace WixSharp
 
             string batchFile = path;
 
-            if (ExternalTool.Locate("wix.exe") == null)
+            var exe = ExternalTool.Locate("wix.exe");
+
+            if (exe == null)
             {
                 var error = "`wix.exe` cannot be found. Ensure you installed it with `dotnet tool install --global wix`";
                 Compiler.OutputWriteLine("Error: " + error);
@@ -554,8 +556,7 @@ namespace WixSharp
             using (var sw = new IO.StreamWriter(batchFile))
             {
                 sw.WriteLine("echo off");
-
-                sw.WriteLine($"wix build {wixCmd} -o \"{outDir.PathJoin(msiFile)}\"");
+                sw.WriteLine($"{exe.Replace("localtool:", "dotnet")} build {wixCmd} -o \"{outDir.PathJoin(msiFile)}\"");
             }
         }
 
@@ -693,9 +694,9 @@ namespace WixSharp
             {
                 // System.Diagnostics.Debug.Assert(false);
                 Compiler.TempFiles.Clear();
-                string compiler = "wix";
+                string compiler = ExternalTool.Locate("wix.exe");
 
-                if (ExternalTool.Locate("wix.exe") == null)
+                if (compiler == null)
                 {
                     var error = "`wix.exe` cannot be found. Ensure you installed it with `dotnet tool install --global wix`";
                     Compiler.OutputWriteLine("Error: " + error);
@@ -3293,11 +3294,14 @@ namespace WixSharp
             makeSfxCA_args += $" \"{dtfWinInstaller}\"";
 
             ProjectValidator.ValidateCAAssembly(asmFile);
-#if DEBUG
-            Compiler.OutputWriteLine($"<- Packing managed CA ({asmFile.PathGetFileName()}):");
-            Compiler.OutputWriteLine(makeSfxCA + " " + makeSfxCA_args);
-            Compiler.OutputWriteLine("->");
-#endif
+
+            if (Compiler.VerboseOutput)
+            {
+                Compiler.OutputWriteLine($"<- Packing managed CA ({asmFile.PathGetFileName()}):");
+                Compiler.OutputWriteLine(makeSfxCA + " " + makeSfxCA_args);
+                Compiler.OutputWriteLine("->");
+            }
+
             if (batchFile == null)
             {
                 Run(makeSfxCA, makeSfxCA_args);
@@ -3475,15 +3479,28 @@ namespace WixSharp
 
         internal static object WiX_Tools = new object();
 
-        internal static void Run(string file, string args, string workingDir = null)
+        internal static void Run(string exe, string args, string workingDir = null)
         {
             lock (WiX_Tools)
             {
-                Trace.WriteLine("\"" + file + "\" " + args);
+                string file = exe.IsAbsolutePath() ? exe : ExternalTool.Locate(exe);
 
                 Process p = new Process();
-                p.StartInfo.FileName = file;
-                p.StartInfo.Arguments = args;
+
+                if (file.StartsWith("localtool:"))
+                {
+                    var toolName = file.Split(':').Last();
+                    p.StartInfo.FileName = "dotnet";
+                    p.StartInfo.Arguments = $"{toolName} {args}";
+                }
+                else
+                {
+                    p.StartInfo.FileName = file;
+                    p.StartInfo.Arguments = args;
+                }
+
+                Trace.WriteLine("\"" + p.StartInfo.FileName + "\" " + p.StartInfo.Arguments);
+
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.WorkingDirectory = workingDir ?? Environment.CurrentDirectory;
                 p.StartInfo.RedirectStandardOutput = true;

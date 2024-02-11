@@ -82,9 +82,9 @@ namespace WixSharp
                 //System.Diagnostics.Debug.Assert(false);
                 Compiler.TempFiles.Clear();
 
-                string compiler = "wix";
+                string compiler = ExternalTool.Locate("wix.exe");
 
-                if (ExternalTool.Locate("wix.exe") == null)
+                if (compiler == null)
                 {
                     var error = "`wix.exe` cannot be found. Ensure you installed it with `dotnet tool install --global wix`";
                     Compiler.OutputWriteLine("Error: " + error);

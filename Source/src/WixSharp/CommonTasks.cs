@@ -361,7 +361,8 @@ namespace WixSharp.CommonTasks
         {
             string enginePath = IO.Path.GetTempFileName();
 
-            if (ExternalTool.Locate("wix.exe") == null)
+            string wix = ExternalTool.Locate("wix.exe");
+            if (wix == null)
             {
                 var error = "`wix.exe` cannot be found. Ensure you installed it with `dotnet tool install --global wix`";
                 Compiler.OutputWriteLine("Error: " + error);
@@ -371,7 +372,8 @@ namespace WixSharp.CommonTasks
             try
             {
                 // First detach the engine from the bundle
-                Compiler.Run("wix", "burn detach \"{0}\" -engine \"{1}\"".FormatWith(bootstrapperFileToSign, enginePath));
+
+                Compiler.Run("wix.exe", "burn detach \"{0}\" -engine \"{1}\"".FormatWith(bootstrapperFileToSign, enginePath));
 
                 if (!IO.File.Exists(enginePath))
                     throw new Exception($"The supposedly detached engine file appears to be missing. Expected location: '{enginePath}'");
@@ -382,7 +384,7 @@ namespace WixSharp.CommonTasks
                     return retval;
 
                 // Finally reattach the signed engine to the bundle
-                Compiler.Run("wix", "burn reattach \"{0}\" -engine \"{1}\" -o \"{0}\"".FormatWith(bootstrapperFileToSign, enginePath));
+                Compiler.Run("wix.exe", "burn reattach \"{0}\" -engine \"{1}\" -o \"{0}\"".FormatWith(bootstrapperFileToSign, enginePath));
 
                 return 0;
             }
@@ -1870,8 +1872,38 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         public static string Locate(string file)
         {
+            if (file.PathGetFileNameWithoutExtension() == "wix" &&
+                file.PathGetDirName().IsEmpty() &&
+                IsLocalTool("wix")) // currently we expect only wix.exe to be a local tool
+            {
+                // a special case as it can be installed as a global tool (location is listed in PATH)
+                // or it can be specially versioned wix.exe based on the presence of dotnet-tools.json
+                // file in one of current dir the parent folders.
+                // Such tool installation is called `local`. Of course it is still globally installed but
+                // it is local with respect to invoking it from the current dir.
+
+                return "localtool:wix";
+            }
+
             var possibleLocations = defaultLookupDirs.Select(x => x.Trim().PathCombine(file));
             return possibleLocations.FirstOrDefault(IO.File.Exists);
+        }
+
+        static bool IsLocalTool(string tool)
+        {
+            var probingDir = Environment.CurrentDirectory;
+            do
+            {
+                var toolManifest = probingDir.PathJoin(".config", "dotnet-tools.json");
+                if (toolManifest.FileExists())
+                {
+                    if (IO.File.ReadAllLines(toolManifest).Select(x => x.Trim()).Any(x => x == "\"wix\": {"))
+                        return true; // contains wix configuration
+                }
+                probingDir = probingDir.PathGetDirName();
+            } while (probingDir.PathGetFileName().IsNotEmpty()); // not the root dir of the drive
+
+            return false;
         }
 
         /// <summary>
@@ -2271,7 +2303,7 @@ namespace WixSharp.CommonTasks
         internal static void EnsureWixExtension(string name)
         {
             if (!Directory.Exists(WixExtensionsDir.PathCombine(name)))
-                Compiler.Run("wix", $"extension add -g {name}");
+                Compiler.Run("wix.exe", $"extension add -g {name}");
         }
 
         internal static void EnsureDtfTool(string package = null)
