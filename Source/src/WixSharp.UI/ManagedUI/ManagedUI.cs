@@ -301,26 +301,36 @@ namespace WixSharp
 
                     var uiThread = new Thread(() =>
                     {
-                        session["WIXSHARP_MANAGED_UI"] = System.Reflection.Assembly.GetExecutingAssembly().ToString();
-                        shell = new UIShell(); //important to create the instance in the same thread that call ShowModal
-                        shell.ShowModal(
-                            new MsiRuntime(session)
-                            {
-                                StartExecute = () => startEvent.Set(),
-                                CancelExecute = () =>
+                        try
+                        {
+                            session["WIXSHARP_MANAGED_UI"] = System.Reflection.Assembly.GetExecutingAssembly().ToString();
+                            shell = new UIShell(); //important to create the instance in the same thread that call ShowModal
+                            shell.ShowModal(
+                                new MsiRuntime(session)
                                 {
-                                    // NOTE: IEmbeddedUI interface has no way to cancel the installation, which has been started
-                                    // (e.g. ProgressDialog is displayed). What is even worse is that UI can pass back to here
-                                    // a signal the user pressed 'Cancel' but nothing we can do with it. Install is already started
-                                    // and session object is now invalid.
-                                    // To solve this we use this work around - set a unique "cancel request mutex" form here
-                                    // and ManagedProjectActions.CancelRequestHandler built-in CA will pick the request and yield
-                                    // return code UserExit.
-                                    cancelRequest = new Mutex(true, "WIXSHARP_UI_CANCEL_REQUEST." + upgradeCode);
-                                }
-                            },
-                            this);
-                        uiExitEvent.Set();
+                                    StartExecute = () => startEvent.Set(),
+                                    CancelExecute = () =>
+                                    {
+                                        // NOTE: IEmbeddedUI interface has no way to cancel the installation, which has been started
+                                        // (e.g. ProgressDialog is displayed). What is even worse is that UI can pass back to here
+                                        // a signal the user pressed 'Cancel' but nothing we can do with it. Install is already started
+                                        // and session object is now invalid.
+                                        // To solve this we use this work around - set a unique "cancel request mutex" form here
+                                        // and ManagedProjectActions.CancelRequestHandler built-in CA will pick the request and yield
+                                        // return code UserExit.
+                                        cancelRequest = new Mutex(true, "WIXSHARP_UI_CANCEL_REQUEST." + upgradeCode);
+                                    }
+                                },
+                                this);
+                            uiExitEvent.Set();
+                        }
+                        catch (Exception e)
+                        {
+                            ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
+                            session.Log("ManagedUI unhandled Exception: " + e);
+
+                            uiExitEvent.Set();
+                        }
                     });
 
                     uiThread.SetApartmentState(ApartmentState.STA);
@@ -329,7 +339,7 @@ namespace WixSharp
                     int waitResult = WaitHandle.WaitAny(new[] { startEvent, uiExitEvent });
                     if (waitResult == 1)
                     {
-                        //UI exited without starting the install. Cancel the installation.
+                        // UI exited without starting the install. Cancel the installation.
                         throw new InstallCanceledException();
                     }
                     else
@@ -341,8 +351,13 @@ namespace WixSharp
                         return true;
                     }
                 }
+                catch (InstallCanceledException)
+                {
+                    throw;
+                }
                 catch (Exception e)
                 {
+                    ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
                     session.Log("Cannot attach ManagedUI: " + e);
                     throw;
                 }

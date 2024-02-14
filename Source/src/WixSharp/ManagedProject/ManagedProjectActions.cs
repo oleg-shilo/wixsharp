@@ -22,14 +22,22 @@ namespace WixSharp
         [CustomAction]
         public static ActionResult WixSharp_InitRuntime_Action(Session session)
         {
-            // Debugger.Launch();
-            if (session.Property("FOUNDPREVIOUSVERSION").IsEmpty())
-                session["FOUNDPREVIOUSVERSION"] = session.LookupInstalledVersion()?.ToString();
+            try
+            {
+                // Debugger.Launch();
+                if (session.Property("FOUNDPREVIOUSVERSION").IsEmpty())
+                    session["FOUNDPREVIOUSVERSION"] = session.LookupInstalledVersion()?.ToString();
 
-            if (session["MsiLogFileLocation"].IsNotEmpty())
-                Environment.SetEnvironmentVariable("MsiLogFileLocation", session.Property("MsiLogFileLocation"));
+                if (session["MsiLogFileLocation"].IsNotEmpty())
+                    Environment.SetEnvironmentVariable("MsiLogFileLocation", session.Property("MsiLogFileLocation"));
 
-            return ManagedProject.Init(session);
+                return ManagedProject.Init(session);
+            }
+            catch (Exception e)
+            {
+                ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
+                throw;
+            }
         }
 
         /// <summary>

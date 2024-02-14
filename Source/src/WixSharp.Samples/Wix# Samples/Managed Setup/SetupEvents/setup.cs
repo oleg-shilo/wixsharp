@@ -4,7 +4,6 @@
 //css_ref System.Core;
 //css_ref System.Xml;
 
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,6 +16,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 
@@ -84,26 +84,35 @@ public static class Script
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.PreserveTempFiles = true;
 
+        project.UnhandledException += Project_UnhandledException;
+
         Compiler.BuildMsi(project);
+    }
+
+    private static void Project_UnhandledException(ExceptionEventArgs e)
+    {
+        MessageBox.Show("Project_UnhandledException");
     }
 
     static void Project_UIInitialized(SetupEventArgs e)
     {
         // just an example of restarting the setup UI elevated. Old fashioned but... convenient and reliable.
-        if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
-        {
-            MessageBox.Show(e.Session.GetMainWindow(), "You must start the msi file as admin");
-            e.Result = ActionResult.Failure;
+        // if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
+        // {
+        //     MessageBox.Show(e.Session.GetMainWindow(), "You must start the msi file as admin");
+        //     e.Result = ActionResult.Failure;
 
-            var startInfo = new ProcessStartInfo();
-            startInfo.UseShellExecute = true;
-            startInfo.WorkingDirectory = Environment.CurrentDirectory;
-            startInfo.FileName = "msiexec.exe";
-            startInfo.Arguments = "/i \"" + e.MsiFile + "\"";
-            startInfo.Verb = "runas";
+        //     var startInfo = new ProcessStartInfo();
+        //     startInfo.UseShellExecute = true;
+        //     startInfo.WorkingDirectory = Environment.CurrentDirectory;
+        //     startInfo.FileName = "msiexec.exe";
+        //     startInfo.Arguments = "/i \"" + e.MsiFile + "\"";
+        //     startInfo.Verb = "runas";
 
-            Process.Start(startInfo);
-        }
+        //     Process.Start(startInfo);
+        // }
+
+        // throw new Exception("test3");
     }
 
     [CustomAction]
@@ -127,6 +136,7 @@ public static class Script
         //                                              .GetValue("Path")
         //                                              .ToString();
 
+        throw new Exception("test2");
         SetEnvVersion(e.Session);
     }
 

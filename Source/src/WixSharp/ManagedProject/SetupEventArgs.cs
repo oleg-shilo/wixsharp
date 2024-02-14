@@ -10,6 +10,28 @@ namespace WixSharp
     /// <summary>
     ///
     /// </summary>
+    public class ExceptionEventArgs
+    {
+        /// <summary>
+        /// Gets or sets the exception.
+        /// </summary>
+        /// <value>
+        /// The exception.
+        /// </value>
+        public Exception Exception { get; set; }
+
+        /// <summary>
+        /// Gets or sets the MSI session object.
+        /// </summary>
+        /// <value>
+        /// The session.
+        /// </value>
+        public Session Session { get; set; }
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
     public class SetupEventArgs
     {
         /// <summary>

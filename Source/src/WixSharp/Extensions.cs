@@ -3965,6 +3965,15 @@ namespace WixSharp
         public string Namespace { get; set; }
     }
 
+    static class ReflectionExtensions
+    {
+        public static object Call(this MethodInfo method, params object[] args)
+        {
+            object instance = method.IsStatic ? null : Activator.CreateInstance(method.DeclaringType);
+            return method.Invoke(instance, args);
+        }
+    }
+
     /// <summary>
     /// Extension methods for <see cref="System.Diagnostics.Process"/>
     /// </summary>

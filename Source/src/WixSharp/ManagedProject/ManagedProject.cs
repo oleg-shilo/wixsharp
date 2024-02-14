@@ -136,6 +136,17 @@ namespace WixSharp
         public delegate void SetupEventHandler(SetupEventArgs e);
 
         /// <summary>
+        /// Occurs when an exception thrown in one of the project runtime events or Managed UI dialog is not caught.
+        /// </summary>
+        /// <param name="e">The <see cref="ExceptionEventArgs"/> instance containing the event data.</param>
+        public delegate void UnhandledExceptionEventHandler(ExceptionEventArgs e);
+
+        /// <summary>
+        /// Occurs when an unhandled exception is thrown either from Managed UI or from ManagedProject event (e.g. <see cref="WixSharp.ManagedProject.BeforeInstall"/>).
+        /// </summary>
+        public event UnhandledExceptionEventHandler UnhandledException;
+
+        /// <summary>
         /// Indicates if the installations should be aborted if managed event handler throws an
         /// unhanded exception.
         /// <para>Aborting is the default behavior if this field is not set.</para>
@@ -256,6 +267,39 @@ namespace WixSharp
                     else
                         this.AddAction(new ManagedAction(dllEntry) { Id = new Id(dllEntry), ActionAssembly = thisAsm, Return = Return.check, When = when, Step = step, Condition = Condition.Create("1") });
                 }
+            }
+        }
+
+        void BindUnhandledExceptionHadler<T>(Expression<Func<T>> expression)
+        {
+            var name = Reflect.NameOf(expression);
+            var handler = expression.Compile()() as Delegate;
+
+            if (handler != null)
+            {
+                foreach (var type in handler.GetInvocationList().Select(x => x.Method.DeclaringType))
+                {
+                    string location = type.Assembly.Location;
+
+                    // Resolving scriptAsmLocation is not properly tested yet
+                    bool resolveInMemAsms = true;
+
+                    if (resolveInMemAsms)
+                    {
+                        if (location.IsEmpty())
+                            location = type.Assembly.GetLocation();
+                    }
+
+                    if (location.IsEmpty())
+                        throw new ApplicationException($"The location of the assembly for ManagedProject event handler ({type}) cannot be obtained.\n" +
+                                                        "The assembly must be a file based one but it looks like it was loaded from memory.\n" +
+                                                        "If you are using CS-Script to build MSI ensure it has 'InMemoryAssembly' set to false.");
+
+                    if (!this.DefaultRefAssemblies.Contains(location))
+                        this.DefaultRefAssemblies.Add(location);
+                }
+
+                this.AddProperty(new Property("WixSharp_UnhandledException_Handlers".FormatWith(name), GetHandlersInfo(handler as MulticastDelegate)));
             }
         }
 
@@ -413,6 +457,7 @@ namespace WixSharp
                 Bind(() => Load, When.Before, Step.AppSearch);
                 Bind(() => BeforeInstall, When.Before, Step.InstallFiles);
                 Bind(() => AfterInstall, When.After, Step.InstallFiles, true);
+                BindUnhandledExceptionHadler(() => UnhandledException);
             }
 
             if (ManagedUI != null)
@@ -601,14 +646,27 @@ namespace WixSharp
             return method;
         }
 
-        static void InvokeClientHandler(string info, SetupEventArgs eventArgs)
+        internal static void InvokeClientHandlers(string eventName, Session session, Exception e)
         {
-            MethodInfo method = GetHandler(info);
+            var args = new ExceptionEventArgs { Session = session, Exception = e };
+            var handlerName = $"WixSharp_{eventName}_Handlers";
+            try
+            {
+                string handlersInfo = args.Session.Property(handlerName);
 
-            if (method.IsStatic)
-                method.Invoke(null, new object[] { eventArgs });
-            else
-                method.Invoke(Activator.CreateInstance(method.DeclaringType), new object[] { eventArgs });
+                if (handlersInfo.IsNotEmpty())
+                {
+                    foreach (string item in handlersInfo.Trim().Split('\n').Select(x => x.Trim()))
+                    {
+                        MethodInfo method = GetHandler(item);
+                        method.Call(args);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                args.Session.Log($"WixSharp failed to invoke {handlerName} :" + Environment.NewLine + ex.ToPublicString());
+            }
         }
 
         internal static ActionResult InvokeClientHandlers(Session session, string eventName, IShellView UIShell = null)
@@ -622,9 +680,11 @@ namespace WixSharp
 
                 if (!string.IsNullOrEmpty(handlersInfo))
                 {
-                    foreach (string item in handlersInfo.Trim().Split('\n'))
+                    foreach (string item in handlersInfo.Trim().Split('\n').Select(x => x.Trim()))
                     {
-                        InvokeClientHandler(item.Trim(), eventArgs);
+                        MethodInfo method = GetHandler(item);
+                        method.Call(eventArgs);
+
                         if (eventArgs.Result == ActionResult.Failure || eventArgs.Result == ActionResult.UserExit)
                             break;
                     }
@@ -637,6 +697,8 @@ namespace WixSharp
                 session.Log("WixSharp aborted the session because of the error:" + Environment.NewLine + e.ToPublicString());
                 if (session.AbortOnError())
                     eventArgs.Result = ActionResult.Failure;
+
+                ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
             }
             return eventArgs.Result;
         }
