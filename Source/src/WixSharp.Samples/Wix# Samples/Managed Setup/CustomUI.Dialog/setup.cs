@@ -62,6 +62,14 @@ public class Script
         project.BeforeInstall += msi_BeforeInstall;
         project.AfterInstall += Project_AfterInstall;
 
+        // just to demo how to detect unhandled exceptions in the ManagedProject costom
+        // routines (CA and ManagedUI)
+        project.UnhandledException += e =>
+        {
+            MessageBox.Show("Unhandled exception: " + e.Exception.Message, e.Session.Property("ProductName"));
+            // Debug.Assert(false);
+        };
+
         // project.PreserveTempFiles = true;
 
         project.BuildMsi();

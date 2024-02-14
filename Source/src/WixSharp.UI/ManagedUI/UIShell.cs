@@ -236,7 +236,6 @@ namespace WixSharp
                         view.FormBorderStyle = forms.FormBorderStyle.None;
                         shellView.ControlBox = view.ControlBox;
                         view.TopLevel = false;
-                        //view.Dock = DockStyle.Fill; //do not use Dock as it interferes with scaling
                         view.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
                         view.Size = shellView.ClientSize;
                         view.Location = new System.Drawing.Point(0, 0);
@@ -264,7 +263,15 @@ namespace WixSharp
                         catch { /*expected to fail on deferred actions stage*/}
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Session msiSession = (Session)Runtime.Session.SessionContext;
+
+                    ManagedProject.InvokeClientHandlers("UnhandledException", msiSession, e);
+                    msiSession.Log("Managed Dialog unhandled Exception: " + e);
+
+                    this.Cancel();
+                }
             }
         }
 
@@ -331,12 +338,17 @@ namespace WixSharp
                         catch { }
 
                         result = runtime.InvokeClientHandlers("UILoaded", (IShellView)shellView);
+
                         if (result != ActionResult.Success)
                         {
                             // aborting UI dialogs sequence from here is not possible as this event is
                             // simply called when Shell is loaded but not when dialogs are progressing in the sequence.
                             runtime.Session.Log("UILoaded returned " + result);
                         }
+
+                        if (result == ActionResult.Failure)
+                            this.Exit();
+
                         runtime.Data.MergeReplace(runtime.Session["WIXSHARP_RUNTIME_DATA"]); ; //data may be changed in the client handler
                     };
 

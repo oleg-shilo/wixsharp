@@ -22,7 +22,7 @@ namespace WixSharp
     /// <summary>
     /// Container with the parameters of the digital signature
     /// </summary>
-    public class DigitalSignature1 : IDigitalSignature
+    public class DigitalSignature : IDigitalSignature
     {
         private SecureString _password;
 

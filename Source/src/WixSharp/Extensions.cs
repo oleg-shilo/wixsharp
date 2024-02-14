@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using System.Drawing;
 using static System.Environment;
 using System.Globalization;
@@ -4030,6 +4031,15 @@ namespace WixSharp
         /// </summary>
         /// <value>The namespace.</value>
         public string Namespace { get; set; }
+    }
+
+    static class ReflectionExtensions
+    {
+        public static object Call(this MethodInfo method, params object[] args)
+        {
+            object instance = method.IsStatic ? null : Activator.CreateInstance(method.DeclaringType);
+            return method.Invoke(instance, args);
+        }
     }
 
     /// <summary>

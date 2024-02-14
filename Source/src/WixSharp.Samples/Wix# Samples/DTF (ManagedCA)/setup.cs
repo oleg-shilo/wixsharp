@@ -33,6 +33,7 @@ public class Script
 
             // project.PreserveTempFiles = true;
             // project.OutDir = "bin";
+            // Compiler.VerboseOutput = true;
 
             project.BuildMsi();
         }
