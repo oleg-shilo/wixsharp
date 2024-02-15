@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>2.0.4.0</version>
+    <version>2.1.0.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,17 +18,22 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>WiX4-Release v2.0.4.0
-- #1363: Shortcut to Dir/Folder
-- #1398: Underscore in String Id in wxl breaks localization
-- reverted experimental change for x86 bitness of WixSharp.UI. Now it's back to AnyCPU but SilentUI BA will no longer work. It's acceptable as it's better to set x86 on the user codebase (e.g. custom BA) than on generic lib (WixSharp.UI) and put bitness pressure on all users of this lib.
-- `WarnOnOutputPathCollision` changed from Warning to Error (continuation of #1384).
-- Extended cascading `Project.Platform` to `RegistrySearch` (triggered by #1390 discussion).</releaseNotes>
+    <releaseNotes>WiX4: Release v2.1.0.0 
+- #1446: Catch all exceptions in managed WinForms UI
+- #1444: wix.exe not found if installed as local tool
+- #1436: NuGet config variable "globalPackagesFolder" is ignored
+- #1428: [Question] SetNetPrerequirements to NET 7 or better
+         Updated SetNetPrerequirements to allow using new WiX4 `DotNetCompatibilityCheck`
+- #1436: NuGet config variable "globalPackagesFolder" is ignored
+- Proposal #1263: Signing using JSign or other alternatives
+- Added `bool None&lt;TSource&gt;(this IEnumerable&lt;TSource&gt; source, ...)` extension method
+- Fixed accidental renaming of `DigitalSignature1`-&gt;`DigitalSignature`
+</releaseNotes>
     <copyright>Copyright (C) 2008-2022 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="2.0.4.0" />
+      <dependency id="WixSharp.bin" version="2.1.0.0" />
     </dependencies>
   </metadata>
   <files>
