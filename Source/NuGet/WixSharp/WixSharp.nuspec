@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>1.24.2.0</version>
+    <version>1.25.0.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,21 +18,19 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>WiX3-Release v1.24.2.0
+    <releaseNotes>WiX3-Release v1.25.0.0
+- #1446: Catch all exceptions in managed WinForms UI
+- Added sample for #1449
+- #1421 Update Text (Dialog title) on view title change (@PatrickHofman)
+- Proposal #1263: Signing using JSign or other alternatives
 
-- WiX3: improvements triggered by #1424
-- Feature condition support in managed UI #1430
-- Added support for condition evaluation and custom installlevel settings.
-- Issue #1405: Can't make LookupInstalledVersion work
-- added test case for Issue #1403
-- updated the WPF BA sample to show the solution for #1400
-- Enhancement #1401: Can't mark directory as permanent
+
 </releaseNotes>
     <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.24.2.0" />
+      <dependency id="WixSharp.bin" version="1.25.0.0" />
     </dependencies>
   </metadata>
   <files>
