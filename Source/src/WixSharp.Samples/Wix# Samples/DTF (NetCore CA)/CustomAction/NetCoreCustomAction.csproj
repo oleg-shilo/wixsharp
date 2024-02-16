@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -8,7 +8,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="outdir\**" />
+    <EmbeddedResource Remove="outdir\**" />
+    <None Remove="outdir\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="4.0.0-preview.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PrivateSdkAssemblies Remove="outdir\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkAssemblies Remove="outdir\**" />
   </ItemGroup>
 
 </Project>
