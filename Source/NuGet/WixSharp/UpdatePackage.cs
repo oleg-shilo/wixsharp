@@ -1,5 +1,5 @@
-using System.Diagnostics;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -55,6 +55,7 @@ class Script
         CopyFiles(root + @"\bin\WixSharp\net4.5.1", "WixSharp.Lab.dll", @"lib\net451");
         CopyFiles(root + @"\bin\WixSharp\net4.5.1", "WixSharp.Lab.xml", @"lib\net451");
 
+        ValidateDllVersions(version.ToString());
         Console.WriteLine("Done!");
     }
 
@@ -72,6 +73,20 @@ class Script
             wixSharp_bin.Attribute("version").Value = version;
 
         doc.Save(specFile);
+    }
+
+    static void ValidateDllVersions(string version)
+    {
+        var versions = Directory.GetFiles(Environment.CurrentDirectory, "WixSharp*.dll", SearchOption.AllDirectories)
+                .Select(x => new { version = FileVersionInfo.GetVersionInfo(x).FileVersion, path = x });
+
+        if (versions.Select(x => version).Distinct().Count() > 1 || versions.FirstOrDefault().version != version)
+        {
+            Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            throw new Exception("ERROR: Inconsistent dll versions: \n" + string.Join('\n', versions));
+        }
+        else
+            Console.WriteLine("===\ndll versions: \n" + string.Join('\n', versions));
     }
 
     static string ValidateReleaseNotes(string version)
