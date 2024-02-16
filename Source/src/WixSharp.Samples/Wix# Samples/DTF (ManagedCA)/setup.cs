@@ -12,7 +12,9 @@ using System.Xml;
 using System.Xml.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixSharp.Controls;
 using WixToolset.Dtf.WindowsInstaller;
+using Action = WixSharp.Action;
 
 public class Script
 {
@@ -27,6 +29,7 @@ public class Script
             var project = new ManagedProject("CustomActionTest",
                     new Dir(@"%ProgramFiles%\My Company\My Product",
                         new File("setup.cs")),
+
                     new ManagedAction(CustomActions.MyAction, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed),
                     new ManagedAction(CustomActions.InvokeRemoveFiles, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed),
                     new Error("9000", "Hello World! (CLR: v[2]) Embedded Managed CA ([3])"));
@@ -41,6 +44,7 @@ public class Script
 
     static void RemoveFiles(string installdir)
     {
+        MessageBox.Show("Clearing install dir: " + installdir);
     }
 }
 
@@ -56,7 +60,11 @@ public class CustomActions
         startInfo.Arguments = "-remove \"" + session.Property("INSTALLDIR") + "\"";
         startInfo.Verb = "runas";
 
-        Process.Start(startInfo);
+        MessageBox.Show(typeof(CustomActions).Assembly.Location);
+
+        Process
+            .Start(startInfo)
+            .WaitForExit();
 
         return ActionResult.Success;
     }

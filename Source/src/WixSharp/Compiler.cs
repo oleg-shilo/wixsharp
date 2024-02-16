@@ -2725,19 +2725,25 @@ namespace WixSharp
 
                     if (existingBinary == null)
                     {
-                        PackageManagedAsm(
-                            asmFile,
-                            packageFile,
-                            wManagedAction.RefAssemblies.Concat(wProject.DefaultRefAssemblies).Distinct().ToArray(),
-                            wProject.OutDir,
-                            wProject.CustomActionConfig,
-                            wProject.Platform,
-                            false);
+                        string nativeCAdll = asmFile;
+
+                        if (wManagedAction.CreateInteropWrapper)
+                        {
+                            PackageManagedAsm(
+                                asmFile,
+                                packageFile,
+                                wManagedAction.RefAssemblies.Concat(wProject.DefaultRefAssemblies).Distinct().ToArray(),
+                                wProject.OutDir,
+                                wProject.CustomActionConfig,
+                                wProject.Platform,
+                                false);
+                            nativeCAdll = packageFile;
+                        }
 
                         bynaryKey = wAction.Name.Expand() + "_File";
                         product.Add(new XElement("Binary",
                                         new XAttribute("Id", bynaryKey),
-                                        new XAttribute("SourceFile", packageFile)));
+                                        new XAttribute("SourceFile", nativeCAdll)));
                     }
                     else
                     {

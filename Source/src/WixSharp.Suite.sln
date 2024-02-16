@@ -226,6 +226,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asp .NET App (XML injection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SigningBundle", "WixSharp.Samples\Wix# Samples\SigningBundle\SigningBundle.csproj", "{4C53D699-FFB4-4719-BB77-4AA7750CC35C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTF (NetCore CA)", "WixSharp.Samples\Wix# Samples\DTF (NetCore CA)\DTF (NetCore CA).csproj", "{810AC5D9-DC9D-4C9B-8BFA-7DE7B7CFAE21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -962,6 +964,14 @@ Global
 		{4C53D699-FFB4-4719-BB77-4AA7750CC35C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4C53D699-FFB4-4719-BB77-4AA7750CC35C}.Release|x86.ActiveCfg = Release|Any CPU
 		{4C53D699-FFB4-4719-BB77-4AA7750CC35C}.Release|x86.Build.0 = Release|Any CPU
+		{810AC5D9-DC9D-4C9B-8BFA-7DE7B7CFAE21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{810AC5D9-DC9D-4C9B-8BFA-7DE7B7CFAE21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{810AC5D9-DC9D-4C9B-8BFA-7DE7B7CFAE21}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{810AC5D9-DC9D-4C9B-8BFA-7DE7B7CFAE21}.Debug|x86.Build.0 = Debug|Any CPU
+		{810AC5D9-DC9D-4C9B-8BFA-7DE7B7CFAE21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{810AC5D9-DC9D-4C9B-8BFA-7DE7B7CFAE21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{810AC5D9-DC9D-4C9B-8BFA-7DE7B7CFAE21}.Release|x86.ActiveCfg = Release|Any CPU
+		{810AC5D9-DC9D-4C9B-8BFA-7DE7B7CFAE21}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1058,6 +1068,7 @@ Global
 		{919D071C-A792-4BAB-8102-946D73D9D6C2} = {AE8877B5-88C1-4493-B70D-27DCCEA5CE39}
 		{2750472C-DD43-448F-87DC-6F2D1AB9478C} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
 		{4C53D699-FFB4-4719-BB77-4AA7750CC35C} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
+		{810AC5D9-DC9D-4C9B-8BFA-7DE7B7CFAE21} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {559711D5-4429-4577-BBC9-F0D973972079}
