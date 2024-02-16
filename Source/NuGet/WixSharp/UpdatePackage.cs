@@ -38,6 +38,8 @@ class Script
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.Msi.dll", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.Msi.xml", @"lib");
 
+        ValidateDllVersions(version.ToString());	
+
         Console.WriteLine("Done!");
     }
 
@@ -57,6 +59,20 @@ class Script
             dependencyElement.Attribute("version").Value = version;
 
         doc.Save(specFile);
+    }
+
+    static void ValidateDllVersions(string version)
+    {
+        var versions = Directory.GetFiles(Environment.CurrentDirectory, "WixSharp*.dll", SearchOption.AllDirectories)
+                .Select(x => new { version = FileVersionInfo.GetVersionInfo(x).FileVersion, path = x });
+
+        if (versions.Select(x => version).Distinct().Count() > 1 || versions.FirstOrDefault().version != version)
+        {
+            Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            throw new Exception("ERROR: Inconsistent dll versions: \n" + string.Join('\n', versions));
+        }
+        else
+            Console.WriteLine("===\ndll versions: \n" + string.Join('\n', versions));
     }
 
     static string ValidateReleaseNotes(string version)
