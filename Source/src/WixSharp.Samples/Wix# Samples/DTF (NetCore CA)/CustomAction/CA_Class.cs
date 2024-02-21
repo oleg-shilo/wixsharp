@@ -1,7 +1,8 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Reflection;
+using System.Runtime.InteropServices;
 using WixToolset.Dtf.WindowsInstaller;
 
-namespace CustomAction;
+// namespace CustomAction;
 
 public class Class1
 {
@@ -16,9 +17,15 @@ public class Class1
     {
         using Session session = Session.FromHandle(handle, false);
 
-        MessageBox(GetForegroundWindow(), "Hello from .NET Core!", "WixSharp", 0);
-        session.Log("CustomActionCore invoked");
+        System.Windows.Forms.MessageBox.Show("Hello from .NET Core! (007)", "WixSharp.Core", 0);
 
-        return (uint)ActionResult.Success;
+        MessageBox(GetForegroundWindow(), "Hello from .NET Core!", "WixSharp", 0);
+
+        // Assembly.LoadFrom();
+
+        MessageBox(GetForegroundWindow(), typeof(Class1).Assembly.Location, "WixSharp", 0);
+        // session.Log("CustomActionCore invoked");
+
+        return (uint)ActionResult.UserExit;
     }
 }

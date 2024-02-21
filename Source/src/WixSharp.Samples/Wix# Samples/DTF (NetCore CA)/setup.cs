@@ -31,6 +31,7 @@ public class Script
                     CreateInteropWrapper = false,
                 });
 
+        project.UI = WUI.WixUI_ProgressOnly;
         project.BuildMsi();
     }
 
@@ -43,11 +44,13 @@ public class Script
         using (var process = new Process())
         {
             process.StartInfo.FileName = "dotnet";
-            process.StartInfo.Arguments = $"publish /p:NativeLib=Shared -r win-x64 -c release -o {outDir}";
+            process.StartInfo.Arguments = $"publish {System.IO.Path.GetFullPath(projFile).Enquote()} /p:NativeLib=Shared -r win-x64 -c release -o {outDir.Enquote()}";
             process.StartInfo.WorkingDirectory = projFile.PathGetDirName();
             process.StartInfo.UseShellExecute = false;
             process.Start();
             process.WaitForExit();
+
+            Console.WriteLine($"dotnet {process.StartInfo.Arguments}");
 
             if (process.ExitCode == 0)
                 return projDir.PathCombine(outDir, asmFileName);

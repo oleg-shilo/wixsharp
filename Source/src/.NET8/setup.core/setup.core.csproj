@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!--<OutputType>Library</OutputType>-->
+    <!--<PublishAot>true</PublishAot>-->
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="aot\**" />
+    <Compile Remove="outdir\**" />
+    <EmbeddedResource Remove="aot\**" />
+    <EmbeddedResource Remove="outdir\**" />
+    <None Remove="aot\**" />
+    <None Remove="outdir\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="CustomAction.config" />
+    <None Remove="My Product.msi" />
+    <None Remove="MyProduct.msi" />
+    <None Remove="readme.md" />
+    <None Remove="setup.core.dll" />
+    <None Remove="setup.core.pdb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WixSharp.Core\WixSharp.Core.csproj" />
+  </ItemGroup>
+
+</Project>
