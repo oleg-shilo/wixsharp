@@ -9,6 +9,8 @@ using WixSharp.CommonTasks;
 using WixSharp.Nsis;
 using WixToolset.Dtf.WindowsInstaller;
 
+#pragma warning disable CS8981
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
 using sys = System.IO;
 
 namespace WixSharp.Bootstrapper
@@ -157,14 +159,15 @@ namespace WixSharp.Bootstrapper
         {
             try
             {
-                var valid = (bool)Utils.ExecuteInTempDomain<AsmReflector>(
-                                        asmReflector => asmReflector.ValidateCustomBaAssembly(assembly));
+                throw new NotImplementedException("The method is not implemented on .NET Core");
+                // var valid = (bool)Utils.ExecuteInTempDomain<AsmReflector>(
+                //                         asmReflector => asmReflector.ValidateCustomBaAssembly(assembly));
 
-                if (!valid)
-                    Compiler.OutputWriteLine(
-                            $"ERROR: The custom BA assembly (`{assembly}`) seems to have no attribute " +
-                            $"`WixToolset.Mba.Core.BootstrapperApplicationFactoryAttribute` defined " +
-                            $"for the BootstrapperApplication factory class.");
+                // if (!valid)
+                //     Compiler.OutputWriteLine(
+                //             $"ERROR: The custom BA assembly (`{assembly}`) seems to have no attribute " +
+                //             $"`WixToolset.Mba.Core.BootstrapperApplicationFactoryAttribute` defined " +
+                //             $"for the BootstrapperApplication factory class.");
             }
             catch
             {

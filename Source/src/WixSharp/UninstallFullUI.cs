@@ -2,11 +2,9 @@
 using Microsoft.Win32;
 using WixSharp.CommonTasks;
 
-#if WIX3
 using WixToolset.Dtf.WindowsInstaller;
-#else
-using WixToolset.Dtf.WindowsInstaller;
-#endif
+
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
 
 namespace WixSharp
 {

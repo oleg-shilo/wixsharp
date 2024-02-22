@@ -29,7 +29,7 @@ using IO = System.IO;
 
 namespace WixSharp
 {
-    public static class Win32
+    public static class Native
     {
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();

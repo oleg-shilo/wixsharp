@@ -29,7 +29,7 @@ public class MyActions
     [CustomAction]
     public static ActionResult CustomAction(Session session)
     {
-        Win32.MessageBox("CA: " + session.Property("WIXSHARP_RUNTIME_DATA"), "WixSharp.Managed");
+        Native.MessageBox("WS-Session: " + session.Property("INSTALLDIR"), "WixSharp.Managed");
         return ActionResult.Success;
     }
 
@@ -38,26 +38,7 @@ public class MyActions
     {
         SetupEventArgs args = session.ToEventArgs();
 
-        Win32.MessageBox("CA2 " + args.MsiFile, "WixSharp.Managed");
-        return ActionResult.UserExit;
-    }
-}
-
-public class MyActions2
-{
-    [CustomAction]
-    public static ActionResult CustomAction(Session session)
-    {
-        Win32.MessageBox("CA: " + session.Property("WIXSHARP_RUNTIME_DATA"), "WixSharp.Managed");
-        return ActionResult.Success;
-    }
-
-    [CustomAction]
-    public static ActionResult CustomAction2(Session session)
-    {
-        SetupEventArgs args = session.ToEventArgs();
-
-        Win32.MessageBox("CA2 " + args.MsiFile, "WixSharp.Managed");
+        Native.MessageBox("WS-RuntimeData: " + args.MsiFile, "WixSharp.Managed");
         return ActionResult.UserExit;
     }
 }

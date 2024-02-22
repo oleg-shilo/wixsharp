@@ -1709,7 +1709,7 @@ namespace WixSharp.CommonTasks
             var groups = customActions.GroupBy(v => v.Method.Name);
             foreach (var group in groups)
                 if (group.Count() > 1)
-                    Console.WriteLine($"WIXSHARP.cs(0): warning IL3000: Custom action `{group.Key}` has multiple entry points in '{assemblyPath}'");
+                    Console.WriteLine($"WIXSHARP.dll: warning: Custom action `{group.Key}` has multiple entry points in '{assemblyPath}'");
 
             var code = new StringBuilder();
 
@@ -1740,7 +1740,7 @@ namespace WixSharp.CommonTasks
                 assembly = Compiler.ClientAssembly;
             }
 
-            var projDir = assembly.PathGetDirName().PathJoin("aot." + assembly.PathGetFileNameWithoutExtension).PathGetFullPath();
+            var projDir = assembly.PathGetDirName().PathJoin("aot." + assembly.PathGetFileNameWithoutExtension()).PathGetFullPath();
             var actualProjectFile = projDir.PathJoin(assembly.PathGetFileNameWithoutExtension() + ".aot.csproj");
 
             var outDir = "output";
@@ -1796,8 +1796,7 @@ namespace WixSharp.CommonTasks
 
             IO.File.WriteAllText(projDir.PathJoin("aot.entrypoints.cs"), assembly.GenerateAotEntryPoints());
 
-            // IO.File.Copy(assembly.PathChangeFileName("aot.cs"), projDir.PathJoin("aot.cs"));
-
+            var sw = Stopwatch.StartNew();
             using (var process = new Process())
             {
                 process.StartInfo.FileName = "dotnet";
@@ -1806,6 +1805,7 @@ namespace WixSharp.CommonTasks
                 process.StartInfo.UseShellExecute = false;
                 process.Start();
                 process.WaitForExit();
+                Compiler.OutputWriteLine($"Converted ({sw.Elapsed})");
 
                 if (process.ExitCode == 0)
                     return aotAsm;

@@ -27,9 +27,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 using IO = System.IO;
 using Reflection = System.Reflection;
+
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
 
 namespace WixSharp
 {
@@ -170,14 +175,22 @@ namespace WixSharp
                 // Issue #835
                 // Cannot use ReflectionOnlyLoad as it will throw if it is called more than once from the same AppDomain.
                 // will use temp domain then
-
+#if !NETCORE
                 name = (string)ExecuteInTempDomain<AsmReflector>(asmReflector => asmReflector.AssemblyScopeName(file));
+#else
+                throw new NotImplementedException("The method is not implemented on .NET Core");
+#endif
             }
             else
                 name = asm.ManifestModule.ScopeName;
 
             return IO.Path.Combine(dir, name);
         }
+
+#if NETCORE
+
+        [Obsolete("The method is not implemented on .NET Core", true)]
+#endif
 
         internal static void ExecuteInTempDomain<T>(Action<T> action) where T : MarshalByRefObject
         {
@@ -187,6 +200,11 @@ namespace WixSharp
                 return null;
             });
         }
+
+#if NETCORE
+
+        [Obsolete("The method is not implemented on .NET Core", true)]
+#endif
 
         internal static object ExecuteInTempDomain<T>(Func<T, object> action) where T : MarshalByRefObject
         {
@@ -236,6 +254,10 @@ namespace WixSharp
             return null;
         }
 
+#if NETCORE
+        [Obsolete("The method is not implemented on .NET Core", true)]
+#endif
+
         internal static void Unload(this AppDomain domain)
         {
             AppDomain.Unload(domain);
@@ -246,10 +268,12 @@ namespace WixSharp
             return (T)domain.CreateInstanceFromAndUnwrap(typeof(T).Assembly.Location, typeof(T).ToString());
         }
 
+#if NETCORE
+        [Obsolete("The method is not implemented on .NET Core", true)]
+#endif
+
         internal static AppDomain Clone(this AppDomain domain, string name = null)
         {
-            //return AppDomain.CreateDomain(name ?? Guid.NewGuid().ToString(), null, new AppDomainSetup());
-
             var setup = new AppDomainSetup();
             setup.ApplicationBase = IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             setup.ShadowCopyFiles = "true";

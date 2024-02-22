@@ -8,10 +8,14 @@ using WixSharp.Utilities;
 #if WIX3
 using WixToolset.Dtf.WindowsInstaller;
 #else
+
 using WixToolset.Dtf.WindowsInstaller;
+
 #endif
 
 using IO = System.IO;
+
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
 
 namespace WixSharp
 {

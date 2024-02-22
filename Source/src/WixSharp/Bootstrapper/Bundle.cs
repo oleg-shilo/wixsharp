@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using WixSharp.CommonTasks;
+
+#pragma warning disable CS8981
+
 using sys = System.IO;
 
 namespace WixSharp.Bootstrapper

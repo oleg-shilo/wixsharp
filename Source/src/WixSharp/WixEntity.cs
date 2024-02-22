@@ -39,7 +39,7 @@ namespace WixSharp
     /// <summary>
     /// Base class for all Wix# related types
     /// </summary>
-    public class WixObject
+    public partial class WixObject
     {
         /// <summary>
         /// Collection of Attribute/Value pairs for WiX element attributes not supported directly by Wix# objects.
@@ -338,7 +338,7 @@ namespace WixSharp
         /// Name of the <see cref="WixEntity"/>.
         /// <para>This value is used as a <c>Name</c> for the corresponding WiX XML element.</para>
         /// </summary>
-        public string Name = "";
+        public new string Name = "";
 
         /// <summary>
         /// Gets or sets the <c>Id</c> value of the <see cref="WixEntity"/>.
@@ -356,7 +356,7 @@ namespace WixSharp
         /// </remarks>
         /// </summary>
         /// <value>The id.</value>
-        public string Id
+        public new string Id
         {
             get
             {
@@ -477,7 +477,7 @@ namespace WixSharp
         /// <summary>
         /// Backing value of <see cref="Id"/>.
         /// </summary>
-        protected string id;
+        protected new string id;
 
         internal string RawId { get { return id; } }
 
@@ -493,7 +493,7 @@ namespace WixSharp
         /// <c>Build</c> operations to ensure reproducibility of the <see cref="Id"/> set between <c>Build()</c>
         /// calls.
         /// </summary>
-        static public void ResetIdGenerator()
+        static public new void ResetIdGenerator()
         {
             idMaps.Clear();
             alreadyTakenIds.Clear();

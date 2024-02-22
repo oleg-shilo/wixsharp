@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Script.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="CustomAction.config" />
     <None Remove="My Product.msi" />
     <None Remove="MyProduct.msi" />

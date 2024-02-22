@@ -6,6 +6,8 @@ using System.Text;
 using Microsoft.Win32;
 using IO = System.IO;
 
+#pragma warning disable CA1416 // Validate platform compatibility
+
 namespace WixSharp.CommonTasks
 {
     /// <summary>

@@ -425,7 +425,7 @@ namespace WixSharp
         /// <summary>
         /// Use this attribute if you need to specify the installation scope of this package: per-machine or per-user.
         /// </summary>
-        [Obsolete("Not supported in WiX4", true)]
+        [Obsolete("`InstallScope` is not supported in WiX4, use `Scope` instead", true)]
         public InstallScope? InstallScope
         {
             get => Scope;
@@ -924,7 +924,7 @@ namespace WixSharp
         /// </summary>
         public int InstallerVersion = 200;
 
-        private string codepage = "";
+        private string codepage = "Windows-1252";
 
         /// <summary>
         /// Installation UI Code Page. If not specified

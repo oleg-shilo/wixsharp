@@ -5,6 +5,7 @@ using WixToolset.Dtf.WindowsInstaller;
 using Reflection = System.Reflection;
 
 #pragma warning disable 1591
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
 
 namespace WixSharp
 {

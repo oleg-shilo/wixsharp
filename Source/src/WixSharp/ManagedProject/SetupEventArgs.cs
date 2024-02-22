@@ -6,6 +6,8 @@ using WixSharp.CommonTasks;
 
 using WixToolset.Dtf.WindowsInstaller;
 
+#pragma warning disable CA1416 // Validate platform compatibility
+
 namespace WixSharp
 {
     /// <summary>

@@ -42,6 +42,9 @@ using WixToolset.Dtf.WindowsInstaller;
 using IO = System.IO;
 using Reflection = System.Reflection;
 
+// I am checking it for null anyway but when compiling AOT the output becomes too noisy
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
+
 namespace WixSharp
 {
     class ProjectValidator
@@ -189,11 +192,13 @@ namespace WixSharp
 
             if (Compiler.AutoGeneration.ValidateCAAssemblies == CAValidation.InRemoteAppDomain)
             {
+                // throw new NotImplementedException("The method is not implemented on .NET Core");
+
                 // will not lock the file and will unload the assembly
-                Utils.ExecuteInTempDomain<AsmReflector>(asmReflector =>
-                    {
-                        asmReflector.ValidateCAAssembly(caAssembly, dtfAssembly);
-                    });
+                // Utils.ExecuteInTempDomain<AsmReflector>(asmReflector =>
+                //     {
+                //         asmReflector.ValidateCAAssembly(caAssembly, dtfAssembly);
+                //     });
             }
             else if (Compiler.AutoGeneration.ValidateCAAssemblies == CAValidation.InCurrentAppDomain)
             {
@@ -216,7 +221,11 @@ namespace WixSharp
 
         public string AssemblyScopeName(string file)
         {
+#if !NETCORE
             return Reflection.Assembly.ReflectionOnlyLoad(System.IO.File.ReadAllBytes(file)).ManifestModule.ScopeName;
+#else
+            throw new NotImplementedException("Not supported on .NET Core builds");
+#endif
         }
 
         public bool ValidateCustomBaAssembly(string assembly)

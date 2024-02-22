@@ -1,11 +1,13 @@
-using System.ComponentModel;
-using System.Windows.Forms;
-using Wix = WixSharp;
 using System;
-using System.Drawing.Design;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using System.Collections.Generic;
+using System.Drawing.Design;
+using System.Windows.Forms;
+using Wix = WixSharp;
+
+#pragma warning disable CA1416 // Validate platform compatibility
 
 namespace WixSharp.Controls
 {
@@ -46,6 +48,7 @@ namespace WixSharp.Controls
         /// The size of the <c>Control</c>.
         /// </value>
         public Size WixSize { get; private set; }
+
         /// <summary>
         /// Gets the <c>Control</c> location.
         /// </summary>
@@ -53,6 +56,7 @@ namespace WixSharp.Controls
         /// The <c>Control</c> location.
         /// </value>
         public Point WixLocation { get; private set; }
+
         /// <summary>
         /// Gets or sets the Id.
         /// </summary>
@@ -60,6 +64,7 @@ namespace WixSharp.Controls
         /// The Id.
         /// </value>
         public string Id { get; set; }
+
         /// <summary>
         /// Gets or sets the tooltip.
         /// </summary>
@@ -67,6 +72,7 @@ namespace WixSharp.Controls
         /// The tooltip.
         /// </value>
         public string Tooltip { get; set; }
+
         /// <summary>
         /// Gets or sets the bound property name.
         /// </summary>
@@ -74,6 +80,7 @@ namespace WixSharp.Controls
         /// The bound property name.
         /// </value>
         public string BoundProperty { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="IWixControl" /> is hidden.
         /// </summary>
