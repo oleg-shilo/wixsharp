@@ -604,6 +604,8 @@ namespace WixSharp
         /// </summary>
         public bool CreateInteropWrapper = true;
 
+        internal bool IsNetCore = Environment.Version.Major > 5;
+
         /// <summary>
         /// Comma separated list of properties which the custom action is intended to use. Set this property if you are implementing the 'deferred' (as well as 'rollback'  and 'commit')  action.
         /// <remarks>

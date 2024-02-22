@@ -712,6 +712,8 @@ namespace WixSharp
         internal static ActionResult Init(Session session)
         {
             //System.Diagnostics.Debugger.Launch();
+
+            // need to push these properties into runtime data so it is available in the deferred actions
             var data = new SetupEventArgs.AppData();
             try
             {
@@ -748,6 +750,7 @@ namespace WixSharp
             {
                 string data = session.Property("WIXSHARP_RUNTIME_DATA");
                 result.Data.InitFrom(data);
+
                 result.Data.SetEnvironmentVariables();
                 session.CustomActionData.SetEnvironmentVariables();
             }

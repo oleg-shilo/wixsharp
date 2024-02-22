@@ -14,10 +14,13 @@ using System.Xml.XPath;
 using Microsoft.Win32;
 using WixSharp;
 using WixSharp.Controls;
+
 #if WIX3
 using WixToolset.Dtf.WindowsInstaller;
 #else
+
 using WixToolset.Dtf.WindowsInstaller;
+
 #endif
 
 namespace WixSharp.CommonTasks

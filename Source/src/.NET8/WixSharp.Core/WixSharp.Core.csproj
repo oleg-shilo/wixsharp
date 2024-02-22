@@ -19,6 +19,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="outdir\**" />
+    <EmbeddedResource Remove="outdir\**" />
+    <None Remove="outdir\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="4.0.4" />
     <PackageReference Include="WixToolset.Mba.Core" Version="4.0.4" />
   </ItemGroup>

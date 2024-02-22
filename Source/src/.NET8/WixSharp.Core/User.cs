@@ -6,29 +6,6 @@ using System.Xml.Linq;
 using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
 
-public class Class3
-{
-    [DllImport("user32.dll")]
-    static extern int MessageBox(IntPtr hWnd, String text, String caption, int options);
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetForegroundWindow();
-
-    // [UnmanagedCallersOnly(EntryPoint = "CustomActionCore")]
-    public static uint CustomActionCore(IntPtr handle)
-    {
-        // Debug.Assert(false);
-        using Session session = Session.FromHandle(handle, false);
-
-        // MessageBox(GetForegroundWindow(), "Hello from .NET Core Form! (007)", "WixSharp.Core.AUT", 0);
-
-        MessageBox(GetForegroundWindow(), typeof(Class3).Assembly.GetName().Name, "WixSharp - " + typeof(Class3).Name, 0);
-        //session.Log("CustomActionCore invoked");
-
-        return (uint)ActionResult.UserExit;
-    }
-}
-
 namespace WixSharp
 {
     /// <summary>

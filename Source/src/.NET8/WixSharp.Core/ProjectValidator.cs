@@ -42,6 +42,9 @@ using WixToolset.Dtf.WindowsInstaller;
 using IO = System.IO;
 using Reflection = System.Reflection;
 
+// I am checking it for null anyway but when compiling AOT the output becomes too noisy
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
+
 namespace WixSharp
 {
     class ProjectValidator

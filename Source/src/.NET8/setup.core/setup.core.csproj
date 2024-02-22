@@ -24,7 +24,9 @@
     <None Remove="CustomAction.config" />
     <None Remove="My Product.msi" />
     <None Remove="MyProduct.msi" />
+    <None Remove="Program.cs.WORKING" />
     <None Remove="readme.md" />
+    <None Remove="setup.core.7z" />
     <None Remove="setup.core.dll" />
     <None Remove="setup.core.pdb" />
   </ItemGroup>

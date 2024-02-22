@@ -29,6 +29,17 @@ using IO = System.IO;
 
 namespace WixSharp
 {
+    public static class Win32
+    {
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        static extern int MessageBox(IntPtr hWnd, String text, String caption, int options);
+
+        public static void MessageBox(string message, string title = "") => MessageBox(GetForegroundWindow(), message, title, 0);
+    }
+
     /// <summary>
     /// </summary>
     public static partial class Extensions
@@ -1280,7 +1291,9 @@ namespace WixSharp
             var location = "";
             try
             {
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
                 location = assembly.Location;
+#pragma warning restore IL3000
             }
             catch { }
 
@@ -2601,6 +2614,12 @@ namespace WixSharp
             {
                 return false;
             }
+        }
+
+        public static SetupEventArgs ToEventArgs(this Session session)
+        {
+            ManagedProject.Init(session);
+            return ManagedProject.Convert(session);
         }
 
         /// <summary>
