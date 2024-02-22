@@ -29,6 +29,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -39,9 +40,15 @@ using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.Controls;
 using WixSharp.Nsis;
+using WixSharp.UI;
 using WixToolset.Dtf.WindowsInstaller;
 
 using IO = System.IO;
+
+// I am checking it for null anyway but when compiling AOT the output becomes too noisy
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
+
+#pragma warning disable CA1416 // Validate platform compatibility
 
 namespace WixSharp.CommonTasks
 {
@@ -1255,7 +1262,9 @@ namespace WixSharp.CommonTasks
                     {
                         try
                         {
+#pragma warning disable SYSLIB0018 // Type or member is obsolete
                             version = System.Reflection.Assembly.ReflectionOnlyLoadFrom(file).GetName().Version.ToString();
+#pragma warning restore SYSLIB0018 // Type or member is obsolete
                         }
                         catch { }
                     }
@@ -1676,15 +1685,170 @@ namespace WixSharp.CommonTasks
         /// <param name="isInstalling">if set to <c>true</c> is installing/registering
         /// COM server, otherwise uninstalling/unregistering.</param>
         /// <returns></returns>
+        [Obsolete("The method is not implemented on .NET Core", true)]
         static public bool RegisterComAssembly(this string assemblyFile, bool isInstalling)
         {
-            var asm = System.Reflection.Assembly.LoadFrom(assemblyFile);
+            // var asm = System.Reflection.Assembly.LoadFrom(assemblyFile);
 
-            var regAsm = new System.Runtime.InteropServices.RegistrationServices();
-            if (isInstalling)
-                return regAsm.RegisterAssembly(asm, System.Runtime.InteropServices.AssemblyRegistrationFlags.SetCodeBase);
-            else
-                return regAsm.UnregisterAssembly(asm);
+            // var regAsm = new System.Runtime.InteropServices.RegistrationServices();
+            // if (isInstalling)
+            //     return regAsm.RegisterAssembly(asm, System.Runtime.InteropServices.AssemblyRegistrationFlags.SetCodeBase);
+            // else
+            //     return regAsm.UnregisterAssembly(asm);
+            throw new NotImplementedException("The method is not implemented on .NET Core");
+        }
+
+        static string GenerateAotEntryPoints(this string assemblyPath)
+        {
+            var assembly = System.Reflection.Assembly.LoadFile(assemblyPath);
+
+            var customActions = assembly
+                .GetTypes()
+                .SelectMany(x => x.GetMethods())
+                .Select(x => new { Method = x, Attribute = x.GetCustomAttribute<CustomActionAttribute>() })
+                .Where(x => x.Method.IsStatic && x.Attribute != null);
+
+            var groups = customActions.GroupBy(v => v.Method.Name);
+            foreach (var group in groups)
+                if (group.Count() > 1)
+                    Console.WriteLine($"WIXSHARP.cs(0): warning IL3000: Custom action `{group.Key}` has multiple entry points in '{assemblyPath}'");
+
+            var code = new StringBuilder();
+
+            code.AppendLine("using System;\r\nusing System.Runtime.InteropServices;\r\nusing WixToolset.Dtf.WindowsInstaller;\r\n")
+                .AppendLine("public class AotEnrtyPoints")
+                .AppendLine("{");
+
+            foreach (var info in customActions)
+                code.AppendLine($"    [UnmanagedCallersOnly(EntryPoint = \"{info.Method.Name}\")]")
+                    .AppendLine($"    public static uint {info.Method.Name}(IntPtr handle)")
+                    .AppendLine($"        => (uint){info.Method.DeclaringType?.FullName}.{info.Method.Name}(Session.FromHandle(handle, false));")
+                    .AppendLine("");
+
+            code.AppendLine("}");
+
+            return code.ToString();
+        }
+
+        public static string ConvertToAotAssembly(this string assemblyPath)
+        {
+            string assembly = assemblyPath;
+
+            if (assemblyPath.EndsWith("%this%"))
+            {
+                if (Compiler.ClientAssembly.IsEmpty())
+                    Compiler.ClientAssembly = Compiler.FindClientAssemblyInCallStack();
+
+                assembly = Compiler.ClientAssembly;
+            }
+
+            var projDir = assembly.PathGetDirName().PathJoin("aot." + assembly.PathGetFileNameWithoutExtension()).PathGetFullPath();
+            var actualProjectFile = projDir.PathJoin(assembly.PathGetFileNameWithoutExtension() + ".aot.csproj");
+
+            var outDir = "output";
+            var aotAsm = projDir.PathCombine(outDir, actualProjectFile.PathGetFileNameWithoutExtension() + ".dll");
+
+            var buildId = projDir.PathJoin($"PID-{Process.GetCurrentProcess().Id}");
+
+            if (projDir.PathExists())
+            {
+                if (buildId.FileExists() && aotAsm.FileExists())
+                    return aotAsm;
+            }
+
+            projDir
+                .DeleteIfExists()
+                .EnsureDirExists();
+
+            IO.File.WriteAllText(buildId, "");
+
+            // https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/trimming-options?pivots=dotnet-8-0#warning-versions
+            var projDefinition = $@"<Project Sdk=""Microsoft.NET.Sdk"">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <PublishAot>true</PublishAot>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove=""output\**"" />
+    <EmbeddedResource Remove=""output\**"" />
+    <None Remove=""output\**"" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include=""{assembly.PathGetFileName()}"">
+      <HintPath>{assembly.PathGetFullPath()}</HintPath>
+    </Reference>
+    <Reference Include=""WixToolset.Dtf.WindowsInstaller.dll"">
+      <HintPath>{typeof(CustomActionAttribute).Assembly.Location}</HintPath>
+    </Reference>
+    <Reference Include=""WixSharp.dlll"">
+      <HintPath>{typeof(WixSharp.Project).Assembly.Location}</HintPath>
+    </Reference>
+    <Reference Include=""WixSharp.Msi.dlll"">
+      <HintPath>{typeof(MsiParser).Assembly.Location}</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>";
+
+            IO.File.WriteAllText(actualProjectFile, projDefinition);
+
+            IO.File.WriteAllText(projDir.PathJoin("aot.entrypoints.cs"), assembly.GenerateAotEntryPoints());
+
+            // IO.File.Copy(assembly.PathChangeFileName("aot.cs"), projDir.PathJoin("aot.cs"));
+
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = "dotnet";
+                process.StartInfo.Arguments = $"publish {actualProjectFile.Enquote()} /p:NativeLib=Shared -r win-x64 -c release -o {outDir}";
+                process.StartInfo.WorkingDirectory = projDir;
+                process.StartInfo.UseShellExecute = false;
+                process.Start();
+                process.WaitForExit();
+
+                if (process.ExitCode == 0)
+                    return aotAsm;
+
+                return "<unknown>";
+            }
+        }
+
+        public static string CompileAotAssembly(this string projFile)
+        {
+            var projDir = projFile.PathGetDirName();
+            var actualProjectFile = projFile.PathChangeExtension(".aot.csproj").PathGetFullPath();
+
+            IO.File.WriteAllText(actualProjectFile,
+                                 IO.File.ReadAllText(projFile)
+                                 .Replace("<OutputType>Exe</OutputType>", "<OutputType>Library</OutputType><PublishAot>true</PublishAot>"));
+
+            var asmFileName = actualProjectFile.PathGetFileNameWithoutExtension() + ".dll";
+            var outDir = "outdir";
+
+            try
+            {
+                using (var process = new Process())
+                {
+                    process.StartInfo.FileName = "dotnet";
+                    process.StartInfo.Arguments = $"publish {actualProjectFile.Enquote()} /p:NativeLib=Shared -r win-x64 -c release -o {outDir}";
+                    process.StartInfo.WorkingDirectory = projFile.PathGetDirName();
+                    process.StartInfo.UseShellExecute = false;
+                    process.Start();
+                    process.WaitForExit();
+
+                    if (process.ExitCode == 0)
+                        return projDir.PathCombine(outDir, asmFileName);
+
+                    return "<unknown>";
+                }
+            }
+            finally
+            {
+                actualProjectFile.DeleteIfExists();
+            }
         }
 
         /// <summary>

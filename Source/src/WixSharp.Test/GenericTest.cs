@@ -1,6 +1,5 @@
 ﻿extern alias WixSharpMsi;
 
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 using System.Xml.Linq;
+using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
+using static WixSharp.SetupEventArgs;
 using WixSharp.UI;
 using WixToolset.Dtf.WindowsInstaller;
 using Xunit;
-using static WixSharp.SetupEventArgs;
 using io = System.IO;
 using WixMsi = WixSharpMsi::WixSharp;
 
@@ -123,13 +123,13 @@ namespace WixSharp.Test
             var dir = @"..\..\..";
 
             var files = io.Directory.GetFiles(dir, "*.wxl", io.SearchOption.AllDirectories)
-                                    .Where(x => !x.Contains("Wix_bin"))
+                                    .Where(x => !x.Contains("Wix_bin") && x.PathGetFileName() != ".wxl") // WixSharp and test data files
                                     .Where(x => XDocument.Load(x).Root.GetDefaultNamespace().NamespaceName == "http://schemas.microsoft.com/wix/2006/localization")
                                     .ToArray();
 
             files.ForEach(x => Debug.WriteLine(x));
 
-            // var file = @" ".Trim(); file.Wxl3_to_Wxl4(file);
+            // files.ForEach(x => x.Wxl3_to_Wxl4(x));
 
             Assert.Equal(0, files.Count());
         }

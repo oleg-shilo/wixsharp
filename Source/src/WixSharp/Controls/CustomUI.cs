@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
 
+#pragma warning disable CA1416
+
 namespace WixSharp.Controls
 {
     /// <summary>
@@ -401,7 +403,7 @@ namespace WixSharp.Controls
                     var element = ui.AddElement(new XElement("Publish",
                                                     new XAttribute("Dialog", info.Dialog),
                                                     new XAttribute("Control", info.Control),
-                                                     new XAttribute("Condition", action.Condition)));
+                                                    new XAttribute("Condition", action.Condition)));
 
                     Action<string, string> AddAttribute = (name, value) =>
                     {

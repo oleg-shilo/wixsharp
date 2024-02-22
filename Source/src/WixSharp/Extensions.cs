@@ -25,8 +25,21 @@ using WixToolset.Dtf.WindowsInstaller;
 
 using IO = System.IO;
 
+#pragma warning disable CA1416 // Validate platform compatibility
+
 namespace WixSharp
 {
+    public static class Native
+    {
+        [DllImport("user32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        static extern int MessageBox(IntPtr hWnd, String text, String caption, int options);
+
+        public static void MessageBox(string message, string title = "") => MessageBox(GetForegroundWindow(), message, title, 0);
+    }
+
     /// <summary>
     /// </summary>
     public static partial class Extensions
@@ -1278,7 +1291,9 @@ namespace WixSharp
             var location = "";
             try
             {
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
                 location = assembly.Location;
+#pragma warning restore IL3000
             }
             catch { }
 
@@ -2451,59 +2466,6 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Adds/combines given <see cref="T:System.Array"/> object with the specified item.
-        /// </summary>
-        /// <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
-        /// <typeparam name="T2">The type of the elements of the items being added.</typeparam>
-        /// <param name="obj">The instance of the <see cref="T:System.Array"/>.</param>
-        /// <param name="item">The item to be added.</param>
-        /// <returns>Combined <see cref="T:System.Array"/> object.</returns>
-        [Obsolete(message: "This method name is obsolete use `Combine` instead", error: true)]
-        public static T1[] Add<T1, T2>(this T1[] obj, T2 item) where T2 : class, T1
-        {
-            if (item != null)
-            {
-                var retval = new ArrayList();
-
-                if (obj != null)
-                    foreach (var i in obj)
-                        retval.Add(i);
-
-                retval.Add(item);
-
-                return (T1[])retval.ToArray(typeof(T1));
-            }
-            return (T1[])obj;
-        }
-
-        /// <summary>
-        /// Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
-        /// </summary>
-        /// <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
-        /// <typeparam name="T2">The type of the elements of the items being added.</typeparam>
-        /// <param name="obj">The instance of the <see cref="T:System.Array"/>.</param>
-        /// <param name="items">The items to be added.</param>
-        /// <returns>Combined <see cref="T:System.Array"/> object.</returns>
-        [Obsolete(message: "This method name is obsolete use `Combine` instead", error: true)]
-        public static T1[] AddRange<T1, T2>(this T1[] obj, IEnumerable<T2> items)
-        {
-            if (items != null)
-            {
-                var retval = new ArrayList();
-
-                if (obj != null)
-                    foreach (var i in obj)
-                        retval.Add(i);
-
-                foreach (var i in items)
-                    retval.Add(i);
-
-                return (T1[])retval.ToArray(typeof(T1));
-            }
-            return (T1[])obj;
-        }
-
-        /// <summary>
         /// Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
         /// <para>
         /// If you are adding items to the <c>Project</c> or <c>Dir</c> then you can use the
@@ -2519,6 +2481,8 @@ namespace WixSharp
         {
             return obj.Combine((IEnumerable<T2>)items);
         }
+
+        // #if !NETCORE
 
         /// <summary>
         /// Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
@@ -2541,10 +2505,12 @@ namespace WixSharp
                 foreach (var i in items)
                     retval.Add(i);
 
-                return (T1[])retval.ToArray(typeof(T1));
+                return (T1[])retval.Cast<T1>().ToArray();
             }
             return (T1[])obj;
         }
+
+        // #endif
 
         /// <summary>
         /// Combines given <see cref="T:System.Collections.Generic.List"/> items with items of
@@ -2599,6 +2565,12 @@ namespace WixSharp
             {
                 return false;
             }
+        }
+
+        public static SetupEventArgs ToEventArgs(this Session session)
+        {
+            ManagedProject.Init(session);
+            return ManagedProject.Convert(session);
         }
 
         /// <summary>

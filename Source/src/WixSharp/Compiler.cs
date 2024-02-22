@@ -43,6 +43,9 @@ using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
 using IO = System.IO;
 
+// I am checking it for null anyway but when compiling AOT the output becomes too noisy
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file 
+
 namespace WixSharp
 {
 
@@ -2727,7 +2730,11 @@ namespace WixSharp
                     {
                         string nativeCAdll = asmFile;
 
-                        if (wManagedAction.CreateInteropWrapper)
+                        if (wManagedAction.IsNetCore)
+                        {
+                            nativeCAdll = asmFile.ConvertToAotAssembly();
+                        }
+                        else if (wManagedAction.CreateInteropWrapper)
                         {
                             PackageManagedAsm(
                                 asmFile,
@@ -2737,6 +2744,7 @@ namespace WixSharp
                                 wProject.CustomActionConfig,
                                 wProject.Platform,
                                 false);
+
                             nativeCAdll = packageFile;
                         }
 
@@ -3221,6 +3229,7 @@ namespace WixSharp
 
             //if WixSharp was "linked" with the client assembly not as script file but as external assembly
             string wixSharpAsm = System.Reflection.Assembly.GetExecutingAssembly().Location;
+
             if (!clientAsmPath.SamePathAs(wixSharpAsm) && !asmFile.SamePathAs(wixSharpAsm))
             {
                 if (!requiredAsms.Contains(wixSharpAsm))

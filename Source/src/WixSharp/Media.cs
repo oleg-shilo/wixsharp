@@ -29,7 +29,7 @@ namespace WixSharp
         /// Disk identifier for Media table. This number must be equal to or greater than 1.
         /// </summary>
         [Xml]
-        public int Id = 1;
+        public new int Id = 1;
 
         /// <summary>
         /// The name of the cabinet if some or all of the files stored on the media are in
@@ -103,8 +103,8 @@ namespace WixSharp
                 Cabinet = Cabinet.Replace("{projectId}", projectId);
 
             var mediaElement = new XElement("Media")
-                 .AddAttributes(this.MapToXmlAttributes())
-                 .AddAttributes(this.Attributes);
+                .AddAttributes(this.MapToXmlAttributes())
+                .AddAttributes(this.Attributes);
 
             if (!this.IsSetByUser) // let XML cleaners know that it is an auto-element
                 mediaElement.AddAttributes($"{Compiler.WixSharpXmlContextPrefix}DefaultMedia=true");
