@@ -1730,7 +1730,7 @@ namespace WixSharp.CommonTasks
             return code.ToString();
         }
 
-        public static string ConvertToAotAssembly(this string assemblyPath)
+        public static string ConvertToAotAssembly(this string assemblyPath, bool previewOnly = false)
         {
             string assembly = assemblyPath;
 
@@ -1747,6 +1747,9 @@ namespace WixSharp.CommonTasks
 
             var outDir = "output";
             var aotAsm = projDir.PathCombine(outDir, actualProjectFile.PathGetFileNameWithoutExtension() + ".dll");
+
+            if (previewOnly)
+                return aotAsm;
 
             var buildId = projDir.PathJoin($"PID-{Process.GetCurrentProcess().Id}");
 

@@ -2720,9 +2720,14 @@ namespace WixSharp
                     var packageFile = asmFile.PathChangeDirectory(wProject.OutDir.PathGetFullPath())
                                              .PathChangeExtension(".CA.dll");
 
+                    if (wManagedAction.IsNetCore)
+                    {
+                        packageFile = asmFile.ConvertToAotAssembly(previewOnly: true);
+                    }
+
                     var existingBinary = product.Descendants("Binary")
-                                                .Where(e => e.Attribute("SourceFile").Value == packageFile)
-                                                .FirstOrDefault();
+                                            .Where(e => e.Attribute("SourceFile").Value == packageFile)
+                                            .FirstOrDefault();
 
                     string bynaryKey;
 
