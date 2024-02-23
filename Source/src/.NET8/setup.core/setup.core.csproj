@@ -2,13 +2,10 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <!--<OutputType>Library</OutputType>-->
-    <!--<PublishAot>true</PublishAot>-->
     <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
-
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,5 +35,9 @@
   <ItemGroup>
     <ProjectReference Include="..\WixSharp.Core\WixSharp.Core.csproj" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;dotnet &quot;$(TargetPath)&quot;" />
+  </Target>
 
 </Project>

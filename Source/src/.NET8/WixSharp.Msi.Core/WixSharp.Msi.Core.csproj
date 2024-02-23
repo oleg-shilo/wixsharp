@@ -5,15 +5,26 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWindowsForms>true</UseWindowsForms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PublishAot>true</PublishAot>
+    <NoWarn>$(NoWarn);SYSLIB0003</NoWarn>
   </PropertyGroup>
 
   <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">-->
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);CSS_PROJECT;WIXSHARP_MSI</DefineConstants>
   </PropertyGroup>
-
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);CSS_PROJECT;WIXSHARP_MSI;NETCORE</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\WixSharp.Msi\WixSharp.Msi\GenericSetup.cs" Link="GenericSetup.cs" />
+    <Compile Include="..\..\WixSharp.Msi\WixSharp.Msi\MsiExtensions.cs" Link="MsiExtensions.cs" />
+    <Compile Include="..\..\WixSharp.Msi\WixSharp.Msi\MsiInterop.cs" Link="MsiInterop.cs" />
+    <Compile Include="..\..\WixSharp.Msi\WixSharp.Msi\MsiParser.cs" Link="MsiParser.cs" />
+    <Compile Include="..\..\WixSharp.Msi\WixSharp.Msi\MsiSession.cs" Link="MsiSession.cs" />
+    <Compile Include="..\..\WixSharp.Msi\WixSharp.Msi\Program.cs" Link="Program.cs" />
+    <Compile Include="..\..\WixSharp\Properties\AssemblyInfo.version.cs" Link="Properties\AssemblyInfo.version.cs" />
   </ItemGroup>
 
 </Project>

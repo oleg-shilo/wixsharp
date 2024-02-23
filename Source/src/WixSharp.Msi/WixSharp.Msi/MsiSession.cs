@@ -1,14 +1,17 @@
 using System;
 
-using sys = System;
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
+
 using WindowsInstaller;
 
+#pragma warning disable CS8981
+using sys = System;
+
 #pragma warning disable 1591
+#pragma warning disable CA1416 // Validate platform compatibility
 
 namespace WixSharp.UI
 {

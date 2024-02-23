@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("WixSharp")]
-[assembly: AssemblyDescription(".NET 8 bild")]
+[assembly: AssemblyDescription(".NET 8 build")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Oleg Shilo")]
 [assembly: AssemblyProduct("WixSharp")]

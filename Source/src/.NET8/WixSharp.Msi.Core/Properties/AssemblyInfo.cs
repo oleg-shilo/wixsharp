@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 // [assembly: AssemblyTitle("WixSharp.Msi")]
-[assembly: AssemblyDescription("Managed interface for MSI Runtime")]
+[assembly: AssemblyDescription("Managed interface for MSI Runtime. .NET 8 build")]
 // [assembly: AssemblyConfiguration("")]
 // [assembly: AssemblyCompany("")]
 // [assembly: AssemblyProduct("WixSharp.Msi")]
-[assembly: AssemblyCopyright("Copyright Oleg Shilo 2013")]
+[assembly: AssemblyCopyright("Copyright Oleg Shilo 2013-2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -71,6 +71,27 @@
             <param name="msi">The MSI file.</param>
             <param name="mst">The MST file.</param>
         </member>
+        <member name="M:WixSharp.UI.LocalExtensions.GetEnvVar(System.String,System.String)">
+            <summary>
+            Gets the environment variable by the `name`.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="defaultValue">The default value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.UI.LocalExtensions.Is64OS">
+            <summary>
+            Returns <c>true</c> if the OS (this routine is executed on) has an x64 CPU architecture.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WixSharp.UI.LocalExtensions.PathGetDirName(System.String)">
+            <summary>
+            Identical to <see cref="M:System.IO.Path.GetDirectoryName(System.String)"/>. It is useful for Wix# consuming code as it allows avoiding
+            "using System.IO;" directive, which interferes with Wix# types.
+            </summary>
+            <param name="path">The path.</param>
+        </member>
         <member name="T:WixSharp.UI.MsiParser">
             <summary>
             Utility class for simplifying MSI interpreting tasks DB querying, message data parsing
