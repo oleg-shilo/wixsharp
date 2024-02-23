@@ -254,14 +254,11 @@ namespace WixSharp
             return null;
         }
 
-#if NETCORE
-
-        [Obsolete("The method is not implemented on .NET Core", true)]
-#endif
-
         internal static void Unload(this AppDomain domain)
         {
+#if !NETCORE
             AppDomain.Unload(domain);
+#endif
         }
 
         internal static T CreateInstanceFromAndUnwrap<T>(this AppDomain domain)
@@ -269,14 +266,10 @@ namespace WixSharp
             return (T)domain.CreateInstanceFromAndUnwrap(typeof(T).Assembly.Location, typeof(T).ToString());
         }
 
-#if NETCORE
-
-        [Obsolete("The method is not implemented on .NET Core", true)]
-#endif
-
         internal static AppDomain Clone(this AppDomain domain, string name = null)
         {
 #if !NETCORE
+            
             var setup = new AppDomainSetup();
             setup.ApplicationBase = IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             setup.ShadowCopyFiles = "true";

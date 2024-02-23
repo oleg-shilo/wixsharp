@@ -2482,8 +2482,6 @@ namespace WixSharp
             return obj.Combine((IEnumerable<T2>)items);
         }
 
-        // #if !NETCORE
-
         /// <summary>
         /// Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
         /// </summary>
@@ -2509,8 +2507,6 @@ namespace WixSharp
             }
             return (T1[])obj;
         }
-
-        // #endif
 
         /// <summary>
         /// Combines given <see cref="T:System.Collections.Generic.List"/> items with items of

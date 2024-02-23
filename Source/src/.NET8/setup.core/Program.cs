@@ -1,4 +1,4 @@
-﻿using WixSharp;
+using WixSharp;
 using WixToolset.Dtf.WindowsInstaller;
 using File = WixSharp.File;
 
@@ -24,6 +24,7 @@ public class MyActions
     public static ActionResult CustomAction(Session session)
     {
         Native.MessageBox("MSI Session\nINSTALLDIR: " + session.Property("INSTALLDIR"), "WixSharp - .NET8");
+
         return ActionResult.Success;
     }
 
@@ -33,6 +34,7 @@ public class MyActions
         SetupEventArgs args = session.ToEventArgs();
 
         Native.MessageBox("WixSharp RuntimeData\nMsiFile: " + args.MsiFile, "WixSharp - .NET8");
+
         return ActionResult.UserExit;
     }
 }
