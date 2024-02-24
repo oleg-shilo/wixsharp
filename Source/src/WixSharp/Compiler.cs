@@ -1201,6 +1201,7 @@ namespace WixSharp
             if (project.LocalizeErrorAndProgressText)
             {
                 product.AddElement("UIRef", "Id=WixUI_ErrorProgressText");
+                project.Include(WixExtension.UI);
             }
 
             if (project.EmbeddedUI != null)
