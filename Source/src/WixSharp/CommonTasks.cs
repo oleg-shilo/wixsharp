@@ -1803,6 +1803,7 @@ namespace WixSharp.CommonTasks
 
             // IO.File.Copy(assembly.PathChangeFileName("aot.cs"), projDir.PathJoin("aot.cs"));
 
+            var sw = Stopwatch.StartNew();
             using (var process = new Process())
             {
                 process.StartInfo.FileName = "dotnet";
@@ -1812,6 +1813,7 @@ namespace WixSharp.CommonTasks
                 process.Start();
                 process.WaitForExit();
 
+                Console.WriteLine($"Converted: {sw.Elapsed}");
                 if (process.ExitCode == 0)
                     return aotAsm;
 

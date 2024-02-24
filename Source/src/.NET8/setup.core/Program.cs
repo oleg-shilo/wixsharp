@@ -1,3 +1,4 @@
+using System.Text;
 using WixSharp;
 using WixToolset.Dtf.WindowsInstaller;
 using File = WixSharp.File;
@@ -8,8 +9,8 @@ var project =
     new Project("My Product",
         new Dir(@"%ProgramFiles%\My Company\My Product",
             new File("program.cs")),
-        new ManagedAction(MyActions.CustomAction),
-        new ManagedAction(MyActions.CustomAction2),
+        new ManagedAction(Actions.CustomAction),
+        new ManagedAction(Actions.CustomAction2),
         new Property("PropName", "<your value>")); ;
 
 project.PreserveTempFiles = true;
@@ -18,7 +19,8 @@ project.UI = WUI.WixUI_ProgressOnly;
 
 project.BuildMsi();
 
-public class MyActions
+// -----------------------------------------------
+public class Actions
 {
     [CustomAction]
     public static ActionResult CustomAction(Session session)

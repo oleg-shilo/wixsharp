@@ -292,6 +292,12 @@ namespace WixSharp
         /// </summary>
         static public ResolveEventHandler AssemblyResolve;
 
+        [Obsolete("WiX4 does not use Candle/Light any more but wix.exe. Thus use WixOptions instead", true)]
+        public static string LightOptions;
+
+        [Obsolete("WiX4 does not use Candle/Light any more but wix.exe. Thus use WixOptions instead", true)]
+        public static string CandleOptions;
+
         /// <summary>
         /// WiX compiler <c>wix.exe</c> options (e.g. "-define DEBUG"). Available only in WiX v4.*
         /// <para>The default value is "-sw1026" (disable warning 1026).</para>

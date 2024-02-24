@@ -7,6 +7,9 @@
     <UseWindowsForms>true</UseWindowsForms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <PublishAot>true</PublishAot>
+    <RootNamespace>WixSharp</RootNamespace>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>D:\dev\wixsharp-wix4\Source\src\WixSharp\WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -177,11 +180,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Nsis\macros.nsh" />
+    <EmbeddedResource Include="Nsis\macros.nsh">
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\WixSharp\Bootstrapper\runtime\win-x86\mbanative.dll" Link="Bootstrapper\runtime\win-x86\mbanative.dll" />
+    <EmbeddedResource Include="..\..\WixSharp\Bootstrapper\runtime\win-x86\mbanative.dll" Link="Bootstrapper\runtime\win-x86\mbanative.dll" />
   </ItemGroup>
 
   <ItemGroup>

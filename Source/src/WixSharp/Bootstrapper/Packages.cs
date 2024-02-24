@@ -335,7 +335,9 @@ namespace WixSharp.Bootstrapper
                 .Add(this.MapToXmlAttributes());
 
             root.AddPayloads(this.Payloads);
+#pragma warning disable CS0618 // Type or member is obsolete
             root.AddPayloads(this.RemotePayloads);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             foreach (var exitCode in ExitCodes)
             {
@@ -538,7 +540,9 @@ namespace WixSharp.Bootstrapper
                 .Add(this.MapToXmlAttributes());
 
             root.AddPayloads(this.Payloads);
+#pragma warning disable CS0618 // Type or member is obsolete
             root.AddPayloads(this.RemotePayloads);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             return new[] { root };
         }
@@ -607,7 +611,9 @@ namespace WixSharp.Bootstrapper
                 .Add(this.MapToXmlAttributes());
 
             root.AddPayloads(this.Payloads);
+#pragma warning disable CS0618 // Type or member is obsolete
             root.AddPayloads(this.RemotePayloads);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             return new[] { root };
         }
