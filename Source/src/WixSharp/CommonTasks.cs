@@ -2513,10 +2513,10 @@ namespace WixSharp.CommonTasks
 
             // need to publish to restore even if we are going to "publish"
             // It is to handle the cases when in user updated project file manually (e.g. to get different version of tools)
-            Compiler.Run("dotnet", "restore", projectDir);
+            Compiler.Run("dotnet.exe", "restore", projectDir);
 
             // need to publish to isolate assemblies
-            Compiler.Run("dotnet", @"publish -o .\publish", projectDir);
+            Compiler.Run("dotnet.exe", @"publish -o .\publish", projectDir);
         }
     }
 }
