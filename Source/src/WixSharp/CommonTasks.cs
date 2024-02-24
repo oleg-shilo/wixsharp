@@ -1806,7 +1806,7 @@ namespace WixSharp.CommonTasks
             var sw = Stopwatch.StartNew();
             using (var process = new Process())
             {
-                process.StartInfo.FileName = "dotnet";
+                process.StartInfo.FileName = "dotnet.exe";
                 process.StartInfo.Arguments = $"publish {actualProjectFile.Enquote()} /p:NativeLib=Shared -r win-x64 -c release -o {outDir}";
                 process.StartInfo.WorkingDirectory = projDir;
                 process.StartInfo.UseShellExecute = false;
@@ -1837,7 +1837,7 @@ namespace WixSharp.CommonTasks
             {
                 using (var process = new Process())
                 {
-                    process.StartInfo.FileName = "dotnet";
+                    process.StartInfo.FileName = "dotnet.exe";
                     process.StartInfo.Arguments = $"publish {actualProjectFile.Enquote()} /p:NativeLib=Shared -r win-x64 -c release -o {outDir}";
                     process.StartInfo.WorkingDirectory = projFile.PathGetDirName();
                     process.StartInfo.UseShellExecute = false;

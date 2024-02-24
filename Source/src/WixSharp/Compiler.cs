@@ -3505,7 +3505,7 @@ namespace WixSharp
                 if (file.StartsWith("localtool:"))
                 {
                     var toolName = file.Split(':').Last();
-                    p.StartInfo.FileName = "dotnet";
+                    p.StartInfo.FileName = "dotnet.exe";
                     p.StartInfo.Arguments = $"{toolName} {args}";
                 }
                 else
