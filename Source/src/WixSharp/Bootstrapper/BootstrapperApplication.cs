@@ -157,23 +157,26 @@ namespace WixSharp.Bootstrapper
 
         static void ValidateCustomBaAssembly(string assembly)
         {
+#if DOTNET
+                throw new NotImplementedException("The method is not implemented on .NET Core");
+#else
             try
             {
-                throw new NotImplementedException("The method is not implemented on .NET Core");
-                // var valid = (bool)Utils.ExecuteInTempDomain<AsmReflector>(
-                //                         asmReflector => asmReflector.ValidateCustomBaAssembly(assembly));
+                var valid = (bool)Utils.ExecuteInTempDomain<AsmReflector>(
+                                        asmReflector => asmReflector.ValidateCustomBaAssembly(assembly));
 
-                // if (!valid)
-                //     Compiler.OutputWriteLine(
-                //             $"ERROR: The custom BA assembly (`{assembly}`) seems to have no attribute " +
-                //             $"`WixToolset.Mba.Core.BootstrapperApplicationFactoryAttribute` defined " +
-                //             $"for the BootstrapperApplication factory class.");
+                if (!valid)
+                    Compiler.OutputWriteLine(
+                            $"ERROR: The custom BA assembly (`{assembly}`) seems to have no attribute " +
+                            $"`WixToolset.Mba.Core.BootstrapperApplicationFactoryAttribute` defined " +
+                            $"for the BootstrapperApplication factory class.");
             }
             catch
             {
                 Compiler.OutputWriteLine(
                         $"WARNING: Cannot validate the custom BA assembly (`{assembly}`).");
             }
+#endif
         }
 
         /// <summary>

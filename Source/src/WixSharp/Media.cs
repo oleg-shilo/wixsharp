@@ -29,7 +29,7 @@ namespace WixSharp
         /// Disk identifier for Media table. This number must be equal to or greater than 1.
         /// </summary>
         [Xml]
-        public new int Id = 1;
+        public int Id = 1;
 
         /// <summary>
         /// The name of the cabinet if some or all of the files stored on the media are in

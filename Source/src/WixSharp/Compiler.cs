@@ -292,9 +292,17 @@ namespace WixSharp
         /// </summary>
         static public ResolveEventHandler AssemblyResolve;
 
+        /// <summary>
+        /// WiX linker <c>Light.exe</c> options (e.g. " -sice:ICE30").
+        /// <para>The default value is "-sw1076 -sw1079" (disable warning 1076 and 1079).</para>
+        /// </summary>
         [Obsolete("WiX4 does not use Candle/Light any more but wix.exe. Thus use WixOptions instead", true)]
         public static string LightOptions;
 
+        /// <summary>
+        /// WiX compiler <c>Candle.exe</c> options.
+        /// <para>The default value is "-sw1076" (disable warning 1026).</para>
+        /// </summary>
         [Obsolete("WiX4 does not use Candle/Light any more but wix.exe. Thus use WixOptions instead", true)]
         public static string CandleOptions;
 

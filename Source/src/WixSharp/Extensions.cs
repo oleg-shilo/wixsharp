@@ -2624,6 +2624,11 @@ namespace WixSharp
             }
         }
 
+        /// <summary>
+        /// Returns an instance of <see cref="SetupEventArgs"/> initialized from the <see cref="Session"/> data.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
         public static SetupEventArgs ToEventArgs(this Session session)
         {
             ManagedProject.Init(session);

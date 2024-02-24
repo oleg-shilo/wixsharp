@@ -338,7 +338,7 @@ namespace WixSharp
         /// Name of the <see cref="WixEntity"/>.
         /// <para>This value is used as a <c>Name</c> for the corresponding WiX XML element.</para>
         /// </summary>
-        public new string Name = "";
+        public string Name = "";
 
         /// <summary>
         /// Gets or sets the <c>Id</c> value of the <see cref="WixEntity"/>.
@@ -356,7 +356,7 @@ namespace WixSharp
         /// </remarks>
         /// </summary>
         /// <value>The id.</value>
-        public new string Id
+        public string Id
         {
             get
             {
@@ -477,7 +477,7 @@ namespace WixSharp
         /// <summary>
         /// Backing value of <see cref="Id"/>.
         /// </summary>
-        protected new string id;
+        protected string id;
 
         internal string RawId { get { return id; } }
 
@@ -493,7 +493,7 @@ namespace WixSharp
         /// <c>Build</c> operations to ensure reproducibility of the <see cref="Id"/> set between <c>Build()</c>
         /// calls.
         /// </summary>
-        static public new void ResetIdGenerator()
+        static public void ResetIdGenerator()
         {
             idMaps.Clear();
             alreadyTakenIds.Clear();

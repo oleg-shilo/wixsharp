@@ -1730,6 +1730,13 @@ namespace WixSharp.CommonTasks
             return code.ToString();
         }
 
+        /// <summary>
+        /// Converts an assembly containing Custom Actions into a native library by AOT compiling it.
+        /// <para>Custom action methods are exported as native entry points with the same name.</para>
+        /// </summary>
+        /// <param name="assemblyPath">The assembly path.</param>
+        /// <param name="previewOnly">if set to <c>true</c> [preview only].</param>
+        /// <returns></returns>
         public static string ConvertToAotAssembly(this string assemblyPath, bool previewOnly = false)
         {
             string assembly = assemblyPath;
@@ -1821,6 +1828,11 @@ namespace WixSharp.CommonTasks
             }
         }
 
+        /// <summary>
+        /// Compiles the the project file into an aot assembly.
+        /// </summary>
+        /// <param name="projFile">The proj file.</param>
+        /// <returns></returns>
         public static string CompileAotAssembly(this string projFile)
         {
             var projDir = projFile.PathGetDirName();
