@@ -4,10 +4,12 @@
 
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
@@ -32,11 +34,14 @@ class Script
                             new FileShortcut("My App", "INSTALLDIR") { Advertise = true })));
 
         project.UI = WUI.WixUI_InstallDir;
-        
+        project.LocalizeErrorAndProgressText = false;
+
         // project.PreserveTempFiles = true;
 
         project.BeforeInstall += args =>
         {
+            AppSearch.GetRelatedProducts(project.UpgradeCode.ToString());
+
             if (args.IsUninstalling)
                 MessageBox.Show(args.InstallDir, "Uninstalling...");
             else

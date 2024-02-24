@@ -2564,9 +2564,9 @@ namespace WixSharp
                 foreach (var i in items)
                     retval.Add(i);
 
-                return (T1[])retval.Cast<T1>().ToArray();
+                return retval.Cast<T1>().ToArray();
             }
-            return (T1[])obj;
+            return obj;
         }
 
         /// <summary>
