@@ -32,6 +32,7 @@ class Script
                             new FileShortcut("My App", "INSTALLDIR") { Advertise = true })));
 
         project.UI = WUI.WixUI_InstallDir;
+        
         // project.PreserveTempFiles = true;
 
         project.BeforeInstall += args =>

@@ -313,6 +313,17 @@ namespace WixSharp
         public WUI UI = WUI.WixUI_Minimal;
 
         /// <summary>
+        /// <para>Note this setting is only applicable to native MSI/WiX UI.</para>
+        /// By default, WixUI will not include any translated Error or ProgressText elements.
+        /// You can include them by referencing the WixUI_ErrorProgressText UI element in the wxs file.
+        /// You can control referencing WixUI_ErrorProgressText element by setting by setting this field.
+        /// <para>
+        /// True (default): WixUI_ErrorProgressText will be referenced, otherwise it will not.
+        /// </para>
+        /// </summary>
+        public bool LocalizeErrorAndProgressText = true;
+
+        /// <summary>
         /// The Binary (assembly) implementing WiX embedded UI
         /// </summary>
         public Binary EmbeddedUI = null;
