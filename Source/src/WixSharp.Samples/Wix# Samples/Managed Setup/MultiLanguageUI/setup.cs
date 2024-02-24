@@ -3,13 +3,13 @@
 //css_ref WixSharp.UI.dll;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.Deployment.WindowsInstaller;
+using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
@@ -46,8 +46,11 @@ public static class Script
 
     static SupportedLanguages DetectLanguage()
     {
-        // in production you can do something smarter like analysing OS language
-        // current thread UI culture most likely will not work as it will be set to the language of the project
+        // In production you can do something smarter like analyzing OS language.
+        // Current thread UI culture most likely will not work as it will be set to the language of the project
+        // Consider using WixSharp.Native.GetPreferredIsoTwoLetterUILanguages to get OS preferred languages info
+
+        string[] OS_PreferredLanguages = Native.GetPreferredIsoTwoLetterUILanguages();
 
         var input = new Form
         {
