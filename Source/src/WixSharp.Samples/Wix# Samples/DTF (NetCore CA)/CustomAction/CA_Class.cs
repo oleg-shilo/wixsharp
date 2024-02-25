@@ -17,7 +17,8 @@ public class Class1
     {
         using Session session = Session.FromHandle(handle, false);
 
-        System.Windows.Forms.MessageBox.Show("Hello from .NET Core! (007)", "WixSharp.Core", 0);
+        // uncommenting next line will increate AOT compilation overhead, but it will work nevertheless
+        // System.Windows.Forms.MessageBox.Show("Hello from .NET Core! (007)", "WixSharp.Core", 0);
 
         MessageBox(GetForegroundWindow(), "Hello from .NET Core!", "WixSharp", 0);
 

@@ -18,7 +18,7 @@ This is a .NET Core release that is currently under reliability testing. For the
 
 ### Create project
 
-_Note, when .NET-Core packages are fully released they will come along with the Visual; Studio project templates as .NET-Framework packages do currently. But until it happens you will need to create your project manually or use this sample as a starting point.'
+_Note, when .NET-Core packages are fully released they will come along with the Visual; Studio project templates as .NET-Framework packages do currently. But until it happens you will need to create your project manually or use this [sample](https://github.com/oleg-shilo/wixsharp/blob/wix-v4-master/Source/src/NET-Core/Sample/Program.cs) as a starting point.'_
 
 Steps:
 

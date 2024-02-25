@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp_wix4</id>
-    <version>2.1.0.0</version>
+    <version>2.1.1.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,22 +18,24 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed: `dotnet tool install --global wix`
 The package is tested against WIX (Windows Installer Xml) Toolset v4.0.1.0</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>WiX4: Release v2.1.0.0 
-- #1446: Catch all exceptions in managed WinForms UI
-- #1444: wix.exe not found if installed as local tool
-- #1436: NuGet config variable "globalPackagesFolder" is ignored
-- #1428: [Question] SetNetPrerequirements to NET 7 or better
-         Updated SetNetPrerequirements to allow using new WiX4 `DotNetCompatibilityCheck`
-- #1436: NuGet config variable "globalPackagesFolder" is ignored
-- Proposal #1263: Signing using JSign or other alternatives
-- Added `bool None&lt;TSource&gt;(this IEnumerable&lt;TSource&gt; source, ...)` extension method
-- Fixed accidental renaming of `DigitalSignature1`-&gt;`DigitalSignature`
+    <releaseNotes>WiX4: Release v2.1.1.0 
+- Issue #1406: Multi-language improvement
+- Issue #1462: ProgressText with WiX 4
+- Issue #1463: Unable to find dotnet when building with dotnet cli
+- Issue #1460: Add -sw1026 to default Wix4 argument options?
+- PR #1461 from klokkenman1/wix-v4-master
+  Add sw1026 to WixOptions
+- Proposal #1456: Using PublishAot instead of SfxCA for custom actions
+- Support for CA compiled with .NETCore (AOT)
+- Added support for .NET Core projects (pre-release)
+  See https://github.com/oleg-shilo/wixsharp/blob/wix-v4-master/Source/src/NET-Core
+
 </releaseNotes>
     <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp_wix4.bin" version="2.1.0.0" />
+      <dependency id="WixSharp_wix4.bin" version="2.1.1.0" />
     </dependencies>
   </metadata>
   <files>
