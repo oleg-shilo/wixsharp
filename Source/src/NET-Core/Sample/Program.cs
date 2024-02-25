@@ -1,5 +1,4 @@
-using System.Text;
-using WixSharp;
+﻿using WixSharp;
 using WixToolset.Dtf.WindowsInstaller;
 using File = WixSharp.File;
 

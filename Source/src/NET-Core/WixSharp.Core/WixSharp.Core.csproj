@@ -6,19 +6,25 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWindowsForms>true</UseWindowsForms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <PublishAot>true</PublishAot>
+    <!--<PublishAot>true</PublishAot>-->
     <RootNamespace>WixSharp</RootNamespace>
     <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>D:\dev\wixsharp-wix4\Source\src\WixSharp\WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\WixSharp\WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <FileVersion>2.1.1</FileVersion>
+    <AssemblyVersion>2.1.1</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants);CSS_PROJECT;NETCORE</DefineConstants>
-    <NoWarn>1701;1702; CA1416</NoWarn>
+    <DefineConstants>$(DefineConstants); CSS_PROJECT; NETCORE;</DefineConstants>
+    <NoWarn>1701;1702; CA1416; CS0108</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>1701;1702; CA1416</NoWarn>
+    <DefineConstants>$(DefineConstants); CSS_PROJECT; NETCORE;</DefineConstants>
+    <NoWarn>1701;1702; CA1416; CS0108</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -189,9 +195,42 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\..\Templates.2022\WixSharpVSIX\WixSharpVSIX\wixsharp_logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="4.0.4" />
     <PackageReference Include="WixToolset.Mba.Core" Version="4.0.4" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <PackageVersion>2.1.1-pre</PackageVersion>
+    <Title>WixSharp (.NET Core)</Title>
+    <Description>.NET Core edition of WixSharp package</Description>
+    <Copyright>Oleg Shilo</Copyright>
+    <PackageProjectUrl>https://github.com/oleg-shilo/wixsharp</PackageProjectUrl>
+    <PackageIcon>wixsharp_logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/oleg-shilo/wixsharp</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>MSI, WiX, WIxSharp, C#</PackageTags>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+
+  <Target Name="PrePackage" BeforeTargets="BuildPackage">
+    <PropertyGroup>
+      <BuildCommand>$(BuildCommand) -IncludeReferencedProjects</BuildCommand>
+    </PropertyGroup>
+  </Target>
 
   <ItemGroup>
     <ProjectReference Include="..\WixSharp.Msi.Core\WixSharp.Msi.Core.csproj" />

@@ -157,8 +157,8 @@ namespace WixSharp.Bootstrapper
 
         static void ValidateCustomBaAssembly(string assembly)
         {
-#if DOTNET
-                throw new NotImplementedException("The method is not implemented on .NET Core");
+#if NETCORE
+            throw new NotImplementedException("The method is not implemented on .NET Core");
 #else
             try
             {

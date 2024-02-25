@@ -269,7 +269,6 @@ namespace WixSharp
         internal static AppDomain Clone(this AppDomain domain, string name = null)
         {
 #if !NETCORE
-            
             var setup = new AppDomainSetup();
             setup.ApplicationBase = IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             setup.ShadowCopyFiles = "true";
