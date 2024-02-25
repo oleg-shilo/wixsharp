@@ -8,6 +8,10 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="aot\**" />
     <Compile Remove="outdir\**" />
