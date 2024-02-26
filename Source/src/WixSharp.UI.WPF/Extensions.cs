@@ -16,7 +16,7 @@ namespace WixSharp.UI.WPF
     /// <summary>
     /// Implements as standard dialog-based MSI embedded UI as a sequence of WPF dialogs.
     /// <para>
-    /// This class allows defining separate sequences of UI dialogs for 'install'
+    /// This class allows defining separate sequences of UI dialogs for 'install'.
     /// and 'modify' MSI executions. The dialog sequence can contain any mixture
     /// of built-in standard dialogs and/or custom WPF dialogs.
     /// </para>

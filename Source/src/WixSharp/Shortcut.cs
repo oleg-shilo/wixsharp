@@ -95,6 +95,16 @@ namespace WixSharp
         public bool Advertise = false;
 
         /// <summary>
+        /// The localizable description for the shortcut.
+        /// <para>It appears as a tooltip when rolling the mouse over the shortcut file.</para>
+        /// </summary>
+        public string Description
+        {
+            get => attributesBag.Get(nameof(Description));
+            set => attributesBag.Set(nameof(Description), value);
+        }
+
+        /// <summary>
         /// Shortcut properties
         /// </summary>
         public Dictionary<string, string> ShortcutProperties = new Dictionary<string, string>();

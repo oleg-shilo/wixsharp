@@ -108,6 +108,10 @@ namespace WixSharp
 
         internal string HiddenAttributesDefinition;
 
+        /// <summary>
+        /// The attributes bag is a set of hidden extra attributes to be used to implement WixObject serializable
+        /// properties. IE `File.TargetFileName`
+        /// </summary>
         internal Dictionary<string, string> attributesBag = new Dictionary<string, string>();
 
         void ProcessAttributesDefinition()

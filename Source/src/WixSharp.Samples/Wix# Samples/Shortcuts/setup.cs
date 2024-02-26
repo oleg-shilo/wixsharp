@@ -15,30 +15,22 @@ class Script
     {
         try
         {
+            Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = true;
+
             var project =
                 new Project("My Product",
-                    new Dir(@"%ProgramFiles%\My Company\My Product",
-                        new InternetShortcut
-                        {
-                            Name = "Wix# project page",
-                            Target = "https://github.com/oleg-shilo/wixsharp"
-                        },
-                        new Dir("Samples",
-                            new File(@"AppFiles\MyApp.cs")),
-
+                    new Dir(@"%ProgramFiles%\Invantive Software BV\Invantive Build Tool 24.0",
                         new File(@"AppFiles\MyApp.exe",
                             new FileShortcut("MyApp", "INSTALLDIR"), //INSTALLDIR is the ID of "%ProgramFiles%\My Company\My Product"
-                            new FileShortcut("MyApp", @"%Desktop%") { IconFile = @"AppFiles\Icon.ico", WorkingDirectory = "Samples", Arguments = "777" })
-                           //,
-                           // // new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")
-                           // new ExeFileShortcut("MyApp Setup", @"%ProgramFiles%\dotnet\dotnet.exe",
-                           // "\"[INSTALLDIR]AIS Manager Setup.dll\"")
-                           // {
-                           //     WorkingDirectory = "%Temp%"
-                           // }
-                           ),
+                            new FileShortcut("MyApp", @"%Desktop%")
+                            {
+                                IconFile = @"AppFiles\Icon.ico",
+                                WorkingDirectory = "Samples",
+                                Description = "My Application",
+                                Arguments = "777"
+                            })),
 
-                    new Dir(@"%ProgramMenu%\My Company\My Product",
+                    new Dir(@"%ProgramMenu%\Invantive Software BV\Invantive Build Tool 24.0",
                         new DirectoryShortcut("Samples", "[Samples]"),
                         new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")));
 
@@ -46,7 +38,6 @@ class Script
             project.UI = WUI.WixUI_ProgressOnly;
 
             project.Platform = Platform.x64;
-            // project.OutFileName = "setup";
             project.PreserveTempFiles = true;
 
             Compiler.BuildMsi(project);
