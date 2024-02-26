@@ -28,8 +28,16 @@ class Script
                             new File(@"AppFiles\MyApp.cs")),
 
                         new File(@"AppFiles\MyApp.exe",
-                            new FileShortcut("MyApp", "INSTALLDIR"), //INSTALLDIR is the ID of "%ProgramFiles%\My Company\My Product"
-                            new FileShortcut("MyApp", @"%Desktop%") { IconFile = @"AppFiles\Icon.ico", WorkingDirectory = "Samples", Arguments = "777" })
+                            new FileShortcut("MyApp", "INSTALLDIR"),
+
+                            //INSTALLDIR is the ID of "%ProgramFiles%\My Company\My Product"
+                            new FileShortcut("MyApp", @"%Desktop%")
+                            {
+                                IconFile = @"AppFiles\Icon.ico",
+                                WorkingDirectory = "Samples",
+                                Arguments = "777",
+                                Description = "My Application"
+                            })
                            //,
                            // // new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")
                            // new ExeFileShortcut("MyApp Setup", @"%ProgramFiles%\dotnet\dotnet.exe",
