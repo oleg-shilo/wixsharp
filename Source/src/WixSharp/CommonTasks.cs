@@ -1725,6 +1725,12 @@ namespace WixSharp.CommonTasks
                     .AppendLine($"        => (uint){info.Method.DeclaringType?.FullName}.{info.Method.Name}(Session.FromHandle(handle, false));")
                     .AppendLine("");
 
+            code.AppendLine($"    [UnmanagedCallersOnly(EntryPoint = \"WixSharp_Load_Action\")]")
+                .AppendLine($"    public static uint WixSharp_Load_Action(IntPtr handle)")
+                .AppendLine($"        => (uint)Actions.WixSharp_Load_Action(Session.FromHandle(handle, false));")
+                .AppendLine("");
+
+
             code.AppendLine("}");
 
             return code.ToString();
@@ -1740,6 +1746,11 @@ namespace WixSharp.CommonTasks
         public static string ConvertToAotAssembly(this string assemblyPath, bool previewOnly = false)
         {
             string assembly = assemblyPath;
+
+            if (assemblyPath.PathGetFileName() == "WixSharp.Core.dll")
+            {
+                assemblyPath = "%this%";
+            }
 
             if (assemblyPath.EndsWith("%this%"))
             {

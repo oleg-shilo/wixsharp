@@ -385,6 +385,8 @@ namespace WixSharp
         /// </summary>
         public bool AlwaysScheduleInitRuntime = true;
 
+        internal bool IsNetCore = Environment.Version.Major > 5;
+
         override internal void Preprocess()
         {
             //Debug.Assert(false);
@@ -410,6 +412,13 @@ namespace WixSharp
                                               || IsHandlerSet(() => BeforeInstall)
                                               || IsHandlerSet(() => AfterInstall)
                                               || AlwaysScheduleInitRuntime);
+
+                // With .NET-Core we do not schedule any CA to initialize reflection based algorithm for invoking
+                // event handlers at runtime. All event handlers will be exported as entry points of the AOT compiled
+                // client assembly instead.
+                if (this.IsNetCore)
+                    needInvokeInitRuntime = false;
+
                 if (needInvokeInitRuntime)
                     this.AddAction(new ManagedAction(dllEntry)
                     {
@@ -647,8 +656,8 @@ namespace WixSharp
             if (type == null)
                 type = assembly.GetType(parts[1]);
 
-            var method = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Static)
-                             .Single(m => m.Name == parts[2]);
+            var method = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Static)
+                             .Single(m => m.Name.Split('|').First() == parts[2]);
 
             return method;
         }
