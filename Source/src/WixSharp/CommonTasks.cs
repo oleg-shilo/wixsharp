@@ -1715,13 +1715,24 @@ namespace WixSharp.CommonTasks
 
             var code = new StringBuilder();
 
-            code.AppendLine("using System;\r\nusing System.Runtime.InteropServices;\r\nusing WixToolset.Dtf.WindowsInstaller;\r\n")
+            code.AppendLine("using System;\r\nusing System.Runtime.InteropServices;\r\nusing WixToolset.Dtf.WindowsInstaller;\r\nusing static System.Reflection.BindingFlags;\r\n")
                 .AppendLine("public class AotEnrtyPoints")
                 .AppendLine("{")
                 .AppendLine("    static AotEnrtyPoints()")
-                .AppendLine("    {")
-                .AppendLine("        AotRuntime.Init();")
-                .AppendLine("    }")
+                .AppendLine("    {");
+
+            if (assembly.GetType("AotRuntime") != null)
+            {
+                code.AppendLine("        AotRuntime.Init();");
+            }
+            else
+                foreach (var t in assembly.GetExportedTypes())
+                {
+                    code.AppendLine($"        typeof({t.FullName}).GetMembers(Public | NonPublic | FlattenHierarchy | Static | Instance | InvokeMethod);");
+                }
+            code.AppendLine($"        typeof(Program).GetMembers(Public | NonPublic | FlattenHierarchy | Static | Instance | InvokeMethod);");
+
+            code.AppendLine("    }")
                 .AppendLine("");
 
             foreach (var info in customActions)

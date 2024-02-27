@@ -31,6 +31,7 @@ static void Project_Load(SetupEventArgs e)
     Native.MessageBox("static delegate", "WixSharp - .NET8");
     // e.Result = ActionResult.Failure;
 }
+// }
 
 // -----------------------------------------------
 
