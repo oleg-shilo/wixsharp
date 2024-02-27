@@ -1717,7 +1717,12 @@ namespace WixSharp.CommonTasks
 
             code.AppendLine("using System;\r\nusing System.Runtime.InteropServices;\r\nusing WixToolset.Dtf.WindowsInstaller;\r\n")
                 .AppendLine("public class AotEnrtyPoints")
-                .AppendLine("{");
+                .AppendLine("{")
+                .AppendLine("    static AotEnrtyPoints()")
+                .AppendLine("    {")
+                .AppendLine("        AotRuntime.Init();")
+                .AppendLine("    }")
+                .AppendLine("");
 
             foreach (var info in customActions)
                 code.AppendLine($"    [UnmanagedCallersOnly(EntryPoint = \"{info.Method.Name}\")]")
@@ -1727,9 +1732,9 @@ namespace WixSharp.CommonTasks
 
             code.AppendLine($"    [UnmanagedCallersOnly(EntryPoint = \"WixSharp_Load_Action\")]")
                 .AppendLine($"    public static uint WixSharp_Load_Action(IntPtr handle)")
-                .AppendLine($"        => (uint)Actions.WixSharp_Load_Action(Session.FromHandle(handle, false));")
+                // .AppendLine($"        => (uint)Actions.WixSharp_Load_Action(Session.FromHandle(handle, false));")
+                .AppendLine($"        => (uint)WixSharp.ManagedProjectActions.WixSharp_Load_Action(Session.FromHandle(handle, false));")
                 .AppendLine("");
-
 
             code.AppendLine("}");
 
