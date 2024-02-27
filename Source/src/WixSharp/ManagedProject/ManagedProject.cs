@@ -232,13 +232,12 @@ namespace WixSharp
                 {
                     string location = type.Assembly.Location;
 
-                    if (!type.IsNested)
-                    {
-                        if (HandlerAotDeclaringTypes.ContainsKey(location))
-                            HandlerAotDeclaringTypes[location] += "," + type.FullName;
-                        else
-                            HandlerAotDeclaringTypes[location] = type.FullName;
-                    }
+                    var rootType = type.RootDeclaringType();
+
+                    if (HandlerAotDeclaringTypes.ContainsKey(location))
+                        HandlerAotDeclaringTypes[location] += "," + rootType.FullName;
+                    else
+                        HandlerAotDeclaringTypes[location] = rootType.FullName;
 
                     //Resolving scriptAsmLocation is not properly tested yet
                     bool resolveInMemAsms = true;

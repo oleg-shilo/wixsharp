@@ -12,11 +12,21 @@ var project =
 
 project.PreserveTempFiles = true;
 
-project.Load += Project_Load;
+project.BeforeInstall += e =>
+{
+    Native.MessageBox("Before Instrall", "WixSharp - .NET8");
+};
+
+project.AfterInstall += e =>
+{
+    Native.MessageBox("After Instrall", "WixSharp - .NET8");
+};
+
+// project.Load += Project_Load;
 project.Load += (e) =>
 {
     Native.MessageBox("lambda delegate", "WixSharp - .NET8");
-    e.Result = ActionResult.Failure;
+    // e.Result = ActionResult.Failure;
 };
 
 project.UI = WUI.WixUI_ProgressOnly;

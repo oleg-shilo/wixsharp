@@ -197,6 +197,14 @@ namespace WixSharp
         public static bool Implements<T>(this Type type)
             => type.GetInterfaces().Contains(typeof(T));
 
+        internal static Type RootDeclaringType(this Type type)
+        {
+            var retval = type;
+            while (retval.DeclaringType != null)
+                retval = retval.DeclaringType;
+            return retval;
+        }
+
         internal static bool Implements(this Type type, string interfaceName)
             => type.GetInterfaces().Any(i => i.FullName == interfaceName);
 

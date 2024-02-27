@@ -1738,11 +1738,17 @@ namespace WixSharp.CommonTasks
                     .AppendLine($"        => (uint){info.Method.DeclaringType?.FullName}.{info.Method.Name}(Session.FromHandle(handle, false));")
                     .AppendLine("");
 
-            code.AppendLine($"    [UnmanagedCallersOnly(EntryPoint = \"WixSharp_Load_Action\")]")
-                .AppendLine($"    public static uint WixSharp_Load_Action(IntPtr handle)")
-                // .AppendLine($"        => (uint)Actions.WixSharp_Load_Action(Session.FromHandle(handle, false));")
-                .AppendLine($"        => (uint)WixSharp.ManagedProjectActions.WixSharp_Load_Action(Session.FromHandle(handle, false));")
-                .AppendLine("");
+            void insertEP(string name)
+            {
+                code.AppendLine($"    [UnmanagedCallersOnly(EntryPoint = \"{name}\")]")
+                    .AppendLine($"    public static uint {name}(IntPtr handle)")
+                    .AppendLine($"        => (uint)WixSharp.ManagedProjectActions.{name}(Session.FromHandle(handle, false));")
+                    .AppendLine("");
+            }
+
+            insertEP("WixSharp_Load_Action");
+            insertEP("WixSharp_BeforeInstall_Action");
+            insertEP("WixSharp_AfterInstall_Action");
 
             code.AppendLine("}");
 
