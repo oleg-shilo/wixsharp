@@ -17,12 +17,11 @@ var project =
         new Dir(@"%ProgramFiles%\My Company\My Product",
             new File("program.cs")),
         new ManagedAction(Actions.CustomAction),
-        // new ManagedAction(Actions.CustomAction2),
         new Property("PropName", "<your value>"));
 
 project.PreserveTempFiles = true;
 
-// project.Load += Project_Load;
+project.Load += Project_Load;
 project.Load += (e) =>
 {
     Native.MessageBox("lambda delegate", "WixSharp - .NET8");
@@ -30,68 +29,26 @@ project.Load += (e) =>
 
 project.UI = WUI.WixUI_ProgressOnly;
 
-Actions.ExportEventsEntryPoints(project);
-
 project.BuildMsi();
 
 // -----------------------------------------------
-// }
 
-// static void Project_Load(SetupEventArgs e)
-// {
-//     Native.MessageBox("static delegate", "WixSharp - .NET8");
-//     e.Result = ActionResult.Failure;
-// }
-//}
+static void Project_Load(SetupEventArgs e)
+{
+    Native.MessageBox("static delegate", "WixSharp - .NET8");
+}
 
 // -----------------------------------------------
 public class Actions
 {
-    public static string ExportEventsEntryPoints(ManagedProject project)
-    {
-        // Bind(() => Load, When.Before, Step.AppSearch);
-        return null;
-    }
-
     const BindingFlags bindng = Public | NonPublic | FlattenHierarchy | Static | Instance | InvokeMethod;
 
     public static ActionResult WixSharp_Load_Action(Session session)
     {
         // https://github.com/dotnet/corert/blob/master/Documentation/using-corert/reflection-in-aot-mode.md
         var required_for_aot_inclusion_of_reflection_metadata = typeof(Program).GetMembers(bindng);
-        return InvokeHandler(session, "Program+<>c", "<<Main>$>b__0_0");
-    }
 
-    public static ActionResult InvokeHandler(Session session, string type, string method)
-    {
-        try
-        {
-            var handlerClass = System.Reflection.Assembly.GetExecutingAssembly().GetTypes().FirstOrDefault(x => x.FullName == type);
-            var handlerMethod = (MethodInfo)handlerClass?
-                .GetMembers(bindng)?
-                .FirstOrDefault(x => x.Name == method);
-
-            // var arg = AotInterop.Convert(session);
-            Native.MessageBox($"{handlerClass.FullName}\n{handlerMethod.Name}", "WixSharp.Managed");
-
-            if (handlerClass != null && handlerMethod != null)
-            {
-                if (handlerMethod.IsStatic)
-                {
-                    handlerMethod?.Invoke(null, new object[] { null, null });
-                }
-                else
-                {
-                    object instance = Activator.CreateInstance(handlerClass);
-                    handlerMethod?.Invoke(instance, new object[] { null });
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            Native.MessageBox(e.Message, "WixSharp.Managed");
-        }
-
+        WixSharp.ManagedProjectActions.WixSharp_Load_Action(session);
         return ActionResult.UserExit;
     }
 
@@ -105,7 +62,6 @@ public class Actions
         return ActionResult.Success;
     }
 
-    [CustomAction]
     public static ActionResult CustomAction2(Session session)
     {
         SetupEventArgs args = session.ToEventArgs();
