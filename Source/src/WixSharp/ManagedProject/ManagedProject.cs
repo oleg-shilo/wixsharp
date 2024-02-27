@@ -209,6 +209,8 @@ namespace WixSharp
             return (handler != null);
         }
 
+        internal static Dictionary<string, string> HandlerAotDeclaringTypes = new Dictionary<string, string>();
+
         void Bind<T>(Expression<Func<T>> expression, When when = When.Before, Step step = null, bool elevated = false)
         {
             var name = Reflect.NameOf(expression);
@@ -229,6 +231,14 @@ namespace WixSharp
                 foreach (var type in handler.GetInvocationList().Select(x => x.Method.DeclaringType))
                 {
                     string location = type.Assembly.Location;
+
+                    if (!type.IsNested)
+                    {
+                        if (HandlerAotDeclaringTypes.ContainsKey(location))
+                            HandlerAotDeclaringTypes[location] += "," + type.FullName;
+                        else
+                            HandlerAotDeclaringTypes[location] = type.FullName;
+                    }
 
                     //Resolving scriptAsmLocation is not properly tested yet
                     bool resolveInMemAsms = true;

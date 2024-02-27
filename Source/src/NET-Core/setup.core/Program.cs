@@ -8,7 +8,6 @@ var project =
     new ManagedProject("My Product",
         new Dir(@"%ProgramFiles%\My Company\My Product",
             new File("program.cs")),
-        // new ManagedAction(Actions.CustomAction),
         new Property("PropName", "<your value>"));
 
 project.PreserveTempFiles = true;
@@ -22,26 +21,19 @@ project.Load += (e) =>
 
 project.UI = WUI.WixUI_ProgressOnly;
 
+ValidateAotReadiness(project);
+
 project.BuildMsi();
 
 // -----------------------------------------------
+static void ValidateAotReadiness(Project project)
+{
+    // check if the types declaring event handlers are public or handlers assemblies are
+    // listed in this assembly `InternalsVisibleTo` attribute (usually in AssemblyInfo.cs file)
+}
 
 static void Project_Load(SetupEventArgs e)
 {
     Native.MessageBox("static delegate", "WixSharp - .NET8");
     // e.Result = ActionResult.Failure;
-}
-// }
-
-// -----------------------------------------------
-
-public class Actions
-{
-    [CustomAction]
-    public static ActionResult CustomAction(Session session)
-    {
-        Native.MessageBox("MSI Session\nINSTALLDIR: " + session.Property("INSTALLDIR"), "WixSharp - .NET8");
-
-        return ActionResult.Success;
-    }
 }

@@ -1721,16 +1721,13 @@ namespace WixSharp.CommonTasks
                 .AppendLine("    static AotEnrtyPoints()")
                 .AppendLine("    {");
 
-            if (assembly.GetType("AotRuntime") != null)
-            {
-                code.AppendLine("        AotRuntime.Init();");
-            }
-            else
-                foreach (var t in assembly.GetExportedTypes())
-                {
-                    code.AppendLine($"        typeof({t.FullName}).GetMembers(Public | NonPublic | FlattenHierarchy | Static | Instance | InvokeMethod);");
-                }
-            code.AppendLine($"        typeof(Program).GetMembers(Public | NonPublic | FlattenHierarchy | Static | Instance | InvokeMethod);");
+            var publicTypes = assembly.GetExportedTypes().Select(x => x.FullName).ToList();
+
+            if (ManagedProject.HandlerAotDeclaringTypes.ContainsKey(assembly.Location))
+                publicTypes.AddRange(ManagedProject.HandlerAotDeclaringTypes[assembly.Location].Split(','));
+
+            foreach (var typeName in publicTypes.Distinct())
+                code.AppendLine($"        typeof({typeName}).GetMembers(Public | NonPublic | FlattenHierarchy | Static | Instance | InvokeMethod);");
 
             code.AppendLine("    }")
                 .AppendLine("");
