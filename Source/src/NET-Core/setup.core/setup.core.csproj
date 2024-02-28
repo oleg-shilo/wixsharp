@@ -11,7 +11,10 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+    <NoWarn>1701;1702;IL3000</NoWarn>
   </PropertyGroup>
+
+
 
   <ItemGroup>
     <Compile Remove="aot\**" />

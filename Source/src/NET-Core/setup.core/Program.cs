@@ -25,7 +25,7 @@ project.AfterInstall += e =>
 // project.Load += Project_Load;
 project.Load += (e) =>
 {
-    Native.MessageBox("lambda delegate", "WixSharp - .NET8");
+    Native.MessageBox("OnLoad", "WixSharp - .NET8");
     // e.Result = ActionResult.Failure;
 };
 

@@ -1809,7 +1809,7 @@ namespace WixSharp.CommonTasks
     <PublishAot>true</PublishAot>
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-
+    <NoWarn>{(Compiler.SuppressAotWarnings ? "IL3000" : "")}</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
