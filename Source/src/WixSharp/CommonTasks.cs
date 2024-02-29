@@ -29,6 +29,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Contexts;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
@@ -542,6 +543,9 @@ namespace WixSharp.CommonTasks
             project.Properties = project.Properties.Combine(items).Distinct().ToArray();
             return project;
         }
+
+        static internal bool IsWarningSuppressed(this WixProject project, string warning)
+            => project.CandleOptions.ToLower().Contains($"-{warning}") || Compiler.CandleOptions.ToLower().Contains($"-{warning}");
 
         /// <summary>
         /// Adds the property to the project.
