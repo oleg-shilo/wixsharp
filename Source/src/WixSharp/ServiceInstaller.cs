@@ -360,6 +360,13 @@ namespace WixSharp
         {
             if (RequiresConfig())
             {
+                Compiler.OutputWriteLine("WARNING: You used one of the ServiceInstaller properties (DelayedAutoStart, " +
+                    "PreShutdownDelay, ServiceSid) that WiX can only support via its old implementation of `ServiceConfig` " +
+                    "element. WiX compiler will generate the `warning CNDL1150` about this element and suggest using a newer " +
+                    "WixUtilExtension ServiceConfig element instead.\n" +
+                    "However since the new element does not support DelayedAutoStart, PreShutdownDelay, ServiceSid you need to " +
+                    "asses the WiX warning and decide if you want keep or drop the use of these attributes.");
+
                 Config = new ServiceConfig
                 {
                     DelayedAutoStart = DelayedAutoStart,
