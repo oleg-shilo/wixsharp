@@ -536,6 +536,9 @@ namespace WixSharp.CommonTasks
             return project;
         }
 
+        static internal bool IsWarningSuppressed(this WixProject project, string warning)
+        => project.WixOptions.ToLower().Contains($"-{warning}") || Compiler.WixOptions.ToLower().Contains($"-{warning}");
+
         /// <summary>
         /// Adds the property items to the project.
         /// </summary>

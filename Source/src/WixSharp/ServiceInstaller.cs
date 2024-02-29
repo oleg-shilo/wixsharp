@@ -1,5 +1,6 @@
 using System;
 using System.Xml.Linq;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
@@ -351,6 +352,8 @@ namespace WixSharp
                    RestartServiceDelayInSeconds != null;
         }
 
+        static bool serviceConfigPreWarningWasPrinted = false;
+
         /// <summary>
         /// Adds itself as an XML content into the WiX source being generated from the <see cref="WixSharp.Project"/>.
         /// See 'Wix#/samples/Extensions' sample for the details on how to implement this interface correctly.
@@ -358,13 +361,16 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            if (!Compiler.WixOptions.Contains("-sw1149"))
+            if (!context.Project.IsWarningSuppressed("sw1149") && !serviceConfigPreWarningWasPrinted)
+            {
+                serviceConfigPreWarningWasPrinted = true;
                 Compiler.OutputWriteLine("WARNING: You used one of the ServiceInstaller properties (DelayedAutoStart, " +
                          "PreShutdownDelay, ServiceSid) that WiX can only support via its old implementation of `ServiceConfig` " +
                          "element. WiX compiler will generate the `warning WIX1149` about this element and suggest using a newer " +
                          "WixUtilExtension ServiceConfig element instead.\n" +
                          "However since the new element does not support DelayedAutoStart, PreShutdownDelay, ServiceSid you need to " +
                          "asses the WiX warning and decide if you want keep or drop the use of these attributes.");
+            }
 
             if (RequiresConfig())
             {
