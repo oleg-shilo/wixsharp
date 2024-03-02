@@ -1,7 +1,7 @@
 using System;
-using Microsoft.Deployment.WindowsInstaller;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Deployment.WindowsInstaller;
 
 namespace WixSharp.UI.Forms
 {
@@ -97,8 +97,14 @@ namespace WixSharp.UI.Forms
             // Get default install level and feature condition (if any).
             //
             if (!int.TryParse(session["INSTALLLEVEL"], out var installLevel)) installLevel = 1; // MSI default
-            var condition = session.OpenView("select * from Condition where Feature_ = '" + name + "'");
-            Dictionary<string, object> conditionRow = condition.FirstOrDefault();
+
+            Dictionary<string, object> conditionRow = null;
+
+            if (session.Database.IsTablePersistent("Condition"))
+            {
+                var condition = session.OpenView("select * from Condition where Feature_ = '" + name + "'");
+                conditionRow = condition.FirstOrDefault();
+            }
 
             var data = session.OpenView("select * from Feature where Feature = '" + name + "'");
             Dictionary<string, object> row = data.FirstOrDefault();
@@ -118,7 +124,7 @@ namespace WixSharp.UI.Forms
                 // and adjust state according to feature condition.
                 //
                 var defaultState = (Convert.ToInt32(row["Level"]) <= installLevel) ? InstallState.Local : InstallState.Absent;
-                if (session.IsInstalling() 
+                if (session.IsInstalling()
                     && conditionRow?["Condition"] != null
                     && session.EvaluateCondition(conditionRow["Condition"].ToString())  // If condition is true...
                     && Convert.ToInt32(conditionRow["Level"]) <= installLevel)          // ...set state according to condition level.
