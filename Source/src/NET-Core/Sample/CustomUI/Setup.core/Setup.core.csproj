@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+    <NoWarn>NU1701;NU1702;IL3000</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Setup.UI\Setup.UI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="WixSharp.Core">
+      <HintPath>..\..\..\WixSharp.Core\bin\Debug\net8.0-windows\WixSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="WixSharp.Msi.Core">
+      <HintPath>..\..\..\WixSharp.Core\bin\Debug\net8.0-windows\WixSharp.Msi.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="WixToolset.Dtf.WindowsInstaller">
+      <HintPath>..\..\..\WixSharp.Core\out\WixToolset.Dtf.WindowsInstaller.dll</HintPath>
+    </Reference>
+    <Reference Include="WixToolset.Mba.Core">
+      <HintPath>..\..\..\WixSharp.Core\out\WixToolset.Mba.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;dotnet &quot;$(TargetPath)&quot;" />
+  </Target>
+
+</Project>

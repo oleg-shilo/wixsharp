@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Forms;
 using WixSharp.CommonTasks;
@@ -426,7 +427,10 @@ namespace WixSharp
                 // event handlers at runtime. All event handlers will be exported as entry points of the AOT compiled
                 // client assembly instead.
                 if (this.IsNetCore)
+                {
                     needInvokeInitRuntime = false;
+                    ValidateAotReadiness();
+                }
 
                 if (needInvokeInitRuntime)
                     this.AddAction(new ManagedAction(dllEntry)
@@ -475,6 +479,43 @@ namespace WixSharp
 
             if (ManagedUI != null)
                 ManagedUI.BeforeBuild(this);
+        }
+
+        public void ValidateAotReadiness()
+        {
+            ValidateAotHandler(() => this.Load);
+            ValidateAotHandler(() => this.BeforeInstall);
+            ValidateAotHandler(() => this.AfterInstall);
+            ValidateAotHandler(() => this.UnhandledException);
+        }
+
+        static void ValidateAotHandler<T>(Expression<Func<T>> expression)
+        {
+            // check if the types declaring event handlers are public or handlers assemblies are
+            // listed in this assembly `InternalsVisibleTo` attribute (usually in AssemblyInfo.cs file)
+
+            var name = Reflect.NameOf(expression);
+            var handler = expression.Compile()() as Delegate;
+
+            if (handler != null)
+                foreach (var type in handler.GetInvocationList().Select(x => x.Method.DeclaringType))
+                {
+                    if (type.IsNotPublic)
+                    {
+                        var friendAsm = type.Assembly.GetName().Name + ".aot";
+                        var markedAsFriendly = type.Assembly.GetCustomAttributes(false)
+                            .OfType<InternalsVisibleToAttribute>()
+                            .Any(x => x.AssemblyName == friendAsm);
+
+                        if (!markedAsFriendly)
+                        {
+                            throw new Exception($"Event handler of `{type.FullName}` is invisible at runtime. " +
+                                $"Either make it public or mark `{type.Assembly.GetName().Name}` assembly as visible with " +
+                                $"`[assembly: InternalsVisibleTo(assemblyName: \"{type.Assembly.GetName().Name}.aot\")]` " +
+                                $"attribute (e.g. in the AssemblyInfo.cs file).");
+                        }
+                    }
+                }
         }
 
         /// <summary>
