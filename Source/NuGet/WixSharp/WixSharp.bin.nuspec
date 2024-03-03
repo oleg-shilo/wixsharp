@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>1.25.1.0</version>
+    <version>1.25.2.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,11 +16,12 @@
       In order to use this package you need have WiX Toolset installed.
       The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>WiX3-Release v1.25.1.0 (repeat of v1.25.0.0 because of the packaging problem)
-- #1446: Catch all exceptions in managed WinForms UI
-- Added sample for #1449
-- #1421 Update Text (Dialog title) on view title change (@PatrickHofman)
-- Proposal #1263: Signing using JSign or other alternatives
+    <releaseNotes>WiX3-Release v1.25.2.0
+- #1464: Installer crashes when using custom UIs with Features
+- #1460: Add -sw1026 to default Wix4 argument options?
+- #1459: ShortCut Icon Tooltip
+- #1406: Multi-language improvement
+- Added `ManagedAction` for CA implemented as native DLLs (e.g. AOT assemblies). Triggered by proposal #1456
 
 
 </releaseNotes>
