@@ -235,8 +235,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreCustomAction", "WixS
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetCore", "NetCore", "{B8FA0F17-1C07-4511-9FFA-3AD69B36B16C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomUI.Assembly", "WixSharp.Samples\Wix# Samples\Managed Setup\CustomUI.Assembly\CustomUI.Assembly.csproj", "{AA562623-E712-4921-954F-4ED262EA9225}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -989,14 +987,6 @@ Global
 		{BBAA7E0F-CAC0-4D7B-BCE9-4C5A5C585BD9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BBAA7E0F-CAC0-4D7B-BCE9-4C5A5C585BD9}.Release|x86.ActiveCfg = Release|Any CPU
 		{BBAA7E0F-CAC0-4D7B-BCE9-4C5A5C585BD9}.Release|x86.Build.0 = Release|Any CPU
-		{AA562623-E712-4921-954F-4ED262EA9225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA562623-E712-4921-954F-4ED262EA9225}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA562623-E712-4921-954F-4ED262EA9225}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{AA562623-E712-4921-954F-4ED262EA9225}.Debug|x86.Build.0 = Debug|Any CPU
-		{AA562623-E712-4921-954F-4ED262EA9225}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA562623-E712-4921-954F-4ED262EA9225}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA562623-E712-4921-954F-4ED262EA9225}.Release|x86.ActiveCfg = Release|Any CPU
-		{AA562623-E712-4921-954F-4ED262EA9225}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1096,7 +1086,6 @@ Global
 		{810AC5D9-DC9D-4C9B-8BFA-7DE7B7CFAE21} = {B8FA0F17-1C07-4511-9FFA-3AD69B36B16C}
 		{BBAA7E0F-CAC0-4D7B-BCE9-4C5A5C585BD9} = {B8FA0F17-1C07-4511-9FFA-3AD69B36B16C}
 		{B8FA0F17-1C07-4511-9FFA-3AD69B36B16C} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
-		{AA562623-E712-4921-954F-4ED262EA9225} = {DA107019-87B6-473D-8C9B-1C3A48CB8FD5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {559711D5-4429-4577-BBC9-F0D973972079}
