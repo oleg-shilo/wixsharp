@@ -1883,5 +1883,18 @@
             Gets a number between 0 and 1 that indicates the overall installation progress.
             </summary>
         </member>
+        <member name="T:WxiBuilder">
+            <summary>
+            utility class for generation of wxi reusable fragments.
+            </summary>
+        </member>
+        <member name="M:WxiBuilder.UI(System.Action{WixSharp.ManagedProject})">
+            <summary>
+            This method is to be used by user to define Managed UI that is later to be converted into reusable wxi fragment.
+            </summary>
+            <param name="initProject">The initialize project.</param>
+            <returns></returns>
+            <exception cref="T:System.Exception">project.OutDir is empty</exception>
+        </member>
     </members>
 </doc>

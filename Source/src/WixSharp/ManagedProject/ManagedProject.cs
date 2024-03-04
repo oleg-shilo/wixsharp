@@ -481,7 +481,10 @@ namespace WixSharp
                 ManagedUI.BeforeBuild(this);
         }
 
-        public void ValidateAotReadiness()
+        /// <summary>
+        /// Validates the aot readiness.
+        /// </summary>
+        void ValidateAotReadiness()
         {
             ValidateAotHandler(() => this.Load);
             ValidateAotHandler(() => this.BeforeInstall);

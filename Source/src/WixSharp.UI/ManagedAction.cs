@@ -160,6 +160,9 @@ namespace WixSharp
     }
 }
 
+/// <summary>
+/// utility class for generation of wxi reusable fragments.
+/// </summary>
 public static class WxiBuilder
 {
     static string FindVsOutputPath()
@@ -183,6 +186,12 @@ public static class WxiBuilder
         return null;
     }
 
+    /// <summary>
+    /// This method is to be used by user to define Managed UI that is later to be converted into reusable wxi fragment.
+    /// </summary>
+    /// <param name="initProject">The initialize project.</param>
+    /// <returns></returns>
+    /// <exception cref="System.Exception">project.OutDir is empty</exception>
     public static ManagedProject UI(System.Action<ManagedProject> initProject)
     {
         // Entry assembly may not be the one who is calling the builder so using StackTrace.
