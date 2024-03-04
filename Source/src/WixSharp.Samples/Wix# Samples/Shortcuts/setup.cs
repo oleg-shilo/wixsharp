@@ -28,9 +28,7 @@ class Script
                             new File(@"AppFiles\MyApp.cs")),
 
                         new File(@"AppFiles\MyApp.exe",
-                            new FileShortcut("MyApp", "INSTALLDIR"),
-
-                            //INSTALLDIR is the ID of "%ProgramFiles%\My Company\My Product"
+                            new FileShortcut("MyApp", "INSTALLDIR"), //INSTALLDIR is the ID of "%ProgramFiles%\My Company\My Product"
                             new FileShortcut("MyApp", @"%Desktop%")
                             {
                                 IconFile = @"AppFiles\Icon.ico",

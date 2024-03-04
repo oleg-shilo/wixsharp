@@ -35,6 +35,13 @@
 
 #endregion Licence...
 
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
+using WixSharp;
+
 namespace WixSharp
 {
     /// <summary>
@@ -150,5 +157,98 @@ namespace WixSharp
             this.ActionAssembly = actionAssembly;
             this.Sequence = Sequence.NotInSequence;
         }
+    }
+}
+
+/// <summary>
+/// utility class for generation of wxi reusable fragments.
+/// </summary>
+public static class WxiBuilder
+{
+    static string FindVsOutputPath()
+    {
+        var asm = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var outdir = asm.PathGetDirName();
+
+        // running from the proj dir
+        if (outdir.PathCombine("bin").PathExists() && outdir.PathCombine("obj").PathExists())
+            return outdir.PathCombine("wix").EnsureDirExists();
+
+        // running from the proj/bin/debug dir
+        for (int i = 0; i < 6; i++)
+        {
+            if (outdir.PathGetFileName() == "bin")
+                return outdir.PathGetDirName().PathCombine("wix").EnsureDirExists();
+
+            outdir = outdir.PathGetDirName();
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// This method is to be used by user to define Managed UI that is later to be converted into reusable wxi fragment.
+    /// </summary>
+    /// <param name="initProject">The initialize project.</param>
+    /// <returns></returns>
+    /// <exception cref="System.Exception">project.OutDir is empty</exception>
+    public static ManagedProject UI(System.Action<ManagedProject> initProject)
+    {
+        // Entry assembly may not be the one who is calling the builder so using StackTrace.
+        var builderAssembly = new StackTrace(false).GetFrame(1).GetMethod().DeclaringType?.Assembly.Location;
+
+        var projectName = builderAssembly.PathGetFileNameWithoutExtension();
+
+        var project = new ManagedProject(projectName);
+
+        project.PreserveTempFiles = true;
+
+        if (!project.IsOutDirSet)
+            project.OutDir = FindVsOutputPath();
+
+        if (!project.IsOutDirSet)
+            throw new System.Exception("project.OutDir is empty");
+
+        var wxiPrefix = "custom_ui.";
+
+        project.WixSourceGenerated += doc =>
+        {
+            // extract
+            var children = doc.Root.Select("Package")
+                .Descendants()
+                .Where(x => x.LocalName().IsOneOf("UI", "CustomAction", "Binary", "Property", "InstallExecuteSequence"))
+                .Where(x => x.Attributes().Any() || x.Descendants().Any())
+                .ToArray();
+
+            children.ForEach(x => doc.Root.Add(x));
+
+            // rename with "namespace-like" prefix
+
+            doc.Root.FindAll("Binary")
+               .Where(x => x.HasAttribute("Id", "WixSharp_InitRuntime_Action_File"))
+               .ForEach(x => x.SetAttribute("Id", wxiPrefix + "WixSharp_InitRuntime_Action_File"));
+
+            doc.Root.FindAll("CustomAction").Where(x => x.HasAttribute("BinaryRef", "WixSharp_InitRuntime_Action_File"))
+               .ForEach(x => x.SetAttribute("BinaryRef", wxiPrefix + "WixSharp_InitRuntime_Action_File"));
+
+            doc.Root.FindAll("CustomAction").Where(x => x.HasAttribute("Id", "WixSharp_InitRuntime_Action"))
+               .ForEach(x => x.SetAttribute("Id", wxiPrefix + "WixSharp_InitRuntime_Action"));
+
+            doc.Root.Descendants().Where(x => x.HasLocalName("Custom") && x.HasAttribute("Action", "WixSharp_InitRuntime_Action"))
+               .ForEach(x => x.SetAttribute("Action", wxiPrefix + "WixSharp_InitRuntime_Action"));
+
+            // convert into Include root
+            doc.Root.Select("Package").Remove();
+            doc.Root.Name = doc.Root.Name.Namespace + "Include";
+        };
+        Compiler.EmitRelativePaths = false;
+
+        initProject(project);
+
+        string wsiFile = project.OutDir.PathJoin(projectName) + ".wxi";
+
+        var file = project.BuildWxs(path: wsiFile);
+        // Compiler.OutputWriteLine(System.IO.File.ReadAllText(file));
+        return project;
     }
 }

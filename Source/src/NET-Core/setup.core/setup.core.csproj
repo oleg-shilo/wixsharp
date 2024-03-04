@@ -11,15 +11,21 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+    <NoWarn>1701;1702;IL3000</NoWarn>
   </PropertyGroup>
+
+
 
   <ItemGroup>
     <Compile Remove="aot\**" />
     <Compile Remove="outdir\**" />
+    <Compile Remove="setup.core\**" />
     <EmbeddedResource Remove="aot\**" />
     <EmbeddedResource Remove="outdir\**" />
+    <EmbeddedResource Remove="setup.core\**" />
     <None Remove="aot\**" />
     <None Remove="outdir\**" />
+    <None Remove="setup.core\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,7 +48,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;dotnet &quot;$(TargetPath)&quot;" />
+    <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;rem dotnet &quot;$(TargetPath)&quot;" />
   </Target>
 
 </Project>

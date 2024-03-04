@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -13,8 +13,8 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <FileVersion>2.1.1</FileVersion>
-    <AssemblyVersion>2.1.1</AssemblyVersion>
+    <FileVersion>2.1.2</FileVersion>
+    <AssemblyVersion>2.1.2</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -211,7 +211,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <PackageVersion>2.1.1-pre</PackageVersion>
+    <PackageVersion>2.1.2</PackageVersion>
     <Title>WixSharp (.NET Core)</Title>
     <Description>.NET Core edition of WixSharp package</Description>
     <Copyright>Oleg Shilo</Copyright>

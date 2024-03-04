@@ -536,6 +536,9 @@ namespace WixSharp.CommonTasks
             return project;
         }
 
+        static internal bool IsWarningSuppressed(this WixProject project, string warning)
+        => project.WixOptions.ToLower().Contains($"-{warning}") || Compiler.WixOptions.ToLower().Contains($"-{warning}");
+
         /// <summary>
         /// Adds the property items to the project.
         /// </summary>
@@ -1715,15 +1718,40 @@ namespace WixSharp.CommonTasks
 
             var code = new StringBuilder();
 
-            code.AppendLine("using System;\r\nusing System.Runtime.InteropServices;\r\nusing WixToolset.Dtf.WindowsInstaller;\r\n")
+            code.AppendLine("using System;\r\nusing System.Runtime.InteropServices;\r\nusing WixToolset.Dtf.WindowsInstaller;\r\nusing static System.Reflection.BindingFlags;\r\n")
                 .AppendLine("public class AotEnrtyPoints")
-                .AppendLine("{");
+                .AppendLine("{")
+                .AppendLine("    static AotEnrtyPoints()")
+                .AppendLine("    {");
+
+            var publicTypes = assembly.GetExportedTypes().Select(x => x.FullName).ToList();
+
+            if (ManagedProject.HandlerAotDeclaringTypes.ContainsKey(assembly.Location))
+                publicTypes.AddRange(ManagedProject.HandlerAotDeclaringTypes[assembly.Location].Split(','));
+
+            foreach (var typeName in publicTypes.Distinct())
+                code.AppendLine($"        typeof({typeName}).GetMembers(Public | NonPublic | FlattenHierarchy | Static | Instance | InvokeMethod);");
+
+            code.AppendLine("    }")
+                .AppendLine("");
 
             foreach (var info in customActions)
                 code.AppendLine($"    [UnmanagedCallersOnly(EntryPoint = \"{info.Method.Name}\")]")
                     .AppendLine($"    public static uint {info.Method.Name}(IntPtr handle)")
                     .AppendLine($"        => (uint){info.Method.DeclaringType?.FullName}.{info.Method.Name}(Session.FromHandle(handle, false));")
                     .AppendLine("");
+
+            void insertEP(string name)
+            {
+                code.AppendLine($"    [UnmanagedCallersOnly(EntryPoint = \"{name}\")]")
+                    .AppendLine($"    public static uint {name}(IntPtr handle)")
+                    .AppendLine($"        => (uint)WixSharp.ManagedProjectActions.{name}(Session.FromHandle(handle, false));")
+                    .AppendLine("");
+            }
+
+            insertEP("WixSharp_Load_Action");
+            insertEP("WixSharp_BeforeInstall_Action");
+            insertEP("WixSharp_AfterInstall_Action");
 
             code.AppendLine("}");
 
@@ -1740,6 +1768,11 @@ namespace WixSharp.CommonTasks
         public static string ConvertToAotAssembly(this string assemblyPath, bool previewOnly = false)
         {
             string assembly = assemblyPath;
+
+            if (assemblyPath.PathGetFileName() == "WixSharp.Core.dll")
+            {
+                assemblyPath = "%this%";
+            }
 
             if (assemblyPath.EndsWith("%this%"))
             {
@@ -1779,7 +1812,7 @@ namespace WixSharp.CommonTasks
     <PublishAot>true</PublishAot>
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-
+    <NoWarn>{(Compiler.SuppressAotWarnings ? "IL3000" : "")}</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

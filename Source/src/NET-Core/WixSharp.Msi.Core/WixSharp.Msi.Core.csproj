@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -24,7 +24,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageVersion>2.1.1-pre</PackageVersion>
+    <PackageVersion>2.1.2</PackageVersion>
     <Title>WixSharp (.NET Core)</Title>
     <Description>.NET Core edition of WixSharp.Msi package</Description>
     <Copyright>Oleg Shilo</Copyright>

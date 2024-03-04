@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Forms;
 using WixSharp.CommonTasks;
@@ -209,6 +210,8 @@ namespace WixSharp
             return (handler != null);
         }
 
+        internal static Dictionary<string, string> HandlerAotDeclaringTypes = new Dictionary<string, string>();
+
         void Bind<T>(Expression<Func<T>> expression, When when = When.Before, Step step = null, bool elevated = false)
         {
             var name = Reflect.NameOf(expression);
@@ -229,6 +232,13 @@ namespace WixSharp
                 foreach (var type in handler.GetInvocationList().Select(x => x.Method.DeclaringType))
                 {
                     string location = type.Assembly.Location;
+
+                    var rootType = type.RootDeclaringType();
+
+                    if (HandlerAotDeclaringTypes.ContainsKey(location))
+                        HandlerAotDeclaringTypes[location] += "," + rootType.FullName;
+                    else
+                        HandlerAotDeclaringTypes[location] = rootType.FullName;
 
                     //Resolving scriptAsmLocation is not properly tested yet
                     bool resolveInMemAsms = true;
@@ -385,6 +395,8 @@ namespace WixSharp
         /// </summary>
         public bool AlwaysScheduleInitRuntime = true;
 
+        internal bool IsNetCore = Environment.Version.Major > 5;
+
         override internal void Preprocess()
         {
             //Debug.Assert(false);
@@ -410,6 +422,16 @@ namespace WixSharp
                                               || IsHandlerSet(() => BeforeInstall)
                                               || IsHandlerSet(() => AfterInstall)
                                               || AlwaysScheduleInitRuntime);
+
+                // With .NET-Core we do not schedule any CA to initialize reflection based algorithm for invoking
+                // event handlers at runtime. All event handlers will be exported as entry points of the AOT compiled
+                // client assembly instead.
+                if (this.IsNetCore)
+                {
+                    needInvokeInitRuntime = false;
+                    ValidateAotReadiness();
+                }
+
                 if (needInvokeInitRuntime)
                     this.AddAction(new ManagedAction(dllEntry)
                     {
@@ -457,6 +479,46 @@ namespace WixSharp
 
             if (ManagedUI != null)
                 ManagedUI.BeforeBuild(this);
+        }
+
+        /// <summary>
+        /// Validates the aot readiness.
+        /// </summary>
+        void ValidateAotReadiness()
+        {
+            ValidateAotHandler(() => this.Load);
+            ValidateAotHandler(() => this.BeforeInstall);
+            ValidateAotHandler(() => this.AfterInstall);
+            ValidateAotHandler(() => this.UnhandledException);
+        }
+
+        static void ValidateAotHandler<T>(Expression<Func<T>> expression)
+        {
+            // check if the types declaring event handlers are public or handlers assemblies are
+            // listed in this assembly `InternalsVisibleTo` attribute (usually in AssemblyInfo.cs file)
+
+            var name = Reflect.NameOf(expression);
+            var handler = expression.Compile()() as Delegate;
+
+            if (handler != null)
+                foreach (var type in handler.GetInvocationList().Select(x => x.Method.DeclaringType))
+                {
+                    if (type.IsNotPublic)
+                    {
+                        var friendAsm = type.Assembly.GetName().Name + ".aot";
+                        var markedAsFriendly = type.Assembly.GetCustomAttributes(false)
+                            .OfType<InternalsVisibleToAttribute>()
+                            .Any(x => x.AssemblyName == friendAsm);
+
+                        if (!markedAsFriendly)
+                        {
+                            throw new Exception($"Event handler of `{type.FullName}` is invisible at runtime. " +
+                                $"Either make it public or mark `{type.Assembly.GetName().Name}` assembly as visible with " +
+                                $"`[assembly: InternalsVisibleTo(assemblyName: \"{type.Assembly.GetName().Name}.aot\")]` " +
+                                $"attribute (e.g. in the AssemblyInfo.cs file).");
+                        }
+                    }
+                }
         }
 
         /// <summary>
@@ -647,8 +709,8 @@ namespace WixSharp
             if (type == null)
                 type = assembly.GetType(parts[1]);
 
-            var method = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Static)
-                             .Single(m => m.Name == parts[2]);
+            var method = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Static)
+                             .Single(m => m.Name.Split('|').First() == parts[2]);
 
             return method;
         }
