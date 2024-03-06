@@ -2633,7 +2633,24 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Extracts the application data from the session object. Can be used in the deferred actions.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
+        public static SetupEventArgs.AppData ExtractAppData(this Session session)
+            => new AppData().InitFrom(session.Property("WIXSHARP_RUNTIME_DATA"));
+
+        /// <summary>
+        /// Saves AppData to the session objcet.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="session">The session.</param>
+        public static void SaveTo(this SetupEventArgs.AppData data, Session session)
+            => session["WIXSHARP_RUNTIME_DATA"] = data.ToString();
+
+        /// <summary>
         /// Returns an instance of <see cref="SetupEventArgs"/> initialized from the <see cref="Session"/> data.
+        /// <para>This method can only be called from immediate actions as it requires alive session object.</para>
         /// </summary>
         /// <param name="session">The session.</param>
         /// <returns></returns>

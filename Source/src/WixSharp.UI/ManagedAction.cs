@@ -161,7 +161,7 @@ namespace WixSharp
 }
 
 /// <summary>
-/// utility class for generation of wxi reusable fragments.
+/// Utility class for generation of wxi reusable fragments.
 /// </summary>
 public static class WxiBuilder
 {

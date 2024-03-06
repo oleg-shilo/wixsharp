@@ -1885,7 +1885,7 @@
         </member>
         <member name="T:WxiBuilder">
             <summary>
-            utility class for generation of wxi reusable fragments.
+            Utility class for generation of wxi reusable fragments.
             </summary>
         </member>
         <member name="M:WxiBuilder.UI(System.Action{WixSharp.ManagedProject})">
