@@ -3,12 +3,12 @@
 //css_ref WixSharp.UI.dll;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
-using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
@@ -68,6 +68,7 @@ public static class Script
 
         project.ManagedUI.Icon = "app.ico";
         project.UILoaded += Project_UILoaded;
+        project.AfterInstall += Project_AfterInstall;
 
         project.MinimalCustomDrawing = true;
 
@@ -80,6 +81,19 @@ public static class Script
         // project.PreserveTempFiles = true;
 
         project.BuildMsi();
+    }
+
+    private static void Project_AfterInstall(SetupEventArgs e)
+    {
+        Debug.Assert(false);
+
+        var session = e.Session;
+        try
+        {
+            var value = session.ExtractAppData()["SQLSERVER"];
+            MessageBox.Show(value);
+        }
+        catch (Exception ex) { MessageBox.Show(ex.Message); }
     }
 
     static void Project_UILoaded(SetupEventArgs e)

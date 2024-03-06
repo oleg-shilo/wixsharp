@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Tracing;
@@ -399,7 +400,7 @@ namespace WixSharp
 
         override internal void Preprocess()
         {
-            //Debug.Assert(false);
+            // Debug.Assert(false);
             base.Preprocess();
 
             if (!preprocessed)
@@ -496,6 +497,7 @@ namespace WixSharp
         {
             // check if the types declaring event handlers are public or handlers assemblies are
             // listed in this assembly `InternalsVisibleTo` attribute (usually in AssemblyInfo.cs file)
+            // Debug.Assert(false);
 
             var name = Reflect.NameOf(expression);
             var handler = expression.Compile()() as Delegate;
@@ -503,7 +505,7 @@ namespace WixSharp
             if (handler != null)
                 foreach (var type in handler.GetInvocationList().Select(x => x.Method.DeclaringType))
                 {
-                    if (type.IsNotPublic)
+                    if (type.RootDeclaringType().IsNotPublic)
                     {
                         var friendAsm = type.Assembly.GetName().Name + ".aot";
                         var markedAsFriendly = type.Assembly.GetCustomAttributes(false)
@@ -512,10 +514,14 @@ namespace WixSharp
 
                         if (!markedAsFriendly)
                         {
-                            throw new Exception($"Event handler of `{type.FullName}` is invisible at runtime. " +
+                            var error =
+                                $"Event handler of `{type.FullName}` is invisible at runtime. " +
                                 $"Either make it public or mark `{type.Assembly.GetName().Name}` assembly as visible with " +
                                 $"`[assembly: InternalsVisibleTo(assemblyName: \"{type.Assembly.GetName().Name}.aot\")]` " +
-                                $"attribute (e.g. in the AssemblyInfo.cs file).");
+                                $"attribute (e.g. in the AssemblyInfo.cs file).";
+
+                            Compiler.OutputWriteLine($"Error: " + error);
+                            throw new Exception(error);
                         }
                     }
                 }

@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net472</TargetFramework>
-    <RootNamespace>WixSharp</RootNamespace>
+    <RootNamespace>$safeprojectname$</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,4 +26,7 @@
     <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
   </Target>
 
+   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="del .\wix\*.dll" />
+  </Target>
 </Project>

@@ -29,9 +29,16 @@ public class Script
             var project = new ManagedProject("CustomActionTest",
                     new Dir(@"%ProgramFiles%\My Company\My Product",
                         new File("setup.cs")),
-
                     new ManagedAction(CustomActions.MyAction, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed),
-                    new ManagedAction(CustomActions.InvokeRemoveFiles, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed),
+                    new ManagedAction(CustomActions.InvokeRemoveFiles, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed)
+                    {
+                        Execute = Execute.deferred,
+                        UsesProperties = "tttt"
+                    },
+                    new ElevatedManagedAction(CustomActions.MyCustomAction, Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed)
+                    {
+                        UsesProperties = "WIXSHARP_RUNTIME_DATA"
+                    },
                     new Error("9000", "Hello World! (CLR: v[2]) Embedded Managed CA ([3])"));
 
             // project.PreserveTempFiles = true;
@@ -72,6 +79,13 @@ public class CustomActions
     [CustomAction]
     public static ActionResult MyAction(Session session)
     {
+        // Debug.Assert(false);
+        var args = session.ToEventArgs();
+        args.Data["SQLSERVER"] = "ttt";
+
+        args.Data.SaveTo(session);
+        // session["WIXSHARP_RUNTIME_DATA"] = args.Data.ToString();
+
         Record record = new Record(3);
 
         record[1] = "9000";
@@ -89,5 +103,18 @@ public class CustomActions
     public static bool Is64BitProcess
     {
         get { return IntPtr.Size == 8; }
+    }
+
+    [CustomAction]
+    public static ActionResult MyCustomAction(Session session)
+    {
+        Debug.Assert(false);
+        try
+        {
+            var value = session.ExtractAppData()["SQLSERVER"];
+            MessageBox.Show(value);
+        }
+        catch (Exception ex) { MessageBox.Show(ex.Message); }
+        return ActionResult.Success;
     }
 }

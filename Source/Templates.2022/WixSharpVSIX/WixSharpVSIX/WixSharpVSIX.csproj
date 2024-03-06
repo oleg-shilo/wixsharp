@@ -125,6 +125,16 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="..\..\ProjectTemplates\WixSharp %28.NET Core%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp %28.NET Core%29.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\..\ProjectTemplates\WixSharp - Cusom UI Library %28WiX4%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp - Cusom UI Library %28WiX4%29.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>

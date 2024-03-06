@@ -1,11 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>net462</TargetFramework>
-     <RootNamespace>WixSharp</RootNamespace>
+    <RootNamespace>WixSharp</RootNamespace>
+    <UseWPF>true</UseWPF>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <None Remove="*.msi" />
     <None Remove="*.exe" />
@@ -22,7 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
 
 </Project>

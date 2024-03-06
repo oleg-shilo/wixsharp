@@ -193,12 +193,16 @@ namespace WixSharp
                 .FirstOrDefault()?
                 .PathGetDirName();
 
-            var wxiFile = uiProjectDir.PathJoin($"wix\\{projectName}.wxi");
+            var wxiFile = (uiProjectDir ?? "").PathJoin($"wix\\{projectName}.wxi");
 
             if (uiProjectDir.IsEmpty() || !wxiFile.FileExists())
-                throw new Exception(
-                    $"Cannot find UI project `{projectName}`. You may solve this problem by explicitly adding " +
-                    $"UI wxi file with `project.AddXmlInclude(@\"..\\{projectName}\\wix\\{projectName}.wxi\"`");
+            {
+                var error = $"Error: Cannot find UI project `{projectName}`. Ensure the project name is specified correctly. " +
+                    $"You may solve this problem by explicitly adding UI wxi file with " +
+                    $"`project.AddXmlInclude(@\"..\\{projectName}\\wix\\{projectName}.wxi\"`";
+                Compiler.OutputWriteLine(error);
+                throw new Exception(error);
+            }
 
             project.AddXmlInclude(wxiFile);
         }
