@@ -26,7 +26,7 @@
     <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
   </Target>
 
-   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="del .\wix\*.dll" />
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="if exist .\wix del .\wix\*.dll" />
   </Target>
 </Project>
