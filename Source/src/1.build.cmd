@@ -5,7 +5,7 @@ rem cleaning WPF bin folders (MSBuild fails to do it)
 rd /Q /S .\WixSharp.UI.WPF\obj
 rd /Q /S .\WixSharp.UI.WPF\bin
 
-.\WixSharp.Samples\cscs.exe /l .\bin\set_version.cs
+.\WixSharp.Samples\cscs.exe /l .\..\bin\set_version.cs
 
 PUSHD .
 cd .\NET-Core\WixSharp.Core

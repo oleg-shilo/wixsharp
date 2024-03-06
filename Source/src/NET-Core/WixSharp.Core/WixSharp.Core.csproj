@@ -13,8 +13,8 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <FileVersion>2.1.2</FileVersion>
-    <AssemblyVersion>2.1.2</AssemblyVersion>
+    <FileVersion>2.1.3</FileVersion>
+    <AssemblyVersion>2.1.3</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -211,7 +211,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <PackageVersion>2.1.2</PackageVersion>
+    <PackageVersion>2.1.3</PackageVersion>
     <Title>WixSharp (.NET Core)</Title>
     <Description>.NET Core edition of WixSharp package</Description>
     <Copyright>Oleg Shilo</Copyright>

@@ -74,14 +74,10 @@
       <HintPath>..\..\..\..\WixSharp.UI\bin\Debug\WixSharp.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wix\" />
-  </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
   </Target>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="del .\wix\*.dll" />
+    <Exec Command="if exist .\wix del .\wix\*.dll" />
   </Target>
 </Project>
