@@ -2086,7 +2086,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         public static string Locate(string file)
         {
-            if (file.StartsWith("localtool:wix")) // there is no need to locate it as it will be invoked with `dotnet` launcher
+            if (file.StartsWith("localtool:")) // there is no need to locate it as it will be invoked with `dotnet` launcher
                 return file;
 
             if (file.PathGetFileNameWithoutExtension() == "wix" &&
