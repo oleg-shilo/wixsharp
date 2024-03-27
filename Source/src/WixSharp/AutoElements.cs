@@ -756,7 +756,6 @@ namespace WixSharp
 
                     foreach (XElement item in componentsWithNoFilesOrRegistry)
                     {
-                        //if (!item.Attribute("Id").Value.EndsWith(".EmptyDirectory"))
                         EnsureKeyPath(item);
 
                         if (!xDir.ContainsAnyRemoveFolder())
