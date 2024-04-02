@@ -1,1 +1,2 @@
-WiX Toolset v3.14.0 (v3.14.0.6526)
+WiX Toolset v3.14.1 
+https://github.com/wixtoolset/wix3/releases/tag/wix3141rtm
