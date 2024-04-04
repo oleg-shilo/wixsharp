@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace WixSharp
@@ -84,6 +85,27 @@ namespace WixSharp
         {
             return XmlNamespace;
         }
+
+        /// <summary>
+        /// The preferred version of the Wix Extension package.
+        /// <para>Despite being an instance property the property value is shared by the all instances of the extension of a specific
+        /// stored WiX extension type.</para>
+        /// IE `WixExtension.UI.PreferredVersion = "4.0.4"`.
+        /// </summary>
+        public string PreferredVersion
+        {
+            get => preferredVersion.ContainsKey(this.Assembly) ? preferredVersion[this.Assembly] : null;
+            set => preferredVersion[this.Assembly] = value;
+        }
+
+        internal static string GetPreferredVersion(string assembly)
+        {
+            if (assembly.IsEmpty())
+                return null;
+            return preferredVersion.ContainsKey(assembly) ? preferredVersion[assembly] : null;
+        }
+
+        static Dictionary<string, string> preferredVersion = new Dictionary<string, string>();
 
         /// <summary>
         /// Creates XElement based on XName (XNamespace and specified name) and specified attributes.

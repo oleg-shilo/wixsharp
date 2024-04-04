@@ -2517,10 +2517,22 @@ namespace WixSharp.CommonTasks
             return PackageDir("wixtoolset.dtf.customaction").PathCombine($@"tools\{platformDir}\SfxCA.dll");
         }
 
+        internal static string FindWixExtensionDll(string name, string version)
+            => WixExtensionsDir.PathCombine(name, version, "wixext4", name + ".dll");
+
         internal static void EnsureWixExtension(string name)
         {
-            if (!Directory.Exists(WixExtensionsDir.PathCombine(name)))
-                Compiler.Run("wix.exe", $"extension add -g {name}");
+            var version = WixExtension.GetPreferredVersion(name);
+            if (version.IsEmpty())
+            {
+                if (!Directory.Exists(WixExtensionsDir.PathCombine(name)))
+                    Compiler.Run("wix.exe", $"extension add -g {name}");
+            }
+            else
+            {
+                if (!Directory.Exists(WixExtensionsDir.PathCombine(name, version)))
+                    Compiler.Run("wix.exe", $"extension add -g {name}/{version}");
+            }
         }
 
         internal static void EnsureDtfTool(string package = null)

@@ -650,14 +650,22 @@ namespace WixSharp
         static string GenerateWixCommand(WixProject project, string wxsFile)
         {
             // Debug.Assert(false);
-            // objFile = IO.Path.ChangeExtension(wxsFile, ".wixobj");
 
             project.WixExtensions.ForEach(x => WixTools.EnsureWixExtension(x));
 
             string extensionDlls = project.WixExtensions
                                    .Select(x => x.ExpandEnvVars())
                                    .Distinct()
-                                   .JoinBy(" ", dll => $"-ext \"{dll}\"");
+                                   .JoinBy(" ", dll =>
+                                   {
+                                       var dllPath = dll;
+
+                                       var preferredVersion = WixExtension.GetPreferredVersion(dll);
+                                       if (preferredVersion.IsNotEmpty())
+                                           dllPath = WixTools.FindWixExtensionDll(dll, preferredVersion);
+
+                                       return $"-ext \"{dllPath}\"";
+                                   });
 
             string libFiles = project.LibFiles
                                      .Select(x => x.ExpandEnvVars())
@@ -749,7 +757,10 @@ namespace WixSharp
                     Compiler.OutputWriteLine("->");
                 }
 
-                Run(compiler, compileCmd);
+
+                var output = Run(compiler, compileCmd);
+
+                ProcessOutput(output);
 
                 if (IO.File.Exists(outFile))
                 {
@@ -795,6 +806,23 @@ namespace WixSharp
             }
 
             return path;
+        }
+
+        static void ProcessOutput(string output)
+        {
+            // wix.exe : error WIX0144: The extension 'WixToolset.UI.wixext' could not be found. Checked paths: WixToolset.UI.wixext,
+            // C:\Users\user\.wix\extensions\WixToolset.UI.wixext\5.0.0-rc.2\wixext4\WixToolset.UI.wixext.dll
+
+            if (output.Contains("error WIX0144") &&
+                output.Contains("WixToolset.UI.wixext") &&
+                output.Contains("5.0.0-rc.2"))
+            {
+                Compiler.OutputWriteLine("\nWARNING: It looks like your msi requires WixToolset.UI.wixext and the latest version found on this PC " +
+                    "is v5.0.0-rc.2.\nThis extension version is known as being broken so you have to use any other version released by the WiX team.\n" +
+                    "You can do this by installing a newer version of this extension or by specifying the desired (even older) working version " +
+                    "explicitly in your msi build script (e.g. setup.cs) before calling `project.BuiuldMsi(...)`:\n\n" +
+                    "  WixExtension.UI.PreferredVersion = \"4.0.4\";\n");
+            }
         }
 
         /// <summary>
@@ -3514,10 +3542,11 @@ namespace WixSharp
 
         internal static object WiX_Tools = new object();
 
-        internal static void Run(string exe, string args, string workingDir = null)
+        internal static string Run(string exe, string args, string workingDir = null)
         {
             lock (WiX_Tools)
             {
+                var runOutput = new StringBuilder();
                 string file = exe.IsAbsolutePath() ? exe : ExternalTool.Locate(exe);
 
                 Process p = new Process();
@@ -3543,6 +3572,15 @@ namespace WixSharp
                 p.StartInfo.CreateNoWindow = true;
                 p.Start();
 
+                void OnOutputLine(string line)
+                {
+
+                    Compiler.OutputWriteLine(line);
+                    Trace.WriteLine(line);
+                    ToolsOutputReceived?.Invoke(line + Environment.NewLine);
+                    runOutput.AppendLine(line);
+                }
+
                 ThreadPool.QueueUserWorkItem(x =>
                 {
                     string line = "";
@@ -3550,9 +3588,7 @@ namespace WixSharp
                     {
                         lock (p)
                         {
-                            Compiler.OutputWriteLine(line);
-                            Trace.WriteLine(line);
-                            ToolsOutputReceived?.Invoke(line + Environment.NewLine);
+                            OnOutputLine(line);
                         }
                     }
                 });
@@ -3563,14 +3599,13 @@ namespace WixSharp
                     {
                         lock (p)
                         {
-                            OutputWriteLine(line);
-                            Trace.WriteLine(line);
-                            ToolsOutputReceived?.Invoke(line + Environment.NewLine);
+                            OnOutputLine(line);
                         }
                     }
                 }
 
                 p.WaitForExit();
+                return runOutput.ToString();
             }
         }
 
