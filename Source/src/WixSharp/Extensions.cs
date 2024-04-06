@@ -3175,21 +3175,25 @@ namespace WixSharp
                         if (record == null)
                             return null;
 
-                        using (var stream = record.GetStream(1))
-                        using (var ms = new IO.MemoryStream())
-                        {
-                            int Length = 256;
-                            var buffer = new Byte[Length];
-                            int bytesRead = stream.Read(buffer, 0, Length);
-                            while (bytesRead > 0)
-                            {
-                                ms.Write(buffer, 0, bytesRead);
-                                bytesRead = stream.Read(buffer, 0, Length);
-                            }
-                            ms.Seek(0, IO.SeekOrigin.Begin);
+                        var stream = record.GetStream(1);
 
-                            return (Bitmap)Bitmap.FromStream(ms);
+                        // It is important to keep the stream open even after the bitmap is created
+                        // otherwise the bitmap will be disposed as soon as the stream is closed
+                        // See:
+                        //  https://stackoverflow.com/questions/1053052/a-generic-error-occurred-in-gdi-jpeg-image-to-memorystream
+                        //  https://github.com/oleg-shilo/wixsharp/issues/1490
+                        var ms = new IO.MemoryStream();
+                        int Length = 256;
+                        var buffer = new Byte[Length];
+                        int bytesRead = stream.Read(buffer, 0, Length);
+                        while (bytesRead > 0)
+                        {
+                            ms.Write(buffer, 0, bytesRead);
+                            bytesRead = stream.Read(buffer, 0, Length);
                         }
+                        ms.Seek(0, IO.SeekOrigin.Begin);
+
+                        return (Bitmap)Bitmap.FromStream(ms);
                     }
                 }
             }
