@@ -1,3 +1,5 @@
+// Ignore Spelling: Deconstruct
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +8,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using System.Drawing;
+using System.Drawing.Imaging;
 using static System.Environment;
 using System.Globalization;
 using System.IO;
@@ -1563,6 +1566,33 @@ namespace WixSharp
         {
             action(obj);
             return obj;
+        }
+
+        /// <summary>
+        /// A method for convenient deconstruction of a slice of an array into a tuple.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="head"></param>
+        /// <param name="tail"></param>
+        public static void Deconstruct<T>(this IEnumerable<T> list, out T head, out IEnumerable<T> tail)
+        {
+            head = list.First(); // throws InvalidOperationException for empty list
+            tail = list.Skip(1);
+        }
+
+        /// <summary>
+        /// A method for convenient deconstruction of a slice of an array into a tuple
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="head"></param>
+        /// <param name="next"></param>
+        /// <param name="tail"></param>
+        public static void Deconstruct<T>(this IEnumerable<T> list, out T head, out T next, out IEnumerable<T> tail)
+        {
+            head = list.First();
+            (next, tail) = list.Skip(1);
         }
 
         /// <summary>
@@ -3190,21 +3220,25 @@ namespace WixSharp
                         if (record == null)
                             return null;
 
-                        using (var stream = record.GetStream(1))
-                        using (var ms = new IO.MemoryStream())
-                        {
-                            int Length = 256;
-                            var buffer = new Byte[Length];
-                            int bytesRead = stream.Read(buffer, 0, Length);
-                            while (bytesRead > 0)
-                            {
-                                ms.Write(buffer, 0, bytesRead);
-                                bytesRead = stream.Read(buffer, 0, Length);
-                            }
-                            ms.Seek(0, IO.SeekOrigin.Begin);
+                        var stream = record.GetStream(1);
 
-                            return (Bitmap)Bitmap.FromStream(ms);
+                        // It is important to keep the stream open even after the bitmap is created
+                        // otherwise the bitmap will be disposed as soon as the stream is closed
+                        // See:
+                        //  https://stackoverflow.com/questions/1053052/a-generic-error-occurred-in-gdi-jpeg-image-to-memorystream
+                        //  https://github.com/oleg-shilo/wixsharp/issues/1490
+                        var ms = new IO.MemoryStream();
+                        int Length = 256;
+                        var buffer = new Byte[Length];
+                        int bytesRead = stream.Read(buffer, 0, Length);
+                        while (bytesRead > 0)
+                        {
+                            ms.Write(buffer, 0, bytesRead);
+                            bytesRead = stream.Read(buffer, 0, Length);
                         }
+                        ms.Seek(0, IO.SeekOrigin.Begin);
+
+                        return (Bitmap)Bitmap.FromStream(ms);
                     }
                 }
             }

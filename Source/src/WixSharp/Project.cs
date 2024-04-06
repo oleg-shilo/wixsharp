@@ -613,12 +613,12 @@ namespace WixSharp
         public List<LaunchCondition> LaunchConditions = new List<LaunchCondition>();
 
         /// <summary>
-        /// Path to the file containing the image (e.g. bmp) setup dialogs banner. If not specified default image will be used.
+        /// Path to the file containing the image (e.g. png) setup dialogs banner. If not specified default image will be used.
         /// </summary>
         public string BannerImage = "";
 
         /// <summary>
-        /// Path to the file containing the image (e.g. bmp) setup dialogs background. If not specified default image will be used.
+        /// Path to the file containing the image (e.g. png) setup dialogs background. If not specified default image will be used.
         /// <remarks>
         /// <para>If the image is to be used in the default ManagedUI dialogs it will be left-docked at runtime and will effectively
         /// play the role of a left-aligned dialog banner. Thus if it is too wide it can push away (to right) the all other UI elements.
