@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.WPF</id>
-    <version>2.1.2.0</version>
+    <version>2.1.6.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,20 +16,13 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>WiX4-Release v2.1.2.0
-* NetCore: added integration of the NET-Core setup project with NET-Fx UI projectVS infrastructure.
-* Issue #1464: Installer crashes when using custom UIs with Features
-* Issue #1460: Add -sw1026 to default Wix4 argument options?
-* Added `Compiler.SuppressAotWarnings` property
-* Issue #1459: ShortCut Icon Tooltip
-
-
+    <releaseNotes>Release v2.1.6.0
 </releaseNotes>
     <copyright>Copyright (C) 2008-2021 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="2.1.2.0" />
+      <dependency id="WixSharp.bin" version="2.1.6.0" />
       <dependency id="Caliburn.Micro" version="4.0.212" />
     </dependencies>
     <references>

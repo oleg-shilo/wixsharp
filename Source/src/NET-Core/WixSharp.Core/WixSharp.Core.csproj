@@ -14,11 +14,11 @@
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <FileVersion>2.1.4</FileVersion>
-    <AssemblyVersion>2.1.4</AssemblyVersion>
+    <AssemblyVersion>2.1.5</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageVersion>2.1.4-hotfix</PackageVersion>
+    <PackageVersion>2.1.5</PackageVersion>
     <Title>WixSharp (.NET Core)</Title>
     <Description>.NET Core edition of WixSharp package</Description>
     <Copyright>Oleg Shilo</Copyright>
