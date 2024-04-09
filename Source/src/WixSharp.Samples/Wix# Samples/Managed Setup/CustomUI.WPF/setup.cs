@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using ConsoleApplication1;
 using WixSharp;
@@ -24,6 +25,17 @@ public class Script
 
         project.ManagedUI.ModifyDialogs.Add<ProgressDialog>()
                                        .Add<ExitDialog>();
+
+        project.UIInitialized += e =>
+        {
+            // Since the default MSI localization data has no entry for 'CustomDlgTitle' (and other custom labels) we
+            // need to add this new content dynamically. Alternatively, you can use WiX localization files (wxl).
+
+            MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
+
+            runtime.UIText["CustomDlgTitle"] = "My Custom Dialog";
+            runtime.UIText["CustomDlgTitleDescription"] = "My Custom Dialog Description";
+        };
 
         // project.PreserveTempFiles = true;
         project.SourceBaseDir = @"..\..\";
