@@ -2517,16 +2517,72 @@ namespace WixSharp.CommonTasks
             return PackageDir("wixtoolset.dtf.customaction").PathCombine($@"tools\{platformDir}\SfxCA.dll");
         }
 
+        /// <summary>
+        /// Sets the wix.exe version for the specific directory. The mapping of the executable is managed by the .NET Tool
+        /// mechanism through "dotnet-tools.json" config file, which is created when this method is called.
+        /// <para>Note, if version argument is null the config file will be deleted.</para>
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="version">The version.</param>
+        static public void SetWixVersion(string directory, string version)
+        {
+            try
+            {
+                globalWixVersion = null;
+
+                var configDir = directory.PathCombine(".config");
+                var configFile = configDir.PathCombine("dotnet-tools.json");
+
+                if (version == null)
+                {
+                    if (!Directory.GetFiles(configDir).Any() && !Directory.GetDirectories(configDir).Any())
+                        configDir.DeleteIfExists();
+                    else
+                        configFile.DeleteIfExists();
+
+                    return;
+                }
+
+                var config = @"{
+  ""version"": 1,
+  ""isRoot"": true,
+  ""tools"": {
+    ""wix"": {
+      ""version"": """ + version + @""",
+      ""commands"": [
+        ""wix""
+      ]
+    }
+  }
+}";
+                configDir.EnsureDirExists();
+                IO.File.WriteAllText(configFile, config);
+            }
+            finally
+            {
+                var newVersion = GlobalWixVersion; // just to force the version to be re-read
+            }
+        }
+
         static Version globalWixVersion;
 
-        static Version GlobalWixVersion
+        /// <summary>
+        /// Gets the version of .NET tool "wix.exe".
+        /// Note the version can be set by <see cref="SetWixVersion(string, string)"/>.
+        /// </summary>
+        /// <value>
+        /// The global wix version.
+        /// </value>
+        public static Version GlobalWixVersion
         {
             get
             {
                 if (globalWixVersion == null)
                 {
                     // IE: 5.0.0+41e11442
-                    globalWixVersion = Compiler.Run("wix.exe", "--version").Trim().Split('+').First().SemanticVersionToVersion();
+                    globalWixVersion = Compiler.Run("wix.exe", "--version", null, true).Trim().Split('+').First().SemanticVersionToVersion();
+
+                    Compiler.OutputWriteLine($"Wix version: {globalWixVersion}");
                 }
 
                 return globalWixVersion;
@@ -2537,15 +2593,28 @@ namespace WixSharp.CommonTasks
         {
             // C:\Users\user\.wix\extensions\WixToolset.UI.wixext\5.0.0\wixext5\WixToolset.UI.wixext.dll
             // C:\Users\user\.wix\extensions\WixToolset.UI.wixext\4.0.4\wixext4\WixToolset.UI.wixext.dll
+            // C:\Users\oleg\.wix\extensions\WixToolset.Bal.wixext\4.0.2\wixext4\WixToolset.Bal.wixext.dll
+            // C:\Users\oleg\.wix\extensions\WixToolset.Bal.wixext\5.0.0\wixext5\WixToolset.BootstrapperApplications.wixext.dll
+
             var candidates = Directory
-                .GetDirectories(WixExtensionsDir.PathCombine(name))
-                .Select(x => new
-                {
-                    version = x.PathGetFileName().SemanticVersionToVersion(),
-                    file = x.PathCombine($"wixext{GlobalWixVersion.Major}", name + ".dll"),
-                })
-                .Where(x => version == null || x.version.ToString() == version)
-                .OrderByDescending(x => x.version);
+                             .GetDirectories(WixExtensionsDir.PathCombine(name))
+                             .Select(x => new
+                             {
+                                 version = x.PathGetFileName().SemanticVersionToVersion(),
+                                 compatibleVersion = x.PathCombine($"wixext{GlobalWixVersion.Major}"),
+                                 file = x.PathCombine($"wixext{GlobalWixVersion.Major}", name + ".dll"),
+                             })
+                             .Select(x => new
+                             {
+                                 x.version,
+                                 file = x.file.PathExists()
+                                     ? x.file
+                                     : x.compatibleVersion.PathExists()
+                                         ? Directory.GetFiles(x.compatibleVersion, "WixToolset.*.wixext.dll").FirstOrDefault()
+                                         : null,
+                             })
+                             .Where(x => version == null || x.version.ToString() == version)
+                             .OrderByDescending(x => x.version);
 
             return candidates.FirstOrDefault(x => IO.File.Exists(x.file))?.file;
         }

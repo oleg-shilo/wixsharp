@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Policy;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using WixSharp.CommonTasks;
 using WixSharp.Nsis;
@@ -58,7 +59,10 @@ namespace WixSharp.Bootstrapper
             {
                 rawAppAssembly = Compiler.ResolveClientAsm(outDir); //NOTE: if a new file is generated then the Compiler takes care for cleaning any temps
                 if (Payloads.FirstOrDefault(x => x.SourceFile == "%this%") is Payload payload_this)
+                {
                     payload_this.SourceFile = rawAppAssembly;
+                    payload_this.IsBootstrapperAppAssembly = true;
+                }
             }
 
             string asmName = Path.GetFileNameWithoutExtension(Utils.OriginalAssemblyFile(rawAppAssembly));
@@ -194,19 +198,40 @@ namespace WixSharp.Bootstrapper
             };
 
             var root = new XElement("BootstrapperApplication");
-            root.AddElement(WixExtension.Bal.ToXName("WixManagedBootstrapperApplicationHost"));
+
+            root.AddAttributes(this.Attributes);
+            root.Add(this.MapToXmlAttributes());
+
+            if (WixTools.GlobalWixVersion.Major >= 5)
+                root.AddElement(WixExtension.Bal.ToXName("WixPrerequisiteBootstrapperApplication"));
+            else
+                root.AddElement(WixExtension.Bal.ToXName("WixManagedBootstrapperApplicationHost"));
 
             var files = new List<Payload>
             {
                 rawAppAssembly.ToPayload(),
                 bootstrapperCoreConfig.ToPayload("WixToolset.Mba.Host.config")
             };
+
             files.AddRange(this.Payloads.DistinctBy(x => x.SourceFile)); //note %this% it already resolved at this stage into an absolute path
 
             foreach (var item in frameworkAssemblies)
             {
                 if (!Payloads.Any(x => Path.GetFileName(x.SourceFile).SameAs(Path.GetFileName(item))))
                     files.Add(item.ToPayload());
+            }
+
+            // starting from WiX5 the BA assembly can no longer be a payload but the attribute of the BootstrapperApplication element.
+            if (WixTools.GlobalWixVersion.Major >= 5)
+            {
+                var appPayload = files.FirstOrDefault(x => x.IsBootstrapperAppAssembly);
+
+                if (Environment.CurrentDirectory.SamePathAs(appPayload.SourceFile.PathGetDirName()))
+                    root.SetAttribute("SourceFile", appPayload.SourceFile.PathGetFileName());
+                else
+                    root.SetAttribute("SourceFile", appPayload.SourceFile);
+
+                files.RemoveAll(x => x.SourceFile == appPayload.SourceFile);
             }
 
             if (files.Any())
@@ -627,6 +652,11 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         [Xml]
         public bool? Compressed;
+
+        /// <summary>
+        /// The flag to indicate that the payload contains the assembly file implementing bootstrapper application.
+        /// </summary>
+        public bool IsBootstrapperAppAssembly;
     }
 
     /// <summary>

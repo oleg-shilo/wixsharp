@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Bootstrapper;
+using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
 using io = System.IO;
 
@@ -31,6 +32,8 @@ public class Script
 
     static public void Main()
     {
+        EnsureCompatibleWixVersion();
+
         string productMsi = BuildMsi();
 
         var bundle = new Bundle("My Product Bundle",
@@ -44,9 +47,32 @@ public class Script
         bundle.Version = new Version("1.0.0.0");
         bundle.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
         bundle.Application = new ManagedBootstrapperApplication("%this%");
+        // bundle.Application.AddPayload(typeof(ManagedBootstrapperApplication).Assembly.Location.ToPayload()); // needed for WiX5
         // bundle.Application = new ManagedBootstrapperApplication(@"D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Bootstrapper\WiX4-Spike\Bundle1\WixToolset.WixBA\bin\Debug\net472\win-x86\WixToolset.WixBA.dll");
 
-        bundle.Build("my_app.exe");
+        Compiler.VerboseOutput = true;
+
+        bundle.Build("my_setup.exe");
+    }
+
+    static void EnsureCompatibleWixVersion()
+    {
+        // WiX5 has brought some breaking changes to the custom BA model.
+        // The BA is now a separate process and the communication between the BA and the bundle is done via IPC.
+        // https://wixtoolset.org/docs/fivefour/#burn   mentions the change (10 Apr 2024)
+        // https://wixtoolset.org/docs/fivefour/oopbas/ describes the new model.(10 Apr 2024, though it's empty yet)
+        // It is actually a good decision but it will require an extra effort for integrating it with WixSharp.
+        // Thus, for now, Wix# is still using the WiX4 model of the custom BA.
+
+        if (WixTools.GlobalWixVersion.Major == 5)
+            WixTools.SetWixVersion(Environment.CurrentDirectory, "4.0.4");
+
+        if (WixTools.GlobalWixVersion.Major == 4)
+        {
+            WixExtension.UI.PreferredVersion = "4.0.4";
+            WixExtension.Bal.PreferredVersion = "4.0.2";
+            WixExtension.NetFx.PreferredVersion = "4.0.2";
+        }
     }
 
     static string BuildMsi()

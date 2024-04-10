@@ -32,8 +32,7 @@ public class Script
                     new ManagedAction(CustomActions.MyAction, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed),
                     new ManagedAction(CustomActions.InvokeRemoveFiles, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed)
                     {
-                        Execute = Execute.deferred,
-                        UsesProperties = "tttt"
+                        Execute = Execute.deferred
                     },
                     new ElevatedManagedAction(CustomActions.MyCustomAction, Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed)
                     {
@@ -81,7 +80,7 @@ public class CustomActions
     {
         // Debug.Assert(false);
         var args = session.ToEventArgs();
-        args.Data["SQLSERVER"] = "ttt";
+        args.Data["SQLSERVER"] = "test";
 
         args.Data.SaveTo(session);
         // session["WIXSHARP_RUNTIME_DATA"] = args.Data.ToString();

@@ -52,7 +52,10 @@ namespace WixSharp.Test
         {
             if ("APPVEYOR".GetEnvVar().IsEmpty())
             {
-                var actual = WixTools.FindWixExtensionDll("WixToolset.UI.wixext");
+                var actual = WixTools.FindWixExtensionDll("WixToolset.Bal.wixext");
+                Assert.True(actual.IsNotEmpty());
+
+                actual = WixTools.FindWixExtensionDll("WixToolset.UI.wixext");
                 Assert.True(actual.IsNotEmpty());
 
                 actual = WixTools.FindWixExtensionDll("WixToolset.UI.wixext", "5.0.0");

@@ -658,12 +658,17 @@ namespace WixSharp
                                        var dllPath = dll;
 
                                        var preferredVersion = WixExtension.GetPreferredVersion(dll);
-                                       
-                                       WixTools.EnsureWixExtension(dll, preferredVersion);
-                                       
-                                       if (preferredVersion.IsNotEmpty())
-                                           dllPath = WixTools.FindWixExtensionDll(dll, preferredVersion);
 
+                                       WixTools.EnsureWixExtension(dll, preferredVersion);
+
+                                       dllPath = WixTools.FindWixExtensionDll(dll, preferredVersion);
+
+                                       if (preferredVersion.IsEmpty())
+                                       {
+                                           if (dllPath.PathGetFileNameWithoutExtension() == dll)
+                                               dllPath = dll;
+
+                                       }
 
                                        return $"-ext \"{dllPath}\"";
                                    });
@@ -3543,7 +3548,7 @@ namespace WixSharp
 
         internal static object WiX_Tools = new object();
 
-        internal static string Run(string exe, string args, string workingDir = null)
+        internal static string Run(string exe, string args, string workingDir = null, bool supressEcho = false)
         {
             lock (WiX_Tools)
             {
@@ -3575,9 +3580,12 @@ namespace WixSharp
 
                 void OnOutputLine(string line)
                 {
+                    if (!supressEcho)
+                    {
+                        Compiler.OutputWriteLine(line);
+                        Trace.WriteLine(line);
+                    }
 
-                    Compiler.OutputWriteLine(line);
-                    Trace.WriteLine(line);
                     ToolsOutputReceived?.Invoke(line + Environment.NewLine);
                     runOutput.AppendLine(line);
                 }
