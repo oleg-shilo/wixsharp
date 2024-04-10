@@ -15,6 +15,7 @@ using System.Xml;
 using System.Xml.Linq;
 using WixSharp;
 using WixSharp.Bootstrapper;
+using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
 using WixToolset.Mba.Core;
 
@@ -24,6 +25,8 @@ public class InstallScript
 {
     static public void Main()
     {
+        EnsureCompatibleWixVersion();
+
         var productProj =
             new Project("My Product",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
@@ -69,6 +72,26 @@ public class InstallScript
         // bootstrapper.PreserveTempFiles = true;
 
         bootstrapper.Build("app_setup");
+    }
+
+    static void EnsureCompatibleWixVersion()
+    {
+        // WiX5 has brought some breaking changes to the custom BA model.
+        // The BA is now a separate process and the communication between the BA and the bundle is done via IPC.
+        // https://wixtoolset.org/docs/fivefour/#burn   mentions the change (10 Apr 2024)
+        // https://wixtoolset.org/docs/fivefour/oopbas/ describes the new model.(10 Apr 2024, though it's empty yet)
+        // It is actually a good decision but it will require an extra effort for integrating it with WixSharp.
+        // Thus, for now, Wix# is still using the WiX4 model of the custom BA.
+
+        if (WixTools.GlobalWixVersion.Major == 5)
+            WixTools.SetWixVersion(Environment.CurrentDirectory, "4.0.4");
+
+        if (WixTools.GlobalWixVersion.Major == 4)
+        {
+            WixExtension.UI.PreferredVersion = "4.0.4";
+            WixExtension.Bal.PreferredVersion = "4.0.2";
+            WixExtension.NetFx.PreferredVersion = "4.0.2";
+        }
     }
 }
 
