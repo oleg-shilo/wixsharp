@@ -32,6 +32,38 @@ namespace WixSharp.Test
         }
 
         [Fact]
+        public void SemanticVersionToVersion()
+        {
+            var expected = new Version(1, 0, 0);
+            var actual = "1.0.0-beta.1".SemanticVersionToVersion();
+            Assert.Equal(expected, actual);
+
+            expected = new Version(4, 0, 4);
+            actual = "4.0.4+41e11442".SemanticVersionToVersion();
+            Assert.Equal(expected, actual);
+
+            expected = new Version(4, 0, 4);
+            actual = "4.0.4 rc.2".SemanticVersionToVersion();
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void FindWixExtensionDll()
+        {
+            if ("APPVEYOR".GetEnvVar().IsEmpty())
+            {
+                var actual = WixTools.FindWixExtensionDll("WixToolset.UI.wixext");
+                Assert.True(actual.IsNotEmpty());
+
+                actual = WixTools.FindWixExtensionDll("WixToolset.UI.wixext", "5.0.0");
+                Assert.True(actual.IsNotEmpty());
+
+                actual = WixTools.FindWixExtensionDll("WixToolset.UI.wixext", "4.0.4");
+                Assert.True(actual.IsEmpty());
+            }
+        }
+
+        [Fact]
         public void ComServerInstall()
         {
             //string dll = @"WixSharp\src\WixSharp.Samples\Wix# Samples\InstallCom\ATLSimpleServ.dll";

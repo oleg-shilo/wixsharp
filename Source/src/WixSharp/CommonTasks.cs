@@ -2517,20 +2517,49 @@ namespace WixSharp.CommonTasks
             return PackageDir("wixtoolset.dtf.customaction").PathCombine($@"tools\{platformDir}\SfxCA.dll");
         }
 
-        internal static string FindWixExtensionDll(string name, string version)
-            => WixExtensionsDir.PathCombine(name, version, "wixext4", name + ".dll");
+        static Version globalWixVersion;
 
-        internal static void EnsureWixExtension(string name)
+        static Version GlobalWixVersion
         {
-            var version = WixExtension.GetPreferredVersion(name);
+            get
+            {
+                if (globalWixVersion == null)
+                {
+                    // IE: 5.0.0+41e11442
+                    globalWixVersion = Compiler.Run("wix.exe", "--version").Trim().Split('+').First().SemanticVersionToVersion();
+                }
+
+                return globalWixVersion;
+            }
+        }
+
+        internal static string FindWixExtensionDll(string name, string version = null)
+        {
+            // C:\Users\user\.wix\extensions\WixToolset.UI.wixext\5.0.0\wixext5\WixToolset.UI.wixext.dll
+            // C:\Users\user\.wix\extensions\WixToolset.UI.wixext\4.0.4\wixext4\WixToolset.UI.wixext.dll
+            var candidates = Directory
+                .GetDirectories(WixExtensionsDir.PathCombine(name))
+                .Select(x => new
+                {
+                    version = x.PathGetFileName().SemanticVersionToVersion(),
+                    file = x.PathCombine($"wixext{GlobalWixVersion.Major}", name + ".dll"),
+                })
+                .Where(x => version == null || x.version.ToString() == version)
+                .OrderByDescending(x => x.version);
+
+            return candidates.FirstOrDefault(x => IO.File.Exists(x.file))?.file;
+        }
+
+        internal static void EnsureWixExtension(string name, string version = null)
+        {
             if (version.IsEmpty())
             {
-                if (!Directory.Exists(WixExtensionsDir.PathCombine(name)))
+                if (FindWixExtensionDll(name).IsEmpty())
                     Compiler.Run("wix.exe", $"extension add -g {name}");
             }
             else
             {
-                if (!Directory.Exists(WixExtensionsDir.PathCombine(name, version)))
+                if (FindWixExtensionDll(name, version).IsEmpty())
                     Compiler.Run("wix.exe", $"extension add -g {name}/{version}");
             }
         }

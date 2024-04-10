@@ -3710,7 +3710,30 @@ namespace WixSharp
     }
 
     /// <summary>
-    /// 'Byte array to string' serialization methods.
+    /// </summary>
+    static class SystemExtensions
+    {
+        /// <summary>
+        /// Converts semantic version to <see cref="System.Version"/>.
+        /// </summary>
+        /// <param name="semanticVersion">The semantic version.</param>
+        /// <returns></returns>
+        public static Version SemanticVersionToVersion(this string semanticVersion)
+        {
+            // need to handle cases like this: 1.0.0-beta.1, 5.0.0+41e11442
+            var parts = semanticVersion.Split('.');
+            int major = 0, minor = 0, build = 0;
+
+            if (parts.Length > 0) int.TryParse(parts[0], out major);
+            if (parts.Length > 1) int.TryParse(parts[1], out minor);
+            if (parts.Length > 2) int.TryParse(new string(parts[2].TakeWhile(char.IsDigit).ToArray()), out build);
+
+            return new Version(major, minor, build);
+        }
+    }
+
+    /// <summary>
+    ///
     /// </summary>
     public static class SerializingExtensions
     {

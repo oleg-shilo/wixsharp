@@ -48,7 +48,6 @@ using IO = System.IO;
 
 namespace WixSharp
 {
-
     /// <summary>
     /// This class holds the settings for Wix# XML auto-generation: generation of WiX XML elements, which do not have direct
     /// representation in the Wix# script. The detailed information about Wix# auto-generation can be found here: http://www.csscript.net/WixSharp/ID_Allocation.html.
@@ -651,8 +650,6 @@ namespace WixSharp
         {
             // Debug.Assert(false);
 
-            project.WixExtensions.ForEach(x => WixTools.EnsureWixExtension(x));
-
             string extensionDlls = project.WixExtensions
                                    .Select(x => x.ExpandEnvVars())
                                    .Distinct()
@@ -661,8 +658,12 @@ namespace WixSharp
                                        var dllPath = dll;
 
                                        var preferredVersion = WixExtension.GetPreferredVersion(dll);
+                                       
+                                       WixTools.EnsureWixExtension(dll, preferredVersion);
+                                       
                                        if (preferredVersion.IsNotEmpty())
                                            dllPath = WixTools.FindWixExtensionDll(dll, preferredVersion);
+
 
                                        return $"-ext \"{dllPath}\"";
                                    });
