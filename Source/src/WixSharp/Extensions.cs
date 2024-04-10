@@ -2312,6 +2312,15 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Reads the localized string from the WXL localization file.
+        /// </summary>
+        /// <param name="wxlFile">The WXL file.</param>
+        /// <param name="stringId">The string identifier.</param>
+        /// <returns></returns>
+        public static string GetLocalizedString(this string wxlFile, string stringId)
+            => XDocument.Load(wxlFile).FindAll("String").First(x => x.HasAttribute("Id", stringId)).Attr("Value");
+
+        /// <summary>
         /// Selects the first descendant element with a given name (LocalName).
         /// </summary>
         /// <param name="element">The element to be searched.</param>
