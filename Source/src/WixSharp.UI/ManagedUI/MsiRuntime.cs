@@ -270,10 +270,13 @@ namespace WixSharp
         /// Initializes from WiX localization data (*.wxl).
         /// </summary>
         /// <param name="wxlData">The WXL file bytes.</param>
+        /// <param name="merge">if set to <c>true</c> merge with existing content instead of replacing.</param>
         /// <returns></returns>
-        public void InitFromWxl(byte[] wxlData)
+        public void InitFromWxl(byte[] wxlData, bool merge = false)
         {
-            this.Clear();
+            if (!merge)
+                this.Clear();
+
             if (wxlData != null && wxlData.Any())
             {
                 XDocument doc;
