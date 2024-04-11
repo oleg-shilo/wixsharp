@@ -665,7 +665,7 @@ namespace WixSharp
 
                                        if (preferredVersion.IsEmpty())
                                        {
-                                           if (dllPath.PathGetFileNameWithoutExtension() == dll)
+                                           if (dllPath.PathGetFileNameWithoutExtension() == dll && WixTools.IsHighestAvailableVersion(dllPath))
                                                dllPath = dll;
 
                                        }

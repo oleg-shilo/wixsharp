@@ -2589,6 +2589,21 @@ namespace WixSharp.CommonTasks
             }
         }
 
+        internal static bool IsHighestAvailableVersion(string pathToextensionFile)
+        {
+            // C:\Users\oleg\.wix\extensions\WixToolset.Bal.wixext\4.0.2\wixext4\WixToolset.Bal.wixext.dll
+            var version = pathToextensionFile.PathGetDirName().PathGetDirName().PathGetFileName().SemanticVersionToVersion();
+            var name = pathToextensionFile.PathGetDirName().PathGetDirName().PathGetDirName().PathGetFileName();
+
+            var highestVersion = Directory
+                                 .GetDirectories(WixExtensionsDir.PathCombine(name))
+                                 .Select(x => x.PathGetFileName().SemanticVersionToVersion())
+                                 .OrderByDescending(x => x)
+                                 .FirstOrDefault();
+
+            return (version == highestVersion);
+        }
+
         internal static string FindWixExtensionDll(string name, string version = null)
         {
             // C:\Users\user\.wix\extensions\WixToolset.UI.wixext\5.0.0\wixext5\WixToolset.UI.wixext.dll
