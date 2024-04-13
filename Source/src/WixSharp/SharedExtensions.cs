@@ -5,6 +5,7 @@ using System.IO;
 
 namespace WixSharp.Msi
 #else
+
 namespace WixSharp
 #endif
 {
@@ -78,9 +79,9 @@ namespace WixSharp
                 case "StartupFolder": return Environment.SpecialFolder.Startup.ToPath();
                 case "ProgramMenuFolder": return Environment.SpecialFolder.Programs.ToPath();
 
-                case "System16Folder": return Path.Combine("WindowsFolder".AsWixVarToPath(), "System");
+                case "System16Folder": return Path.Combine(Environment.SpecialFolder.System.ToPath().PathGetDirName(), "System");
                 case "System64Folder": return Environment.SpecialFolder.System.ToPath();
-                case "SystemFolder": return Is64OS() ? Path.Combine("WindowsFolder".AsWixVarToPath(), "SysWow64") : Environment.SpecialFolder.System.ToPath();
+                case "SystemFolder": return Is64OS() ? Path.Combine(Environment.SpecialFolder.System.ToPath().PathGetDirName(), "SysWow64") : Environment.SpecialFolder.System.ToPath();
 
                 case "TemplateFolder": return Environment.SpecialFolder.Templates.ToPath();
                 case "WindowsVolume": return Path.GetPathRoot(Environment.SpecialFolder.Programs.ToPath());
