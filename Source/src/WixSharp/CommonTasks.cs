@@ -1083,6 +1083,7 @@ namespace WixSharp.CommonTasks
                .ForEach(x =>
                {
                    x.SetAttribute("Value", x.Value);
+                   x.Attribute("Overridable")?.Remove();
                    x.Value = "";
                });
 
