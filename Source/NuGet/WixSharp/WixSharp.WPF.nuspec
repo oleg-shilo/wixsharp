@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.WPF</id>
-    <version>2.1.5.0</version>
+    <version>2.1.6.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,27 +16,20 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Wix4: Release 
+    <releaseNotes>Wix4: Release - v2.1.6.0
 
-v2.1.5.0
-NET Framework:
-- #1473: Build error with WixToolset.UI.wixext
-- Issue #1444: wix.exe not found if installed as local tool
-- minor improvements triggered by #1469
-
-v2.1.3.0
-NET Core: 
-- added project templates
-- improved error reporting during compilation.
-- added full CustomUI sample (to be used as a template)
-
-
-</releaseNotes>
+- #1503: %AppData% folder no replace by path wix4
+- #1493: Question : Make Wix# Wix Toolset v5 compatible
+- #1491: How to set title and description for CustomDialogWith&lt;T&gt;
+- #1310: Problem during dynamic localization
+- Enhancement #1497: MSI language
+- Improved algorithm for locating compatible version of installed WiX extension file.
+- Added extension method for reading localized strings from wxl files:   `product.LocalizationFile.GetLocalizedString("ProductName")`</releaseNotes>
     <copyright>Copyright (C) 2008-2021 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="2.1.5.0" />
+      <dependency id="WixSharp.bin" version="2.1.6.0" />
       <dependency id="Caliburn.Micro" version="4.0.212" />
     </dependencies>
     <references>

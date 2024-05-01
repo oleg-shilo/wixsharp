@@ -18,8 +18,9 @@ static class Script
     {
         File f;
         var project =
-            new Project("MyProduct",
-                new Dir(new Id("MY_INSTALLDIR"), @"%ProgramFiles%\My Company\My Product",
+            new ManagedProject("MyProduct",
+                new Dir(@"AppDataFolder\My ICompany\My Product",
+                    // new Dir(new Id("MY_INSTALLDIR"), @"%ProgramFiles%\My ICompany\My Product",
                     f = new File("MyApp_file".ToId(),
                                  @"Files\Bin\MyApp.exe",
                                  new FileAssociation("cstm", "application/custom", "open", "\"%1\"")
@@ -41,7 +42,9 @@ static class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
-        project.UI = WUI.WixUI_InstallDir;
+        // project.ManagedUI = ManagedUI.Default;
+        project.ManagedUI = ManagedUI.DefaultWpf;
+        // project.UI = WUI.WixUI_InstallDir;
 
         project.EmitConsistentPackageId = true;
         project.Scope = InstallScope.perMachine;

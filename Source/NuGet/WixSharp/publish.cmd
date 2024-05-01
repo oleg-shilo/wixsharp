@@ -1,10 +1,11 @@
-dotnet nuget push WixSharp.Msi.Core.2.1.3.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
-dotnet nuget push WixSharp.Core.2.1.3.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
+set ver=2.1.5
+dotnet nuget push WixSharp.Msi.Core.%ver%.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
+dotnet nuget push WixSharp.Core.%ver%.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
 
-dotnet nuget push WixSharp.Msi.Core.2.1.3.snupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
-dotnet nuget push WixSharp.Core.2.1.3.snupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
+dotnet nuget push WixSharp.Msi.Core.%ver%.snupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
+dotnet nuget push WixSharp.Core.%ver%.snupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
 
-dotnet nuget push WixSharp_wix4.bin.2.1.2.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
-dotnet nuget push WixSharp_wix4.2.1.2.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
-dotnet nuget push WixSharp-wix4.WPF.2.1.2.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
+dotnet nuget push WixSharp_wix4.bin.%ver%.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
+dotnet nuget push WixSharp_wix4.%ver%.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
+dotnet nuget push WixSharp-wix4.WPF.%ver%.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
 pause

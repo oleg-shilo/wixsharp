@@ -24,6 +24,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\WixSharp.Msi\WixSharp.Msi\WixSharp.Msi.csproj" />
+		<ProjectReference Include="..\..\..\WixSharp.UI.WPF\WixSharp.UI.WPF.csproj" />
+		<ProjectReference Include="..\..\..\WixSharp.UI\WixSharp.UI.csproj" />
 		<ProjectReference Include="..\..\..\WixSharp\WixSharp.csproj" />
 	</ItemGroup>
 
