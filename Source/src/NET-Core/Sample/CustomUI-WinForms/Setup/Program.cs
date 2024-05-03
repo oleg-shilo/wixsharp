@@ -4,6 +4,7 @@ using WixToolset.Dtf.WindowsInstaller;
 using File = WixSharp.File;
 
 [assembly: InternalsVisibleTo(assemblyName: "setup.aot")]
+
 var project =
     new ManagedProject("My Product",
         new Dir(@"%ProgramFiles%\My Company\My Product",
