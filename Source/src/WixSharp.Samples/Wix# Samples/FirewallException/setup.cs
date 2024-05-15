@@ -4,11 +4,15 @@
 using System;
 using System.Text;
 using WixSharp;
+using WixSharp.CommonTasks;
 
 class Script
 {
     static public void Main()
     {
+        // set Wix 5.0 as a default WiX Toolset version        // set Wix 5.0 as a default WiX Toolset version
+        WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.0");
+
         var project =
             new Project("MyProduct",
                 new FirewallException("notepad")  //global exception
@@ -21,6 +25,7 @@ class Script
                     new File(@"Files\Bin\MyApp.exe",
                         new FirewallException("MyApp") //file specific exception
                         {
+                            AttributesDefinition = "Grouping=Contoso",
                             //Scope = FirewallExceptionScope.any,
                             RemoteAddress = "127.0.0.1, 127.0.0.2, 127.0.0.3".Split(',')
                         })));
