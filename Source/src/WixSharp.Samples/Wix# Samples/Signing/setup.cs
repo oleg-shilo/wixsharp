@@ -36,6 +36,10 @@ class Script
                 // }
             };
 
+        // This is an optional step to sign all files in the project
+        // The supported file formats are configured by the Compiler.SignAllFilesOptions.SupportedFileFormats property
+        project.SignAllFiles = true;
+
         project.UI = WUI.WixUI_ProgressOnly;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
