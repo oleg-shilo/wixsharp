@@ -428,7 +428,7 @@ namespace WixSharp
 
                 if (ManagedUI != null)
                 {
-                    this.AddProperty(new Property("WixSharp_UI_INSTALLDIR", ManagedUI.InstallDirId ?? "INSTALLDIR"));
+                    this.AddProperty(new Property("WixSharp_UI_INSTALLDIR", ManagedUI.InstallDirId ?? Compiler.AutoGeneration.InstallDirDefaultId));
 
                     if (AutoElements.EnableUACRevealer)
                         this.AddProperty(new Property("UAC_REVEALER_ENABLED", "true"));
