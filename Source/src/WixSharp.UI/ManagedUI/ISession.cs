@@ -4,7 +4,12 @@ using WixSharp.UI.Forms;
 namespace WixSharp
 {
     /// <summary>
-    /// The ISession interface controls the installation process.
+    /// The ISession interface controls the installation process. It is a WixSharp session object that encapsulates state 
+    /// and functionality of <see cref="T:WixToolset.Dtf.WindowsInstaller.Session"/> objects but ads some extra features on top.
+    /// <para>
+    /// You can always access the original <see cref="T:WixToolset.Dtf.WindowsInstaller.Session"/> object via 
+    /// <see cref="ISession.SessionContext"/>.
+    /// </para>
     /// </summary>
     public interface ISession
     {
@@ -16,6 +21,10 @@ namespace WixSharp
 
         /// <summary>
         /// The session context object.
+        /// <para>
+        /// It is a <see cref="T:WixToolset.Dtf.WindowsInstaller.Session"/> object. However because the <see cref="ISession"/>
+        /// interface is not dependent on the DTF assembly the actual type of the object is <see cref="T:System.Object"/>.
+        /// </para> 
         /// </summary>
         object SessionContext { get; }
 

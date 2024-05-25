@@ -2724,6 +2724,16 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Returns path to the msi file being executed.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
+        public static string MsiFile(this Session session)
+        {
+            return session.Property("OriginalDatabase");
+        }
+
+        /// <summary>
         /// Gets the UIlevel.
         /// <para>UILevel &gt; 4 lead to displaying modal dialogs. See https://msdn.microsoft.com/en-us/library/aa369487(v=vs.85).aspx.</para>
         /// </summary>

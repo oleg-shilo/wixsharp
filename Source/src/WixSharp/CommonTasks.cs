@@ -1131,7 +1131,7 @@ namespace WixSharp.CommonTasks
                         project.Version = new Version(FileVersionInfo.GetVersionInfo(file_path).FileVersion);
                 }
                 else
-                    Console.WriteLine("Warning: ");
+                    Console.WriteLine($"Warning: cannot set `project.Version` no file with {fileId} found");
             }
             return project;
         }
