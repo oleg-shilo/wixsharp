@@ -189,6 +189,13 @@ namespace WixSharp
         /// </summary>
         public IDigitalSignature DigitalSignature;
 
+        /// <summary>
+        /// Controls whether all files in the project should be digitally signed.
+        /// Supported file formats can be configured by setting <see cref="SignAllFilesOptions.SupportedFileFormats"/>.
+        /// When set to <c>true</c>, all files will be signed.
+        /// </summary>
+        public bool SignAllFiles = false;
+
         internal virtual void Preprocess()
         {
             var managedActions = this.Actions.OfType<ManagedAction>()
