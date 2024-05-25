@@ -771,9 +771,19 @@ namespace WixSharp
                 // Sign all files if the project option is enabled
                 if (project.SignAllFiles)
                 {
-                    ProjectFileSigner.SignAllFiles(project, Compiler.SignAllFilesOptions);
+                    if (project.DigitalSignature == null)
+                    {
+                        Compiler.OutputWriteLine("WARNING: DigitalSignature is not set but SignAllFiles is enabled. Please set DigitalSignature property of the project.");
+                    }
+                    else
+                    {
+                        ProjectFileSigner.SignAllFiles(project, Compiler.SignAllFilesOptions);
+                    }
                 }
-
+                else if (project.DigitalSignature != null)
+                {
+                    Compiler.OutputWriteLine("WARNING: DigitalSignature is set but SignAllFiles is disabled. Not all files are going to be signed, consider setting SignAllFiles property to true.");
+                }
 
                 if (!IO.File.Exists(compiler) || !IO.File.Exists(linker))
                 {

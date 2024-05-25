@@ -191,6 +191,8 @@ namespace WixSharp
         /// Controls whether all files in the project should be digitally signed.
         /// Supported file formats can be configured by setting <see cref="SignAllFilesOptions.SupportedFileFormats"/>.
         /// When set to <c>true</c>, all files will be signed.
+        /// <p>Note, the digital signing will be performed on the original files specified in the <see cref="WixSharp.Project"/>
+        /// initialization.</p>
         /// </summary>
         public bool SignAllFiles = false;
 
