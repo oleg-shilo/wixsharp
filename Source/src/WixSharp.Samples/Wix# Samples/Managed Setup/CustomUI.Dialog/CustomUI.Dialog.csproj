@@ -87,9 +87,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="setup.cs" />
-    <Compile Include="UserNameDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="UserNameDialog.cs" />
     <Compile Include="UserNameDialog.Designer.cs">
       <DependentUpon>UserNameDialog.cs</DependentUpon>
     </Compile>

@@ -170,6 +170,7 @@
     <Compile Include="ODBCDataSource.cs" />
     <Compile Include="PermissionEx.cs" />
     <Compile Include="Permissions.cs" />
+    <Compile Include="ProjectFileSigner.cs" />
     <Compile Include="Properties\AssemblyInfo.version.cs" />
     <Compile Include="Reboot.cs" />
     <Compile Include="RegisterAsCom.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="UrlReservation.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Utilities\RegistryWOW6432.cs" />
+    <Compile Include="Utilities\VerifyFileSignature.cs" />
     <Compile Include="Utilities\WixBinLocator.cs" />
     <Compile Include="WixExtension.cs" />
     <Compile Include="WixProject.cs" />
