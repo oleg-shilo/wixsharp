@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.WPF</id>
-    <version>2.1.6.0</version>
+    <version>2.1.7.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,20 +16,20 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Wix4: Release - v2.1.6.0
+    <releaseNotes>WiX4 - Release v2.1.7.0
 
-- #1503: %AppData% folder no replace by path wix4
-- #1493: Question : Make Wix# Wix Toolset v5 compatible
-- #1491: How to set title and description for CustomDialogWith&lt;T&gt;
-- #1310: Problem during dynamic localization
-- Enhancement #1497: MSI language
-- Improved algorithm for locating compatible version of installed WiX extension file.
-- Added extension method for reading localized strings from wxl files:   `product.LocalizationFile.GetLocalizedString("ProductName")`</releaseNotes>
+Special thanks to @geghamyan for contributing `Project.SignAllFiles` functionality. 
+
+- Added file signing functionality to project build process (`Project.SignAllFiles`). 
+- Added WiX5 new attributes (known at the time) for `FirewallException`'
+- Issue #1533: Allow specifying the Group name when adding a FirewallException
+- WixSharp.Core: Added EmbeddedUI sample solution
+</releaseNotes>
     <copyright>Copyright (C) 2008-2021 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="2.1.6.0" />
+      <dependency id="WixSharp.bin" version="2.1.7.0" />
       <dependency id="Caliburn.Micro" version="4.0.212" />
     </dependencies>
     <references>

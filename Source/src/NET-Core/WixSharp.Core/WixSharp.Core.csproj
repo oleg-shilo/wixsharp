@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageVersion>2.1.6</PackageVersion>
+    <PackageVersion>2.1.7</PackageVersion>
     <Title>WixSharp (.NET Core)</Title>
     <Description>.NET Core edition of WixSharp package</Description>
     <Copyright>Oleg Shilo</Copyright>
@@ -188,7 +188,9 @@
     <Compile Include="..\..\WixSharp\User.cs" Link="User.cs" />
     <Compile Include="..\..\WixSharp\Utilities\RegistryWOW6432.cs" Link="Utilities\RegistryWOW6432.cs" />
     <Compile Include="..\..\WixSharp\Utilities\WixBinLocator.cs" Link="Utilities\WixBinLocator.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\VerifyFileSignature.cs" Link="Utilities\VerifyFileSignature.cs" />
     <Compile Include="..\..\WixSharp\Utils.cs" Link="Utils.cs" />
+    <Compile Include="..\..\WixSharp\ProjectFileSigner.cs" Link="ProjectFileSigner.cs" />
     <Compile Include="..\..\WixSharp\VersionRange.cs" Link="VersionRange.cs" />
     <Compile Include="..\..\WixSharp\WebSite.cs" Link="WebSite.cs" />
     <Compile Include="..\..\WixSharp\WixEntity.cs" Link="WixEntity.cs" />
