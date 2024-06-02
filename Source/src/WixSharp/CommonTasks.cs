@@ -2583,6 +2583,12 @@ namespace WixSharp.CommonTasks
                     // IE: 5.0.0+41e11442
                     globalWixVersion = Compiler.Run("wix.exe", "--version", null, true).Trim().Split('+').First().SemanticVersionToVersion();
 
+                    if (globalWixVersion.IsUninitialized())
+                    {
+                        Compiler.Run("dotnet.exe", "tool restore");
+                        globalWixVersion = Compiler.Run("wix.exe", "--version", null, true).Trim().Split('+').First().SemanticVersionToVersion();
+                    }
+
                     Compiler.OutputWriteLine($"Wix version: {globalWixVersion}");
                 }
 

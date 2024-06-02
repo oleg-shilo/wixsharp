@@ -2574,6 +2574,17 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Determines whether this instance is uninitialized.
+        /// </summary>
+        /// <param name="ver">The ver.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified ver is uninitialized; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsUninitialized(this Version ver)
+          => ver.Major == 0 && ver.Minor == 0 && ver.Build == 0 && ver.Revision == -1;
+
+
+        /// <summary>
         /// Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
         /// <para>
         /// If you are adding items to the <c>Project</c> or <c>Dir</c> then you can use the

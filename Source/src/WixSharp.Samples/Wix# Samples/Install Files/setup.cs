@@ -17,6 +17,7 @@ static class Script
     static public void Main()
     {
         File f;
+
         var project =
             new ManagedProject("MyProduct",
                 new Dir(@"AppDataFolder\My ICompany\My Product",
@@ -42,6 +43,7 @@ static class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
+        // possible UIs
         // project.ManagedUI = ManagedUI.Default;
         project.ManagedUI = ManagedUI.DefaultWpf;
         // project.UI = WUI.WixUI_InstallDir;
@@ -72,20 +74,4 @@ static class Script
                 .AddElement("CreateFolder/Permission", "User=Everyone;GenericAll=yes");
     }
 
-    // static public Project SetNetPrerequisite(this WixSharp.Project project, string version, string runtimeType, string rollForward, string platform, string errorMessage = null)
-    // {
-    //     var condition = Condition.Create("Installed OR DotNetCheckResult = 0");
-    //     string message = errorMessage ?? $"Please install .NET version {version} first.";
-
-    //     project.LaunchConditions.Add(new LaunchCondition(condition, message));
-
-    //     project.WixSourceGenerated += doc =>
-    //         doc.FindFirst("Package").AddElement(
-    //             WixExtension.NetFx.ToXName("DotNetCompatibilityCheck"),
-    //             $"Property=DotNetCheckResult; RuntimeType={runtimeType}; Version={version}; RollForward={rollForward}; Platform={platform}");
-
-    //     project.Include(WixExtension.NetFx);
-
-    //     return project;
-    // }
 }

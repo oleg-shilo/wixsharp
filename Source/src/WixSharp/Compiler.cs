@@ -3580,7 +3580,7 @@ namespace WixSharp
 
                 Process p = new Process();
 
-                if (file.StartsWith("localtool:"))
+                if (file?.StartsWith("localtool:") == true)
                 {
                     var toolName = file.Split(':').Last();
                     p.StartInfo.FileName = "dotnet.exe";
