@@ -1978,6 +1978,20 @@ namespace WixSharp.CommonTasks
             return ServiceDo("stop", service, throwOnError);
         }
 
+
+        /// <summary>
+        /// Adds the property to the default properties that are mapped for use with the setup events (deferred custom actions). See <see
+        /// cref="ManagedAction.UsesProperties"/> for the details.
+        /// <para>The default value is "INSTALLDIR,UILevel"</para>
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns></returns>
+        public static ManagedProject MapAsDeferredProperty(this ManagedProject project, string propertyName)
+        {
+            project.DefaultDeferredProperties += "," + propertyName;
+            return project;
+        }
         /// <summary>
         /// Changes the project configuration so `Project.AfterInstall` event is executed unelevated. Otherwise it is elevated.
         /// </summary>

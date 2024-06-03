@@ -2,7 +2,10 @@
 //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
+// using System.IO;
+using System.Windows.Forms;
 using WixSharp;
+using WixSharp.CommonTasks;
 
 class Script
 {
@@ -11,7 +14,7 @@ class Script
         // Note you can detect at runtime if the feature has been marked for installation by using condition
         // like this Condition.Create("ADDLOCAL >< \"your_feature_name\"")
 
-        var binaries = new Feature("MyApp Binaries", "Application binaries");
+        var binaries = new Feature("MyApp Binaries", "Application binaries", "FEATURE_INSTALL_PATH2");
         var docs = new Feature("MyApp Documentation");
         var docsLight = new Feature("MyApp Light Documentation");
         var tuts = new Feature("MyApp Tutorial");
@@ -21,10 +24,10 @@ class Script
         binaries.Add(docsLight);
 
         var project =
-            new Project("MyProduct",
+            new ManagedProject("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(binaries, @"Files\Bin\MyApp.exe"),
-                    new Dir(@"Docs\Manual",
+                    new Dir(new Id("FEATURE_INSTALL_PATH2"), @"Docs\Manual",
                         new File(docs, @"Files\Docs\Manual.txt"),
                         new File(@"Files\Docs\Tutorial.txt")
                         {
@@ -37,6 +40,23 @@ class Script
         project.UI = WUI.WixUI_FeatureTree;
 
         project.DefaultFeature = binaries; //this line is optional
+                                           project.UnelevateAfterInstallEvent();
+
+
+        project.DefaultDeferredProperties += ",FEATURE_INSTALL_PATH2";
+        project.AfterInstall += (SetupEventArgs e) =>
+        {
+            try
+            {
+                MessageBox.Show(e.Session.Property("FEATURE_INSTALL_PATH2"));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        };
+
+
 
         // project.PreserveTempFiles = true;
 
