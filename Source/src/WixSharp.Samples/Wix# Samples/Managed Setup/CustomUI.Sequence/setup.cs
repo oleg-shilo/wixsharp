@@ -85,7 +85,7 @@ public static class Script
 
     private static void Project_AfterInstall(SetupEventArgs e)
     {
-        Debug.Assert(false);
+        // Debug.Assert(false);
 
         var session = e.Session;
         try
