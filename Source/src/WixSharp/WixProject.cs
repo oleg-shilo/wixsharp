@@ -191,6 +191,13 @@ namespace WixSharp
         /// </summary>
         public event XDocumentGeneratedDlgt WixSourceGenerated;
 
+        /// <summary>
+        /// Occurs when `wix.exe` build command generated.
+        /// Use this event if you want to modify the command before
+        /// it is executed by `wix.exe`.
+        /// </summary>
+        public WixBuildCommandGeneratedDlgt WixBuildCommandGenerated = x => x;
+
         internal string SetVersionFromIdValue = "";
 
         /// <summary>

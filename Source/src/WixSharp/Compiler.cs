@@ -193,10 +193,16 @@ namespace WixSharp
             }
         }
     }
+
     /// <summary>
     /// Delegate for  <see cref="Compiler"/> event <c>WixSourceGenerated</c>
     /// </summary>
     public delegate void XDocumentGeneratedDlgt(XDocument document);
+
+    /// <summary>
+    /// Delegate for  <see cref="WixProject.WixBuildCommandGenerated"/> event.
+    /// </summary>
+    public delegate string WixBuildCommandGeneratedDlgt(string command);
 
     /// <summary>
     /// Delegate for  <see cref="Compiler"/> event <c>WixSourceSaved</c>
@@ -708,7 +714,11 @@ namespace WixSharp
             if (extraWxsFiles.IsNotEmpty())
                 candleCmdLineParams.Append(extraWxsFiles);
 
-            return candleCmdLineParams.ToString().ExpandEnvVars();
+            var buildCmd = candleCmdLineParams.ToString().ExpandEnvVars();
+
+            buildCmd = project.WixBuildCommandGenerated?.Invoke(buildCmd) ?? buildCmd;
+
+            return buildCmd;
         }
 
         static string Build(Project project, string path, OutputType type)
