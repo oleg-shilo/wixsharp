@@ -353,11 +353,6 @@ namespace WixSharp
         x86,
 
         /// <summary>
-        /// Set this value to declare that the package is an ia64 package. This value requires that the InstallerVersion property be set to 200 or greater.
-        /// </summary>
-        ia64,
-
-        /// <summary>
         ///  Set this value to declare that the package is an x64 package. This value requires that the InstallerVersion property be set to 200 or greater.
         /// </summary>
         x64,

@@ -196,7 +196,9 @@ namespace WixSharp
         /// Use this event if you want to modify the command before
         /// it is executed by `wix.exe`.
         /// </summary>
-        public WixBuildCommandGeneratedDlgt WixBuildCommandGenerated = x => x;
+        public event WixBuildCommandGeneratedDlgt WixBuildCommandGenerated = x => x;
+
+        internal string OnWixBuildCommandGenerated(string command) => WixBuildCommandGenerated?.Invoke(command) ?? command;
 
         internal string SetVersionFromIdValue = "";
 

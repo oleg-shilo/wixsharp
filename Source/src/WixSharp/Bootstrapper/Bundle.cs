@@ -354,6 +354,11 @@ namespace WixSharp.Bootstrapper
         public Variable[] Variables = new Variable[0];
 
         /// <summary>
+        /// The target platform type.
+        /// </summary>
+        public Platform? Platform;
+
+        /// <summary>
         /// Builds WiX Bootstrapper application from the specified <see cref="Bundle" /> project instance.
         /// </summary>
         /// <param name="path">The path to the bootstrapper to be build.</param>

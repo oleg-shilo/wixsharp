@@ -194,7 +194,7 @@ namespace WixSharp
         /// Supported file formats can be configured by setting <see cref="SignAllFilesOptions.SupportedFileFormats"/>.
         /// When set to <c>true</c>, all files will be signed.
         /// <p>Note, the digital signing will be performed on the original files specified in the <see cref="WixSharp.Project"/>
-        /// initialization.</p> 
+        /// initialization.</p>
         /// </summary>
         public bool SignAllFiles = false;
 
@@ -212,7 +212,7 @@ namespace WixSharp
                 actions.ForEach(a => a.RefAssemblies = refAsms);
             }
 
-            if (WixSharp.Compiler.AutoGeneration.Map64InstallDirs && this.Platform.HasValue && this.Platform.Value == WixSharp.Platform.x64)
+            if (WixSharp.Compiler.AutoGeneration.Map64InstallDirs && this.Platform.HasValue && this.Is64Bit)
             {
                 foreach (var dir in this.AllDirs)
                 {
@@ -265,6 +265,8 @@ namespace WixSharp
         /// to specify boolean <see cref="RegValue.Win64"/> explicitly.</para>
         /// </summary>
         public Platform? Platform;
+
+        internal bool Is64Bit => Platform == WixSharp.Platform.x64 || Platform == WixSharp.Platform.arm64;
 
         /// <summary>
         /// Schedules the FailWhenDeferred custom action for the current platform.

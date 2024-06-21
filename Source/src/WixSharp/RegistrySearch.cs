@@ -154,9 +154,11 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            var platform = (context.Project as Project)?.Platform;
-            if (this.Win64 == null && platform != null)
-                this.Win64 = platform == Platform.x64;
+            // var platform = (context.Project as Project)?.Platform;
+            var proj = (context.Project as Project);
+
+            if (this.Win64 == null && proj.Platform != null)
+                this.Win64 = proj.Is64Bit;
 
             base.Process(context, "RegistrySearch")
                 .SetAttribute("Bitness", Win64.HasValue ? (Win64.Value ? "always64" : "always32") : null);

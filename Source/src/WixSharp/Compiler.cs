@@ -39,6 +39,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
+using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
 using IO = System.IO;
@@ -707,16 +708,17 @@ namespace WixSharp
             var candleCmdLineParams = new StringBuilder();
             candleCmdLineParams.AppendFormat("{0} {1} {2} {3} \"{4}\" ", candleOptions, localization, extensionDlls, libFiles, wxsFile);
 
-            var msiProj = project as Project;
-            if (msiProj != null && msiProj.Platform != Platform.x86) // non-default architecture
-                candleCmdLineParams.Append($" -arch {Platform.x64}");
+            var platform = (project as Project)?.Platform ?? (project as Bundle)?.Platform;
+
+            if (platform.HasValue) // non-default architecture
+                candleCmdLineParams.Append($" -arch {platform}");
 
             if (extraWxsFiles.IsNotEmpty())
                 candleCmdLineParams.Append(extraWxsFiles);
 
             var buildCmd = candleCmdLineParams.ToString().ExpandEnvVars();
 
-            buildCmd = project.WixBuildCommandGenerated?.Invoke(buildCmd) ?? buildCmd;
+            buildCmd = project.OnWixBuildCommandGenerated(buildCmd);
 
             return buildCmd;
         }
@@ -2153,7 +2155,7 @@ namespace WixSharp
                 {
                     dummyDir = @"%ProgramFiles%\WixSharp\DummyDir";
 
-                    if (wProject.Platform == Platform.x64)
+                    if (wProject.Is64Bit)
                         dummyDir = dummyDir.Map64Dirs();
 
                     wProject.Dirs = new[] { new Dir(dummyDir) };
@@ -2263,14 +2265,14 @@ namespace WixSharp
                     {
                         if (regVal.Win64.HasValue)
                         {
-                            if (regVal.IsWin64 && wProject.Platform == Platform.x86)
+                            if (regVal.IsWin64 && !wProject.Is64Bit)
                                 regVal.AttributesDefinition += ";Component:Bitness=always64";
-                            else if (!regVal.IsWin64 && wProject.Platform == Platform.x64)
+                            else if (!regVal.IsWin64 && wProject.Is64Bit)
                                 regVal.AttributesDefinition += ";Component:Bitness=always32";
                         }
                         else
                         {
-                            if (wProject.Platform != Platform.x86)
+                            if (wProject.Is64Bit)
                                 regVal.AttributesDefinition += ";Component:Bitness=always64";
                         }
                     }
@@ -2299,7 +2301,7 @@ namespace WixSharp
                     // case belongs to a permanent dir but not to the user dir. It is still shocking to enclose an entity
                     // that is a system wide to the directory. But the containment is slightly better in this case.
 
-                    bool is64 = regVal.Win64 ?? (wProject.Platform == Platform.x64);
+                    bool is64 = regVal.Win64 ?? wProject.Is64Bit;
 
                     XElement topLevelDir = GetTopLevelPermanentDir(product, is64);
 
@@ -2584,7 +2586,7 @@ namespace WixSharp
                     else
                     {
                         // otherwise `default` - the same as package x64/x32 
-                        if (wProject.Platform == Platform.x64)
+                        if (wProject.Is64Bit)
                             RegistrySearchElement.SetAttribute("Bitness", "always64");
                         else
                             RegistrySearchElement.SetAttribute("Bitness", rvProp.Win64 ? "always64" : "always32");

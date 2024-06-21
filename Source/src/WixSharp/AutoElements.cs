@@ -377,15 +377,15 @@ namespace WixSharp
         }
 
         private static string[] UserProfileFolders = new[]
-                                                        {
-                                                            "ProgramMenuFolder",
-                                                            "AppDataFolder",
-                                                            "LocalAppDataFolder",
-                                                            "TempFolder",
-                                                            "PersonalFolder",
-                                                            "DesktopFolder",
-                                                            "StartupFolder"
-                                                        };
+                                                         {
+                                                             "ProgramMenuFolder",
+                                                             "AppDataFolder",
+                                                             "LocalAppDataFolder",
+                                                             "TempFolder",
+                                                             "PersonalFolder",
+                                                             "DesktopFolder",
+                                                             "StartupFolder"
+                                                         };
 
         static bool InUserProfile(this XElement xDir)
         {
@@ -449,16 +449,12 @@ namespace WixSharp
 
         static void InjectPlatformAttributes(XDocument doc)
         {
-            var is64BitPlatform = doc.Root.Select("Package").HasAttribute("Platform", val => val == "x64");
+            var is64BitPlatform = doc.Root.Select("Package").HasAttribute("Platform", val => val.EndsWith("64"));
 
             if (is64BitPlatform)
             {
-                var platform = doc.Root.Select("Package").Attribute("Platform");
-                platform.Remove();
                 // doc says Component.Bitness may have value `default` that means "will be
-                // installed using the same bitness as the package".But package element does not have `bitness`.
-
-                // doc.Root.Select("Package").SetAttribute("Bitness", "always64");
+                // installed using the same bitness as the package. But package element does not have `bitness`.
 
                 doc.Descendants("Component")
                    .ForEach(comp =>
@@ -467,6 +463,9 @@ namespace WixSharp
                            comp.SetAttributeValue("Bitness", "always64");
                    });
             }
+
+            var platform = doc.Root.Select("Package").Attribute("Platform");
+            platform?.Remove();
         }
 
         internal static void ExpandCustomAttributes(XDocument doc, WixProject project)
