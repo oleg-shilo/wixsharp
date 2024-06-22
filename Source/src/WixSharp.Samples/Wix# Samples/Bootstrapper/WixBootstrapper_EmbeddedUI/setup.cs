@@ -5,6 +5,7 @@ using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
 using WixSharp.UI;
+
 using io = System.IO;
 
 public class Script
@@ -25,6 +26,9 @@ public class Script
 
     static public void Build(string msi)
     {
+        // This sample does what ManualBuild does but in a single step. This is because there is no need to build
+        // self-hosted msi as it is automatically built in MsiExePackage constructor.
+
         Console.WriteLine("Building Bootstrapper ...");
 
         var bootstrapper =

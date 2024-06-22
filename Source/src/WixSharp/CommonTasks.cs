@@ -2096,12 +2096,13 @@ namespace WixSharp.CommonTasks
 
             var name = parser.GetProductName();
             var version = parser.GetProductVersion();
+            var productCode = parser.GetProductCode();
 
-            var csFile = GenerateCSharpSource(Path.GetTempPath().PathCombine(msiFile.PathGetFileName()), name, version);
+            var csFile = GenerateCSharpSource(Path.GetTempPath().PathCombine(msiFile.PathGetFileName()), name, version, productCode);
 
             try
             {
-                return csc.Run($"\"/res:{msiFile}\" \"-out:{outFile}\" /t:winexe \"{csFile}\"", Path.GetDirectoryName(outFile));
+                return csc.Run($"\"/res:{msiFile}\" \"-out:{outFile}\" /t:winexe /debug+ /define:DEBUG \"{csFile}\"", Path.GetDirectoryName(outFile));
             }
             finally
             {
@@ -2114,7 +2115,7 @@ namespace WixSharp.CommonTasks
                 .OrderByDescending(x => x)
                 .FirstOrDefault();
 
-        static string GenerateCSharpSource(string outFile, string name, string version)
+        static string GenerateCSharpSource(string outFile, string name, string version, string productCode)
         {
             var code = @"
 using System;
@@ -2140,13 +2141,16 @@ class Program
 {
     static int Main(string[] args)
     {
+        // Debug.Assert(false);
+
+        // string msi = GetMsiCacheName();
         string msi = Path.GetTempFileName();
         try
         {
             ExtractMsi(msi);
             string msi_args = args.Any() ? string.Join("" "", args) : ""/i"";
 
-            Process p = Process.Start(""msiexec.exe"", msi_args + ""\"""" + msi + ""\"""");
+            Process p = Process.Start(""msiexec.exe"", msi_args + "" \"""" + msi + ""\"""");
             p.WaitForExit();
             return p.ExitCode;
         }
@@ -2157,13 +2161,24 @@ class Program
         }
         finally
         {
-            try
-            {
-                if (File.Exists(msi))
-                    File.Delete(msi);
-            }
-            catch { }
+            File.Delete(msi);
         }
+    }
+
+    static string GetMsiCacheName()
+    {
+        var p = new System.Security.Principal.WindowsPrincipal(System.Security.Principal.WindowsIdentity.GetCurrent());
+        var admin = p.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+
+        var dir = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ""WixSharp"", ""Installer"", """ + productCode + @""");
+        if (admin)
+            dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), ""Installer"", """ + productCode + @""");
+
+        Directory.CreateDirectory(dir);
+        var msi = Path.Combine(dir, """ + name + @".msi"");
+
+        File.WriteAllText(Path.Combine(dir, ""wixsharp.cache""), """");
+        return msi;
     }
 
     static void ExtractMsi(string outFile)
