@@ -1,7 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Security.Principal;
 using System.Windows;
+using WixSharp;
 using WixToolset.Mba.Core;
 
 using mba = WixToolset.Mba.Core;
@@ -21,6 +24,30 @@ namespace WixToolset.WixBA
     }
 }
 
+public static class Runtime
+{
+    public static void RestartItself()
+    {
+        // On startup the bundle app always starts another instance
+        // of itself but with some extra CLI arguments that need to be cleaned up.
+
+        var exe = Environment.GetCommandLineArgs()[0];
+        var args = string.Join(", ", Environment.GetCommandLineArgs().Skip(1)
+            .Where(x => !x.StartsWith("-burn.")));
+
+        var startInfo = new ProcessStartInfo();
+        startInfo.UseShellExecute = true;
+        startInfo.WorkingDirectory = Environment.CurrentDirectory;
+        startInfo.FileName = exe;
+        startInfo.Arguments = args;
+        startInfo.Verb = "runas";
+
+        Process.Start(startInfo);
+    }
+
+    public static bool IsAdmin => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+}
+
 public class ManagedBA : mba.BootstrapperApplication
 {
     public ManagedBA(mba.IEngine engine, mba.IBootstrapperCommand command) : base(engine)
@@ -36,7 +63,15 @@ public class ManagedBA : mba.BootstrapperApplication
     /// </summary>
     protected override void Run()
     {
-        new MainView(this).ShowDialog();
+        if (Runtime.IsAdmin)
+        {
+            new MainView(this).ShowDialog();
+        }
+        else
+        {
+            Runtime.RestartItself();
+        }
+
         engine.Quit(0);
     }
 }
