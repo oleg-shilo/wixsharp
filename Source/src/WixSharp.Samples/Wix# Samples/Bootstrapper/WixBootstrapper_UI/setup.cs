@@ -34,6 +34,10 @@ public class Script
     {
         EnsureCompatibleWixVersion();
 
+        // if you want to use msi with custom UI managed UIthen use BuildMsiWithManaged() instead of BuildMsi()
+        // You will also need to use MsiExePackage instead of MsiPackage.
+        // See WixBootstrapper_MsiEmbeddedUI.csproj sample
+
         string productMsi = BuildMsi();
 
         var bundle = new Bundle("My Product Bundle",
@@ -83,6 +87,36 @@ public class Script
                     new File("readme.txt")));
 
         productProj.UI = WUI.WixUI_Mondo;
+        productProj.Scope = InstallScope.perMachine;
+        productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258772");
+
+        productProj.Load += (SetupEventArgs e) =>
+        {
+            if (e.IsInstalling)
+            {
+                MessageBox.Show("Installing...", "My Product");
+            }
+            else if (e.IsUninstalling)
+            {
+                MessageBox.Show("Uninstalling...", "My Product");
+            }
+        };
+        productProj.AfterInstall += (SetupEventArgs e) =>
+        {
+            MessageBox.Show("MSI session is completed", "My Product");
+        };
+
+        return productProj.BuildMsi();
+    }
+
+    static string BuildMsiWithManaged()
+    {
+        var productProj =
+            new ManagedProject("My Product1",
+                new Dir(@"%ProgramFiles%\My Company\My Product",
+                    new File("readme.txt")));
+
+        productProj.ManagedUI = ManagedUI.Default;
         productProj.Scope = InstallScope.perMachine;
         productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258772");
 

@@ -2102,7 +2102,8 @@ namespace WixSharp.CommonTasks
 
             try
             {
-                return csc.Run($"\"/res:{msiFile}\" \"-out:{outFile}\" /t:winexe /debug+ /define:DEBUG \"{csFile}\"", Path.GetDirectoryName(outFile));
+                // return csc.Run($"\"/res:{msiFile}\" \"-out:{outFile}\" /t:winexe /debug+ /define:DEBUG \"{csFile}\"", Path.GetDirectoryName(outFile));
+                return csc.Run($"\"/res:{msiFile}\" \"-out:{outFile}\" /t:winexe \"{csFile}\"", Path.GetDirectoryName(outFile));
             }
             finally
             {

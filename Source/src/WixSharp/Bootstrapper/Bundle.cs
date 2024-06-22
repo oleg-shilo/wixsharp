@@ -337,8 +337,8 @@ namespace WixSharp.Bootstrapper
 
             if (Application is ManagedBootstrapperApplication)
             {
-                var lastPackge = xChain.Elements("MsiPackage").LastOrDefault();
-                lastPackge.SetAttributeValue(WixExtension.Bal.ToXName("PrereqPackage"), "yes");
+                var lastPackge = xChain.Elements("MsiPackage").LastOrDefault() ?? xChain.Elements("ExePackage").LastOrDefault();
+                lastPackge?.SetAttributeValue(WixExtension.Bal.ToXName("PrereqPackage"), "yes");
             }
 
             xChain.SetAttribute("DisableRollback", DisableRollback);
