@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Policy;
 using System.Xml.Linq;
+using WixSharp.CommonTasks;
 using WixSharp.Nsis;
+using WixSharp.UI;
 
 namespace WixSharp.Bootstrapper
 {
@@ -181,6 +183,47 @@ namespace WixSharp.Bootstrapper
         /// The executable package implements the .NET Framework v4.0 communication protocol.
         /// </summary>
         public static Protocol netfx4 = new Protocol("netfx4");
+    }
+
+    public class MsiExePackage : ExePackage
+    {
+        public MsiExePackage(string msi)
+        {
+            var msi_exe = msi + ".exe";
+
+            (int exitCode, string output) = msi.CompleSelfHostedMsi(msi_exe);
+            if (exitCode != 0)
+            {
+                Compiler.OutputWriteLine("Error: " + output);
+                return;
+            }
+            SourceFile = msi_exe;
+            InstallArguments = "/i";
+            UninstallArguments = "/x";
+            RepairArguments = "/fa";
+            Compressed = true;
+            productCode = new MsiParser(msi).GetProductCode();
+        }
+
+        string productCode;
+        public string ProductCode => productCode;
+        public string DetectConditionVariable => $"{base.Name}State";
+
+        public string Name
+        {
+            get => base.Name;
+            set
+            {
+                base.Name = value;
+                DetectCondition = $"({DetectConditionVariable} <> \"2\")"; // state
+                /*
+                    assignment: Saves the assignment type of the product: per-user (0), or per-machine (1).
+                    language: Saves the language of a matching product if found; empty otherwise.
+                    state: Saves the state of the product: advertised (1), absent (2), or locally installed (5).
+                    version: Saves the version of a matching product if found; 0.0.0.0 otherwise. This is the default.
+                 */
+            }
+        }
     }
 
     /// <summary>

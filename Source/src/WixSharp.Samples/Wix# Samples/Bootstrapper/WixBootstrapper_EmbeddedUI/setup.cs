@@ -3,6 +3,8 @@ using System.Security.Cryptography;
 using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Bootstrapper;
+using WixSharp.CommonTasks;
+using WixSharp.UI;
 using io = System.IO;
 
 public class Script
@@ -10,37 +12,91 @@ public class Script
     static public void Main()
     {
         // This sample shows how to embed an executable wrapper around MSI file
-        // It was the only way to display MSI own managed UI from the bootstrapper in WiX3
-        // WIX4 does solve this problem but the example itself is still valid and potentially useful.
+        // It is the only way to display MSI own managed UI from the bootstrapper in WiX3 (and
+        // in WIX4 if CcustomBA is used)
+
+        Console.WriteLine("Building MSI ...");
+
+        var msi = BuildMsi();
+
+        Build(msi);
+        // ManualBuild(msi);
+    }
+
+    static public void Build(string msi)
+    {
+        Console.WriteLine("Building Bootstrapper ...");
 
         var bootstrapper =
-            new Bundle("My Product",
-                       new ExePackage(@"..\..\Managed Setup\Self-executable_Msi\ManagedSetup.exe")
+            new Bundle("Managed Product Bundle",
+                       new MsiExePackage(msi)
                        {
-                           Name = "ManagedSetup",
+                           Name = "ManagedProduct",
+                       });
+
+        bootstrapper.Version = new Version("1.0.0.0");
+        bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889a");
+
+        // Use product search to detect if msi_exe is already present on the target system
+
+        bootstrapper.Build("my_app.exe");
+    }
+
+    static public void ManualBuild(string msi)
+    {
+        var msi_exe = msi + ".exe";
+        var msi_product_code = new MsiParser(msi).GetProductCode();
+
+        (int exitCode, string output) = msi.CompleSelfHostedMsi(msi_exe);
+        if (exitCode != 0)
+        {
+            Console.WriteLine("Error: " + output);
+            return;
+        }
+
+        Console.WriteLine("Building Bootstrapper ...");
+
+        var bootstrapper =
+            new Bundle("Managed Product Bundle",
+                       new ExePackage(msi_exe)
+                       {
+                           Name = "ManagedProduct",
                            InstallArguments = "/i",
                            UninstallArguments = "/x",
                            RepairArguments = "/fa",
-                           DetectCondition = "MyAppInstalled",
+                           DetectCondition = "(ProductInstalled <> \"2\")",
                            Compressed = true
                        });
 
         bootstrapper.Version = new Version("1.0.0.0");
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889a");
 
-        // Use file search to detect if MyApp is already present on the target system
-        // Alternatively you can use UtilRegistrySearch to detect the MyApp by testing registry
+        // Use product search to detect if msi_exe is already present on the target system
 
         bootstrapper.Include(WixExtension.Util);
         bootstrapper.AddWixFragment("Wix/Bundle",
-                                    new UtilFileSearch
-                                    {
-                                        Path = @"[ProgramFilesFolder]My Company\My Product\MyApp.exe",
-                                        Result = SearchResult.exists,
-                                        Variable = "MyAppInstalled"
-                                    });
+            new UtilProductSearch
+            {
+                ProductCode = msi_product_code,
+                Result = ProductSearchResultType.state,
+                Variable = "ProductInstalled"
+            });
 
-        // bootstrapper.PreserveTempFiles = true;
         bootstrapper.Build("my_app.exe");
+    }
+
+    static public string BuildMsi()
+    {
+        var productProj =
+            new ManagedProject("My Product",
+                new Dir(@"%ProgramFiles%\My Company\My Product",
+                    new File("setup.cs")));
+
+        productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
+        productProj.Version = new Version("2.0.0.0");
+
+        productProj.ManagedUI = ManagedUI.Default;
+
+        return productProj.BuildMsi();
     }
 }

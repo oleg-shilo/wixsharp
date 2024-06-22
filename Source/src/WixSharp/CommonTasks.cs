@@ -1978,7 +1978,6 @@ namespace WixSharp.CommonTasks
             return ServiceDo("stop", service, throwOnError);
         }
 
-
         /// <summary>
         /// Adds the property to the default properties that are mapped for use with the setup events (deferred custom actions). See <see
         /// cref="ManagedAction.UsesProperties"/> for the details.
@@ -1992,6 +1991,7 @@ namespace WixSharp.CommonTasks
             project.DefaultDeferredProperties += "," + propertyName;
             return project;
         }
+
         /// <summary>
         /// Changes the project configuration so `Project.AfterInstall` event is executed unelevated. Otherwise it is elevated.
         /// </summary>
@@ -2084,6 +2084,135 @@ namespace WixSharp.CommonTasks
             /// Gets the handle to the window represented by the implementer.
             /// </summary>
             public IntPtr Handle { get; }
+        }
+    }
+
+    public static class ExeGen
+    {
+        public static (int exitCode, string output) CompleSelfHostedMsi(this string msiFile, string outFile)
+        {
+            var parser = new MsiParser(msiFile);
+            var csc = LocateCsc();
+
+            var name = parser.GetProductName();
+            var version = parser.GetProductVersion();
+
+            var csFile = GenerateCSharpSource(Path.GetTempPath().PathCombine(msiFile.PathGetFileName()), name, version);
+
+            try
+            {
+                return csc.Run($"\"/res:{msiFile}\" \"-out:{outFile}\" /t:winexe \"{csFile}\"", Path.GetDirectoryName(outFile));
+            }
+            finally
+            {
+                IO.File.Delete(csFile);
+            }
+        }
+
+        static string LocateCsc() =>
+            Directory.GetFiles(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), @"Microsoft.NET\Framework"), "csc.exe", SearchOption.AllDirectories)
+                .OrderByDescending(x => x)
+                .FirstOrDefault();
+
+        static string GenerateCSharpSource(string outFile, string name, string version)
+        {
+            var code = @"
+using System;
+using System.Resources;
+using System.IO;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Reflection;
+
+[assembly: AssemblyTitle(""" + outFile.PathGetFileName() + @""")]
+[assembly: AssemblyDescription(""Self-hosted " + outFile.PathGetFileNameWithoutExtension() + @".msi"")]
+[assembly: AssemblyConfiguration("""")]
+[assembly: AssemblyCompany(""WixSharp"")]
+[assembly: AssemblyProduct(""" + name + @""")]
+[assembly: AssemblyCopyright("""")]
+[assembly: AssemblyTrademark("""")]
+[assembly: AssemblyCulture("""")]
+[assembly: AssemblyVersion(""" + version + @""")]
+[assembly: AssemblyFileVersion(""" + version + @""")]
+class Program
+{
+    static int Main(string[] args)
+    {
+        string msi = Path.GetTempFileName();
+        try
+        {
+            ExtractMsi(msi);
+            string msi_args = args.Any() ? string.Join("" "", args) : ""/i"";
+
+            Process p = Process.Start(""msiexec.exe"", msi_args + ""\"""" + msi + ""\"""");
+            p.WaitForExit();
+            return p.ExitCode;
+        }
+        catch (Exception)
+        {
+            // report the error
+            return -1;
+        }
+        finally
+        {
+            try
+            {
+                if (File.Exists(msi))
+                    File.Delete(msi);
+            }
+            catch { }
+        }
+    }
+
+    static void ExtractMsi(string outFile)
+    {
+        Assembly asm = Assembly.GetExecutingAssembly();
+
+        var names = asm.GetManifestResourceNames();
+        using (Stream stream = asm.GetManifestResourceStream(names.First()))
+
+        {
+            if (stream != null)
+            {
+                byte[] resourceBytes = new byte[stream.Length];
+                stream.Read(resourceBytes, 0, resourceBytes.Length);
+
+                File.WriteAllBytes(outFile, resourceBytes);
+            }
+            else
+            {
+                Console.WriteLine(""Resource not found."");
+            }
+        }
+    }
+}";
+            IO.File.WriteAllText(outFile, code);
+            return outFile;
+        }
+
+        static (int exitCode, string output) Run(this string exe, string arguments, string workingDir)
+        {
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = exe;
+                process.StartInfo.Arguments = arguments;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.WorkingDirectory = workingDir;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+
+                var output = new StringBuilder();
+
+                output.AppendLine(process.StandardOutput.ReadToEnd());
+                output.AppendLine(process.StandardError.ReadToEnd());
+
+                process.WaitForExit();
+                return (process.ExitCode, output.ToString());
+            }
         }
     }
 

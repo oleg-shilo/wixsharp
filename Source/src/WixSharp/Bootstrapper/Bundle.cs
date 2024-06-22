@@ -67,6 +67,21 @@ namespace WixSharp.Bootstrapper
             this.Include(WixExtension.Bal);
             Name = name;
             Chain.AddRange(items);
+            var msiExePackages = items.OfType<MsiExePackage>().ToArray();
+            if (msiExePackages.Any())
+            {
+                this.Include(WixExtension.Util);
+                foreach (var item in msiExePackages)
+                {
+                    this.AddWixFragment("Wix/Bundle",
+                        new UtilProductSearch
+                        {
+                            ProductCode = item.ProductCode,
+                            Result = ProductSearchResultType.state,
+                            Variable = item.DetectConditionVariable
+                        });
+                }
+            }
         }
 
         /// <summary>
