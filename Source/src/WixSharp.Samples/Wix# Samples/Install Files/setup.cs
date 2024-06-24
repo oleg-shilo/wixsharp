@@ -8,9 +8,11 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixSharp.UI;
 
 static class Script
 {
@@ -44,8 +46,9 @@ static class Script
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         // possible UIs
-        // project.ManagedUI = ManagedUI.Default;
-        project.ManagedUI = ManagedUI.DefaultWpf;
+        project.ManagedUI = ManagedUI.Default;
+        // project.ManagedUI = ManagedUI.DefaultWpf;
+        // project.UI = WUI.WixUI_Mondo;
         // project.UI = WUI.WixUI_InstallDir;
 
         project.EmitConsistentPackageId = true;
@@ -62,7 +65,27 @@ static class Script
 
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
+        project.BeforeInstall += Project_BeforeInstall;
+        project.AfterInstall += Project_AfterInstall;
+
         project.BuildMsi();
+    }
+
+    private static void Project_BeforeInstall(SetupEventArgs e)
+    {
+        e.InstallDir
+        e.Result = WixToolset.Dtf.WindowsInstaller.ActionResult.UserExit;
+    }
+
+    private static void Project_AfterInstall(SetupEventArgs e)
+    {
+        if (e.IsInstalling)
+        {
+            if (MsiParser.IsInstalled("{6f330b47-2577-43ad-9095-1861ba25889c}"))
+                MessageBox.Show("Successfully Instaleld", "AfterInstall");
+            else
+                MessageBox.Show("Rolled Back", "AfterInstall");
+        }
     }
 
     private static void Compiler_WixSourceGenerated(XDocument document)
@@ -73,5 +96,4 @@ static class Script
                 .Single(x => x.HasAttribute("Id", value => value.Contains("MyApp_file")))
                 .AddElement("CreateFolder/Permission", "User=Everyone;GenericAll=yes");
     }
-
 }

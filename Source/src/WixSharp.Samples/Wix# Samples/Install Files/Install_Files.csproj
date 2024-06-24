@@ -30,6 +30,10 @@
 		<ProjectReference Include="..\..\..\WixSharp\WixSharp.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Reference Include="System.Windows.Forms" />
+	</ItemGroup>
+
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
 	</Target>

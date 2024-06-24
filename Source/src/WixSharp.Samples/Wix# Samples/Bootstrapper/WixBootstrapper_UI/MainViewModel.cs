@@ -63,6 +63,7 @@ public class ManagedBA : mba.BootstrapperApplication
     /// </summary>
     protected override void Run()
     {
+        // since it is a custom BA we are responsible for elevating the process if it is required.
         if (Runtime.IsAdmin)
         {
             new MainView(this).ShowDialog();

@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using static System.Collections.Specialized.BitVector32;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -14,6 +15,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Principal;
@@ -21,6 +23,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 using Microsoft.Win32;
 using WixSharp.CommonTasks;
 using static WixSharp.SetupEventArgs;
@@ -2581,8 +2584,7 @@ namespace WixSharp
         ///   <c>true</c> if the specified ver is uninitialized; otherwise, <c>false</c>.
         /// </returns>
         public static bool IsUninitialized(this Version ver)
-          => ver.Major == 0 && ver.Minor == 0 && ver.Build == 0 && ver.Revision == -1;
-
+            => ver.Major == 0 && ver.Minor == 0 && ver.Build == 0 && ver.Revision == -1;
 
         /// <summary>
         /// Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
@@ -2669,16 +2671,42 @@ namespace WixSharp
         /// <returns></returns>
         public static bool IsActive(this Session session)
         {
+            if (session.GetAttachedValue("active") != null)
+                return session.GetAttachedValue<bool>("active");
+
             //if (!session.IsClosed) //unfortunately isClosed is always false even for the deferred actions
             try
             {
                 var test = session.Components; //it will throw for the deferred action
                 var text = session["INSTALLDIR"];
+                session.SetAttachedValue("active", true);
                 return true;
             }
             catch
             {
+                session.SetAttachedValue("active", false);
                 return false;
+            }
+        }
+
+        public static bool IsDisconnected(this Session session)
+        {
+            if (session.GetAttachedValue("disconnected") != null)
+                return session.GetAttachedValue<bool>("disconnected");
+
+            try
+            {
+                // it will not throw for the deferred action
+                // but will for the completely disconnected (fake) session that is created with
+                // CreateDisconnectedSession()
+                var test = session.CustomActionData.Count;
+                session.SetAttachedValue("disconnected", false);
+                return false;
+            }
+            catch
+            {
+                session.SetAttachedValue("disconnected", true);
+                return true;
             }
         }
 
@@ -3027,9 +3055,49 @@ namespace WixSharp
         public static string Property(this Session session, string name)
         {
             if (session.IsActive())
+            {
                 return session[name];
+            }
+            else if (session.IsDisconnected())
+            {
+                Dictionary<string, string> extraProps = session.GetAttachedProperties();
+                return extraProps.ContainsKey(name) ? extraProps[name] : "";
+            }
             else
+            {
                 return (session.CustomActionData.ContainsKey(name) ? session.CustomActionData[name] : "");
+            }
+        }
+
+        public static Dictionary<string, string> GetAttachedProperties(this Session session)
+        {
+            var extraProps = session.GetAttachedValue<Dictionary<string, string>>("SerializableProperties");
+            if (extraProps == null)
+                session.SetAttachedValue("SerializableProperties", extraProps = new Dictionary<string, string>());
+            return extraProps;
+        }
+
+        public static void SetProperty(this Session session, string name, string value)
+        {
+            if (session.IsActive())
+            {
+                session[name] = value;
+            }
+            else if (session.IsDisconnected())
+            {
+                var extraProps = session.GetAttachedProperties();
+                if (extraProps.ContainsKey(name))
+                    extraProps[name] = value;
+                else
+                    extraProps.Add(name, value);
+            }
+            else
+            {
+                if (session.CustomActionData.ContainsKey(name))
+                    session.CustomActionData[name] = value;
+                else
+                    session.CustomActionData.Add(name, value);
+            }
         }
 
         /// <summary>
@@ -3407,6 +3475,20 @@ namespace WixSharp
         }
     }
 
+    public static class DisconnectedSession
+    {
+        public static Session Create()
+        {
+            var constr = typeof(Session).GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).FirstOrDefault();
+
+            var constrArgs = new object[] { (IntPtr)1, false };
+
+            var result = constr.Invoke(constrArgs);
+
+            return (Session)result;
+        }
+    }
+
     /// <summary>
     /// Represents set of project localization information.
     /// </summary>
@@ -3767,6 +3849,58 @@ namespace WixSharp
     /// </summary>
     public static class SerializingExtensions
     {
+        public class Property
+        {
+            public string Key { get; set; }
+            public string Value { get; set; }
+        }
+
+        internal static void DeserializeAndUpdateFrom(this Session session, string data)
+        {
+            using (TextReader reader = new StringReader(data))
+            {
+                List<Property> propList = (List<Property>)new XmlSerializer(typeof(List<Property>)).Deserialize(reader);
+                foreach (Property prop in propList)
+                {
+                    session.SetProperty(prop.Key, prop.Value);
+                }
+            }
+        }
+
+        internal static string Serialize(this Session session)
+        {
+            var properties = new List<string>(new[]
+            {
+                "WIXBUNDLEORIGINALSOURCE",
+                "FOUNDPREVIOUSVERSION",
+                "WIXSHARP_RUNTIME_DATA",
+                "MsiLogFileLocation",
+                "ADDFEATURES",
+            });
+            properties.AddRange(ManagedProject.SessionSerializableProperties);
+
+            // aggregate connected session properties if any
+            List<Property> propList = properties
+                .Select(x => new Property { Key = x, Value = session.Property(x) })
+                .Where(x => x.Value.IsNotEmpty())
+                .ToList();
+
+            // aggregate disconnected session properties if any
+            propList.AddRange(
+                session.GetAttachedProperties()
+                    .Select(x => new Property { Key = x.Key, Value = x.Value })
+                    .Where(x => x.Value.IsNotEmpty())
+                    .ToList());
+
+            var serializer = new XmlSerializer(propList.GetType());
+            using (var writer = new StringWriter())
+            {
+                serializer.Serialize(writer, propList);
+                string xmlString = writer.ToString();
+                return xmlString;
+            }
+        }
+
         /// <summary>
         /// Decodes hexadecimal string representation into the byte array.
         /// </summary>
@@ -4298,6 +4432,37 @@ namespace WixSharp
             first = list.Count > 0 ? list[0] : default(T); // or throw
             second = list.Count > 1 ? list[1] : default(T); // or throw
             rest = list.Skip(2).ToList();
+        }
+    }
+
+    public static class AttachedProperies
+    {
+        public static ConditionalWeakTable<object,
+            Dictionary<string, object>> ObjectCache = new ConditionalWeakTable<object,
+            Dictionary<string, object>>();
+
+        public static void SetAttachedValue<T>(this T obj, string name, object value) where T : class
+        {
+            Dictionary<string, object> properties = ObjectCache.GetOrCreateValue(obj);
+
+            if (properties.ContainsKey(name))
+                properties[name] = value;
+            else
+                properties.Add(name, value);
+        }
+
+        public static T GetAttachedValue<T>(this object obj, string name)
+        {
+            Dictionary<string, object> properties;
+            if (ObjectCache.TryGetValue(obj, out properties) && properties.ContainsKey(name))
+                return (T)properties[name];
+            else
+                return default(T);
+        }
+
+        public static object GetAttachedValue(this object obj, string name)
+        {
+            return obj.GetAttachedValue<object>(name);
         }
     }
 }

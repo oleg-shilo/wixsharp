@@ -52,7 +52,7 @@ public static class Script
 
         var input = new Form
         {
-            Size = new Size(140, 50),
+            Size = new Size(140, 60),
             Text = "Language Selection",
             FormBorderStyle = FormBorderStyle.FixedToolWindow,
             ShowIcon = false,
@@ -93,8 +93,21 @@ public static class Script
 
                 case SupportedLanguages.Greek:
                     runtime.UIText.InitFromWxl(e.Session.ReadBinary("gr_xsl"));
+
                     break;
             }
+        };
+
+        project.UILoaded += (SetupEventArgs e) =>
+        {
+            // first dialog is loaded
+            MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
+            runtime.UIText.InitFromWxl(e.Session.ReadBinary("WixSharp_UIText")); // translate back to English
+
+            e.ManagedUI.OnCurrentDialogChanged += (IManagedDialog obj) =>
+            {
+                // any dialog after the first one is loaded
+            };
         };
     }
 }

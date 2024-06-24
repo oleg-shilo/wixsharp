@@ -744,7 +744,79 @@ namespace WixSharp
             }
         }
 
-        internal static ActionResult InvokeClientHandlers(Session session, string eventName, IShellView UIShell = null)
+        public static ActionResult InvokeClientHandlersExternally(Session session, string eventName)
+        {
+            var sessionFile = Path.GetTempFileName();
+            var externalRunner = "";
+
+            ActionResult result = default;
+            try
+            {
+                var sessionData = session.Serialize();
+                IO.File.WriteAllText(sessionFile, sessionData);
+
+                using (var process = new Process())
+                {
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.WorkingDirectory = Environment.CurrentDirectory;
+                    process.StartInfo.FileName = externalRunner;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.RedirectStandardError = true;
+                    process.StartInfo.CreateNoWindow = true;
+                    process.StartInfo.Arguments = $"-event:{eventName} -session:{sessionFile}\"";
+                    process.StartInfo.Verb = "runas";
+
+                    process.Start();
+
+                    var output = new StringBuilder();
+
+                    output.AppendLine(process.StandardOutput.ReadToEnd());
+                    output.AppendLine(process.StandardError.ReadToEnd());
+
+                    process.WaitForExit();
+
+                    // ExitCode == 0 is success regardless of output
+                    // ExitCode != 0 && output.HasText is failure as the exception was thrown in the external process
+                    // ExitCode != 0 && output.IsEmpty is a normal flow where the ExitCode may simply carry user the user cancellation value
+                    if (process.ExitCode != 0 && output.Length > 0)
+                        throw new Exception(output.ToString());
+
+                    var updatedSessionData = IO.File.ReadAllText(sessionFile);
+                    if (updatedSessionData != sessionData)
+                        session.DeserializeAndUpdateFrom(updatedSessionData);
+
+                    result = (ActionResult)process.ExitCode;
+                }
+            }
+            catch (Exception e)
+            {
+                session.Log("WixSharp aborted the session because of the error:" + Environment.NewLine + e.ToPublicString());
+                if (session.AbortOnError())
+                    result = ActionResult.Failure;
+
+                ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
+            }
+            finally
+            {
+                IO.File.Delete(sessionFile);
+            }
+
+            return result;
+        }
+
+        public static ActionResult InvokeClientHandlers(Session session, string eventName, IShellView UIShell = null)
+        {
+            var runAsElevated = session.Property("ManagedProjectElevatedEvents").Split('|').Contains(eventName);
+
+            ActionResult result = runAsElevated ?
+                InvokeClientHandlersExternally(session, eventName) :
+                InvokeClientHandlersInternally(session, eventName, UIShell);
+
+            return result;
+        }
+
+        static ActionResult InvokeClientHandlersInternally(Session session, string eventName, IShellView UIShell)
         {
             var eventArgs = Convert(session);
             eventArgs.ManagedUI = UIShell;
@@ -778,6 +850,22 @@ namespace WixSharp
             return eventArgs.Result;
         }
 
+        internal static string[] SessionSerializableProperties = new[]
+        {
+            "Installed",
+            "REMOVE",
+            "ProductName",
+            "ProductCode",
+            "UpgradeCode",
+            "REINSTALL",
+            "MsiFile",
+            "UPGRADINGPRODUCTCODE",
+            "FOUNDPREVIOUSVERSION",
+            "UILevel",
+            "WIXSHARP_MANAGED_UI",
+            "WIXSHARP_MANAGED_UI_HANDLE",
+        };
+
         internal static ActionResult Init(Session session)
         {
             //System.Diagnostics.Debugger.Launch();
@@ -786,27 +874,17 @@ namespace WixSharp
             var data = new SetupEventArgs.AppData();
             try
             {
-                data["Installed"] = session["Installed"];
-                data["REMOVE"] = session["REMOVE"];
-                data["ProductName"] = session["ProductName"];
-                data["ProductCode"] = session["ProductCode"];
-                data["UpgradeCode"] = session["UpgradeCode"];
-                data["REINSTALL"] = session["REINSTALL"];
-                data["MsiFile"] = session["OriginalDatabase"];
-                data["UPGRADINGPRODUCTCODE"] = session["UPGRADINGPRODUCTCODE"];
-                data["FOUNDPREVIOUSVERSION"] = session["FOUNDPREVIOUSVERSION"];
-                data["UILevel"] = session["UILevel"];
-                data["WIXSHARP_MANAGED_UI"] = session["WIXSHARP_MANAGED_UI"];
-                data["WIXSHARP_MANAGED_UI_HANDLE"] = session["WIXSHARP_MANAGED_UI_HANDLE"];
+                foreach (var name in SessionSerializableProperties)
+                    data[name] = session.Property(name);
             }
             catch (Exception e)
             {
                 session.Log(e.Message);
             }
 
-            data.MergeReplace(session["WIXSHARP_RUNTIME_DATA"]);
+            data.MergeReplace(session.Property("WIXSHARP_RUNTIME_DATA"));
 
-            session["WIXSHARP_RUNTIME_DATA"] = data.ToString();
+            session.SetProperty("WIXSHARP_RUNTIME_DATA", data.ToString());
 
             return ActionResult.Success;
         }
