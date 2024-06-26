@@ -111,6 +111,9 @@
     <Compile Include="Action.cs" />
     <Compile Include="AppSearch.cs" />
     <Compile Include="Assembly.cs" />
+    <Compile Include="Utilities\Utils.cs" />
+    <Compile Include="Utilities\SerializingExtensions.cs" />
+    <Compile Include="Utilities\AttachedProperies.cs" />
     <Compile Include="AutoElements.cs" />
     <Compile Include="BalCondition.cs" />
     <Compile Include="Bootstrapper\UtilFileSearch.cs" />
@@ -162,6 +165,7 @@
     <Compile Include="ODBCDataSource.cs" />
     <Compile Include="PermissionEx.cs" />
     <Compile Include="Permissions.cs" />
+    <Compile Include="Utilities\ProjectLocalization.cs" />
     <Compile Include="Properties\AssemblyInfo.version.cs" />
     <Compile Include="Reboot.cs" />
     <Compile Include="RegisterAsCom.cs" />
@@ -225,7 +229,9 @@
     <Compile Include="PathFileAction.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Property.cs" />
+    <Compile Include="Utilities\XmlAttribute.cs" />
     <Compile Include="XmlFile.cs" />
+    <Compile Include="Utilities\XmlMapping.cs" />
     <EmbeddedResource Include="Nsis\macros.nsh" />
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>

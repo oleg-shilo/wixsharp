@@ -746,47 +746,71 @@ namespace WixSharp
 
         public static ActionResult InvokeClientHandlersExternally(Session session, string eventName)
         {
+            // Debug.Assert(false);
             var sessionFile = Path.GetTempFileName();
-            var externalRunner = "";
+            var logFile = sessionFile + ".log";
+            var eventHost = System.Reflection.Assembly.GetExecutingAssembly().Location.PathChangeFileName("MsiEventHost.exe");
+
+            var evenHandler = "WixSharp_{0}_Handlers".FormatWith(eventName);
+
+            // need to re-enable this routine if the external event handlers is deployed without dependency assemblies.
+            // It's not the case yet
+            // try
+            // {
+            //     string handlersInfo = session.Property(evenHandler);
+
+            //     if (handlersInfo.IsNotEmpty())
+            //     {
+            //         foreach (string item in handlersInfo.Trim().Split('\n').Select(x => x.Trim()))
+            //         {
+            //             MethodInfo method = GetHandler(item);
+            //             var asm = method.DeclaringType.Assembly.Location;
+            //             IO.File.Copy(
+            //                 asm,
+            //                 eventHost.PathChangeFileName(asm.PathGetFileName()),
+            //                 true);
+            //         }
+            //     }
+            // }
+            // catch { }
 
             ActionResult result = default;
             try
             {
-                var sessionData = session.Serialize();
+                var sessionData = session.Serialize(evenHandler);
                 IO.File.WriteAllText(sessionFile, sessionData);
 
-                using (var process = new Process())
+                // Note, we are using eventHost executed with "runas". The proper Windows elevation scenario requires
+                // the executable to be compiled with the elevation request embedded in the exe manifest.
+                // however in this case Windows Defender may block the execution of the exe. Even though the file is signed,
+                // executed from the elevated context.
+                // And yet it is happy to allow the execution of the exe if it is executed with "runas".
+                // Yes that crazy!!!!
+
+                using (var process = eventHost.StartElevated($"-event:{eventName} \"-session:{sessionFile}\" \"-log:{logFile}\""))
                 {
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.WorkingDirectory = Environment.CurrentDirectory;
-                    process.StartInfo.FileName = externalRunner;
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.RedirectStandardOutput = true;
-                    process.StartInfo.RedirectStandardError = true;
-                    process.StartInfo.CreateNoWindow = true;
-                    process.StartInfo.Arguments = $"-event:{eventName} -session:{sessionFile}\"";
-                    process.StartInfo.Verb = "runas";
-
-                    process.Start();
-
-                    var output = new StringBuilder();
-
-                    output.AppendLine(process.StandardOutput.ReadToEnd());
-                    output.AppendLine(process.StandardError.ReadToEnd());
-
                     process.WaitForExit();
+
+                    var output = "";
+                    if (logFile.FileExists())
+                        output = IO.File.ReadAllText(logFile);
 
                     // ExitCode == 0 is success regardless of output
                     // ExitCode != 0 && output.HasText is failure as the exception was thrown in the external process
                     // ExitCode != 0 && output.IsEmpty is a normal flow where the ExitCode may simply carry user the user cancellation value
-                    if (process.ExitCode != 0 && output.Length > 0)
-                        throw new Exception(output.ToString());
+                    if (process.ExitCode != 0 && output.IsNotEmpty())
+                        throw new Exception(output);
 
-                    var updatedSessionData = IO.File.ReadAllText(sessionFile);
-                    if (updatedSessionData != sessionData)
-                        session.DeserializeAndUpdateFrom(updatedSessionData);
+                    bool shoudReadPropertiesBack = false; // not sure if this is needed
 
-                    result = (ActionResult)process.ExitCode;
+                    if (shoudReadPropertiesBack)
+                    {
+                        var updatedSessionData = IO.File.ReadAllText(sessionFile);
+                        if (updatedSessionData != sessionData)
+                            session.DeserializeAndUpdateFrom(updatedSessionData);
+                    }
+
+                    return (ActionResult)process.ExitCode;
                 }
             }
             catch (Exception e)
@@ -799,7 +823,8 @@ namespace WixSharp
             }
             finally
             {
-                IO.File.Delete(sessionFile);
+                sessionFile.DeleteIfExists();
+                logFile.DeleteIfExists();
             }
 
             return result;
@@ -816,7 +841,7 @@ namespace WixSharp
             return result;
         }
 
-        static ActionResult InvokeClientHandlersInternally(Session session, string eventName, IShellView UIShell)
+        public static ActionResult InvokeClientHandlersInternally(Session session, string eventName, IShellView UIShell)
         {
             var eventArgs = Convert(session);
             eventArgs.ManagedUI = UIShell;
@@ -899,11 +924,13 @@ namespace WixSharp
                 result.Data.InitFrom(data);
 
                 result.Data.SetEnvironmentVariables();
-                session.CustomActionData.SetEnvironmentVariables();
+                if (!session.IsDisconnected())
+                    session.CustomActionData.SetEnvironmentVariables();
             }
             catch (Exception e)
             {
-                session.Log(e.Message);
+                if (session.IsActive())
+                    session.Log(e.Message);
             }
             return result;
         }
