@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MsiEventHost")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A host process executable for elevating MSI Custom Actions (WixSharp events).")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HP")]
-[assembly: AssemblyProduct("MsiEventHost")]
-[assembly: AssemblyCopyright("Copyright © HP 2024")]
+[assembly: AssemblyCompany("Oleg Shilo")]
+[assembly: AssemblyProduct("WixSharp")]
+[assembly: AssemblyCopyright("Copyright © Oleg Shilo 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

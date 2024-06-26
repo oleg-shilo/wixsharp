@@ -65,27 +65,7 @@ static class Script
 
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
-        project.BeforeInstall += Project_BeforeInstall;
-        project.AfterInstall += Project_AfterInstall;
-
         project.BuildMsi();
-    }
-
-    private static void Project_BeforeInstall(SetupEventArgs e)
-    {
-        e.InstallDir
-        e.Result = WixToolset.Dtf.WindowsInstaller.ActionResult.UserExit;
-    }
-
-    private static void Project_AfterInstall(SetupEventArgs e)
-    {
-        if (e.IsInstalling)
-        {
-            if (MsiParser.IsInstalled("{6f330b47-2577-43ad-9095-1861ba25889c}"))
-                MessageBox.Show("Successfully Instaleld", "AfterInstall");
-            else
-                MessageBox.Show("Rolled Back", "AfterInstall");
-        }
     }
 
     private static void Compiler_WixSourceGenerated(XDocument document)

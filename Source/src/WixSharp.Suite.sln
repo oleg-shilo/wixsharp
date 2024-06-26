@@ -235,9 +235,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreCustomAction", "WixS
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetCore", "NetCore", "{B8FA0F17-1C07-4511-9FFA-3AD69B36B16C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsiEventHost", "MsiEventHost\MsiEventHost.csproj", "{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InstallEventElevation", "WixSharp.Samples\Wix# Samples\InstallEventElevation\InstallEventElevation.csproj", "{A88C3698-8BD1-49C1-999C-020B5E9312E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixSharp.MsiEventHost", "WixSharp.MsiEventHost\WixSharp.MsiEventHost.csproj", "{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -991,14 +991,6 @@ Global
 		{BBAA7E0F-CAC0-4D7B-BCE9-4C5A5C585BD9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BBAA7E0F-CAC0-4D7B-BCE9-4C5A5C585BD9}.Release|x86.ActiveCfg = Release|Any CPU
 		{BBAA7E0F-CAC0-4D7B-BCE9-4C5A5C585BD9}.Release|x86.Build.0 = Release|Any CPU
-		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Debug|x86.Build.0 = Debug|Any CPU
-		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Release|x86.ActiveCfg = Release|Any CPU
-		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Release|x86.Build.0 = Release|Any CPU
 		{A88C3698-8BD1-49C1-999C-020B5E9312E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A88C3698-8BD1-49C1-999C-020B5E9312E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A88C3698-8BD1-49C1-999C-020B5E9312E1}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -1007,6 +999,14 @@ Global
 		{A88C3698-8BD1-49C1-999C-020B5E9312E1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A88C3698-8BD1-49C1-999C-020B5E9312E1}.Release|x86.ActiveCfg = Release|Any CPU
 		{A88C3698-8BD1-49C1-999C-020B5E9312E1}.Release|x86.Build.0 = Release|Any CPU
+		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Debug|x86.Build.0 = Debug|Any CPU
+		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Release|x86.ActiveCfg = Release|Any CPU
+		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

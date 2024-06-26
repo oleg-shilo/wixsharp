@@ -1,70 +1,71 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<TargetFramework>net472</TargetFramework>
-		<FileUpgradeFlags>
-		</FileUpgradeFlags>
-		<UpgradeBackupLocation>
-		</UpgradeBackupLocation>
-		<OldToolsVersion>2.0</OldToolsVersion>
-		<ProjectGuid>{8FE71ABB-2763-416D-A0D9-01C4629610E2}</ProjectGuid>
-	</PropertyGroup>
-	<ItemGroup>
-		<Compile Remove="CustomUI.Dialog\**" />
-		<Compile Remove="CustomUI.Sequence\**" />
-		<Compile Remove="CustomUI.WPF.Sequence\**" />
-		<Compile Remove="CustomUI.WPF\**" />
-		<Compile Remove="CustomUIDialog\**" />
-		<Compile Remove="CustomUISequence\**" />
-		<Compile Remove="Files\**" />
-		<Compile Remove="MultiLanguageUI\**" />
-		<Compile Remove="Self-executable_Msi\**" />
-		<Compile Remove="SetupEvents\**" />
-		<Compile Remove="WpfControlLibrary1\**" />
-		<EmbeddedResource Remove="CustomUI.Dialog\**" />
-		<EmbeddedResource Remove="CustomUI.Sequence\**" />
-		<EmbeddedResource Remove="CustomUI.WPF.Sequence\**" />
-		<EmbeddedResource Remove="CustomUI.WPF\**" />
-		<EmbeddedResource Remove="CustomUIDialog\**" />
-		<EmbeddedResource Remove="CustomUISequence\**" />
-		<EmbeddedResource Remove="Files\**" />
-		<EmbeddedResource Remove="MultiLanguageUI\**" />
-		<EmbeddedResource Remove="Self-executable_Msi\**" />
-		<EmbeddedResource Remove="SetupEvents\**" />
-		<EmbeddedResource Remove="WpfControlLibrary1\**" />
-		<None Remove="*.cmd" />
-		<None Remove="CustomUI.Dialog\**" />
-		<None Remove="CustomUI.Sequence\**" />
-		<None Remove="CustomUI.WPF.Sequence\**" />
-		<None Remove="CustomUI.WPF\**" />
-		<None Remove="CustomUIDialog\**" />
-		<None Remove="CustomUISequence\**" />
-		<None Remove="Files\**" />
-		<None Remove="MultiLanguageUI\**" />
-		<None Remove="Self-executable_Msi\**" />
-		<None Remove="SetupEvents\**" />
-		<None Remove="WpfControlLibrary1\**" />
-		<None Remove="app.ico" />
-		<None Remove="CustomAction.config" />
-		<None Remove="*.exe" />
-		<None Remove="*.pdb" />
-		<None Remove="*.wixpdb" />
-		<None Remove="*.msi" />
-		<None Remove="readme.txt" />
-		<None Remove="*.CA.dll" />
-		<None Remove="*.cs.dll" />
-		<None Remove="Build.cmd.log" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\WixSharp.UI\WixSharp.UI.csproj" />
-		<ProjectReference Include="..\..\..\..\WixSharp\WixSharp.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="System.Windows.Forms">
-			<HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.Forms.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
-	</Target>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net472</TargetFramework>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <ProjectGuid>{8FE71ABB-2763-416D-A0D9-01C4629610E2}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="CustomUI.Dialog\**" />
+    <Compile Remove="CustomUI.Sequence\**" />
+    <Compile Remove="CustomUI.WPF.Sequence\**" />
+    <Compile Remove="CustomUI.WPF\**" />
+    <Compile Remove="CustomUIDialog\**" />
+    <Compile Remove="CustomUISequence\**" />
+    <Compile Remove="Files\**" />
+    <Compile Remove="MultiLanguageUI\**" />
+    <Compile Remove="Self-executable_Msi\**" />
+    <Compile Remove="SetupEvents\**" />
+    <Compile Remove="WpfControlLibrary1\**" />
+    <EmbeddedResource Remove="CustomUI.Dialog\**" />
+    <EmbeddedResource Remove="CustomUI.Sequence\**" />
+    <EmbeddedResource Remove="CustomUI.WPF.Sequence\**" />
+    <EmbeddedResource Remove="CustomUI.WPF\**" />
+    <EmbeddedResource Remove="CustomUIDialog\**" />
+    <EmbeddedResource Remove="CustomUISequence\**" />
+    <EmbeddedResource Remove="Files\**" />
+    <EmbeddedResource Remove="MultiLanguageUI\**" />
+    <EmbeddedResource Remove="Self-executable_Msi\**" />
+    <EmbeddedResource Remove="SetupEvents\**" />
+    <EmbeddedResource Remove="WpfControlLibrary1\**" />
+    <None Remove="*.cmd" />
+    <None Remove="CustomUI.Dialog\**" />
+    <None Remove="CustomUI.Sequence\**" />
+    <None Remove="CustomUI.WPF.Sequence\**" />
+    <None Remove="CustomUI.WPF\**" />
+    <None Remove="CustomUIDialog\**" />
+    <None Remove="CustomUISequence\**" />
+    <None Remove="Files\**" />
+    <None Remove="MultiLanguageUI\**" />
+    <None Remove="Self-executable_Msi\**" />
+    <None Remove="SetupEvents\**" />
+    <None Remove="WpfControlLibrary1\**" />
+    <None Remove="app.ico" />
+    <None Remove="CustomAction.config" />
+    <None Remove="*.exe" />
+    <None Remove="*.pdb" />
+    <None Remove="*.wixpdb" />
+    <None Remove="*.msi" />
+    <None Remove="readme.txt" />
+    <None Remove="*.CA.dll" />
+    <None Remove="*.cs.dll" />
+    <None Remove="Build.cmd.log" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\WixSharp.UI\WixSharp.UI.csproj" />
+    <ProjectReference Include="..\..\..\..\WixSharp\WixSharp.csproj" />
+    <ProjectReference Include="..\..\..\..\WixSharp.MsiEventHost\WixSharp.MsiEventHost.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.Forms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
+  </Target>
 </Project>

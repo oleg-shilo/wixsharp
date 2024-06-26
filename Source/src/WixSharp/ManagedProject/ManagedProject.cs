@@ -190,6 +190,21 @@ namespace WixSharp
         public event SetupEventHandler AfterInstall;
 
         /// <summary>
+        /// The execution model for <see cref="BeforeInstall"/> event.
+        /// </summary>
+        public EventExecution BeforeInstallEventExecution = EventExecution.MsiSessionScope;
+
+        /// <summary>
+        /// The execution model for <see cref="Load"/> event.
+        /// </summary>
+        public EventExecution LoadEventExecution = EventExecution.MsiSessionScope;
+
+        /// <summary>
+        /// The execution model for <see cref="AfterInstall"/> event.
+        /// </summary>
+        public EventExecution AfterInstallEventExecution = EventExecution.ExternalElevatedProcess;
+
+        /// <summary>
         /// Occurs when an unhandled exception is thrown either from Managed UI or from ManagedProject event (e.g. <see cref="WixSharp.ManagedProject.BeforeInstall"/>).
         /// </summary>
         public event UnhandledExceptionEventHandler UnhandledException;
@@ -352,7 +367,7 @@ namespace WixSharp
             }
         }
 
-        string defaultDeferredProperties = "INSTALLDIR,UILevel,ProductName,FOUNDPREVIOUSVERSION,UpgradeCode";
+        string defaultDeferredProperties = "INSTALLDIR,UILevel,ProductName,FOUNDPREVIOUSVERSION,UpgradeCode,ManagedProjectElevatedEvents";
 
         /// <summary>
         /// Flags that indicates if <c>WixSharp_InitRuntime_Action</c> custom action should be
@@ -443,6 +458,29 @@ namespace WixSharp
                         Step = Step.AppSearch,
                         Condition = Condition.Always
                     });
+
+                var elevatedEvents = new List<string>();
+                if (this.BeforeInstallEventExecution == EventExecution.ExternalElevatedProcess)
+                    elevatedEvents.Add("BeforeInstall");
+                if (this.LoadEventExecution == EventExecution.ExternalElevatedProcess)
+                    elevatedEvents.Add("Load");
+                if (this.AfterInstallEventExecution == EventExecution.ExternalElevatedProcess)
+                    elevatedEvents.Add("AfterInstall");
+
+                if (elevatedEvents.Any())
+                {
+                    this.AddProperty(new Property("ManagedProjectElevatedEvents", elevatedEvents.JoinBy("|")));
+                    this.DefaultDeferredProperties = ",ManagedProjectElevatedEvents";
+
+                    // to be picked by the session serialization
+                    this.AddProperty(new Property("DefaultDeferredProperties", DefaultDeferredProperties));
+
+                    var eventHostAsm = this.GetType().Assembly.Location.PathChangeFileName("WixSharp.MsiEventHost.exe");
+                    if (eventHostAsm.FileExists())
+                        this.DefaultRefAssemblies.Add(eventHostAsm);
+                    else
+                        Compiler.OutputWriteLine($"Error: {eventHostAsm} is not found. Elevated events will not be executed.");
+                }
 
                 if (ManagedUI != null)
                 {
@@ -749,30 +787,9 @@ namespace WixSharp
             // Debug.Assert(false);
             var sessionFile = Path.GetTempFileName();
             var logFile = sessionFile + ".log";
-            var eventHost = System.Reflection.Assembly.GetExecutingAssembly().Location.PathChangeFileName("MsiEventHost.exe");
+            var eventHost = System.Reflection.Assembly.GetExecutingAssembly().Location.PathChangeFileName("WixSharp.MsiEventHost.exe");
 
             var evenHandler = "WixSharp_{0}_Handlers".FormatWith(eventName);
-
-            // need to re-enable this routine if the external event handlers is deployed without dependency assemblies.
-            // It's not the case yet
-            // try
-            // {
-            //     string handlersInfo = session.Property(evenHandler);
-
-            //     if (handlersInfo.IsNotEmpty())
-            //     {
-            //         foreach (string item in handlersInfo.Trim().Split('\n').Select(x => x.Trim()))
-            //         {
-            //             MethodInfo method = GetHandler(item);
-            //             var asm = method.DeclaringType.Assembly.Location;
-            //             IO.File.Copy(
-            //                 asm,
-            //                 eventHost.PathChangeFileName(asm.PathGetFileName()),
-            //                 true);
-            //         }
-            //     }
-            // }
-            // catch { }
 
             ActionResult result = default;
             try
@@ -832,6 +849,7 @@ namespace WixSharp
 
         public static ActionResult InvokeClientHandlers(Session session, string eventName, IShellView UIShell = null)
         {
+            Debug.Assert(false);
             var runAsElevated = session.Property("ManagedProjectElevatedEvents").Split('|').Contains(eventName);
 
             ActionResult result = runAsElevated ?

@@ -202,6 +202,22 @@ namespace WixSharp
     }
 
     /// <summary>
+    /// Specifies the execution model fro Managed Project events  (managed events)
+    /// </summary>
+    public enum EventExecution
+    {
+        /// <summary>
+        /// Execute Managed Event (CA) as an external elevated process.
+        /// </summary>
+        ExternalElevatedProcess,
+
+        /// <summary>
+        /// Execute Managed Event (CA) within MSI session scope.
+        /// </summary>
+        MsiSessionScope
+    }
+
+    /// <summary>
     /// Specifies predefined values for <see cref="Action.Execute"/> attribute,
     /// which controls at what stage of installation script <c>Custom Action</c> will be executed.
     /// </summary>

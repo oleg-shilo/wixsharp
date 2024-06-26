@@ -1,61 +1,62 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<TargetFramework>net472</TargetFramework>
-		<DebugType>embedded</DebugType>
-		<RuntimeIdentifier>win-x86</RuntimeIdentifier>
-		<Description>WiX Bootstrapper Application</Description>
-		<EnableDynamicLoading>true</EnableDynamicLoading>
-		<UseWPF>true</UseWPF>
-		<RollForward>Major</RollForward>
-		<!-- https://stackoverflow.com/questions/58844785/how-to-reference-system-windows-forms-in-net-core-3-0-for-wpf-apps -->
-		<UseWindowsForms>true</UseWindowsForms>
-	</PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net472</TargetFramework>
+    <DebugType>embedded</DebugType>
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    <Description>WiX Bootstrapper Application</Description>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <UseWPF>true</UseWPF>
+    <RollForward>Major</RollForward>
+    <!-- https://stackoverflow.com/questions/58844785/how-to-reference-system-windows-forms-in-net-core-3-0-for-wpf-apps -->
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<Compile Remove="Properties\**" />
-		<EmbeddedResource Remove="Properties\**" />
-		<None Remove="*.cmd" />
-		<None Remove="Properties\**" />
-		<None Remove="app.config" />
-		<None Remove="BootstrapperCore.config" />
-		<None Remove="CustomAction.config" />
-		<None Remove="*.exe" />
-		<None Remove="*.pdb" />
-		<None Remove="*.wixpdb" />
-		<None Remove="*.msi" />
-		<Compile Remove="CRTSetup.cs" />
-		<Compile Remove="MySetup.cs" />
-		<None Remove="de-DE.mst" />
-		<None Remove="en-US.mst" />
-		<None Remove="readme.txt" />
-		<None Remove="*.CA.dll" />
-		<None Remove="*.cs.dll" />
-		<Page Remove="Properties\**" />
-		<None Remove="Build.cmd.log" />
-		<None Remove="*.mst" />
-	</ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="*.cmd" />
+    <None Remove="Properties\**" />
+    <None Remove="app.config" />
+    <None Remove="BootstrapperCore.config" />
+    <None Remove="CustomAction.config" />
+    <None Remove="*.exe" />
+    <None Remove="*.pdb" />
+    <None Remove="*.wixpdb" />
+    <None Remove="*.msi" />
+    <Compile Remove="CRTSetup.cs" />
+    <Compile Remove="MySetup.cs" />
+    <None Remove="de-DE.mst" />
+    <None Remove="en-US.mst" />
+    <None Remove="readme.txt" />
+    <None Remove="*.CA.dll" />
+    <None Remove="*.cs.dll" />
+    <Page Remove="Properties\**" />
+    <None Remove="Build.cmd.log" />
+    <None Remove="*.mst" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="WixToolset.Mba.Core" Version="4.0.3" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Mba.Core" Version="4.0.3" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\WixSharp.UI\WixSharp.UI.csproj" />
-		<ProjectReference Include="..\..\..\..\WixSharp\WixSharp.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\WixSharp.UI\WixSharp.UI.csproj" />
+    <ProjectReference Include="..\..\..\..\WixSharp\WixSharp.csproj" />
+    <ProjectReference Include="..\..\..\..\WixSharp.MsiEventHost\WixSharp.MsiEventHost.csproj" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<Reference Include="System.Windows.Forms">
-			<HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.Forms.dll</HintPath>
-		</Reference>
-	</ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.Windows.Forms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
-	</Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
+  </Target>
 
 
 </Project>

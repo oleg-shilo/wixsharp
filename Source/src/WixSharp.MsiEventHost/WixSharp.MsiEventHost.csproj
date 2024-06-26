@@ -7,7 +7,7 @@
     <ProjectGuid>{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>MsiEventHost</RootNamespace>
-    <AssemblyName>MsiEventHost</AssemblyName>
+    <AssemblyName>WixSharp.MsiEventHost</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -111,7 +111,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>md .\..\..\output
-copy $(TargetPath) .\..\..\output\$(TargetFileName)</PostBuildEvent>
+    <PostBuildEvent>md "$(ProjectDir)..\..\bin\WixSharp"
+copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\bin\WixSharp\$(TargetFileName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

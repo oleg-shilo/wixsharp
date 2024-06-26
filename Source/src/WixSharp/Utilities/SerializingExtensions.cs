@@ -76,6 +76,8 @@ namespace WixSharp
             properties.AddRange(ManagedProject.SessionSerializableProperties);
             properties.AddRange(extraProperties);
 
+            properties = properties.Distinct().ToList();
+
             if (!session.IsDisconnected())
             {
                 // and session.Property(..) will be able to extract data for any session internal

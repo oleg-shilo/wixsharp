@@ -27,6 +27,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\..\WixSharp\WixSharp.csproj" />
+	  <ProjectReference Include="..\..\..\..\WixSharp.MsiEventHost\WixSharp.MsiEventHost.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
