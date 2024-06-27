@@ -9,7 +9,6 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;

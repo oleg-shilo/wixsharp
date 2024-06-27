@@ -192,17 +192,17 @@ namespace WixSharp
         /// <summary>
         /// The execution model for <see cref="BeforeInstall"/> event.
         /// </summary>
-        public EventExecution BeforeInstallEventExecution = EventExecution.MsiSessionScope;
+        public EventExecution BeforeInstallEventExecution = EventExecution.MsiSessionScopeImmediate;
 
         /// <summary>
         /// The execution model for <see cref="Load"/> event.
         /// </summary>
-        public EventExecution LoadEventExecution = EventExecution.MsiSessionScope;
+        public EventExecution LoadEventExecution = EventExecution.MsiSessionScopeImmediate;
 
         /// <summary>
         /// The execution model for <see cref="AfterInstall"/> event.
         /// </summary>
-        public EventExecution AfterInstallEventExecution = EventExecution.ExternalElevatedProcess;
+        public EventExecution AfterInstallEventExecution = EventExecution.MsiSessionScopeDeferred;
 
         /// <summary>
         /// Occurs when an unhandled exception is thrown either from Managed UI or from ManagedProject event (e.g. <see cref="WixSharp.ManagedProject.BeforeInstall"/>).
@@ -228,7 +228,7 @@ namespace WixSharp
 
         internal static Dictionary<string, string> HandlerAotDeclaringTypes = new Dictionary<string, string>();
 
-        void Bind<T>(Expression<Func<T>> expression, When when = When.Before, Step step = null, bool elevated = false)
+        void Bind<T>(Expression<Func<T>> expression, When when = When.Before, Step step = null, EventExecution eventExecution = default)
         {
             var name = Reflect.NameOf(expression);
             var handler = expression.Compile()() as Delegate;
@@ -279,7 +279,7 @@ namespace WixSharp
                 string dllEntry = "WixSharp_{0}_Action".FormatWith(name);
                 if (step != null)
                 {
-                    if (elevated)
+                    if (eventExecution == EventExecution.MsiSessionScopeDeferred)
                         this.AddAction(new ElevatedManagedAction(dllEntry)
                         {
                             Id = new Id(dllEntry),
@@ -291,7 +291,16 @@ namespace WixSharp
                             UsesProperties = "WixSharp_{0}_Handlers,{1},{2}".FormatWith(name, wixSharpProperties, DefaultDeferredProperties),
                         });
                     else
-                        this.AddAction(new ManagedAction(dllEntry) { Id = new Id(dllEntry), ActionAssembly = thisAsm, Return = Return.check, When = when, Step = step, Condition = Condition.Create("1") });
+                        this.AddAction(new ManagedAction(dllEntry)
+                        {
+                            Id = new Id(dllEntry),
+                            ActionAssembly = thisAsm,
+                            Return = Return.check,
+                            When = when,
+                            Step = step,
+
+                            Condition = Condition.Create("1")
+                        });
                 }
             }
         }
@@ -469,6 +478,15 @@ namespace WixSharp
 
                 if (elevatedEvents.Any())
                 {
+                    if (this.IsNetCore)
+                    {
+                        Compiler.OutputWriteLine(
+                            $"Error: Event execution model `{EventExecution.ExternalElevatedProcess}` " +
+                            $"is not supported on .NET (Core family). Either use different model (e.g. " +
+                            $"{nameof(EventExecution.MsiSessionScopeDeferred)}). Or use WixSharp Visual Studio " +
+                            $"project template targetting .NET Framework.");
+                    }
+
                     this.AddProperty(new Property("ManagedProjectElevatedEvents", elevatedEvents.JoinBy("|")));
                     this.DefaultDeferredProperties = ",ManagedProjectElevatedEvents";
 
@@ -510,9 +528,9 @@ namespace WixSharp
                     AddCancelFromUIIHandler();
                 }
 
-                Bind(() => Load, When.Before, Step.AppSearch);
-                Bind(() => BeforeInstall, When.Before, Step.InstallFiles);
-                Bind(() => AfterInstall, When.After, Step.InstallFiles, true);
+                Bind(() => Load, When.Before, Step.AppSearch, this.LoadEventExecution);
+                Bind(() => BeforeInstall, When.Before, Step.InstallFiles, this.BeforeInstallEventExecution);
+                Bind(() => AfterInstall, When.After, Step.InstallFiles, this.AfterInstallEventExecution);
                 BindUnhandledExceptionHadler(() => UnhandledException);
             }
 

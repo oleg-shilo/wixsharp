@@ -207,14 +207,19 @@ namespace WixSharp
     public enum EventExecution
     {
         /// <summary>
+        /// Execute Managed Event within MSI session scope as an immediate Custom Action.
+        /// </summary>
+        MsiSessionScopeImmediate,
+
+        /// <summary>
         /// Execute Managed Event (CA) as an external elevated process.
         /// </summary>
         ExternalElevatedProcess,
 
         /// <summary>
-        /// Execute Managed Event (CA) within MSI session scope.
+        /// Execute Managed Event within MSI session scope as a deferred Custom Action.
         /// </summary>
-        MsiSessionScope
+        MsiSessionScopeDeferred,
     }
 
     /// <summary>

@@ -188,63 +188,64 @@ namespace WixSharp
         /// <summary>
         /// Indicates whether the firewall exception should be enabled.
         /// </summary>
-        [Xml] bool Enabled;
+        [Xml]
+        public bool Enabled;
 
         /// <summary>
         /// ICMP types and codes for the firewall exception.
         /// </summary>
         [Xml]
-        bool IcmpTypesAndCodes;
+        public bool IcmpTypesAndCodes;
 
         /// <summary>
         /// Interface for the firewall exception.
         /// </summary>
-        [Xml] string Interface;
+        [Xml]
+        public string Interface;
 
         /// <summary>
         /// Local user authorized list for the firewall exception.
         /// </summary>
         [Xml]
-        string LocalUserAuthorizedList;
+        public string LocalUserAuthorizedList;
 
         /// <summary>
         /// Local user owner for the firewall exception.
         /// </summary>
         [Xml]
-        string LocalUserOwner;
+        public string LocalUserOwner;
 
         /// <summary>
         /// If "yes", registers an outbound firewall rule.The default is "no".
         /// </summary>
         [Xml]
-        bool Outbound;
+        public bool Outbound;
 
         /// <summary>
         /// Remote machine authorized list for the firewall exception.
         /// </summary>
-
-        [Xml] string RemoteMachineAuthorizedList;
+        [Xml] public string RemoteMachineAuthorizedList;
 
         /// <summary>
         /// Remote port for the firewall exception.
         /// </summary>
-        [Xml] string RemotePort;
+        [Xml] public string RemotePort;
 
         /// <summary>
         /// Remote user authorized list for the firewall exception.
         /// </summary>
-        [Xml] string RemoteUserAuthorizedList;
+        [Xml] public string RemoteUserAuthorizedList;
 
         /// <summary>
         /// Local AppPackageId for the firewall exception.
         /// </summary>
-        [Xml] string LocalAppPackageId;
+        [Xml] public string LocalAppPackageId;
 
         /// <summary>
         /// Service for the firewall exception.Cannot be specified when the firewall exception is a child of a service element.
         /// </summary>
         [Xml]
-        string Service;
+        public string Service;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FirewallException" /> class.

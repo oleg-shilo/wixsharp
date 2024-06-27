@@ -23,7 +23,7 @@ namespace WixSharp.Test
                                                EnvVariables"
                                 .Split(',').Select(x => x.Trim());
 
-        string[] nonTestableProjects = "MultiLanguageUI,Signing,MajorUpgrade,WixBootstrapper".Split(',').Select(x => x.Trim()).ToArray();
+        string[] nonTestableProjects = "MultiLanguageUI,InstallEventElevation,Signing,MajorUpgrade,WixBootstrapper".Split(',').Select(x => x.Trim()).ToArray();
 
         string[] nonPortedWix4Projects = (""             // WIX4-TODO: WiX4 defect (cannot find element from the valid extension)
                                          ).Split(',').Select(x => x.Trim()).ToArray();

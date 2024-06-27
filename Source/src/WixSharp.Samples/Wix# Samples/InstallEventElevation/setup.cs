@@ -1,4 +1,11 @@
-﻿using System;
+﻿//css_dir ..\..\;
+// //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
+//css_ref D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\bin\Debug\net472\WixToolset.Dtf.WindowsInstaller.dll
+//css_ref D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\bin\Debug\net472\WixToolset.Mba.Core.dll
+
+//css_ref System.Core.dll;
+//css_ref System.Xml.dll;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
@@ -25,11 +32,6 @@ static class Script
 
         project.BeforeInstall += Project_BeforeInstall;
         project.AfterInstall += Project_AfterInstall;
-
-        // project.DefaultRefAssemblies.Add(@"..\..\..\MsiEventHost\output\MsiEventHost.exe");
-        // project.DefaultDeferredProperties = ",ManagedProjectElevatedEvents";
-        // project.AddProperty(new Property(
-        //     "ManagedProjectElevatedEvents", "BeforeInstall|AfterInstall"));
 
         project.BeforeInstallEventExecution = EventExecution.ExternalElevatedProcess;
         project.BuildMsi();
