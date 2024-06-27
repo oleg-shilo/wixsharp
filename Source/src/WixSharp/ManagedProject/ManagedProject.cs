@@ -800,6 +800,16 @@ namespace WixSharp
             }
         }
 
+        /// <summary>
+        /// Invokes the MSI event handlers.
+        /// <p>
+        /// This method is not intended to be used by the WixSharp users but by WixSharp internally.
+        /// Though it is public because it needs to be invoked by other assemblies.
+        /// </p>
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="eventName">Name of the event.</param>
+        /// <returns></returns>
         public static ActionResult InvokeClientHandlersExternally(Session session, string eventName)
         {
             // Debug.Assert(false);
@@ -865,9 +875,20 @@ namespace WixSharp
             return result;
         }
 
+        /// <summary>
+        /// Invokes the msi event handlers.
+        /// <p>
+        /// This method is not intended to be used by the WixSharp users but by WixSharp internally.
+        /// Though it is public because it needs to be invoked by other assemblies.
+        /// </p>
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="eventName">Name of the event.</param>
+        /// <param name="UIShell">The UI shell.</param>
+        /// <returns></returns>
         public static ActionResult InvokeClientHandlers(Session session, string eventName, IShellView UIShell = null)
         {
-            Debug.Assert(false);
+            // Debug.Assert(false);
             var runAsElevated = session.Property("ManagedProjectElevatedEvents").Split('|').Contains(eventName);
 
             ActionResult result = runAsElevated ?
@@ -877,6 +898,17 @@ namespace WixSharp
             return result;
         }
 
+        /// <summary>
+        /// Invokes the MSI event handlers.
+        /// <p>
+        /// This method is not intended to be used by the WixSharp users but by WixSharp internally.
+        /// Though it is public because it needs to be invoked by other assemblies.
+        /// </p>
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="eventName">Name of the event.</param>
+        /// <param name="UIShell">The UI shell.</param>
+        /// <returns></returns>
         public static ActionResult InvokeClientHandlersInternally(Session session, string eventName, IShellView UIShell)
         {
             var eventArgs = Convert(session);

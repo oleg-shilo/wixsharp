@@ -185,8 +185,16 @@ namespace WixSharp.Bootstrapper
         public static Protocol netfx4 = new Protocol("netfx4");
     }
 
+    /// <summary>
+    /// Specialized class for embedding MSI into a EXE launcher and then adding it as ExePackage to the bundle..
+    /// </summary>
+    /// <seealso cref="WixSharp.Bootstrapper.ExePackage" />
     public class MsiExePackage : ExePackage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MsiExePackage"/> class.
+        /// </summary>
+        /// <param name="msi">The msi.</param>
         public MsiExePackage(string msi)
         {
             var msi_exe = msi + ".exe";
@@ -206,10 +214,30 @@ namespace WixSharp.Bootstrapper
         }
 
         string productCode;
+
+        /// <summary>
+        /// Gets the product code.
+        /// </summary>
+        /// <value>
+        /// The product code.
+        /// </value>
         public string ProductCode => productCode;
+
+        /// <summary>
+        /// Gets the detect condition variable.
+        /// </summary>
+        /// <value>
+        /// The detect condition variable.
+        /// </value>
         public string DetectConditionVariable => $"{base.Name}State";
 
-        public string Name
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
+        public new string Name
         {
             get => base.Name;
             set

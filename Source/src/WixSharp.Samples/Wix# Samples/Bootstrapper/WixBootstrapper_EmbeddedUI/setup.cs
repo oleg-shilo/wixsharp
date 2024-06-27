@@ -14,7 +14,7 @@ public class Script
     {
         // This sample shows how to embed an executable wrapper around MSI file
         // It is the only way to display MSI own managed UI from the bootstrapper in WiX3 (and
-        // in WIX4 if CcustomBA is used)
+        // in WIX4 if CustomBA is used)
 
         Console.WriteLine("Building MSI ...");
 

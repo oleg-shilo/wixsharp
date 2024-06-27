@@ -12,8 +12,15 @@ using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp
 {
+    /// <summary>
+    /// A utility for creating disconnected MSI session.
+    /// </summary>
     public static class DisconnectedSession
     {
+        /// <summary>
+        /// Creates the instance of the disconnected Session.
+        /// </summary>
+        /// <returns></returns>
         public static Session Create()
         {
             var constr = typeof(Session).GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).FirstOrDefault();

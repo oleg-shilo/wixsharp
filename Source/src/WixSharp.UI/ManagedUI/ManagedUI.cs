@@ -210,7 +210,14 @@ namespace WixSharp
                 {
                     try
                     {
-                        var baseLocalization = XDocument.Load(stockWxlFileForTheLanguage);
+                        var xml = System.IO.File.ReadAllText(stockWxlFileForTheLanguage);
+
+                        // the stock WXL file is in the old format. We need to convert it to the new format
+                        xml = xml.Replace(
+                            "http://schemas.microsoft.com/wix/2006/localization",
+                            "http://wixtoolset.org/schemas/v4/wxl");
+
+                        var baseLocalization = XDocument.Parse(xml);
                         var userLocalization = XDocument.Load(localizationFile);
 
                         var replacementIds = userLocalization.Root.Elements().Select(x => x.Attr("Id"));

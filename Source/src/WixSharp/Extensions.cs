@@ -2617,6 +2617,13 @@ namespace WixSharp
             }
         }
 
+        /// <summary>
+        /// Determines whether this instance is disconnected.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified session is disconnected; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsDisconnected(this Session session)
         {
             if (session.GetAttachedValue("disconnected") != null)
@@ -2997,6 +3004,11 @@ namespace WixSharp
             }
         }
 
+        /// <summary>
+        /// Gets the attached properties.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
         public static Dictionary<string, string> GetAttachedProperties(this Session session)
         {
             var extraProps = session.GetAttachedValue<Dictionary<string, string>>("SerializableProperties");
@@ -3005,6 +3017,12 @@ namespace WixSharp
             return extraProps;
         }
 
+        /// <summary>
+        /// Sets the property.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
         public static void SetProperty(this Session session, string name, string value)
         {
             if (session.IsActive())

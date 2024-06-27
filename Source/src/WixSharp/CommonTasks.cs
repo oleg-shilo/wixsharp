@@ -2087,8 +2087,17 @@ namespace WixSharp.CommonTasks
         }
     }
 
+    /// <summary>
+    /// Utility for generating self-hosted MSI executables.Such a tool is a simple launcher of the
+    /// msiexec.exe with the embedded (as an exe resource) msi file.
+    /// </summary>
     public static class ExeGen
     {
+        /// <summary>Comples the self hosted msi.</summary>
+        /// <param name="msiFile">The msi file.</param>
+        /// <param name="outFile">The out file.</param>
+        /// <returns>
+        /// </returns>
         public static (int exitCode, string output) CompleSelfHostedMsi(this string msiFile, string outFile)
         {
             var parser = new MsiParser(msiFile);

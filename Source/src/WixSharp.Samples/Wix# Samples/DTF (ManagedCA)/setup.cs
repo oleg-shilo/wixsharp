@@ -107,7 +107,7 @@ public class CustomActions
     [CustomAction]
     public static ActionResult MyCustomAction(Session session)
     {
-        Debug.Assert(false);
+        // Debug.Assert(false);
         try
         {
             var value = session.ExtractAppData()["SQLSERVER"];

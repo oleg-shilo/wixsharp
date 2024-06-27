@@ -31,13 +31,18 @@ using WixToolset.Dtf.WindowsInstaller;
 
 using IO = System.IO;
 
+#pragma warning disable 1591
+
 namespace WixSharp
 {
     /// <summary>
-    ///
+    /// Serializer for the MSI session data.
     /// </summary>
     public static class SerializingExtensions
     {
+        /// <summary>
+        ///
+        /// </summary>
         public class Property
         {
             public string Key { get; set; }
