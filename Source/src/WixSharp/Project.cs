@@ -854,7 +854,7 @@ namespace WixSharp
         public string GetTargetPathOf(File file)
         {
             var dir = this.AllDirs.FirstOrDefault(d => d.Files.Contains(file));
-            var path = new List<string> { file.Name };
+            var path = new List<string> { file?.Name.PathGetFileName() ?? "" };
 
             while (dir != null)
             {
