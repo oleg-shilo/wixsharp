@@ -867,15 +867,17 @@ namespace WixSharp
         /// <returns></returns>
         public string GetTargetPathOf(File file)
         {
+            // var filename = file?.Name.Split(System.IO.Path.DirectorySeparatorChar).LastOrDefault() ?? string.Empty;
+
             var dir = this.AllDirs.FirstOrDefault(d => d.Files.Contains(file));
-            var path = new List<string> { file.Name };
+            var path = new List<string> { file?.Name.PathGetFileName() ?? "" };
 
             while (dir != null)
             {
                 path.Insert(0, dir.Name);
                 dir = this.AllDirs.FirstOrDefault(d => d.Dirs.Contains(dir));
             }
-            return path.JoinBy("\\");
+            return path.JoinBy(System.IO.Path.DirectorySeparatorChar.ToString());
         }
 
         /// <summary>

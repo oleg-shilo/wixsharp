@@ -1388,7 +1388,10 @@ namespace WixSharp
         /// <param name="path">The path.</param>
         public static string PathGetFileName(this string path)
         {
-            return IO.Path.GetFileName(path);
+            if (path.IsNotEmpty())
+                return IO.Path.GetFileName(path);
+            else
+                return path;
         }
 
         /// <summary>
