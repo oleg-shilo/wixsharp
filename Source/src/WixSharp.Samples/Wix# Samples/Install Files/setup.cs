@@ -22,10 +22,12 @@ static class Script
 
         var project =
             new ManagedProject("MyProduct",
-                new Dir(@"AppDataFolder\My ICompany\My Product",
-                    // new Dir(new Id("MY_INSTALLDIR"), @"%ProgramFiles%\My ICompany\My Product",
+                    // new Dir(@"AppDataFolder\My ICompany\My Product",
+                    new Dir(new Id("MY_INSTALLDIR"), @"%ProgramFiles%\My ICompany\My Product",
                     f = new File("MyApp_file".ToId(),
-                                 @"Files\Bin\MyApp.exe",
+                                 @"C:\sourceFiles\MyApp.exe",
+                                 // @"Files\Bin\MyApp.exe",
+                                 // @"D:\dev\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\Files\Bin\MyApp.exe",
                                  new FileAssociation("cstm", "application/custom", "open", "\"%1\"")
                                  {
                                      Advertise = true,
@@ -35,7 +37,8 @@ static class Script
                         TargetFileName = "app.exe"
                     },
                     new Dir(@"Docs\Manual",
-                        new File(@"Files\Docs\Manual.txt")
+                        // new File(@"Files\Docs\Manual.txt")
+                        new File(@"D:\dev\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\Files\Docs\Manual.txt")
                         {
                             NeverOverwrite = true
                         })),
@@ -44,7 +47,7 @@ static class Script
         project.SetVersionFrom("MyApp_file");
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-
+        Compiler.EmitRelativePaths = false;
         // possible UIs
         project.ManagedUI = ManagedUI.Default;
         // project.ManagedUI = ManagedUI.DefaultWpf;

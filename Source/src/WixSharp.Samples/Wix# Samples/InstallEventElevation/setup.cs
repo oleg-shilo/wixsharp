@@ -13,6 +13,7 @@ using System.Xml.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.UI;
+using WixToolset.Dtf.WindowsInstaller;
 
 static class Script
 {
@@ -27,20 +28,29 @@ static class Script
 
         project.UI = WUI.WixUI_ProgressOnly;
 
-        // project.Scope = InstallScope.perMachine;
-        project.Scope = InstallScope.perUser;
-
         project.BeforeInstall += Project_BeforeInstall;
-        project.AfterInstall += Project_AfterInstall;
+        project.AfterInstall += Project_AfterInstall; // is already elevated (deferred by default)
 
-        project.BeforeInstallEventExecution = EventExecution.ExternalElevatedProcess;
+        bool installPerUser = false;
+        if (installPerUser)
+        {
+            project.Scope = InstallScope.perUser;
+            project.BeforeInstallEventExecution = EventExecution.ExternalElevatedProcess;
+        }
+        else
+        {
+            project.Scope = InstallScope.perMachine;
+            project.BeforeInstallEventExecution = EventExecution.MsiSessionScopeDeferred;
+            // you can use ExternalElevatedProcess too
+        }
+
         project.BuildMsi();
     }
 
     private static void Project_BeforeInstall(SetupEventArgs e)
     {
         MessageBox.Show(e.ToString(), "Project_BeforeInstall");
-        // e.Result = WixToolset.Dtf.WindowsInstaller.ActionResult.UserExit;
+        e.Result = ActionResult.UserExit; // canceling the install here
     }
 
     private static void Project_AfterInstall(SetupEventArgs e)

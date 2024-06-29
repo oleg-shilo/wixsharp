@@ -25,11 +25,18 @@ class Script
                             Target = "https://github.com/oleg-shilo/wixsharp"
                         },
                         new Dir("Samples",
-                            new File(@"AppFiles\MyApp.cs")),
+                            new File(@"AppFiles\MyApp.cs",
+                                new FileShortcut("MyApp", @"%StartMenuFolder%")
+                                {
+                                    IconFile = @"AppFiles\Icon.ico",
+                                    WorkingDirectory = "Samples",
+                                    Arguments = "777",
+                                    Description = "My Application"
+                                })),
 
                         new File(@"AppFiles\MyApp.exe",
                             new FileShortcut("MyApp", "INSTALLDIR"), //INSTALLDIR is the ID of "%ProgramFiles%\My Company\My Product"
-                            new FileShortcut("MyApp", @"%Desktop%")
+                            new FileShortcut("MyApp", @"%StartMenuFolder%")
                             {
                                 IconFile = @"AppFiles\Icon.ico",
                                 WorkingDirectory = "Samples",

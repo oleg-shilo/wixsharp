@@ -113,7 +113,7 @@
     <Compile Include="Assembly.cs" />
     <Compile Include="Utilities\Utils.cs" />
     <Compile Include="Utilities\SerializingExtensions.cs" />
-    <Compile Include="Utilities\AttachedProperies.cs" />
+    <Compile Include="Utilities\AttachedProperties.cs" />
     <Compile Include="AutoElements.cs" />
     <Compile Include="BalCondition.cs" />
     <Compile Include="Bootstrapper\UtilFileSearch.cs" />

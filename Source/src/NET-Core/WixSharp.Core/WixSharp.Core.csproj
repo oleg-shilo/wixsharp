@@ -13,12 +13,12 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <FileVersion>2.1.4</FileVersion>
-    <AssemblyVersion>2.1.5</AssemblyVersion>
+    <FileVersion>2.2.0</FileVersion>
+    <AssemblyVersion>2.2.0</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageVersion>2.1.9</PackageVersion>
+    <PackageVersion>2.2.0</PackageVersion>
     <Title>WixSharp (.NET Core)</Title>
     <Description>.NET Core edition of WixSharp package</Description>
     <Copyright>Oleg Shilo</Copyright>
@@ -200,6 +200,14 @@
     <Compile Include="..\..\WixSharp\WixProject.cs" Link="WixProject.cs" />
     <Compile Include="..\..\WixSharp\WixQuietExec.cs" Link="WixQuietExec.cs" />
     <Compile Include="..\..\WixSharp\XmlFile.cs" Link="XmlFile.cs" />
+
+    <Compile Include="..\..\WixSharp\Utilities\Utils.cs" Link="Utils.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\XmlMapping.cs" Link="XmlMapping.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\XmlAttribute.cs" Link="XmlAttribute.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\ProjectLocalization.cs" Link="ProjectLocalization.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\SerializingExtensions.cs" Link="SerializingExtensions.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\AttachedProperties.cs" Link="AttachedProperties.cs" />
+
   </ItemGroup>
 
   <ItemGroup>
