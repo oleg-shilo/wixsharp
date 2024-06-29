@@ -1,6 +1,7 @@
-﻿using Caliburn.Micro;
-using System;
+﻿using System;
+using System.Windows;
 using System.Windows.Media.Imaging;
+using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
 using WixSharp.UI.WPF;
@@ -20,6 +21,10 @@ namespace WixSharp.UI.WPF
 
         public void Init()
         {
+            this.ManagedFormHost.FormClosing += (sender, e) =>
+            {
+                MessageBox.Show("Closing1");
+            };
             Banner.Source = this.ManagedFormHost?.Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
         }
 

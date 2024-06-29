@@ -9,7 +9,7 @@ namespace WixSharp
     /// This class allows attaching arbitrary data to any object. This behavior resembles
     /// AttachedProperty in WPF.
     /// </summary>
-    public static class AttachedProperies
+    public static class AttachedProperties
     {
         /// <summary>
         /// The object cache. Contains object that have values attached.

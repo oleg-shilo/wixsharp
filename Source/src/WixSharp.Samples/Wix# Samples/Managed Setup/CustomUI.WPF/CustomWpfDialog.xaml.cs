@@ -1,6 +1,7 @@
-﻿using Caliburn.Micro;
-using System;
+﻿using System;
+using System.Windows;
 using System.Windows.Media.Imaging;
+using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
 using WixSharp.UI.WPF;
@@ -16,6 +17,12 @@ namespace WixSharp.UI.WPF
 
         public void Init()
         {
+            var topWindow = this.ManagedFormHost.Parent as System.Windows.Forms.Form;
+            topWindow.FormClosing += (sender, e) =>
+            {
+                MessageBox.Show("Closing...");
+            };
+
             ViewModelBinder.Bind(new CustomDialogModel { Host = ManagedFormHost }, this, null);
         }
     }

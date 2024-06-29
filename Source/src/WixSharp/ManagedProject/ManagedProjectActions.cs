@@ -61,10 +61,11 @@ namespace WixSharp
         public static ActionResult WixSharp_BeforeInstall_Action(Session session)
         {
             // Debugger.Launch();
-            session["ADDFEATURES"] = session.Features
-                                            .Where(x => x.RequestState != InstallState.Absent)
-                                            .Select(x => x.Name)
-                                            .JoinBy(",");
+            if (session.IsActive())
+                session["ADDFEATURES"] = session.Features
+                                                .Where(x => x.RequestState != InstallState.Absent)
+                                                .Select(x => x.Name)
+                                                .JoinBy(",");
 
             return ManagedProject.InvokeClientHandlers(session, "BeforeInstall");
         }

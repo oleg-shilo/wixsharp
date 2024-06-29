@@ -16,10 +16,10 @@ public class Script
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.ManagedUI = new ManagedUI();
         project.ManagedUI.InstallDialogs.Add<WixSharp.UI.Forms.WelcomeDialog>()     // stock WinForm dialog
-                                        .Add<FeaturesDialog>()                      // stock WinForm dialog
-                                        .Add<CustomDialogWith<CustomDialogPanel>>() // custom WPF dialog (minimalistic);
-                                        .Add<CustomDialogRawView>()                 // custom WPF dialog
                                         .Add<CustomDialogView>()                    // custom WPF dialog (with Claiburn.Micro as MVVM)
+                                        .Add<CustomDialogWith<CustomDialogPanel>>() // custom WPF dialog (minimalistic);
+                                        .Add<FeaturesDialog>()                      // stock WinForm dialog
+                                        .Add<CustomDialogRawView>()                 // custom WPF dialog
                                         .Add<WixSharp.UI.Forms.ProgressDialog>()    // stock WinForm dialog
                                         .Add<WixSharp.UI.Forms.ExitDialog>();       // stock WinForm dialog
 
