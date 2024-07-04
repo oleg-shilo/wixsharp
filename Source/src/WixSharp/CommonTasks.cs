@@ -2643,28 +2643,55 @@ class Program
             }
         }
 
-        internal static string MakeSfxCA
+        static string makeSfxCA = null;
+
+        /// <summary>
+        /// Gets or sets the location of the `WixToolset.Dtf.MakeSfxCA.exe`.
+        /// </summary>
+        public static string MakeSfxCA
         {
+            set => makeSfxCA = value;
             get
             {
+                if (makeSfxCA != null)
+                    return makeSfxCA;
+
                 EnsureDtfTool();
                 return Directory.GetFiles(PackageDir("wixtoolset.dtf.customaction"), "WixToolset.Dtf.MakeSfxCA.exe", SearchOption.AllDirectories).FirstOrDefault();
             }
         }
 
-        internal static string Heat
+        static string heat = null;
+
+        /// <summary>
+        /// Gets or sets the location of `heat.exe`.
+        /// </summary>
+        public static string Heat
         {
+            set => heat = value;
             get
             {
+                if (heat != null)
+                    return heat;
+
                 EnsureDtfTool("wixtoolset.heat");
                 return Directory.GetFiles(PackageDir("wixtoolset.heat"), "heat.exe", SearchOption.AllDirectories).FirstOrDefault();
             }
         }
 
-        internal static string DtfWindowsInstaller
+        static string dtfWindowsInstaller = null;
+
+        /// <summary>
+        /// Gets or sets the location of `WixToolset.Dtf.WindowsInstaller.dll`.
+        /// </summary>
+        public static string DtfWindowsInstaller
         {
+            set => dtfWindowsInstaller = value;
             get
             {
+                if (dtfWindowsInstaller != null)
+                    return dtfWindowsInstaller;
+
                 var localAsm = System.Reflection.Assembly.GetExecutingAssembly().GetLocation().PathChangeFileName("WixToolset.Dtf.WindowsInstaller.dll");
                 if (IO.File.Exists(localAsm))
                     return localAsm;
@@ -2674,15 +2701,48 @@ class Program
             }
         }
 
-        internal static string WixToolsetMbaCoreFor()
+        static string wixToolsetMbaCore;
+
+        /// <summary>
+        /// Gets or sets the location of `WixToolset.Mba.Core.dll`.
+        /// </summary>
+        public static string WixToolsetMbaCore
         {
-            EnsureDtfTool();
-            return PackageDir("wixtoolset.mba.core").PathCombine(@"lib\netstandard2.0\WixToolset.Mba.Core.dll");
+            set => wixToolsetMbaCore = value;
+            get
+            {
+                if (wixToolsetMbaCore != null)
+                    return wixToolsetMbaCore;
+
+                EnsureDtfTool();
+                return PackageDir("wixtoolset.mba.core").PathCombine(@"lib\netstandard2.0\WixToolset.Mba.Core.dll");
+            }
         }
 
-        internal static string SfxCAFor(string platformDir)
+        static string wixToolsetMbaPrereq;
+
+        /// <summary>
+        /// The location of x64 version of `SfxCA.dll`.
+        /// </summary>
+        public static string SfxCAx64;
+
+        /// <summary>
+        /// The location of x86 version of `SfxCA.dll`.
+        /// </summary>
+        public static string SfxCAx86;
+
+        internal static string SfxCAFor(bool is64)
         {
+            if (is64 && SfxCAx64 != null)
+                return SfxCAx64;
+
+            if (!is64 && SfxCAx86 != null)
+                return SfxCAx64;
+
             EnsureDtfTool();
+
+            string platformDir = is64 ? "x64" : "x86";
+
             return PackageDir("wixtoolset.dtf.customaction").PathCombine($@"tools\{platformDir}\SfxCA.dll");
         }
 

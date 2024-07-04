@@ -3277,12 +3277,12 @@ namespace WixSharp
 
         static void PackageManagedAsm(string asm, string nativeDll, string[] refAssemblies, string outDir, string configFilePath, Platform? platform = null, bool embeddedUI = false, string batchFile = null)
         {
-            string platformDir = "x86";
+            bool is64 = false;
             if (platform.HasValue && platform.Value == Platform.x64)
-                platformDir = "x64";
+                is64 = true;
 
             string makeSfxCA = WixTools.MakeSfxCA;
-            string sfxcaDll = WixTools.SfxCAFor(platformDir);
+            string sfxcaDll = WixTools.SfxCAFor(is64);
             string dtfWinInstaller = WixTools.DtfWindowsInstaller;
 
             outDir = IO.Path.GetFullPath(outDir);
@@ -3307,7 +3307,7 @@ namespace WixSharp
                 }
                 else
                 {
-                    localWixToolsetMbaCore = WixTools.WixToolsetMbaCoreFor();
+                    localWixToolsetMbaCore = WixTools.WixToolsetMbaCore;
                     if (localWixToolsetMbaCore.PathExists())
                         requiredAsms.Add(localWixToolsetMbaCore);
                     else
