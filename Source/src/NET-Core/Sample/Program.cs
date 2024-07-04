@@ -2,8 +2,6 @@
 using WixToolset.Dtf.WindowsInstaller;
 using File = WixSharp.File;
 
-Console.WriteLine(Environment.CurrentDirectory);
-
 var project =
     new Project("My Product",
         new Dir(@"%ProgramFiles%\My Company\My Product",

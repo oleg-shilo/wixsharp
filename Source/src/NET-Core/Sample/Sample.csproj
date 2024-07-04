@@ -8,6 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CustomUI-WinForms\**" />
+    <Compile Remove="CustomUI.testpad\**" />
+    <EmbeddedResource Remove="CustomUI-WinForms\**" />
+    <EmbeddedResource Remove="CustomUI.testpad\**" />
+    <None Remove="CustomUI-WinForms\**" />
+    <None Remove="CustomUI.testpad\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="My Exported Templates - Shortcut.lnk" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="WixSharp.Core" Version="1.0.0" />
     <PackageReference Include="WixSharp.Msi.Core" Version="1.0.0" />
   </ItemGroup>
