@@ -28,6 +28,7 @@ class Script
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.WPF.nuspec", releaseNotes, version.ToString());
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.bin.nuspec", releaseNotes, version.ToString());
 
+        CopyFiles(root + @"\bin\WixSharp", "WixSharp.MsiEventHost.exe", "lib");
         CopyFiles(root + @"\bin\WixSharp", "nbsbuilder.exe", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.dll", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.xml", "lib");
@@ -38,7 +39,7 @@ class Script
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.Msi.dll", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.Msi.xml", @"lib");
 
-        ValidateDllVersions(version.ToString());	
+        ValidateDllVersions(version.ToString());
 
         Console.WriteLine("Done!");
     }

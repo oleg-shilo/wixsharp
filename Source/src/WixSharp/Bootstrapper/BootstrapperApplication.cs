@@ -40,7 +40,10 @@ namespace WixSharp.Bootstrapper
         {
             AppAssembly = appAssembly;
 
-            Payloads = Payloads.Combine(AppAssembly.ToPayload())
+            Payload bootstrapperAppAssembly = AppAssembly.ToPayload();
+            bootstrapperAppAssembly.IsBootstrapperAppAssembly = true;
+
+            Payloads = Payloads.Combine(bootstrapperAppAssembly)
                                .Combine(dependencies.Select(x => x.ToPayload()));
         }
 
@@ -144,15 +147,15 @@ namespace WixSharp.Bootstrapper
             return mbanative;
         }
 
-        static string LocateMbaCore()
+        static string LocateMbaCore(string asm = "WixToolset.Mba.Core.dll")
         {
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            var mbanative = (assembly.Location ?? "").PathGetDirName().PathCombine("WixToolset.Mba.Core.dll");
+            var mbanative = (assembly.Location ?? "").PathGetDirName().PathCombine(asm);
 
             if (System.IO.File.Exists(mbanative))
                 return mbanative;
 
-            mbanative = (assembly.Location ?? "").PathGetDirName().PathCombine("wix_bin", "WixToolset.Mba.Core.dll");
+            mbanative = (assembly.Location ?? "").PathGetDirName().PathCombine("wix_bin", asm);
             if (System.IO.File.Exists(mbanative))
                 return mbanative;
 
@@ -164,6 +167,11 @@ namespace WixSharp.Bootstrapper
 #if NETCORE
             throw new NotImplementedException("The method is not implemented on .NET Core");
 #else
+            // In WiX5 the BootstrapperApplicationFactoryAttribute is no longer used.
+            // It's now a plain vanilla executable assembly.
+            if (WixTools.GlobalWixVersion.Major >= 5)
+                return;
+
             try
             {
                 var valid = (bool)Utils.ExecuteInTempDomain<AsmReflector>(
@@ -226,6 +234,9 @@ namespace WixSharp.Bootstrapper
             {
                 var appPayload = files.FirstOrDefault(x => x.IsBootstrapperAppAssembly);
 
+                if (appPayload == null)
+                    throw new Exception("The Bootstrapper application assembly is not found in the payload list.");
+
                 if (Environment.CurrentDirectory.SamePathAs(appPayload.SourceFile.PathGetDirName()))
                     root.SetAttribute("SourceFile", appPayload.SourceFile.PathGetFileName());
                 else
@@ -238,14 +249,22 @@ namespace WixSharp.Bootstrapper
                 files.DistinctBy(x => x.SourceFile).ForEach(p => root.Add(p.ToXElement("Payload")));
 
             // validate payloads
-            if (!files.Any(x => x.SourceFile.EndsWith("WixToolset.Mba.Core.dll")))
+            var wixBaDependency = "WixToolset.Mba.Core.dll";
+
+            if (WixTools.GlobalWixVersion.Major >= 5)
+                wixBaDependency = "WixToolset.BootstrapperApplicationApi.dll";
+
+            if (!files.Any(x => x.SourceFile.EndsWith(wixBaDependency)))
             {
-                var possibleMbaCore = LocateMbaCore();
+                var possibleMbaCore = LocateMbaCore(wixBaDependency);
+
+                if (!possibleMbaCore.PathExists())
+                    possibleMbaCore = this.AppAssembly.PathChangeFileName(wixBaDependency);
 
                 if (possibleMbaCore.PathExists())
                     root.Add(new Payload(possibleMbaCore).ToXElement("Payload"));
                 else
-                    Compiler.OutputWriteLine("WARNING: Custom BA payloads are missing `WixToolset.Mba.Core.dll`");
+                    Compiler.OutputWriteLine($"WARNING: Custom BA payloads are missing `{wixBaDependency}`");
             }
 
             return new[] { root };

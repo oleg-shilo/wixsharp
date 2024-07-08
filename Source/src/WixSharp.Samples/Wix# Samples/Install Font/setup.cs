@@ -3,6 +3,7 @@
 //css_ref System.Core.dll;
 using System;
 using WixSharp;
+using WixSharp.CommonTasks;
 
 class Script
 {

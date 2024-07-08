@@ -32,9 +32,10 @@ public class Script
 
     static public void Main()
     {
-        EnsureCompatibleWixVersion();
+        // EnsureCompatibleWixVersion();
+        // WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.0");
 
-        // if you want to use msi with custom UI managed UIthen use BuildMsiWithManaged() instead of BuildMsi()
+        // if you want to use msi with custom managed UI then use BuildMsiWithManaged() instead of BuildMsi()
         // You will also need to use MsiExePackage instead of MsiPackage.
         // See WixBootstrapper_MsiEmbeddedUI.csproj sample
 
@@ -50,9 +51,16 @@ public class Script
 
         bundle.Version = new Version("1.0.0.0");
         bundle.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
-        bundle.Application = new ManagedBootstrapperApplication("%this%");
-        // bundle.Application.AddPayload(typeof(ManagedBootstrapperApplication).Assembly.Location.ToPayload()); // needed for WiX5
-        // bundle.Application = new ManagedBootstrapperApplication(@"D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Bootstrapper\WiX4-Spike\Bundle1\WixToolset.WixBA\bin\Debug\net472\win-x86\WixToolset.WixBA.dll");
+
+        if (WixTools.GlobalWixVersion.Major >= 5)
+        {
+            var customBa_Wix5_Sample = @"..\WiX5-Spike\WixToolset.WixBA\output\net472\WixToolset.WixBA.exe";
+            bundle.Application = new ManagedBootstrapperApplication(customBa_Wix5_Sample);
+        }
+        else
+        {
+            bundle.Application = new ManagedBootstrapperApplication("%this%");
+        }
 
         Compiler.VerboseOutput = true;
 
@@ -61,16 +69,6 @@ public class Script
 
     static void EnsureCompatibleWixVersion()
     {
-        // WiX5 has brought some breaking changes to the custom BA model.
-        // The BA is now a separate process and the communication between the BA and the bundle is done via IPC.
-        // https://wixtoolset.org/docs/fivefour/#burn   mentions the change (10 Apr 2024)
-        // https://wixtoolset.org/docs/fivefour/oopbas/ describes the new model.(10 Apr 2024, though it's empty yet)
-        // It is actually a good decision but it will require an extra effort for integrating it with WixSharp.
-        // Thus, for now, Wix# is still using the WiX4 model of the custom BA.
-
-        if (WixTools.GlobalWixVersion.Major == 5)
-            WixTools.SetWixVersion(Environment.CurrentDirectory, "4.0.4");
-
         if (WixTools.GlobalWixVersion.Major == 4)
         {
             WixExtension.UI.PreferredVersion = "4.0.4";

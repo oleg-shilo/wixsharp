@@ -7,4 +7,4 @@ In order to build the packages execute the following steps:
 
 - Execute build.WiX4.cmd
 
-That's it.
+That's it.🅾️

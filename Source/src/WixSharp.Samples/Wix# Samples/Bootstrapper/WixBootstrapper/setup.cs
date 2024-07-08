@@ -105,7 +105,6 @@ public class InstallScript
                     //},
 
                     //msiOnlinePackage, // just a demo sample
-
                     new MsiPackage(crtMsi)
                     {
                         Visible = true,
@@ -121,6 +120,12 @@ public class InstallScript
                         MsiProperties = "INSTALLDIR=c:\\",
                         Payloads = new[] { "script.dll".ToPayload() }
                     });
+
+        bootstrapper.WixSourceGenerated += doc =>
+        {
+            var bundle = doc.FindSingle("Bundle");
+            bundle.AddElement(WixExtension.Bal.ToXName("Condition"), "Condition=1<0; Message=Custom Error Message");
+        };
 
         bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";
         bootstrapper.IconFile = "app_icon.ico";
@@ -190,6 +195,11 @@ public class InstallScript
         // Debug.Assert(false);
         var setup = bootstrapper.Build("app_setup");
         Console.WriteLine(setup);
+    }
+
+    private static void Bootstrapper_WixSourceGenerated(XDocument document)
+    {
+        throw new NotImplementedException();
     }
 
     static public string BuildMainMsi()

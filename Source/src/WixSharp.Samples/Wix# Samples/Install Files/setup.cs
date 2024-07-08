@@ -68,7 +68,7 @@ static class Script
 
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
-        project.BuildMsi();
+        project.BuildMsiCmd();
     }
 
     private static void Compiler_WixSourceGenerated(XDocument document)
