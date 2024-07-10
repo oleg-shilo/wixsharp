@@ -32,7 +32,7 @@ public class Script
 
     static public void Main()
     {
-        // EnsureCompatibleWixVersion();
+        // if you don't have WiX5 but want to experiment with it then uncomment the line below
         // WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.0");
 
         // if you want to use msi with custom managed UI then use BuildMsiWithManaged() instead of BuildMsi()
@@ -54,6 +54,8 @@ public class Script
 
         if (WixTools.GlobalWixVersion.Major >= 5)
         {
+            // this is an officil WiX5 BA sample
+            // from https://github.com/wixtoolset/wix/tree/HEAD/src/test/burn/WixToolset.WixBA
             var customBa_Wix5_Sample = @"..\WiX5-Spike\WixToolset.WixBA\output\net472\WixToolset.WixBA.exe";
             bundle.Application = new ManagedBootstrapperApplication(customBa_Wix5_Sample);
         }
