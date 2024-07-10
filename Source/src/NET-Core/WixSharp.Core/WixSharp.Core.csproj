@@ -173,7 +173,6 @@
     <Compile Include="..\..\WixSharp\SetPropertyAction.cs" Link="SetPropertyAction.cs" />
     <Compile Include="..\..\WixSharp\SharedExtensions.cs" Link="SharedExtensions.cs" />
     <Compile Include="..\..\WixSharp\Shortcut.cs" Link="Shortcut.cs" />
-    <Compile Include="..\..\WixSharp\SilentBA.cs" Link="SilentBA.cs" />
     <Compile Include="..\..\WixSharp\SqlDatabase.cs" Link="SqlDatabase.cs" />
     <Compile Include="..\..\WixSharp\SqlScript.cs" Link="SqlScript.cs" />
     <Compile Include="..\..\WixSharp\SqlString.cs" Link="SqlString.cs" />
