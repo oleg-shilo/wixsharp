@@ -50,8 +50,15 @@ using IO = System.IO;
 namespace WixSharp
 {
     /// <summary>
-    /// This class holds the settings for Wix# XML auto-generation: generation of WiX XML elements, which do not have direct
-    /// representation in the Wix# script. The detailed information about Wix# auto-generation can be found here: http://www.csscript.net/WixSharp/ID_Allocation.html.
+    /// This class holds the settings for various WixSharp auto-generation aspects that are not directly related to the 
+    /// WXS XML schema. IE enforcement of ComponentId uniqness, ID allocation, etc.
+    /// <p>
+    /// The detailed information about Wix# auto-generation can be found 
+    /// here: http://www.csscript.net/WixSharp/ID_Allocation.html.
+    /// </p>
+    /// <p> There is also additional configuration settings class that controls pure XML generation aspects: 
+    /// <see cref="WixSharp.AutoElements"/>.
+    /// </p>
     /// </summary>
     public class AutoGenerationOptions
     {
@@ -268,7 +275,16 @@ namespace WixSharp
         /// </summary>
         static public bool VerboseOutput;
         /// <summary>
-        /// Contains settings for XML auto-generation.
+        /// Contains settings for XML auto-generation aspects that are directly related to the 
+        /// WXS XML schema. IE enforcement of ComponentId uniqness, ID allocation, etc.
+        /// <p>
+        /// The detailed information about Wix# auto-generation can be found 
+        /// here: http://www.csscript.net/WixSharp/ID_Allocation.html.
+        /// </p>
+        /// <p> Note, there is also additional configuration settings class that controls pure XML generation aspects: 
+        /// <see cref="WixSharp.AutoElements"/>. The reason for two classes is not strong and rather legacy-based. 
+        /// The intention is to merge them together in the near future (as of 10-Jul-204).   
+        /// </p>
         /// </summary>
         static public AutoGenerationOptions AutoGeneration { get => autoGeneration; }
 

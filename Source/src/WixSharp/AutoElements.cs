@@ -72,6 +72,11 @@ namespace WixSharp
     /// </para>
     /// <para>The following link is a good example of the technique:
     /// http://stackoverflow.com/questions/16119708/component-testcomp-installs-to-user-profile-it-must-use-a-registry-key-under-hk</para>
+    /// <para>
+    /// Note, there is also additional configuration settings class that controls other aspects of auto-generation:
+    /// <see cref="WixSharp.Compiler.AutoGeneration"/>. The reason for two classes is not strong and rather legacy-based.
+    /// The intention is to merge them together in the near future (as of 10-Jul-204).
+    /// </para>
     /// </summary>
     public static class AutoElements
     {
