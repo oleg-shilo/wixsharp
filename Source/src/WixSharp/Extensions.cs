@@ -1645,7 +1645,8 @@ namespace WixSharp
         /// <para>
         /// This method is not the same as `ExpandWixEnvConsts`. The key difference is that it
         /// handles custom properties, leaves square brackets unchanged and also normalizes
-        /// directory separators. Normalization is critical for string values that are used as `ExeFileShortcut.Target`:
+        /// directory separators. Normalization is critical for string values that are used as
+        /// `ExeFileShortcut.Target`:
         /// </para>
         /// <para><example>
         /// <code>
@@ -1660,37 +1661,40 @@ namespace WixSharp
         /// <returns></returns>
         public static string NormalizeWixString(this string path)
         {
-            // EnvironmentConstantsMapping.Keys include '%' chars: { "%ProgramFiles%",
-            // "ProgramFilesFolder" },
+            // EnvironmentConstantsMapping.Keys include '%' chars: { "%ProgramFiles%", "ProgramFilesFolder" },
             foreach (string key in Compiler.EnvironmentConstantsMapping.Keys)
-                path = path
-                           // if the constant came to this method already extended/normalized then
-                           // the call `.Replace(key.Trim('%'),
-                           // Compiler.EnvironmentConstantsMapping[key]` would insert suffix
-                           // `Folder` one extra time (e.g. SystemFolder64Folder->SystemFolder64FolderFolder)
+            {
+                var newPath = path
+                        // if the constant came to this method already extended/normalized then
+                        // the call `.Replace(key.Trim('%'),
+                        // Compiler.EnvironmentConstantsMapping[key]` would insert suffix
+                        // `Folder` one extra time (e.g. SystemFolder64Folder->SystemFolder64FolderFolder)
 
-                           // Another problem is that *64Folder/*FilesFolder can be ruined by *
-                           // replacement ProgramFiles64Folder/ProgramFilesFolder <- ProgramFiles
-                           // System64Folder, SystemFolder <- System
+                        // Another problem is that *64Folder/*FilesFolder can be ruined by *
+                        // replacement ProgramFiles64Folder/ProgramFilesFolder <- ProgramFiles
+                        // System64Folder, SystemFolder <- System
 
-                           // The solution is not elegant in terms of performance but adequate. We
-                           // don't need performance during the compilation.
+                        // The solution is not elegant in terms of performance but adequate. We
+                        // don't need performance during the compilation.
 
-                           // protect `System` and `ProgramFiles`
-                           .Replace("System64Folder", "Sys64Folder")
-                           .Replace("SystemFolder", "SysFolder")
-                           .Replace("ProgramFiles64Folder", "ProgFiles64Folder")
-                           .Replace("ProgramFilesFolder", "ProgFilesFolder")
+                        // protect `System` and `ProgramFiles`
+                        .Replace("System64Folder", "Sys64Folder")
+                        .Replace("SystemFolder", "SysFolder")
+                        .Replace("ProgramFiles64Folder", "ProgFiles64Folder")
+                        .Replace("ProgramFilesFolder", "ProgFilesFolder")
 
-                           .Replace(key, Compiler.EnvironmentConstantsMapping[key])
-                           // .Replace(key.Trim('%'), Compiler.EnvironmentConstantsMapping[key])
-                           .Replace($"[{key.Trim('%')}]", Compiler.EnvironmentConstantsMapping[key])
+                        .Replace(key, Compiler.EnvironmentConstantsMapping[key])
+                        // .Replace(key.Trim('%'), Compiler.EnvironmentConstantsMapping[key])
+                        .Replace($"[{key.Trim('%')}]", $"[{Compiler.EnvironmentConstantsMapping[key]}]")
 
-                           // restore `System` and `ProgramFiles`
-                           .Replace("Sys64Folder", "System64Folder")
-                           .Replace("SysFolder", "SystemFolder")
-                           .Replace("ProgFiles64Folder", "ProgramFiles64Folder")
-                           .Replace("ProgFilesFolder", "ProgramFilesFolder");
+                        // restore `System` and `ProgramFiles`
+                        .Replace("Sys64Folder", "System64Folder")
+                        .Replace("SysFolder", "SystemFolder")
+                        .Replace("ProgFiles64Folder", "ProgramFiles64Folder")
+                        .Replace("ProgFilesFolder", "ProgramFilesFolder");
+
+                path = newPath;
+            }
 
             // ensure `%System64Folder%msiexec.exe` and `%System64Folder%\msiexec.exe` are converted
             // in `[System64Folder]msiexec.exe`

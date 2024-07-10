@@ -323,9 +323,12 @@ namespace WixSharp.Test
         {
             // 'MySystem' should not be converted to 'MySystemFolder`
             var raw_path = @"[INSTALLDIR]\MySystem\MyProduct.exe";
-
             var normalized_path = raw_path.NormalizeWixString();
 
+            Assert.Equal(raw_path, normalized_path);
+
+            raw_path = @"[WindowsFolder]\MySystem\MyProduct.exe";
+            normalized_path = raw_path.NormalizeWixString();
             Assert.Equal(raw_path, normalized_path);
         }
 
