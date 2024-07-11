@@ -30,10 +30,13 @@ same language (C#). This also allows for a homogeneous, simplified, and more con
 
 **_Overview_**
 
-If you are planning to use Wix# on Linux you may find this [article](https://github.com/oleg-shilo/wixsharp/wiki/WixSharp-on-Linux) useful. Please note that Wix# builds MSI deployment packages and while MSI can be built on Linux it cannot be run on Linux as MSI is a pure Windows technology.   
+_NOTE: WixSharp releases come in two streams: Releases v1.* use the WiX3 toolset to author msi setups, and v2.* use WiX4+. For the time being, the two streams will be maintained in parallel, but when WiX4/5 becomes mature enough, the WiX3 stream will be obsolete._
 
-Please note that WixSharp NuGet packages are targeting .NET Framework only. This is because WiX does not support integration with any other .NET flavours but .NET Framework only. 
-IMPORTANT: If you are building WixSharp with WiX4+ tools, you need to have .NET SDK installed in your build environment (not .NET Framework SDK). This is because the WiX method for installing the WiX compiler is via `dotnet tool`. WixSharp fully adheres to this approach. Even though it provides a workaround for the absence of .NET SDK. 
+If you use WiX4+ stream, you need to install .NET SDK (not .NET Framework SDK) installed in your build environment. Visual Studio 2022 comes with .NET SDK already. The need for .NET SDK is dictated by the method WiX vendor distributes WiX compiler and its dependencies (via `dotnet tool`). WixSharp fully adheres to this approach. Even though it provides a workaround for the absence of .NET SDK.
+
+If you are planning to use Wix# on Linux, you may find this [article](https://github.com/oleg-shilo/wixsharp/wiki/WixSharp-on-Linux) useful. Please note that Wix# builds MSI deployment packages and while MSI can be built on Linux it cannot be run on Linux as MSI is a pure Windows technology.   
+
+Please note that WixSharp NuGet packages (for both WiX3 and WiX4) are targeting .NET Framework only. This is because WiX does not support integration with any other .NET flavours but .NET Framework only.
 
 You can find the instructions on how to author MSI setups with WixSharp in the [Documentation](https://github.com/oleg-shilo/wixsharp/wiki) section. And this section only highlights 
 some of the available features.
