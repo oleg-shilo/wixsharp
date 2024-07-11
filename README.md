@@ -26,13 +26,14 @@ the desired source code of a less manageable syntax (WiX). A "more manageable sy
 availability of more advanced tools.
 
 Wix# also removes the necessity to develop MSI sub-modules (Custom Actions) in a completely different language (e.g. C++) by allowing both the components and behaviour to be defined in the 
-same language (C#). This also allows homogeneous, simplified and more consistent source code structure.
+same language (C#). This also allows for a homogeneous, simplified, and more consistent source code structure.
 
 **_Overview_**
 
 If you are planning to use Wix# on Linux you may find this [article](https://github.com/oleg-shilo/wixsharp/wiki/WixSharp-on-Linux) useful. Please note that Wix# builds MSI deployment packages and while MSI can be built on Linux it cannot be run on Linux as MSI is a pure Windows technology.   
 
 Please note that WixSharp NuGet packages are targeting .NET Framework only. This is because WiX does not support integration with any other .NET flavours but .NET Framework only. 
+IMPORTANT: If you are building WixSharp with WiX4+ tools, you need to have .NET SDK installed in your build environment (not .NET Framework SDK). This is because the WiX method for installing the WiX compiler is via `dotnet tool`. WixSharp fully adheres to this approach. Even though it provides a workaround for the absence of .NET SDK. 
 
 You can find the instructions on how to author MSI setups with WixSharp in the [Documentation](https://github.com/oleg-shilo/wixsharp/wiki) section. And this section only highlights 
 some of the available features.
@@ -43,7 +44,7 @@ some of the available features.
 > _Alternatively you can install ["WixSharp Project Templates"](https://visualstudiogallery.msdn.microsoft.com/4e093ce7-be66-40ed-ab16-61a1186c530e) Visual Studio extension. Read more 
 about the Wix# VS templates [here](https://github.com/oleg-shilo/wixsharp/wiki/VS2013-%E2%80%93-2015-Templates)._
 
-Wix# allows a very simple and expressive deployment definition. This is an example of a simple Wix# script:
+Wix# allows a very simple and expressive definition of deployment. This is an example of a simple Wix# script:
 ```C#
 using System;
 using WixSharp;
