@@ -152,7 +152,7 @@ namespace WixSharp.UI.Forms
         {
             this.Parent.MaximumSize =
             this.Parent.MinimumSize =
-            this.Size = new Size(width, height);
+            this.Parent.Size = new Size(width, height);
         }
     }
 }
