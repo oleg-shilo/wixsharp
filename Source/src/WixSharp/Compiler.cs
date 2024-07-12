@@ -3618,7 +3618,7 @@ namespace WixSharp
                 if (file?.StartsWith("localtool:") == true)
                 {
                     var toolName = file.Split(':').Last();
-                    p.StartInfo.FileName = "dotnet.exe";
+                    p.StartInfo.FileName = WixTools.dotnet;
                     p.StartInfo.Arguments = $"{toolName} {args}";
                 }
                 else

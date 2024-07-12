@@ -230,6 +230,7 @@
     <Compile Include="Project.cs" />
     <Compile Include="Property.cs" />
     <Compile Include="Utilities\XmlAttribute.cs" />
+    <Compile Include="Utilities\WixTools.cs" />
     <Compile Include="XmlFile.cs" />
     <Compile Include="Utilities\XmlMapping.cs" />
     <EmbeddedResource Include="Nsis\macros.nsh" />

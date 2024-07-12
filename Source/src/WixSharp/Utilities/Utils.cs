@@ -2,11 +2,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Text;
+using WixSharp.UI;
 using WixToolset.Dtf.WindowsInstaller;
+
+using IO = System.IO;
 
 #pragma warning disable CA1416 // Validate platform compatibility
 
@@ -49,6 +55,160 @@ namespace WixSharp
         public WixItems(IEnumerable<WixObject> items)
         {
             Items = items;
+        }
+    }
+
+    /// <summary>
+    /// Utility for generating self-hosted MSI executables.Such a tool is a simple launcher of the
+    /// msiexec.exe with the embedded (as an exe resource) msi file.
+    /// </summary>
+    public static class ExeGen
+    {
+        /// <summary>Comples the self hosted msi.</summary>
+        /// <param name="msiFile">The msi file.</param>
+        /// <param name="outFile">The out file.</param>
+        /// <returns>
+        /// </returns>
+        public static (int exitCode, string output) CompleSelfHostedMsi(this string msiFile, string outFile)
+        {
+            var parser = new MsiParser(msiFile);
+            var csc = LocateCsc();
+
+            var name = parser.GetProductName();
+            var version = parser.GetProductVersion();
+            var productCode = parser.GetProductCode();
+
+            var csFile = GenerateCSharpSource(Path.GetTempPath().PathCombine(msiFile.PathGetFileName()), name, version, productCode);
+
+            try
+            {
+                // return csc.Run($"\"/res:{msiFile}\" \"-out:{outFile}\" /t:winexe /debug+ /define:DEBUG \"{csFile}\"", Path.GetDirectoryName(outFile));
+                return csc.Run($"\"/res:{msiFile}\" \"-out:{outFile}\" /t:winexe \"{csFile}\"", Path.GetDirectoryName(outFile));
+            }
+            finally
+            {
+                IO.File.Delete(csFile);
+            }
+        }
+
+        static string LocateCsc() =>
+            Directory.GetFiles(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), @"Microsoft.NET\Framework"), "csc.exe", SearchOption.AllDirectories)
+                .OrderByDescending(x => x)
+                .FirstOrDefault();
+
+        static string GenerateCSharpSource(string outFile, string name, string version, string productCode)
+        {
+            var code = @"
+using System;
+using System.Resources;
+using System.IO;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Reflection;
+
+[assembly: AssemblyTitle(""" + outFile.PathGetFileName() + @""")]
+[assembly: AssemblyDescription(""Self-hosted " + outFile.PathGetFileNameWithoutExtension() + @".msi"")]
+[assembly: AssemblyConfiguration("""")]
+[assembly: AssemblyCompany(""WixSharp"")]
+[assembly: AssemblyProduct(""" + name + @""")]
+[assembly: AssemblyCopyright("""")]
+[assembly: AssemblyTrademark("""")]
+[assembly: AssemblyCulture("""")]
+[assembly: AssemblyVersion(""" + version + @""")]
+[assembly: AssemblyFileVersion(""" + version + @""")]
+class Program
+{
+    static int Main(string[] args)
+    {
+        // Debug.Assert(false);
+
+        // string msi = GetMsiCacheName();
+        string msi = Path.GetTempFileName();
+        try
+        {
+            ExtractMsi(msi);
+            string msi_args = args.Any() ? string.Join("" "", args) : ""/i"";
+
+            Process p = Process.Start(""msiexec.exe"", msi_args + "" \"""" + msi + ""\"""");
+            p.WaitForExit();
+            return p.ExitCode;
+        }
+        catch (Exception)
+        {
+            // report the error
+            return -1;
+        }
+        finally
+        {
+            File.Delete(msi);
+        }
+    }
+
+    static string GetMsiCacheName()
+    {
+        var p = new System.Security.Principal.WindowsPrincipal(System.Security.Principal.WindowsIdentity.GetCurrent());
+        var admin = p.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+
+        var dir = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ""WixSharp"", ""Installer"", """ + productCode + @""");
+        if (admin)
+            dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), ""Installer"", """ + productCode + @""");
+
+        Directory.CreateDirectory(dir);
+        var msi = Path.Combine(dir, """ + name + @".msi"");
+
+        File.WriteAllText(Path.Combine(dir, ""wixsharp.cache""), """");
+        return msi;
+    }
+
+    static void ExtractMsi(string outFile)
+    {
+        Assembly asm = Assembly.GetExecutingAssembly();
+
+        var names = asm.GetManifestResourceNames();
+        using (Stream stream = asm.GetManifestResourceStream(names.First()))
+
+        {
+            if (stream != null)
+            {
+                byte[] resourceBytes = new byte[stream.Length];
+                stream.Read(resourceBytes, 0, resourceBytes.Length);
+
+                File.WriteAllBytes(outFile, resourceBytes);
+            }
+            else
+            {
+                Console.WriteLine(""Resource not found."");
+            }
+        }
+    }
+}";
+            IO.File.WriteAllText(outFile, code);
+            return outFile;
+        }
+
+        static (int exitCode, string output) Run(this string exe, string arguments, string workingDir)
+        {
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = exe;
+                process.StartInfo.Arguments = arguments;
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.WorkingDirectory = workingDir;
+                process.StartInfo.CreateNoWindow = true;
+                process.Start();
+
+                var output = new StringBuilder();
+
+                output.AppendLine(process.StandardOutput.ReadToEnd());
+                output.AppendLine(process.StandardError.ReadToEnd());
+
+                process.WaitForExit();
+                return (process.ExitCode, output.ToString());
+            }
         }
     }
 
