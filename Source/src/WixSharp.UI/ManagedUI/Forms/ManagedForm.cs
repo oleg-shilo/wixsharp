@@ -150,9 +150,9 @@ namespace WixSharp.UI.Forms
         /// <param name="height">The height.</param>
         public void SetShellSize(int width, int height)
         {
-            this.MaximumSize =
-            this.MinimumSize =
-            this.Size = new Size(width, height);
+            this.Parent.MaximumSize =
+            this.Parent.MinimumSize =
+            this.Parent.Size = new Size(width, height);
         }
     }
 }
