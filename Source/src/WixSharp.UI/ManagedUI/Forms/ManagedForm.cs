@@ -1,6 +1,6 @@
-using Microsoft.Deployment.WindowsInstaller;
 using System.Drawing;
 using System.Windows.Forms;
+using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 
 namespace WixSharp.UI.Forms
@@ -150,8 +150,8 @@ namespace WixSharp.UI.Forms
         /// <param name="height">The height.</param>
         public void SetShellSize(int width, int height)
         {
-            this.MaximumSize =
-            this.MinimumSize =
+            this.Parent.MaximumSize =
+            this.Parent.MinimumSize =
             this.Size = new Size(width, height);
         }
     }
