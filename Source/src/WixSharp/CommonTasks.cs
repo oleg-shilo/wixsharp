@@ -1087,6 +1087,37 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Adds the reference assemblies of a `Type` (typically from the custom action assembly) to the MSI project.
+        /// <p>Every managed CA requires its dependency assemblies to be referenced via
+        /// <see cref="WixSharp.ManagedAction.RefAssemblies"/>. This method is a convenient way to add all the
+        /// dependencies automatically. It analyzes the CA assembly dependencies and adds them to the
+        /// CA binary that is packaged with "WixToolset.Dtf.MakeSfxCA.exe".
+        /// </p>
+        /// <p>Note, this method may unnecessarily increase the size of the msi as not all CA dependency assemblies
+        /// may be required at runtime (during the installation).</p>
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="type">The Type from the managed CA.</param>
+        public static void AddCustomActionRefAssembliesOf(this Project project, Type type)
+        {
+            var dependencies = type.Assembly
+                .GetReferencedAssemblies()
+                .Where(x => !x.Name.StartsWith("System"))
+                .Select(x =>
+                {
+                    try
+                    {
+                        return System.Reflection.Assembly.Load(x).Location;
+                    }
+                    catch { return null; }
+                })
+                .Where(x => x.IsNotEmpty() && !x.StartsWith(Environment.SpecialFolder.Windows.GetPath(), true))
+                .ToArray();
+
+            project.DefaultRefAssemblies.AddRange(dependencies);
+        }
+
+        /// <summary>
         /// Sets the Project version from the file version of the file specified by it's ID.
         /// <para>This method sets project WixSourceGenerated event handler and injects
         /// "!(bind.FileVersion.&lt;file ID&gt;" into the XML Product's Version attribute.</para>

@@ -3417,7 +3417,6 @@ namespace WixSharp
                         (pdbFileArgument ?? " ") +
                         referencedAssemblies;
 
-            // makeSfxCA_args += $" \"{dtfWinInstaller}\" \"{wixToolsetMbaCore}\"";
             makeSfxCA_args += $" \"{dtfWinInstaller}\"";
 
             ProjectValidator.ValidateCAAssembly(asmFile);
