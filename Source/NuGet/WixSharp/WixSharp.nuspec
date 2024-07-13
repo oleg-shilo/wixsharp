@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>2.2.0.0</version>
+    <version>2.3.0.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,13 +18,21 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.2.0.0
-</releaseNotes>
+    <releaseNotes>Release v2.3.0.0
+- #1580 Shortcut "Target" produces unexpected results for many supported WiX environment constants
+- #1574: Cannot build .net 8 example project (NET-Core)
+- #1546: dotnet tool install --global wix - Need for all users
+- #1585:  Dotnet tool should not be relied on for wixsharp.   Added error logging on `dotnet` or `wix` not found.
+- Added error log for failure to find WiX extension. Triggered by #1574, #1589
+- Improved the documentation for `AutoElements` and `Compiler.AutoGeneration` (triggered by #1578)
+- #7591: added WiX5 Custom BA sample (`&lt;wixsharp&gt;\Source\src\WixSharp.Samples\Wix# Samples\Bootstrapper\WiX5-Spike\WixToolset.WixBA`)
+- added missing SilentBA for `WixSharp.Core`
+- fixed problem with `SetShellSize` not setting the top level window size</releaseNotes>
     <copyright>Copyright (C) 2008-2022 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="2.2.0.0" />
+      <dependency id="WixSharp.bin" version="2.3.0.0" />
     </dependencies>
   </metadata>
   <files>

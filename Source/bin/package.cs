@@ -31,11 +31,11 @@ class app
                 .LastOrDefault();
 
             Console.WriteLine($"Last Release: {lastRelease}");
+            Console.WriteLine("Edit Release Notes and close the editor to continue packaging!");
 
             File.AppendAllLines(releaseNotes, new[] { $"Release v{version}" });
             run("git", $"log --pretty=format:'%s' v{lastRelease}..HEAD", line => File.AppendAllLines(releaseNotes, new[] { line }));
-            Task.Run(() => run("notepad", releaseNotes));
-            Thread.Sleep(1000);
+            run("notepad", releaseNotes);
         }
 
         Console.WriteLine("---");

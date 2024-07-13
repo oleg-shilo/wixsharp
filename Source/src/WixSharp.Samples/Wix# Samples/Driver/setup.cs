@@ -14,6 +14,8 @@ class Script
 {
     static void Main()
     {
+        WixTools.SetWixVersion(Environment.CurrentDirectory, "4.0.2");
+
         // As of 22 Jul 2023
         // `Driver` support in WiX4 is somewhat incomplete.
         // The sample can build but it may fail during the install.

@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageVersion>2.2.0</PackageVersion>
+    <PackageVersion>2.3.0</PackageVersion>
     <Title>WixSharp (.NET Core)</Title>
     <Description>.NET Core edition of WixSharp package</Description>
     <Copyright>Oleg Shilo</Copyright>
@@ -199,7 +199,7 @@
     <Compile Include="..\..\WixSharp\WixProject.cs" Link="WixProject.cs" />
     <Compile Include="..\..\WixSharp\WixQuietExec.cs" Link="WixQuietExec.cs" />
     <Compile Include="..\..\WixSharp\XmlFile.cs" Link="XmlFile.cs" />
-
+    <Compile Include="..\..\WixSharp\Utilities\WixTools.cs" Link="Utilities\WixTools.cs" />
     <Compile Include="..\..\WixSharp\Utilities\Utils.cs" Link="Utils.cs" />
     <Compile Include="..\..\WixSharp\Utilities\XmlMapping.cs" Link="XmlMapping.cs" />
     <Compile Include="..\..\WixSharp\Utilities\XmlAttribute.cs" Link="XmlAttribute.cs" />
