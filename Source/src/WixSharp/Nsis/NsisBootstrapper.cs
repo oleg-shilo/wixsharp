@@ -233,9 +233,8 @@ namespace WixSharp.Nsis
                 writer.WriteLine("SectionEnd");
             }
 
-            NsiSourceGenerated?.Invoke(builder);
-
             IO.File.WriteAllText(nsiFile, builder.ToString());
+            NsiSourceGenerated?.Invoke(builder);
 
             var output = ExecuteNsisMake(nsisMake, $"/INPUTCHARSET UTF8 {nsiFile} {OptionalArguments}");
             if (!string.IsNullOrEmpty(output))
