@@ -37,6 +37,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using WixSharp.Bootstrapper;
@@ -129,6 +130,16 @@ namespace WixSharp
         /// Force Component ID uniqueness.
         /// </summary>
         public bool ForceComponentIdUniqueness = false;
+
+        /// <summary>
+        /// The option for adding managed custom action dependencies automatically.
+        /// <p> This option is a convenient way to add all the dependencies automatically setting them manually. 
+        /// The compiler analyzes the CA assembly dependencies and adds them to the CA binary that is packaged 
+        /// with "WixToolset.Dtf.MakeSfxCA.exe". </p>
+        /// <p>Note, this method may unnecessarily increase the size of the msi as not all CA dependency assemblies
+        /// may be required at runtime (during the installation).</p>
+        /// </summary>
+        public bool AddManagedCustomActionDependencies = false;
 
         /// <summary>
         /// Remove media if no files are included
@@ -3318,6 +3329,42 @@ namespace WixSharp
                 asmFile = clientAsmPath;
 
             var requiredAsms = new List<string>(refAssemblies);
+
+
+            if (Compiler.AutoGeneration.AddManagedCustomActionDependencies)
+            {
+#if !NETCORE
+                string[] dependencies = (string[])Utils.ExecuteInTempDomain<AsmReflector>(asmReflector => asmReflector.GetRefAssemblies(asmFile));
+
+                // dependencies are loaded in the temp domain and their location may not be original (preferred). IE in the temp folder
+                // so we need to resolve them to the original locations if possible
+                var localAssemblies = AppDomain.CurrentDomain.GetAssemblies()
+                                               .Select(x =>
+                                               {
+                                                   try
+                                                   {
+                                                       return x.Location;
+                                                   }
+                                                   catch
+                                                   {
+                                                       return null;
+                                                   }
+                                               })
+                                               .Where(x => x.IsNotEmpty());
+
+                for (int i = 0; i < dependencies.Length; i++)
+                {
+                    var localAsmPath = localAssemblies.Where(x => x.PathGetFileName() == dependencies[i].PathGetFileName()).FirstOrDefault();
+                    if (localAsmPath != null)
+                        dependencies[i] = localAsmPath;
+                }
+
+                dependencies.Where(x => !requiredAsms.Contains(x))
+                            .ForEach(x => requiredAsms.Add(x));
+#else
+                throw new NotImplementedException($"The option {nameof(Compiler.AutoGeneration.AddManagedCustomActionDependencies)} is not implemented on .NET Core");
+#endif
+            }
 
             if (refAssemblies.Any(x => x.PathGetFileName() == "WixSharp.UI.dll") &&
                 !refAssemblies.Any(x => x.PathGetFileName() == "WixToolset.Mba.Core.dll"))

@@ -41,6 +41,34 @@ namespace WixSharp
 
     static class ReflectionExtensions
     {
+        public static string[] GetRefAssembliesOf(string assembly)
+        {
+            try
+            {
+                return GetRefAssemblies(System.Reflection.Assembly.LoadFrom(assembly));
+            }
+            catch { return new string[0]; }
+        }
+
+        public static string[] GetRefAssemblies(this System.Reflection.Assembly assembly)
+        {
+            var dependencies = assembly
+                .GetReferencedAssemblies()
+                .Where(x => !x.Name.StartsWith("System"))
+                .Select(x =>
+                {
+                    try
+                    {
+                        return System.Reflection.Assembly.ReflectionOnlyLoad(x.FullName).Location;
+                    }
+                    catch { return null; }
+                })
+                .Where(x => x.IsNotEmpty() && !x.StartsWith(Environment.SpecialFolder.Windows.GetPath(), true))
+                .ToArray();
+
+            return dependencies;
+        }
+
         public static object Call(this MethodInfo method, params object[] args)
         {
             object instance = method.IsStatic ? null : Activator.CreateInstance(method.DeclaringType);

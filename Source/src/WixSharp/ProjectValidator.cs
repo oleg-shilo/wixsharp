@@ -237,6 +237,11 @@ namespace WixSharp
             return valid;
         }
 
+        public string[] GetRefAssemblies(string file)
+        {
+            return ReflectionExtensions.GetRefAssembliesOf(file);
+        }
+
         public void ValidateCAAssembly(string file, string dtfAsm)
         {
             // `ValidateCAAssemblyImpl` will load assembly from `file` for validation. Though for this to happen

@@ -1100,19 +1100,7 @@ namespace WixSharp.CommonTasks
         /// <param name="type">The Type from the managed CA.</param>
         public static void AddCustomActionRefAssembliesOf(this Project project, Type type)
         {
-            var dependencies = type.Assembly
-                .GetReferencedAssemblies()
-                .Where(x => !x.Name.StartsWith("System"))
-                .Select(x =>
-                {
-                    try
-                    {
-                        return System.Reflection.Assembly.Load(x).Location;
-                    }
-                    catch { return null; }
-                })
-                .Where(x => x.IsNotEmpty() && !x.StartsWith(Environment.SpecialFolder.Windows.GetPath(), true))
-                .ToArray();
+            var dependencies = type.Assembly.GetRefAssemblies();
 
             project.DefaultRefAssemblies.AddRange(dependencies);
         }
@@ -2020,6 +2008,7 @@ namespace WixSharp.CommonTasks
         /// </summary>
         /// <param name="project">The project.</param>
         /// <returns></returns>
+        [Obsolete("This method is obsolete. Use `project.AfterInstallEventExecution = EventExecution.MsiSessionScopeImmediate;` instead")]
         public static ManagedProject UnelevateAfterInstallEvent(this ManagedProject project)
         {
             project.WixSourceGenerated +=
