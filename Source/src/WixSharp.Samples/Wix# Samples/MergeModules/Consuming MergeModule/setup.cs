@@ -26,7 +26,7 @@ class Script
                 new Project("MyMergeModuleSetup",
                     new MediaTemplate { CompressionLevel = CompressionLevel.none, EmbedCab = false },
                     new Dir(@"%ProgramFiles%\My Company",
-                        // new File(featureA, @"Files\MainFile.txt"),
+                        new File(featureA, @"Files\MainFile.txt"),
                         new Merge(featureB, @"Files\MyMergeModule.msm"),
                         new Merge(featureB, @"Files\MyMergeModule1.msm")),
                     new EnvironmentVariable("foo", "bar"));
