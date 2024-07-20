@@ -2,6 +2,8 @@
 //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
+using System.Linq;
+
 // using System.IO;
 using System.Windows.Forms;
 using WixSharp;
@@ -40,8 +42,6 @@ class Script
         project.UI = WUI.WixUI_FeatureTree;
 
         project.DefaultFeature = binaries; //this line is optional
-                                           project.UnelevateAfterInstallEvent();
-
 
         project.DefaultDeferredProperties += ",FEATURE_INSTALL_PATH2";
         project.AfterInstall += (SetupEventArgs e) =>
@@ -56,7 +56,7 @@ class Script
             }
         };
 
-
+        project.AddCustomActionRefAssembliesOf(typeof(Script));
 
         // project.PreserveTempFiles = true;
 
