@@ -3677,7 +3677,7 @@ namespace WixSharp
 
     /// <summary>
     /// </summary>
-    static class SystemExtensions
+    public static class SystemExtensions
     {
         /// <summary>
         /// Converts semantic version to <see cref="System.Version"/>.

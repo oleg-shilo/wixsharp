@@ -41,8 +41,22 @@ namespace WixSharp.CommonTasks
     public static class WixTools
     {
         static internal string NuGetDir => Environment.GetEnvironmentVariable("NUGET_PACKAGES") ?? @"%userprofile%\.nuget\packages".ExpandEnvVars();
-        static internal string WixSharpToolDir => @"%userprofile%\.wix\.wixsharp".ExpandEnvVars();
-        static internal string WixExtensionsDir => @"%userprofile%\.wix\extensions".ExpandEnvVars();
+
+        /// <summary>
+        /// Gets or sets the WiX sharp tool dir.
+        /// </summary>
+        /// <value>
+        /// The WiX sharp tool dir.
+        /// </value>
+        static public string WixSharpToolDir { set; get; } = @"%userprofile%\.wix\.wixsharp".ExpandEnvVars();
+
+        /// <summary>
+        /// Gets or sets the WiX extensions dir.
+        /// </summary>
+        /// <value>
+        /// The WiX extensions dir.
+        /// </value>
+        static public string WixExtensionsDir { set; get; } = @"%userprofile%\.wix\extensions".ExpandEnvVars();
 
         static string PackageDir(string name)
             => Directory.GetDirectories(NuGetDir.PathCombine(name))
@@ -296,12 +310,18 @@ namespace WixSharp.CommonTasks
             return (version == highestVersion);
         }
 
-        internal static string FindWixExtensionDll(string name, string version = null)
+        /// <summary>
+        /// Finds the WiX extension DLL in the <see cref="WixExtensionsDir"/>.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="version">The version.</param>
+        /// <returns></returns>
+        static public string FindWixExtensionDll(string name, string version = null)
         {
             // C:\Users\user\.wix\extensions\WixToolset.UI.wixext\5.0.0\wixext5\WixToolset.UI.wixext.dll
             // C:\Users\user\.wix\extensions\WixToolset.UI.wixext\4.0.4\wixext4\WixToolset.UI.wixext.dll
-            // C:\Users\oleg\.wix\extensions\WixToolset.Bal.wixext\4.0.2\wixext4\WixToolset.Bal.wixext.dll
-            // C:\Users\oleg\.wix\extensions\WixToolset.Bal.wixext\5.0.0\wixext5\WixToolset.BootstrapperApplications.wixext.dll
+            // C:\Users\user\.wix\extensions\WixToolset.Bal.wixext\4.0.2\wixext4\WixToolset.Bal.wixext.dll
+            // C:\Users\user\.wix\extensions\WixToolset.Bal.wixext\5.0.0\wixext5\WixToolset.BootstrapperApplications.wixext.dll
 
             var candidates = Directory
                              .GetDirectories(WixExtensionsDir.PathCombine(name))
