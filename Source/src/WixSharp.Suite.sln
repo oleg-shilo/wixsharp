@@ -239,6 +239,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InstallEventElevation", "Wi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixSharp.MsiEventHost", "WixSharp.MsiEventHost\WixSharp.MsiEventHost.csproj", "{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testpad", "WixSharp.Samples\Wix# Samples\testpad\testpad.csproj", "{33B0F443-DE35-44E9-848A-42ECF653D782}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1007,6 +1009,14 @@ Global
 		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Release|x86.ActiveCfg = Release|Any CPU
 		{F9EF797E-5423-4A9E-A697-01E4F48A3E4F}.Release|x86.Build.0 = Release|Any CPU
+		{33B0F443-DE35-44E9-848A-42ECF653D782}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33B0F443-DE35-44E9-848A-42ECF653D782}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33B0F443-DE35-44E9-848A-42ECF653D782}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{33B0F443-DE35-44E9-848A-42ECF653D782}.Debug|x86.Build.0 = Debug|Any CPU
+		{33B0F443-DE35-44E9-848A-42ECF653D782}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33B0F443-DE35-44E9-848A-42ECF653D782}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33B0F443-DE35-44E9-848A-42ECF653D782}.Release|x86.ActiveCfg = Release|Any CPU
+		{33B0F443-DE35-44E9-848A-42ECF653D782}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1107,6 +1117,7 @@ Global
 		{BBAA7E0F-CAC0-4D7B-BCE9-4C5A5C585BD9} = {B8FA0F17-1C07-4511-9FFA-3AD69B36B16C}
 		{B8FA0F17-1C07-4511-9FFA-3AD69B36B16C} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
 		{A88C3698-8BD1-49C1-999C-020B5E9312E1} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
+		{33B0F443-DE35-44E9-848A-42ECF653D782} = {DB40BEF1-64CF-4308-9740-AF22284F4491}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {559711D5-4429-4577-BBC9-F0D973972079}
