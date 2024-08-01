@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="4.0.2" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup>

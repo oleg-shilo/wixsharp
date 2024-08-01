@@ -324,11 +324,13 @@ namespace WixSharp.CommonTasks
 
         static string FindWixExtensionDll(string extensionDir, string name, string version)
         {
+            if (!extensionDir.PathCombine(name).PathExists())
+                return null;
+
             // C:\Users\user\.wix\extensions\WixToolset.UI.wixext\5.0.0\wixext5\WixToolset.UI.wixext.dll
             // C:\Users\user\.wix\extensions\WixToolset.UI.wixext\4.0.4\wixext4\WixToolset.UI.wixext.dll
             // C:\Users\user\.wix\extensions\WixToolset.Bal.wixext\4.0.2\wixext4\WixToolset.Bal.wixext.dll
             // C:\Users\user\.wix\extensions\WixToolset.Bal.wixext\5.0.0\wixext5\WixToolset.BootstrapperApplications.wixext.dll
-
             var candidates = Directory
                              .GetDirectories(extensionDir.PathCombine(name))
                              .Select(x => new
