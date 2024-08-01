@@ -318,13 +318,19 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public string FindWixExtensionDll(string name, string version = null)
         {
+            return FindWixExtensionDll(WixExtensionsDir, name, version) ?? // the extension is installed with the wix.exe
+                   FindWixExtensionDll(NuGetDir, name, version);           // the extension is installed as a nuget package
+        }
+
+        static string FindWixExtensionDll(string extensionDir, string name, string version)
+        {
             // C:\Users\user\.wix\extensions\WixToolset.UI.wixext\5.0.0\wixext5\WixToolset.UI.wixext.dll
             // C:\Users\user\.wix\extensions\WixToolset.UI.wixext\4.0.4\wixext4\WixToolset.UI.wixext.dll
             // C:\Users\user\.wix\extensions\WixToolset.Bal.wixext\4.0.2\wixext4\WixToolset.Bal.wixext.dll
             // C:\Users\user\.wix\extensions\WixToolset.Bal.wixext\5.0.0\wixext5\WixToolset.BootstrapperApplications.wixext.dll
 
             var candidates = Directory
-                             .GetDirectories(WixExtensionsDir.PathCombine(name))
+                             .GetDirectories(extensionDir.PathCombine(name))
                              .Select(x => new
                              {
                                  version = x.PathGetFileName().SemanticVersionToVersion(),
