@@ -28,6 +28,8 @@ class Script
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.WPF.nuspec", releaseNotes, version.ToString());
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.bin.nuspec", releaseNotes, version.ToString());
 
+        UpdatePublish(root + @"\NuGet\WixSharp\publish.cmd", version);
+
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.MsiEventHost.exe", "lib");
         CopyFiles(root + @"\bin\WixSharp", "nbsbuilder.exe", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.dll", "lib");
@@ -74,6 +76,13 @@ class Script
         }
         else
             Console.WriteLine("===\ndll versions: \n" + string.Join('\n', versions));
+    }
+
+    static void UpdatePublish(string batchFile, string version)
+    {
+        var lines = File.ReadAllLines(batchFile).Skip(1).ToList();
+        lines.Insert(0, $"set ver={version}");
+        File.WriteAllLines(batchFile, lines.ToArray());
     }
 
     static string ValidateReleaseNotes(string version)
