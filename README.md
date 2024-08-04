@@ -9,23 +9,23 @@
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.cs-script.net/cs-script/Donation.html)
 
 
-# Wix# (WixSharp) - managed interface for WiX
+# WixSharp (WixSharp) - managed interface for WiX
 
 **_Framework for building a complete MSI or WiX source code by using script files written with the C# syntax._**
 
-_In July 2014 Wix# was migrated to CodePlex [Wix#](https://wixsharp.codeplex.com/) and re-released under MIT license. It was subsequently migrated from CodePlex to GitHub. You can still find old releases and some useful content from the past discussions on CodePlex._
+_In July 2014 WixSharp was migrated to CodePlex [WixSharp](https://wixsharp.codeplex.com/) and re-released under MIT license. It was subsequently migrated from CodePlex to GitHub. You can still find old releases and some useful content from the past discussions on CodePlex._
 
 ## Project Description
 
-Wix# (WixSharp) is a member of the [CS-Script](https://www.cs-script.net/) family. Wix# allows building a complete MSI or WiX source code by executing script files written with 
-the plain C# syntax. Wix# engine uses a C# class structure to mimic WiX entities and their relationships to produce a valid deployment model.
+WixSharp is a member of the [CS-Script](https://www.cs-script.net/) family. WixSharp allows building a complete MSI or WiX source code by executing script files written with 
+the plain C# syntax. WixSharp engine uses a C# class structure to mimic WiX entities and their relationships to produce a valid deployment model.
 
-Wix# answers many MSI authoring challenges. It solves the common MSI/WiX authoring limitations in a very elegant yet unorthodox way. Wix# follows the steps of other 
+WixSharp answers many MSI authoring challenges. It solves the common MSI/WiX authoring limitations in a very elegant yet unorthodox way. WixSharp follows the steps of other 
 [transcompilers](http://en.wikipedia.org/wiki/Source-to-source_compiler) like Script#, CoffeeScript or GWT by using source code of a more manageable syntax (C# in this case) to produce 
 the desired source code of a less manageable syntax (WiX). A "more manageable syntax" in this context means less verbose and more readable code, better compile-time error checking and 
 availability of more advanced tools.
 
-Wix# also removes the necessity to develop MSI sub-modules (Custom Actions) in a completely different language (e.g. C++) by allowing both the components and behaviour to be defined in the 
+WixSharp also removes the necessity to develop MSI sub-modules (Custom Actions) in a completely different language (e.g. C++) by allowing both the components and behaviour to be defined in the 
 same language (C#). This also allows for a homogeneous, simplified, and more consistent source code structure.
 
 **_Overview_**
@@ -34,20 +34,19 @@ _NOTE: WixSharp releases come in two streams: Releases v1.* use the WiX3 toolset
 
 If you use WiX4+ stream, you need to install .NET SDK (not .NET Framework SDK) installed in your build environment. Visual Studio 2022 comes with .NET SDK already. The need for .NET SDK is dictated by the method WiX vendor distributes WiX compiler and its dependencies (via `dotnet tool`). WixSharp fully adheres to this approach. Even though it provides a workaround for the absence of .NET SDK.
 
-If you are planning to use Wix# on Linux, you may find this [article](https://github.com/oleg-shilo/wixsharp/wiki/WixSharp-on-Linux) useful. Please note that Wix# builds MSI deployment packages and while MSI can be built on Linux it cannot be run on Linux as MSI is a pure Windows technology.   
+If you are planning to use WixSharp on Linux, you may find this [article](https://github.com/oleg-shilo/wixsharp/wiki/WixSharp-on-Linux) useful. Please note that WixSharp builds MSI deployment packages and while MSI can be built on Linux it cannot be run on Linux as MSI is a pure Windows technology.   
 
 Please note that WixSharp NuGet packages (for both WiX3 and WiX4) are targeting .NET Framework only. This is because WiX does not support integration with any other .NET flavours but .NET Framework only.
 
 You can find the instructions on how to author MSI setups with WixSharp in the [Documentation](https://github.com/oleg-shilo/wixsharp/wiki) section. And this section only highlights 
 some of the available features.
 
-> _You can use Visual Studio console application project and NuGet package as the starting point._
-![image](https://github.com/oleg-shilo/wixsharp/raw/master/Documentation/wiki_images/nuget.png)
+> _If you prefer a manual approach you can use the Visual Studio console application project and NuGet package as the starting point._
+![image](https://github.com/oleg-shilo/wixsharp/raw/master/Documentation/wiki_images/nuget.png) <br>
+_However a simpler approach is to use Visual Studio WixSharp Project Template [extension](https://marketplace.visualstudio.com/items?itemName=OlegShilo.WixSharpProjectTemplates). Read more 
+about the WixSharp VS templates [here](https://github.com/oleg-shilo/wixsharp/wiki/VS2019-%E2%80%93-2022-Templates)._
 
-> _Alternatively you can install ["WixSharp Project Templates"](https://visualstudiogallery.msdn.microsoft.com/4e093ce7-be66-40ed-ab16-61a1186c530e) Visual Studio extension. Read more 
-about the Wix# VS templates [here](https://github.com/oleg-shilo/wixsharp/wiki/VS2013-%E2%80%93-2015-Templates)._
-
-Wix# allows a very simple and expressive definition of deployment. This is an example of a simple Wix# script:
+WixSharp allows a very simple and expressive definition of deployment. This is an example of a simple WixSharp script:
 ```C#
 using System;
 using WixSharp;
@@ -67,7 +66,7 @@ class Script
     }
 }
 ```
-One of the most intriguing features of Wix# is the ability to define/implement managed Custom Actions directly in the script file:
+One of the most intriguing features of WixSharp is the ability to define/implement managed Custom Actions directly in the script file:
 ```C#
 using System;
 using System.Windows.Forms;
@@ -103,7 +102,7 @@ public class CustomActions
 Another important feature is the support for custom UI including WPF external UI:
 ![image](https://github.com/oleg-shilo/wixsharp/raw/master/Documentation/wiki_images/wpf_ui.png)
 
-The [Samples Folder](https://github.com/oleg-shilo/wixsharp/tree/master/Source/src/WixSharp.Samples/Wix%23%20Samples) an extensive collection of Wix# samples covering the following development scenarios:
+The [Samples Folder](https://github.com/oleg-shilo/wixsharp/tree/master/Source/src/WixSharp.Samples/Wix%23%20Samples) an extensive collection of WixSharp samples covering the following development scenarios:
 
 * Visual Studio integration including [NuGet](https://www.nuget.org/packages/WixSharp/) packages and VS2013/2015 [project templates extension](https://visualstudiogallery.msdn.microsoft.com/4e093ce7-be66-40ed-ab16-61a1186c530e)
 * Installing file(s) into Program Files directory
