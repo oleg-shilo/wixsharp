@@ -18,8 +18,6 @@ static class Script
 {
     static public void Main()
     {
-        var ttt = WixTools.FindWixExtensionDll("WixToolset.UI.wixext");
-        return;
         Feature poFeature = new Feature("PO", "PO", "INSTALLDIR");
 
         var project = new ManagedProject("My Product",

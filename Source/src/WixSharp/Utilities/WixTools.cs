@@ -44,6 +44,10 @@ namespace WixSharp.CommonTasks
 
         /// <summary>
         /// Gets or sets the WiX sharp tool dir.
+        /// <para>By default it points to <c>%userprofile%\.wix\.wixsharp</c> where the WiX tools (e.g. <c>WixToolset.Dtf.WindowsInstaller.dll</c>
+        /// are deployed. This setting should only be used if you cannot achieve the desired configuration with the default settings
+        /// or WixTools.* properties (e.g. WixTools.DtfWindowsInstaller).
+        /// </para>
         /// </summary>
         /// <value>
         /// The WiX sharp tool dir.
@@ -52,6 +56,11 @@ namespace WixSharp.CommonTasks
 
         /// <summary>
         /// Gets or sets the WiX extensions dir.
+        /// <para>By default it points to <c>%userprofile%\.wix\extensions</c> where all WiX extensions are deployed
+        /// by the WiX tool <c>wix.exe</c>. This setting is useful when you want to deploy WiX tools and extensions
+        /// manually (e.g. on CI). IE if you deployed WiX extension via NuGet manager then
+        /// <see cref="WixExtensionsDir"/> needs to be set to <c>%userprofile%\.nuget\packages</c>.
+        /// </para>
         /// </summary>
         /// <value>
         /// The WiX extensions dir.
