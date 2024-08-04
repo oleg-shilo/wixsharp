@@ -19,7 +19,7 @@ namespace $safeprojectname$
                     });
 
             bootstrapper.Version = new Version("1.0.0.0");
-			#warning "DON'T FORGET to replace this with a freshly generated GUID and remove this `#warning` statement."
+            #warning "DON'T FORGET to replace this with a freshly generated GUID and remove this `#warning` statement."
             bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25844b");
 
             bootstrapper.Application = new ManagedBootstrapperApplication("%this%");

@@ -120,6 +120,7 @@ namespace $safeprojectname$.Dialogs
                     {
                         try
                         {
+                            // see Discussion: https://github.com/oleg-shilo/wixsharp/discussions/1504
                             //messageRecord[0] - is reserved for FormatString value
 
                             string message = null;

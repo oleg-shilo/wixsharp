@@ -12,8 +12,8 @@ namespace $safeprojectname$
             var project = new ManagedProject("MyProduct",
                               new Dir(@"%ProgramFiles%\My Company\My Product",
                                   new File("Program.cs")));
-								  
-			#warning "DON'T FORGET to replace this with a freshly generated GUID and remove this `#warning` statement."
+
+#warning "DON'T FORGET to replace this with a freshly generated GUID and remove this `#warning` statement."
             project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
 
             // project.ManagedUI = ManagedUI.DefaultWpf; // all stock UI dialogs

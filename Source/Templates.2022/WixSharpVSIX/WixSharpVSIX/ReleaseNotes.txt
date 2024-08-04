@@ -1,3 +1,6 @@
+v2.2.7
+- added warning/remainder about updating project GUID
+
 v2.2.0
 - #1429: Transparent Background for ManagedUI.WPF Dialog-Banner TextBlock Controls 
 - #1387: Cannot update to latest Caliburn.Micro
