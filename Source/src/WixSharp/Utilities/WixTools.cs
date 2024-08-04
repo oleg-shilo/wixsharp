@@ -196,8 +196,6 @@ namespace WixSharp.CommonTasks
             }
         }
 
-        static string wixToolsetMbaPrereq;
-
         /// <summary>
         /// The location of x64 version of `SfxCA.dll`.
         /// </summary>
