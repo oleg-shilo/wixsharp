@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>2.3.1.0</version>
+    <version>2.3.2.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,18 +18,13 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.3.1.0
-- #1574: Cannot build .net 8 example project
-- #1587 Support for pulling in dlls for runtime dependencies       
-- VSTemplates update. Added warning message about `project.GUID`. Triggered by #1597   Contributed by @fredemmott
-- Added errorhandling to continue extecution if WiX extension is not install. The error will still be reported by the WiX compiler
-- Added `Project.AddCastomActionRefAssembliesOf` to add CA referenced assemblies programmatically.
-</releaseNotes>
+    <releaseNotes>Release v2.3.2.0
+ Issue #1606: Incorrect FirewallException.IcmpTypesAndCodes property type</releaseNotes>
     <copyright>Copyright (C) 2008-2022 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="2.3.1.0" />
+      <dependency id="WixSharp.bin" version="2.3.2.0" />
     </dependencies>
   </metadata>
   <files>

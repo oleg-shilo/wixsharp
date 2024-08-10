@@ -14,21 +14,21 @@ class Script
         var version = Directory.GetFiles(root + @"\bin", "WixSharp.*.*.*.*.7z", SearchOption.TopDirectoryOnly)
                                .Select(x => new Version(Path.GetFileName(x).Replace("WixSharp.", "").Replace(".7z", "")))
                                .OrderByDescending(x => x)
-                               .FirstOrDefault();
+                               .FirstOrDefault()?.ToString();
 
         Console.WriteLine("Version: " + version);
 
-        string releaseNotes = ValidateReleaseNotes(version.ToString());
+        string releaseNotes = ValidateReleaseNotes(version);
 
-        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.nuspec", releaseNotes, version.ToString());
-        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.WPF.nuspec", releaseNotes, version.ToString());
-        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.bin.nuspec", releaseNotes, version.ToString());
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.nuspec", releaseNotes, version);
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.WPF.nuspec", releaseNotes, version);
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.bin.nuspec", releaseNotes, version);
 
-        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.nuspec", releaseNotes, version.ToString());
-        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.WPF.nuspec", releaseNotes, version.ToString());
-        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.bin.nuspec", releaseNotes, version.ToString());
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.nuspec", releaseNotes, version);
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.WPF.nuspec", releaseNotes, version);
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.bin.nuspec", releaseNotes, version);
 
-        UpdatePublish(root + @"\NuGet\WixSharp\publish.cmd", version);
+        UpdatePublish(root + @"\NuGet\WixSharp\publish.cmd", string.Join(".", version.Split('.').Take(3)));
 
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.MsiEventHost.exe", "lib");
         CopyFiles(root + @"\bin\WixSharp", "nbsbuilder.exe", "lib");
