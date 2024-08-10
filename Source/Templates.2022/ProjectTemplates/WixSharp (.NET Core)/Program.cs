@@ -13,8 +13,7 @@ var project =
 
 // project.AddUIProject("$safeprojectname$.UI"); // name of the 'Custom UI Library' project in the solution
 
-#warning "DON'T FORGET to replace this with a freshly generated GUID and remove this `#warning` statement."
-project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
+project.GUID = new Guid("$guid1$");
 
 project.Load += (e) =>
 {

@@ -19,8 +19,7 @@ namespace $safeprojectname$
                     });
 
             bootstrapper.Version = new Version("1.0.0.0");
-            #warning "DON'T FORGET to replace this with a freshly generated GUID and remove this `#warning` statement."
-            bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25844b");
+            bootstrapper.UpgradeCode = new Guid("$guid1$");
 
             bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
 
@@ -33,7 +32,7 @@ namespace $safeprojectname$
                               new Dir(@"%ProgramFiles%\My Company\My Product",
                                   new File("Program.cs")));
 
-            project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
+            project.GUID = new Guid("$guid1$");
 
             return project.BuildMsi();
         }
