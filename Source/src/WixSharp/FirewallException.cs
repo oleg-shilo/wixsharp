@@ -195,7 +195,7 @@ namespace WixSharp
         /// ICMP types and codes for the firewall exception.
         /// </summary>
         [Xml]
-        public bool IcmpTypesAndCodes;
+        public string IcmpTypesAndCodes;
 
         /// <summary>
         /// Interface for the firewall exception.

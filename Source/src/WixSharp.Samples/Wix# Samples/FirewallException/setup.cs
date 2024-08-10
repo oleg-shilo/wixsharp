@@ -10,7 +10,7 @@ class Script
 {
     static public void Main()
     {
-        // set Wix 5.0 as a default WiX Toolset version        // set Wix 5.0 as a default WiX Toolset version
+        // set Wix 5.0 as a default WiX Toolset version
         WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.0");
 
         var project =
