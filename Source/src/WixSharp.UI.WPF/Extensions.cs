@@ -236,6 +236,17 @@ namespace WixSharp.UI.WPF
     /// <seealso cref="WixSharp.IManagedDialog" />
     public class WpfDialog : UserControl, IManagedDialog
     {
+        bool isLocalizationScheduled = false;
+
+        internal void ScheduleOnLoadLocalization()
+        {
+            if (!isLocalizationScheduled)
+            {
+                Loaded += (s, e) => Localize();
+                isLocalizationScheduled = true;
+            }
+        }
+
         string dialogTitle;
 
         /// <summary>
@@ -367,7 +378,7 @@ namespace WixSharp.UI.WPF
 
                 if (content is WpfDialog wpfDialog)
                 {
-                    wpfDialog.Localize();
+                    wpfDialog.ScheduleOnLoadLocalization();
                     this.Text = wpfDialog.DialogTitle;
                 }
                 this.Localize();
