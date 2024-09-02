@@ -26,6 +26,13 @@ namespace WixSharp.UI.Forms
             if (feature.View is TreeNode)
                 return (feature.View as TreeNode).Checked;
 
+            try
+            {
+                // can be a WPF TreeView custom node
+                return (bool)feature.View.GetType().GetProperty("Checked").GetValue(feature.View);
+            }
+            catch { }
+
             return false;
         }
 
