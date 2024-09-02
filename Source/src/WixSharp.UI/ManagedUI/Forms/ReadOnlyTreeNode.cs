@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
@@ -25,6 +26,13 @@ namespace WixSharp.UI.Forms
         {
             if (feature.View is TreeNode)
                 return (feature.View as TreeNode).Checked;
+
+            try
+            {
+                // can be a WPF TreeView custom node
+                return (bool)feature.View.GetType().GetProperty("Checked").GetValue(feature.View);
+            }
+            catch { }
 
             return false;
         }

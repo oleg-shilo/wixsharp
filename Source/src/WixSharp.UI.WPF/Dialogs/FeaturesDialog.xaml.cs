@@ -1,11 +1,11 @@
-﻿using Caliburn.Micro;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
+using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
 
@@ -48,8 +48,19 @@ namespace WixSharp.UI.WPF
         private bool @checked;
 
         public string Name { get; set; }
-        public ObservableCollection<Node> Nodes { get; set; } // with list and observable collection same results
-        public bool Checked { get => @checked; set { @checked = value; NotifyOfPropertyChange(() => Checked); } }
+        public ObservableCollection<Node> Nodes { get; set; } = new ObservableCollection<Node>();  // with list and observable collection same results
+
+        public bool Checked
+        {
+            get => @checked;
+            set
+            {
+                @checked = value;
+                NotifyOfPropertyChange(() => Checked);
+                Nodes.ForEach(x => x.Checked = value);
+            }
+        }
+
         public bool DefaultChecked { get; set; }
         public object Data { get; set; }
         public bool IsEditable { get; set; } = true;
@@ -176,7 +187,7 @@ namespace WixSharp.UI.WPF
                 item.View = view; // link model to view
 
                 if (item.Parent != null && item.Display != FeatureDisplay.hidden)
-                    (item.Parent.View as Node).Nodes.Add(view); //link child view to parent view
+                    (item.Parent.View as Node).Nodes?.Add(view); //link child view to parent view
 
                 // even if the item is hidden process all its children so the correct hierarchy is established
 
