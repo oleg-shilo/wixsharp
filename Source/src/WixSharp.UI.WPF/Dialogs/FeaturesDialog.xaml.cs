@@ -48,8 +48,19 @@ namespace WixSharp.UI.WPF
         private bool @checked;
 
         public string Name { get; set; }
-        public ObservableCollection<Node> Nodes { get; set; } // with list and observable collection same results
-        public bool Checked { get => @checked; set { @checked = value; NotifyOfPropertyChange(() => Checked); } }
+        public ObservableCollection<Node> Nodes { get; set; } = new ObservableCollection<Node>(); // with list and observable collection same results
+
+        public bool Checked
+        {
+            get => @checked;
+            set
+            {
+                @checked = value;
+                NotifyOfPropertyChange(() => Checked);
+                Nodes.ForEach(x => x.Checked = value);
+            }
+        }
+
         public bool DefaultChecked { get; set; }
         public object Data { get; set; }
         public bool IsEditable { get; set; } = true;
