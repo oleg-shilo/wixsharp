@@ -5,7 +5,7 @@ using WixSharp.UI.WPF;
 
 namespace $safeprojectname$
 {
-    internal class Program
+    public class Program
     {
         static void Main()
         {

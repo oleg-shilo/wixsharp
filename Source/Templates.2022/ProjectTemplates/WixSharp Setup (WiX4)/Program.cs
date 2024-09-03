@@ -3,7 +3,7 @@ using WixSharp;
 
 namespace $safeprojectname$
 {
-    class Program
+    public class Program
     {
         static void Main()
         {

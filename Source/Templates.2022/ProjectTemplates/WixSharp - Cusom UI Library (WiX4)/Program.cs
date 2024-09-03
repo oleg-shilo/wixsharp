@@ -4,7 +4,7 @@ using WixSharp;
 using $safeprojectname$.Dialogs;
 using WixToolset.Dtf.WindowsInstaller;
 
-class Program
+public class Program
 {
     static void Main()
     {

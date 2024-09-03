@@ -5,7 +5,7 @@ using WixSharp.Forms;
 
 namespace $safeprojectname$
 {
-    class Program
+    public class Program
     {
         static void Main()
         {
