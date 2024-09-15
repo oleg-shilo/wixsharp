@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -5,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WixSharp;
@@ -442,5 +444,16 @@ namespace WixSharp.UI.WPF
             if (content is IManagedDialog)
                 (this.content as IManagedDialog).Shell = this.Shell;
         }
+    }
+
+    public class BoolToBackgroundConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+            => (value is bool)
+                ? ((bool)value ? System.Windows.Media.Brushes.LightGray : System.Windows.Media.Brushes.Transparent)
+                : null;
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+            => throw new NotImplementedException();
     }
 }

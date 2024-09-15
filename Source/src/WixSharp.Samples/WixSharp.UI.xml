@@ -83,9 +83,14 @@
             The description of the Feature
             </summary>
         </member>
-        <member name="F:WixSharp.UI.Forms.FeatureItem.View">
+        <member name="P:WixSharp.UI.Forms.FeatureItem.View">
             <summary>
             The view of the Feature. Typically a TreeNode
+            </summary>
+        </member>
+        <member name="F:WixSharp.UI.Forms.FeatureItem.ViewModel">
+            <summary>
+            The ViewModel of the Feature. Typically a TreeNode (WinForms) or Node (WPF)
             </summary>
         </member>
         <member name="F:WixSharp.UI.Forms.FeatureItem.Parent">

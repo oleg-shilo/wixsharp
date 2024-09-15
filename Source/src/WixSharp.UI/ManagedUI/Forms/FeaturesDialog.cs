@@ -167,6 +167,9 @@ namespace WixSharp.UI.Forms
 
         void next_Click(object sender, System.EventArgs e)
         {
+            // ensure the child nodes are in sync with the parent here
+            // (childFeature.View as TreeNode).Checked = true;
+
             bool userChangedFeatures = UserSelectedItems?.JoinBy(",") != InitialUserSelectedItems.JoinBy(",");
 
             if (userChangedFeatures)

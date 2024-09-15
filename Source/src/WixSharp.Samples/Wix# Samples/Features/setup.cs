@@ -20,6 +20,7 @@ class Script
         var docs = new Feature("MyApp Documentation");
         var docsLight = new Feature("MyApp Light Documentation");
         var tuts = new Feature("MyApp Tutorial");
+        var test = new Feature("TEST");
 
         docs.Add(tuts);
         binaries.Add(docs);
@@ -27,7 +28,7 @@ class Script
 
         var project =
             new ManagedProject("MyProduct",
-                new Dir(@"%ProgramFiles%\My Company\My Product",
+                new Dir(test, @"%ProgramFiles%\My Company\My Product",
                     new File(binaries, @"Files\Bin\MyApp.exe"),
                     new Dir(new Id("FEATURE_INSTALL_PATH2"), @"Docs\Manual",
                         new File(docs, @"Files\Docs\Manual.txt"),

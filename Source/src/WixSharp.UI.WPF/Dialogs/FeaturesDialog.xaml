@@ -10,6 +10,9 @@
     d:DesignWidth="512"
     DialogTitle="[ProductName] Setup"
     mc:Ignorable="d">
+    <wixsharp:WpfDialog.Resources>
+        <wixsharp:BoolToBackgroundConverter x:Key="BoolToBackgroundConverter" />
+    </wixsharp:WpfDialog.Resources>
 
     <Grid x:Name="Root">
         <Grid.Resources>
@@ -100,7 +103,10 @@
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
                         <StackPanel Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding Checked}" IsEnabled="{Binding IsEditable}" />
+                            <CheckBox
+                                Background="{Binding IsPartialChecked, Converter={StaticResource BoolToBackgroundConverter}}"
+                                IsChecked="{Binding Checked}"
+                                IsEnabled="{Binding IsEditable}" />
                             <TextBlock
                                 Margin="5,0"
                                 VerticalAlignment="Center"

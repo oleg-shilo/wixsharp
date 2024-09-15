@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using Caliburn.Micro;
@@ -19,6 +20,8 @@ namespace WixSharp.UI.WPF.Sequence
 {
     public partial class FeaturesDialog : WpfDialog, IWpfDialog
     {
+        FeaturesDialogModel model;
+
         public FeaturesDialog()
         {
             InitializeComponent();
@@ -26,29 +29,77 @@ namespace WixSharp.UI.WPF.Sequence
 
         public void Init()
         {
-            ViewModelBinder.Bind(new FeaturesDialogModel(ManagedFormHost), this, null);
+            model = new FeaturesDialogModel(ManagedFormHost);
+            ViewModelBinder.Bind(model, this, null);
+        }
+
+        void Features_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var data = (FeatureItem)(e.NewValue as Node)?.Data;
+            model.SelectedNodeDescription = data?.Description;
         }
     }
 
     public class Node : PropertyChangedBase
     {
-        private bool @checked;
+        bool @checked;
 
         public string Name { get; set; }
         public ObservableCollection<Node> Nodes { get; set; } = new ObservableCollection<Node>(); // with list and observable collection same results
+
+        internal bool ignoreChldrenCheck = false;
+
+        public bool IsPartialChecked
+        {
+            get
+            {
+                bool allChldrenInSameState =
+                    Nodes.Count == 0 ||
+                    Nodes.All(x => x.Checked) ||
+                    Nodes.All(x => !x.Checked);
+
+                return !allChldrenInSameState;
+            }
+        }
 
         public bool Checked
         {
             get => @checked; set
             {
-                @checked = value;
+                if (@checked != value)
+                {
+                    @checked = value;
+
+                    if (ignoreChldrenCheck)
+                    {
+                        ignoreChldrenCheck = false;
+                    }
+                    else
+                    {
+                        Nodes.ForEach(x =>
+                        {
+                            x.ignoreChldrenCheck = true;
+                            x.Checked = value;
+                            x.ignoreChldrenCheck = false;
+                        });
+
+                        if (this.Parent != null)
+                        {
+                            Parent.ignoreChldrenCheck = true;
+                            Parent.Checked = Parent.Nodes.Any(x => x.Checked);
+                            Parent.ignoreChldrenCheck = false;
+                        }
+                    }
+                }
+                // allways update view in case if the Checked update was triggered by children even when @checked value is not changed
                 NotifyOfPropertyChange(() => Checked);
-                Nodes.ForEach(x => x.Checked = value);
+                NotifyOfPropertyChange(() => IsPartialChecked);
             }
         }
 
         public bool DefaultChecked { get; set; }
         public object Data { get; set; }
+        public Node Parent => ((FeatureItem)this.Data).Parent?.View as Node;
         public bool IsEditable { get; set; } = true;
     }
 
@@ -167,7 +218,7 @@ namespace WixSharp.UI.WPF.Sequence
                 item.View = view; // link model to view
 
                 if (item.Parent != null && item.Display != FeatureDisplay.hidden)
-                    (item.Parent.View as Node).Nodes?.Add(view); //link child view to parent view
+                    (item.Parent.View as Node).Nodes.Add(view); // link child view to parent view
 
                 // even if the item is hidden process all its children so the correct hierarchy is established
 

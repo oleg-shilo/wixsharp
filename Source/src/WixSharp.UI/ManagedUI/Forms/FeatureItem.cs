@@ -33,7 +33,13 @@ namespace WixSharp.UI.Forms
         /// <summary>
         /// The view of the Feature. Typically a TreeNode
         /// </summary>
-        public object View;
+        [Obsolete("This field has been renamed into ViewModel. Use the new field instead.", error: false)]
+        public object View { set => ViewModel = value; get => ViewModel; }
+
+        /// <summary>
+        /// The ViewModel of the Feature. Typically a TreeNode (WinForms) or Node (WPF)
+        /// </summary>
+        public object ViewModel;
 
         /// <summary>
         /// The parent FeatureItem
