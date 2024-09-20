@@ -31,7 +31,8 @@ namespace WixSharp.UI.Forms
 
         void ProgressDialog_Load(object sender, EventArgs e)
         {
-            banner.Image = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner") ??
+                           Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner");
 
             if (!WindowsIdentity.GetCurrent().IsAdmin() && Uac.IsEnabled())
             {
@@ -40,7 +41,8 @@ namespace WixSharp.UI.Forms
                 showWaitPromptTimer.Start();
             }
 
-            ResetLayout();
+            if (banner.Image != null)
+                ResetLayout();
 
             Shell.StartExecute();
         }

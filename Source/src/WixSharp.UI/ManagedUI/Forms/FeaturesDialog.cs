@@ -49,10 +49,13 @@ namespace WixSharp.UI.Forms
 
             ReadOnlyTreeNode.Behavior.AttachTo(featuresTree, drawTextOnly);
 
-            banner.Image = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner") ??
+                           Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner");
+
             BuildFeaturesHierarchy();
 
-            ResetLayout();
+            if (banner.Image != null)
+                ResetLayout();
         }
 
         void ResetLayout()
