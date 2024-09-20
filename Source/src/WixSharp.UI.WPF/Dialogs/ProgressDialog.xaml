@@ -33,7 +33,9 @@
                     Grid.Row="1"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch" />
+                    VerticalAlignment="Stretch"
+                    Source="{Binding Banner}"
+                    Stretch="UniformToFill" />
                 <StackPanel Margin="9">
                     <TextBlock
                         x:Name="DialogTitleLabel"
@@ -60,7 +62,10 @@
                 <TextBlock x:Name="CurrentStatus">
                     [ProgressDlgStatusLabel]
                 </TextBlock>
-                <TextBlock x:Name="CurrentAction" TextWrapping="WrapWithOverflow" />
+                <TextBlock
+                    x:Name="CurrentAction"
+                    Text="{Binding CurrentAction}"
+                    TextWrapping="WrapWithOverflow" />
             </StackPanel>
             <ProgressBar
                 Height="10"
@@ -111,7 +116,8 @@
                 <Button
                     x:Name="Cancel"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="Cancel_Click">
                     [WixUICancel]
                 </Button>
                 <Separator Width="10" Opacity="0" />

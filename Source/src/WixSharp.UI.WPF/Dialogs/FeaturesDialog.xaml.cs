@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
 
@@ -38,8 +37,7 @@ namespace WixSharp.UI.WPF
         /// </summary>
         public void Init()
         {
-            model = new FeaturesDialogModel(ManagedFormHost);
-            ViewModelBinder.Bind(model, this, null);
+            DataContext = model = new FeaturesDialogModel(ManagedFormHost);
         }
 
         void Features_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -47,13 +45,24 @@ namespace WixSharp.UI.WPF
             var data = (FeatureItem)(e.NewValue as Node)?.Data;
             model.SelectedNodeDescription = data?.Description;
         }
+
+        void GoPrev_Click(object sender, RoutedEventArgs e)
+            => model.GoPrev();
+
+        void GoNext_Click(object sender, RoutedEventArgs e)
+            => model.GoNext();
+
+        void Cancel_Click(object sender, RoutedEventArgs e)
+            => model.Cancel();
+
+        void Reset_Click(object sender, RoutedEventArgs e)
+            => model.Reset();
     }
 
     /// <summary>
     /// ViewModel of the feature tree node.
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.PropertyChangedBase" />
-    class Node : PropertyChangedBase
+    class Node : NotifyPropertyChangedBase
     {
         bool @checked;
 
@@ -106,8 +115,8 @@ namespace WixSharp.UI.WPF
                 }
 
                 // allways update view in case if the Checked update was triggered by children even when @checked value is not changed
-                NotifyOfPropertyChange(() => Checked);
-                NotifyOfPropertyChange(() => IsPartialChecked);
+                NotifyOfPropertyChange(nameof(Checked));
+                NotifyOfPropertyChange(nameof(IsPartialChecked));
             }
         }
 
@@ -119,11 +128,8 @@ namespace WixSharp.UI.WPF
 
     /// <summary>
     /// ViewModel for standard FeaturesDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.Screen" />
-    class FeaturesDialogModel : Caliburn.Micro.Screen
+    class FeaturesDialogModel : NotifyPropertyChangedBase
     {
         ManagedForm Host;
         ISession session => Host?.Runtime.Session;
@@ -143,7 +149,7 @@ namespace WixSharp.UI.WPF
         public string SelectedNodeDescription
         {
             get => selectedNodeDescription;
-            set { selectedNodeDescription = value; NotifyOfPropertyChange(() => SelectedNodeDescription); }
+            set { selectedNodeDescription = value; NotifyOfPropertyChange(nameof(SelectedNodeDescription)); }
         }
 
         /// <summary>

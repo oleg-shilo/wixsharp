@@ -1,6 +1,6 @@
+using System.ComponentModel;
 using System.Security.Principal;
 using System.Windows.Media.Imaging;
-using Caliburn.Micro;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.UI.Forms;
@@ -34,9 +34,7 @@ namespace WixSharp.UI.WPF
         {
             UpdateTitles(ManagedFormHost.Runtime.Session);
 
-            model = new ProgressDialogModel { Host = ManagedFormHost };
-            ViewModelBinder.Bind(model, this, null);
-
+            DataContext = model = new ProgressDialogModel { Host = ManagedFormHost };
             model.StartExecute();
         }
 
@@ -97,6 +95,9 @@ namespace WixSharp.UI.WPF
             if (model != null)
                 model.ProgressValue = progressPercentage;
         }
+
+        void Cancel_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.Cancel();
     }
 
     /// <summary>
@@ -104,8 +105,7 @@ namespace WixSharp.UI.WPF
     /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
     /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.Screen" />
-    class ProgressDialogModel : Caliburn.Micro.Screen
+    class ProgressDialogModel : NotifyPropertyChangedBase
     {
         public ManagedForm Host;
 
@@ -116,8 +116,8 @@ namespace WixSharp.UI.WPF
 
         public bool UacPromptIsVisible => (!WindowsIdentity.GetCurrent().IsAdmin() && Uac.IsEnabled() && !uacPromptActioned);
 
-        public string CurrentAction { get => currentAction; set { currentAction = value; base.NotifyOfPropertyChange(() => CurrentAction); } }
-        public int ProgressValue { get => progressValue; set { progressValue = value; base.NotifyOfPropertyChange(() => ProgressValue); } }
+        public string CurrentAction { get => currentAction; set { currentAction = value; base.NotifyOfPropertyChange(nameof(CurrentAction)); } }
+        public int ProgressValue { get => progressValue; set { progressValue = value; base.NotifyOfPropertyChange(nameof(ProgressValue)); } }
 
         bool uacPromptActioned = false;
         string currentAction;
@@ -161,7 +161,7 @@ namespace WixSharp.UI.WPF
                 case InstallMessage.InstallEnd:
                     {
                         uacPromptActioned = true;
-                        base.NotifyOfPropertyChange(() => UacPromptIsVisible);
+                        base.NotifyOfPropertyChange(nameof(UacPromptIsVisible));
                     }
                     break;
 

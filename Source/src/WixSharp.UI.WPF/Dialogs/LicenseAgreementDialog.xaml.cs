@@ -1,5 +1,4 @@
-﻿using Caliburn.Micro;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -8,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using WixSharp;
 using WixSharp.UI.Forms;
+
 using IO = System.IO;
 
 namespace WixSharp.UI.WPF
@@ -36,15 +36,26 @@ namespace WixSharp.UI.WPF
         /// </summary>
         public void Init()
         {
-            ViewModelBinder.Bind(
-                new LicenseDialogModel
-                {
-                    ShowRtfContent = x => this.LicenceText.SetRtf(x),
-                    Host = ManagedFormHost,
-                },
-                this,
-                null);
+            DataContext = model = new LicenseDialogModel
+            {
+                ShowRtfContent = x => this.LicenceText.SetRtf(x),
+                Host = ManagedFormHost,
+            };
         }
+
+        LicenseDialogModel model;
+
+        void GoPrev_Click(object sender, RoutedEventArgs e)
+            => model.GoPrev();
+
+        void GoNext_Click(object sender, RoutedEventArgs e)
+            => model.GoNext();
+
+        void Cancel_Click(object sender, RoutedEventArgs e)
+            => model.Cancel();
+
+        void Print_Click(object sender, RoutedEventArgs e)
+            => model.Print();
     }
 
     static partial class Extension
@@ -66,8 +77,7 @@ namespace WixSharp.UI.WPF
     /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
     /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.Screen" />
-    class LicenseDialogModel : Caliburn.Micro.Screen
+    class LicenseDialogModel : NotifyPropertyChangedBase
     {
         ManagedForm host;
         ISession session => Host?.Runtime.Session;
@@ -83,9 +93,9 @@ namespace WixSharp.UI.WPF
                 host = value;
 
                 ShowRtfContent?.Invoke(LicenceText);
-                NotifyOfPropertyChange(() => Banner);
-                NotifyOfPropertyChange(() => LicenseAcceptedChecked);
-                NotifyOfPropertyChange(() => CanGoNext);
+                NotifyOfPropertyChange(nameof(Banner));
+                NotifyOfPropertyChange(nameof(LicenseAcceptedChecked));
+                NotifyOfPropertyChange(nameof(CanGoNext));
             }
         }
 
@@ -101,8 +111,8 @@ namespace WixSharp.UI.WPF
                 if (Host != null)
                     session["LastLicenceAcceptedChecked"] = value.ToString();
 
-                NotifyOfPropertyChange(() => LicenseAcceptedChecked);
-                NotifyOfPropertyChange(() => CanGoNext);
+                NotifyOfPropertyChange(nameof(LicenseAcceptedChecked));
+                NotifyOfPropertyChange(nameof(CanGoNext));
             }
         }
 

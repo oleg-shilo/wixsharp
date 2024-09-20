@@ -1,4 +1,3 @@
-using Caliburn.Micro;
 using System.Windows.Media.Imaging;
 using WixSharp;
 using WixSharp.UI.Forms;
@@ -29,8 +28,25 @@ namespace WixSharp.UI.WPF
         /// </summary>
         public void Init()
         {
-            ViewModelBinder.Bind(new MaintenanceTypeDialogModel { Host = ManagedFormHost, }, this, null);
+            DataContext = model = new MaintenanceTypeDialogModel { Host = ManagedFormHost };
         }
+
+        MaintenanceTypeDialogModel model;
+
+        void GoPrev_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.GoPrev();
+
+        void Cancel_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.Cancel();
+
+        void Remove_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.Remove();
+
+        void Repair_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.Repair();
+
+        void Change_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.Change();
     }
 
     /// <summary>
@@ -38,8 +54,7 @@ namespace WixSharp.UI.WPF
     /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
     /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.Screen" />
-    class MaintenanceTypeDialogModel : Caliburn.Micro.Screen
+    class MaintenanceTypeDialogModel : NotifyPropertyChangedBase
     {
         public ManagedForm Host;
 

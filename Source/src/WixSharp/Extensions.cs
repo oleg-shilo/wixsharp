@@ -2607,7 +2607,13 @@ namespace WixSharp
         public static bool IsActive(this Session session)
         {
             if (session.GetAttachedValue("active") != null)
-                return session.GetAttachedValue<bool>("active");
+            {
+                // if the session already detected as closed then jest return the result
+                // but if the session was marked as active, it may get closed since then.
+                var active = session.GetAttachedValue<bool>("active");
+                if (!active)
+                    return session.GetAttachedValue<bool>("active");
+            }
 
             //if (!session.IsClosed) //unfortunately isClosed is always false even for the deferred actions
             try

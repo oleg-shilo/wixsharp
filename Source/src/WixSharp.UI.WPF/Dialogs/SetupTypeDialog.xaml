@@ -32,7 +32,9 @@
                     Grid.Row="1"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch" />
+                    VerticalAlignment="Stretch"
+                    Source="{Binding Banner}"
+                    Stretch="UniformToFill" />
                 <StackPanel Margin="9">
                     <TextBlock
                         Grid.Column="0"
@@ -63,6 +65,7 @@
                 MinWidth="112"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
+                Click="DoTypical_Click"
                 Content="[SetupTypeDlgTypicalButton]" />
             <TextBlock
                 MinHeight="35"
@@ -80,6 +83,7 @@
                 MinWidth="112"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
+                Click="DoCustom_Click"
                 Content="[SetupTypeDlgCustomButton]" />
             <TextBlock
                 Grid.Row="1"
@@ -98,6 +102,7 @@
                 MinWidth="112"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
+                Click="DoComplete_Click"
                 Content="[SetupTypeDlgCompleteButton]" />
             <TextBlock
                 Grid.Row="2"
@@ -125,7 +130,8 @@
                 <Button
                     x:Name="GoPrev"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="GoPrev_Click">
                     [WixUIBack]
                 </Button>
                 <Separator Width="10" Opacity="0" />
@@ -133,6 +139,7 @@
                     x:Name="GoNext"
                     Height="23"
                     MinWidth="73"
+                    Click="GoNext_Click"
                     IsEnabled="false">
                     [WixUINext]
                 </Button>
@@ -140,7 +147,8 @@
                 <Button
                     x:Name="Cancel"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="Cancel_Click">
                     [WixUICancel]
                 </Button>
                 <Separator Width="10" Opacity="0" />

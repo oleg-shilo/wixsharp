@@ -166,8 +166,14 @@ namespace WixSharp
         /// <value>
         /// The log file.
         /// </value>
-        public string LogFile => MsiSession.GetLogFile().IsNotEmpty() ?
-            MsiSession.GetLogFile() : // may fail if the session is closed
-            Environment.GetEnvironmentVariable("MsiLogFileLocation");
+        public string LogFile
+        {
+            get
+            {
+                // may fail if the session is closed
+                var logFile = MsiSession.GetLogFile();
+                return logFile.IsNotEmpty() ? logFile : Environment.GetEnvironmentVariable("MsiLogFileLocation");
+            }
+        }
     }
 }

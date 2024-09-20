@@ -52,7 +52,11 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Image x:Name="Banner" Grid.RowSpan="2" />
+                <Image
+                    x:Name="Banner"
+                    Grid.RowSpan="2"
+                    Source="{Binding Banner}" />
+
                 <TextBlock
                     x:Name="DialogTitleLabel"
                     Grid.RowSpan="1"
@@ -80,6 +84,7 @@
             Margin="10,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
+            Click="ViewLog_Click"
             Style="{StaticResource Link}">
             [ViewLog]
         </Button>
@@ -107,14 +112,16 @@
                 <Button
                     x:Name="GoExit"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="GoExit_Click">
                     [WixUIFinish]
                 </Button>
                 <Separator Width="20" Opacity="0" />
                 <Button
                     x:Name="Cancel"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="Cancel_Click">
                     [WixUICancel]
                 </Button>
                 <Separator Width="10" Opacity="0" />

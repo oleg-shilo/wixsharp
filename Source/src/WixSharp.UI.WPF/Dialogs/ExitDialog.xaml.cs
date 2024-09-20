@@ -1,9 +1,11 @@
-﻿using Caliburn.Micro;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
+using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using WixSharp;
 using WixSharp.UI.Forms;
+
 using IO = System.IO;
 
 namespace WixSharp.UI.WPF
@@ -34,8 +36,10 @@ namespace WixSharp.UI.WPF
         {
             UpdateTitles(ManagedFormHost.Runtime.Session);
 
-            ViewModelBinder.Bind(new ExitDialogModel { Host = ManagedFormHost }, this, null);
+            DataContext = model = new ExitDialogModel { Host = ManagedFormHost };
         }
+
+        ExitDialogModel model;
 
         /// <summary>
         /// Updates the titles of the dialog depending on the success of the installation action.
@@ -57,6 +61,15 @@ namespace WixSharp.UI.WPF
             // `Localize` resolves [...] titles and descriptions into the localized strings stored in MSI resources tables
             this.Localize();
         }
+
+        void ViewLog_Click(object sender, RoutedEventArgs e)
+            => model.ViewLog();
+
+        void GoExit_Click(object sender, RoutedEventArgs e)
+            => model.GoExit();
+
+        void Cancel_Click(object sender, RoutedEventArgs e)
+            => model.Cancel();
     }
 
     /// <summary>
@@ -64,8 +77,7 @@ namespace WixSharp.UI.WPF
     /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
     /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.Screen" />
-    class ExitDialogModel : Caliburn.Micro.Screen
+    class ExitDialogModel
     {
         public ManagedForm Host { get; set; }
         ISession session => Host?.Runtime.Session;
