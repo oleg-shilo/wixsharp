@@ -23,9 +23,11 @@ namespace $safeprojectname$.Dialogs
 
         void WelcomeDialog_Load(object sender, EventArgs e)
         {
-            image.Image = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Dialog");
+            image.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Dialog") ??
+                          Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Dialog");
 
-            ResetLayout();
+            if (image.Image != null)
+                ResetLayout();
         }
 
         void ResetLayout()

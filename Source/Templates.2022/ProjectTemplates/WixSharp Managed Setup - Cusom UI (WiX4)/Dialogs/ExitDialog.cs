@@ -23,7 +23,9 @@ namespace $safeprojectname$.Dialogs
 
         void ExitDialog_Load(object sender, System.EventArgs e)
         {
-            image.Image = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Dialog");
+            image.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Dialog") ??
+                          Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Dialog");
+
             if (Shell.UserInterrupted || Shell.Log.Contains("User cancelled installation."))
             {
                 title.Text = "[UserExitTitle]";
@@ -37,7 +39,8 @@ namespace $safeprojectname$.Dialogs
                 this.Localize();
             }
 
-            ResetLayout();
+            if (image.Image != null)
+                ResetLayout();
 
             // show error message if required
             // if (Shell.Errors.Any())

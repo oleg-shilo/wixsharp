@@ -20,6 +20,12 @@ updateWpfDialogs(
     @"..\..\src\WixSharp.UI.WPF\Dialogs",
     @"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI (WiX4)\Dialogs");
 
+updateWixSharpPackages(
+    @"..\..\Templates.2022\ProjectTemplates", "(WiX3)", "1.26.0");
+
+updateWixSharpPackages(
+    @"..\..\Templates.2022\ProjectTemplates", "(WiX4)", "2.4.0");
+
 foreach (var file in Directory.GetFiles(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI (WiX3)\Dialogs",
         "*.xaml.cs"))
 {
@@ -48,13 +54,14 @@ void updateWpfDialogs(string inputDir, string outDir)
 {
     CopyFiles(inputDir, "*Dialog.xaml*", outDir, null, processFile);
 }
+
 void updateWinFormDialogs(string inputDir, string outDir)
 {
     CopyFiles(inputDir, "*Dialog*.cs", outDir,
         x => !x.Contains("InstallScope") &&
-                !x.Contains("AdvancedFeatures") &&
-                !x.Contains("scaling"),
-                processFile);
+             !x.Contains("AdvancedFeatures") &&
+             !x.Contains("scaling"),
+             processFile);
 
     CopyFiles(inputDir, "*Dialog.resx", outDir,
               x => !x.Contains("InstallScope") &&
@@ -115,6 +122,27 @@ void CopyFiles(string srcDir, string pattern, string destDir, Func<string, bool>
 
             Console.WriteLine(path);
         }
+    }
+}
+
+void updateWixSharpPackages(string dir, string projTypePattern, string version)
+{
+    foreach (string file in Directory.GetFiles(dir, "*.csproj", SearchOption.AllDirectories).Where(x => x.Contains("(WiX3)")))
+    {
+        var lines = File.ReadLines(file);
+        lines = lines.Select(line =>
+        {
+            // <PackageReference Include="WixSharp" Version="1.25.2" />
+            if (line.Contains("PackageReference") && line.Contains("Include=\"WixSharp"))
+            {
+                var currentVersion = line.Split(" ").Where(x => x.Trim().Contains("Version=\"")).First();
+                return line.Replace(currentVersion, $"Version=\"{version}\"");
+            }
+            else
+                return line;
+        }).ToArray();
+
+        File.WriteAllLines(file, lines);
     }
 }
 

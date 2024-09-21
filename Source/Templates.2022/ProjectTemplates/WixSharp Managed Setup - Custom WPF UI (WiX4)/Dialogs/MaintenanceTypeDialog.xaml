@@ -32,7 +32,8 @@
                     Grid.Row="1"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch" />
+                    VerticalAlignment="Stretch"
+                    Source="{Binding Banner}" />
                 <StackPanel Margin="9">
                     <TextBlock
                         Grid.Column="0"
@@ -62,7 +63,8 @@
                 Height="23"
                 MinWidth="112"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top">
+                VerticalAlignment="Top"
+                Click="Change_Click">
                 [MaintenanceTypeDlgChangeButton]
             </Button>
             <TextBlock
@@ -80,7 +82,8 @@
                 Height="23"
                 MinWidth="112"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top">
+                VerticalAlignment="Top"
+                Click="Repair_Click">
                 [MaintenanceTypeDlgRepairButton]
             </Button>
             <TextBlock
@@ -99,7 +102,8 @@
                 Height="23"
                 MinWidth="112"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top">
+                VerticalAlignment="Top"
+                Click="Remove_Click">
                 [MaintenanceTypeDlgRemoveButton]
             </Button>
             <TextBlock
@@ -128,7 +132,8 @@
                 <Button
                     x:Name="GoPrev"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="GoPrev_Click">
                     [WixUIBack]
                 </Button>
                 <Separator Width="10" Opacity="0" />
@@ -143,7 +148,8 @@
                 <Button
                     x:Name="Cancel"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="Cancel_Click">
                     [WixUICancel]
                 </Button>
                 <Separator Width="10" Opacity="0" />

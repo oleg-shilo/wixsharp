@@ -1,4 +1,3 @@
-using Caliburn.Micro;
 using System.Windows.Media.Imaging;
 using WixSharp;
 using WixSharp.UI.Forms;
@@ -9,8 +8,6 @@ namespace $safeprojectname$
 {
     /// <summary>
     /// The standard MaintenanceTypeDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro View (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     /// <seealso cref="WixSharp.UI.WPF.WpfDialog" />
     /// <seealso cref="WixSharp.IWpfDialog" />
@@ -31,24 +28,39 @@ namespace $safeprojectname$
         /// </summary>
         public void Init()
         {
-            ViewModelBinder.Bind(new MaintenanceTypeDialogModel { Host = ManagedFormHost, }, this, null);
+            DataContext = model = new MaintenanceTypeDialogModel { Host = ManagedFormHost };
         }
+
+        MaintenanceTypeDialogModel model;
+
+        void GoPrev_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.GoPrev();
+
+        void Cancel_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.Cancel();
+
+        void Remove_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.Remove();
+
+        void Repair_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.Repair();
+
+        void Change_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.Change();
     }
 
     /// <summary>
     /// ViewModel for standard MaintenanceTypeDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.Screen" />
-    class MaintenanceTypeDialogModel : Caliburn.Micro.Screen
+    class MaintenanceTypeDialogModel : NotifyPropertyChangedBase
     {
         public ManagedForm Host;
 
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource() ??
+                                     session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MaintenanceTypeDialog" /> class.

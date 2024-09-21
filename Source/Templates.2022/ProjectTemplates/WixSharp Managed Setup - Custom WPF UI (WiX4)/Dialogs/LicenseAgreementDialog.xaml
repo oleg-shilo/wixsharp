@@ -32,7 +32,8 @@
                     Grid.Row="1"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch" />
+                    VerticalAlignment="Stretch"
+                    Source="{Binding Banner}" />
                 <StackPanel Margin="9">
                     <TextBlock
                         Grid.Column="0"
@@ -65,7 +66,8 @@
             Grid.Row="1"
             Margin="10"
             VerticalAlignment="Bottom"
-            VerticalContentAlignment="Center">
+            VerticalContentAlignment="Center"
+            IsChecked="{Binding LicenseAcceptedChecked}">
             [LicenseAgreementDlgLicenseAcceptedCheckBox]
         </CheckBox>
 
@@ -83,28 +85,33 @@
                 <Button
                     x:Name="Print"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="Print_Click">
                     [WixUIPrint]
                 </Button>
                 <Separator Width="10" Opacity="0" />
                 <Button
                     x:Name="GoPrev"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="GoPrev_Click">
                     [WixUIBack]
                 </Button>
                 <Separator Width="10" Opacity="0" />
                 <Button
                     x:Name="GoNext"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="GoNext_Click"
+                    IsEnabled="{Binding CanGoNext}">
                     [WixUINext]
                 </Button>
                 <Separator Width="20" Opacity="0" />
                 <Button
                     x:Name="Cancel"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="Cancel_Click">
                     [WixUICancel]
                 </Button>
                 <Separator Width="10" Opacity="0" />
