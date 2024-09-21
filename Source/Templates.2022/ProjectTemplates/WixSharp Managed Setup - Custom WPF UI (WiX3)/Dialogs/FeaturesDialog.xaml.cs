@@ -1,10 +1,10 @@
-using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using WixSharp;
 using WixSharp.UI.Forms;
@@ -15,14 +15,14 @@ namespace $safeprojectname$
 {
     /// <summary>
     /// The standard FeaturesDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro View (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     /// <seealso cref="WixSharp.UI.WPF.WpfDialog" />
     /// <seealso cref="WixSharp.IWpfDialog" />
     /// <seealso cref="System.Windows.Markup.IComponentConnector" />
     public partial class FeaturesDialog : WpfDialog, IWpfDialog
     {
+        FeaturesDialogModel model;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FeaturesDialog"/> class.
         /// </summary>
@@ -37,33 +37,99 @@ namespace $safeprojectname$
         /// </summary>
         public void Init()
         {
-            ViewModelBinder.Bind(new FeaturesDialogModel(ManagedFormHost), this, null);
+            DataContext = model = new FeaturesDialogModel(ManagedFormHost);
         }
+
+        void Features_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var data = (FeatureItem)(e.NewValue as Node)?.Data;
+            model.SelectedNodeDescription = data?.Description;
+        }
+
+        void GoPrev_Click(object sender, RoutedEventArgs e)
+            => model.GoPrev();
+
+        void GoNext_Click(object sender, RoutedEventArgs e)
+            => model.GoNext();
+
+        void Cancel_Click(object sender, RoutedEventArgs e)
+            => model.Cancel();
+
+        void Reset_Click(object sender, RoutedEventArgs e)
+            => model.Reset();
     }
 
     /// <summary>
     /// ViewModel of the feature tree node.
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.PropertyChangedBase" />
-    class Node : PropertyChangedBase
+    class Node : NotifyPropertyChangedBase
     {
-        private bool @checked;
+        bool @checked;
 
         public string Name { get; set; }
-        public ObservableCollection<Node> Nodes { get; set; } // with list and observable collection same results
-        public bool Checked { get => @checked; set { @checked = value; NotifyOfPropertyChange(() => Checked); } }
+        public ObservableCollection<Node> Nodes { get; set; } = new ObservableCollection<Node>(); // with list and observable collection same results
+
+        internal bool ignoreChldrenCheck = false;
+
+        public bool IsPartialChecked
+        {
+            get
+            {
+                bool allChldrenInSameState =
+                    Nodes.Count == 0 ||
+                    Nodes.All(x => x.Checked) ||
+                    Nodes.All(x => !x.Checked);
+
+                return !allChldrenInSameState;
+            }
+        }
+
+        public bool Checked
+        {
+            get => @checked; set
+            {
+                if (@checked != value)
+                {
+                    @checked = value;
+
+                    if (ignoreChldrenCheck)
+                    {
+                        ignoreChldrenCheck = false;
+                    }
+                    else
+                    {
+                        Nodes.ForEach(x =>
+                        {
+                            x.ignoreChldrenCheck = true;
+                            x.Checked = value;
+                            x.ignoreChldrenCheck = false;
+                        });
+
+                        if (this.Parent != null)
+                        {
+                            Parent.ignoreChldrenCheck = true;
+                            Parent.Checked = Parent.Nodes.Any(x => x.Checked);
+                            Parent.ignoreChldrenCheck = false;
+                        }
+                    }
+                }
+
+                // allways update view in case if the Checked update was triggered by children even when @checked value is not changed
+                NotifyOfPropertyChange(nameof(Checked));
+                NotifyOfPropertyChange(nameof(IsPartialChecked));
+            }
+        }
+
         public bool DefaultChecked { get; set; }
         public object Data { get; set; }
+        public Node Parent => ((FeatureItem)this.Data).Parent?.ViewModel as Node;
         public bool IsEditable { get; set; } = true;
     }
 
     /// <summary>
     /// ViewModel for standard FeaturesDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.Screen" />
-    class FeaturesDialogModel : Caliburn.Micro.Screen
+    class FeaturesDialogModel : NotifyPropertyChangedBase
     {
         ManagedForm Host;
         ISession session => Host?.Runtime.Session;
@@ -78,12 +144,13 @@ namespace $safeprojectname$
             BuildFeaturesHierarchy();
         }
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource() ??
+                                     session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
         public string SelectedNodeDescription
         {
             get => selectedNodeDescription;
-            set { selectedNodeDescription = value; NotifyOfPropertyChange(() => SelectedNodeDescription); }
+            set { selectedNodeDescription = value; NotifyOfPropertyChange(nameof(SelectedNodeDescription)); }
         }
 
         /// <summary>
@@ -116,11 +183,11 @@ namespace $safeprojectname$
 
             if (userChangedFeatures)
             {
-                string itemsToInstall = features.Where(x => (x.View as Node).Checked)
+                string itemsToInstall = features.Where(x => (x.ViewModel as Node).Checked)
                                                 .Select(x => x.Name)
                                                 .JoinBy(",");
 
-                string itemsToRemove = features.Where(x => !(x.View as Node).Checked)
+                string itemsToRemove = features.Where(x => !(x.ViewModel as Node).Checked)
                                                .Select(x => x.Name)
                                                .JoinBy(",");
 
@@ -145,7 +212,7 @@ namespace $safeprojectname$
 
         public void Reset()
         {
-            features.ForEach(x => (x.View as Node).Checked = x.DefaultIsToBeInstalled());
+            features.ForEach(x => (x.ViewModel as Node).Checked = x.DefaultIsToBeInstalled());
         }
 
         FeatureItem[] features;
@@ -166,7 +233,7 @@ namespace $safeprojectname$
                 var item = itemsToProcess.Dequeue();
 
                 // create the view of the feature
-                var view = new Node
+                var viewModel = new Node
                 {
                     Name = item.Title,
                     Data = item, // link view to model
@@ -175,10 +242,10 @@ namespace $safeprojectname$
                     Checked = item.DefaultIsToBeInstalled()
                 };
 
-                item.View = view; // link model to view
+                item.ViewModel = viewModel; // link model to view
 
                 if (item.Parent != null && item.Display != FeatureDisplay.hidden)
-                    (item.Parent.View as Node).Nodes.Add(view); //link child view to parent view
+                    (item.Parent.ViewModel as Node).Nodes.Add(viewModel); //link child view to parent view
 
                 // even if the item is hidden process all its children so the correct hierarchy is established
 
@@ -191,16 +258,16 @@ namespace $safeprojectname$
                          });
 
                 if (UserSelectedItems != null)
-                    view.Checked = UserSelectedItems.Contains((view.Data as FeatureItem).Name);
+                    viewModel.Checked = UserSelectedItems.Contains((viewModel.Data as FeatureItem).Name);
             }
 
             // add views to the treeView control
             visibleRootItems
                 .Where(x => x.Display != FeatureDisplay.hidden)
-                .Select(x => (Node)x.View)
+                .Select(x => (Node)x.ViewModel)
                 .ForEach(node => RootNodes.Add(node));
 
-            InitialUserSelectedItems = features.Where(x => (x.View as Node).Checked)
+            InitialUserSelectedItems = features.Where(x => (x.ViewModel as Node).Checked)
                                                .Select(x => x.Name)
                                                .OrderBy(x => x)
                                                .ToList();

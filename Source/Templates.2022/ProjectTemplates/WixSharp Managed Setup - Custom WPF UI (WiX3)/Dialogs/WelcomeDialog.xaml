@@ -30,7 +30,10 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Image x:Name="Banner" Grid.RowSpan="2" />
+                <Image
+                    x:Name="Banner"
+                    Grid.RowSpan="2"
+                    Source="{Binding Banner}" />
                 <TextBlock
                     Grid.RowSpan="1"
                     Grid.Column="1"
@@ -66,21 +69,24 @@
                 <Button
                     x:Name="GoPrev"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="GoPrev_Click">
                     [WixUIBack]
                 </Button>
                 <Separator Width="10" Opacity="0" />
                 <Button
                     x:Name="GoNext"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="GoNext_Click">
                     [WixUINext]
                 </Button>
                 <Separator Width="20" Opacity="0" />
                 <Button
                     x:Name="Cancel"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="Cancel_Click">
                     [WixUICancel]
                 </Button>
                 <Separator Width="10" Opacity="0" />

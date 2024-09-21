@@ -1,4 +1,3 @@
-using Caliburn.Micro;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using WixSharp;
@@ -10,8 +9,6 @@ namespace $safeprojectname$
 {
     /// <summary>
     /// The standard SetupTypeDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro View (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     /// <seealso cref="WixSharp.UI.WPF.WpfDialog" />
     /// <seealso cref="WixSharp.IWpfDialog" />
@@ -32,24 +29,42 @@ namespace $safeprojectname$
         /// </summary>
         public void Init()
         {
-            ViewModelBinder.Bind(new SetupTypeDialogModel { Host = ManagedFormHost, }, this, null);
+            this.DataContext = model = new SetupTypeDialogModel { Host = ManagedFormHost };
         }
+
+        SetupTypeDialogModel model;
+
+        void GoPrev_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.GoPrev();
+
+        void GoNext_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.GoNext();
+
+        void Cancel_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.Cancel();
+
+        void DoTypical_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.DoTypical();
+
+        void DoCustom_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.DoCustom();
+
+        void DoComplete_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.DoComplete();
     }
 
     /// <summary>
     /// ViewModel for standard SetupTypeDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.Screen" />
-    class SetupTypeDialogModel : Caliburn.Micro.Screen
+    class SetupTypeDialogModel : NotifyPropertyChangedBase
     {
         public ManagedForm Host;
 
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource() ??
+                                     session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SetupTypeDialog" /> class.
