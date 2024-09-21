@@ -1,4 +1,4 @@
-set ver=2.3.2
+set ver=2.4.0
 dotnet nuget push WixSharp.Msi.Core.%ver%.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
 dotnet nuget push WixSharp.Core.%ver%.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
 
