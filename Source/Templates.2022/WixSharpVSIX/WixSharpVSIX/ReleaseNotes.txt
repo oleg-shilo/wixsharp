@@ -1,3 +1,7 @@
+v2.2.9
+- Removed Caliburn.Micro dependency
+- Updated UI dialogs
+
 v2.2.8
 - added VS auto-generated project GUID ($guid1$)
 

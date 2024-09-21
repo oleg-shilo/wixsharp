@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net472</TargetFramework>
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WixSharp-wix4.WPF" Version="2.1.2" />
+    <PackageReference Include="WixSharp-wix4.WPF" Version="2.4.0.1" />
   </ItemGroup>
 
 

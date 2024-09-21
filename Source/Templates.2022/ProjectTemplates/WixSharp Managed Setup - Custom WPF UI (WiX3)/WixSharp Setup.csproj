@@ -24,10 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WixSharp" Version="2.4.0" />
-    <PackageReference Include="WixSharp.bin" Version="2.4.0" />
-    <PackageReference Include="WixSharp.wix.bin" Version="2.4.0" />
-    <PackageReference Include="WixSharp.WPF" Version="2.4.0" />
+    <PackageReference Include="WixSharp" Version="1.26.0" />
+    <PackageReference Include="WixSharp.bin" Version="1.26.0" />
+    <PackageReference Include="WixSharp.wix.bin" Version="1.26.0" />
+    <PackageReference Include="WixSharp.WPF" Version="1.26.0.1" />
   </ItemGroup>
 
   <ItemGroup>

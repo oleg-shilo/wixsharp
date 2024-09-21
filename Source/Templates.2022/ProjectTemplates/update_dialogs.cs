@@ -127,8 +127,9 @@ void CopyFiles(string srcDir, string pattern, string destDir, Func<string, bool>
 
 void updateWixSharpPackages(string dir, string projTypePattern, string version)
 {
-    foreach (string file in Directory.GetFiles(dir, "*.csproj", SearchOption.AllDirectories).Where(x => x.Contains("(WiX3)")))
+    foreach (string file in Directory.GetFiles(dir, "*.csproj", SearchOption.AllDirectories).Where(x => x.Contains(projTypePattern)))
     {
+        Console.WriteLine("Package for: " + file);
         var lines = File.ReadLines(file);
         lines = lines.Select(line =>
         {
@@ -136,6 +137,7 @@ void updateWixSharpPackages(string dir, string projTypePattern, string version)
             if (line.Contains("PackageReference") && line.Contains("Include=\"WixSharp"))
             {
                 var currentVersion = line.Split(" ").Where(x => x.Trim().Contains("Version=\"")).First();
+                Console.WriteLine($"    {currentVersion} => {version} ");
                 return line.Replace(currentVersion, $"Version=\"{version}\"");
             }
             else
