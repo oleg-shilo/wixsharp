@@ -99,7 +99,7 @@ namespace WixSharp.UI.WPF.Sequence
 
         public bool DefaultChecked { get; set; }
         public object Data { get; set; }
-        public Node Parent => ((FeatureItem)this.Data).Parent?.View as Node;
+        public Node Parent => ((FeatureItem)this.Data).Parent?.ViewModel as Node;
         public bool IsEditable { get; set; } = true;
     }
 
@@ -156,11 +156,11 @@ namespace WixSharp.UI.WPF.Sequence
 
             if (userChangedFeatures)
             {
-                string itemsToInstall = features.Where(x => (x.View as Node).Checked)
+                string itemsToInstall = features.Where(x => (x.ViewModel as Node).Checked)
                                                 .Select(x => x.Name)
                                                 .JoinBy(",");
 
-                string itemsToRemove = features.Where(x => !(x.View as Node).Checked)
+                string itemsToRemove = features.Where(x => !(x.ViewModel as Node).Checked)
                                                .Select(x => x.Name)
                                                .JoinBy(",");
 
@@ -185,7 +185,7 @@ namespace WixSharp.UI.WPF.Sequence
 
         public void Reset()
         {
-            features.ForEach(x => (x.View as Node).Checked = x.DefaultIsToBeInstalled());
+            features.ForEach(x => (x.ViewModel as Node).Checked = x.DefaultIsToBeInstalled());
         }
 
         FeatureItem[] features;
@@ -206,7 +206,7 @@ namespace WixSharp.UI.WPF.Sequence
                 var item = itemsToProcess.Dequeue();
 
                 // create the view of the feature
-                var view = new Node
+                var viewModel = new Node
                 {
                     Name = item.Title,
                     Data = item, // link view to model
@@ -215,10 +215,10 @@ namespace WixSharp.UI.WPF.Sequence
                     Checked = item.DefaultIsToBeInstalled()
                 };
 
-                item.View = view; // link model to view
+                item.ViewModel = viewModel; // link model to view
 
                 if (item.Parent != null && item.Display != FeatureDisplay.hidden)
-                    (item.Parent.View as Node).Nodes.Add(view); // link child view to parent view
+                    (item.Parent.ViewModel as Node).Nodes.Add(viewModel); // link child view to parent view
 
                 // even if the item is hidden process all its children so the correct hierarchy is established
 
@@ -231,16 +231,16 @@ namespace WixSharp.UI.WPF.Sequence
                          });
 
                 if (UserSelectedItems != null)
-                    view.Checked = UserSelectedItems.Contains((view.Data as FeatureItem).Name);
+                    viewModel.Checked = UserSelectedItems.Contains((viewModel.Data as FeatureItem).Name);
             }
 
             // add views to the treeView control
             visibleRootItems
                 .Where(x => x.Display != FeatureDisplay.hidden)
-                .Select(x => (Node)x.View)
+                .Select(x => (Node)x.ViewModel)
                 .ForEach(node => RootNodes.Add(node));
 
-            InitialUserSelectedItems = features.Where(x => (x.View as Node).Checked)
+            InitialUserSelectedItems = features.Where(x => (x.ViewModel as Node).Checked)
                                                .Select(x => x.Name)
                                                .OrderBy(x => x)
                                                .ToList();

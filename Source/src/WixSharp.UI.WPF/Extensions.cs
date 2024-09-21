@@ -79,8 +79,6 @@ namespace WixSharp.UI.WPF
 
     /// <summary>
     /// Returns an array of AssemblyName that defines referenced assemblies required at runtime for WixSharp WPF dialogs.
-    /// <para>Typically it is Caliburn.Micro assemblies and their dependencies and WixSharp.UI assembly.</para>
-    /// <para>This method is to be used by WixSharp compiler only.</para>
     /// </summary>
     public static class DependencyDescriptor
     {
@@ -93,6 +91,7 @@ namespace WixSharp.UI.WPF
             var result = new List<System.Reflection.AssemblyName>();
 
             // Caliburn.Micro renamed Caliburn.Micro.dll into Caliburn.Micro.Core.dll in the 4.0 version.
+            // Or any other UI dependency (e.g. MVVM)
 
             bool TryToLoad(string asmName)
             {
@@ -104,16 +103,6 @@ namespace WixSharp.UI.WPF
                 catch { }
                 return false;
             }
-
-            // Claliburn v4.*
-            TryToLoad("Caliburn.Micro.Core");
-            TryToLoad("Caliburn.Micro.Platform");
-            TryToLoad("Caliburn.Micro.Platform.Core");
-            TryToLoad("Microsoft.Xaml.Behaviors");
-
-            // Claliburn v3.*
-            TryToLoad("Caliburn.Micro");
-            TryToLoad("System.Windows.Interactivity");
 
             TryToLoad("WixSharp.UI");
 
@@ -132,6 +121,7 @@ namespace WixSharp.UI.WPF
         /// <returns></returns>
         public static BitmapImage ToImageSource(this Bitmap src)
         {
+            if (src == null) return null;
             var ms = new MemoryStream();
             src.Save(ms, ImageFormat.Bmp);
             BitmapImage image = new BitmapImage();
@@ -446,13 +436,30 @@ namespace WixSharp.UI.WPF
         }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <seealso cref="System.Windows.Data.IValueConverter" />
     public class BoolToBackgroundConverter : IValueConverter
     {
+        /// <summary>
+        /// Converts a value.
+        /// </summary>
+        /// <param name="value">The value produced by the binding source.</param>
+        /// <param name="targetType">The type of the binding target property.</param>
+        /// <param name="parameter">The converter parameter to use.</param>
+        /// <param name="culture">The culture to use in the converter.</param>
+        /// <returns>
+        /// A converted value. If the method returns <see langword="null" />, the valid null value is used.
+        /// </returns>
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
             => (value is bool)
                 ? ((bool)value ? System.Windows.Media.Brushes.LightGray : System.Windows.Media.Brushes.Transparent)
                 : null;
 
+        /// <summary>
+        /// Converts a value back.
+        /// </summary>
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
             => throw new NotImplementedException();
     }

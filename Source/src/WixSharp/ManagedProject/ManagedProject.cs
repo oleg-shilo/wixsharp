@@ -604,27 +604,18 @@ namespace WixSharp
                 var result = new List<string>();
 
                 // Caliburn.Micro renamed Caliburn.Micro.dll into Caliburn.Micro.Core.dll in the 4.0 version.
+                // Or any other MVVM framework that is used by the WPF dialogs.
 
-                bool TryToLoad(string asmName)
-                {
-                    try
-                    {
-                        result.Add(System.Reflection.Assembly.Load(asmName).Location);
-                        return true;
-                    }
-                    catch { }
-                    return false;
-                }
-
-                // Claliburn v4.*
-                TryToLoad("Caliburn.Micro.Core");
-                TryToLoad("Caliburn.Micro.Platform");
-                TryToLoad("Caliburn.Micro.Platform.Core");
-                TryToLoad("Microsoft.Xaml.Behaviors");
-
-                // Claliburn v3.*
-                TryToLoad("Caliburn.Micro");
-                TryToLoad("System.Windows.Interactivity");
+                // bool TryToLoad(string asmName)
+                // {
+                //     try
+                //     {
+                //         result.Add(System.Reflection.Assembly.Load(asmName).Location);
+                //         return true;
+                //     }
+                //     catch { }
+                //     return false;
+                // }
 
                 return result.ToArray();
             }

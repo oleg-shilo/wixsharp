@@ -12,8 +12,6 @@ namespace WixSharp.UI.WPF
 {
     /// <summary>
     /// The standard ExitDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro View (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     /// <seealso cref="WixSharp.UI.WPF.WpfDialog" />
     /// <seealso cref="WixSharp.IWpfDialog" />
@@ -74,8 +72,6 @@ namespace WixSharp.UI.WPF
 
     /// <summary>
     /// ViewModel for standard ExitDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     class ExitDialogModel
     {
@@ -83,7 +79,8 @@ namespace WixSharp.UI.WPF
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Dialog").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Dialog").ToImageSource() ??
+                                     session?.GetResourceBitmap("WixUI_Bmp_Dialog").ToImageSource();
 
         public void GoExit()
             => shell?.Exit();

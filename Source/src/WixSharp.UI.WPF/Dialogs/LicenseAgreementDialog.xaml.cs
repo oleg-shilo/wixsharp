@@ -14,8 +14,6 @@ namespace WixSharp.UI.WPF
 {
     /// <summary>
     /// The standard LicenceDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro View (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     /// <seealso cref="WixSharp.UI.WPF.WpfDialog" />
     /// <seealso cref="System.Windows.Markup.IComponentConnector" />
@@ -74,8 +72,6 @@ namespace WixSharp.UI.WPF
 
     /// <summary>
     /// ViewModel for standard LicenceDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     class LicenseDialogModel : NotifyPropertyChangedBase
     {
@@ -101,7 +97,8 @@ namespace WixSharp.UI.WPF
 
         public string LicenceText => session?.GetResourceString("WixSharp_LicenceFile");
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource() ??
+                                     session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
         public bool LicenseAcceptedChecked
         {

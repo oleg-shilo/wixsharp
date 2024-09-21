@@ -193,7 +193,6 @@ namespace WixSharp
         internal static AssemblyName[] GetWixSharpDependencies(this System.Reflection.Assembly asm)
             => asm.GetReferencedAssemblies()
                .Where(a => a.Name.StartsWith("WixSharp.") ||
-                           a.Name.StartsWith("Caliburn.") ||
                            a.Name.StartsWith("System.Windows.Interactivity")).ToArray();
 
         /// <summary>

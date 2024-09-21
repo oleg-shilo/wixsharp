@@ -13,7 +13,7 @@ class Script
         // Uncomment last line of the code (`project.BuildMsi()`) if you want to run this sample
 
         Project project =
-            new Project("MyProduct",
+            new ManagedProject("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(@"Files\Bin\MyApp.exe")))
             {

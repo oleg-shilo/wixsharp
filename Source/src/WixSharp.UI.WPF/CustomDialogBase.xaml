@@ -31,9 +31,7 @@
                     x:Name="Banner"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Source="{Binding Banner}"
-                    Stretch="UniformToFill" />
+                    VerticalAlignment="Stretch" />
                 <StackPanel Margin="9">
                     <TextBlock
                         Grid.Column="0"

@@ -17,6 +17,8 @@ public class Script
 
     static void BuildMsi()
     {
+        // Note, custom dialogs source code may not be the latest version. Thus for the most recent version use VS WixSharp project template.
+
         var feature1 = new Feature("Feat1", "Feat1", true);
         var feature2 = new Feature("Feat2", "Feat2", true);
 
@@ -67,6 +69,11 @@ public class Script
         // project.LocalizationFile = "exta_fr-fr.wxl";
 
         Compiler.VerboseOutput = true;
+
+        project.DefaultRefAssemblies.Add(typeof(Caliburn.Micro.ActivateExtensions).Assembly.Location);  // Caliburn.Micro.dll
+        project.DefaultRefAssemblies.Add(typeof(Caliburn.Micro.Bind).Assembly.Location);                // Caliburn.Micro.Platform.dll
+        project.DefaultRefAssemblies.Add(typeof(Caliburn.Micro.NameTransformer).Assembly.Location);     // Caliburn.Micro.Platform.Core.dll
+        project.DefaultRefAssemblies.Add(typeof(Microsoft.Xaml.Behaviors.Behavior).Assembly.Location);  // Microsoft.Xaml.Behaviors.dll
 
         project.BuildMsi();
     }

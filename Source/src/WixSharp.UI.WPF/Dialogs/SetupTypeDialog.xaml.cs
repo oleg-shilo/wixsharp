@@ -7,8 +7,6 @@ namespace WixSharp.UI.WPF
 {
     /// <summary>
     /// The standard SetupTypeDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro View (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     /// <seealso cref="WixSharp.UI.WPF.WpfDialog" />
     /// <seealso cref="WixSharp.IWpfDialog" />
@@ -55,8 +53,6 @@ namespace WixSharp.UI.WPF
 
     /// <summary>
     /// ViewModel for standard SetupTypeDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     class SetupTypeDialogModel : NotifyPropertyChangedBase
     {
@@ -65,7 +61,8 @@ namespace WixSharp.UI.WPF
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource() ??
+                                     session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SetupTypeDialog" /> class.
