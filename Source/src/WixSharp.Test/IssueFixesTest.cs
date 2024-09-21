@@ -291,6 +291,11 @@ namespace WixSharp.Test
             }
         }
 
+        private void Project1_WixSourceGenerated(XDocument document)
+        {
+            throw new NotImplementedException();
+        }
+
         [Fact]
         [Description("Issue #1398: Underscore in String Id in wxl breaks localization ")]
         public void Fix_Issue_1398()

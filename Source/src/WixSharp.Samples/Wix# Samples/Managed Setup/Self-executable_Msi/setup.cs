@@ -12,47 +12,15 @@ public static class Launcher
 {
     static public int Main(string[] args)
     {
-        var msi = @"D:\dev\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Managed Setup\Self-executable_Msi\ManagedSetup.msi";
+        var msi = Path.GetFullPath(@"..\..\ManagedSetup.msi");
+        Console.WriteLine(Environment.CurrentDirectory);
 
         (int exitCode, string output) = msi.CompleSelfHostedMsi(Path.ChangeExtension(msi, ".exe"));
 
-        Assembly asm = Assembly.LoadFrom(msi + ".exe");
+        if (exitCode != 0)
+            Console.WriteLine(output);
 
-        var ttt = asm.GetManifestResourceNames();
-        using (Stream stream = asm.GetManifestResourceStream(ttt.FirstOrDefault()))
-        {
-        }
-        return 0;
-
-        // Create a ResourceManager instance
-
-        // Retrieve a string resource
-        // var msi = Path.GetTempFileName();
-        // try
-        // {
-        //     test();
-        //     return 0;
-        //     // File.WriteAllBytes(msi, Resources.ManagedSetup);
-        //     // string msi_args = args.Any() ? string.Join(" ", args) : "/i";
-
-        //     // var p = Process.Start("msiexec.exe", msi_args + "\"" + msi + "\"");
-        //     // p.WaitForExit();
-        //     // return p.ExitCode;
-        // }
-        // catch (Exception)
-        // {
-        //     // report the error
-        //     return -1;
-        // }
-        // finally
-        // {
-        //     try
-        //     {
-        //         if (File.Exists(msi))
-        //             File.Delete(msi);
-        //     }
-        //     catch { }
-        // }
+        return exitCode;
     }
 }
 
@@ -64,7 +32,9 @@ static class ExeGen
         var csFile = GenerateCSharpSource(outFile + ".cs");
         try
         {
-            return csc.Run($"\"/res:{msiFile}\" \"-out:{outFile}\" /t:winexe \"{csFile}\"", Path.GetDirectoryName(outFile));
+            var extraArg = "/define:DEBUG /debug+";
+            Console.WriteLine($"Building: {outFile}");
+            return csc.Run($"\"/res:{msiFile}\" \"-out:{outFile}\" {extraArg}  /t:winexe \"{csFile}\"", Path.GetDirectoryName(outFile));
         }
         finally
         {
@@ -94,6 +64,7 @@ class Program
         string msi = Path.GetTempFileName();
         try
         {
+            // Debug.Assert(false);
             ExtractMsi(msi);
             string msi_args = args.Any() ? string.Join("" "", args) : ""/i"";
 
@@ -121,7 +92,7 @@ class Program
     {
         Assembly asm = Assembly.GetExecutingAssembly();
 
-        using (Stream stream = asm.GetManifestResourceStream(asm.GetName().Name))
+        using (Stream stream = asm.GetManifestResourceStream(asm.GetName().Name+"".msi""))
         {
             if (stream != null)
             {
