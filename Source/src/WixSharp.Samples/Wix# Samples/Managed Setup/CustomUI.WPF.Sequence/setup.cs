@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.WPF;
 
@@ -18,11 +19,22 @@ public class Script
 
     static void BuildMsi()
     {
+        // Note, custom dialogs source code may not be the latest version. Thus for the most recent version use VS WixSharp project template.
+        var feature1 = new Feature("Feat1", "Feat1", true);
+        var feature2 = new Feature("Feat2", "Feat2", true);
+
+        Feature features21 = new Feature("Feat2Child1", "Feat2Child1", true) { Display = FeatureDisplay.expand };
+        Feature features22 = new Feature("Feat2Child2", "Feat2Child2", true) { Display = FeatureDisplay.expand };
+        feature2.Add(features21, features22);
+
         var project = new ManagedProject("ManagedSetup",
                       new Dir(@"%ProgramFiles%\My Company\My Product",
-                          new File("readme.md")));
+                          new File(feature1, "readme.md"),
+                          new File(feature2, "setup.cs"),
+                          new File(features21, "exta_fr-fr.wxl"),
+                          new File(features22, "app.config")));
 
-        project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
+        project.GUID = new Guid("6f330b47-2577-43ad-9095-3861ba25889b");
 
         // custom WPF dialogs
         project.ManagedUI = new ManagedUI();
@@ -50,6 +62,11 @@ public class Script
         project.SourceBaseDir = @"..\..\";
 
         project.ManagedUI.AutoScaleMode = AutoScaleMode.Dpi;
+
+        project.DefaultRefAssemblies.Add(typeof(Caliburn.Micro.ActivateExtensions).Assembly.Location);  // Caliburn.Micro.dll
+        project.DefaultRefAssemblies.Add(typeof(Caliburn.Micro.Bind).Assembly.Location);                // Caliburn.Micro.Platform.dll
+        project.DefaultRefAssemblies.Add(typeof(Caliburn.Micro.NameTransformer).Assembly.Location);     // Caliburn.Micro.Platform.Core.dll
+        project.DefaultRefAssemblies.Add(typeof(Microsoft.Xaml.Behaviors.Behavior).Assembly.Location);  // Microsoft.Xaml.Behaviors.dll
 
         project.BuildMsi();
     }

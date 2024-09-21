@@ -1,5 +1,4 @@
 using System.Windows.Media.Imaging;
-using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
 
@@ -7,8 +6,6 @@ namespace WixSharp.UI.WPF
 {
     /// <summary>
     /// The standard WelcomeDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro View (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     /// <seealso cref="WixSharp.UI.WPF.WpfDialog" />
     /// <seealso cref="WixSharp.IWpfDialog" />
@@ -29,23 +26,32 @@ namespace WixSharp.UI.WPF
         /// </summary>
         public void Init()
         {
-            ViewModelBinder.Bind(new WelcomeDialogModel { Host = ManagedFormHost }, this, null);
+            this.DataContext = model = new WelcomeDialogModel { Host = ManagedFormHost };
         }
+
+        WelcomeDialogModel model;
+
+        void GoPrev_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.GoPrev();
+
+        void GoNext_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.GoNext();
+
+        void Cancel_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.Cancel();
     }
 
     /// <summary>
     /// ViewModel for standard WelcomeDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.Screen" />
-    class WelcomeDialogModel : Caliburn.Micro.Screen
+    class WelcomeDialogModel : NotifyPropertyChangedBase
     {
         public ManagedForm Host;
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Dialog").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Dialog")?.ToImageSource() ??
+                                     session?.GetResourceBitmap("WixSharpUI_Bmp_Dialog")?.ToImageSource();
 
         public bool CanGoPrev => false;
 

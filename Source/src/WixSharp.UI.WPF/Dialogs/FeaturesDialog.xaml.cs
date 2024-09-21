@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media.Imaging;
-using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
 
@@ -13,14 +13,14 @@ namespace WixSharp.UI.WPF
 {
     /// <summary>
     /// The standard FeaturesDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro View (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     /// <seealso cref="WixSharp.UI.WPF.WpfDialog" />
     /// <seealso cref="WixSharp.IWpfDialog" />
     /// <seealso cref="System.Windows.Markup.IComponentConnector" />
     public partial class FeaturesDialog : WpfDialog, IWpfDialog
     {
+        FeaturesDialogModel model;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FeaturesDialog"/> class.
         /// </summary>
@@ -35,44 +35,99 @@ namespace WixSharp.UI.WPF
         /// </summary>
         public void Init()
         {
-            ViewModelBinder.Bind(new FeaturesDialogModel(ManagedFormHost), this, null);
+            DataContext = model = new FeaturesDialogModel(ManagedFormHost);
         }
+
+        void Features_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var data = (FeatureItem)(e.NewValue as Node)?.Data;
+            model.SelectedNodeDescription = data?.Description;
+        }
+
+        void GoPrev_Click(object sender, RoutedEventArgs e)
+            => model.GoPrev();
+
+        void GoNext_Click(object sender, RoutedEventArgs e)
+            => model.GoNext();
+
+        void Cancel_Click(object sender, RoutedEventArgs e)
+            => model.Cancel();
+
+        void Reset_Click(object sender, RoutedEventArgs e)
+            => model.Reset();
     }
 
     /// <summary>
     /// ViewModel of the feature tree node.
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.PropertyChangedBase" />
-    class Node : PropertyChangedBase
+    class Node : NotifyPropertyChangedBase
     {
-        private bool @checked;
+        bool @checked;
 
         public string Name { get; set; }
         public ObservableCollection<Node> Nodes { get; set; } = new ObservableCollection<Node>(); // with list and observable collection same results
 
+        internal bool ignoreChldrenCheck = false;
+
+        public bool IsPartialChecked
+        {
+            get
+            {
+                bool allChldrenInSameState =
+                    Nodes.Count == 0 ||
+                    Nodes.All(x => x.Checked) ||
+                    Nodes.All(x => !x.Checked);
+
+                return !allChldrenInSameState;
+            }
+        }
+
         public bool Checked
         {
-            get => @checked;
-            set
+            get => @checked; set
             {
-                @checked = value;
-                NotifyOfPropertyChange(() => Checked);
-                Nodes.ForEach(x => x.Checked = value);
+                if (@checked != value)
+                {
+                    @checked = value;
+
+                    if (ignoreChldrenCheck)
+                    {
+                        ignoreChldrenCheck = false;
+                    }
+                    else
+                    {
+                        Nodes.ForEach(x =>
+                        {
+                            x.ignoreChldrenCheck = true;
+                            x.Checked = value;
+                            x.ignoreChldrenCheck = false;
+                        });
+
+                        if (this.Parent != null)
+                        {
+                            Parent.ignoreChldrenCheck = true;
+                            Parent.Checked = Parent.Nodes.Any(x => x.Checked);
+                            Parent.ignoreChldrenCheck = false;
+                        }
+                    }
+                }
+
+                // allways update view in case if the Checked update was triggered by children even when @checked value is not changed
+                NotifyOfPropertyChange(nameof(Checked));
+                NotifyOfPropertyChange(nameof(IsPartialChecked));
             }
         }
 
         public bool DefaultChecked { get; set; }
         public object Data { get; set; }
+        public Node Parent => ((FeatureItem)this.Data).Parent?.ViewModel as Node;
         public bool IsEditable { get; set; } = true;
     }
 
     /// <summary>
     /// ViewModel for standard FeaturesDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.Screen" />
-    class FeaturesDialogModel : Caliburn.Micro.Screen
+    class FeaturesDialogModel : NotifyPropertyChangedBase
     {
         ManagedForm Host;
         ISession session => Host?.Runtime.Session;
@@ -87,12 +142,13 @@ namespace WixSharp.UI.WPF
             BuildFeaturesHierarchy();
         }
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource() ??
+                                     session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
         public string SelectedNodeDescription
         {
             get => selectedNodeDescription;
-            set { selectedNodeDescription = value; NotifyOfPropertyChange(() => SelectedNodeDescription); }
+            set { selectedNodeDescription = value; NotifyOfPropertyChange(nameof(SelectedNodeDescription)); }
         }
 
         /// <summary>
@@ -194,10 +250,10 @@ namespace WixSharp.UI.WPF
                 // find all children
                 features.Where(x => x.ParentName == item.Name)
                         .ForEach(c =>
-                         {
-                             c.Parent = item; //link child model to parent model
-                             itemsToProcess.Enqueue(c); //schedule for further processing
-                         });
+                        {
+                            c.Parent = item; //link child model to parent model
+                            itemsToProcess.Enqueue(c); //schedule for further processing
+                        });
 
                 if (UserSelectedItems != null)
                     view.Checked = UserSelectedItems.Contains((view.Data as FeatureItem).Name);

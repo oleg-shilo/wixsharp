@@ -2,7 +2,6 @@
     x:Class="WixSharp.UI.WPF.FeaturesDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:cal="http://www.caliburnproject.org"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:wixsharp="clr-namespace:WixSharp.UI.WPF"
@@ -10,6 +9,9 @@
     d:DesignWidth="512"
     DialogTitle="[ProductName] Setup"
     mc:Ignorable="d">
+    <wixsharp:WpfDialog.Resources>
+        <wixsharp:BoolToBackgroundConverter x:Key="BoolToBackgroundConverter" />
+    </wixsharp:WpfDialog.Resources>
 
     <Grid x:Name="Root">
         <Grid.Resources>
@@ -43,7 +45,6 @@
             Margin="-1,-1,-1,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Background="White"
             BorderBrush="Gray"
             BorderThickness="1">
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -57,11 +58,13 @@
                     Grid.Row="1"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch" />
+                    VerticalAlignment="Stretch"
+                    Source="{Binding Banner}"
+                    Stretch="UniformToFill"
+                    StretchDirection="Both" />
                 <StackPanel Margin="9">
                     <TextBlock
                         Grid.Column="0"
-                        Background="White"
                         FontSize="12"
                         FontWeight="Bold">
                         [CustomizeDlgTitle]
@@ -70,7 +73,6 @@
                         x:Name="DialogDescription"
                         Margin="17,5"
                         VerticalAlignment="Stretch"
-                        Background="White"
                         TextWrapping="WrapWithOverflow">
                         [CustomizeDlgDescription]
                     </TextBlock>
@@ -99,12 +101,19 @@
                 x:Name="FeaturesTree"
                 Grid.Row="1"
                 Grid.Column="0"
-                ItemsSource="{Binding RootNodes}">
+                ItemsSource="{Binding RootNodes}"
+                SelectedItemChanged="Features_SelectedItemChanged">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
                         <StackPanel Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding Checked}" IsEnabled="{Binding IsEditable}" />
-                            <TextBlock Margin="5, 0" VerticalAlignment="Center" Text="{Binding Name}" />
+                            <CheckBox
+                                Background="{Binding IsPartialChecked, Converter={StaticResource BoolToBackgroundConverter}}"
+                                IsChecked="{Binding Checked}"
+                                IsEnabled="{Binding IsEditable}" />
+                            <TextBlock
+                                Margin="5,0"
+                                VerticalAlignment="Center"
+                                Text="{Binding Name}" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
@@ -115,13 +124,17 @@
                 Margin="10,0,0,0"
                 BorderBrush="Black"
                 BorderThickness="1">
-                <TextBlock x:Name="SelectedNodeDescription" Margin="10" />
+                <TextBlock
+                    x:Name="SelectedNodeDescription"
+                    Margin="10"
+                    Text="{Binding SelectedNodeDescription}" />
             </Border>
             <Button
                 x:Name="Reset"
                 Grid.Row="2"
                 Margin="0,10,0,0"
                 HorizontalAlignment="Left"
+                Click="Reset_Click"
                 Style="{StaticResource Link}">
                 [CustomizeDlgReset]
             </Button>
@@ -142,21 +155,24 @@
                 <Button
                     x:Name="GoPrev"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="GoPrev_Click">
                     [WixUIBack]
                 </Button>
                 <Separator Width="10" Opacity="0" />
                 <Button
                     x:Name="GoNext"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="GoNext_Click">
                     [WixUINext]
                 </Button>
                 <Separator Width="20" Opacity="0" />
                 <Button
                     x:Name="Cancel"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="Cancel_Click">
                     [WixUICancel]
                 </Button>
                 <Separator Width="10" Opacity="0" />

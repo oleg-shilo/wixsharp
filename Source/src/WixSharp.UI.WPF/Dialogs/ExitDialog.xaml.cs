@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Media.Imaging;
-using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
 
@@ -11,8 +12,6 @@ namespace WixSharp.UI.WPF
 {
     /// <summary>
     /// The standard ExitDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro View (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     /// <seealso cref="WixSharp.UI.WPF.WpfDialog" />
     /// <seealso cref="WixSharp.IWpfDialog" />
@@ -35,8 +34,10 @@ namespace WixSharp.UI.WPF
         {
             UpdateTitles(ManagedFormHost.Runtime.Session);
 
-            ViewModelBinder.Bind(new ExitDialogModel { Host = ManagedFormHost }, this, null);
+            DataContext = model = new ExitDialogModel { Host = ManagedFormHost };
         }
+
+        ExitDialogModel model;
 
         /// <summary>
         /// Updates the titles of the dialog depending on the success of the installation action.
@@ -58,21 +59,28 @@ namespace WixSharp.UI.WPF
             // `Localize` resolves [...] titles and descriptions into the localized strings stored in MSI resources tables
             this.Localize();
         }
+
+        void ViewLog_Click(object sender, RoutedEventArgs e)
+            => model.ViewLog();
+
+        void GoExit_Click(object sender, RoutedEventArgs e)
+            => model.GoExit();
+
+        void Cancel_Click(object sender, RoutedEventArgs e)
+            => model.Cancel();
     }
 
     /// <summary>
     /// ViewModel for standard ExitDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.Screen" />
-    class ExitDialogModel : Caliburn.Micro.Screen
+    class ExitDialogModel
     {
         public ManagedForm Host { get; set; }
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Dialog").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Dialog").ToImageSource() ??
+                                     session?.GetResourceBitmap("WixUI_Bmp_Dialog").ToImageSource();
 
         public void GoExit()
             => shell?.Exit();
