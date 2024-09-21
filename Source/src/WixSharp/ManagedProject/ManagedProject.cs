@@ -481,16 +481,16 @@ namespace WixSharp
 
                 // Caliburn.Micro renamed Caliburn.Micro.dll into Caliburn.Micro.Core.dll in the 4.0 version.
                 // or any other future MVVM dependencies.
-                bool TryToLoad(string asmName)
-                {
-                    try
-                    {
-                        result.Add(System.Reflection.Assembly.Load(asmName).Location);
-                        return true;
-                    }
-                    catch { }
-                    return false;
-                }
+                // bool TryToLoad(string asmName)
+                // {
+                //     try
+                //     {
+                //         result.Add(System.Reflection.Assembly.Load(asmName).Location);
+                //         return true;
+                //     }
+                //     catch { }
+                //     return false;
+                // }
 
                 return result.ToArray();
             }

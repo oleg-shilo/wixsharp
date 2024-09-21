@@ -126,10 +126,21 @@ namespace WixSharp.UI.WPF
             => model.Cancel();
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     public class NotifyPropertyChangedBase : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Notifies the of property change.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
         public void NotifyOfPropertyChange(string propertyName)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

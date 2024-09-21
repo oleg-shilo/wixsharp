@@ -37,7 +37,7 @@ namespace WixSharp.UI.Forms
         public object View { set => ViewModel = value; get => ViewModel; }
 
         /// <summary>
-        /// The ViewModel of the Feature. Typically a TreeNode (WinForms) or Node (WPF)
+        /// The View or ViewModel of the Feature. Typically a TreeNode (view in WinForms) or Node (ViewModel in WPF)
         /// </summary>
         public object ViewModel;
 

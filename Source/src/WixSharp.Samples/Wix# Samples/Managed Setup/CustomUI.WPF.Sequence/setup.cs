@@ -20,6 +20,7 @@ public class Script
     static void BuildMsi()
     {
         // Note, custom dialogs source code may not be the latest version. Thus for the most recent version use VS WixSharp project template.
+
         var feature1 = new Feature("Feat1", "Feat1", true);
         var feature2 = new Feature("Feat2", "Feat2", true);
 

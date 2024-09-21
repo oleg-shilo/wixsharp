@@ -433,13 +433,30 @@ namespace WixSharp.UI.WPF
         }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <seealso cref="System.Windows.Data.IValueConverter" />
     public class BoolToBackgroundConverter : IValueConverter
     {
+        /// <summary>
+        /// Converts a value.
+        /// </summary>
+        /// <param name="value">The value produced by the binding source.</param>
+        /// <param name="targetType">The type of the binding target property.</param>
+        /// <param name="parameter">The converter parameter to use.</param>
+        /// <param name="culture">The culture to use in the converter.</param>
+        /// <returns>
+        /// A converted value. If the method returns null, the valid null value is used.
+        /// </returns>
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
             => (value is bool)
                 ? ((bool)value ? System.Windows.Media.Brushes.LightGray : System.Windows.Media.Brushes.Transparent)
                 : null;
 
+        /// <summary>
+        /// Converts a value.
+        /// </summary>
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
             => throw new NotImplementedException();
     }

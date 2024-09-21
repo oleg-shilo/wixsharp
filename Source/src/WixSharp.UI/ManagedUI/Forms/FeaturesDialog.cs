@@ -108,7 +108,7 @@ namespace WixSharp.UI.Forms
                 var item = itemsToProcess.Dequeue();
 
                 //create the view of the feature
-                var view = new ReadOnlyTreeNode
+                var viewModel = new ReadOnlyTreeNode
                 {
                     Text = item.Title,
                     Tag = item, //link view to model
@@ -117,10 +117,10 @@ namespace WixSharp.UI.Forms
                     Checked = item.DefaultIsToBeInstalled()
                 };
 
-                item.View = view;
+                item.ViewModel = viewModel;
 
                 if (item.Parent != null && item.Display != FeatureDisplay.hidden)
-                    (item.Parent.View as TreeNode).Nodes.Add(view); //link child view to parent view
+                    (item.Parent.ViewModel as TreeNode).Nodes.Add(viewModel); //link child view to parent view
 
                 // even if the item is hidden process all its children so the correct hierarchy is established
 
@@ -133,15 +133,15 @@ namespace WixSharp.UI.Forms
                                  });
 
                 if (UserSelectedItems != null)
-                    view.Checked = UserSelectedItems.Contains((view.Tag as FeatureItem).Name);
+                    viewModel.Checked = UserSelectedItems.Contains((viewModel.Tag as FeatureItem).Name);
 
                 if (item.Display == FeatureDisplay.expand)
-                    view.Expand();
+                    viewModel.Expand();
             }
 
             //add views to the treeView control
             rootItems.Where(x => x.Display != FeatureDisplay.hidden)
-                     .Select(x => x.View)
+                     .Select(x => x.ViewModel)
                      .Cast<TreeNode>()
                      .ForEach(node => featuresTree.Nodes.Add(node));
 
