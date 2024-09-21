@@ -34,8 +34,7 @@
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    Source="{Binding Banner}"
-                    Stretch="UniformToFill" />
+                    Source="{Binding Banner}" />
                 <StackPanel Margin="9">
                     <TextBlock
                         Grid.Column="0"
