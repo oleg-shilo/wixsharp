@@ -1368,10 +1368,7 @@ namespace WixSharp
                     dirId.IsNotEmpty())
                 {
                     if (firstDirWithItems.Id.IsWixConstant())
-                        Compiler.OutputWriteLine($"WARNING: Special folder directory ID '{firstDirWithItems.Id}' has been reset to '{dirId}'.\n" +
-                                                  "If it was not intended disable auto assignment by setting 'Compiler.AutoGeneration.InstallDirDefaultId' to null.\n" +
-                                                  "Or set  'Dir.IsInstallDir = true' for the installation directory.\r" +
-                                                  "Or instead of 'new Dir(...' use 'new InstallDir(...' for the installation directory.");
+                        EmitInstallDirCollisionWarning(firstDirWithItems.Id, logicalPath);
 
                     firstDirWithItems.Id = dirId;
                     return logicalPath;
@@ -1380,6 +1377,13 @@ namespace WixSharp
             return null;
         }
 
+        static void EmitInstallDirCollisionWarning(string dirId, string logicalPath)
+        {
+            Compiler.OutputWriteLine($"WARNING: Auto assigned installation directory ID '{dirId}' collides with the existing directory ID '{logicalPath}'.\n" +
+                                      "If it was not intended disable auto assignment by setting 'Compiler.AutoGeneration.InstallDirDefaultId' to null.\n" +
+                                      "Or set  'Dir.IsInstallDir = true' for the installation directory.\r" +
+                                      "Or instead of 'new Dir(...' use 'new InstallDir(...' for the installation directory.");
+        }
         static XElement GetTopLevelDir(XElement product)
         {
             XElement dir = product.Elements("Directory").First();
@@ -2178,8 +2182,12 @@ namespace WixSharp
             if (userDefinedInstallDir != null)
             {
                 if (!userDefinedInstallDir.IsIdSet())
-                    userDefinedInstallDir.Id = Compiler.AutoGeneration.InstallDirDefaultId;
+                {
+                    if (userDefinedInstallDir.Id.IsWixConstant())
+                        EmitInstallDirCollisionWarning(Compiler.AutoGeneration.InstallDirDefaultId, userDefinedInstallDir.Id);
 
+                    userDefinedInstallDir.Id = Compiler.AutoGeneration.InstallDirDefaultId;
+                }
                 wProject.ActualInstallDirId = userDefinedInstallDir.Id;
             }
             else
