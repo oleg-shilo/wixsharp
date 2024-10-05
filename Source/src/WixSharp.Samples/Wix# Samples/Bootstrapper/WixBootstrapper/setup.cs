@@ -18,12 +18,12 @@ public class InstallScript
 {
     static public void Main()
     {
-        // SimpleMsiInternalUI("test.msi"); return;
+        // SimpleMsiInternalUI("My Product.msi"); return;
 
         var crtMsi = BuildCrtMsi();
         var productMsi = BuildMainMsi();
 
-        // SimpleMsiInternalUI(crtMsi);
+        SimpleMsiInternalUI(crtMsi);
         // SimpleGlobalInternalUI(crtMsi);
         // Standard(crtMsi, productMsi);
         Complex(crtMsi, productMsi);
@@ -39,6 +39,16 @@ public class InstallScript
 
         // will show MSI UI instead
         bundle.Chain.Add(new MsiPackage(msi) { DisplayInternalUI = true, Visible = true });
+
+        // Adds .NET compatibility check to the bundle.
+        var check = new DotNetCompatibilityCheck(
+            "DOTNET_RUNTIME_CHECK",
+            RollForward.latestMinor,
+            RuntimeType.desktop,
+            Platform.x64,
+            new Version(8, 0, 0, 0));
+
+        bundle.GenericItems.Add(check);
 
         bundle.Build("my.exe");
     }
