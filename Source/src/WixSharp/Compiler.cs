@@ -779,7 +779,8 @@ namespace WixSharp
                 {
                     if (project.DigitalSignature == null)
                     {
-                        Compiler.OutputWriteLine("WARNING: DigitalSignature is not set but SignAllFiles is enabled. Please set DigitalSignature property of the project.");
+                        if (project.signAllFilesSet)
+                            Compiler.OutputWriteLine("WARNING: DigitalSignature is not set but SignAllFiles is enabled. Please set DigitalSignature property of the project.");
                     }
                     else
                     {

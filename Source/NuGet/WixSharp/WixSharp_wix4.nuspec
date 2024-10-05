@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp_wix4</id>
-    <version>2.4.0.0</version>
+    <version>2.4.1.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,21 +18,18 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed: `dotnet tool install --global wix`
 The package is tested against WIX (Windows Installer Xml) Toolset v4.0.1.0</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.4.0.0
+    <releaseNotes>Release v2.4.1.0
+#1652: Bundle DotNetCompatibilityCheck element suport
+#1653: Avoid unnecessary *Ref element for Fragment definitions.
+#1579: installDir variable erased depending on ManagedProject structure
+Updated custom dialogs to deal with changes in the size of Wix stock background images
 
-- Remove Caliburn.Micro dependency for WPF UI
-- #1638: Simplify Custom UI
-- #1641: How to set or use Launchcondition Action in Wix#
-- #1613: Hidden child features in FeaturesDialog.UserSelectedItems
-- #1604: Some strings in Dialogs from .wxl are not replaced in Custom WPF UI
-- #1637: Custom WPF FeaturesDialog (possibly default too) non-functional.
-- Improved VSTemplates. Triggered by #1624
-- Updated VS project Templates for supporting Caliburn.Micro removal</releaseNotes>
+</releaseNotes>
     <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp_wix4.bin" version="2.4.0.0" />
+      <dependency id="WixSharp_wix4.bin" version="2.4.1.0" />
     </dependencies>
   </metadata>
   <files>
