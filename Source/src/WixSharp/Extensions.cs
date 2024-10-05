@@ -2152,8 +2152,11 @@ namespace WixSharp
             {
                 item.EnsureId();
 
-                var refElement = new XElement(item.Name.Namespace + item.Name.LocalName + "Ref", item.Attribute("Id"));
-                placementElement.Add(refElement);
+                if (placementElement != placementElement.Document.Root)
+                {
+                    var refElement = new XElement(item.Name.Namespace + item.Name.LocalName + "Ref", item.Attribute("Id"));
+                    placementElement.Add(refElement);
+                }
 
                 fragment.Add(item);
             }

@@ -1524,6 +1524,29 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Adds the XML generated from the <see cref="IXmlAware"/> entity.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="entity">The entity.</param>
+        /// <param name="placementXmlPath">The placement XML path. If it's null then the entity XML is placed in the root
+        /// of teh XML document.</param>
+        /// <returns></returns>
+        static public WixProject AddXml(this WixProject project, IXmlAware entity, string placementXmlPath = null)
+        {
+            project.WixSourceGenerated += doc =>
+            {
+                var element = entity.ToXml();
+                var placement = doc.Root;
+                if (placementXmlPath.IsNotEmpty())
+                    placement = doc.SelectOrCreate(placementXmlPath);
+
+                placement.AddElement(element);
+            };
+
+            return project;
+        }
+
+        /// <summary>
         /// Sets the value of the attribute value in the .NET application configuration file according
         /// the specified XPath expression.
         /// <para>
