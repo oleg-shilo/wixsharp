@@ -19,6 +19,13 @@ namespace WixSharp.UI.Forms
 
         void WelcomeDialog_Load(object sender, EventArgs e)
         {
+            // Debugger.Launch();
+            // var ttt = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Dialog");
+            // var ttt2 = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Dialog");
+
+            // ttt?.Save("ttt.bmp");
+            // ttt2?.Save("ttt2.bmp");
+
             image.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Dialog") ??
                           Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Dialog");
 
@@ -41,9 +48,6 @@ namespace WixSharp.UI.Forms
             imgPanel.Height = this.ClientRectangle.Height - bottomPanel.Height;
             float ratio = (float)image.Image.Width / (float)image.Image.Height;
             image.Width = (int)(image.Height * ratio);
-
-            textPanel.Left = image.Right + 5;
-            textPanel.Width = (bottomPanel.Width - image.Width) - 10;
         }
 
         void cancel_Click(object sender, EventArgs e)
