@@ -196,7 +196,19 @@ namespace WixSharp
         /// <p>Note, the digital signing will be performed on the original files specified in the <see cref="WixSharp.Project"/>
         /// initialization.</p>
         /// </summary>
-        public bool SignAllFiles = false;
+        public bool SignAllFiles
+        {
+            get => signAllFiles;
+
+            set
+            {
+                signAllFiles = value;
+                signAllFilesSet = true;
+            }
+        }
+
+        bool signAllFiles = true;
+        internal bool signAllFilesSet = false;
 
         internal virtual void Preprocess()
         {
