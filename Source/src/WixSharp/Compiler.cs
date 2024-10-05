@@ -777,6 +777,9 @@ namespace WixSharp
                     }
                     else
                     {
+                        if (!project.signAllFilesSet)
+                            Compiler.OutputWriteLine(
+                                "WARNING: DigitalSignature is set but SignAllFiles is not. The default SignAllFiles value 'true' is used.");
                         ProjectFileSigner.SignAllFiles(project, Compiler.SignAllFilesOptions);
                     }
                 }
