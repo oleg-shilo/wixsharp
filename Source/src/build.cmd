@@ -5,7 +5,7 @@ rem cleaning WPF bin folders (MSBuild fails to do it)
 rd /Q /S .\WixSharp.UI.WPF\obj
 rd /Q /S .\WixSharp.UI.WPF\bin
 
-rem set EnableNuGetPackageRestore=true
+set EnableNuGetPackageRestore=true
 nuget restore WixSharp.Suite.sln
 
 set msbuild=C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe
