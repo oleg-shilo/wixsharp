@@ -19,13 +19,6 @@ namespace WixSharp.UI.Forms
 
         void WelcomeDialog_Load(object sender, EventArgs e)
         {
-            // Debugger.Launch();
-            // var ttt = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Dialog");
-            // var ttt2 = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Dialog");
-
-            // ttt?.Save("ttt.bmp");
-            // ttt2?.Save("ttt2.bmp");
-
             image.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Dialog") ??
                           Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Dialog");
 

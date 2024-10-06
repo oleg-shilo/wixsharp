@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using WixSharp;
+
 using WixSharp.UI.Forms;
 
 namespace $safeprojectname$.Dialogs
@@ -22,7 +23,9 @@ namespace $safeprojectname$.Dialogs
 
         void ExitDialog_Load(object sender, System.EventArgs e)
         {
-            image.Image = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Dialog");
+            image.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Dialog") ??
+                          Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Dialog");
+
             if (Shell.UserInterrupted || Shell.Log.Contains("User cancelled installation."))
             {
                 title.Text = "[UserExitTitle]";
@@ -36,7 +39,8 @@ namespace $safeprojectname$.Dialogs
                 this.Localize();
             }
 
-            ResetLayout();
+            if (image.Image != null)
+                ResetLayout();
 
             // show error message if required
             // if (Shell.Errors.Any())
@@ -61,9 +65,6 @@ namespace $safeprojectname$.Dialogs
             imgPanel.Height = this.ClientRectangle.Height - bottomPanel.Height;
             float ratio = (float)image.Image.Width / (float)image.Image.Height;
             image.Width = (int)(image.Height * ratio);
-
-            textPanel.Left = image.Right + 5;
-            textPanel.Width = (bottomPanel.Width - image.Width) - 10;
         }
 
         void finish_Click(object sender, System.EventArgs e)
@@ -79,7 +80,7 @@ namespace $safeprojectname$.Dialogs
 
                 if (logFile.IsEmpty())
                 {
-                    string wixSharpDir = Path.GetTempPath().PathCombine("$safeprojectname$");
+                    string wixSharpDir = Path.GetTempPath().PathCombine("WixSharp");
 
                     if (!Directory.Exists(wixSharpDir))
                         Directory.CreateDirectory(wixSharpDir);

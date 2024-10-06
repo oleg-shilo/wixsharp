@@ -60,8 +60,8 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Cusom UI %28WiX3%29.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Cusom UI %28WiX3%29.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Custom UI %28WiX3%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Custom UI %28WiX3%29.zip</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -95,8 +95,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Cusom UI %28WiX4%29.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Cusom UI %28WiX4%29.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Custom UI %28WiX4%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Custom UI %28WiX4%29.zip</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -130,8 +130,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp - Cusom UI Library %28WiX4%29.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp - Cusom UI Library %28WiX4%29.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp - Custom UI Library %28WiX4%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp - Custom UI Library %28WiX4%29.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

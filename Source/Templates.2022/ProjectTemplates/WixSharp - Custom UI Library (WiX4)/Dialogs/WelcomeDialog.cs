@@ -1,6 +1,9 @@
 using System;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 using WixSharp;
+
 using WixSharp.UI.Forms;
 
 namespace $safeprojectname$.Dialogs
@@ -20,9 +23,11 @@ namespace $safeprojectname$.Dialogs
 
         void WelcomeDialog_Load(object sender, EventArgs e)
         {
-            image.Image = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Dialog");
+            image.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Dialog") ??
+                          Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Dialog");
 
-            ResetLayout();
+            if (image.Image != null)
+                ResetLayout();
         }
 
         void ResetLayout()
@@ -40,9 +45,6 @@ namespace $safeprojectname$.Dialogs
             imgPanel.Height = this.ClientRectangle.Height - bottomPanel.Height;
             float ratio = (float)image.Image.Width / (float)image.Image.Height;
             image.Width = (int)(image.Height * ratio);
-
-            textPanel.Left = image.Right + 5;
-            textPanel.Width = (bottomPanel.Width - image.Width) - 10;
         }
 
         void cancel_Click(object sender, EventArgs e)

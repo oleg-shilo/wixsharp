@@ -26,8 +26,8 @@
   <ItemGroup>
     <PackageReference Include="WixSharp" Version="1.26.0" />
     <PackageReference Include="WixSharp.bin" Version="1.26.0" />
-    <PackageReference Include="WixSharp.wix.bin" Version="1.26.0" />
-    <PackageReference Include="WixSharp.WPF" Version="1.26.0.1" />
+    <PackageReference Include="WixSharp.wix.bin" Version="3.14.1" />
+    <PackageReference Include="WixSharp.WPF" Version="1.26.0" />
   </ItemGroup>
 
   <ItemGroup>

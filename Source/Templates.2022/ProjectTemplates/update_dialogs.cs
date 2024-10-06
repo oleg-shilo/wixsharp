@@ -6,11 +6,15 @@ using System.Diagnostics;
 
 updateWinFormDialogs(
     @"..\..\src\WixSharp.UI\ManagedUI\Forms",
-    @"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Cusom UI (WiX3)\Dialogs");
+    @"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom UI (WiX3)\Dialogs");
 
 updateWinFormDialogs(
     @"..\..\src\WixSharp.UI\ManagedUI\Forms",
-    @"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Cusom UI (WiX4)\Dialogs");
+    @"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom UI (WiX4)\Dialogs");
+
+updateWinFormDialogs(
+    @"..\..\src\WixSharp.UI\ManagedUI\Forms",
+    @"..\..\Templates.2022\ProjectTemplates\WixSharp - Custom UI Library (WiX4)\Dialogs");
 
 updateWpfDialogs(
     @"..\..\src\WixSharp.UI.WPF\Dialogs",
@@ -24,7 +28,7 @@ updateWixSharpPackages(
     @"..\..\Templates.2022\ProjectTemplates", "(WiX3)", "1.26.0");
 
 updateWixSharpPackages(
-    @"..\..\Templates.2022\ProjectTemplates", "(WiX4)", "2.4.0");
+    @"..\..\Templates.2022\ProjectTemplates", "(WiX4)", "2.4.1");
 
 foreach (var file in Directory.GetFiles(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI (WiX3)\Dialogs",
         "*.xaml.cs"))
@@ -36,8 +40,9 @@ foreach (var file in Directory.GetFiles(@"..\..\Templates.2022\ProjectTemplates\
 "------------------------------------".print();
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup (WiX3)");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup (WiX4)");
-packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Cusom UI (WiX3)");
-packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Cusom UI (WiX4)");
+packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom UI (WiX3)");
+packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom UI (WiX4)");
+packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp - Custom UI Library (WiX4)");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom Dialog (WiX3)");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom Dialog (WiX4)");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI (WiX3)");
@@ -134,7 +139,8 @@ void updateWixSharpPackages(string dir, string projTypePattern, string version)
         lines = lines.Select(line =>
         {
             // <PackageReference Include="WixSharp" Version="1.25.2" />
-            if (line.Contains("PackageReference") && line.Contains("Include=\"WixSharp"))
+            // WixSharp.wix.bin - should be excluded
+            if (!line.Contains("WixSharp.wix.bin") && line.Contains("PackageReference") && line.Contains("Include=\"WixSharp"))
             {
                 var currentVersion = line.Split(" ").Where(x => x.Trim().Contains("Version=\"")).First();
                 Console.WriteLine($"    {currentVersion} => {version} ");

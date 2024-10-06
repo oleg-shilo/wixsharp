@@ -1,10 +1,12 @@
 using System;
 using System.Drawing;
 using System.Security.Principal;
-using WixSharp;
 using WixSharp.CommonTasks;
-using WixSharp.UI.Forms;
 using WixToolset.Dtf.WindowsInstaller;
+
+using WixSharp;
+
+using WixSharp.UI.Forms;
 
 namespace $safeprojectname$.Dialogs
 {
@@ -33,7 +35,8 @@ namespace $safeprojectname$.Dialogs
 
         void ProgressDialog_Load(object sender, EventArgs e)
         {
-            banner.Image = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner") ??
+                           Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner");
 
             if (!WindowsIdentity.GetCurrent().IsAdmin() && Uac.IsEnabled())
             {
@@ -42,7 +45,8 @@ namespace $safeprojectname$.Dialogs
                 showWaitPromptTimer.Start();
             }
 
-            ResetLayout();
+            if (banner.Image != null)
+                ResetLayout();
 
             Shell.StartExecute();
         }
@@ -118,6 +122,7 @@ namespace $safeprojectname$.Dialogs
                     {
                         try
                         {
+                            // see Discussion: https://github.com/oleg-shilo/wixsharp/discussions/1504
                             //messageRecord[0] - is reserved for FormatString value
 
                             string message = null;

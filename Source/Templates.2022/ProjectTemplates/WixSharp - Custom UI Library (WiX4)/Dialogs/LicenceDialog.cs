@@ -2,9 +2,12 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using WixSharp;
-using WixSharp.UI.Forms;
+
 using io = System.IO;
+
+using WixSharp;
+
+using WixSharp.UI.Forms;
 
 namespace $safeprojectname$.Dialogs
 {
@@ -25,11 +28,14 @@ namespace $safeprojectname$.Dialogs
 
         void LicenceDialog_Load(object sender, EventArgs e)
         {
-            banner.Image = Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner") ??
+                           Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner");
+
             agreement.Rtf = Runtime.Session.GetResourceString("WixSharp_LicenceFile");
             accepted.Checked = Runtime.Session["LastLicenceAcceptedChecked"] == "True";
 
-            ResetLayout();
+            if (banner.Image != null)
+                ResetLayout();
         }
 
         void ResetLayout()
