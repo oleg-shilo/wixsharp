@@ -2,7 +2,6 @@
 //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Configuration;
 using System.Diagnostics;

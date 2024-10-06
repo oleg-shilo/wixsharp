@@ -77,7 +77,7 @@ class Script
 
     private static void InjectImages(System.Xml.Linq.XDocument document)
     {
-        var productElement = document.Root.Select("Product");
+        var productElement = document.Root.Select(Compiler.ProductElementName);
 
         productElement.Add(new XElement("WixVariable",
                                new XAttribute("Id", "WixUIBannerBmp"),

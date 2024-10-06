@@ -76,8 +76,6 @@ public class Script
         project.DefaultRefAssemblies.Add(typeof(Caliburn.Micro.NameTransformer).Assembly.Location);     // Caliburn.Micro.Platform.Core.dll
         project.DefaultRefAssemblies.Add(typeof(Microsoft.Xaml.Behaviors.Behavior).Assembly.Location);  // Microsoft.Xaml.Behaviors.dll
 
-        project.ManagedUI.AutoScaleMode = AutoScaleMode.Dpi;
-
         project.BuildMsi();
     }
 

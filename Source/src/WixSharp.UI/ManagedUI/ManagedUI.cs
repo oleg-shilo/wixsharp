@@ -1,4 +1,3 @@
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -293,15 +292,6 @@ namespace WixSharp
 
         ManualResetEvent uiExitEvent = new ManualResetEvent(false);
         IUIContainer shell;
-
-        /// <summary>
-        /// Gets or sets the AutoScaleMode scale mode of the UI shell window.
-        /// <para>Note, even for the WPF dialogs the top level window (shell) is a WinForm object.</para>
-        /// </summary>
-        /// <value>
-        /// The default AutoScaleMode.
-        /// </value>
-        public AutoScaleMode AutoScaleMode { get; set; } = AutoScaleMode.Font;
 
         void ReadDialogs(Session session)
         {

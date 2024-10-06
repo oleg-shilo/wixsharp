@@ -1,0 +1,47 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0/win-x86",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {},
+    ".NETCoreApp,Version=v6.0/win-x86": {
+      "WixToolset.WixBA/1.0.0": {
+        "dependencies": {
+          "WixToolset.BootstrapperApplicationApi": "5.0.0"
+        },
+        "runtime": {
+          "WixToolset.WixBA.dll": {}
+        }
+      },
+      "WixToolset.BootstrapperApplicationApi/5.0.0": {
+        "runtime": {
+          "lib/netstandard2.0/WixToolset.BootstrapperApplicationApi.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.0.0"
+          }
+        },
+        "native": {
+          "runtimes/win-x86/native/mbanative.dll": {
+            "fileVersion": "5.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "WixToolset.WixBA/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "WixToolset.BootstrapperApplicationApi/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-PtK6Bb7MjebFiQDoZ+jQq5HYOuwTsDmPrk5/sewojRfCLbm3z8bQHWD7JSo/S8sH8OUsmZvGkjjUh5pj37FxBQ==",
+      "path": "wixtoolset.bootstrapperapplicationapi/5.0.0",
+      "hashPath": "wixtoolset.bootstrapperapplicationapi.5.0.0.nupkg.sha512"
+    }
+  }
+}

@@ -176,7 +176,7 @@ namespace WixSharp
 
         internal bool HasItemsToInstall()
         {
-            return Files.Any() || FilesCollections.Any() || Shortcuts.Any();
+            return Files.Any() || FileCollections.Any() || Shortcuts.Any();
         }
 
         static internal string[] ToFlatPathTree(string path)
@@ -251,21 +251,9 @@ namespace WixSharp
         /// not only a single level directory but all subdirectories as well.
         /// </para>
         /// </summary>
-        [Obsolete("This field is renamed to `DirFilesCollections` to address misspell in the member name.")]
         public DirFiles[] DirFileCollections = new DirFiles[0];
 
         /// <summary>
-        /// Collection of the <see cref="DirFiles"/> objects. <see cref="DirFiles"/> type is used to specify files
-        /// contained by a specific directory with wildcard character pattern.
-        /// Files in subdirectories are not included.
-        /// <para>
-        /// <see cref="DirFiles"/> type is related to but not identical to <see cref="Files"/>, which defines files of
-        /// not only a single level directory but all subdirectories as well.
-        /// </para>
-        /// </summary>
-        public DirFiles[] DirFilesCollections { get => DirFileCollections; set => DirFileCollections = value; }
-
-        /// <summary>
         /// Collection of the <see cref="Files"/> objects. <see cref="Files"/> type is used to specify files
         /// contained by a specific directory and all subdirectories with wildcard character pattern.
         /// <para>
@@ -273,18 +261,7 @@ namespace WixSharp
         /// of a single level directory.
         /// </para>
         /// </summary>
-        [Obsolete("This field is renamed to `FilesCollections` to address misspell in the member name.")]
         public Files[] FileCollections = new Files[0];
-
-        /// <summary>
-        /// Collection of the <see cref="Files"/> objects. <see cref="Files"/> type is used to specify files
-        /// contained by a specific directory and all subdirectories with wildcard character pattern.
-        /// <para>
-        /// <see cref="Files"/> type is related to but not identical to <see cref="DirFiles"/>, which defines only files
-        /// of a single level directory.
-        /// </para>
-        /// </summary>
-        public Files[] FilesCollections { get => FileCollections; set => FileCollections = value; }
 
         /// <summary>
         /// Collection of WiX/MSI <see cref="ODBCDataSource"/> objects to be created during the installed.
@@ -430,8 +407,8 @@ namespace WixSharp
 
             Files = files.ToArray();
             Dirs = dirs.ToArray();
-            DirFilesCollections = fileCollections.ToArray();
-            FilesCollections = dirItemsCollections.ToArray();
+            DirFileCollections = fileCollections.ToArray();
+            FileCollections = dirItemsCollections.ToArray();
             Shortcuts = shortcuts.ToArray();
             GenericItems = genericItems.ToArray();
             MergeModules = mergeModules.ToArray();

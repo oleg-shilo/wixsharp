@@ -181,6 +181,11 @@ namespace WixSharp
         public string CandleOptions = "";
 
         /// <summary>
+        /// WiX compiler <c>wix.exe</c> options (e.g. "-define DEBUG"). Available only in WiX v4.*
+        /// </summary>
+        public string WixOptions = "";
+
+        /// <summary>
         /// Occurs when WiX source code generated. Use this event if you need to modify generated XML (XDocument)
         /// before it is compiled into MSI.
         /// </summary>
