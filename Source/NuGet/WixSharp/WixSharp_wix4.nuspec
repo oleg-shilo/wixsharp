@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>WixSharp_wix4</id>
+    <version>2.4.1.0</version>
+    <title>Wix# (WixSharp) - managed interface for WiX</title>
+    <authors>Oleg Shilo</authors>
+    <owners>Oleg Shilo</owners>
+    <projectUrl>https://github.com/oleg-shilo/wixsharp</projectUrl>
+    <license type="expression">MIT</license>
+    <icon>wixsharp_logo.png</icon>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
+The package contains WixSharp binaries.
+
+If you need only Wix# binaries you may want to use WixSharp.bin package instead.
+
+In order to use this package you need have WiX Toolset installed: `dotnet tool install --global wix`
+The package is tested against WIX (Windows Installer Xml) Toolset v4.0.1.0</description>
+    <summary>Wix# (WixSharp) - Binaries</summary>
+    <releaseNotes>Release v2.4.1.0
+#1652: Bundle DotNetCompatibilityCheck element suport
+#1653: Avoid unnecessary *Ref element for Fragment definitions.
+#1579: installDir variable erased depending on ManagedProject structure
+Updated custom dialogs to deal with changes in the size of Wix stock background images
+
+</releaseNotes>
+    <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
+    <language>en-AU</language>
+    <tags>C# scripting msi install setup wix</tags>
+    <dependencies>
+      <dependency id="WixSharp_wix4.bin" version="2.4.1.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\..\Templates\WixSharpVSIX\WixSharpVSIX\wixsharp_logo.png" target="" />
+  </files>
+</package>

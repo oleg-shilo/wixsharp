@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WixSharp</RootNamespace>
     <AssemblyName>WixSharp</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
     </StartupObject>
@@ -77,13 +77,6 @@
     <AssemblyOriginatorKeyFile>WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BootstrapperCore, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
-      <HintPath>../WixSharp.Samples/Wix_bin/SDK/BootstrapperCore.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Deployment.WindowsInstaller, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad, processorArchitecture=MSIL">
-      <HintPath>../WixSharp.Samples/Wix_bin/SDK/Microsoft.Deployment.WindowsInstaller.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -91,6 +84,7 @@
     </Reference>
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -117,6 +111,10 @@
     <Compile Include="Action.cs" />
     <Compile Include="AppSearch.cs" />
     <Compile Include="Assembly.cs" />
+    <Compile Include="Bootstrapper\DotNetCompatibilityCheck.cs" />
+    <Compile Include="Utilities\Utils.cs" />
+    <Compile Include="Utilities\SerializingExtensions.cs" />
+    <Compile Include="Utilities\AttachedProperties.cs" />
     <Compile Include="AutoElements.cs" />
     <Compile Include="BalCondition.cs" />
     <Compile Include="Bootstrapper\UtilFileSearch.cs" />
@@ -129,6 +127,7 @@
     <Compile Include="CustomActionRef.cs" />
     <Compile Include="DigitalSignature.cs" />
     <Compile Include="DigitalSignatureBootstrapper.cs" />
+    <Compile Include="DirectoryShortcut.cs" />
     <Compile Include="DriverInstaller.cs" />
     <Compile Include="BinaryFileAction.cs" />
     <Compile Include="Bootstrapper\Bundle.cs" />
@@ -139,7 +138,6 @@
     <Compile Include="Compiler.Bootstrapper.cs" />
     <Compile Include="Error.cs" />
     <Compile Include="FileSearch.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Heat\Harvester.cs" />
     <Compile Include="IconFile.cs" />
     <Compile Include="IISCertificate.cs" />
@@ -168,6 +166,7 @@
     <Compile Include="ODBCDataSource.cs" />
     <Compile Include="PermissionEx.cs" />
     <Compile Include="Permissions.cs" />
+    <Compile Include="Utilities\ProjectLocalization.cs" />
     <Compile Include="Properties\AssemblyInfo.version.cs" />
     <Compile Include="Reboot.cs" />
     <Compile Include="RegisterAsCom.cs" />
@@ -178,6 +177,7 @@
     <Compile Include="ResilientPackage.cs" />
     <Compile Include="ServiceConfig.cs" />
     <Compile Include="ServiceConfigUtil.cs" />
+    <Compile Include="ProjectFileSigner.cs" />
     <Compile Include="SvcEvent.cs" />
     <Compile Include="ServiceDependency.cs" />
     <Compile Include="SharedExtensions.cs" />
@@ -191,6 +191,7 @@
     <Compile Include="UrlReservation.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Utilities\RegistryWOW6432.cs" />
+    <Compile Include="Utilities\VerifyFileSignature.cs" />
     <Compile Include="Utilities\WixBinLocator.cs" />
     <Compile Include="WixExtension.cs" />
     <Compile Include="WixProject.cs" />
@@ -229,7 +230,10 @@
     <Compile Include="PathFileAction.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Property.cs" />
+    <Compile Include="Utilities\XmlAttribute.cs" />
+    <Compile Include="Utilities\WixTools.cs" />
     <Compile Include="XmlFile.cs" />
+    <Compile Include="Utilities\XmlMapping.cs" />
     <EmbeddedResource Include="Nsis\macros.nsh" />
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>
@@ -280,6 +284,14 @@
       <Project>{611d8893-7d39-4f3c-92d5-0554f780a914}</Project>
       <Name>WixSharp.Msi</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Dtf.WindowsInstaller">
+      <Version>4.0.2</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Bootstrapper\runtime\win-x86\mbanative.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

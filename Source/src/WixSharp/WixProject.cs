@@ -51,6 +51,7 @@ namespace WixSharp
         public string OutFileName = "setup";
 
         string outDir;
+        internal bool IsOutDirSet => !outDir.IsEmpty();
 
         /// <summary>
         /// The output directory. The directory where all msi and temporary files should be assembled. The <c>CurrentDirectory</c> will be used if <see cref="OutDir"/> is left unassigned.
@@ -59,7 +60,7 @@ namespace WixSharp
         {
             get
             {
-                return outDir.IsEmpty() ? Environment.CurrentDirectory : outDir.ExpandEnvVars();
+                return (outDir.IsEmpty() ? Environment.CurrentDirectory : outDir.ExpandEnvVars()).EnsureDirExists(); ;
             }
             set
             {
@@ -68,7 +69,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Collection of XML namespaces (e.g. <c>xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension"</c>) to be declared in the XML (WiX project) root.
+        /// Collection of XML namespaces (e.g. <c>xmlns:iis="http://wixtoolset.org/schemas/v4/wxs/iis"</c>) to be declared in the XML (WiX project) root.
         /// </summary>
         public List<string> WixNamespaces = new List<string>();
 
@@ -105,6 +106,21 @@ namespace WixSharp
         /// Collection of paths to the external wsxlib files to be passed to the Light linker.
         /// </summary>
         public List<string> LibFiles = new List<string>();
+
+        internal bool IsLocalized
+        {
+            get { return (Language.ToLower() != "en-us" && Language.ToLower() != "en") || !LocalizationFile.IsEmpty(); }
+        }
+
+        internal bool IsNonEnglish
+        {
+            get { return (Language.ToLower() != "en-us" && Language.ToLower() != "en"); }
+        }
+
+        /// <summary>
+        /// Path to the Localization file.
+        /// </summary>
+        public string LocalizationFile = "";
 
         /// <summary>
         /// Gets a value indicating whether this project supports multiple languages.
@@ -169,6 +185,15 @@ namespace WixSharp
         /// before it is compiled into MSI.
         /// </summary>
         public event XDocumentGeneratedDlgt WixSourceGenerated;
+
+        /// <summary>
+        /// Occurs when `wix.exe` build command generated.
+        /// Use this event if you want to modify the command before
+        /// it is executed by `wix.exe`.
+        /// </summary>
+        public event WixBuildCommandGeneratedDlgt WixBuildCommandGenerated = x => x;
+
+        internal string OnWixBuildCommandGenerated(string command) => WixBuildCommandGenerated?.Invoke(command) ?? command;
 
         internal string SetVersionFromIdValue = "";
 

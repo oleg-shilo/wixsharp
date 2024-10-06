@@ -1,7 +1,7 @@
-using Microsoft.Deployment.WindowsInstaller;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp.UI.Forms
 {
@@ -33,7 +33,13 @@ namespace WixSharp.UI.Forms
         /// <summary>
         /// The view of the Feature. Typically a TreeNode
         /// </summary>
-        public object View;
+        [Obsolete("This field has been renamed into ViewModel. Use the new field instead.", error: false)]
+        public object View { set => ViewModel = value; get => ViewModel; }
+
+        /// <summary>
+        /// The View or ViewModel of the Feature. Typically a TreeNode (view in WinForms) or Node (ViewModel in WPF)
+        /// </summary>
+        public object ViewModel;
 
         /// <summary>
         /// The parent FeatureItem
@@ -93,8 +99,20 @@ namespace WixSharp.UI.Forms
         {
             // Debug.Assert(false);
 
-            var data = session.OpenView("select * from Feature where Feature = '" + name + "'");
+            //
+            // Get default install level and feature condition (if any).
+            //
+            if (!int.TryParse(session["INSTALLLEVEL"], out var installLevel)) installLevel = 1; // MSI default
 
+            Dictionary<string, object> conditionRow = null;
+
+            if (session.Database.IsTablePersistent("Condition"))
+            {
+                var condition = session.OpenView("select * from Condition where Feature_ = '" + name + "'");
+                conditionRow = condition.FirstOrDefault();
+            }
+
+            var data = session.OpenView("select * from Feature where Feature = '" + name + "'");
             Dictionary<string, object> row = data.FirstOrDefault();
 
             if (row != null)
@@ -107,7 +125,18 @@ namespace WixSharp.UI.Forms
                 RawDisplay = (int)row["Display"];
                 Display = RawDisplay.MapToFeatureDisplay();
 
-                var defaultState = (InstallState)row["Level"];
+                //
+                // Set defaultState according to feature and install levels, then evaluate
+                // and adjust state according to feature condition.
+                //
+                var defaultState = (Convert.ToInt32(row["Level"]) <= installLevel) ? InstallState.Local : InstallState.Absent;
+                if (session.IsInstalling()
+                    && conditionRow?["Condition"] != null
+                    && session.EvaluateCondition(conditionRow["Condition"].ToString())  // If condition is true...
+                    && Convert.ToInt32(conditionRow["Level"]) <= installLevel)          // ...set state according to condition level.
+                {
+                    defaultState = InstallState.Local;
+                }
 
                 CurrentState = DetectFeatureState(session, name);
                 RequestedState = session.IsInstalled() ? CurrentState : defaultState;
@@ -137,7 +166,7 @@ namespace WixSharp.UI.Forms
         {
             var productCode = session["ProductCode"];
 
-            var installedPackage = new Microsoft.Deployment.WindowsInstaller.ProductInstallation(productCode);
+            var installedPackage = new ProductInstallation(productCode);
             if (installedPackage.IsInstalled)
                 return installedPackage.Features
                                        .First(x => x.FeatureName == name)

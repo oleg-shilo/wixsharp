@@ -1,5 +1,5 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
 using System.Linq;
@@ -36,7 +36,7 @@ class Script
                .AddXmlInclude("CommonProperies.wxi")
                .AddXmlInclude("CommonProperies2.wxi");
 
-        project.AddWixFragment("Wix/Product", XElement.Parse(@"
+        project.AddWixFragment("Wix/Package", XElement.Parse(@"
                         <Feature Id=""BinaryOnlyFeature"" Title=""Sample Product Feature"" Level=""1"">
                             <ComponentRef Id=""Component.myapp_exe"" />
                         </Feature>"));
@@ -44,34 +44,34 @@ class Script
         // project specific build event
         project.WixSourceGenerated += InjectImages;
 
-        project.AddXml("Wix/Product", "<Property Id=\"Title\" Value=\"Properties Test\" />");
+        project.AddXml("Wix/Package", "<Property Id=\"Title\" Value=\"Properties Test\" />");
 
-        project.AddXmlElement("Wix/Product", "Property", "Id=Gritting; Value=Hello World!");
+        project.AddXmlElement("Wix/Package", "Property", "Id=Gritting; Value=Hello World!");
 
         project.Media.Clear(); // clear default media as we will add it via MediaTemplate
         project.WixSourceGenerated += document =>
         {
-            document.Select("Wix/Product")
+            document.Select("Wix/Package")
                     .AddElement("MediaTemplate", "CabinetTemplate=cab{0}.cab; CompressionLevel=mszip");
         };
 
         // global build event
         Compiler.WixSourceGenerated += document =>
             {
-                document.Select("Wix/Product/Package")
-                        .SetAttributeValue("Platform", "x64");
+                // document.Select("Wix/Package")
+                //         .SetAttributeValue("Platform", "x64");
 
                 document.FindAll("Component")
-                        .ForEach(e => e.SetAttributeValue("Win64", "yes"));
+                        .ForEach(e => e.SetAttributeValue("Bitness", "always64"));
 
-                // merge 'Wix/Product' elements of document with 'Wix/Product' elements of CommonProperies.wxs
+                // merge 'Wix/Product' elements of document with 'Wix/Package' elements of CommonProperies.wxs
                 document.InjectWxs("CommonProperies.wxs");
 
                 // the commented code below is the equivalent of project.AddXmlInclude(...)
                 // document.FindSingle("Product").Add(new XProcessingInstruction("include", "CommonProperies.wxi"));
             };
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
         project.BuildMsi();
     }
 

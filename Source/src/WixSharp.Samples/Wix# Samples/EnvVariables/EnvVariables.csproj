@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net472</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="*.cmd" />
+		<None Remove="CustomAction.config" />
+		<None Remove="*.exe" />
+		<None Remove="*.pdb" />
+		<None Remove="*.wixpdb" />
+		<None Remove="*.msi" />
+		<Compile Remove="Files\Bin\MyApp.cs" />
+		<None Remove="readme.txt" />
+		<None Remove="WixSharp.CA.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\WixSharp\WixSharp.csproj" />
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
+	</Target>
+
+</Project>

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp
 {
@@ -22,14 +22,22 @@ namespace WixSharp
         [CustomAction]
         public static ActionResult WixSharp_InitRuntime_Action(Session session)
         {
-            // Debugger.Launch();
-            if (session.Property("FOUNDPREVIOUSVERSION").IsEmpty())
-                session["FOUNDPREVIOUSVERSION"] = session.LookupInstalledVersion()?.ToString();
+            try
+            {
+                // Debugger.Launch();
+                if (session.Property("FOUNDPREVIOUSVERSION").IsEmpty())
+                    session["FOUNDPREVIOUSVERSION"] = session.LookupInstalledVersion()?.ToString();
 
-            if (session["MsiLogFileLocation"].IsNotEmpty())
-                Environment.SetEnvironmentVariable("MsiLogFileLocation", session.Property("MsiLogFileLocation"));
+                if (session.Property("MsiLogFileLocation").IsNotEmpty())
+                    Environment.SetEnvironmentVariable("MsiLogFileLocation", session.Property("MsiLogFileLocation"));
 
-            return ManagedProject.Init(session);
+                return ManagedProject.Init(session);
+            }
+            catch (Exception e)
+            {
+                ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -53,10 +61,11 @@ namespace WixSharp
         public static ActionResult WixSharp_BeforeInstall_Action(Session session)
         {
             // Debugger.Launch();
-            session["ADDFEATURES"] = session.Features
-                                            .Where(x => x.RequestState != InstallState.Absent)
-                                            .Select(x => x.Name)
-                                            .JoinBy(",");
+            if (session.IsActive())
+                session["ADDFEATURES"] = session.Features
+                                                .Where(x => x.RequestState != InstallState.Absent)
+                                                .Select(x => x.Name)
+                                                .JoinBy(",");
 
             return ManagedProject.InvokeClientHandlers(session, "BeforeInstall");
         }

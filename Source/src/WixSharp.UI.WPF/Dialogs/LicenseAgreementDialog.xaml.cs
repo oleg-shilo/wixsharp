@@ -5,7 +5,6 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
 
@@ -15,8 +14,6 @@ namespace WixSharp.UI.WPF
 {
     /// <summary>
     /// The standard LicenceDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro View (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     /// <seealso cref="WixSharp.UI.WPF.WpfDialog" />
     /// <seealso cref="System.Windows.Markup.IComponentConnector" />
@@ -37,15 +34,26 @@ namespace WixSharp.UI.WPF
         /// </summary>
         public void Init()
         {
-            ViewModelBinder.Bind(
-                new LicenseDialogModel
-                {
-                    ShowRtfContent = x => this.LicenceText.SetRtf(x),
-                    Host = ManagedFormHost,
-                },
-                this,
-                null);
+            DataContext = model = new LicenseDialogModel
+            {
+                ShowRtfContent = x => this.LicenceText.SetRtf(x),
+                Host = ManagedFormHost,
+            };
         }
+
+        LicenseDialogModel model;
+
+        void GoPrev_Click(object sender, RoutedEventArgs e)
+            => model.GoPrev();
+
+        void GoNext_Click(object sender, RoutedEventArgs e)
+            => model.GoNext();
+
+        void Cancel_Click(object sender, RoutedEventArgs e)
+            => model.Cancel();
+
+        void Print_Click(object sender, RoutedEventArgs e)
+            => model.Print();
     }
 
     static partial class Extension
@@ -64,11 +72,8 @@ namespace WixSharp.UI.WPF
 
     /// <summary>
     /// ViewModel for standard LicenceDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.Screen" />
-    class LicenseDialogModel : Caliburn.Micro.Screen
+    class LicenseDialogModel : NotifyPropertyChangedBase
     {
         ManagedForm host;
         ISession session => Host?.Runtime.Session;
@@ -84,15 +89,16 @@ namespace WixSharp.UI.WPF
                 host = value;
 
                 ShowRtfContent?.Invoke(LicenceText);
-                NotifyOfPropertyChange(() => Banner);
-                NotifyOfPropertyChange(() => LicenseAcceptedChecked);
-                NotifyOfPropertyChange(() => CanGoNext);
+                NotifyOfPropertyChange(nameof(Banner));
+                NotifyOfPropertyChange(nameof(LicenseAcceptedChecked));
+                NotifyOfPropertyChange(nameof(CanGoNext));
             }
         }
 
         public string LicenceText => session?.GetResourceString("WixSharp_LicenceFile");
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource() ??
+                                     session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
         public bool LicenseAcceptedChecked
         {
@@ -102,8 +108,8 @@ namespace WixSharp.UI.WPF
                 if (Host != null)
                     session["LastLicenceAcceptedChecked"] = value.ToString();
 
-                NotifyOfPropertyChange(() => LicenseAcceptedChecked);
-                NotifyOfPropertyChange(() => CanGoNext);
+                NotifyOfPropertyChange(nameof(LicenseAcceptedChecked));
+                NotifyOfPropertyChange(nameof(CanGoNext));
             }
         }
 

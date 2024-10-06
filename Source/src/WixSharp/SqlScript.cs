@@ -18,29 +18,30 @@ namespace WixSharp
         {
         }
 
-        private SqlScript(string binaryKey)
+        SqlScript(string binaryRef)
         {
-            if (string.IsNullOrEmpty(binaryKey)) throw new ArgumentNullException("binaryKey", "binaryKey is a null reference or empty");
+            if (binaryRef.IsEmpty())
+                throw new ArgumentNullException("binaryRef", "binaryref is a null reference or empty");
 
-            BinaryKey = binaryKey;
-            Name = binaryKey;
+            BinaryRef = binaryRef;
+            Name = binaryRef;
         }
 
         private SqlScript(Binary binary)
         {
             if (binary == null) throw new ArgumentNullException("binary", "binary is a null reference or empty");
 
-            BinaryKey = binary.Id;
+            BinaryRef = binary.Id;
             Name = binary.Id;
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be execute according to <paramref name="executeOptions"/>
         /// </summary>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="executeOptions"></param>
-        public SqlScript(string binaryKey, ExecuteSql executeOptions)
-            : this(binaryKey)
+        public SqlScript(string binaryRef, ExecuteSql executeOptions)
+            : this(binaryRef)
         {
             SetExecutionOptions(executeOptions);
         }
@@ -57,13 +58,12 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be execute according to <paramref name="executeOptions"/>
         /// </summary>
         /// <param name="sqlDb"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="executeOptions"></param>
-        public SqlScript(string sqlDb, string binaryKey, ExecuteSql executeOptions)
-            : this(binaryKey, executeOptions)
+        public SqlScript(string sqlDb, string binaryRef, ExecuteSql executeOptions) : this(binaryRef, executeOptions)
         {
             SqlDb = sqlDb;
         }
@@ -81,13 +81,13 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be execute according to <paramref name="executeOptions"/>
         /// </summary>
         /// <param name="sqlDb"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="executeOptions"></param>
-        public SqlScript(SqlDatabase sqlDb, string binaryKey, ExecuteSql executeOptions)
-            : this(binaryKey, executeOptions)
+        public SqlScript(SqlDatabase sqlDb, string binaryRef, ExecuteSql executeOptions)
+            : this(binaryRef, executeOptions)
         {
             SqlDb = sqlDb.Id;
         }
@@ -105,13 +105,13 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be execute according to <paramref name="executeOptions"/>
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="executeOptions"></param>
-        public SqlScript(Id id, string binaryKey, ExecuteSql executeOptions)
-            : this(binaryKey, executeOptions)
+        public SqlScript(Id id, string binaryRef, ExecuteSql executeOptions)
+            : this(binaryRef, executeOptions)
         {
             Id = id;
         }
@@ -129,14 +129,13 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be execute according to <paramref name="executeOptions"/>
         /// </summary>
         /// <param name="id"></param>
         /// <param name="sqlDb"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="executeOptions"></param>
-        public SqlScript(Id id, string sqlDb, string binaryKey, ExecuteSql executeOptions)
-            : this(binaryKey, executeOptions)
+        public SqlScript(Id id, string sqlDb, string binaryRef, ExecuteSql executeOptions) : this(binaryRef, executeOptions)
         {
             Id = id;
             SqlDb = sqlDb;
@@ -157,14 +156,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be execute according to <paramref name="executeOptions"/>
         /// </summary>
         /// <param name="id"></param>
         /// <param name="sqlDb"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="executeOptions"></param>
-        public SqlScript(Id id, SqlDatabase sqlDb, string binaryKey, ExecuteSql executeOptions)
-            : this(binaryKey, executeOptions)
+        public SqlScript(Id id, SqlDatabase sqlDb, string binaryRef, ExecuteSql executeOptions)
+            : this(binaryRef, executeOptions)
         {
             Id = id;
             SqlDb = sqlDb.Id;
@@ -185,13 +184,13 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be execute according to <paramref name="executeOptions"/>
         /// </summary>
         /// <param name="feature"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="executeOptions"></param>
-        public SqlScript(Feature feature, string binaryKey, ExecuteSql executeOptions)
-            : this(binaryKey, executeOptions)
+        public SqlScript(Feature feature, string binaryRef, ExecuteSql executeOptions)
+            : this(binaryRef, executeOptions)
         {
             Feature = feature;
         }
@@ -209,14 +208,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be execute according to <paramref name="executeOptions"/>
         /// </summary>
         /// <param name="sqlDb"></param>
         /// <param name="feature"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="executeOptions"></param>
-        public SqlScript(string sqlDb, Feature feature, string binaryKey, ExecuteSql executeOptions)
-            : this(binaryKey, executeOptions)
+        public SqlScript(string sqlDb, Feature feature, string binaryRef, ExecuteSql executeOptions)
+            : this(binaryRef, executeOptions)
         {
             SqlDb = sqlDb;
             Feature = feature;
@@ -237,14 +236,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be execute according to <paramref name="executeOptions"/>
         /// </summary>
         /// <param name="sqlDb"></param>
         /// <param name="feature"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="executeOptions"></param>
-        public SqlScript(SqlDatabase sqlDb, Feature feature, string binaryKey, ExecuteSql executeOptions)
-            : this(binaryKey, executeOptions)
+        public SqlScript(SqlDatabase sqlDb, Feature feature, string binaryRef, ExecuteSql executeOptions)
+            : this(binaryRef, executeOptions)
         {
             SqlDb = sqlDb.Id;
             Feature = feature;
@@ -265,14 +264,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be execute according to <paramref name="executeOptions"/>
         /// </summary>
         /// <param name="id"></param>
         /// <param name="feature"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="executeOptions"></param>
-        public SqlScript(Id id, Feature feature, string binaryKey, ExecuteSql executeOptions)
-            : this(binaryKey, executeOptions)
+        public SqlScript(Id id, Feature feature, string binaryRef, ExecuteSql executeOptions)
+            : this(binaryRef, executeOptions)
         {
             Id = id;
             Feature = feature;
@@ -293,15 +292,15 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be execute according to <paramref name="executeOptions"/>
         /// </summary>
         /// <param name="id"></param>
         /// <param name="sqlDb"></param>
         /// <param name="feature"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="executeOptions"></param>
-        public SqlScript(Id id, string sqlDb, Feature feature, string binaryKey, ExecuteSql executeOptions)
-            : this(binaryKey, executeOptions)
+        public SqlScript(Id id, string sqlDb, Feature feature, string binaryRef, ExecuteSql executeOptions)
+            : this(binaryRef, executeOptions)
         {
             Id = id;
             SqlDb = sqlDb;
@@ -325,15 +324,15 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be execute according to <paramref name="executeOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be execute according to <paramref name="executeOptions"/>
         /// </summary>
         /// <param name="id"></param>
         /// <param name="sqlDb"></param>
         /// <param name="feature"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="executeOptions"></param>
-        public SqlScript(Id id, SqlDatabase sqlDb, Feature feature, string binaryKey, ExecuteSql executeOptions)
-            : this(binaryKey, executeOptions)
+        public SqlScript(Id id, SqlDatabase sqlDb, Feature feature, string binaryRef, ExecuteSql executeOptions)
+            : this(binaryRef, executeOptions)
         {
             Id = id;
             SqlDb = sqlDb.Id;
@@ -357,12 +356,12 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be rolled-back according to <paramref name="rollbackOptions"/>
         /// </summary>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="rollbackOptions"></param>
-        public SqlScript(string binaryKey, RollbackSql rollbackOptions)
-            : this(binaryKey)
+        public SqlScript(string binaryRef, RollbackSql rollbackOptions)
+            : this(binaryRef)
         {
             SetRollbackOptions(rollbackOptions);
         }
@@ -379,13 +378,13 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be rolled-back according to <paramref name="rollbackOptions"/>
         /// </summary>
         /// <param name="sqlDb"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="rollbackOptions"></param>
-        public SqlScript(string sqlDb, string binaryKey, RollbackSql rollbackOptions)
-            : this(binaryKey, rollbackOptions)
+        public SqlScript(string sqlDb, string binaryRef, RollbackSql rollbackOptions)
+            : this(binaryRef, rollbackOptions)
         {
             SqlDb = sqlDb;
         }
@@ -403,13 +402,13 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be rolled-back according to <paramref name="rollbackOptions"/>
         /// </summary>
         /// <param name="sqlDb"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="rollbackOptions"></param>
-        public SqlScript(SqlDatabase sqlDb, string binaryKey, RollbackSql rollbackOptions)
-            : this(binaryKey, rollbackOptions)
+        public SqlScript(SqlDatabase sqlDb, string binaryRef, RollbackSql rollbackOptions)
+            : this(binaryRef, rollbackOptions)
         {
             SqlDb = sqlDb.Id;
         }
@@ -427,13 +426,13 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be rolled-back according to <paramref name="rollbackOptions"/>
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="rollbackOptions"></param>
-        public SqlScript(Id id, string binaryKey, RollbackSql rollbackOptions)
-            : this(binaryKey, rollbackOptions)
+        public SqlScript(Id id, string binaryRef, RollbackSql rollbackOptions)
+            : this(binaryRef, rollbackOptions)
         {
             Id = id;
         }
@@ -451,14 +450,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be rolled-back according to <paramref name="rollbackOptions"/>
         /// </summary>
         /// <param name="id"></param>
         /// <param name="sqlDb"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="rollbackOptions"></param>
-        public SqlScript(Id id, string sqlDb, string binaryKey, RollbackSql rollbackOptions)
-            : this(binaryKey, rollbackOptions)
+        public SqlScript(Id id, string sqlDb, string binaryRef, RollbackSql rollbackOptions)
+            : this(binaryRef, rollbackOptions)
         {
             Id = id;
             SqlDb = sqlDb;
@@ -479,14 +478,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be rolled-back according to <paramref name="rollbackOptions"/>
         /// </summary>
         /// <param name="id"></param>
         /// <param name="sqlDb"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="rollbackOptions"></param>
-        public SqlScript(Id id, SqlDatabase sqlDb, string binaryKey, RollbackSql rollbackOptions)
-            : this(binaryKey, rollbackOptions)
+        public SqlScript(Id id, SqlDatabase sqlDb, string binaryRef, RollbackSql rollbackOptions)
+            : this(binaryRef, rollbackOptions)
         {
             Id = id;
             SqlDb = sqlDb.Id;
@@ -507,13 +506,13 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be rolled-back according to <paramref name="rollbackOptions"/>
         /// </summary>
         /// <param name="feature"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="rollbackOptions"></param>
-        public SqlScript(Feature feature, string binaryKey, RollbackSql rollbackOptions)
-            : this(binaryKey, rollbackOptions)
+        public SqlScript(Feature feature, string binaryRef, RollbackSql rollbackOptions)
+            : this(binaryRef, rollbackOptions)
         {
             Feature = feature;
         }
@@ -531,14 +530,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be rolled-back according to <paramref name="rollbackOptions"/>
         /// </summary>
         /// <param name="sqlDb"></param>
         /// <param name="feature"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="rollbackOptions"></param>
-        public SqlScript(string sqlDb, Feature feature, string binaryKey, RollbackSql rollbackOptions)
-            : this(binaryKey, rollbackOptions)
+        public SqlScript(string sqlDb, Feature feature, string binaryRef, RollbackSql rollbackOptions)
+            : this(binaryRef, rollbackOptions)
         {
             SqlDb = sqlDb;
             Feature = feature;
@@ -559,14 +558,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be rolled-back according to <paramref name="rollbackOptions"/>
         /// </summary>
         /// <param name="sqlDb"></param>
         /// <param name="feature"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="rollbackOptions"></param>
-        public SqlScript(SqlDatabase sqlDb, Feature feature, string binaryKey, RollbackSql rollbackOptions)
-            : this(binaryKey, rollbackOptions)
+        public SqlScript(SqlDatabase sqlDb, Feature feature, string binaryRef, RollbackSql rollbackOptions)
+            : this(binaryRef, rollbackOptions)
         {
             SqlDb = sqlDb.Id;
             Feature = feature;
@@ -587,14 +586,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be rolled-back according to <paramref name="rollbackOptions"/>
         /// </summary>
         /// <param name="id"></param>
         /// <param name="feature"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="rollbackOptions"></param>
-        public SqlScript(Id id, Feature feature, string binaryKey, RollbackSql rollbackOptions)
-            : this(binaryKey, rollbackOptions)
+        public SqlScript(Id id, Feature feature, string binaryRef, RollbackSql rollbackOptions)
+            : this(binaryRef, rollbackOptions)
         {
             Id = id;
             Feature = feature;
@@ -615,15 +614,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be rolled-back according to <paramref name="rollbackOptions"/>
         /// </summary>
         /// <param name="id"></param>
         /// <param name="sqlDb"></param>
         /// <param name="feature"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="rollbackOptions"></param>
-        public SqlScript(Id id, string sqlDb, Feature feature, string binaryKey, RollbackSql rollbackOptions)
-            : this(binaryKey, rollbackOptions)
+        public SqlScript(Id id, string sqlDb, Feature feature, string binaryRef, RollbackSql rollbackOptions) : this(binaryRef, rollbackOptions)
         {
             Id = id;
             SqlDb = sqlDb;
@@ -647,15 +645,15 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an instance of SqlScript for <paramref name="binaryKey"/> to be rolled-back according to <paramref name="rollbackOptions"/>
+        /// Creates an instance of SqlScript for <paramref name="binaryRef"/> to be rolled-back according to <paramref name="rollbackOptions"/>
         /// </summary>
         /// <param name="id"></param>
         /// <param name="sqlDb"></param>
         /// <param name="feature"></param>
-        /// <param name="binaryKey"></param>
+        /// <param name="binaryRef"></param>
         /// <param name="rollbackOptions"></param>
-        public SqlScript(Id id, SqlDatabase sqlDb, Feature feature, string binaryKey, RollbackSql rollbackOptions)
-            : this(binaryKey, rollbackOptions)
+        public SqlScript(Id id, SqlDatabase sqlDb, Feature feature, string binaryRef, RollbackSql rollbackOptions)
+            : this(binaryRef, rollbackOptions)
         {
             Id = id;
             SqlDb = sqlDb.Id;
@@ -683,10 +681,10 @@ namespace WixSharp
         #region Wix SqlScript attributes
 
         /// <summary>
-        /// Maps to the BinaryKey property of SqlScript
+        /// Maps to the BinaryRef property of SqlScript
         /// </summary>
         [Xml]
-        public string BinaryKey; //required
+        public string BinaryRef; //required
 
         /// <summary>
         /// Maps to the ContinueOnError property of SqlScript

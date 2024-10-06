@@ -27,7 +27,10 @@ THE SOFTWARE.
 
 #endregion Licence...
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace WixSharp
@@ -78,6 +81,16 @@ namespace WixSharp
         /// determine if the shortcut should be installed.
         /// </summary>
         public Condition Condition;
+
+        /// <summary>
+        /// The localizable description for the shortcut.
+        /// <para>It appears as a tooltip when rolling the mouse over the shortcut file.</para>
+        /// </summary>
+        public string Description
+        {
+            get => attributesBag.Get(nameof(Description));
+            set => attributesBag.Set(nameof(Description), value);
+        }
 
         /// <summary>
         /// Defines icon file for the shortcut. Relative or absolute path to the source file containing icons (exe, dll or ico).

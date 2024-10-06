@@ -1,6 +1,18 @@
 1. Rebuild Release configuration       (Just to verify Release code correctness)
 
 2.1 Execute src\build.cmd              (Builds all solutions)
-2.2 Execute src\aggregate
-3.  Follow  NuGet\WixSharp\readme.md
+2.2 Execute src\aggregate.cmd
+2.2 Execute bin\package.cs
+
+===============================
+WiX4 Issues:
+
+Made obsolete without any guidance on how to deal with it: 
+
+WixSharp just drops these features:
+- Package.InstallPrivileges
+- Publish.Condition
+- <CustomAction Id="VBScript" Script="vbscript" ...><![CDATA[MsgBox "Executing VBScript code..."]]>
+- <Package Platform="x64" is illegal but not even picked by wix convert; doc says Component.Bitness may have the value default which means "will be installed using the same bitness as the package". But the package element does not have bitness attribute. WixSharp maintains Project.Platform property but does not convert it in the Package.Platform while still cascades it to the Component.Bitness
+
 

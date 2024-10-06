@@ -1,11 +1,11 @@
 //css_dir ..\..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
+using WixToolset.Dtf.WindowsInstaller;
 using WixSharp;
 using System.Linq;
 using WixSharp.CommonTasks;

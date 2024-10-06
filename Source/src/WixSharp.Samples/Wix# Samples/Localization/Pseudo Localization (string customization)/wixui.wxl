@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<WixLocalization  Culture="en-US" xmlns="http://schemas.microsoft.com/wix/2006/localization">
-  <String Id="WixUINext" Overridable="yes">Next Step</String>
-  <String Id="WixUIBack" Overridable="yes">Step Back</String>
-  <String Id="WixUICancel" Overridable="yes">Cancel Setup</String>
-</WixLocalization>

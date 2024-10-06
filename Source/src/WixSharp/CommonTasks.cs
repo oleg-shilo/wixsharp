@@ -23,13 +23,15 @@ THE SOFTWARE.
 
 #endregion Licence...
 
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -37,7 +39,16 @@ using System.Xml.XPath;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.Controls;
+using WixSharp.Nsis;
+using WixSharp.UI;
+using WixToolset.Dtf.WindowsInstaller;
+
 using IO = System.IO;
+
+// I am checking it for null anyway but when compiling AOT the output becomes too noisy
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
+
+#pragma warning disable CA1416 // Validate platform compatibility
 
 namespace WixSharp.CommonTasks
 {
@@ -244,16 +255,7 @@ namespace WixSharp.CommonTasks
 
             var tool = new ExternalTool
             {
-                WellKnownLocations = wellKnownLocations ??
-                                     @"C:\Program Files (x86)\Windows Kits\10\App Certification Kit;" +
-                                     @"C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x86;" +
-                                     @"C:\Program Files (x86)\Windows Kits\10\bin\x86;" +
-                                     @"C:\Program Files (x86)\Windows Kits\8.1\bin\x86;" +
-                                     @"C:\Program Files (x86)\Windows Kits\8.0\bin\x86;" +
-                                     @"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool;" +
-                                     @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin;" +
-                                     @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin",
-                ExePath = "signtool.exe",
+                ExePath = WixTools.SignTool,
                 Arguments = hash
             };
 
@@ -302,20 +304,19 @@ namespace WixSharp.CommonTasks
         /// <param name="certificateStore">Type of the certificate store to load it from.</param>
         /// <param name="outputLevel">A flag indicating the output level</param>
         /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow
-        /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
-        /// </param>
-        /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
-        /// 
+        /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.</param>
+        /// <returns>
+        /// Exit code of the <c>SignTool.exe</c> process.
+        /// </returns>
         /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file.
         /// <code>
         /// WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(
-        ///     "SetupBootstrapper.exe",
-        ///     "MyCert.pfx",
-        ///     "http://timestamp.verisign.com/scripts/timstamp.dll",
-        ///     "MyPassword",
-        ///     null);
-        /// </code>
-        /// </example>
+        /// "SetupBootstrapper.exe",
+        /// "MyCert.pfx",
+        /// "http://timestamp.verisign.com/scripts/timstamp.dll",
+        /// "MyPassword",
+        /// null);
+        /// </code></example>
         static public int DigitalySignBootstrapper(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
@@ -325,6 +326,8 @@ namespace WixSharp.CommonTasks
 
             return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
         }
+
+        const string unknown_sign_exe_location = "<unknown insignia.exe/signtool.exe Path>";
 
         /// <summary>
         /// Applies digital signature to a bootstrapper engine with MS <c>SignTool.exe</c> utility.
@@ -358,36 +361,31 @@ namespace WixSharp.CommonTasks
         ///      null);
         /// </code>
         /// </example>
+        /// <exception cref="ApplicationException">Thrown if <c>wix.exe</c> cannot be found.</exception>
+        /// <exception cref="Exception">Thrown if no engine file is found after detaching it from the bundle.</exception>
         static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
-            var insigniaPath = IO.Path.Combine(Compiler.WixLocation, "insignia.exe");
             string enginePath = IO.Path.GetTempFileName();
 
             try
             {
-                var tool = new ExternalTool
-                {
-                    ExePath = insigniaPath,
-                    Arguments = "-ib \"{0}\" -o \"{1}\"".FormatWith(bootstrapperFileToSign, enginePath)
-                };
+                // First detach the engine from the bundle
 
-                var retval = tool.ConsoleRun();
+                Compiler.Run(WixTools.wix, "burn detach \"{0}\" -engine \"{1}\"".FormatWith(bootstrapperFileToSign, enginePath));
+
+                if (!IO.File.Exists(enginePath))
+                    throw new Exception($"The supposedly detached engine file appears to be missing. Expected location: '{enginePath}'");
+
+                // Then sign the detached engine
+                int retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
                 if (retval != 0)
                     return retval;
 
-                retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
-                if (retval != 0)
-                    return retval;
+                // Finally reattach the signed engine to the bundle
+                Compiler.Run(WixTools.wix, "burn reattach \"{0}\" -engine \"{1}\" -o \"{0}\"".FormatWith(bootstrapperFileToSign, enginePath));
 
-                tool = new ExternalTool
-                {
-                    ExePath = insigniaPath,
-                    Arguments = "-ab \"{1}\" \"{0}\" -o \"{0}\"".FormatWith(bootstrapperFileToSign, enginePath)
-                };
-
-                tool.ConsoleRun();
-                return retval;
+                return 0;
             }
             finally
             {
@@ -496,6 +494,16 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Adds the specified XML content as a WiX Fragment/FragmentRef elements combination.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="placementPath">The placement path to the element matching the specified path (e.g. <c>Select("Product/Package")</c>.</param>
+        /// <param name="wixFile">The file with the XML fragment content.</param>
+        /// <returns></returns>
+        static public WixProject AddWixFragmentFile(this Project project, string placementPath, string wixFile)
+            => project.AddWixFragment(placementPath, XElement.Parse(System.IO.File.ReadAllText(wixFile)));
+
+        /// <summary>
         /// Imports the reg file. It is nothing else but an extension method version of the 'plain' <see cref="T:WixSharp.CommonTasks.Tasks.ImportRegFile"/>.
         /// </summary>
         /// <param name="project">The project object.</param>
@@ -519,6 +527,9 @@ namespace WixSharp.CommonTasks
             project.RegValues = ImportRegFile(regFile);
             return project;
         }
+
+        static internal bool IsWarningSuppressed(this WixProject project, string warning)
+        => project.WixOptions.ToLower().Contains($"-{warning}") || Compiler.WixOptions.ToLower().Contains($"-{warning}");
 
         /// <summary>
         /// Adds the property items to the project.
@@ -582,6 +593,27 @@ namespace WixSharp.CommonTasks
         {
             return project.AddDirs(item);
         }
+
+        /// <summary>
+        /// Adds the payload.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        static public WixStandardBootstrapperApplication AddPayload(this WixStandardBootstrapperApplication project, Bootstrapper.Payload item)
+        {
+            project.Payloads = project.Payloads.Combine(item);
+            return project;
+        }
+
+        /// <summary>
+        /// Adds the payload.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="payloadFile">The payload file.</param>
+        /// <returns></returns>
+        static public void AddPayload(this WixStandardBootstrapperApplication project, string payloadFile)
+            => project.AddPayload(new Bootstrapper.Payload(payloadFile));
 
         /// <summary>
         /// Adds the directory items to the Project.
@@ -705,7 +737,7 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Creates a new <see cref="Version"/> object from based on <c>version</c> with the revision part omitted.
+        /// Creates a new <see cref="T:System.Version"/> object from based on <c>version</c> with the revision part omitted.
         /// </summary>
         /// <param name="version">The version.</param>
         /// <returns></returns>
@@ -767,7 +799,7 @@ namespace WixSharp.CommonTasks
 
         //         progId.SetAttribute("Icon", iconId);
 
-        //         doc.FindSingle("Product")
+        //         doc.FindSingle(Compiler.ProductElementName)
         //                 .AddElement("Icon", $@"Id={iconId};SourceFile={iconPath}");
         //     };
         // }
@@ -966,7 +998,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Dir AddFileCollections(this Dir dir, params Files[] items)
         {
-            dir.FilesCollections = dir.FilesCollections.Combine(items).Distinct().ToArray();
+            dir.FileCollections = dir.FileCollections.Combine(items).Distinct().ToArray();
             return dir;
         }
 
@@ -1000,7 +1032,7 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Dir AddDirFileCollections(this Dir dir, params DirFiles[] items)
         {
-            dir.DirFilesCollections = dir.DirFilesCollections.Combine(items).Distinct().ToArray();
+            dir.DirFileCollections = dir.DirFileCollections.Combine(items).Distinct().ToArray();
             return dir;
         }
 
@@ -1031,6 +1063,49 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Convert WXL file of WiX3 format to WiX4 format.
+        /// </summary>
+        /// <param name="source">The source file.</param>
+        /// <param name="destination">The destination file.</param>
+        static public void Wxl3_to_Wxl4(this string source, string destination)
+        {
+            var doc = XDocument.Parse(IO.File.ReadAllText(source));
+            doc.Descendants()
+               .Where(x => x.Name.LocalName == "String")
+               .ForEach(x =>
+               {
+                   x.SetAttribute("Value", x.Value);
+                   x.Attribute("Overridable")?.Remove();
+                   x.Value = "";
+               });
+
+            IO.File.WriteAllText(
+                destination,
+                doc.ToString().Replace("xmlns=\"http://schemas.microsoft.com/wix/2006/localization\"",
+                                       "xmlns=\"http://wixtoolset.org/schemas/v4/wxl\""),
+                Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// Adds the reference assemblies of a `Type` (typically from the custom action assembly) to the MSI project.
+        /// <p>Every managed CA requires its dependency assemblies to be referenced via
+        /// <see cref="WixSharp.ManagedAction.RefAssemblies"/>. This method is a convenient way to add all the
+        /// dependencies automatically. It analyzes the CA assembly dependencies and adds them to the
+        /// CA binary that is packaged with "WixToolset.Dtf.MakeSfxCA.exe".
+        /// </p>
+        /// <p>Note, this method may unnecessarily increase the size of the msi as not all CA dependency assemblies
+        /// may be required at runtime (during the installation).</p>
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="type">The Type from the managed CA.</param>
+        public static void AddCustomActionRefAssembliesOf(this Project project, Type type)
+        {
+            var dependencies = type.Assembly.GetRefAssemblies();
+
+            project.DefaultRefAssemblies.AddRange(dependencies);
+        }
+
+        /// <summary>
         /// Sets the Project version from the file version of the file specified by it's ID.
         /// <para>This method sets project WixSourceGenerated event handler and injects
         /// "!(bind.FileVersion.&lt;file ID&gt;" into the XML Product's Version attribute.</para>
@@ -1054,7 +1129,7 @@ namespace WixSharp.CommonTasks
         {
             project.SetVersionFromIdValue = fileId;
             project.WixSourceGenerated += document =>
-                document.FindSingle("Product")
+                document.FindSingle(Compiler.ProductElementName)
                         .AddAttributes("Version=!(bind.FileVersion." + fileId + ")");
 
             if (setProjectVersionAsWell)
@@ -1067,7 +1142,7 @@ namespace WixSharp.CommonTasks
                         project.Version = new Version(FileVersionInfo.GetVersionInfo(file_path).FileVersion);
                 }
                 else
-                    Console.WriteLine("Warning: ");
+                    Console.WriteLine($"Warning: cannot set `project.Version` no file with {fileId} found");
             }
             return project;
         }
@@ -1088,6 +1163,24 @@ namespace WixSharp.CommonTasks
                 }
                 catch { }
             return "";
+        }
+
+        /// <summary>
+        /// Removes `RemoveFolder` element for the specific directory.
+        /// <para>This method is particularly useful when there is no parent `Component` element for a directory (default behaver).</para>
+        /// <para>This method subscribes for the post WXS generation event from which it removes the `RemoveFolder` XML element.</para>
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="directoryId">The directory identifier.</param>
+        /// <returns></returns>
+        static public Project SuppressRemovingFolderFor(this Project project, string directoryId)
+        {
+            project.WixSourceGenerated += (doc) =>
+            doc.FindAll("RemoveFolder")
+               .Single(x => x.HasAttribute("Id", directoryId))
+               .Remove();
+
+            return project;
         }
 
         /// <summary>
@@ -1125,36 +1218,6 @@ namespace WixSharp.CommonTasks
         {
             project.Version = project.ExtractVersionFrom(fileId).ToRawVersion();
             return project;
-        }
-
-        /// <summary>
-        /// Gets the target path of a give <see cref="Dir" /> object within <see cref="Project" />.
-        /// </summary>
-        /// <param name="project">The project.</param>
-        /// <param name="directory">The <see cref="Dir" />.</param>
-        /// <returns></returns>
-        static public string GetTargetPathOf(this Project project, Dir directory)
-        {
-            int iterator = 0;
-
-            var dirList = new List<Tuple<string, Dir>>();
-            dirList.AddRange(project.Dirs.Select(x => new Tuple<string, Dir>(x.Name, x)));
-
-            while (iterator < dirList.Count)
-            {
-                var currentDir = dirList[iterator].Item2;
-                var path = dirList[iterator].Item1;
-
-                if (currentDir == directory)
-                    return path;
-
-                foreach (Dir item in currentDir.Dirs)
-                    dirList.Add(new Tuple<string, Dir>(path.PathCombine(item.Name), item));
-
-                iterator++;
-            }
-
-            return "";
         }
 
         /// <summary>
@@ -1214,7 +1277,9 @@ namespace WixSharp.CommonTasks
                     {
                         try
                         {
+#pragma warning disable SYSLIB0018 // Type or member is obsolete
                             version = System.Reflection.Assembly.ReflectionOnlyLoadFrom(file).GetName().Version.ToString();
+#pragma warning restore SYSLIB0018 // Type or member is obsolete
                         }
                         catch { }
                     }
@@ -1384,6 +1449,34 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Sets the .Net prerequisite. This routine is based on `netfx:DotNetCompatibilityCheck` element
+        /// (https://wixtoolset.org/docs/schema/netfx/dotnetcompatibilitycheck/).
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="version">The version.</param>
+        /// <param name="runtimeType">Type of the runtime.</param>
+        /// <param name="rollForward">The roll forward.</param>
+        /// <param name="platform">The platform.</param>
+        /// <param name="errorMessage">The error message.</param>
+        /// <returns></returns>
+        static public Project SetNetPrerequisite(this WixSharp.Project project, string version, RuntimeType runtimeType, RollForward rollForward, Platform platform, string errorMessage = null)
+        {
+            var condition = Condition.Create("Installed OR DotNetCheckResult = 0");
+            string message = errorMessage ?? $"Please install .NET version {version} first.";
+
+            project.LaunchConditions.Add(new LaunchCondition(condition, message));
+
+            project.WixSourceGenerated += doc =>
+                doc.FindFirst("Package").AddElement(
+                    WixExtension.NetFx.ToXName("DotNetCompatibilityCheck"),
+                    $"Property=DotNetCheckResult; RuntimeType={runtimeType}; Version={version}; RollForward={rollForward}; Platform={platform}");
+
+            project.Include(WixExtension.NetFx);
+
+            return project;
+        }
+
+        /// <summary>
         /// Adds the XML fragment to the element specified by <c>placementPath</c>.
         /// <para>Note <c>placementPath</c> can only contain forward slashes.</para>
         /// <example>
@@ -1429,6 +1522,39 @@ namespace WixSharp.CommonTasks
 
             return project;
         }
+
+        /// <summary>
+        /// Adds the XML generated from the <see cref="IXmlAware"/> entity.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="placementXmlPath">The placement XML path. If it's null then the entity XML is placed in the root
+        /// <param name="entity">The entity.</param>
+        /// of the XML document.</param>
+        /// <returns></returns>
+        static public WixProject AddXml(this WixProject project, string placementXmlPath, IXmlAware entity)
+        {
+            project.WixSourceGenerated += doc =>
+            {
+                var element = entity.ToXml();
+                var placement = doc.Root;
+                if (placementXmlPath.IsNotEmpty())
+                    placement = doc.SelectOrCreate(placementXmlPath);
+
+                placement.AddElement(element);
+            };
+
+            return project;
+        }
+
+        /// <summary>
+        /// Adds the XML generated from the <see cref="IXmlAware"/> entity to the XML document root.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="entity">The entity.</param>
+        /// of the XML document.</param>
+        /// <returns></returns>
+        static public WixProject AddXml(this WixProject project, IXmlAware entity)
+            => project.AddXml(null, entity);
 
         /// <summary>
         /// Sets the value of the attribute value in the .NET application configuration file according
@@ -1607,15 +1733,217 @@ namespace WixSharp.CommonTasks
         /// <param name="isInstalling">if set to <c>true</c> is installing/registering
         /// COM server, otherwise uninstalling/unregistering.</param>
         /// <returns></returns>
+        [Obsolete("The method is not implemented on .NET Core", true)]
         static public bool RegisterComAssembly(this string assemblyFile, bool isInstalling)
         {
-            var asm = System.Reflection.Assembly.LoadFrom(assemblyFile);
+            // var asm = System.Reflection.Assembly.LoadFrom(assemblyFile);
 
-            var regAsm = new System.Runtime.InteropServices.RegistrationServices();
-            if (isInstalling)
-                return regAsm.RegisterAssembly(asm, System.Runtime.InteropServices.AssemblyRegistrationFlags.SetCodeBase);
-            else
-                return regAsm.UnregisterAssembly(asm);
+            // var regAsm = new System.Runtime.InteropServices.RegistrationServices();
+            // if (isInstalling)
+            //     return regAsm.RegisterAssembly(asm, System.Runtime.InteropServices.AssemblyRegistrationFlags.SetCodeBase);
+            // else
+            //     return regAsm.UnregisterAssembly(asm);
+            throw new NotImplementedException("The method is not implemented on .NET Core");
+        }
+
+        static string GenerateAotEntryPoints(this string assemblyPath)
+        {
+            var assembly = System.Reflection.Assembly.LoadFile(assemblyPath);
+
+            var customActions = assembly
+                .GetTypes()
+                .SelectMany(x => x.GetMethods())
+                .Select(x => new { Method = x, Attribute = x.GetCustomAttribute<CustomActionAttribute>() })
+                .Where(x => x.Method.IsStatic && x.Attribute != null);
+
+            var groups = customActions.GroupBy(v => v.Method.Name);
+            foreach (var group in groups)
+                if (group.Count() > 1)
+                    Console.WriteLine($"WIXSHARP.cs(0): warning IL3000: Custom action `{group.Key}` has multiple entry points in '{assemblyPath}'");
+
+            var code = new StringBuilder();
+
+            code.AppendLine("using System;\r\nusing System.Runtime.InteropServices;\r\nusing WixToolset.Dtf.WindowsInstaller;\r\nusing static System.Reflection.BindingFlags;\r\n")
+                .AppendLine("public class AotEnrtyPoints")
+                .AppendLine("{")
+                .AppendLine("    static AotEnrtyPoints()")
+                .AppendLine("    {");
+
+            var publicTypes = assembly.GetExportedTypes().Select(x => x.FullName).ToList();
+
+            if (ManagedProject.HandlerAotDeclaringTypes.ContainsKey(assembly.Location))
+                publicTypes.AddRange(ManagedProject.HandlerAotDeclaringTypes[assembly.Location].Split(','));
+
+            foreach (var typeName in publicTypes.Distinct())
+                code.AppendLine($"        typeof({typeName}).GetMembers(Public | NonPublic | FlattenHierarchy | Static | Instance | InvokeMethod);");
+
+            code.AppendLine("    }")
+                .AppendLine("");
+
+            foreach (var info in customActions)
+                code.AppendLine($"    [UnmanagedCallersOnly(EntryPoint = \"{info.Method.Name}\")]")
+                    .AppendLine($"    public static uint {info.Method.Name}(IntPtr handle)")
+                    .AppendLine($"        => (uint){info.Method.DeclaringType?.FullName}.{info.Method.Name}(Session.FromHandle(handle, false));")
+                    .AppendLine("");
+
+            void insertEP(string name)
+            {
+                code.AppendLine($"    [UnmanagedCallersOnly(EntryPoint = \"{name}\")]")
+                    .AppendLine($"    public static uint {name}(IntPtr handle)")
+                    .AppendLine($"        => (uint)WixSharp.ManagedProjectActions.{name}(Session.FromHandle(handle, false));")
+                    .AppendLine("");
+            }
+
+            insertEP("WixSharp_Load_Action");
+            insertEP("WixSharp_BeforeInstall_Action");
+            insertEP("WixSharp_AfterInstall_Action");
+
+            code.AppendLine("}");
+
+            return code.ToString();
+        }
+
+        /// <summary>
+        /// Converts an assembly containing Custom Actions into a native library by AOT compiling it.
+        /// <para>Custom action methods are exported as native entry points with the same name.</para>
+        /// </summary>
+        /// <param name="assemblyPath">The assembly path.</param>
+        /// <param name="previewOnly">if set to <c>true</c> [preview only].</param>
+        /// <returns></returns>
+        public static string ConvertToAotAssembly(this string assemblyPath, bool previewOnly = false)
+        {
+            string assembly = assemblyPath;
+
+            if (assemblyPath.PathGetFileName() == "WixSharp.Core.dll")
+            {
+                assemblyPath = "%this%";
+            }
+
+            if (assemblyPath.EndsWith("%this%"))
+            {
+                if (Compiler.ClientAssembly.IsEmpty())
+                    Compiler.ClientAssembly = Compiler.FindClientAssemblyInCallStack();
+
+                assembly = Compiler.ClientAssembly;
+            }
+
+            var projDir = assembly.PathGetDirName().PathJoin("aot." + assembly.PathGetFileNameWithoutExtension()).PathGetFullPath();
+            var actualProjectFile = projDir.PathJoin(assembly.PathGetFileNameWithoutExtension() + ".aot.csproj");
+
+            var outDir = "output";
+            var aotAsm = projDir.PathCombine(outDir, actualProjectFile.PathGetFileNameWithoutExtension() + ".dll");
+
+            if (previewOnly)
+                return aotAsm;
+
+            var buildId = projDir.PathJoin($"PID-{Process.GetCurrentProcess().Id}");
+
+            if (projDir.PathExists())
+            {
+                if (buildId.FileExists() && aotAsm.FileExists())
+                    return aotAsm;
+            }
+
+            projDir
+                .DeleteIfExists()
+                .EnsureDirExists();
+
+            IO.File.WriteAllText(buildId, "");
+
+            // https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/trimming-options?pivots=dotnet-8-0#warning-versions
+            var projDefinition = $@"<Project Sdk=""Microsoft.NET.Sdk"">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <PublishAot>true</PublishAot>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <NoWarn>{(Compiler.SuppressAotWarnings ? "IL3000" : "")}</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove=""output\**"" />
+    <EmbeddedResource Remove=""output\**"" />
+    <None Remove=""output\**"" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include=""{assembly.PathGetFileName()}"">
+      <HintPath>{assembly.PathGetFullPath()}</HintPath>
+    </Reference>
+    <Reference Include=""WixToolset.Dtf.WindowsInstaller.dll"">
+      <HintPath>{typeof(CustomActionAttribute).Assembly.Location}</HintPath>
+    </Reference>
+    <Reference Include=""WixSharp.dlll"">
+      <HintPath>{typeof(WixSharp.Project).Assembly.Location}</HintPath>
+    </Reference>
+    <Reference Include=""WixSharp.Msi.dlll"">
+      <HintPath>{typeof(MsiParser).Assembly.Location}</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>";
+
+            IO.File.WriteAllText(actualProjectFile, projDefinition);
+
+            IO.File.WriteAllText(projDir.PathJoin("aot.entrypoints.cs"), assembly.GenerateAotEntryPoints());
+
+            // IO.File.Copy(assembly.PathChangeFileName("aot.cs"), projDir.PathJoin("aot.cs"));
+
+            var sw = Stopwatch.StartNew();
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = WixTools.dotnet;
+                process.StartInfo.Arguments = $"publish {actualProjectFile.Enquote()} /p:NativeLib=Shared -r win-x64 -c release -o {outDir}";
+                process.StartInfo.WorkingDirectory = projDir;
+                process.StartInfo.UseShellExecute = false;
+                process.Start();
+                process.WaitForExit();
+
+                Console.WriteLine($"Converted: {sw.Elapsed}");
+                if (process.ExitCode == 0)
+                    return aotAsm;
+
+                return "<unknown>";
+            }
+        }
+
+        /// <summary>
+        /// Compiles the the project file into an aot assembly.
+        /// </summary>
+        /// <param name="projFile">The proj file.</param>
+        /// <returns></returns>
+        public static string CompileAotAssembly(this string projFile)
+        {
+            var projDir = projFile.PathGetDirName();
+            var actualProjectFile = projFile.PathChangeExtension(".aot.csproj").PathGetFullPath();
+
+            IO.File.WriteAllText(actualProjectFile,
+                                 IO.File.ReadAllText(projFile)
+                                 .Replace("<OutputType>Exe</OutputType>", "<OutputType>Library</OutputType><PublishAot>true</PublishAot>"));
+
+            var asmFileName = actualProjectFile.PathGetFileNameWithoutExtension() + ".dll";
+            var outDir = "outdir";
+
+            try
+            {
+                using (var process = new Process())
+                {
+                    process.StartInfo.FileName = WixTools.dotnet;
+                    process.StartInfo.Arguments = $"publish {actualProjectFile.Enquote()} /p:NativeLib=Shared -r win-x64 -c release -o {outDir}";
+                    process.StartInfo.WorkingDirectory = projFile.PathGetDirName();
+                    process.StartInfo.UseShellExecute = false;
+                    process.Start();
+                    process.WaitForExit();
+
+                    if (process.ExitCode == 0)
+                        return projDir.PathCombine(outDir, asmFileName);
+
+                    return "<unknown>";
+                }
+            }
+            finally
+            {
+                actualProjectFile.DeleteIfExists();
+            }
         }
 
         /// <summary>
@@ -1692,6 +2020,38 @@ namespace WixSharp.CommonTasks
         static public string StopService(string service, bool throwOnError = true)
         {
             return ServiceDo("stop", service, throwOnError);
+        }
+
+        /// <summary>
+        /// Adds the property to the default properties that are mapped for use with the setup events (deferred custom actions). See <see
+        /// cref="ManagedAction.UsesProperties"/> for the details.
+        /// <para>The default value is "INSTALLDIR,UILevel"</para>
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns></returns>
+        public static ManagedProject MapAsDeferredProperty(this ManagedProject project, string propertyName)
+        {
+            project.DefaultDeferredProperties += "," + propertyName;
+            return project;
+        }
+
+        /// <summary>
+        /// Changes the project configuration so `Project.AfterInstall` event is executed unelevated. Otherwise it is elevated.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns></returns>
+        [Obsolete("This method is obsolete. Use `project.AfterInstallEventExecution = EventExecution.MsiSessionScopeImmediate;` instead")]
+        public static ManagedProject UnelevateAfterInstallEvent(this ManagedProject project)
+        {
+            project.WixSourceGenerated +=
+                doc =>
+                {
+                    doc.FindAll("CustomAction")
+                       .FirstOrDefault(x => x.HasAttribute("Id", "WixSharp_AfterInstall_Action"))
+                       ?.SetAttribute("Execute", "immediate");
+                };
+            return project;
         }
 
         static string ServiceDo(string action, string service, bool throwOnError)
@@ -1773,191 +2133,125 @@ namespace WixSharp.CommonTasks
     }
 
     /// <summary>
-    /// A generic utility class for running console application tools (e.g. compilers, utilities)
+    /// An utility class for persisting session data (dictionary) between installation sessions..
+    /// The data is persisted in the encrypted `C:\ProgramData\WixSharp\SessionData\&lt;UpgradeCode&gt;` file.
     /// </summary>
-    public class ExternalTool
+    /// <example>The following is an example of persisting session data at the end of setup from the project `AfterInstall` event handler:
+    /// <code>
+    /// // persist data at the end of the session
+    /// static void project_AfterInstall(SetupEventArgs e)
+    /// {
+    ///     try
+    ///     {
+    ///         var customData = new Dictionary&lt;string, string&gt;();
+    ///         customData[install_time] = DateTime.Now.ToString();
+    ///         e.Session.PersistData(customData);
+    ///     }
+    ///     catch { }
+    /// }
+    ///
+    /// . . .
+    /// // read the persisted data at the start of the next session
+    /// static void project_UIInit(SetupEventArgs e)
+    /// {
+    ///     try
+    ///     {
+    ///         var Dictionary&lt;string, string&gt; data = e.Session.ReadPersistedData());
+    ///     }
+    ///     catch { }
+    ///
+    ///
+    /// </code>
+    /// </example>
+    public static class SessionDataExtensions
     {
+        static string persitentDataDir = System.IO.Path.Combine(
+                                             Environment.SpecialFolder.CommonApplicationData.ToPath(),
+                                             "WixSharp",
+                                             "SessionData")
+                                             .EnsureDirExists();
+
         /// <summary>
-        /// The default console out handler. It can be used when you want to have fine control over
-        /// STD output of the external tool.
+        /// Persists the data.
         /// </summary>
-        /// <example>The following is an example of masking the word 'secret' in the output text.
+        /// <example>The following is an example of persisting session data at the end of setup from the project `AfterInstall` event handler:
         /// <code>
-        /// ExternalTool.ConsoleOut = (line) => Console.WriteLine(line.Replace("secret", "******"))
-        /// var tool = new ExternalTool
+        /// static void project_AfterInstall(SetupEventArgs e)
         /// {
-        ///     ExePath = "tool.exe",
-        ///     Arguments = "-a -b",
-        /// };
-        /// tool.ConsoleRun();
+        ///     try
+        ///     {
+        ///         e.Session.PersistData(e.Data);
+        ///         // or
+        ///         var customData = new Dictionary&lt;string, string&gt;();
+        ///         customData[install_time] = DateTime.Now.ToString();
+        ///         e.Session.PersistData(customData);
+        ///     }
+        ///     catch { }
+        /// }
         /// </code>
         /// </example>
-        public Action<string> ConsoleOut = Compiler.OutputWriteLine;
-
-        /// <summary>
-        /// Controls echoing the executed command in the ConsoleOut.
-        /// </summary>
-        public bool EchoOn = true;
-
-        /// <summary>
-        /// Gets or sets the encoding to be used to process external executable output.
-        /// By default it is the value of <see cref="ExternalTool.DefaultEncoding"/>.
-        /// </summary>
-        /// <value>
-        /// The encoding.
-        /// </value>
-        public Encoding Encoding;
-
-        /// <summary>
-        /// Gets or sets the default encoding to be used to process external executable output.
-        /// By default it is the value of <c>System.Text.Encoding.Default</c>.
-        /// </summary>
-        public static Encoding DefaultEncoding = Encoding.Default;
-
-        /// <summary>
-        /// Gets or sets the path to the exe file of the tool to be executed.
-        /// </summary>
-        /// <value>The exe path.</value>
-        public string ExePath { set; get; }
-
-        /// <summary>
-        /// Gets or sets the arguments for the exe file of the tool to be executed.
-        /// </summary>
-        /// <value>The arguments.</value>
-        public string Arguments { set; get; }
-
-        /// <summary>
-        /// Gets or sets the well known locations for probing the exe file.
-        /// <para>
-        /// By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>.
-        /// By setting <c>WellKnownLocations</c>
-        /// you can add some extra probing locations. The directories must be separated by the ';' character.
-        /// </para>
-        /// </summary>
-        /// <value>The well known locations.</value>
-        public string WellKnownLocations { set; get; }
-
-        /// <summary>
-        /// Runs the exec file with the console output completely hidden and discarded.
-        /// </summary>
-        /// <returns>The process exit code.</returns>
-        public int WinRun()
+        /// <param name="session">The session.</param>
+        /// <param name="data">The data.</param>
+        /// <param name="protectionScope">The protection scope.</param>
+        /// <returns></returns>
+        public static Session PersistData(this Session session, Dictionary<string, string> data, DataProtectionScope protectionScope = DataProtectionScope.LocalMachine)
         {
-            string systemPathOriginal = Environment.GetEnvironmentVariable("PATH");
-            try
-            {
-                Environment.SetEnvironmentVariable("PATH", systemPathOriginal + ";" + Environment.ExpandEnvironmentVariables(this.WellKnownLocations ?? ""));
-
-                var process = new Process();
-                process.StartInfo.FileName = this.ExePath;
-                process.StartInfo.Arguments = this.Arguments;
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.CreateNoWindow = true;
-                process.StartInfo.StandardOutputEncoding = this.Encoding ?? DefaultEncoding;
-                process.Start();
-
-                process.WaitForExit();
-                return process.ExitCode;
-            }
-            finally
-            {
-                Environment.SetEnvironmentVariable("PATH", systemPathOriginal);
-            }
+            var fileName = persitentDataDir.PathCombine(session.Property("UpgradeCode"));
+            var xml = data.ToXml();
+            var bytes = ProtectedData.Protect(Encoding.Unicode.GetBytes(xml), null, protectionScope);
+            System.IO.File.WriteAllBytes(fileName, bytes);
+            return session;
         }
 
         /// <summary>
-        /// Runs the exec file with the console and redirects the output into the current process console output.
+        /// Reads the persisted data.
         /// </summary>
-        /// <returns>The process exit code.</returns>
-        public int ConsoleRun()
+        /// <example>The following is an example of reading persisted data from the project `Load` event handler:
+        /// <code>
+        ///
+        /// static void project_UIInit(SetupEventArgs e)
+        /// {
+        ///     try
+        ///     {
+        ///         e.Data.Merge(e.Session.ReadPersistedData());
+        ///     }
+        ///     catch { }
+        /// }
+        /// </code>
+        /// </example>
+        /// <param name="session">The session.</param>
+        /// <param name="protectionScope">The protection scope.</param>
+        /// <returns></returns>
+        public static Dictionary<string, string> ReadPersistedData(this Session session, DataProtectionScope protectionScope = DataProtectionScope.LocalMachine)
         {
-            return ConsoleRun(this.ConsoleOut);
+            var fileName = persitentDataDir.PathCombine(session.Property("UpgradeCode"));
+
+            if (System.IO.File.Exists(fileName))
+            {
+                var bytes = System.IO.File.ReadAllBytes(fileName);
+                bytes = ProtectedData.Unprotect(bytes, null, protectionScope);
+                var xml = Encoding.Unicode.GetString(bytes);
+                return new Dictionary<string, string>().InitFromXml(xml);
+            }
+            else
+                return new Dictionary<string, string>();
         }
 
-        /// <summary>
-        /// Runs the exec file with the console and returns the output text.
-        /// </summary>
-        /// <returns>The process console output.</returns>
-        public string GetConsoleRunOutput()
+        static string ToXml(this Dictionary<string, string> data)
         {
-            var buf = new StringBuilder();
-            this.ConsoleRun(line => buf.AppendLine(line));
-            return buf.ToString();
+            var xml = XDocument.Parse("<items/>");
+            foreach (var key in data.Keys)
+                xml.Root.AddElement("item")
+                        .SetAttribute("key", key)
+                        .SetAttribute("value", data[key] ?? "");
+            return xml.ToString();
         }
 
-        /// <summary>
-        /// Runs the exec file with the console and intercepts and redirects the output into the user specified delegate.
-        /// </summary>
-        /// <param name="onConsoleOut">The on console out.</param>
-        /// <returns>The process exit code.</returns>
-        public int ConsoleRun(Action<string> onConsoleOut)
+        static Dictionary<string, string> InitFromXml(this Dictionary<string, string> data, string xml)
         {
-            string systemPathOriginal = Environment.GetEnvironmentVariable("PATH");
-            try
-            {
-                Environment.SetEnvironmentVariable("PATH", Environment.ExpandEnvironmentVariables(this.WellKnownLocations ?? "") + ";" + "%WIXSHARP_PATH%;" + systemPathOriginal);
-
-                string exePath = GetFullPath(this.ExePath);
-
-                if (exePath == null)
-                {
-                    onConsoleOut("Error: Cannot find " + this.ExePath);
-                    onConsoleOut("Make sure it is in the System PATH or WIXSHARP_PATH environment variables or WellKnownLocations member/parameter is initialized properly. ");
-                    return 1;
-                }
-
-                if (EchoOn)
-                    onConsoleOut("Execute:\n\"" + this.ExePath + "\" " + this.Arguments);
-
-                using (var process = new Process())
-                {
-                    process.StartInfo.FileName = exePath;
-                    process.StartInfo.Arguments = this.Arguments;
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.RedirectStandardOutput = true;
-                    process.StartInfo.RedirectStandardError = true;
-                    process.StartInfo.StandardOutputEncoding = this.Encoding ?? DefaultEncoding;
-                    process.StartInfo.CreateNoWindow = true;
-                    process.Start();
-
-                    if (onConsoleOut != null)
-                    {
-                        string line = null;
-                        while (null != (line = process.StandardOutput.ReadLine()))
-                        {
-                            onConsoleOut(line);
-                        }
-
-                        string error = process.StandardError.ReadToEnd();
-                        if (!error.IsEmpty())
-                            onConsoleOut(error);
-                    }
-                    process.WaitForExit();
-                    return process.ExitCode;
-                }
-            }
-            finally
-            {
-                Environment.SetEnvironmentVariable("PATH", systemPathOriginal);
-            }
-        }
-
-        string GetFullPath(string path)
-        {
-            if (IO.File.Exists(path))
-                return IO.Path.GetFullPath(path);
-
-            foreach (string dir in Environment.GetEnvironmentVariable("PATH").Split(';'))
-            {
-                if (IO.Directory.Exists(dir))
-                {
-                    string fullPath = IO.Path.Combine(Environment.ExpandEnvironmentVariables(dir).Trim(), path);
-                    if (IO.File.Exists(fullPath))
-                        return fullPath;
-                }
-            }
-
-            return null;
+            foreach (var element in XDocument.Parse(xml).Root.Elements())
+                data[element.GetAttribute("key")] = element.GetAttribute("value");
+            return data;
         }
     }
 }

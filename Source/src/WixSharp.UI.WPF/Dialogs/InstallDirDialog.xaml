@@ -19,7 +19,6 @@
             Margin="-1,-1,-1,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Background="White"
             BorderBrush="Gray"
             BorderThickness="1">
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -33,11 +32,11 @@
                     Grid.Row="1"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch" />
+                    VerticalAlignment="Stretch"
+                    Source="{Binding Banner}" />
                 <StackPanel Margin="9">
                     <TextBlock
                         Grid.Column="0"
-                        Background="White"
                         FontSize="12"
                         FontWeight="Bold">
                         [InstallDirDlgTitle]
@@ -46,7 +45,6 @@
                         x:Name="DialogDescription"
                         Margin="17,5"
                         VerticalAlignment="Stretch"
-                        Background="White"
                         TextWrapping="WrapWithOverflow">
                         [InstallDirDlgDescription]
                     </TextBlock>
@@ -55,19 +53,21 @@
         </Border>
 
         <StackPanel Grid.Row="1" Margin="20,10">
-            <TextBlock
-                MinHeight="35"
-                TextWrapping="WrapWithOverflow">
+            <TextBlock MinHeight="35" TextWrapping="WrapWithOverflow">
                 [InstallDirDlgFolderLabel]
             </TextBlock>
-            <TextBox x:Name="InstallDirPath" Height="18"
-                     VerticalContentAlignment="Center"
-                     Margin="0,10" />
+            <TextBox
+                x:Name="InstallDirPath"
+                Height="18"
+                Margin="0,10"
+                VerticalContentAlignment="Center"
+                Text="{Binding InstallDirPath}" />
             <Button
                 x:Name="ChangeInstallDir"
                 Height="23"
                 MinWidth="140"
                 HorizontalAlignment="Left"
+                Click="ChangeInstallDir_Click"
                 Content="[InstallDirDlgChange]" />
         </StackPanel>
 
@@ -86,21 +86,24 @@
                 <Button
                     x:Name="GoPrev"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="GoPrev_Click">
                     [WixUIBack]
                 </Button>
                 <Separator Width="10" Opacity="0" />
                 <Button
                     x:Name="GoNext"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="GoNext_Click">
                     [WixUINext]
                 </Button>
                 <Separator Width="20" Opacity="0" />
                 <Button
                     x:Name="Cancel"
                     Height="23"
-                    MinWidth="73">
+                    MinWidth="73"
+                    Click="Cancel_Click">
                     [WixUICancel]
                 </Button>
                 <Separator Width="10" Opacity="0" />

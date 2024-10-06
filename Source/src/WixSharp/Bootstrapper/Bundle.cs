@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using WixSharp.CommonTasks;
+
+#pragma warning disable CS8981
+
 using sys = System.IO;
 
 namespace WixSharp.Bootstrapper
@@ -19,7 +22,7 @@ namespace WixSharp.Bootstrapper
     /// <code>
     ///  var bootstrapper =
     ///      new Bundle("My Product",
-    ///          new PackageGroupRef("NetFx40Web"),
+    ///          new PackageGroupRef("NetFx462Web"),
     ///          new MsiPackage("productA.msi"),
     ///          new MsiPackage("productB.msi"));
     ///
@@ -64,6 +67,21 @@ namespace WixSharp.Bootstrapper
             this.Include(WixExtension.Bal);
             Name = name;
             Chain.AddRange(items);
+            var msiExePackages = items.OfType<MsiExePackage>().ToArray();
+            if (msiExePackages.Any())
+            {
+                this.Include(WixExtension.Util);
+                foreach (var item in msiExePackages)
+                {
+                    this.AddWixFragment("Wix/Bundle",
+                        new UtilProductSearch
+                        {
+                            ProductCode = item.ProductCode,
+                            Result = ProductSearchResultType.state,
+                            Variable = item.DetectConditionVariable
+                        });
+                }
+            }
         }
 
         /// <summary>
@@ -116,9 +134,9 @@ namespace WixSharp.Bootstrapper
         public string Condition;
 
         /// <summary>
-        /// Parameters of digitally sign
+        /// The implementation of the digital signing algorithm
         /// </summary>
-        public DigitalSignatureBootstrapper DigitalSignature;
+        public IDigitalSignature DigitalSignature;
 
         /// <summary>
         /// Determines whether the bundle can be removed via the Programs and Features (also known as Add/Remove Programs). If the value is
@@ -198,13 +216,13 @@ namespace WixSharp.Bootstrapper
         /// The suppress auto insertion of WixMbaPrereq* variables in the bundle definition (WixMbaPrereqPackageId and WixMbaPrereqLicenseUrl).
         /// <para>BA is relying on two internal variables that reflect .NET version (and license) that BA requires at runtime. If user defines
         /// custom Wix# based BA the required variables are inserted automatically, similarly to the standards WiX/Burn BA. However some other
-        /// bundle packages (e.g. new PackageGroupRef("NetFx40Web")) may also define these variables so some duplication/collision is possible.
+        /// bundle packages (e.g. new PackageGroupRef("NetFx462Web")) may also define these variables so some duplication/collision is possible.
         /// To avoid this you can suppress variables auto-insertion and define them manually as needed.</para>
         /// </summary>
         ///<example>The following is an example of suppressing auto-insertion:
         /// <code>
         /// var bootstrapper = new Bundle("My Product Suite",
-        ///                        new PackageGroupRef("NetFx40Web"),
+        ///                        new PackageGroupRef("NetFx462Web"),
         ///                        new MsiPackage(productMsi)
         ///                        {
         ///                            Id = "MyProductPackageId",
@@ -214,7 +232,8 @@ namespace WixSharp.Bootstrapper
         /// bootstrapper.SuppressWixMbaPrereqVars = true;
         /// </code>
         /// </example>
-        public bool SuppressWixMbaPrereqVars = false;
+        [Obsolete("Not needed for WiX4", true)]
+        public bool SuppressWixMbaPrereqVars = true;
 
         /// <summary>
         /// The version of the bundle. Newer versions upgrade earlier versions of the bundles with matching UpgradeCodes. If the bundle is registered in Programs and Features then this attribute will be displayed in the Programs and Features user interface.
@@ -282,13 +301,6 @@ namespace WixSharp.Bootstrapper
                         app.PrimaryPackageId = lastPackage.Id;
                     }
                 }
-
-                //addresses https://wixsharp.codeplex.com/workitem/149
-                if (!SuppressWixMbaPrereqVars)
-                {
-                    WixVariables["WixMbaPrereqPackageId"] = "Netfx4Full";
-                    WixVariables.Add("WixMbaPrereqLicenseUrl", "NetfxLicense.rtf");
-                }
             }
 
             //important to call AutoGenerateSources after PrimaryPackageId is set
@@ -323,6 +335,12 @@ namespace WixSharp.Bootstrapper
             foreach (var item in this.Chain)
                 xChain.Add(item.ToXml());
 
+            if (Application is ManagedBootstrapperApplication)
+            {
+                var lastPackge = xChain.Elements("MsiPackage").LastOrDefault() ?? xChain.Elements("ExePackage").LastOrDefault();
+                lastPackge?.SetAttributeValue(WixExtension.Bal.ToXName("PrereqPackage"), "yes");
+            }
+
             xChain.SetAttribute("DisableRollback", DisableRollback);
             xChain.SetAttribute("DisableSystemRestore", DisableSystemRestore);
             xChain.SetAttribute("ParallelCache", ParallelCache);
@@ -349,6 +367,11 @@ namespace WixSharp.Bootstrapper
         /// </code>
         /// </example>
         public Variable[] Variables = new Variable[0];
+
+        /// <summary>
+        /// The target platform type.
+        /// </summary>
+        public Platform? Platform;
 
         /// <summary>
         /// Builds WiX Bootstrapper application from the specified <see cref="Bundle" /> project instance.
@@ -382,27 +405,6 @@ namespace WixSharp.Bootstrapper
 
         void ValidateCompileOutput(string output)
         {
-            if (!this.SuppressWixMbaPrereqVars && output.Contains("'WixMbaPrereqPackageId' is declared in more than one location."))
-            {
-                Compiler.OutputWriteLine("======================================================");
-                Compiler.OutputWriteLine("");
-                Compiler.OutputWriteLine("WARNING: It looks like one of the packages defines " +
-                                         "WixMbaPrereqPackageId/WixMbaPrereqLicenseUrl in addition to the definition " +
-                                         "auto-inserted by Wix# managed BA. If it is the case set your Bundle project " +
-                                         "SuppressWixMbaPrereqVars to 'true' to fix the problem.");
-                Compiler.OutputWriteLine("");
-                Compiler.OutputWriteLine("======================================================");
-            }
-            else if (this.SuppressWixMbaPrereqVars && output.Contains("The Windows Installer XML variable !(wix.WixMbaPrereqPackageId) is unknown."))
-            {
-                Compiler.OutputWriteLine("======================================================");
-                Compiler.OutputWriteLine("");
-                Compiler.OutputWriteLine("WARNING: It looks like generation of WixMbaPrereqPackageId/WixMbaPrereqLicenseUrl " +
-                                         "was suppressed while none of other packages defines it. " +
-                                         "If it is the case set your Bundle project SuppressWixMbaPrereqVars to false to fix the problem.");
-                Compiler.OutputWriteLine("");
-                Compiler.OutputWriteLine("======================================================");
-            }
         }
 
         /// <summary>
@@ -424,22 +426,22 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         public void Validate()
         {
-            var msiPackages = this.Chain.Where(x => (x is MsiPackage) && (x as MsiPackage).DisplayInternalUI == true);
-            foreach (MsiPackage item in msiPackages)
-            {
-                try
-                {
-                    if (Tasks.IsEmbeddedUIPackage(item.SourceFile))
-                    {
-                        Compiler.OutputWriteLine("");
-                        Compiler.OutputWriteLine("WARNING: You have selected enabled DisplayInternalUI for EmbeddedUI-based '"
-                            + sys.Path.GetFileName(item.SourceFile) + "'. Currently Burn (WiX) " +
-                            "doesn't support integration with EmbeddedUI packages. Read more here: https://github.com/oleg-shilo/wixsharp/wiki/Wix%23-Bootstrapper-(Burn)-integration-notes");
+            // https://github.com/wixtoolset/issues/issues/7670
 
-                        Compiler.OutputWriteLine("");
-                    }
+            var customBA = this.Application as ManagedBootstrapperApplication;
+            if (customBA != null && customBA.GetType().Name != "SilentBootstrapperApplication")
+            {
+                var msiPackages = this.Chain.Where(x => (x is MsiPackage) && (x as MsiPackage).DisplayInternalUI == true);
+
+                if (msiPackages.Any())
+                {
+                    Compiler.OutputWriteLine("");
+                    Compiler.OutputWriteLine("WARNING: DisplayInternalUI value of MsiPackages will be ignored because " +
+                        "you are using custom BA. For custom BA applications visibility of the individual MSI packages " +
+                        "needs to be controlled from the PlanMsiPackage event handler of the BA.\n" +
+                        "Read more here: https://github.com/oleg-shilo/wixsharp/issues/1396#issuecomment-1849731522");
+                    Compiler.OutputWriteLine("");
                 }
-                catch { }
             }
         }
 
@@ -479,7 +481,7 @@ namespace WixSharp.Bootstrapper
 
         <Chain>
             <!-- Install .Net 4 Full -->
-            <PackageGroupRef Id="NetFx40Web"/>
+            <PackageGroupRef Id="NetFx462Web"/>
             <!--<ExePackage
                 Id="Netfx4FullExe"
                 Cache="no"

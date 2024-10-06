@@ -1,5 +1,3 @@
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,12 +5,15 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using WixSharp.UI.Forms;
+using WixToolset.Dtf.WindowsInstaller;
+using WixToolset.Mba.Core;
 
 using io = System.IO;
 using sys = System.Windows.Forms;
@@ -36,6 +37,9 @@ namespace WixSharp
 
     public static class UIExtensions
     {
+        public static string GetVersion(this System.Reflection.Assembly assembly)
+            => assembly.GetName().Version.ToString();
+
         public static System.Drawing.Icon GetAssiciatedIcon(this string extension)
         {
             var dummy = Path.GetTempPath() + extension;
@@ -189,8 +193,8 @@ namespace WixSharp
         public static string GetDirectoryPath(this Session session, string name)
         {
             string[] subDirs = session.GetDirectoryPathParts(name)
-                                        .Select(x => x.AsWixVarToPath())
-                                        .ToArray();
+                                      .Select(x => x.AsWixVarToPath())
+                                          .ToArray();
             return string.Join(@"\", subDirs);
         }
 
@@ -253,6 +257,18 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Safe version of <see cref="WixToolset.Mba.Core.IEngine.Apply(IntPtr)"/>. It allows passing
+        /// parent handle <c>null</c> or <c>IntPtr.Zero</c> to allow applying the "setup plan" when the bootstrapper
+        /// window is not available. In such case SafeApply will use the handle returned by the <see cref="GetForegroundWindow()"/>
+        /// </summary>
+        /// <param name="engine">The engine.</param>
+        /// <param name="hwndParent">The HWND parent.</param>
+        static public void SafeApply(this IEngine engine, IntPtr? hwndParent = null) => engine.Apply(GetForegroundWindow());
+
+        [DllImport("User32.dll")]
+        static extern IntPtr GetForegroundWindow();
+
+        /// <summary>
         /// Localizes the control its contained <see cref="T:System.Windows.Forms.Control.Text"/> from the specified localization
         /// delegate 'localize'.
         /// <para>The method substitutes both localization file (*.wxl) entries and MSI properties contained by the input string
@@ -275,13 +291,9 @@ namespace WixSharp
 
                 item.Text = item.Text.LocalizeWith(localize);
 
-                if (item.ContextMenuStrip != null)
-                    foreach (ToolStripItem menu in item.ContextMenuStrip?.Items.OfType<ToolStripItem>())
-                        menu.Text = menu.Text.LocalizeWith(localize);
-
                 item.Controls
-                    .OfType<sys.Control>()
-                    .ForEach(x => controls.Enqueue(x));
+                .OfType<sys.Control>()
+                .ForEach(x => controls.Enqueue(x));
             }
             return control;
         }
@@ -296,6 +308,10 @@ namespace WixSharp
         /// <remarks>
         /// Note that both localization entries and MSI properties must be enclosed in the square brackets
         /// (e.g. "[ProductName] Setup", "[InstallDirDlg_Title]").
+        /// <code>
+        /// Func&lt;string, string&gt; localizer = e.ManagedUI.Shell.MsiRuntime().Localize;
+        /// var localizedText =  "[ProductName] Setup".LocalizeWith(localizer);
+        /// </code>
         /// </remarks>
         /// </summary>
         /// <param name="textToLocalize">The text to localize.</param>
@@ -329,14 +345,6 @@ namespace WixSharp
                     result.Append(text.Substring(lastEnd, text.Length - lastEnd));
             }
             return cleanRegex.Replace(result.ToString(), "");
-        }
-
-        internal static T Get<T>(this Engine.Variables<T> variables, string name)
-        {
-            if (!string.IsNullOrEmpty(name) && variables.Contains(name))
-                return variables[name];
-            else
-                return default(T);
         }
     }
 }

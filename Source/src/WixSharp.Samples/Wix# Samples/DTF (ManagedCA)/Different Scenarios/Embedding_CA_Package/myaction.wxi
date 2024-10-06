@@ -1,7 +1,7 @@
-<Include>
-  <CustomAction Id="MyAction" BinaryKey="MyAction_File" DllEntry="MyAction" Impersonate="yes" Execute="immediate" Return="check" />
+<Include xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<CustomAction Id="MyAction" BinaryRef="MyAction_File" DllEntry="MyAction" Impersonate="yes" Execute="immediate" Return="check" />
 
-  <InstallExecuteSequence>
-    <Custom Action="MyAction" After="InstallInitialize">(NOT Installed)</Custom>
-  </InstallExecuteSequence>
+	<InstallExecuteSequence>
+		<Custom Action="MyAction" After="InstallInitialize" Condition="(NOT Installed)"></Custom>
+	</InstallExecuteSequence>
 </Include>

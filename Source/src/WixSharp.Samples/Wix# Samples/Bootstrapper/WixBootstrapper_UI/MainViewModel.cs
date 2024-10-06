@@ -1,26 +1,79 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Security.Principal;
 using System.Windows;
+using WixSharp;
+using WixToolset.Mba.Core;
 
-#if WIX4
-using WixToolset.Bootstrapper;
-#else
+using mba = WixToolset.Mba.Core;
 
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
+using PackageState = WixToolset.Mba.Core.PackageState;
 
-#endif
+[assembly: BootstrapperApplicationFactory(typeof(WixToolset.WixBA.WixBAFactory))]
 
-[assembly: BootstrapperApplication(typeof(ManagedBA))]
-
-public class ManagedBA : BootstrapperApplication
+namespace WixToolset.WixBA
 {
+    public class WixBAFactory : BaseBootstrapperApplicationFactory
+    {
+        protected override mba.IBootstrapperApplication Create(IEngine engine, IBootstrapperCommand command)
+        {
+            return new ManagedBA(engine, command);
+        }
+    }
+}
+
+public static class Runtime
+{
+    public static void RestartItself()
+    {
+        // On startup the bundle app always starts another instance
+        // of itself but with some extra CLI arguments that need to be cleaned up.
+
+        var exe = Environment.GetCommandLineArgs()[0];
+        var args = string.Join(", ", Environment.GetCommandLineArgs().Skip(1)
+            .Where(x => !x.StartsWith("-burn.")));
+
+        var startInfo = new ProcessStartInfo();
+        startInfo.UseShellExecute = true;
+        startInfo.WorkingDirectory = Environment.CurrentDirectory;
+        startInfo.FileName = exe;
+        startInfo.Arguments = args;
+        startInfo.Verb = "runas";
+
+        Process.Start(startInfo);
+    }
+
+    public static bool IsAdmin => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+}
+
+public class ManagedBA : mba.BootstrapperApplication
+{
+    public ManagedBA(mba.IEngine engine, mba.IBootstrapperCommand command) : base(engine)
+    {
+        this.Command = command;
+    }
+
+    public mba.IEngine Engine => base.engine;
+    public mba.IBootstrapperCommand Command;
+
     /// <summary>
     /// Entry point that is called when the bootstrapper application is ready to run.
     /// </summary>
     protected override void Run()
     {
-        new MainView(this).ShowDialog();
-        Engine.Quit(0);
+        // since it is a custom BA we are responsible for elevating the process if it is required.
+        if (Runtime.IsAdmin)
+        {
+            new MainView(this).ShowDialog();
+        }
+        else
+        {
+            Runtime.RestartItself();
+        }
+
+        engine.Quit(0);
     }
 }
 
@@ -34,7 +87,9 @@ public class MainViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public MainViewModel(BootstrapperApplication bootstrapper)
+    public IntPtr ViewHandle;
+
+    public MainViewModel(ManagedBA bootstrapper)
 
     {
         this.IsBusy = false;
@@ -42,13 +97,51 @@ public class MainViewModel : INotifyPropertyChanged
         this.Bootstrapper = bootstrapper;
         this.Bootstrapper.Error += this.OnError;
         this.Bootstrapper.ApplyComplete += this.OnApplyComplete;
+        this.Bootstrapper.DetectBegin += Bootstrapper_DetectBegin;
         this.Bootstrapper.DetectPackageComplete += this.OnDetectPackageComplete;
         this.Bootstrapper.PlanComplete += this.OnPlanComplete;
 
         this.Bootstrapper.Engine.Detect();
+
+        var cmd = this.Bootstrapper.Command.CommandLine;
+
+        if (cmd != null)
+        {
+            if (cmd.Contains("-install") || cmd.Contains("-i") || cmd.Contains("/install") || cmd.Contains("/i"))
+                this.InstallExecute();
+            else if (cmd.Contains("-uninstall") || cmd.Contains("-u") || cmd.Contains("/uninstall") || cmd.Contains("/u"))
+                this.InstallExecute();
+            else if (cmd.Contains("-all") || cmd.Contains("/all"))
+                showAllCommands = true;
+        }
     }
 
-    void OnError(object sender, ErrorEventArgs e)
+    bool showAllCommands = false;
+
+    RegistrationType detecteRegistrationType = RegistrationType.None;
+
+    void Bootstrapper_DetectBegin(object sender, DetectBeginEventArgs e)
+    {
+        detecteRegistrationType = e.RegistrationType;
+    }
+
+    public void ShowLog()
+    {
+        try
+        {
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = new Uri(Bootstrapper.Engine.GetVariableString("WixBundleLog")).ToString();
+                process.StartInfo.UseShellExecute = true;
+                process.StartInfo.Verb = "open";
+
+                process.Start();
+            }
+        }
+        catch { }
+    }
+
+    void OnError(object sender, mba.ErrorEventArgs e)
     {
         MessageBox.Show(e.ErrorMessage);
     }
@@ -102,20 +195,25 @@ public class MainViewModel : INotifyPropertyChanged
         }
     }
 
-    public BootstrapperApplication Bootstrapper { get; set; }
+    public ManagedBA Bootstrapper { get; set; }
 
     public void InstallExecute()
     {
         IsBusy = true;
+        InstallEnabled = false;
+        UninstallEnabled = false;
 
-        Bootstrapper.Engine.StringVariables["UserInput"] = UserInput;
-        Bootstrapper.Engine.Plan(LaunchAction.Install);
+        Bootstrapper.Engine.SetVariableString("UserInput", UserInput, false);
+        Bootstrapper.Engine.Plan(mba.LaunchAction.Install);
     }
 
     public void UninstallExecute()
     {
         IsBusy = true;
-        Bootstrapper.Engine.Plan(LaunchAction.Uninstall);
+        InstallEnabled = false;
+        UninstallEnabled = false;
+
+        Bootstrapper.Engine.Plan(mba.LaunchAction.Uninstall);
     }
 
     public void ExitExecute()
@@ -127,7 +225,7 @@ public class MainViewModel : INotifyPropertyChanged
     /// Method that gets invoked when the Bootstrapper ApplyComplete event is fired.
     /// This is called after a bundle installation has completed. Make sure we updated the view.
     /// </summary>
-    void OnApplyComplete(object sender, ApplyCompleteEventArgs e)
+    void OnApplyComplete(object sender, mba.ApplyCompleteEventArgs e)
     {
         IsBusy = false;
         InstallEnabled = false;
@@ -140,14 +238,33 @@ public class MainViewModel : INotifyPropertyChanged
     /// specified in one of the package elements (msipackage, exepackage, msppackage,
     /// msupackage) in the WiX bundle.
     /// </summary>
-    void OnDetectPackageComplete(object sender, DetectPackageCompleteEventArgs e)
+    void OnDetectPackageComplete(object sender, mba.DetectPackageCompleteEventArgs e)
     {
+        // Debug.Assert(false);
         if (e.PackageId == "MyProductPackageId")
         {
-            if (e.State == PackageState.Absent)
-                InstallEnabled = true;
-            else if (e.State == PackageState.Present)
-                UninstallEnabled = true;
+            if (e.Cached)
+            {
+                InstallEnabled = detecteRegistrationType == RegistrationType.None;
+                UninstallEnabled = !InstallEnabled;
+            }
+            else
+            {
+                if (e.State == PackageState.Absent)
+                {
+                    InstallEnabled = true;
+                }
+                else if (e.State == PackageState.Present)
+                {
+                    UninstallEnabled = true;
+                }
+            }
+        }
+
+        if (showAllCommands)
+        {
+            InstallEnabled = true;
+            UninstallEnabled = true;
         }
     }
 
@@ -156,9 +273,9 @@ public class MainViewModel : INotifyPropertyChanged
     /// If the planning was successful, it instructs the Bootstrapper Engine to
     /// install the packages.
     /// </summary>
-    void OnPlanComplete(object sender, PlanCompleteEventArgs e)
+    void OnPlanComplete(object sender, mba.PlanCompleteEventArgs e)
     {
         if (e.Status >= 0)
-            Bootstrapper.Engine.Apply(System.IntPtr.Zero);
+            Bootstrapper.Engine.Apply(ViewHandle);
     }
 }

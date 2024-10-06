@@ -1,27 +1,25 @@
 //css_ref ..\..\..\WixSharp.dll;
 //css_ref System.Core.dll;
-//css_ref ..\..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
-using System;
-using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
-using System.Diagnostics;
+//css_ref ..\..\..\Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 using Microsoft.Win32;
+using System;
+using System.Diagnostics;
 using System.IO;
+using System.Windows.Forms;
 using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 
 public class InstallScript
 {
     static public void Main()
     {
-        var tt = WixBinLocator.FindWixBinLocation(throwOnError: false);
-
         var project =
             new Project("MyProduct",
 
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new WixSharp.File(@"readme.txt")),
 
-                new Binary(@"Fake CRT.msi"),
+                new Binary("Fake CRT.msi"),
                 new ManagedAction(InstallScript.InstallCRTAction,
                                   Return.check,
                                   When.Before,

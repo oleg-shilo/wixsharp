@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using Microsoft.Deployment.WindowsInstaller;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp
 {
@@ -594,6 +594,17 @@ namespace WixSharp
         /// Name of the method implementing the Managed CustomAction action functionality.
         /// </summary>
         public string MethodName = "";
+
+        /// <summary>
+        /// Flag indicating if the assembly should be wrapped into the native package with `makeSfxCA.exe`.
+        /// <para>It is set to <c>true</c> by default</para>
+        /// <para>
+        /// You should set it to <c>false</c> if the assembly is compiled as AOT.
+        /// </para>
+        /// </summary>
+        public bool CreateInteropWrapper = true;
+
+        internal bool IsNetCore = Environment.Version.Major > 5;
 
         /// <summary>
         /// Comma separated list of properties which the custom action is intended to use. Set this property if you are implementing the 'deferred' (as well as 'rollback'  and 'commit')  action.

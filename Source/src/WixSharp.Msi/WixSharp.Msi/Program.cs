@@ -1,10 +1,12 @@
 //css_inc MsiInterop.cs
 using System;
+using static System.Collections.Specialized.BitVector32;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
+
+// using System.Windows.Forms;
 using WindowsInstaller;
 using WixSharp.UI;
 

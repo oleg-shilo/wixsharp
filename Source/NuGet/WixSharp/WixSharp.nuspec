@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>1.22.1.0</version>
+    <version>2.4.1.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,16 +18,18 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v1.22.1.0
-- Added Support StoreType.sha1Hash in DigitalSignatureBootstrapper
-- Issue #1317: Bootstrapper bundle has bugs on wxs files generation.
-- Issue #1310: Problem during dynamic localization
+    <releaseNotes>Release v2.4.1.0
+#1652: Bundle DotNetCompatibilityCheck element suport
+#1653: Avoid unnecessary *Ref element for Fragment definitions.
+#1579: installDir variable erased depending on ManagedProject structure
+Updated custom dialogs to deal with changes in the size of Wix stock background images
+
 </releaseNotes>
-    <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
+    <copyright>Copyright (C) 2008-2022 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="1.22.1.0" />
+      <dependency id="WixSharp.bin" version="2.4.1.0" />
     </dependencies>
   </metadata>
   <files>

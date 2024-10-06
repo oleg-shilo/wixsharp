@@ -202,6 +202,27 @@ namespace WixSharp
     }
 
     /// <summary>
+    /// Specifies the execution model fro Managed Project events  (managed events)
+    /// </summary>
+    public enum EventExecution
+    {
+        /// <summary>
+        /// Execute Managed Event within MSI session scope as an immediate Custom Action.
+        /// </summary>
+        MsiSessionScopeImmediate,
+
+        /// <summary>
+        /// Execute Managed Event (CA) as an external elevated process.
+        /// </summary>
+        ExternalElevatedProcess,
+
+        /// <summary>
+        /// Execute Managed Event within MSI session scope as a deferred Custom Action.
+        /// </summary>
+        MsiSessionScopeDeferred,
+    }
+
+    /// <summary>
     /// Specifies predefined values for <see cref="Action.Execute"/> attribute,
     /// which controls at what stage of installation script <c>Custom Action</c> will be executed.
     /// </summary>
@@ -279,7 +300,7 @@ namespace WixSharp
     }
 
     /// <summary>
-    /// Use this attribute to specify the priviliges required to install the package on Windows Vista and above.
+    /// Use this attribute to specify the privileges required to install the package on Windows Vista and above.
     /// </summary>
     public enum InstallScope
     {
@@ -291,7 +312,12 @@ namespace WixSharp
         /// <summary>
         /// Set this value to declare that the package is a per-user installation and does not require elevated privileges to install. Sets the package's InstallPrivileges attribute to "limited."
         /// </summary>
-        perUser
+        perUser,
+
+        /// <summary>
+        ///  Set this value to declare that the package is dual-purpose that can install per-user or per-machine. Sets the ALLUSERS property to 2 and MSIINSTALLPERUSER property to 1.
+        /// </summary>
+        perUserOrMachine
     }
 
     /// <summary>
@@ -348,11 +374,6 @@ namespace WixSharp
         x86,
 
         /// <summary>
-        /// Set this value to declare that the package is an ia64 package. This value requires that the InstallerVersion property be set to 200 or greater.
-        /// </summary>
-        ia64,
-
-        /// <summary>
         ///  Set this value to declare that the package is an x64 package. This value requires that the InstallerVersion property be set to 200 or greater.
         /// </summary>
         x64,
@@ -367,6 +388,41 @@ namespace WixSharp
         /// </summary>
         arm64,
     }
+
+    /// <summary>
+    /// The roll forward policy to use while validating.
+    /// <para>
+    /// To be used with DotNetCompatibilityCheck element (Netfx extension).
+    /// </para>
+    /// </summary>
+    public enum RollForward
+    {
+        // no WiX4 documentation is available for the values
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+        latestMajor,
+        major,
+        latestMinor,
+        minor,
+        latestPatch,
+        disable
+    }
+
+    /// <summary>
+    /// The .NET runtime to check against.
+    /// <para>
+    /// To be used with DotNetCompatibilityCheck element (Netfx extension).
+    /// </para>
+    /// </summary>
+    public enum RuntimeType
+    {
+        // mo WiX4 documentation is available for the values
+        aspnet,
+
+        core,
+        desktop
+    }
+
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
     /// <summary>
     /// Indicates the compression level for a cabinet.

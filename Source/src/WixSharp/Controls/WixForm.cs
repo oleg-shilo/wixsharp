@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
+#pragma warning disable CA1416 // Validate platform compatibility
+
 namespace WixSharp.Controls
 {
     /// <summary>
@@ -38,7 +40,7 @@ namespace WixSharp.Controls
         public Size WixSize { get; private set; }
 
         /// <summary>
-        /// Generates and adds the action to the list of the dialog actions, which is to be used at compile time for 
+        /// Generates and adds the action to the list of the dialog actions, which is to be used at compile time for
         /// generating WiX Dialog element actions.
         /// <code>
         /// void wixButton_Click()
@@ -61,7 +63,7 @@ namespace WixSharp.Controls
         }
 
         /// <summary>
-        /// Generates and adds the EndDialog action to the list of the dialog actions, which is to be used at compile time for 
+        /// Generates and adds the EndDialog action to the list of the dialog actions, which is to be used at compile time for
         /// generating WiX Dialog element actions.
         /// <code>
         /// void wixButton_Click()
@@ -78,7 +80,7 @@ namespace WixSharp.Controls
         }
 
         /// <summary>
-        /// Generates and adds the SetProperty action to the list of the dialog actions, which is to be used at compile time for 
+        /// Generates and adds the SetProperty action to the list of the dialog actions, which is to be used at compile time for
         /// generating WiX Dialog element actions.
         /// </summary>
         /// <param name="name">The property name.</param>
@@ -151,5 +153,4 @@ namespace WixSharp.Controls
             return wDialog;
         }
     }
-
 }

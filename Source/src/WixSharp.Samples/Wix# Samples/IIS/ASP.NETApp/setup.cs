@@ -1,6 +1,6 @@
 //css_dir ..\..\..\;
 //css_ref WixSharp.dll;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Xml.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
 
-class Script
+partial class Script
 {
     static public void Main()
     {
@@ -79,10 +79,13 @@ class Script
         project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
         project.UI = WUI.WixUI_ProgressOnly;
         project.OutFileName = "setup";
+        project.Include(WixExtension.IIs);
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
+
         // uncomment the line below if you want to associate the web site with the app pool via WebApplicaion element
         // project.WixSourceGenerated += Project_WixSourceGenerated;
+
         project.BuildMsi();
     }
 

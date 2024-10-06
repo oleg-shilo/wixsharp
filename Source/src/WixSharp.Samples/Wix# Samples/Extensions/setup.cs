@@ -1,12 +1,12 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 
 using System;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 
 /// <summary>
 /// <para>
@@ -48,7 +48,7 @@ class Script
 
         project.UI = WUI.WixUI_ProgressOnly;
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
         project.BuildMsi();
     }
 }

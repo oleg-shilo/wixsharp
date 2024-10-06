@@ -1,5 +1,7 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
+// css_ref Wix_bin\WixToolset.Mba.Core.dll;
+//css_ref C:\Users\oleg.shilo\.nuget\packages\wixtoolset.mba.core\4.0.1;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 using System;
@@ -20,6 +22,7 @@ class Script
         var project = new ManagedProject("MyProduct",
                       new Dir(@"C:\My Company\My Product",
                           new File("readme.txt")));
+
         project.ManagedUI = new ManagedUI();
 
         project.ManagedUI.InstallDialogs.Add(Dialogs.Progress)

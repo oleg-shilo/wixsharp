@@ -11,7 +11,7 @@
 //---------------------------------------------------------------------
 
 using System;
-using Microsoft.Deployment.WindowsInstaller;
+using WixToolset.Dtf.WindowsInstaller;
 
 #pragma warning disable 1591
 

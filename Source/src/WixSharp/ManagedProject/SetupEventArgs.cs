@@ -2,11 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
+
+using WixToolset.Dtf.WindowsInstaller;
+
+#pragma warning disable CA1416 // Validate platform compatibility
 
 namespace WixSharp
 {
+    /// <summary>
+    ///
+    /// </summary>
+    public class ExceptionEventArgs
+    {
+        /// <summary>
+        /// Gets or sets the exception.
+        /// </summary>
+        /// <value>
+        /// The exception.
+        /// </value>
+        public Exception Exception { get; set; }
+
+        /// <summary>
+        /// Gets or sets the MSI session object.
+        /// </summary>
+        /// <value>
+        /// The session.
+        /// </value>
+        public Session Session { get; set; }
+    }
+
     /// <summary>
     ///
     /// </summary>

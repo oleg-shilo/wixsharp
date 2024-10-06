@@ -1,5 +1,5 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core;
 using System;
 using System.Collections.Generic;
@@ -42,7 +42,7 @@ class Script
             new FileShortcut("some.exe", @"%Desktop%")
         };
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }

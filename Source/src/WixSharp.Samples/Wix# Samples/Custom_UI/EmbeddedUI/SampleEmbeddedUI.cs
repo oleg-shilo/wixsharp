@@ -11,6 +11,7 @@
 //---------------------------------------------------------------------
 
 using EmbeddedUI;
+
 namespace Microsoft.Deployment.Samples.EmbeddedUI
 {
     using System;
@@ -18,9 +19,9 @@ namespace Microsoft.Deployment.Samples.EmbeddedUI
     using System.Configuration;
     using System.Threading;
     using System.Windows;
-    using Microsoft.Deployment.WindowsInstaller;
+    using WixToolset.Dtf.WindowsInstaller;
 
-    public class SampleEmbeddedUI : IEmbeddedUI
+    public class SampleEmbeddedUI : IEmbeddedUI  
     {
         private Thread appThread;
         private SetupWizard setupWizard;
@@ -98,7 +99,7 @@ namespace Microsoft.Deployment.Samples.EmbeddedUI
         public MessageResult ProcessMessage(InstallMessage messageType, Record messageRecord, MessageButtons buttons, MessageIcon icon, MessageDefaultButton defaultButton)
         {
             // Synchronously send the message to the setup wizard window on its thread.
-            return InUIThread<MessageResult>(()=>
+            return InUIThread<MessageResult>(() =>
                                {
                                    return setupWizard.ProcessMessage(messageType, messageRecord, buttons, icon, defaultButton);
                                });
@@ -122,7 +123,7 @@ namespace Microsoft.Deployment.Samples.EmbeddedUI
         {
             setupWizard.Invoke(action);
         }
-        
+
         T InUIThread<T>(Func<T> action)
         {
             return (T)setupWizard.Invoke(action);

@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+  <metadata>
+    <id>WixSharp_wix4.bin</id>
+    <version>2.4.1.0</version>
+    <title>Wix# (WixSharp) - Binaries</title>
+    <authors>Oleg Shilo</authors>
+    <owners>Oleg Shilo</owners>
+    <license type="expression">MIT</license>
+    <icon>wixsharp_logo.png</icon>
+    <projectUrl>https://github.com/oleg-shilo/wixsharp</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Wix# is a framework for building a complete MSI or WiX source code by using build script files written with the C# syntax.
+The package contains Wix# binaries only.
+
+In order to use this package you need have WiX Toolset installed: `dotnet tool install --global wix`
+The package is tested against WIX (Windows Installer Xml) Toolset v4.0.1.0</description>
+    <summary>Wix# (WixSharp) - Binaries</summary>
+    <releaseNotes>Release v2.4.1.0
+#1652: Bundle DotNetCompatibilityCheck element suport
+#1653: Avoid unnecessary *Ref element for Fragment definitions.
+#1579: installDir variable erased depending on ManagedProject structure
+Updated custom dialogs to deal with changes in the size of Wix stock background images
+
+</releaseNotes>
+    <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
+    <language>en-AU</language>
+    <tags>C# scripting msi install setup wix</tags>
+    <dependencies>
+      <dependency id="WixToolset.Dtf.WindowsInstaller" version="4.0.1" />
+      <dependency id="WixToolset.Mba.Core" version="4.0.1" />
+    </dependencies>
+    <references>
+      <reference file="WixSharp.MsiEventHost.exe" />
+      <reference file="WixSharp.dll" />
+      <reference file="WixSharp.Msi.dll" />
+      <reference file="WixSharp.UI.dll" />
+      <reference file="WixSharp.UI.WPF.dll" />
+    </references>
+  </metadata>
+  <files>
+    <file src="lib\WixSharp.MsiEventHost.exe" target="lib\WixSharp.MsiEventHost.exe" />
+    <file src="lib\nbsbuilder.exe" target="lib\nbsbuilder.exe" />
+    <file src="lib\WixSharp.dll" target="lib\WixSharp.dll" />
+    <file src="lib\WixSharp.xml" target="lib\WixSharp.xml" />
+    <file src="lib\WixSharp.Msi.dll" target="lib\WixSharp.Msi.dll" />
+    <file src="lib\WixSharp.Msi.xml" target="lib\WixSharp.Msi.xml" />
+    <file src="lib\WixSharp.UI.dll" target="lib\WixSharp.UI.dll" />
+    <file src="lib\WixSharp.UI.xml" target="lib\WixSharp.UI.xml" />
+    <file src="lib\WixSharp.UI.WPF.dll" target="lib\WixSharp.UI.WPF.dll" />
+    <file src="lib\WixSharp.UI.WPF.xml" target="lib\WixSharp.UI.WPF.xml" />
+    <file src="..\..\Templates\WixSharpVSIX\WixSharpVSIX\wixsharp_logo.png" target="" />
+  </files>
+</package>

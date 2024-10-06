@@ -160,6 +160,12 @@ namespace WixSharp
         public FirewallExceptionProtocol? Protocol;
 
         /// <summary>
+        /// Grouping for the firewall exception.
+        /// </summary>
+        [Xml]
+        public string Grouping;
+
+        /// <summary>
         /// The scope of this firewall exception, which indicates whether incoming connections can come from any computer
         /// including those on the Internet or only those on the local network subnet. To more precisely specify allowed remote
         /// address, specify a custom scope using RemoteAddress child elements. This attribute's value must be one of the
@@ -178,6 +184,68 @@ namespace WixSharp
         /// RemoteAddresses Property. For Windows Vista and Windows Server 2008, see RemoteAddresses Property.
         /// </summary>
         public string[] RemoteAddress = new string[0];
+
+        /// <summary>
+        /// Indicates whether the firewall exception should be enabled.
+        /// </summary>
+        [Xml]
+        public bool Enabled;
+
+        /// <summary>
+        /// ICMP types and codes for the firewall exception.
+        /// </summary>
+        [Xml]
+        public string IcmpTypesAndCodes;
+
+        /// <summary>
+        /// Interface for the firewall exception.
+        /// </summary>
+        [Xml]
+        public string Interface;
+
+        /// <summary>
+        /// Local user authorized list for the firewall exception.
+        /// </summary>
+        [Xml]
+        public string LocalUserAuthorizedList;
+
+        /// <summary>
+        /// Local user owner for the firewall exception.
+        /// </summary>
+        [Xml]
+        public string LocalUserOwner;
+
+        /// <summary>
+        /// If "yes", registers an outbound firewall rule.The default is "no".
+        /// </summary>
+        [Xml]
+        public bool Outbound;
+
+        /// <summary>
+        /// Remote machine authorized list for the firewall exception.
+        /// </summary>
+        [Xml] public string RemoteMachineAuthorizedList;
+
+        /// <summary>
+        /// Remote port for the firewall exception.
+        /// </summary>
+        [Xml] public string RemotePort;
+
+        /// <summary>
+        /// Remote user authorized list for the firewall exception.
+        /// </summary>
+        [Xml] public string RemoteUserAuthorizedList;
+
+        /// <summary>
+        /// Local AppPackageId for the firewall exception.
+        /// </summary>
+        [Xml] public string LocalAppPackageId;
+
+        /// <summary>
+        /// Service for the firewall exception.Cannot be specified when the firewall exception is a child of a service element.
+        /// </summary>
+        [Xml]
+        public string Service;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FirewallException" /> class.
@@ -228,7 +296,7 @@ namespace WixSharp
 
             RemoteAddress.ForEach(address =>
             {
-                firewallElement.Add(WixExtension.Fire.XElement("RemoteAddress", (object)address.Trim()));
+                firewallElement.Add(WixExtension.Fire.XElement("RemoteAddress", new XAttribute("Value", address.Trim())));
             });
 
             var findComponent = context.XParent.FindFirst("Component");

@@ -1,5 +1,5 @@
 //css_ref ..\..\..\WixSharp.dll;
-//css_ref ..\..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref ..\..\..\Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
 using System.IO;

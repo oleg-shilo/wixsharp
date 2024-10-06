@@ -1,11 +1,11 @@
 //css_ref ..\..\..\..\WixSharp.dll;
 //css_include CustomAction.cs;
 //css_ref System.Core.dll;
-//css_ref ..\..\..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref ..\..\..\..\Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 
 using System;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
+using WixToolset.Dtf.WindowsInstaller;
 using WixSharp;
 
 class Script

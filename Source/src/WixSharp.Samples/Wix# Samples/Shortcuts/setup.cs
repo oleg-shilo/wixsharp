@@ -1,5 +1,5 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 
 using System;
@@ -25,11 +25,24 @@ class Script
                             Target = "https://github.com/oleg-shilo/wixsharp"
                         },
                         new Dir("Samples",
-                            new File(@"AppFiles\MyApp.cs")),
+                            new File(@"AppFiles\MyApp.cs",
+                                new FileShortcut("MyApp", @"%StartMenuFolder%")
+                                {
+                                    IconFile = @"AppFiles\Icon.ico",
+                                    WorkingDirectory = "Samples",
+                                    Arguments = "777",
+                                    Description = "My Application"
+                                })),
 
                         new File(@"AppFiles\MyApp.exe",
                             new FileShortcut("MyApp", "INSTALLDIR"), //INSTALLDIR is the ID of "%ProgramFiles%\My Company\My Product"
-                            new FileShortcut("MyApp", @"%Desktop%") { IconFile = @"AppFiles\Icon.ico", WorkingDirectory = "Samples", Arguments = "777" })
+                            new FileShortcut("MyApp", @"%StartMenuFolder%")
+                            {
+                                IconFile = @"AppFiles\Icon.ico",
+                                WorkingDirectory = "Samples",
+                                Arguments = "777",
+                                Description = "My Application"
+                            })
                            //,
                            // // new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")
                            // new ExeFileShortcut("MyApp Setup", @"%ProgramFiles%\dotnet\dotnet.exe",
@@ -40,7 +53,7 @@ class Script
                            ),
 
                     new Dir(@"%ProgramMenu%\My Company\My Product",
-                        new ExeFileShortcut("Samples", "[Samples]", ""),
+                        new DirectoryShortcut("Samples", "[Samples]"),
                         new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")));
 
             project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
@@ -48,7 +61,7 @@ class Script
 
             project.Platform = Platform.x64;
             // project.OutFileName = "setup";
-            project.PreserveTempFiles = true;
+            // project.PreserveTempFiles = true;
 
             Compiler.BuildMsi(project);
         }

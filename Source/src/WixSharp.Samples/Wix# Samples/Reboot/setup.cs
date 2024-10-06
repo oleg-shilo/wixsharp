@@ -1,14 +1,14 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {
@@ -25,7 +25,7 @@ class Script
         // project.RebootSupressing = RebootSupressing.ReallySuppress;
 
         project.UI = WUI.WixUI_ProgressOnly;
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }

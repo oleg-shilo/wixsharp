@@ -1,28 +1,30 @@
-using System.Windows.Forms;
-using System.Xml.Linq;
-using System.Linq;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms.Design;
-using System.Collections.Generic;
-using System.Reflection;
-using System.IO;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
+using System.Xml.Linq;
+
+#pragma warning disable CA1416 // Validate platform compatibility
 
 namespace WixSharp.Controls
 {
     /// <summary>
-    /// Implements Form Designer support for the WixSharp MSI UI controls. 
+    /// Implements Form Designer support for the WixSharp MSI UI controls.
     /// </summary>
     /// <typeparam name="T">WinForm control to be supported by Form Designer.</typeparam>
     public class WixControlDesigner<T> : ControlDesigner
     {
-        //do not include Visible as it is not a design time property but a runtime one. 
-        //For example if it is set to true it is false just after the instantiation but will 
+        //do not include Visible as it is not a design time property but a runtime one.
+        //For example if it is set to true it is false just after the instantiation but will
         //become true when the form becomes visible.
         /// <summary>
-        /// The ';' separated list of the <see cref="T:System.Windows.Forms.Control" /> properties 
+        /// The ';' separated list of the <see cref="T:System.Windows.Forms.Control" /> properties
         /// to be visible in the properties grid by default.
         /// </summary>
         public const string VisibleBaseProperties = "Width;Height;Location;Enabled;Text;Name;Size";

@@ -115,7 +115,8 @@ namespace WixSharp
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="elementName">Name of the element.</param>
-        virtual public void Process(ProcessingContext context, string elementName)
+        /// <returns></returns>
+        virtual public XElement Process(ProcessingContext context, string elementName)
         {
             // serialize itself and add to the parent component
             var thisElement = context.XParent
@@ -129,6 +130,8 @@ namespace WixSharp
 
                 Children.ForEach(x => x.Process(newContext));
             }
+
+            return thisElement;
         }
     }
 }

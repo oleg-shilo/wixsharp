@@ -1,13 +1,13 @@
 //css_dir ..\..\..\..\;
 //css_ref System.Core.dll;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 using System;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {
@@ -36,7 +36,7 @@ class Script
         project.WixSourceGenerated +=
                 document =>
                 {
-                    var product = document.Select("Wix/Product");
+                    var product = document.Select("Wix/Package");
 
                     product.AddElement("CustomAction",
                                       @"Id=MyAction;

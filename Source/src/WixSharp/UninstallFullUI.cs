@@ -1,7 +1,10 @@
 ﻿using System.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using WixSharp.CommonTasks;
+
+using WixToolset.Dtf.WindowsInstaller;
+
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
 
 namespace WixSharp
 {
@@ -79,7 +82,7 @@ namespace WixSharp
                 {
                     return;
                 }
-                
+
                 var comp = doc.FindAll("RegistryValue")
                     .First(x => x.HasAttribute("Id", "WixSharp_RegValue_DisplayIcon"))
                     .Parent

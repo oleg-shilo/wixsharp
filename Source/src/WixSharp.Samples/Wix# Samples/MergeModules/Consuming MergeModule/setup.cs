@@ -1,15 +1,15 @@
 //css_dir ..\..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 
 using System;
 using System.IO;
-using File = WixSharp.File;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using WixSharp;
-using System.Text.RegularExpressions;
+using File = WixSharp.File;
 
 class Script
 {
@@ -26,7 +26,7 @@ class Script
                 new Project("MyMergeModuleSetup",
                     new MediaTemplate { CompressionLevel = CompressionLevel.none, EmbedCab = false },
                     new Dir(@"%ProgramFiles%\My Company",
-                        // new File(featureA, @"Files\MainFile.txt"),
+                        new File(featureA, @"Files\MainFile.txt"),
                         new Merge(featureB, @"Files\MyMergeModule.msm"),
                         new Merge(featureB, @"Files\MyMergeModule1.msm")),
                     new EnvironmentVariable("foo", "bar"));
@@ -37,7 +37,7 @@ class Script
         project.UI = WUI.WixUI_FeatureTree;
         project.InstallerVersion = 200; //you may want to change it to match MSM module installer version
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }

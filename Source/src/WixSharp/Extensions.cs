@@ -1,17 +1,21 @@
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-using Microsoft.Win32;
+// Ignore Spelling: Deconstruct
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using static System.Collections.Specialized.BitVector32;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using System.Drawing;
+using System.Drawing.Imaging;
+using static System.Environment;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Principal;
@@ -19,10 +23,15 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using System.Xml.Serialization;
+using Microsoft.Win32;
 using WixSharp.CommonTasks;
 using static WixSharp.SetupEventArgs;
+using WixToolset.Dtf.WindowsInstaller;
 
 using IO = System.IO;
+
+#pragma warning disable CA1416 // Validate platform compatibility
 
 namespace WixSharp
 {
@@ -122,6 +131,14 @@ namespace WixSharp
         public static bool Implements<T>(this Type type)
             => type.GetInterfaces().Contains(typeof(T));
 
+        internal static Type RootDeclaringType(this Type type)
+        {
+            var retval = type;
+            while (retval.DeclaringType != null)
+                retval = retval.DeclaringType;
+            return retval;
+        }
+
         internal static bool Implements(this Type type, string interfaceName)
             => type.GetInterfaces().Any(i => i.FullName == interfaceName);
 
@@ -159,10 +176,23 @@ namespace WixSharp
             return element;
         }
 
+        /// <summary>
+        /// Returns LocalName.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns></returns>
+        public static string LocalName(this XElement obj) => obj.Name.LocalName;
+
+        /// <summary>
+        /// Returns LocalName.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static string LocalName(this XAttribute obj) => obj.Name.LocalName;
+
         internal static AssemblyName[] GetWixSharpDependencies(this System.Reflection.Assembly asm)
             => asm.GetReferencedAssemblies()
                .Where(a => a.Name.StartsWith("WixSharp.") ||
-                           a.Name.StartsWith("Caliburn.") ||
                            a.Name.StartsWith("System.Windows.Interactivity")).ToArray();
 
         /// <summary>
@@ -268,6 +298,9 @@ namespace WixSharp
         {
             return IO.Path.IsPathRooted(path);
         }
+
+        internal static bool IsPublicWixProperty(this string name)
+            => name == name.ToUpper();
 
         /// <summary>
         /// Determines whether the character is a digit.
@@ -651,14 +684,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Injects the Wxs (WiX source) into Wxs document. It merges 'Wix/Product' elements of
-        /// document with 'Wix/Product' elements of wxsFile.
+        /// Injects the Wxs (WiX source) into Wxs document. It merges 'Wix/Package' elements of
+        /// document with 'Wix/Package' elements of wxsFile.
         /// <para>
         /// This method is nothing else but a 'syntactic sugar' method, which wraps the following code:
         /// <code>
-        ///document.Root.Select("Product")
+        ///document.Root.Select(Compiler.ProductElementName)
         ///             .Add(XDocument.Load(wxsFile)
-        ///             .Root.Select("Product").Elements());
+        ///             .Root.Select(Compiler.ProductElementName).Elements());
         /// </code>
         /// </para>
         /// <example>The following is an example of using InjectWxs.
@@ -684,9 +717,9 @@ namespace WixSharp
         /// <returns></returns>
         public static XDocument InjectWxs(this XDocument document, string wxsFile)
         {
-            document.Root.Select("Product")
+            document.Root.Select(Compiler.ProductElementName)
                          .Add(XDocument.Load(wxsFile)
-                                       .Root.Select("Product").Elements());
+                                       .Root.Select(Compiler.ProductElementName).Elements());
             return document;
         }
 
@@ -732,6 +765,24 @@ namespace WixSharp
         /// <param name="action">The action.</param>
         /// <returns></returns>
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> collection, Action<T> action)
+        {
+            // clone the copy so the collection is not impacted by the action
+            foreach (T item in collection.ToArray())
+            {
+                action(item);
+            }
+            return collection;
+        }
+
+        /// <summary>
+        /// A generic LINQ equivalent of C# foreach loop.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T1">The type of the 1.</typeparam>
+        /// <param name="collection">The collection.</param>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        public static IEnumerable<T> ForEach<T, T1>(this IEnumerable<T> collection, Func<T, T1> action)
         {
             foreach (T item in collection)
             {
@@ -1049,14 +1100,15 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Creates an Instance of <see cref="WixSharp.Bootstrapper.Payload"/> for the specified `sourceFile`.
+        /// Creates an Instance of <see cref="WixSharp.Bootstrapper.Payload" /> for the specified `sourceFile`.
         /// </summary>
         /// <param name="sourceFile">The source file.</param>
+        /// <param name="name">The name f the payload.</param>
         /// <returns></returns>
-        public static Bootstrapper.Payload ToPayload(this string sourceFile)
+        public static Bootstrapper.Payload ToPayload(this string sourceFile, string name = null)
         {
             if (sourceFile.IsNotEmpty())
-                return new Bootstrapper.Payload { SourceFile = sourceFile };
+                return new Bootstrapper.Payload { SourceFile = sourceFile, Name = name };
             else
                 return null;
         }
@@ -1097,12 +1149,27 @@ namespace WixSharp
             => IO.File.Exists(path);
 
         /// <summary>
+        /// Checks if the file exists.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static bool FileExists(this string path)
+            => IO.File.Exists(path);
+
+        /// <summary>
         /// Determines whether this instance is directory.
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns><c>true</c> if the specified path is directory; otherwise, <c>false</c>.</returns>
         public static bool IsDirectory(this string path)
             => IO.Directory.Exists(path);
+
+        /// <summary>
+        /// Determines if the specified path exists.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static bool PathExists(this string path) => IO.File.Exists(path) ? true : IO.Directory.Exists(path);
 
         /// <summary>
         /// Deletes File/Directory from by the specified path if it exists.
@@ -1226,7 +1293,9 @@ namespace WixSharp
             var location = "";
             try
             {
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
                 location = assembly.Location;
+#pragma warning restore IL3000
             }
             catch { }
 
@@ -1252,7 +1321,7 @@ namespace WixSharp
 #pragma warning disable CS0419 // Ambiguous reference in cref attribute
 
         /// <summary>
-        /// Combines path parts. Encapsulates <see cref="Path.Combine"/>
+        /// Combines path parts. Encapsulates <see cref="Path.Combine" />
         /// </summary>
         /// <param name="path1">The path1.</param>
         /// <param name="path2">The path2.</param>
@@ -1262,6 +1331,30 @@ namespace WixSharp
         public static string PathCombine(this string path1, string path2)
         {
             return IO.Path.Combine(path1, path2);
+        }
+
+        /// <summary>
+        /// Combines path parts. Encapsulates <see cref="Path.Combine(string[])" />
+        /// </summary>
+        /// <param name="path1">The path1.</param>
+        /// <param name="parts">The parts of the path.</param>
+        /// <returns></returns>
+        public static string PathCombine(this string path1, params object[] parts)
+        {
+            var allParts = new[] { path1 }.Concat(parts.Select(x => x?.ToString() ?? "")).ToArray();
+            return IO.Path.Combine(allParts);
+        }
+
+        /// <summary>
+        /// Gets the special folder path combined with an array of strings into a path.
+        /// </summary>
+        /// <param name="folder">The folder.</param>
+        /// <param name="parts">The parts.</param>
+        /// <returns></returns>
+        public static string GetPath(this Environment.SpecialFolder folder, params object[] parts)
+        {
+            var allParts = new[] { Environment.GetFolderPath(folder) }.Concat(parts.Select(x => x?.ToString() ?? ""));
+            return Path.Combine(allParts.ToArray());
         }
 
         /// <summary>
@@ -1294,7 +1387,21 @@ namespace WixSharp
         /// <param name="path">The path.</param>
         public static string PathGetFileName(this string path)
         {
-            return IO.Path.GetFileName(path);
+            if (path.IsNotEmpty())
+                return IO.Path.GetFileName(path);
+            else
+                return path;
+        }
+
+        /// <summary>
+        /// Identical to <see cref="System.IO.Path.GetFileNameWithoutExtension(string)"/>. It is useful for Wix#
+        /// consuming code as it allows avoiding "using System.IO;" directive, which interferes with
+        /// Wix# types.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        public static string PathGetFileNameWithoutExtension(this string path)
+        {
+            return IO.Path.GetFileNameWithoutExtension(path);
         }
 
         /// <summary>
@@ -1392,6 +1499,33 @@ namespace WixSharp
         {
             action(obj);
             return obj;
+        }
+
+        /// <summary>
+        /// A method for convenient deconstruction of a slice of an array into a tuple.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="head"></param>
+        /// <param name="tail"></param>
+        public static void Deconstruct<T>(this IEnumerable<T> list, out T head, out IEnumerable<T> tail)
+        {
+            head = list.First(); // throws InvalidOperationException for empty list
+            tail = list.Skip(1);
+        }
+
+        /// <summary>
+        /// A method for convenient deconstruction of a slice of an array into a tuple
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="head"></param>
+        /// <param name="next"></param>
+        /// <param name="tail"></param>
+        public static void Deconstruct<T>(this IEnumerable<T> list, out T head, out T next, out IEnumerable<T> tail)
+        {
+            head = list.First();
+            (next, tail) = list.Skip(1);
         }
 
         /// <summary>
@@ -1510,7 +1644,8 @@ namespace WixSharp
         /// <para>
         /// This method is not the same as `ExpandWixEnvConsts`. The key difference is that it
         /// handles custom properties, leaves square brackets unchanged and also normalizes
-        /// directory separators. Normalization is critical for string values that are used as `ExeFileShortcut.Target`:
+        /// directory separators. Normalization is critical for string values that are used as
+        /// `ExeFileShortcut.Target`:
         /// </para>
         /// <para><example>
         /// <code>
@@ -1525,37 +1660,40 @@ namespace WixSharp
         /// <returns></returns>
         public static string NormalizeWixString(this string path)
         {
-            // EnvironmentConstantsMapping.Keys include '%' chars: { "%ProgramFiles%",
-            // "ProgramFilesFolder" },
+            // EnvironmentConstantsMapping.Keys include '%' chars: { "%ProgramFiles%", "ProgramFilesFolder" },
             foreach (string key in Compiler.EnvironmentConstantsMapping.Keys)
-                path = path
-                           // if the constant came to this method already extended/normalized then
-                           // the call `.Replace(key.Trim('%'),
-                           // Compiler.EnvironmentConstantsMapping[key]` would insert suffix
-                           // `Folder` one extra time (e.g. SystemFolder64Folder->SystemFolder64FolderFolder)
+            {
+                var newPath = path
+                        // if the constant came to this method already extended/normalized then
+                        // the call `.Replace(key.Trim('%'),
+                        // Compiler.EnvironmentConstantsMapping[key]` would insert suffix
+                        // `Folder` one extra time (e.g. SystemFolder64Folder->SystemFolder64FolderFolder)
 
-                           // Another problem is that *64Folder/*FilesFolder can be ruined by *
-                           // replacement ProgramFiles64Folder/ProgramFilesFolder <- ProgramFiles
-                           // System64Folder, SystemFolder <- System
+                        // Another problem is that *64Folder/*FilesFolder can be ruined by *
+                        // replacement ProgramFiles64Folder/ProgramFilesFolder <- ProgramFiles
+                        // System64Folder, SystemFolder <- System
 
-                           // The solution is not elegant in terms of performance but adequate. We
-                           // don't need performance during the compilation.
+                        // The solution is not elegant in terms of performance but adequate. We
+                        // don't need performance during the compilation.
 
-                           // protect `System` and `ProgramFiles`
-                           .Replace("System64Folder", "Sys64Folder")
-                           .Replace("SystemFolder", "SysFolder")
-                           .Replace("ProgramFiles64Folder", "ProgFiles64Folder")
-                           .Replace("ProgramFilesFolder", "ProgFilesFolder")
+                        // protect `System` and `ProgramFiles`
+                        .Replace("System64Folder", "Sys64Folder")
+                        .Replace("SystemFolder", "SysFolder")
+                        .Replace("ProgramFiles64Folder", "ProgFiles64Folder")
+                        .Replace("ProgramFilesFolder", "ProgFilesFolder")
 
-                           .Replace(key, Compiler.EnvironmentConstantsMapping[key])
-                           // .Replace(key.Trim('%'), Compiler.EnvironmentConstantsMapping[key])
-                           .Replace($"[{key.Trim('%')}]", Compiler.EnvironmentConstantsMapping[key])
+                        .Replace(key, Compiler.EnvironmentConstantsMapping[key])
+                        // .Replace(key.Trim('%'), Compiler.EnvironmentConstantsMapping[key])
+                        .Replace($"[{key.Trim('%')}]", $"[{Compiler.EnvironmentConstantsMapping[key]}]")
 
-                           // restore `System` and `ProgramFiles`
-                           .Replace("Sys64Folder", "System64Folder")
-                           .Replace("SysFolder", "SystemFolder")
-                           .Replace("ProgFiles64Folder", "ProgramFiles64Folder")
-                           .Replace("ProgFilesFolder", "ProgramFilesFolder");
+                        // restore `System` and `ProgramFiles`
+                        .Replace("Sys64Folder", "System64Folder")
+                        .Replace("SysFolder", "SystemFolder")
+                        .Replace("ProgFiles64Folder", "ProgramFiles64Folder")
+                        .Replace("ProgFilesFolder", "ProgramFilesFolder");
+
+                path = newPath;
+            }
 
             // ensure `%System64Folder%msiexec.exe` and `%System64Folder%\msiexec.exe` are converted
             // in `[System64Folder]msiexec.exe`
@@ -1715,8 +1853,10 @@ namespace WixSharp
         /// </summary>
         /// <typeparam name="TSource">The type of the T source.</typeparam>
         /// <param name="source">The source.</param>
+        /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns></returns>
-        public static bool None<TSource>(this IEnumerable<TSource> source) => !source.Any();
+        public static bool None<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate = null)
+            => predicate != null ? !source.Any(predicate) : !source.Any();
 
         /// <summary>
         /// Determines if the collection contains a single item.
@@ -2012,8 +2152,11 @@ namespace WixSharp
             {
                 item.EnsureId();
 
-                var refElement = new XElement(item.Name.Namespace + item.Name.LocalName + "Ref", item.Attribute("Id"));
-                placementElement.Add(refElement);
+                if (placementElement != placementElement.Document.Root)
+                {
+                    var refElement = new XElement(item.Name.Namespace + item.Name.LocalName + "Ref", item.Attribute("Id"));
+                    placementElement.Add(refElement);
+                }
 
                 fragment.Add(item);
             }
@@ -2107,6 +2250,15 @@ namespace WixSharp
         {
             return element.Descendants().Where(x => x.Name.LocalName == elementName).ToArray();
         }
+
+        /// <summary>
+        /// Reads the localized string from the WXL localization file.
+        /// </summary>
+        /// <param name="wxlFile">The WXL file.</param>
+        /// <param name="stringId">The string identifier.</param>
+        /// <returns></returns>
+        public static string GetLocalizedString(this string wxlFile, string stringId)
+            => XDocument.Load(wxlFile).FindAll("String").First(x => x.HasAttribute("Id", stringId)).Attr("Value");
 
         /// <summary>
         /// Selects the first descendant element with a given name (LocalName).
@@ -2362,57 +2514,14 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Adds/combines given <see cref="T:System.Array"/> object with the specified item.
+        /// Determines whether this instance is uninitialized.
         /// </summary>
-        /// <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
-        /// <typeparam name="T2">The type of the elements of the items being added.</typeparam>
-        /// <param name="obj">The instance of the <see cref="T:System.Array"/>.</param>
-        /// <param name="item">The item to be added.</param>
-        /// <returns>Combined <see cref="T:System.Array"/> object.</returns>
-        [Obsolete(message: "This method name is obsolete use `Combine` instead", error: true)]
-        public static T1[] Add<T1, T2>(this T1[] obj, T2 item) where T2 : class, T1
-        {
-            if (item != null)
-            {
-                var retval = new ArrayList();
-
-                if (obj != null)
-                    foreach (var i in obj)
-                        retval.Add(i);
-
-                retval.Add(item);
-
-                return (T1[])retval.ToArray(typeof(T1));
-            }
-            return (T1[])obj;
-        }
-
-        /// <summary>
-        /// Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
-        /// </summary>
-        /// <typeparam name="T1">The type of the elements of <c>obj</c>.</typeparam>
-        /// <typeparam name="T2">The type of the elements of the items being added.</typeparam>
-        /// <param name="obj">The instance of the <see cref="T:System.Array"/>.</param>
-        /// <param name="items">The items to be added.</param>
-        /// <returns>Combined <see cref="T:System.Array"/> object.</returns>
-        [Obsolete(message: "This method name is obsolete use `Combine` instead", error: true)]
-        public static T1[] AddRange<T1, T2>(this T1[] obj, IEnumerable<T2> items)
-        {
-            if (items != null)
-            {
-                var retval = new ArrayList();
-
-                if (obj != null)
-                    foreach (var i in obj)
-                        retval.Add(i);
-
-                foreach (var i in items)
-                    retval.Add(i);
-
-                return (T1[])retval.ToArray(typeof(T1));
-            }
-            return (T1[])obj;
-        }
+        /// <param name="ver">The ver.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified ver is uninitialized; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsUninitialized(this Version ver)
+            => ver.Major == 0 && ver.Minor == 0 && ver.Build == 0 && ver.Revision == -1;
 
         /// <summary>
         /// Adds/combines given <see cref="T:IEnumerable&lt;T&gt;"/> object with the specified items.
@@ -2452,9 +2561,9 @@ namespace WixSharp
                 foreach (var i in items)
                     retval.Add(i);
 
-                return (T1[])retval.ToArray(typeof(T1));
+                return retval.Cast<T1>().ToArray();
             }
-            return (T1[])obj;
+            return obj;
         }
 
         /// <summary>
@@ -2499,17 +2608,84 @@ namespace WixSharp
         /// <returns></returns>
         public static bool IsActive(this Session session)
         {
+            if (session.GetAttachedValue("active") != null)
+            {
+                // if the session already detected as closed then jest return the result
+                // but if the session was marked as active, it may get closed since then.
+                var active = session.GetAttachedValue<bool>("active");
+                if (!active)
+                    return session.GetAttachedValue<bool>("active");
+            }
+
             //if (!session.IsClosed) //unfortunately isClosed is always false even for the deferred actions
             try
             {
                 var test = session.Components; //it will throw for the deferred action
                 var text = session["INSTALLDIR"];
+                session.SetAttachedValue("active", true);
                 return true;
             }
             catch
             {
+                session.SetAttachedValue("active", false);
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Determines whether this instance is disconnected.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified session is disconnected; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsDisconnected(this Session session)
+        {
+            if (session.GetAttachedValue("disconnected") != null)
+                return session.GetAttachedValue<bool>("disconnected");
+
+            try
+            {
+                // it will not throw for the deferred action
+                // but will for the completely disconnected (fake) session that is created with
+                // CreateDisconnectedSession()
+                var test = session.CustomActionData.Count;
+                session.SetAttachedValue("disconnected", false);
+                return false;
+            }
+            catch
+            {
+                session.SetAttachedValue("disconnected", true);
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Extracts the application data from the session object. Can be used in the deferred actions.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
+        public static SetupEventArgs.AppData ExtractAppData(this Session session)
+            => new AppData().InitFrom(session.Property("WIXSHARP_RUNTIME_DATA"));
+
+        /// <summary>
+        /// Saves AppData to the session objcet.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="session">The session.</param>
+        public static void SaveTo(this SetupEventArgs.AppData data, Session session)
+            => session["WIXSHARP_RUNTIME_DATA"] = data.ToString();
+
+        /// <summary>
+        /// Returns an instance of <see cref="SetupEventArgs"/> initialized from the <see cref="Session"/> data.
+        /// <para>This method can only be called from immediate actions as it requires alive session object.</para>
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
+        public static SetupEventArgs ToEventArgs(this Session session)
+        {
+            ManagedProject.Init(session);
+            return ManagedProject.Convert(session);
         }
 
         /// <summary>
@@ -2534,6 +2710,16 @@ namespace WixSharp
         public static bool IsUISupressed(this Session session)
         {
             return session.UILevel() <= 4;
+        }
+
+        /// <summary>
+        /// Returns path to the msi file being executed.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
+        public static string MsiFile(this Session session)
+        {
+            return session.Property("OriginalDatabase");
         }
 
         /// <summary>
@@ -2819,9 +3005,60 @@ namespace WixSharp
         public static string Property(this Session session, string name)
         {
             if (session.IsActive())
+            {
                 return session[name];
+            }
+            else if (session.IsDisconnected())
+            {
+                Dictionary<string, string> extraProps = session.GetAttachedProperties();
+                return extraProps.ContainsKey(name) ? extraProps[name] : "";
+            }
             else
+            {
                 return (session.CustomActionData.ContainsKey(name) ? session.CustomActionData[name] : "");
+            }
+        }
+
+        /// <summary>
+        /// Gets the attached properties.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
+        public static Dictionary<string, string> GetAttachedProperties(this Session session)
+        {
+            var extraProps = session.GetAttachedValue<Dictionary<string, string>>("SerializableProperties");
+            if (extraProps == null)
+                session.SetAttachedValue("SerializableProperties", extraProps = new Dictionary<string, string>());
+            return extraProps;
+        }
+
+        /// <summary>
+        /// Sets the property.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        public static void SetProperty(this Session session, string name, string value)
+        {
+            if (session.IsActive())
+            {
+                session[name] = value;
+            }
+            else if (session.IsDisconnected())
+            {
+                var extraProps = session.GetAttachedProperties();
+                if (extraProps.ContainsKey(name))
+                    extraProps[name] = value;
+                else
+                    extraProps.Add(name, value);
+            }
+            else
+            {
+                if (session.CustomActionData.ContainsKey(name))
+                    session.CustomActionData[name] = value;
+                else
+                    session.CustomActionData.Add(name, value);
+            }
         }
 
         /// <summary>
@@ -2833,7 +3070,7 @@ namespace WixSharp
         {
             try
             {
-                session.Message(Microsoft.Deployment.WindowsInstaller.InstallMessage.ActionData, new Record());
+                session.Message(WixToolset.Dtf.WindowsInstaller.InstallMessage.ActionData, new Record());
             }
             catch (InstallCanceledException)
             {
@@ -2847,20 +3084,21 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// Determines whether the specified session is cancelled.
+        /// Determines whether the specified session is canceled.
         /// <para>
-        /// It is identical to <see cref="WixSharp.Extensions.IsCancelled(Session)"/> except it does
+        /// It is identical to <see cref="WixSharp.Extensions.IsCancelled(Session)" /> except it does
         /// not throw/handle internal exception This helps if it is preferred to keep MSI log clean
         /// from any messages triggered by handled exceptions.
-        /// </para>
-        /// <para>
-        /// Though this method relies on <see cref="Microsoft.Deployment.WindowsInstaller"/>
-        /// internal (non-public) implementation thus is not warranteed to stay unchanged in the
+        /// </para><para>
+        /// Though this method relies on <see cref="WixToolset.Dtf.WindowsInstaller" />
+        /// internal (non-public) implementation thus is not warrantied to stay unchanged in the
         /// future WiX releases.
         /// </para>
         /// </summary>
         /// <param name="session">The session.</param>
-        /// <returns><c>true</c> if the specified session is cancelled; otherwise, <c>false</c>.</returns>
+        /// <returns>
+        ///   <c>true</c> if the specified session is canceled; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsCancelledRaw(this Session session)
         {
             // does not throw but will become broken if WiX team changes the implementation
@@ -3037,9 +3275,18 @@ namespace WixSharp
                     sql.Execute();
 
                     using (var record = sql.Fetch())
-                    using (var stream = record.GetStream(1))
-                    using (var ms = new IO.MemoryStream())
                     {
+                        if (record == null)
+                            return null;
+
+                        var stream = record.GetStream(1);
+
+                        // It is important to keep the stream open even after the bitmap is created
+                        // otherwise the bitmap will be disposed as soon as the stream is closed
+                        // See:
+                        //  https://stackoverflow.com/questions/1053052/a-generic-error-occurred-in-gdi-jpeg-image-to-memorystream
+                        //  https://github.com/oleg-shilo/wixsharp/issues/1490
+                        var ms = new IO.MemoryStream();
                         int Length = 256;
                         var buffer = new Byte[Length];
                         int bytesRead = stream.Read(buffer, 0, Length);
@@ -3093,26 +3340,36 @@ namespace WixSharp
             //}
 
             //however View approach is OK
-            using (var sql = session.Database.OpenView("select Data from Binary where Name = '" + binary + "'"))
+            try
             {
-                sql.Execute();
-
-                using (var record = sql.Fetch())
-                using (var stream = record.GetStream(1))
-                using (var ms = new IO.MemoryStream())
+                using (var sql = session.Database.OpenView("select Data from Binary where Name = '" + binary + "'"))
                 {
-                    int Length = 256;
-                    var buffer = new Byte[Length];
-                    int bytesRead = stream.Read(buffer, 0, Length);
-                    while (bytesRead > 0)
+                    sql.Execute();
+
+                    using (var record = sql.Fetch())
                     {
-                        ms.Write(buffer, 0, bytesRead);
-                        bytesRead = stream.Read(buffer, 0, Length);
+                        if (record == null)
+                            return null;
+
+                        using (var stream = record.GetStream(1))
+                        using (var ms = new IO.MemoryStream())
+                        {
+                            int Length = 256;
+                            var buffer = new Byte[Length];
+                            int bytesRead = stream.Read(buffer, 0, Length);
+                            while (bytesRead > 0)
+                            {
+                                ms.Write(buffer, 0, bytesRead);
+                                bytesRead = stream.Read(buffer, 0, Length);
+                            }
+                            ms.Seek(0, IO.SeekOrigin.Begin);
+                            return ms.ToArray();
+                        }
                     }
-                    ms.Seek(0, IO.SeekOrigin.Begin);
-                    return ms.ToArray();
                 }
             }
+            catch { }
+            return null;
         }
 
         /// <summary>
@@ -3180,124 +3437,44 @@ namespace WixSharp
     }
 
     /// <summary>
-    /// Represents set of project localization information.
-    /// </summary>
-    public class ProjectLocalization
-    {
-        /// <summary>
-        /// </summary>
-        /// <param name="language">Culture info name. Example: "en-US"</param>
-        /// <param name="localizationFile">Optional path to the localization file</param>
-        public ProjectLocalization(string language, string localizationFile = null)
-            : this(CultureInfo.GetCultureInfo(language), localizationFile)
-        {
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="cultureInfo">Culture info</param>
-        /// <param name="localizationFile">Optional path to the localization file</param>
-        public ProjectLocalization(CultureInfo cultureInfo, string localizationFile = null)
-            : this(cultureInfo.Name, cultureInfo.TextInfo.ANSICodePage.ToString(), cultureInfo.LCID, localizationFile)
-        {
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="language">Culture info name. Example: "en-US"</param>
-        /// <param name="codePage">The ANSI code page identifier. Example: "1252" for en-US.</param>
-        /// <param name="localizationFile">Optional path to the localization file</param>
-        public ProjectLocalization(string language, string codePage, string localizationFile = null)
-            : this(language, codePage, new CultureInfo(language).LCID, localizationFile)
-        {
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="language">Culture info name. Example: "en-US"</param>
-        /// <param name="codePage">The ANSI code page identifier. Example: "1252" for en-US.</param>
-        /// <param name="lcid">Language code Id</param>
-        /// <param name="localizationFile">Optional path to the localization file</param>
-        ProjectLocalization(string language, string codePage, int lcid, string localizationFile = null)
-        {
-            if (language.IsEmpty()) throw new ArgumentException("Invalid localization language.", nameof(language));
-            if (codePage.IsEmpty()) throw new ArgumentException("Invalid localization code page", nameof(codePage));
-
-            this.Language = language;
-            this.CodePage = codePage;
-            this.LocalizationFile = localizationFile;
-            this.LanguageCodeId = lcid;
-        }
-
-        /// <summary>
-        /// Gets the language.
-        /// </summary>
-        /// <value>The language.</value>
-        public string Language { get; }
-
-        /// <summary>
-        /// Gets the code page.
-        /// </summary>
-        /// <value>The code page.</value>
-        public string CodePage { get; }
-
-        /// <summary>
-        /// Gets the localization file.
-        /// </summary>
-        /// <value>The localization file.</value>
-        public string LocalizationFile { get; }
-
-        /// <summary>
-        /// Gets the language code identifier.
-        /// </summary>
-        /// <value>The language code identifier.</value>
-        public int LanguageCodeId { get; }
-
-        internal void BindTo(Project project)
-        {
-            if (project is null)
-                throw new ArgumentNullException(nameof(project));
-
-            project.Language = this.Language;
-            project.Codepage = this.CodePage;
-            project.LocalizationFile = this.LocalizationFile ?? "";
-        }
-    }
-
-    /// <summary>
     /// </summary>
     public static class LocalizationExtensions
     {
         /// <summary>
-        /// Produces multilanguage MSI with embedded transformations based on <paramref
-        /// name="localizations"/> collection. If this msi is executed on the OS, which language
+        /// Produces multilanguage MSI with embedded transformations based on <paramref name="localizations" /> collection. If this msi is executed on the OS, which language
         /// matches one of the embedded transformations, this transformation will be automatically
         /// triggered and effectively switch the setup UI language. Builds the localized msi.
         /// </summary>
+        /// <param name="project">Wix# project.</param>
+        /// <param name="defaultLocalization">Use your OS language as default localization. This will ensure that the all
+        /// transformations are embedded in such a way that the produced msi can switch to any
+        /// alternative language both automatically and manually.</param>
+        /// <param name="torchPath">The torch path.</param>
+        /// <param name="localizations">Collection of localizations. At least one localization is expected.</param>
+        /// <returns>
+        /// Path to the built MSI file.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// project
+        /// or
+        /// defaultLocalization
+        /// or
+        /// localizations
+        /// </exception>
+        /// <exception cref="System.ArgumentException">At least one localization expected - localizations</exception>
+        /// <exception cref="System.InvalidOperationException">Signing the file '{msiFilePath}' failed. Return code: {signingReturnCode}</exception>
         /// <example>
         /// The following is an example of building single .msi file with two localizations. With
-        /// one of trhen based on a custom localization file.
+        /// one of then based on a custom localization file.
         /// <p>
         /// During installation, language is automatically selected based on user's operating system
         /// region settings.
-        /// </p>
-        /// <code>
-        ///project.BuildMultilanguageMsi(
-        ///new ProjectLocalization("en-US"),
-        ///new ProjectLocalization("sk-SK", "WixUI_sk-SK.wxl"));
-        /// </code>
-        /// </example>
-        /// <param name="project">Wix# project.</param>
-        /// <param name="defaultLocalization">
-        /// Use your OS language as default localization. This will ensure that the all
-        /// transformations are embedded in such a way that the produced msi can switch to any
-        /// alternative language both automatically and manually.
-        /// </param>
-        /// <param name="localizations">
-        /// Collection of localizations. At least one localization is expected.
-        /// </param>
-        /// <returns>Path to the built MSI file.</returns>
-        public static string BuildMultilanguageMsi(this Project project, ProjectLocalization defaultLocalization, params ProjectLocalization[] localizations)
+        /// </p><code>
+        /// project.BuildMultilanguageMsi(
+        /// new ProjectLocalization("en-US"),
+        /// new ProjectLocalization("sk-SK", "WixUI_sk-SK.wxl"));
+        /// </code></example>
+        public static string BuildMultilanguageMsi(this Project project, ProjectLocalization defaultLocalization, string torchPath, params ProjectLocalization[] localizations)
         {
             if (project is null)
                 throw new ArgumentNullException(nameof(project));
@@ -3310,8 +3487,6 @@ namespace WixSharp
 
             if (!localizations.Any())
                 throw new ArgumentException("At least one localization expected", nameof(localizations));
-
-            var torchCmd = Compiler.WixLocation.PathCombine("torch.exe");
 
             defaultLocalization.BindTo(project);
 
@@ -3330,7 +3505,7 @@ namespace WixSharp
                 var localizedMstFilePath = localizedMsiFilePath.PathChangeExtension(".mst");
 
                 Compiler.OutputWriteLine("> Preparing language transformations...");
-                Process.Start(torchCmd, $"-p -t language \"{msiFilePath}\" \"{localizedMsiFilePath}\" -out \"{localizedMstFilePath}\"")
+                Process.Start(torchPath, $"-p -t language \"{msiFilePath}\" \"{localizedMsiFilePath}\" -out \"{localizedMstFilePath}\"")
                        .WaitForExit();
 
                 msiFilePath.EmbedTransform(localizedMstFilePath);
@@ -3364,70 +3539,79 @@ namespace WixSharp
         /// This method builds the msi with the default language support according
         /// `project.Language` setting. The additional languages can also be embedded into the
         /// resulting msi during the build.
-        /// </para>
-        /// <para>
+        /// </para><para>
         /// Invoking specific language UI is triggered either automatically based on the OS default
         /// language or by passing special MSI properties arguments to the <c>msiexec.exe</c>:
         /// </para>
         /// <list type="bullet">
-        /// <item>
-        /// <description><i>English</i>
-        /// <para><c>msiexec /i setup.msi</c></para>
-        /// </description>
-        /// </item>
-        /// <item>
-        /// <description><i>German</i>
-        /// <para><c>msiexec /i setup.msi TRANSFORMS=:1031</c></para>
-        /// </description>
-        /// </item>
-        /// <item>
-        /// <description><i>Russian</i>
-        /// <para><c>msiexec /i setup.msi TRANSFORMS=:1049</c></para>
-        /// </description>
-        /// </item>
+        ///   <item><description><i>English</i><para><c>msiexec /i setup.msi</c></para></description></item>
+        ///   <item><description><i>German</i><para><c>msiexec /i setup.msi TRANSFORMS=:1031</c></para></description>
+        ///   </item><item><description><i>Ukrainian</i><para><c>msiexec /i setup.msi TRANSFORMS=:1058</c></para></description></item>
         /// </list>
         /// </summary>
+        /// <param name="project">The project.</param>
+        /// <param name="languages">The additional languages to embed. The value is a string of the coma-separated
+        /// language identifiers (e.g. `en-US,uk-UA,de-DE`). The first identifier will be used as the default language
+        /// of the msi to build. Any value of <see cref="WixSharp.WixProject.Language"/> wil be ignored.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        /// Path to the built MSI file.
+        /// </returns>
         /// <example>
         /// The following is an example of building <c>English</c> msi, which can also support
-        /// <c>German</c> and <c>Russian</c> UI.
+        /// <c>German</c> and <c>Ukrainian</c> UI.
         /// <code>
-        ///var project =
-        ///new ManagedProject("My Product",
-        ///new Dir(@"%ProgramFiles%\My Company\My Product",
-        ///new File("readme.txt")));
+        /// var project =
+        ///     new ManagedProject("My Product",
+        ///         new Dir(@"%ProgramFiles%\My Company\My Product",
+        ///             new File("readme.txt")));
         ///
-        ///project.Language = "en-US,ru-RU,de-DE";
-        ///project.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
-        ///
-        ///project.BuildLocalizedMsi();
-        /// </code>
-        /// </example>
-        /// <param name="project">The project.</param>
-        /// <param name="path">The path.</param>
-        /// <returns>Path to the built MSI file.</returns>
-        static public string BuildMultilanguageMsi(this WixSharp.Project project, string path = null)
+        /// project.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
+        /// project.BuildMultilanguageMsiFor(en-US,uk-UA,de-DE);
+        /// </code></example>
+        static public string BuildMultilanguageMsiFor(this WixSharp.Project project, string languages, string path = null)
         {
             project.VerifyLanguage();
-            project.SuppressSettingPackageLanguages = true;
 
-            string productMsi = project.BuildMsi(path);
-
-            Compiler.OutputWriteLine("> Preparing language transformations...");
-
-            var additionalLanguages = project.Language.Split(',', ';')
-                                             .Skip(1)
-                                             .Select(x => x.Trim());
-
-            foreach (string lang in additionalLanguages)
+            var originalLanguages = project.Language;
+            try
             {
-                string mstFile = project.BuildLanguageTransform(productMsi, lang);
-                productMsi.EmbedTransform(mstFile);
+                var allLanguages = languages.Split(',', ';').Select(x => x.Trim());
+                var additionalLanguages = allLanguages.Skip(1);
+
+                Compiler.OutputWriteLine("> Building msi with the default language...");
+                project.Language = allLanguages.FirstOrDefault();
+                string productMsi = project.BuildMsi(path);
+
+                Compiler.OutputWriteLine("> Preparing language transformations...");
+
+                foreach (string lang in additionalLanguages)
+                {
+                    string mstFile = project.BuildLanguageTransform(productMsi, lang);
+                    productMsi.EmbedTransform(mstFile);
+                }
+
+                productMsi.SetPackageLanguagesFrom(project);
+
+                // -------------------------------
+                Compiler.OutputWriteLine($"> Multi-language setup {productMsi} is completed.");
+                if (originalLanguages != project.Language)
+                    Compiler.OutputWriteLine(
+                        $"Warning: The project language `{originalLanguages}` is different to the " +
+                        $"first language specified in the transformations list `{languages}`. " +
+                        $"The project language value will be ignored and `{allLanguages.FirstOrDefault()}` will be used instead.");
+
+                Compiler.OutputWriteLine($"> {allLanguages.FirstOrDefault()} (default): \"msiexec /i {productMsi.PathGetFileName()}\"");
+                foreach (string lang in additionalLanguages)
+                    Compiler.OutputWriteLine($"> {lang}          : \"msiexec /i {productMsi.PathGetFileName()} TRANSFORMS=:{new CultureInfo(lang).LCID}\"");
+                // -------------------------------
+
+                return productMsi;
             }
-
-            productMsi.SetPackageLanguagesFrom(project);
-
-            Compiler.OutputWriteLine($"> Multi-language setup {productMsi} is completed.");
-            return productMsi;
+            finally
+            {
+                project.Language = originalLanguages;
+            }
         }
 
         /// <summary>
@@ -3463,18 +3647,17 @@ namespace WixSharp
         /// Builds a language transform (*.mst) file for a given msi file and its `Project`.
         /// <para>
         /// This method is not intended to be used directly (even though it's possible). The
-        /// developers are encouraged to use a <see
-        /// cref="LocalizationExtensions.BuildMultilanguageMsi(Project, string)"/> instead.
+        /// developers are encouraged to use a <see cref="LocalizationExtensions.BuildMultilanguageMsiFor(Project, string, string)" />
+        /// instead.
         /// </para>
         /// </summary>
-        /// <param name="project"></param>
-        /// <param name="originalMsi"></param>
-        /// <param name="language"></param>
-        /// <param name="localizationFile"></param>
+        /// <param name="project">The project.</param>
+        /// <param name="originalMsi">The original msi.</param>
+        /// <param name="language">The language.</param>
+        /// <param name="localizationFile">The localization file.</param>
         /// <returns></returns>
         public static string BuildLanguageTransform(this Project project, string originalMsi, string language, string localizationFile = "")
         {
-            var torch = Compiler.WixLocation.PathCombine("torch.exe");
             var originalLng = project.Language;
             var originalLocalizationFile = project.LocalizationFile;
             try
@@ -3485,7 +3668,8 @@ namespace WixSharp
                 string localizedMsi = project.BuildMsi(language).PathGetFullPath();
                 string langMst = localizedMsi.PathChangeExtension(".mst");
 
-                torch.Run($"-p -t language \"{originalMsi}\" \"{localizedMsi}\" -out \"{langMst}\"");
+                "wix.exe".Run($"msi transform -p -t language \"{originalMsi}\" \"{localizedMsi}\" -out \"{langMst}\"");
+
                 return langMst;
             }
             finally
@@ -3500,420 +3684,26 @@ namespace WixSharp
     }
 
     /// <summary>
-    /// 'Byte array to string' serialization methods.
     /// </summary>
-    public static class SerializingExtensions
+    public static class SystemExtensions
     {
         /// <summary>
-        /// Decodes hexadecimal string representation into the byte array.
+        /// Converts semantic version to <see cref="System.Version"/>.
         /// </summary>
-        /// <param name="obj">The object.</param>
+        /// <param name="semanticVersion">The semantic version.</param>
         /// <returns></returns>
-        public static byte[] DecodeFromHex(this string obj)
+        public static Version SemanticVersionToVersion(this string semanticVersion)
         {
-            var data = new List<byte>();
-            for (int i = 0; !string.IsNullOrEmpty(obj) && i < obj.Length;)
-            {
-                if (obj[i] == ',')
-                {
-                    i++;
-                    continue;
-                }
-                data.Add(byte.Parse(obj.Substring(i, 2), System.Globalization.NumberStyles.HexNumber));
-                i += 2;
-            }
-            return data.ToArray();
+            // need to handle cases like this: 1.0.0-beta.1, 5.0.0+41e11442
+            var parts = semanticVersion.Split('.');
+            int major = 0, minor = 0, build = 0;
+
+            if (parts.Length > 0) int.TryParse(parts[0], out major);
+            if (parts.Length > 1) int.TryParse(parts[1], out minor);
+            if (parts.Length > 2) int.TryParse(new string(parts[2].TakeWhile(char.IsDigit).ToArray()), out build);
+
+            return new Version(major, minor, build);
         }
-
-        /// <summary>
-        /// Encodes byte array into its hexadecimal string representation.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        /// <returns></returns>
-        public static string EncodeToHex(this byte[] data)
-        {
-            return BitConverter.ToString(data).Replace("-", string.Empty);
-        }
-
-        /// <summary>
-        /// Converts bytes into text according the specified Encoding..
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="encoding">The encoding.</param>
-        /// <returns></returns>
-        public static string GetString(this byte[] obj, Encoding encoding = null)
-        {
-            if (obj == null) return null;
-            if (encoding == null)
-                return Encoding.Default.GetString(obj);
-            else
-                return encoding.GetString(obj);
-        }
-
-        /// <summary>
-        /// Gets the bytes of the text according the specified Encoding.
-        /// </summary>
-        /// <param name="obj">The text.</param>
-        /// <param name="encoding">The encoding.</param>
-        /// <returns></returns>
-        public static byte[] GetBytes(this string obj, Encoding encoding = null)
-        {
-            if (encoding == null)
-                return Encoding.Default.GetBytes(obj);
-            else
-                return encoding.GetBytes(obj);
-        }
-
-        /// <summary>
-        /// Converts a string in Base64 encoding.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        /// <returns></returns>
-        public static string Base64Encode(this string text)
-            => Convert.ToBase64String((text ?? "").GetBytes());
-
-        /// <summary>
-        /// Decodes Base64 data into a string..
-        /// </summary>
-        /// <param name="data">The data.</param>
-        /// <returns></returns>
-        public static string Base64Decode(this string data)
-            => Convert.FromBase64String(data ?? "").GetString();
-    }
-
-    class WixItems : WixObject
-    {
-        public IEnumerable<WixObject> Items;
-
-        public WixItems(IEnumerable<WixObject> items)
-        {
-            Items = items;
-        }
-    }
-
-    /// <summary>
-    /// Serializes CLR entity into XML, based on the type members being marked for the serialization
-    /// with <see cref="WixSharp.XmlAttribute"/>.
-    /// <code>
-    ///public class RemoveFolderEx : WixEntity, IGenericEntity
-    ///{
-    ///[Xml]
-    ///public InstallEvent? On;
-    ///
-    ///[Xml]
-    ///public string Property;
-    ///
-    ///[Xml]
-    ///public string Id;
-    ///}
-    /// </code>
-    /// </summary>
-    public static class XmlMapping
-    {
-        /// <summary>
-        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked
-        /// with <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        internal static XElement ToXElement(this WixObject obj)
-        {
-            var root = new XElement(obj.GetType().Name);
-
-            root.AddAttributes(obj.Attributes).Add(obj.MapToXmlAttributes());
-            root.Add(obj.MapToXmlCData());
-
-            return root;
-        }
-
-        /// <summary>
-        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked
-        /// with <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="elementName"></param>
-        /// <returns></returns>
-        public static XElement ToXElement(this WixObject obj, XName elementName)
-        {
-            var root = new XElement(elementName);
-
-            root.AddAttributes(obj.Attributes).Add(obj.MapToXmlAttributes());
-            root.Add(obj.MapToXmlCData());
-
-            return root;
-        }
-
-        /// <summary>
-        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked
-        /// with <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
-        /// </summary>
-        /// <param name="obj">The obj.</param>
-        /// <param name="extension">The extension.</param>
-        /// <returns></returns>
-        public static XElement ToXElement(this WixObject obj, WixExtension extension)
-        {
-            var root = new XElement(extension.ToXName(obj.GetType().Name));
-
-            root.AddAttributes(obj.Attributes).Add(obj.MapToXmlAttributes());
-            root.Add(obj.MapToXmlCData());
-
-            return root;
-        }
-
-        /// <summary>
-        /// Serializes the <see cref="WixSharp.WixObject"/> into XML based on the members marked
-        /// with <see cref="WixSharp.XmlAttribute"/> and <see cref="WixSharp.WixObject.Attributes"/>.
-        /// </summary>
-        /// <param name="obj">The obj.</param>
-        /// <param name="extension">The extension.</param>
-        /// <param name="elementName">Name of the element.</param>
-        /// <returns></returns>
-        public static XElement ToXElement(this WixObject obj, WixExtension extension, string elementName)
-        {
-            var root = new XElement(extension.ToXName(elementName));
-
-            root.AddAttributes(obj.Attributes).Add(obj.MapToXmlAttributes());
-            root.Add(obj.MapToXmlCData());
-
-            return root;
-        }
-
-        /// <summary>
-        /// Serializes the object into XML based on the members marked with <see cref="WixSharp.XmlAttribute"/>.
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public static XAttribute[] MapToXmlAttributes(this object obj)
-        {
-            var emptyArgs = new object[0];
-
-            var result = new List<XAttribute>();
-
-            var items = GetMemberInfo(obj)
-                                      .Select(x =>
-                                      {
-                                          var xmlAttr = (XmlAttribute)x.GetCustomAttributes(typeof(XmlAttribute), false)
-                                                                       .FirstOrDefault();
-
-                                          string @namespace = null;
-                                          if (xmlAttr != null)
-                                              @namespace = xmlAttr.Namespace;
-
-                                          bool IsCData = false;
-                                          string name = null;
-                                          if (xmlAttr != null)
-                                          {
-                                              name = xmlAttr.Name ?? x.Name;
-                                              IsCData = xmlAttr.IsCData;
-                                          }
-
-                                          object value = null;
-                                          if (!IsCData)
-                                          {
-                                              switch (x)
-                                              {
-                                                  case FieldInfo fieldInfo:
-                                                      value = fieldInfo.GetValue(obj);
-                                                      break;
-
-                                                  case PropertyInfo propertyInfo:
-                                                      value = propertyInfo.GetValue(obj, emptyArgs);
-                                                      break;
-                                              }
-                                          }
-
-                                          return new
-                                          {
-                                              Name = name,
-                                              Value = value,
-                                              Namespace = @namespace
-                                          };
-                                      })
-                                      .Where(x => x.Name != null && x.Value != null)
-                                      .ToArray();
-
-            foreach (var item in items)
-            {
-                string xmlValue = item.Value.ToString();
-
-                if (item.Value is bool?)
-                {
-                    var boolVal = (item.Value as bool?);
-                    if (!boolVal.HasValue)
-                        continue;
-                    else
-                        xmlValue = boolVal.Value.ToYesNo();
-                }
-                else if (item.Value is bool boolean)
-                {
-                    xmlValue = boolean.ToYesNo();
-                }
-
-                XNamespace ns = item.Namespace ?? "";
-                result.Add(new XAttribute(ns + item.Name, xmlValue));
-            }
-
-            return result.ToArray();
-        }
-
-        static XCData MapToXmlCData(this object obj)
-        {
-            var emptyArgs = new object[0];
-
-            XCData result = null;
-
-            var items = GetMemberInfo(obj)
-                .Select(x =>
-                {
-                    var xmlAttr = (XmlAttribute)x.GetCustomAttributes(typeof(XmlAttribute), false).FirstOrDefault();
-
-                    bool IsCData = false;
-                    if (xmlAttr != null)
-                        IsCData = xmlAttr.IsCData;
-
-                    object value = null;
-
-                    if (IsCData)
-                    {
-                        switch (x)
-                        {
-                            case FieldInfo fieldInfo:
-                                value = fieldInfo.GetValue(obj);
-                                break;
-
-                            case PropertyInfo propertyInfo:
-                                value = propertyInfo.GetValue(obj, emptyArgs);
-                                break;
-                        }
-                    }
-
-                    return new
-                    {
-                        Value = value
-                    };
-                }).Where(x => x.Value != null);
-
-            foreach (var item in items)
-            {
-                string xmlValue = item.Value.ToString();
-
-                result = new XCData(xmlValue);
-            }
-
-            return result;
-        }
-
-        static IEnumerable<MemberInfo> GetMemberInfo(object obj)
-        {
-            // BindingFlags.NonPublic is needed to cover "internal" but not necessarily "private"
-            var fields = obj.GetType()
-                .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                .Cast<MemberInfo>()
-                .ToArray();
-
-            var props = obj.GetType()
-                .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                .Where(x => x.CanRead)
-                .Cast<MemberInfo>()
-                .ToArray();
-
-            return props.Concat(fields);
-        }
-
-        /// <summary>
-        /// Converts source string to SecureString
-        /// </summary>
-        /// <param name="source">Insecure string</param>
-        /// <returns>Secure version of the source string</returns>
-        public static SecureString ToSecureString(this string source)
-        {
-            if (string.IsNullOrEmpty(source))
-                return null;
-
-            var result = new SecureString();
-            foreach (char c in source)
-                result.AppendChar(c);
-
-            result.MakeReadOnly();
-
-            return result;
-        }
-
-        /// <summary>
-        /// Converts secure version of the string to insecure string
-        /// </summary>
-        /// <param name="input">Secure string</param>
-        /// <returns>Insecure version of the SecureString</returns>
-        public static string ToInsecureString(this SecureString input)
-        {
-            IntPtr bstr = Marshal.SecureStringToBSTR(input);
-            try
-            {
-                return Marshal.PtrToStringBSTR(bstr);
-            }
-            finally
-            {
-                Marshal.FreeBSTR(bstr);
-            }
-        }
-    }
-
-    /// <summary>
-    /// The attribute indicating the type member being mapped to XML element. Used by Wix# compiler
-    /// to emit XML base on CLR types.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
-    public class XmlAttribute : Attribute
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlAttribute"/> class.
-        /// </summary>
-        public XmlAttribute()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlAttribute"/> class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        public XmlAttribute(string name)
-        {
-            Name = name;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlAttribute"/> class.
-        /// </summary>
-        /// <param name="isCData">if set to <c>true</c> [is c data].</param>
-        public XmlAttribute(bool isCData)
-        {
-            IsCData = isCData;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlAttribute"/> class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="isCData">if set to <c>true</c> [is c data].</param>
-        public XmlAttribute(string name, bool isCData)
-        {
-            Name = name;
-            IsCData = isCData;
-        }
-
-        /// <summary>
-        /// Gets or sets the name of the mapped XML element.
-        /// </summary>
-        /// <value>The name.</value>
-        public string Name { get; set; }
-
-        internal bool IsCData { get; set; }
-
-        /// <summary>
-        /// Gets or sets the namespace.
-        /// </summary>
-        /// <value>The namespace.</value>
-        public string Namespace { get; set; }
     }
 
     /// <summary>
@@ -3937,7 +3727,7 @@ namespace WixSharp
         /// </returns>
         public static Process StartElevated(this string fileName, string args = "")
         {
-            bool isAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+            bool alreadyAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
             return Process.Start(new ProcessStartInfo
             {
@@ -3945,7 +3735,7 @@ namespace WixSharp
                 FileName = fileName,
                 Arguments = args,
                 UseShellExecute = true,
-                Verb = isAdmin ? "" : "runas"
+                Verb = alreadyAdmin ? "" : "runas"
             });
         }
 

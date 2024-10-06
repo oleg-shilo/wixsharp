@@ -3,41 +3,56 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Threading;
+using WixSharp;
+using WixToolset.Mba.Core;
 
-#if WIX4
-using WixToolset.Bootstrapper;
-#else
+[assembly: BootstrapperApplicationFactory(typeof(WixToolset.WixBA.WixBAFactory))]
 
-using Microsoft.Tools.WindowsInstallerXml.Bootstrapper;
-
-#endif
-
-[assembly: BootstrapperApplication(typeof(BA))]
+namespace WixToolset.WixBA
+{
+    public class WixBAFactory : BaseBootstrapperApplicationFactory
+    {
+        protected override IBootstrapperApplication Create(IEngine engine, IBootstrapperCommand command)
+        {
+            // Debug.Assert(false);
+            return new BA(engine, command);
+        }
+    }
+}
 
 public class BA : BootstrapperApplication
 {
+    public IEngine Engine => base.engine;
+    public IBootstrapperCommand Command;
+
     public static string MainPackageId = "MyProductPackageId";
-    public static string Languages = "en-US,de-DE,ru-RU";
 
-    public CultureInfo SelectedLanguage { get; set; }
-
-    public CultureInfo[] SupportedLanguages => Languages.Split(',')
-                                                        .Select(x => new CultureInfo(x))
-                                                        .ToArray();
-
-    public BA()
+    public BA(IEngine engine, IBootstrapperCommand command) : base(engine)
     {
-        SelectedLanguage = SupportedLanguages.FirstOrDefault();
+        this.Command = command;
         this.Error += (s, e) => MessageBox.Show(e.ErrorMessage);
-        this.ApplyComplete += (s, e) =>
+
+        this.DetectBegin += (s, e) =>
+            detectedRegistrationType = e.RegistrationType;
+
+        this.PlanMsiPackage += (s, e) =>
         {
-            Engine.Quit(0);
+            if (e.PackageId == BA.MainPackageId)
+                e.UiLevel = (e.Action == ActionState.Uninstall) ?
+                                INSTALLUILEVEL.ProgressOnly :
+                                INSTALLUILEVEL.Full;
         };
+
+        this.ApplyComplete += (s, e) =>
+            Engine.Quit(0);
     }
+
+    RegistrationType detectedRegistrationType = RegistrationType.None;
 
     LaunchAction Detect()
     {
@@ -49,10 +64,20 @@ public class BA : BootstrapperApplication
         {
             if (e.PackageId == BA.MainPackageId)
             {
-                if (e.State == PackageState.Absent)
-                    launchAction = LaunchAction.Install;
-                else if (e.State == PackageState.Present)
-                    launchAction = LaunchAction.Uninstall;
+                if (e.Cached)
+                {
+                    if (detectedRegistrationType == RegistrationType.None)
+                        launchAction = LaunchAction.Install;
+                    else
+                        launchAction = LaunchAction.Uninstall;
+                }
+                else
+                {
+                    if (e.State == PackageState.Absent)
+                        launchAction = LaunchAction.Install;
+                    else if (e.State == PackageState.Present)
+                        launchAction = LaunchAction.Uninstall;
+                }
 
                 done.Set();
             }
@@ -76,18 +101,18 @@ public class BA : BootstrapperApplication
 
         if (launchAction == LaunchAction.Install)
         {
-            var view = new MainView { DataContext = this };
+            var view = new MainView();
             var result = view.ShowDialog();
 
             if (result == true)
             {
-                bool defaultLanguage = SelectedLanguage.LCID == SupportedLanguages.FirstOrDefault()?.LCID;
+                bool defaultLanguage = view.SelectedLanguage.LCID == view.SupportedLanguages.FirstOrDefault()?.LCID;
 
                 if (!defaultLanguage)
-                    Engine.StringVariables["TRANSFORMS"] = $":{SelectedLanguage.LCID}";
+                    Engine.SetVariableString("TRANSFORMS", $":{view.SelectedLanguage.LCID}", false);
 
                 Engine.Plan(launchAction);
-                Engine.Apply(new WindowInteropHelper(view).Handle);
+                Engine.Apply(GetForegroundWindow());
 
                 Dispatcher.CurrentDispatcher.VerifyAccess();
                 Dispatcher.Run();
@@ -98,8 +123,8 @@ public class BA : BootstrapperApplication
             // You can also show a small form with selection of the next action "Modify/Repair" vs "Uninstall"
             if (MessageBox.Show("Do you want to uninstall?", "My Product", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                Engine.Plan(launchAction);
-                Engine.Apply(IntPtr.Zero);
+                Engine.Plan(LaunchAction.Uninstall);
+                Engine.Apply(GetForegroundWindow());
 
                 Dispatcher.CurrentDispatcher.VerifyAccess();
                 Dispatcher.Run();
@@ -108,4 +133,7 @@ public class BA : BootstrapperApplication
 
         Engine.Quit(0);
     }
+
+    [DllImport("User32.dll")]
+    static extern IntPtr GetForegroundWindow();
 }

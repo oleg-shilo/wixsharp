@@ -2,31 +2,99 @@
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 //css_ref System.Xml.Linq.dll;
-//css_ref ..\..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref ..\..\..\Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
-
+using WixSharp.Nsis;
+using WixToolset.Dtf.WindowsInstaller;
 using io = System.IO;
 
 public class InstallScript
 {
     static public void Main()
     {
-        string productMsi = BuildMainMsi();
-        string crtMsi = BuildCrtMsi();
+        // SimpleMsiInternalUI("My Product.msi"); return;
 
-        //---------------------------------------------------------
+        var crtMsi = BuildCrtMsi();
+        var productMsi = BuildMainMsi();
 
+        SimpleMsiInternalUI(crtMsi);
+        // SimpleGlobalInternalUI(crtMsi);
+        // Standard(crtMsi, productMsi);
+        Complex(crtMsi, productMsi);
+    }
+
+    static public void SimpleMsiInternalUI(string msi)
+    {
+        var bundle = new Bundle("My Product Bundle")
+        {
+            Version = Version.Parse("1.0.0.0"),
+            UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb24889b")
+        };
+
+        // will show MSI UI instead
+        bundle.Chain.Add(new MsiPackage(msi) { DisplayInternalUI = true, Visible = true });
+
+        // Adds .NET compatibility check to the bundle.
+        var check = new DotNetCompatibilityCheck(
+            "DOTNET_RUNTIME_CHECK",
+            RollForward.latestMinor,
+            RuntimeType.desktop,
+            Platform.x64,
+            new Version(8, 0, 0, 0));
+
+        bundle.GenericItems.Add(check);
+
+        bundle.Build("my.exe");
+    }
+
+    static public void SimpleGlobalInternalUI(string msi)
+    {
+        var bundle = new Bundle("My Product Bundle")
+        {
+            Version = Version.Parse("1.0.0.0"),
+            UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb24889b")
+        };
+
+        // will show MSI UI instead for all MsiPackages
+        bundle.Application = new WixInternalUIBootstrapperApplication { LogoFile = "product_logo.png" };
+        bundle.Chain.Add(new MsiPackage(msi));
+
+        bundle.Build("my.exe");
+    }
+
+    static public void Standard(string dependencyMsi, string productMsi)
+    {
+        var bundle = new Bundle("My Product")
+        {
+            Version = Version.Parse("1.0.0.0"),
+            UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb24889b")
+        };
+
+        // bundle.Chain.Add(new PackageGroupRef("NetFx462Web"));
+        // bundle.Chain.Add(new MsiPackage(dependencyMsi));
+        bundle.Chain.Add(new MsiPackage(productMsi));
+
+        bundle.Application.Theme = Theme.rtfLicense;
+        bundle.Application.LicensePath = "licence.rtf";
+        bundle.Application.LogoFile = "product_logo.png";
+
+        // bundle.PreserveTempFiles = true;
+
+        bundle.Build("my.exe");
+    }
+
+    static public void Complex(string crtMsi, string productMsi)
+    {
         var msiOnlinePackage = new MsiPackage(crtMsi) //demo for downloadable msi package
         {
             Vital = true,
             Compressed = false,
-            DisplayInternalUI = true,
             DownloadUrl = @"https://dl.dropboxusercontent.com/....../CRT.msi"
         };
 
@@ -35,7 +103,7 @@ public class InstallScript
 
         var bootstrapper =
                 new Bundle("My Product",
-                    // new PackageGroupRef("NetFx40Web"),
+                    // new PackageGroupRef("NetFx462Web"),
                     //new ExePackage(@"..\redist\dotNetFx40_Full_x86_x64.exe") //just a demo sample
                     //{
                     //     Name = "Microsoft .NET Framework 4.0",
@@ -47,33 +115,35 @@ public class InstallScript
                     //},
 
                     //msiOnlinePackage, // just a demo sample
-
                     new MsiPackage(crtMsi)
                     {
-                        DisplayInternalUI = true,
                         Visible = true,
                         MsiProperties = "INSTALLDIR=[InstallFolder]",
                         InstallCondition = "MyCheckbox<>0"
                     },
                     // new MspPackage("Patch.msp")
                     // {
-                    //     DisplayInternalUI = true,
                     //     Slipstream = false
                     // },
                     new MsiPackage(productMsi)
                     {
                         MsiProperties = "INSTALLDIR=c:\\",
-                        DisplayInternalUI = true,
                         Payloads = new[] { "script.dll".ToPayload() }
                     });
+
+        bootstrapper.WixSourceGenerated += doc =>
+        {
+            var bundle = doc.FindSingle("Bundle");
+            bundle.AddElement(WixExtension.Bal.ToXName("Condition"), "Condition=1<0; Message=Custom Error Message");
+        };
 
         bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";
         bootstrapper.IconFile = "app_icon.ico";
         bootstrapper.Version = Tasks.GetVersionFromFile(productMsi); //will extract "product version"
         bootstrapper.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
-        bootstrapper.Application.LogoFile = "logo.png";
-        bootstrapper.Application.Payloads = new[] { "logo.png".ToPayload() };
-        bootstrapper.Application.ThemeFile = "Theme.xml".PathGetFullPath();
+        bootstrapper.Application.LogoFile = "product_logo.png";
+        bootstrapper.Application.Theme = Theme.rtfLicense;
+        // bootstrapper.Application.Payloads = new[] { "product_logo.png".ToPayload() };
 
         // adding themes
         // var themes = new[]
@@ -82,20 +152,17 @@ public class InstallScript
         //     };
         // bootstrapper.Application.Payloads = themes;
 
-        bootstrapper.Application.LicensePath = "licence.html"; //HyperlinkLicense app with embedded license file
+        // bootstrapper.Application.LicensePath = "licence.html"; //HyperlinkLicense app with embedded license file
         bootstrapper.Application.LicensePath = "licence.rtf"; // RtfLicense app with embedded license file
-                                                              // bootstrapper.Application.LicensePath = "http://opensource.org/licenses/MIT"; //HyperlinkLicense app with online license file
-                                                              // bootstrapper.Application.LicensePath = null; //HyperlinkLicense app with no license
+        //                                                       // bootstrapper.Application.LicensePath = "http://opensource.org/licenses/MIT"; //HyperlinkLicense app with online license file
+        //                                                       // bootstrapper.Application.LicensePath = null; //HyperlinkLicense app with no license
 
         // if you want to use `WixStandardBootstrapperApplication.HyperlinkSidebarLicense`
         // you need to clear bootstrapper.Application.LicensePath and uncomment the next line
         // bootstrapper.Application.LogoSideFile = "logo.png";
 
-        bootstrapper.Application.AttributesDefinition = "ShowVersion=yes; ShowFilesInUse=yes"; // you can also use bootstrapper.Application.Show* = true;
+        bootstrapper.Application.AttributesDefinition = "ShowVersion=yes"; // you can also use bootstrapper.Application.Show* = true;
         bootstrapper.Include(WixExtension.Util);
-
-        bootstrapper.IncludeWixExtension(@"WixDependencyExtension.dll", "dep", "http://schemas.microsoft.com/wix/DependencyExtension");
-        bootstrapper.AttributesDefinition = "{dep}ProviderKey=01234567-8901-2345-6789-012345678901";
 
         // The code below sets WiX variables 'Netfx4FullVersion' and 'AdobeInstalled'. Note it has no affect on
         //the runtime behaviour and 'FileSearch' and "RegistrySearch" are only provided as an example.
@@ -107,12 +174,12 @@ public class InstallScript
                                         Value = "Version",
                                         Variable = "Netfx4FullVersion"
                                     },
-                                    new UtilFileSearch
-                                    {
-                                        Path = @"[ProgramFilesFolder]Adobe\adobe.exe",
-                                        Result = SearchResult.exists,
-                                        Variable = "AdobeInstalled"
-                                    });
+                                        new UtilFileSearch
+                                        {
+                                            Path = @"[ProgramFilesFolder]Adobe\adobe.exe",
+                                            Result = SearchResult.exists,
+                                            Variable = "AdobeInstalled"
+                                        });
 
         // bootstrapper.AddXml("Wix/Bundle", "<Log PathVariable=\"LogFileLocation\"/>");
 
@@ -130,20 +197,19 @@ public class InstallScript
         // bootstrapper.Variables = "BundleVariable=333".ToStringVariables();
         // bootstrapper.Variables = Variables.ToStringVariables("BundleVariable=333");
 
-        bootstrapper.PreserveTempFiles = true;
+        // bootstrapper.PreserveTempFiles = true;
 
         // bootstrapper.WixSourceGenerated += doc => doc.FindSingle("WixStandardBootstrapperApplication")
         //                                              .AddAttributes("ShowVersion=yes; ShowFilesInUse=no");
 
-        //in real life scenarios suppression may need to be enabled (see SuppressWixMbaPrereqVars documentation)
-        //bootstrapper.SuppressWixMbaPrereqVars = true;
-
+        // Debug.Assert(false);
         var setup = bootstrapper.Build("app_setup");
         Console.WriteLine(setup);
-        //---------------------------------------------------------
+    }
 
-        if (io.File.Exists(productMsi)) io.File.Delete(productMsi);
-        if (io.File.Exists(crtMsi)) io.File.Delete(crtMsi);
+    private static void Bootstrapper_WixSourceGenerated(XDocument document)
+    {
+        throw new NotImplementedException();
     }
 
     static public string BuildMainMsi()
@@ -152,8 +218,8 @@ public class InstallScript
             new Project("My Product",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("readme.txt"),
-                    new File("logo.png")))
-            { InstallScope = InstallScope.perMachine };
+                    new File("product_logo.png")))
+            { };
 
         productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         productProj.Version = new Version("2.0.0.0");
@@ -163,7 +229,7 @@ public class InstallScript
             DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
         };
 
-        productProj.PreserveTempFiles = true;
+        // productProj.PreserveTempFiles = true;
 
         return productProj.BuildMsi();
     }
@@ -174,7 +240,8 @@ public class InstallScript
             new ManagedProject("CRT",
                 new Dir(@"%ProgramFiles%\My Company\CRT",
                     new File("readme.txt")))
-            { InstallScope = InstallScope.perMachine };
+            { };
+
         crtProj.UI = WUI.WixUI_InstallDir;
         crtProj.Load += CrtProj_Load;
 
@@ -192,4 +259,17 @@ public class InstallScript
     {
         MessageBox.Show("DOINSTALL: " + e.Session["DOINSTALL"]);
     }
+}
+
+// This is an example of support for custom Bundle elements that are not directly implemented by WixSharp
+// Usage: `bundle.Chain.Add(new DotNetCoreSearch());`
+public class DotNetCoreSearch : ChainItem
+{
+    [Xml] public string RuntimeType = "aspnet";
+    [Xml] public string Platform = "x64";
+    [Xml] public string MajorVersion = "6";
+    [Xml] public string Variable = "AspNetCoreRuntimeVersion";
+
+    public override XContainer[] ToXml()
+        => new[] { this.ToXElement(WixExtension.NetFx.ToXName("DotNetCoreSearch")) };
 }

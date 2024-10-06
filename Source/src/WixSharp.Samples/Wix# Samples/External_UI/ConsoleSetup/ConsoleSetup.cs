@@ -4,11 +4,12 @@ using System.IO;
 using System.Reflection;
 using WixSharp.UI;
 
-internal class ConsoleSetup
+class ConsoleSetupUI
 {
     [STAThread]
     static public void Main()
     {
+        // This is nothing else but an equivalent of a bootstrapper for a single msi file.
         string msiFile = SetupDependencies();
         RunSetup(msiFile);
     }
@@ -20,7 +21,7 @@ internal class ConsoleSetup
 
         Console.WriteLine("The product is {0}INSTALLED\n\n", setup.IsCurrentlyInstalled ? "" : "NOT ");
 
-        try 
+        try
         {
             if (!setup.IsCurrentlyInstalled)
             {
@@ -45,14 +46,14 @@ internal class ConsoleSetup
 
     static string SetupDependencies()
     {
-        byte[] msiData = WixSharp.UI.Properties.Resources.MyProduct_msi;
+        byte[] msiData = ConsoleSetup.Properties.Resource.MyProduct_msi;
         string msiFile = Path.Combine(Path.GetTempPath(), "MyProduct.msi");
 
         if (!File.Exists(msiFile) || new FileInfo(msiFile).Length != msiData.Length)
             File.WriteAllBytes(msiFile, msiData);
 
         AppDomain.CurrentDomain.AssemblyResolve +=
-            (sender, args) => Assembly.Load(WixSharp.UI.Properties.Resources.WixSharp_Msi_dll);
+            (sender, args) => Assembly.Load(ConsoleSetup.Properties.Resource.WixSharp_Msi_dll);
 
         return msiFile;
     }

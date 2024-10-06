@@ -1,6 +1,24 @@
-v1.17.4.0
-- Issue #1301: Make more elements translateable
-  Updated Project template VS extension to support context menu localization
+v2.2.10
+- Updated NuGet versions
+- Updated UI dialogs
+
+v2.2.9
+- Removed Caliburn.Micro dependency
+- Updated UI dialogs
+
+v2.2.8
+- added VS auto-generated project GUID ($guid1$)
+
+v2.2.7
+- added warning/remainder about updating project GUID
+
+v2.2.0
+- #1429: Transparent Background for ManagedUI.WPF Dialog-Banner TextBlock Controls 
+- #1387: Cannot update to latest Caliburn.Micro
+
+v2.1.0
+- Made split on WiX3 vs WiX4 templates
+- Added Bootstrapper Custom BA templates
 
 v1.17.2.0
 - Issue #511: Compile error CustomDialog

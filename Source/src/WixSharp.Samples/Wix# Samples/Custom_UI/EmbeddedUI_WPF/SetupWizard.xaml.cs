@@ -26,7 +26,7 @@ namespace Microsoft.Deployment.Samples.EmbeddedUI
     using System.Windows.Media.Imaging;
     using System.Windows.Navigation;
     using System.Windows.Shapes;
-    using Microsoft.Deployment.WindowsInstaller;
+    using WixToolset.Dtf.WindowsInstaller;
 
     /// <summary>
     /// Interaction logic for SetupWizard.xaml

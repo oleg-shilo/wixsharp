@@ -2,9 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Security.Policy;
+using System.Windows.Forms;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
+using WixSharp.CommonTasks;
+using WixSharp.Nsis;
+using WixToolset.Dtf.WindowsInstaller;
 
+#pragma warning disable CS8981
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
 using sys = System.IO;
 
 namespace WixSharp.Bootstrapper
@@ -32,7 +39,11 @@ namespace WixSharp.Bootstrapper
         public ManagedBootstrapperApplication(string appAssembly, params string[] dependencies)
         {
             AppAssembly = appAssembly;
-            Payloads = Payloads.Combine(AppAssembly.ToPayload())
+
+            Payload bootstrapperAppAssembly = AppAssembly.ToPayload();
+            bootstrapperAppAssembly.IsBootstrapperAppAssembly = true;
+
+            Payloads = Payloads.Combine(bootstrapperAppAssembly)
                                .Combine(dependencies.Select(x => x.ToPayload()));
         }
 
@@ -51,7 +62,10 @@ namespace WixSharp.Bootstrapper
             {
                 rawAppAssembly = Compiler.ResolveClientAsm(outDir); //NOTE: if a new file is generated then the Compiler takes care for cleaning any temps
                 if (Payloads.FirstOrDefault(x => x.SourceFile == "%this%") is Payload payload_this)
+                {
                     payload_this.SourceFile = rawAppAssembly;
+                    payload_this.IsBootstrapperAppAssembly = true;
+                }
             }
 
             string asmName = Path.GetFileNameWithoutExtension(Utils.OriginalAssemblyFile(rawAppAssembly));
@@ -99,23 +113,83 @@ namespace WixSharp.Bootstrapper
         public static string DefaultBootstrapperCoreConfigContent = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 <configuration>
     <configSections>
-        <sectionGroup name=""wix.bootstrapper"" type=""Microsoft.Tools.WindowsInstallerXml.Bootstrapper.BootstrapperSectionGroup, BootstrapperCore"">
-            <section name=""host"" type=""Microsoft.Tools.WindowsInstallerXml.Bootstrapper.HostSection, BootstrapperCore"" />
+        <sectionGroup name=""wix.bootstrapper"" type=""WixToolset.Mba.Host.BootstrapperSectionGroup, WixToolset.Mba.Host"">
+            <section name=""host"" type=""WixToolset.Mba.Host.HostSection, WixToolset.Mba.Host"" />
         </sectionGroup>
     </configSections>
-    <startup useLegacyV2RuntimeActivationPolicy=""true"">
-        <supportedRuntime version=""v2.0.50727"" />
-        <supportedRuntime version=""v4.0"" />
+    <startup>
+        <supportedRuntime version=""v4.0"" sku="".NETFramework,Version=v4.8"" />
     </startup>
     <wix.bootstrapper>
-        <host assemblyName=""{asmName}"">
-            <supportedFramework version=""v3.5"" runtimeVersion=""v2.0.50727"" />
-            <supportedFramework version=""v4\Full"" />
-            <supportedFramework version=""v4\Client"" />
-        </host>
+        <host assemblyName=""{asmName}"" />
     </wix.bootstrapper>
 </configuration>
 ";
+
+        static string LocateMbanative()
+        {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var mbanative = (assembly.Location ?? "").PathGetDirName().PathCombine("mbanative.dll");
+
+            if (System.IO.File.Exists(mbanative))
+                return mbanative;
+
+            var resourceName = $"{assembly.GetName().Name}.Bootstrapper.runtime.win_x86.mbanative.dll";
+
+            using (var input = assembly.GetManifestResourceStream(resourceName))
+            using (var output = System.IO.File.Create(mbanative))
+            {
+                input.Seek(0, SeekOrigin.Begin);
+                input.CopyTo(output);
+            }
+
+            Compiler.TempFiles.Add(mbanative);
+            return mbanative;
+        }
+
+        static string LocateMbaCore(string asm = "WixToolset.Mba.Core.dll")
+        {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var mbanative = (assembly.Location ?? "").PathGetDirName().PathCombine(asm);
+
+            if (System.IO.File.Exists(mbanative))
+                return mbanative;
+
+            mbanative = (assembly.Location ?? "").PathGetDirName().PathCombine("wix_bin", asm);
+            if (System.IO.File.Exists(mbanative))
+                return mbanative;
+
+            return null;
+        }
+
+        static void ValidateCustomBaAssembly(string assembly)
+        {
+#if NETCORE
+            throw new NotImplementedException("The method is not implemented on .NET Core");
+#else
+            // In WiX5 the BootstrapperApplicationFactoryAttribute is no longer used.
+            // It's now a plain vanilla executable assembly.
+            if (WixTools.GlobalWixVersion.Major >= 5)
+                return;
+
+            try
+            {
+                var valid = (bool)Utils.ExecuteInTempDomain<AsmReflector>(
+                                        asmReflector => asmReflector.ValidateCustomBaAssembly(assembly));
+
+                if (!valid)
+                    Compiler.OutputWriteLine(
+                            $"ERROR: The custom BA assembly (`{assembly}`) seems to have no attribute " +
+                            $"`WixToolset.Mba.Core.BootstrapperApplicationFactoryAttribute` defined " +
+                            $"for the BootstrapperApplication factory class.");
+            }
+            catch
+            {
+                Compiler.OutputWriteLine(
+                        $"WARNING: Cannot validate the custom BA assembly (`{assembly}`).");
+            }
+#endif
+        }
 
         /// <summary>
         /// Emits WiX XML.
@@ -123,19 +197,75 @@ namespace WixSharp.Bootstrapper
         /// <returns></returns>
         public override XContainer[] ToXml()
         {
-            string winInstaller = typeof(Session).Assembly.Location;
+            ValidateCustomBaAssembly(rawAppAssembly);
 
-            var root = new XElement("BootstrapperApplicationRef");
-            root.SetAttribute("Id", "ManagedBootstrapperApplicationHost");
+            var frameworkAssemblies = new[]
+            {
+                typeof(Session).Assembly.Location,
+                LocateMbanative()
+            };
 
-            var files = new List<Payload> { rawAppAssembly.ToPayload(), bootstrapperCoreConfig.ToPayload() };
+            var root = new XElement("BootstrapperApplication");
+
+            root.AddAttributes(this.Attributes);
+            root.Add(this.MapToXmlAttributes());
+
+            if (WixTools.GlobalWixVersion.Major >= 5)
+                root.AddElement(WixExtension.Bal.ToXName("WixPrerequisiteBootstrapperApplication"));
+            else
+                root.AddElement(WixExtension.Bal.ToXName("WixManagedBootstrapperApplicationHost"));
+
+            var files = new List<Payload>
+            {
+                rawAppAssembly.ToPayload(),
+                bootstrapperCoreConfig.ToPayload("WixToolset.Mba.Host.config")
+            };
+
             files.AddRange(this.Payloads.DistinctBy(x => x.SourceFile)); //note %this% it already resolved at this stage into an absolute path
 
-            if (!Payloads.Any(x => Path.GetFileName(x.SourceFile).SameAs(Path.GetFileName(winInstaller))))
-                files.Add(winInstaller.ToPayload());
+            foreach (var item in frameworkAssemblies)
+            {
+                if (!Payloads.Any(x => Path.GetFileName(x.SourceFile).SameAs(Path.GetFileName(item))))
+                    files.Add(item.ToPayload());
+            }
+
+            // starting from WiX5 the BA assembly can no longer be a payload but the attribute of the BootstrapperApplication element.
+            if (WixTools.GlobalWixVersion.Major >= 5)
+            {
+                var appPayload = files.FirstOrDefault(x => x.IsBootstrapperAppAssembly);
+
+                if (appPayload == null)
+                    throw new Exception("The Bootstrapper application assembly is not found in the payload list.");
+
+                if (Environment.CurrentDirectory.SamePathAs(appPayload.SourceFile.PathGetDirName()))
+                    root.SetAttribute("SourceFile", appPayload.SourceFile.PathGetFileName());
+                else
+                    root.SetAttribute("SourceFile", appPayload.SourceFile);
+
+                files.RemoveAll(x => x.SourceFile == appPayload.SourceFile);
+            }
 
             if (files.Any())
                 files.DistinctBy(x => x.SourceFile).ForEach(p => root.Add(p.ToXElement("Payload")));
+
+            // validate payloads
+            var wixBaDependency = "WixToolset.Mba.Core.dll";
+
+            if (WixTools.GlobalWixVersion.Major >= 5)
+                wixBaDependency = "WixToolset.BootstrapperApplicationApi.dll";
+
+            if (!files.Any(x => x.SourceFile.EndsWith(wixBaDependency)))
+            {
+                var possibleMbaCore = LocateMbaCore(wixBaDependency);
+
+                if (!possibleMbaCore.PathExists())
+                    possibleMbaCore = this.AppAssembly.PathChangeFileName(wixBaDependency);
+
+                if (possibleMbaCore.PathExists())
+                    root.Add(new Payload(possibleMbaCore).ToXElement("Payload"));
+                else
+                    Compiler.OutputWriteLine($"WARNING: Custom BA payloads are missing `{wixBaDependency}`");
+            }
 
             return new[] { root };
         }
@@ -163,6 +293,14 @@ namespace WixSharp.Bootstrapper
             set { primaryPackageId = value; }
         }
 
+        /*
+          <BootstrapperApplication>
+              <Payload SourceFile="WixBootstrapper_UI.exe" />
+              <Payload SourceFile="BootstrapperCore.config" />
+              <Payload SourceFile="WixToolset.Dtf.WindowsInstaller.dll" />
+              <bal:WixManagedBootstrapperApplicationHost />
+          </BootstrapperApplication>
+         */
         //public ChainItem DependencyPackage { get; set; }
     }
 
@@ -175,6 +313,11 @@ namespace WixSharp.Bootstrapper
     {
         /// <summary>
         /// Source file of the RTF license file or URL target of the license link.
+        /// <para>
+        /// In opposite to WiX, WixSharp does not require you specify source of license through different API path (LicenceUrl and LicenceFile).
+        /// With WixSharp you only need to set LicencePath to either a file or URL and the compiler will automatically redirect
+        /// the value to the correct XML attribute and also set the appropriate BA application theme (if user did not specify one.).
+        /// </para>
         /// </summary>
         public string LicensePath;
 
@@ -189,6 +332,12 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         [Xml]
         public string LaunchTarget;
+
+        /// <summary>
+        /// Id of the target ApprovedExeForElevation element. If set with LaunchTarget, WixStdBA will launch the application through the Engine's LaunchApprovedExe method instead of through ShellExecute.
+        /// </summary>
+        [Xml]
+        public string LaunchTargetElevatedId;
 
         /// <summary>
         /// WixStdBA will use this working folder when launching the specified application. The string value can be formatted using Burn variables enclosed in brackets, to refer to installation directories and so forth. This attribute is ignored when the LaunchTargetElevatedId attribute is specified.
@@ -206,6 +355,7 @@ namespace WixSharp.Bootstrapper
         /// If set to "true", WixStdBA will show a page allowing the user to restart applications when files are in use.
         /// </summary>
         [Xml]
+        [Obsolete("Note supported by WiX schema")]
         public bool? ShowFilesInUse;
 
         /// <summary>
@@ -239,7 +389,13 @@ namespace WixSharp.Bootstrapper
         public bool? SuppressRepair;
 
         /// <summary>
-        /// Source file of the theme XML.
+        /// The bootstrapper Application theme.
+        /// </summary>
+        [Xml]
+        public Theme Theme;
+
+        /// <summary>
+        /// The theme file
         /// </summary>
         [Xml]
         public string ThemeFile;
@@ -285,6 +441,12 @@ namespace WixSharp.Bootstrapper
         public Payload[] Payloads = new Payload[0];
 
         /// <summary>
+        /// Adds the payload.
+        /// </summary>
+        /// <param name="payload">The payload.</param>
+        public void AddPayload(Payload payload) => Payloads = Payloads.Combine(payload);
+
+        /// <summary>
         /// The Bundle string variables associated with the Bootstrapper application.
         /// <para>The variables are defined as a named values map.</para>
         /// </summary>
@@ -300,51 +462,131 @@ namespace WixSharp.Bootstrapper
     }
 
     /// <summary>
+    /// PayloadGeneration string enum
+    /// </summary>
+    public class PayloadGeneration : StringEnum<PayloadGeneration>
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PayloadGeneration"/> class.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public PayloadGeneration(string value) : base(value)
+        {
+        }
+
+        /// <summary>
+        /// None of the bundle's payloads or containers are automatically included as payloads for the package.
+        /// </summary>
+        public static PayloadGeneration none = new PayloadGeneration("none");
+
+        /// <summary>
+        /// All detached containers from the bundle that have no download url are included as payloads for the package,
+        /// as well as all external payloads from the bundle that have no download url.
+        /// </summary>
+        public static PayloadGeneration externalWithoutDownloadUrl = new PayloadGeneration("externalWithoutDownloadUrl");
+
+        /// <summary>
+        /// All detached containers from the bundle are included as payloads for the package, as well as all external payloads from the bundle.
+        /// </summary>
+        public static PayloadGeneration external = new PayloadGeneration("external");
+
+        /// <summary>
+        /// All detached containers from the bundle are included as payloads for the package, as well as all other payloads
+        /// that are not compressed into the detached containers.This option normally requires extra work to use since it requires all attached containers to have been extracted.
+        /// </summary>
+        public static PayloadGeneration all = new PayloadGeneration("all");
+    }
+
+    /// <summary>
+    /// Describes information about the BundlePackage payload. Cannot be specified if the owning BundlePackage specified any of SourceFile, Name, DownloadUrl, or Compressed.
+    /// </summary>
+    /// <seealso cref="WixSharp.Bootstrapper.RemotePayload" />
+    public class BundlePackagePayload : RemotePayload
+    {
+        /// <summary>
+        /// Choose one of the supported payload generation types: none, externalWithoutDownloadUrl, external, all.This attribute's value must be one of the following:(enumeration) : Choose one of the supported payload generation types
+        /// </summary>
+        [Xml]
+        public PayloadGeneration PayloadGeneration = PayloadGeneration.none;
+    }
+
+    /// <summary>
+    /// Describes information about the MsuPackage payload. Cannot be specified if the owning MsuPackage specified any of SourceFile, Name, DownloadUrl, or Compressed.
+    /// </summary>
+    /// <seealso cref="WixSharp.Bootstrapper.RemotePayload" />
+    public class MsuPackagePayload : RemotePayload { }
+
+    /// <summary>
+    /// Describes information about the ExePackage payload. Cannot be specified if the owning ExePackage specified any of SourceFile, Name, DownloadUrl, or Compressed.
+    /// </summary>
+    /// <seealso cref="WixSharp.Bootstrapper.RemotePayload" />
+    public class ExePackagePayload : RemotePayload { }
+
+    /// <summary>
+    /// Describes information about the MsiPackage payload. Cannot be specified if the owning MsiPackage specified any of SourceFile, Name, DownloadUrl, or Compressed.
+    /// </summary>
+    /// <seealso cref="WixSharp.Bootstrapper.Payload" />
+    public class MsiPackagePayload : Payload
+    {
+    }
+
+    /// <summary>
+    /// Describes information about the MspPackage payload. Cannot be specified if the owning MspPackage specified any of SourceFile, Name, DownloadUrl, or Compressed.
+    /// </summary>
+    /// <seealso cref="WixSharp.Bootstrapper.Payload" />
+    public class MspPackagePayload : Payload
+    {
+    }
+
+    /// <summary>
     /// Describes a remote payload to a bootstrapper.
     /// <para>Describes information about a remote file payload that is not
     /// available at the time of building the bundle. The parent must specify DownloadUrl
     /// and must not specify SourceFile when using this element.</para></summary>
-    /// <seealso cref="WixSharp.WixEntity" />
-    public class RemotePayload : WixEntity
+    public class RemotePayload : Payload
     {
-        /// <summary>
-        /// Description of the file from version resources.
-        /// </summary>
-        [Xml]
-        public string Description;
+        // [Obsolete("Use concrete RemotePayload entities instead. IE `ExePackagePayload` instead of `RemotePayloadPayload`", true)]
+        // public RemotePayload() { }
 
         /// <summary>
-        /// Public key of the authenticode certificate used to sign the RemotePayload.Include this attribute if the remote file is signed.
+        /// Optional public key of the certificate used to sign the payload. It is not recommended to use this attribute and rely on the Hash alone.
         /// </summary>
         [Xml]
         public string CertificatePublicKey;
 
         /// <summary>
-        /// Thumbprint of the authenticode certificate used to sign the RemotePayload.Include this attribute if the remote file is signed.
+        /// Optional thumbprint of the certificate used to sign the payload. It is not recommended to use this attribute and rely on the Hash alone.
         /// </summary>
         [Xml]
         public string CertificateThumbprint;
 
         /// <summary>
-        /// SHA-1 hash of the RemotePayload.Include this attribute if the remote file is unsigned or SuppressSignatureVerification is set to Yes.
+        /// Description of the file from version resources. If Hash is not specified, must not be specified.
+        /// </summary>
+        [Xml]
+        public string Description;
+
+        /// <summary>
+        /// SHA-512 hash of the RemotePayload. If SourceFile is specified, must not be specified. If specified then Name,
+        /// DownloadUrl, and Size are required
         /// </summary>
         [Xml]
         public string Hash;
 
         /// <summary>
-        /// Product name of the file from version resources.
+        /// Product name of the file from version resouces. If Hash is not specified, must not be specified.
         /// </summary>
         [Xml]
         public string ProductName;
 
         /// <summary>
-        /// Size of the remote file in bytes.
+        /// Size of the remote file in bytes. Required if Hash is specified, otherwise must not be specified.
         /// </summary>
         [Xml]
-        public int Size;
+        public int? Size;
 
         /// <summary>
-        /// Version of the remote file
+        /// Version of the remote file. If Hash is not specified, must not be specified.
         /// </summary>
         [Xml]
         public Version Version;
@@ -429,6 +671,11 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         [Xml]
         public bool? Compressed;
+
+        /// <summary>
+        /// The flag to indicate that the payload contains the assembly file implementing bootstrapper application.
+        /// </summary>
+        public bool IsBootstrapperAppAssembly;
     }
 
     /// <summary>
@@ -441,7 +688,7 @@ namespace WixSharp.Bootstrapper
     /// embedded HTML file.
     /// <code>
     /// var bootstrapper = new Bundle("My Product",
-    ///                         new PackageGroupRef("NetFx40Web"),
+    ///                         new PackageGroupRef("NetFx462Web"),
     ///                         new MsiPackage(productMsi) { DisplayInternalUI = true });
     ///
     /// bootstrapper.AboutUrl = "https://github.com/oleg-shilo/wixsharp/";
@@ -462,11 +709,9 @@ namespace WixSharp.Bootstrapper
         /// <returns></returns>
         public override XContainer[] ToXml()
         {
-            XNamespace bal = Compiler.IsWix4 ?
-                                "http://wixtoolset.org/schemas/v4/wxs/bal" :
-                                "http://schemas.microsoft.com/wix/BalExtension";
+            XNamespace bal = "http://wixtoolset.org/schemas/v4/wxs/bal";
 
-            var root = new XElement("BootstrapperApplicationRef");
+            var root = new XElement("BootstrapperApplication");
 
             var app = this.ToXElement(bal + "WixStandardBootstrapperApplication");
 
@@ -474,19 +719,15 @@ namespace WixSharp.Bootstrapper
 
             if (LicensePath.IsNotEmpty() && LicensePath.EndsWith(".rtf", StringComparison.OrdinalIgnoreCase))
             {
-                root.SetAttribute("Id", "WixStandardBootstrapperApplication.RtfLicense");
-                app.SetAttribute("LicenseFile", LicensePath);
+                app.SetAttribute("Theme", this.Theme ?? Theme.rtfLargeLicense)
+                   .SetAttribute("LicenseFile", LicensePath);
             }
             else
             {
                 if (LogoSideFile.IsEmpty())
-                {
-                    root.SetAttribute("Id", "WixStandardBootstrapperApplication.HyperlinkLicense");
-                }
+                    app.SetAttribute("Theme", this.Theme ?? Theme.hyperlinkLicense);
                 else
-                {
-                    root.SetAttribute("Id", "WixStandardBootstrapperApplication.HyperlinkSidebarLicense");
-                }
+                    app.SetAttribute("Theme", this.Theme ?? Theme.hyperlinkSidebarLicense);
 
                 if (LicensePath.IsEmpty())
                 {
@@ -508,6 +749,44 @@ namespace WixSharp.Bootstrapper
             }
 
             foreach (Payload item in payloads)
+            {
+                var xml = item.ToXElement("Payload");
+                root.AddElement(xml);
+            }
+
+            root.Add(app);
+
+            return new[] { root };
+        }
+    }
+
+    /// <summary>
+    /// Custom BA UI that shows internal MSI UI dialogs
+    /// </summary>
+    /// <seealso cref="WixSharp.Bootstrapper.WixStandardBootstrapperApplication" />
+    public class WixInternalUIBootstrapperApplication : WixStandardBootstrapperApplication
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WixInternalUIBootstrapperApplication"/> class.
+        /// </summary>
+        public WixInternalUIBootstrapperApplication()
+        {
+            this.Theme = Bootstrapper.Theme.standard;
+        }
+
+        /// <summary>
+        /// Emits WiX XML.
+        /// </summary>
+        /// <returns></returns>
+        public override XContainer[] ToXml()
+        {
+            XNamespace bal = "http://wixtoolset.org/schemas/v4/wxs/bal";
+
+            var root = new XElement("BootstrapperApplication");
+
+            var app = this.ToXElement(bal + "WixInternalUIBootstrapperApplication");
+
+            foreach (Payload item in this.Payloads)
             {
                 var xml = item.ToXElement("Payload");
                 root.AddElement(xml);

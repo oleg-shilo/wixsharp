@@ -1,5 +1,5 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
 using System.Linq;
@@ -20,7 +20,7 @@ class Script
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new Files(@"..\Release Folder\test\*.exe")
+                    new Files(@"..\Release Folder\test\*.exe", x => x.PathGetFileName() != "app-I-do-not-like.exe")
                     {
                         OnProcess = file =>
                         {
@@ -46,7 +46,7 @@ class Script
 
         new ExeFileShortcut("Uninstall My Product", "[System64Folder]msiexec.exe", "/x [ProductCode]")));
 
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1561ba25889b");
 
         project.BuildMsi();

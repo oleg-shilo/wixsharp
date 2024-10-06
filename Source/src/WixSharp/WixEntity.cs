@@ -39,7 +39,7 @@ namespace WixSharp
     /// <summary>
     /// Base class for all Wix# related types
     /// </summary>
-    public class WixObject
+    public partial class WixObject
     {
         /// <summary>
         /// Collection of Attribute/Value pairs for WiX element attributes not supported directly by Wix# objects.
@@ -106,6 +106,10 @@ namespace WixSharp
 
         internal string HiddenAttributesDefinition;
 
+        /// <summary>
+        /// The attributes bag is a set of hidden extra attributes to be used to implement WixObject serializable
+        /// properties. IE `File.TargetFileName`
+        /// </summary>
         internal Dictionary<string, string> attributesBag = new Dictionary<string, string>();
 
         void ProcessAttributesDefinition()
@@ -366,7 +370,16 @@ namespace WixSharp
                     {
                         // break point parking spot
                     }
-                    id = Compiler.AutoGeneration.CustomIdAlgorithm?.Invoke(this) ?? IncrementalIdFor(this);
+
+                    try
+                    {
+                        id = Compiler.AutoGeneration.CustomIdAlgorithm?.Invoke(this) ?? IncrementalIdFor(this);
+                    }
+                    catch
+                    {
+                        Compiler.OutputWriteLine($"Cannot auto-generate id for {this.GetType()}");
+                        throw;
+                    }
                 }
 
                 return id;
@@ -400,7 +413,11 @@ namespace WixSharp
                     rawName = entity.GetType().Name;
 
                 if (IO.Path.IsPathRooted(entity.Name))
-                    rawName = IO.Path.GetFileName(entity.Name).Expand();
+                {
+                    var name = IO.Path.GetFileName(entity.Name).Expand();
+                    if (name.IsEmpty()) // new Dir(@"C:\",...
+                        rawName = entity.Name.Expand();
+                }
 
                 if (entity.GetType() != typeof(Dir) && entity.GetType().BaseType != typeof(Dir) && entity.Name.IsNotEmpty())
                     rawName = IO.Path.GetFileName(entity.Name).Expand();

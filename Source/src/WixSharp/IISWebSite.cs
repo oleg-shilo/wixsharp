@@ -31,7 +31,6 @@ using System.Xml.Linq;
 
 namespace WixSharp
 {
-
     /// <summary>
     ///  This class allows creating an IIS Website without using IISVirtualDir.
     /// </summary>
@@ -73,7 +72,7 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            XNamespace ns = "http://schemas.microsoft.com/wix/IIsExtension";
+            XNamespace ns = WixExtension.IIs.ToXNamespace();
             var dirId = context.XParent.Attribute("Id").Value;
 
             var componentId = $"{Description}.Component.Id";

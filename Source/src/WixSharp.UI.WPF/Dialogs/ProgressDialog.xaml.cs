@@ -1,16 +1,15 @@
+using System.ComponentModel;
 using System.Security.Principal;
 using System.Windows.Media.Imaging;
-using Microsoft.Deployment.WindowsInstaller;
-using Caliburn.Micro;
+using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.UI.Forms;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp.UI.WPF
 {
     /// <summary>
     /// The standard ProgressDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro View (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     /// <seealso cref="WixSharp.UI.WPF.WpfDialog" />
     /// <seealso cref="WixSharp.IWpfDialog" />
@@ -26,16 +25,14 @@ namespace WixSharp.UI.WPF
         }
 
         /// <summary>
-        /// This method is invoked by WixSHarp runtime when the custom dialog content is internally fully initialized.
+        /// This method is invoked by WixSharp runtime when the custom dialog content is internally fully initialized.
         /// This is a convenient place to do further initialization activities (e.g. localization).
         /// </summary>
         public void Init()
         {
             UpdateTitles(ManagedFormHost.Runtime.Session);
 
-            model = new ProgressDialogModel { Host = ManagedFormHost };
-            ViewModelBinder.Bind(model, this, null);
-
+            DataContext = model = new ProgressDialogModel { Host = ManagedFormHost };
             model.StartExecute();
         }
 
@@ -96,27 +93,28 @@ namespace WixSharp.UI.WPF
             if (model != null)
                 model.ProgressValue = progressPercentage;
         }
+
+        void Cancel_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.Cancel();
     }
 
     /// <summary>
     /// ViewModel for standard ProgressDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
-    /// <seealso cref="Caliburn.Micro.Screen" />
-    class ProgressDialogModel : Caliburn.Micro.Screen
+    class ProgressDialogModel : NotifyPropertyChangedBase
     {
         public ManagedForm Host;
 
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource() ??
+                                     session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
         public bool UacPromptIsVisible => (!WindowsIdentity.GetCurrent().IsAdmin() && Uac.IsEnabled() && !uacPromptActioned);
 
-        public string CurrentAction { get => currentAction; set { currentAction = value; base.NotifyOfPropertyChange(() => CurrentAction); } }
-        public int ProgressValue { get => progressValue; set { progressValue = value; base.NotifyOfPropertyChange(() => ProgressValue); } }
+        public string CurrentAction { get => currentAction; set { currentAction = value; base.NotifyOfPropertyChange(nameof(CurrentAction)); } }
+        public int ProgressValue { get => progressValue; set { progressValue = value; base.NotifyOfPropertyChange(nameof(ProgressValue)); } }
 
         bool uacPromptActioned = false;
         string currentAction;
@@ -160,7 +158,7 @@ namespace WixSharp.UI.WPF
                 case InstallMessage.InstallEnd:
                     {
                         uacPromptActioned = true;
-                        base.NotifyOfPropertyChange(() => UacPromptIsVisible);
+                        base.NotifyOfPropertyChange(nameof(UacPromptIsVisible));
                     }
                     break;
 

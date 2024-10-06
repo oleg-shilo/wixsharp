@@ -1,26 +1,33 @@
 ﻿//css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+// //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
+//css_ref D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\bin\Debug\net472\WixToolset.Dtf.WindowsInstaller.dll
+//css_ref D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\bin\Debug\net472\WixToolset.Mba.Core.dll
+
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixSharp.UI;
 
-class Script
+static class Script
 {
     static public void Main()
     {
         File f;
+
         var project =
-            new Project("MyProduct",
-                new Dir(new Id("MY_INSTALLDIR"), @"%ProgramFiles%\My Company\My Product",
+            new ManagedProject("MyProduct",
+                    // new Dir(@"AppDataFolder\My ICompany\My Product",
+                    new Dir(new Id("MY_INSTALLDIR"), @"%ProgramFiles%\My ICompany\My Product",
                     f = new File("MyApp_file".ToId(),
-                                 @"Files\Bin\MyApp.exe",
+                                 @"C:\sourceFiles\MyApp.exe",
+                                 // @"Files\Bin\MyApp.exe",
+                                 // @"D:\dev\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\Files\Bin\MyApp.exe",
                                  new FileAssociation("cstm", "application/custom", "open", "\"%1\"")
                                  {
                                      Advertise = true,
@@ -30,7 +37,8 @@ class Script
                         TargetFileName = "app.exe"
                     },
                     new Dir(@"Docs\Manual",
-                        new File(@"Files\Docs\Manual.txt")
+                        // new File(@"Files\Docs\Manual.txt")
+                        new File(@"D:\dev\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\Files\Docs\Manual.txt")
                         {
                             NeverOverwrite = true
                         })),
@@ -39,17 +47,24 @@ class Script
         project.SetVersionFrom("MyApp_file");
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
+        Compiler.EmitRelativePaths = false;
+        // possible UIs
+        project.ManagedUI = ManagedUI.Default;
+        // project.ManagedUI = ManagedUI.DefaultWpf;
+        // project.UI = WUI.WixUI_Mondo;
+        // project.UI = WUI.WixUI_InstallDir;
 
         project.EmitConsistentPackageId = true;
-        project.PreserveTempFiles = true;
-        project.PreserveDbgFiles = true;
+        project.Scope = InstallScope.perMachine;
+        // project.PreserveTempFiles = true;
+        // project.PreserveDbgFiles = true;
+
+        project.SetNetPrerequisite("7.0.0", RuntimeType.desktop, RollForward.minor, Platform.x64);
 
         project.EnableUninstallFullUI();
         project.EnableResilientPackage();
 
         project.Language = "en-US";
-
-        // project.PreserveTempFiles = true;
 
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 

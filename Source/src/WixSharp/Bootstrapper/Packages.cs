@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Xml.Linq;
+using WixSharp.CommonTasks;
+using WixSharp.Nsis;
+using WixSharp.UI;
 
 namespace WixSharp.Bootstrapper
 {
@@ -10,6 +14,25 @@ namespace WixSharp.Bootstrapper
     /// </summary>
     public abstract class Package : ChainItem
     {
+        /// <summary>
+        /// The identifier of another package that this one should be installed after. By default the After attribute is
+        /// set to the previous sibling package in the Chain or PackageGroup element. If this attribute is specified
+        /// ensure that a cycle is not created explicitly or implicitly.
+        /// </summary>
+        [Xml]
+        public string After;
+
+        /// <summary>
+        /// By default, a Bundle will use the hash of a package to verify its contents. If this attribute is explicitly
+        /// set to "no" and the package is signed with an Authenticode signature the Bundle will verify the contents of
+        /// the package using the signature instead. Therefore, the default for this attribute could be considered to be
+        /// "true". It is unusual for "true" to be the default of an attribute. In this case, the default was changed in
+        /// WiX v3.9 after experiencing real-world issues with Windows verifying Authenticode signatures. Since the
+        /// Authenticode signatures are no more secure than hashing the packages directly, the default was changed.
+        /// </summary>
+        [Xml]
+        public bool? SuppressSignatureVerification;
+
         /// <summary>
         /// Specifies the display name to place in the bootstrapper application data manifest for the package.
         /// By default, ExePackages use the ProductName field from the version information, MsiPackages use the ProductName property, and MspPackages use the DisplayName patch metadata property.
@@ -106,7 +129,8 @@ namespace WixSharp.Bootstrapper
         {
             if (!base.IsIdSet())
             {
-                Name = System.IO.Path.GetFileName(SourceFile);
+                if (Name.IsEmpty())
+                    Name = System.IO.Path.GetFileName(SourceFile);
             }
         }
     }
@@ -131,21 +155,104 @@ namespace WixSharp.Bootstrapper
         abstract public XContainer[] ToXml();
     }
 
-    // /// <summary>
-    // /// The interface for the items that are XML-aware and capable of building
-    // /// XML elements based on the internal content.
-    // /// <para>YOu can use <see cref="IXmlBuilder"/> objects to extend WixSharp type system.
-    // /// See <see cref="Bundle.Items"/> for details.
-    // /// </para>
-    // /// </summary>
-    // public interface IXmlBuilder
-    // {
-    //     /// <summary>
-    //     /// Emits WiX XML.
-    //     /// </summary>
-    //     /// <returns></returns>
-    //     XContainer[] ToXml();
-    // }
+    /// <summary>
+    /// Protocol enum for ExePackage. It's an equivalent of WiX `BurnExeProtocolType`
+    /// </summary>
+    /// <seealso cref="WixSharp.StringEnum{T}" />
+    public class Protocol : StringEnum<Protocol>
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Protocol"/> class.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public Protocol(string value) : base(value)
+        {
+        }
+
+        /// <summary>
+        /// The executable package does not support a communication protocol.
+        /// </summary>
+        public static Protocol none = new Protocol("none");
+
+        /// <summary>
+        /// The executable package implements the Burn communication protocol.
+        /// </summary>
+        public static Protocol burn = new Protocol("burn");
+
+        /// <summary>
+        /// The executable package implements the .NET Framework v4.0 communication protocol.
+        /// </summary>
+        public static Protocol netfx4 = new Protocol("netfx4");
+    }
+
+    /// <summary>
+    /// Specialized class for embedding MSI into a EXE launcher and then adding it as ExePackage to the bundle..
+    /// </summary>
+    /// <seealso cref="WixSharp.Bootstrapper.ExePackage" />
+    public class MsiExePackage : ExePackage
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MsiExePackage"/> class.
+        /// </summary>
+        /// <param name="msi">The msi.</param>
+        public MsiExePackage(string msi)
+        {
+            var msi_exe = msi + ".exe";
+
+            (int exitCode, string output) = msi.CompleSelfHostedMsi(msi_exe);
+            if (exitCode != 0)
+            {
+                Compiler.OutputWriteLine("Error: " + output);
+                return;
+            }
+            SourceFile = msi_exe;
+            InstallArguments = "/i";
+            UninstallArguments = "/x";
+            RepairArguments = "/fa";
+            Compressed = true;
+            productCode = new MsiParser(msi).GetProductCode();
+        }
+
+        string productCode;
+
+        /// <summary>
+        /// Gets the product code.
+        /// </summary>
+        /// <value>
+        /// The product code.
+        /// </value>
+        public string ProductCode => productCode;
+
+        /// <summary>
+        /// Gets the detect condition variable.
+        /// </summary>
+        /// <value>
+        /// The detect condition variable.
+        /// </value>
+        public string DetectConditionVariable => $"{base.Name}State";
+
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
+        public new string Name
+        {
+            get => base.Name;
+            set
+            {
+                base.Name = value;
+                DetectCondition = $"({DetectConditionVariable} <> \"2\")"; // state
+                /*
+                    assignment: Saves the assignment type of the product: per-user (0), or per-machine (1).
+                    language: Saves the language of a matching product if found; empty otherwise.
+                    state: Saves the state of the product: advertised (1), absent (2), or locally installed (5).
+                    version: Saves the version of a matching product if found; 0.0.0.0 otherwise. This is the default.
+                 */
+            }
+        }
+    }
 
     /// <summary>
     /// Standard WiX ExePackage.
@@ -175,7 +282,20 @@ namespace WixSharp.Bootstrapper
         /// is absent the executable will be launched with no command-line arguments
         /// </summary>
         [Xml]
-        public string InstallCommand;
+        public string InstallArguments;
+
+        /// <summary>
+        /// Gets or sets the install command.
+        /// </summary>
+        /// <value>
+        /// The install command.
+        /// </value>
+        [Obsolete("Use `InstallArguments` instead")]
+        public string InstallCommand
+        {
+            set => InstallArguments = value;
+            get => InstallArguments;
+        }
 
         /// <summary>
         /// The command-line arguments to specify to indicate a repair. If the executable package can be repaired but does not require any
@@ -183,20 +303,52 @@ namespace WixSharp.Bootstrapper
         /// omit this attribute.
         /// </summary>
         [Xml]
-        public string RepairCommand;
+        public string RepairArguments;
+
+        /// <summary>
+        /// Gets or sets the repair command.
+        /// </summary>
+        /// <value>
+        /// The repair command.
+        /// </value>
+        [Obsolete("Use `RepairArguments` instead")]
+        public string RepairCommand
+        {
+            set => RepairArguments = value;
+            get => RepairArguments;
+        }
 
         /// <summary>
         /// The command-line arguments provided to the ExePackage during uninstall. If this attribute is absent the executable will be launched
         /// with no command-line arguments. To prevent an ExePackage from being uninstalled set the Permanent attribute to "yes".
         /// </summary>
         [Xml]
-        public string UninstallCommand;
+        public string UninstallArguments;
+
+        /// <summary>
+        /// Gets or sets the uninstall command.
+        /// </summary>
+        /// <value>
+        /// The uninstall command.
+        /// </value>
+        [Obsolete("Use `UninstallArguments` instead")]
+        public string UninstallCommand
+        {
+            set => UninstallArguments = value;
+            get => UninstallArguments;
+        }
 
         /// <summary>
         /// Indicates the package must be executed elevated. The default is "no".
         /// </summary>
         [Xml]
         public bool? PerMachine;
+
+        /// <summary>
+        /// Indicates the communication protocol the package supports for extended progress and error reporting. The default is `none`.
+        /// </summary>
+        [Xml]
+        public Protocol Protocol;
 
         /// <summary>
         /// A condition that determines if the package is present on the target system.
@@ -234,6 +386,7 @@ namespace WixSharp.Bootstrapper
         ///              ...
         /// </code>
         /// </example>
+        [Obsolete("Use `Payloads` instead.")]
         public RemotePayload[] RemotePayloads = new RemotePayload[0];
 
         /// <summary>
@@ -252,11 +405,10 @@ namespace WixSharp.Bootstrapper
             root.AddAttributes(this.Attributes)
                 .Add(this.MapToXmlAttributes());
 
-            if (Payloads.Any())
-                Payloads.ForEach(p => root.Add(p.ToXElement("Payload")));
-
-            if (RemotePayloads.Any())
-                RemotePayloads.ForEach(p => root.Add(p.ToXElement("RemotePayload")));
+            root.AddPayloads(this.Payloads);
+#pragma warning disable CS0618 // Type or member is obsolete
+            root.AddPayloads(this.RemotePayloads);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             foreach (var exitCode in ExitCodes)
             {
@@ -296,14 +448,18 @@ namespace WixSharp.Bootstrapper
         }
 
         /// <summary>
-        /// Specifies whether the bundle will show the UI authored into the msi package. The default is "no" which means all information is routed to
-        /// the bootstrapper application to provide a unified installation experience. If "yes" is specified the UI authored into the msi package will be
-        /// displayed on top of any bootstrapper application UI.
-        /// <para>Please note that WiX has a pending issue (https://github.com/wixtoolset/issues/issues/4921) associated with the problem
-        /// that prevents EmbeddedUI (ManagedUI) to be displayed even if 'DisplayInternalUI' is set to <c>true</c>. The issue is scheduled to be
-        /// resolved in WiX v4.x.</para>
+        /// Specifies whether the bundle will show the UI authored into the msi package. The default is "no" which means
+        /// all information is routed to the bootstrapper application to provide a unified installation experience.
+        /// If "yes" is specified the UI authored into the msi package will be displayed on top of any bootstrapper
+        /// application UI.
+        /// <para>Note, this field is only applicable for the stock bootstrapper applications.
+        /// This is because when standard BA is used, WixSharp compiler can detect DisplayInternalUI and inject a "magic"
+        /// attribute (bal:DisplayInternalUICondition="WixBundleAction = 6") into the bundle WXS definition. This condition
+        /// is evaluated at runtime by the standard BA and the msi UI is displayed accordingly.</para>
+        /// <para>However when custom UI is used, it is a responsibility of custom BA to manage msi UI visibility.
+        /// It is normally done by adjusting `PlanMsiPackageEventArgs.UiLevel` value of the specific MsiPackages from the
+        /// `BootstrapperApplication.PlanMsiPackage` event of the BA.</para>
         /// </summary>
-        [Xml]
         public bool? DisplayInternalUI;
 
         /// <summary>
@@ -350,8 +506,14 @@ namespace WixSharp.Bootstrapper
             root.AddAttributes(this.Attributes)
                 .Add(this.MapToXmlAttributes());
 
-            if (Payloads.Any())
-                Payloads.ForEach(p => root.Add(p.ToXElement("Payload")));
+            if (DisplayInternalUI == true)
+            {
+                // bal:DisplayInternalUICondition="WixBundleAction = 6"
+                XNamespace bal = "http://wixtoolset.org/schemas/v4/wxs/bal";
+                root.SetAttribute(bal + "DisplayInternalUICondition", "WixBundleAction = 6");
+            }
+
+            root.AddPayloads(this.Payloads);
 
             string props = MsiProperties + ";" + DefaultMsiProperties;
 
@@ -384,13 +546,6 @@ namespace WixSharp.Bootstrapper
         {
             SourceFile = path;
         }
-
-        /// <summary>
-        /// The identifier of another package that this one should be installed after. By default the After attribute is set to the previous sibling
-        /// package in the Chain or PackageGroup element. If this attribute is specified ensure that a cycle is not created explicitly or implicitly.
-        /// </summary>
-        [Xml]
-        public string After;
 
         /// <summary>
         /// The identifier to use when caching the package.
@@ -427,15 +582,6 @@ namespace WixSharp.Bootstrapper
         public bool? Slipstream;
 
         /// <summary>
-        ///  	By default, a Bundle will use the hash of a package to verify its contents. If this attribute is explicitly set to "no" and the package
-        ///  	is signed with an Authenticode signature the Bundle will verify the contents of the package using the signature instead. Therefore, the
-        ///  	default for this attribute could be considered to be "yes". It is unusual for "yes" to be the default of an attribute. In this case, the
-        ///  	default was changed in WiX v3.9 after experiencing real world issues with Windows verifying Authenticode signatures. Since the
-        ///  	Authenticode signatures are no more secure than hashing the packages directly, the default was changed.
-        /// </summary>
-        public bool? SuppressSignatureVerification;
-
-        /// <summary>
         /// When set to "yes", the Prereq BA will plan the package to be installed if its InstallCondition is "true" or empty.
         /// (http://schemas.microsoft.com/wix/BalExtension)
         /// </summary>
@@ -445,6 +591,7 @@ namespace WixSharp.Bootstrapper
         /// <summary>
         /// The remote payloads
         /// </summary>
+        [Obsolete("Use `Payloads` instead.")]
         public RemotePayload[] RemotePayloads = new RemotePayload[0];
 
         /// <summary>
@@ -463,11 +610,10 @@ namespace WixSharp.Bootstrapper
             root.AddAttributes(this.Attributes)
                 .Add(this.MapToXmlAttributes());
 
-            if (Payloads.Any())
-                Payloads.ForEach(p => root.Add(p.ToXElement("Payload")));
-
-            if (RemotePayloads.Any())
-                RemotePayloads.ForEach(p => root.Add(p.ToXElement("RemotePayload")));
+            root.AddPayloads(this.Payloads);
+#pragma warning disable CS0618 // Type or member is obsolete
+            root.AddPayloads(this.RemotePayloads);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             return new[] { root };
         }
@@ -516,6 +662,7 @@ namespace WixSharp.Bootstrapper
         /// <summary>
         /// The remote payloads
         /// </summary>
+        [Obsolete("Use `Payloads` instead.")]
         public RemotePayload[] RemotePayloads = new RemotePayload[0];
 
         /// <summary>
@@ -534,13 +681,26 @@ namespace WixSharp.Bootstrapper
             root.AddAttributes(this.Attributes)
                 .Add(this.MapToXmlAttributes());
 
-            if (Payloads.Any())
-                Payloads.ForEach(p => root.Add(p.ToXElement("Payload")));
-
-            if (RemotePayloads.Any())
-                RemotePayloads.ForEach(p => root.Add(p.ToXElement("RemotePayload")));
+            root.AddPayloads(this.Payloads);
+#pragma warning disable CS0618 // Type or member is obsolete
+            root.AddPayloads(this.RemotePayloads);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             return new[] { root };
+        }
+    }
+
+    internal static class PackagesExtensions
+    {
+        public static void AddPayloads(this XElement parent, Payload[] payloads)
+        {
+            if (payloads.Any())
+                payloads.ForEach(p => parent.Add(p.ToXElement(p.GetType().Name)));
+
+            if (payloads.Any(x => x.GetType().Name == "RemotePayload"))
+                throw new Exception(
+                    "`RemotePayload` entity is obsolete. Use concrete (RemotePayload derived) entities instead. " +
+                    "IE `ExePackagePayload` instead of `RemotePayload`");
         }
     }
 
@@ -660,6 +820,21 @@ namespace WixSharp.Bootstrapper
         /// force reboot on specified error code
         /// </summary>
         forceReboot,
+    }
+
+    public class Theme : StringEnum<Theme>
+    {
+        public Theme(string value) : base(value)
+        {
+        }
+
+        public static Theme hyperlinkLargeLicense = new Theme(nameof(hyperlinkLargeLicense));
+        public static Theme hyperlinkLicense = new Theme(nameof(hyperlinkLicense));
+        public static Theme hyperlinkSidebarLicense = new Theme(nameof(hyperlinkSidebarLicense));
+        public static Theme none = new Theme(nameof(none));
+        public static Theme standard = new Theme(nameof(standard));
+        public static Theme rtfLargeLicense = new Theme(nameof(rtfLargeLicense));
+        public static Theme rtfLicense = new Theme(nameof(rtfLicense));
     }
 
     public enum SearchResult

@@ -1,10 +1,11 @@
 #region Licence...
+
 /*
 The MIT License (MIT)
 
 Copyright (c) 2014 Oleg Shilo
 
-Permission is hereby granted, 
+Permission is hereby granted,
 free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -23,15 +24,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+
 #endregion
-using IO = System.IO;
-using System.Collections.Generic;
+
 using System;
+using System.Collections.Generic;
+using IO = System.IO;
+
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
 
 namespace WixSharp
 {
     /// <summary>
-    /// Defines native (un-managed) bootstrapper. The primary usage of <see cref="NativeBootstrapper"/> is to build bootstrappers for automatically installing .NET 
+    /// Defines native (un-managed) bootstrapper. The primary usage of <see cref="NativeBootstrapper"/> is to build bootstrappers for automatically installing .NET
     /// for executing MSIs containing managed Custom Actions (<see cref="ManagedAction"/>).
     /// <para></para>
     /// <remarks>
@@ -42,7 +47,7 @@ namespace WixSharp
     /// </list>
     /// </remarks>
     /// </summary>
-    /// <example>The following is an example of defining and building bootstrapper for installing MyProduct.msi and 
+    /// <example>The following is an example of defining and building bootstrapper for installing MyProduct.msi and
     /// .NET setup (dotnetfx.exe) as prerequisite installation.
     /// <para></para>
     /// <code>
@@ -63,11 +68,13 @@ namespace WixSharp
         /// </summary>
         /// <value>The prerequisite file.</value>
         public string PrerequisiteFile { set; get; }
+
         /// <summary>
         /// Gets or sets the primary setup file.
         /// </summary>
         /// <value>The primary setup file.</value>
         public string PrimaryFile { set; get; }
+
         /// <summary>
         /// Gets or sets the prerequisite registry key value. This value is used to determine if the <see cref="PrerequisiteFile"/> should be launched.
         /// <para>This value must comply with the following pattern: &lt;RegistryHive&gt;:&lt;KeyPath&gt;:&lt;ValueName&gt;.</para>
@@ -77,6 +84,7 @@ namespace WixSharp
         /// </summary>
         /// <value>The prerequisite registry key value.</value>
         public string PrerequisiteRegKeyValue { set; get; }
+
         /// <summary>
         /// Gets or sets the output file (bootsrtapper) name.
         /// </summary>
@@ -97,7 +105,7 @@ namespace WixSharp
         /// Gets or sets the optional arguments for the bootstrapper compiler.
         /// </summary>
         /// <value>The optional arguments.</value>
-        public string OptionalArguments{ set; get; }
+        public string OptionalArguments { set; get; }
 
         /// <summary>
         /// Builds bootstrapper file.
@@ -115,16 +123,16 @@ namespace WixSharp
 
             if (!IO.File.Exists(builderPath))
                 throw new Exception("Bootstrapper builder (" + builderFileName + ") cannot be found in any of the expected locations " +
-                                     "(environment variable WIXSHARP_DIR and WixSharp.dll location).");
+                                    "(environment variable WIXSHARP_DIR and WixSharp.dll location).");
 
             Compiler.Run(builderPath,
                          string.Format("\"/out:{0}\" \"/first:{1}\" \"/second:{2}\" \"/reg:{3}\" {4} {5}",
-                                        IO.Path.GetFullPath(OutputFile),
-                                        IO.Path.GetFullPath(PrerequisiteFile),
-                                        IO.Path.GetFullPath(PrimaryFile),
-                                        PrerequisiteRegKeyValue,
-                                        DoNotPostVerifyPrerequisite ? "/verify:no" : "/verify:yes",
-                                        OptionalArguments ?? ""));
+                                       IO.Path.GetFullPath(OutputFile),
+                                       IO.Path.GetFullPath(PrerequisiteFile),
+                                       IO.Path.GetFullPath(PrimaryFile),
+                                       PrerequisiteRegKeyValue,
+                                       DoNotPostVerifyPrerequisite ? "/verify:no" : "/verify:yes",
+                                       OptionalArguments ?? ""));
 
             var retval = IO.Path.GetFullPath(OutputFile);
             return IO.File.Exists(retval) ? retval : null;

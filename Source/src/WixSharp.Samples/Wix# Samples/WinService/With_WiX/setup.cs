@@ -1,5 +1,5 @@
 //css_dir ..\..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core;
 //css_ref System.Xml.Linq;
 //css_ref System.Xml;
@@ -26,6 +26,7 @@ class Script
                                      StopOn = SvcEvent.InstallUninstall_Wait,
                                      RemoveOn = SvcEvent.Uninstall_Wait,
                                      DelayedAutoStart = true,
+                                     Start = SvcStartType.auto,
                                      ServiceSid = ServiceSid.none,
                                      FirstFailureActionType = FailureActionType.restart,
                                      SecondFailureActionType = FailureActionType.restart,
@@ -58,6 +59,7 @@ class Script
                                      StopOn = SvcEvent.InstallUninstall_Wait,
                                      RemoveOn = SvcEvent.Uninstall_Wait,
                                      DelayedAutoStart = true,
+                                     Start = SvcStartType.auto,
                                      ServiceSid = ServiceSid.none,
                                      FirstFailureActionType = FailureActionType.restart,
                                      SecondFailureActionType = FailureActionType.restart,

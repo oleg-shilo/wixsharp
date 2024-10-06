@@ -14,18 +14,24 @@ class Script
         var version = Directory.GetFiles(root + @"\bin", "WixSharp.*.*.*.*.7z", SearchOption.TopDirectoryOnly)
                                .Select(x => new Version(Path.GetFileName(x).Replace("WixSharp.", "").Replace(".7z", "")))
                                .OrderByDescending(x => x)
-                               .FirstOrDefault();
+                               .FirstOrDefault()?.ToString();
 
         Console.WriteLine("Version: " + version);
 
-        string releaseNotes = ValidateReleaseNotes(version.ToString());
+        string releaseNotes = ValidateReleaseNotes(version);
 
-        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.nuspec", releaseNotes, version.ToString());
-        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.WPF.nuspec", releaseNotes, version.ToString());
-        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.bin.nuspec", releaseNotes, version.ToString());
-        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.lab.nuspec", releaseNotes, version.ToString());
-        //UpdateReleaseNotesAndVersion(@"E:\Galos\Projects\WixSharp\NuGet\WixSharp\WixSharp.ClrDialog.nuspec", releaseNotes, version.ToString());
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.nuspec", releaseNotes, version);
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.WPF.nuspec", releaseNotes, version);
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp.bin.nuspec", releaseNotes, version);
 
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.nuspec", releaseNotes, version);
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.WPF.nuspec", releaseNotes, version);
+        UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.bin.nuspec", releaseNotes, version);
+
+        UpdatePublish(root + @"\NuGet\WixSharp\publish.cmd", string.Join(".", version.Split('.').Take(3)));
+
+        CopyFiles(root + @"\bin\WixSharp", "WixSharp.MsiEventHost.exe", "lib");
+        CopyFiles(root + @"\bin\WixSharp", "nbsbuilder.exe", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.dll", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.xml", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.UI.dll", @"lib");
@@ -34,14 +40,8 @@ class Script
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.UI.WPF.xml", @"lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.Msi.dll", "lib");
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.Msi.xml", @"lib");
-        CopyFiles(root + @"\bin\WixSharp", "WixSharp.Lab.dll", "lib");
-        CopyFiles(root + @"\bin\WixSharp", "WixSharp.Lab.xml", "lib");
-        CopyFiles(root + @"\bin\WixSharp\Wix_bin\SDK", "BootstrapperCore.dll", "lib");
-        CopyFiles(root + @"\bin\WixSharp\Wix_bin\SDK", "BootstrapperCore.xml", "lib");
-        CopyFiles(root + @"\bin\WixSharp\Wix_bin\SDK", "Microsoft.Deployment.WindowsInstaller.dll", "lib");
-        CopyFiles(root + @"\bin\WixSharp\Wix_bin\SDK", "Microsoft.Deployment.WindowsInstaller.xml", "lib");
-        CopyFiles(root + @"\NuGet\MSBuild_SetEnvVar", "SetEnvVar.dll", "build");
-        CopyFiles(root + @"\src\WixSharp.Samples", "nbsbuilder.exe", "lib");
+
+        ValidateDllVersions(version.ToString());
 
         Console.WriteLine("Done!");
     }
@@ -54,12 +54,35 @@ class Script
         doc.Descendants().Where(x => x.Name.LocalName == "version").First().Value = version;
         doc.Descendants().Where(x => x.Name.LocalName == "releaseNotes").First().Value = releaseNotes;
 
-        var wixSharp_bin = doc.Descendants().Where(x => x.Name.LocalName == "dependency" && x.Attribute("id").Value == "WixSharp.bin").FirstOrDefault();
+        var wixSharp_bins = doc.Descendants()
+                               .Where(x => x.Name.LocalName == "dependency" &&
+                                          (x.Attribute("id").Value == "WixSharp.bin" || x.Attribute("id").Value == "WixSharp_wix4.bin"));
 
-        if (wixSharp_bin != null)
-            wixSharp_bin.Attribute("version").Value = version;
+        foreach (var dependencyElement in wixSharp_bins)
+            dependencyElement.Attribute("version").Value = version;
 
         doc.Save(specFile);
+    }
+
+    static void ValidateDllVersions(string version)
+    {
+        var versions = Directory.GetFiles(Environment.CurrentDirectory, "WixSharp*.dll", SearchOption.AllDirectories)
+                .Select(x => new { version = FileVersionInfo.GetVersionInfo(x).FileVersion, path = x });
+
+        if (versions.Select(x => version).Distinct().Count() > 1 || versions.FirstOrDefault().version != version)
+        {
+            Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            throw new Exception("ERROR: Inconsistent dll versions: \n" + string.Join('\n', versions));
+        }
+        else
+            Console.WriteLine("===\ndll versions: \n" + string.Join('\n', versions));
+    }
+
+    static void UpdatePublish(string batchFile, string version)
+    {
+        var lines = File.ReadAllLines(batchFile).Skip(1).ToList();
+        lines.Insert(0, $"set ver={version}");
+        File.WriteAllLines(batchFile, lines.ToArray());
     }
 
     static string ValidateReleaseNotes(string version)

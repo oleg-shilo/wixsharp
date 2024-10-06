@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Win32;
 
 namespace WixSharp
@@ -49,15 +49,15 @@ namespace WixSharp
     /// The following sample demonstrates how to use RegisterySearch in canonical WiX
     /// RegisterySearch and FileSearch use-case. the reg file:
     /// <code>
-    ///var project =
-    ///new Project("MyProduct",
-    ///new Dir(@"%ProgramFiles%\My Company\My Product",
-    ///new Property("SQL_BROWSER_LOCATION",
-    ///new RegistrySearch(RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\services\SQLBrowser", "ImagePath", RegistrySearchType.file,
-    ///new FileSearch("sqlbrowser.exe"))),
-    ///...
+    /// var project =
+    ///     new Project("MyProduct",
+    ///         new Dir(@"%ProgramFiles%\My Company\My Product",
+    ///             new Property("SQL_BROWSER_LOCATION",
+    ///                 new RegistrySearch(RegistryHive.LocalMachine, @"SYSTEM\CurrentControlSet\services\SQLBrowser", "ImagePath", RegistrySearchType.file,
+    ///                 new FileSearch("sqlbrowser.exe"))),
+    /// ...
     ///
-    ///Compiler.BuildMsi(project);
+    /// Compiler.BuildMsi(project);
     /// </code>
     /// </example>
     public class RegistrySearch : GenericNestedEntity, IGenericEntity
@@ -103,11 +103,10 @@ namespace WixSharp
         public RegistrySearchType Type;
 
         /// <summary>
-        /// Instructs the search to look in the 64-bit registry when the value is 'true'. When the
-        /// value is 'false', the search looks in the 32-bit registry. The default value is based on
-        /// the platform set by the -arch switch to candle.exe or the InstallerPlatform property in
-        /// a .wixproj MSBuild project: For x86 and ARM, the default value is 'false'. For x64 and
-        /// IA64, the default value is 'true'.
+        /// Overrides the default registry to search. The value `true` (always64) will force the search to look in the 64-bit
+        /// registry even when building for 32-bit. Simliarly, the value `false` (always32) will force the search to look in the
+        /// 32-bit registry even when building for 64-bit. The default value is default where the search will look in
+        /// the same registry as the bitness of the package..
         /// </summary>
         public bool? Win64;
 
@@ -155,7 +154,14 @@ namespace WixSharp
         /// <param name="context">The context.</param>
         public void Process(ProcessingContext context)
         {
-            base.Process(context, "RegistrySearch");
+            // var platform = (context.Project as Project)?.Platform;
+            var proj = (context.Project as Project);
+
+            if (this.Win64 == null && proj.Platform != null)
+                this.Win64 = proj.Is64Bit;
+
+            base.Process(context, "RegistrySearch")
+                .SetAttribute("Bitness", Win64.HasValue ? (Win64.Value ? "always64" : "always32") : null);
         }
     }
 }

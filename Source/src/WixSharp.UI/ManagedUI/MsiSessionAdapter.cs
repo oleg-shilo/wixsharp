@@ -1,8 +1,8 @@
 using System;
 using System.Drawing;
 using System.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.UI.Forms;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp
 {
@@ -166,8 +166,14 @@ namespace WixSharp
         /// <value>
         /// The log file.
         /// </value>
-        public string LogFile => MsiSession.GetLogFile().IsNotEmpty() ?
-            MsiSession.GetLogFile() : // may fail if the session is closed
-            Environment.GetEnvironmentVariable("MsiLogFileLocation");
+        public string LogFile
+        {
+            get
+            {
+                // may fail if the session is closed
+                var logFile = MsiSession.GetLogFile();
+                return logFile.IsNotEmpty() ? logFile : Environment.GetEnvironmentVariable("MsiLogFileLocation");
+            }
+        }
     }
 }

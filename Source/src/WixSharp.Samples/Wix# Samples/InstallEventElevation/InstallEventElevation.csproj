@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net472</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="*.cmd" />
+		<None Remove="CustomAction.config" />
+		<None Remove="*.exe" />
+		<None Remove="*.pdb" />
+		<None Remove="*.wixpdb" />
+		<None Remove="*.msi" />
+		<None Remove="readme.txt" />
+		<None Remove="*.cs.dll" />
+		<None Remove="WixSharp.CA.dll" />
+		<None Remove="wixsharp.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="4.0.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\WixSharp.Msi\WixSharp.Msi\WixSharp.Msi.csproj" />
+		<ProjectReference Include="..\..\..\WixSharp.UI.WPF\WixSharp.UI.WPF.csproj" />
+		<ProjectReference Include="..\..\..\WixSharp.UI\WixSharp.UI.csproj" />
+		<ProjectReference Include="..\..\..\WixSharp\WixSharp.csproj" />
+		<ProjectReference Include="..\..\..\WixSharp.MsiEventHost\WixSharp.MsiEventHost.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="System.Windows.Forms" />
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
+	</Target>
+
+</Project>

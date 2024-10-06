@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <!-- The configuration and platform will be used to determine which
          assemblies to include from solution and project documentation
@@ -28,15 +29,17 @@
     </SandcastlePath>
     <WorkingPath>
     </WorkingPath>
-    <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.7.2</FrameworkVersion>
     <PresentationStyle>VS2013</PresentationStyle>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.dll" />
-      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.Msi.dll" />
-      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.Msi.xml" />
-      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.UI.dll" />
-      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.UI.xml" />
-      <DocumentationSource sourceFile="..\..\bin\WixSharp\WixSharp.xml" />
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.dll" />
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.Msi.dll" />
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.Msi.xml" />
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.dll" />
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.xml" />
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.xml" />
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.WPF.dll" />
+      <DocumentationSource sourceFile="..\WixSharp.Samples\WixSharp.UI.WPF.xml" />
     </DocumentationSources>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="True">Namespace Summary: N/A</NamespaceSummaryItem>
@@ -45,7 +48,7 @@
       <NamespaceSummaryItem name="CSScriptLibrary.ThirdpartyLibraries.Rubenhak.Utils" isDocumented="True">Namespace Summary: N/A</NamespaceSummaryItem>
     </NamespaceSummaries>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
-    <SyntaxFilters>C#, Visual Basic</SyntaxFilters>
+    <SyntaxFilters>None</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <Preliminary>False</Preliminary>
@@ -67,6 +70,20 @@
       </Filter>
     </ApiFilter>
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <PlugInConfigurations>
+      <PlugInConfig id="Assembly Binding Redirection" enabled="True" xmlns="">
+        <configuration useGAC="false">
+  <assemblyBinding />
+  <ignoreIfUnresolved>
+    <assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" />
+    <assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" />
+    <assemblyIdentity name="Caliburn.Micro.Core" />
+  </ignoreIfUnresolved>
+</configuration>
+      </PlugInConfig>
+    </PlugInConfigurations>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
@@ -75,14 +92,26 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BootstrapperCore">
-      <HintPath>..\WixSharp.Samples\Wix_bin\SDK\BootstrapperCore.dll</HintPath>
+    <Reference Include="Caliburn.Micro">
+      <HintPath>..\WixSharp.UI.WPF\bin\Release\Caliburn.Micro.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Deployment.WindowsInstaller, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad">
-      <HintPath>..\WixSharp.Samples\Wix_bin\bin\Microsoft.Deployment.WindowsInstaller.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Caliburn.Micro.Core">
+      <HintPath>..\WixSharp.UI.WPF\bin\Release\Caliburn.Micro.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform">
+      <HintPath>..\WixSharp.UI.WPF\bin\Release\Caliburn.Micro.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform.Core">
+      <HintPath>..\WixSharp.UI.WPF\bin\Release\Caliburn.Micro.Platform.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="WixToolset.Dtf.WindowsInstaller">
+      <HintPath>..\WixSharp.Samples\Wix_bin\WixToolset.Dtf.WindowsInstaller.dll</HintPath>
+    </Reference>
+    <Reference Include="WixToolset.Mba.Core">
+      <HintPath>..\WixSharp.Samples\Wix_bin\WixToolset.Mba.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="'$(MSBuildRestoreSessionId)' != ''" />
   <!-- Import the SHFB build targets -->
-  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
+  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" Condition="'$(MSBuildRestoreSessionId)' == ''" />
 </Project>

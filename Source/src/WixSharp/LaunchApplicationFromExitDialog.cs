@@ -66,9 +66,8 @@ namespace WixSharp
                                     "Dialog=ExitDialog;" +
                                     "Control=Finish;" +
                                     "Event=DoAction;" +
-                                    "Value=LaunchApplication",
-                                value:
-                                    "WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed");
+                                    "Value=LaunchApplication;" +
+                                    "Condition=WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed");
             }
             else
             {
@@ -98,7 +97,7 @@ namespace WixSharp
             context.XParent
                 .Add(new XElement("CustomAction")
                     .SetAttribute("Id", "LaunchApplication")
-                    .SetAttribute("BinaryKey", "WixCA")
+                    .SetAttribute("BinaryRef", "Wix4UtilCA_X86")
                     .SetAttribute("DllEntry", "WixShellExec")
                     .SetAttribute("Impersonate", "yes"));
         }

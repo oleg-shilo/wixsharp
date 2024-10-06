@@ -1,12 +1,12 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 
 using System;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {
@@ -22,7 +22,7 @@ class Script
             Actions = new WixSharp.Action[]
             {
                 new ManagedAction(CustomActions.ShowGritting),
-                new WixQuietExecAction("notepad.exe", "[NOTEPAD_FILE]"),
+                // new WixQuietExecAction("notepad.exe", "[NOTEPAD_FILE]"),
             },
 
             Properties = new[]
@@ -33,7 +33,9 @@ class Script
             }
         };
 
-        project.PreserveTempFiles = true;
+        project.Include(WixExtension.UI);
+        // project.PreserveTempFiles = true;
+
         project.BuildMsi();
     }
 }

@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 #endregion Licence...
 
+using System;
 using IO = System.IO;
 
 namespace WixSharp

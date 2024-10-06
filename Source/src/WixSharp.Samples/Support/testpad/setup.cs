@@ -1,6 +1,5 @@
 //css_ref ..\..\WixSharp.dll;
 //css_ref System.Core.dll;
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Diagnostics;
 
@@ -12,6 +11,7 @@ using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
+using WixToolset.Dtf.WindowsInstaller;
 
 #pragma warning disable S1075 // URIs should not be hardcoded
 #pragma warning disable S1118 // Utility classes should not have public constructors
@@ -71,7 +71,7 @@ static class Script
         }
     }
 
-    static void issue_865()
+    static void Issue_865()
     {
         // Compiler.AutoGeneration.InstallDirDefaultId = "CommonAppDataFolder";
 
@@ -84,7 +84,7 @@ static class Script
         Console.WriteLine(wix);
     }
 
-    static void issue_386()
+    static void Issue_386()
     {
         var project =
             new ManagedProject("ElevatedSetup",
@@ -121,7 +121,7 @@ static class Script
         Compiler.BuildMsi(project);
     }
 
-    static void issue_825()
+    static void Issue_825()
     {
         var client = new Feature("Feature_Client");
         var server = new Feature("Feature_Server");
@@ -150,7 +150,7 @@ static class Script
         project.BuildMsiCmd();
     }
 
-    static void issue_825_a()
+    static void Issue_825_a()
     {
         var client = new Feature("Feature_Client");
         var server = new Feature("Feature_Server");
@@ -173,7 +173,7 @@ static class Script
         project.BuildMsi();
     }
 
-    static void issue_374()
+    static void Issue_374()
     {
         string inDir = @"C:\temp\wixIn\";
         string outDir = @"C:\temp\wixOut\";
@@ -195,7 +195,7 @@ static class Script
         Compiler.BuildMsi(project);
     }
 
-    static void issue_609()
+    static void Issue_609()
     {
         AutoElements.DisableAutoKeyPath = true;
 
@@ -207,7 +207,7 @@ static class Script
         project.BuildMsi();
     }
 
-    static void issue_377()
+    static void Issue_377()
     {
         var project = new Project("someProject",
             new Dir(new Id("someDirId"), "someDirPath",
@@ -224,7 +224,7 @@ static class Script
         Compiler.BuildMsi(project);
     }
 
-    static void issue_606()
+    static void Issue_606()
     {
         var aisFeature = new Feature("AIS", "Allied Information Services")
         {
@@ -263,7 +263,7 @@ static class Script
         project.BuildMsi();
     }
 
-    static void issue_551()
+    static void Issue_551()
     {
         var bundle = new Bundle("MyBundle", new PackageGroupRef("NetFx471Web"))
         {
@@ -280,26 +280,7 @@ static class Script
         bundle.BuildCmd();
     }
 
-    static void issue_440()
-    {
-        Compiler.WixLocation = @"E:\Projects\WixSharp\Support\issue_#440\wix_error\packages\WiX.4.0.0.5512-pre\tools";
-        Compiler.WixSdkLocation = @"E:\Projects\WixSharp\Support\issue_#440\wix_error\packages\WiX.4.0.0.5512-pre\tools\sdk";
-
-        var project = new ManagedProject("TestMsi")
-        {
-            GUID = Guid.NewGuid(),
-            PreserveTempFiles = true,
-            UI = WUI.WixUI_ProgressOnly,
-            Dirs = new[]
-            {
-                new Dir(@"temp", new Dir(@"wixIn", new WixSharp.File(@"E:\Projects\WixSharp\Source\src\WixSharp.Samples\Support\testpad\setup.cs")))
-            }
-        };
-
-        Compiler.BuildMsi(project);
-    }
-
-    static void issue_378()
+    static void Issue_378()
     {
         AutoElements.DisableAutoUserProfileRegistry = true;
         // Compiler.LightOptions += " -sice:ICE38";
@@ -315,7 +296,7 @@ static class Script
         project.BuildMsi();
     }
 
-    static void issue_298()
+    static void Issue_298()
     {
         var project = new Project("MyProduct",
             new Dir(@"%ProgramFiles%\My Company\My Product",
@@ -342,7 +323,7 @@ static class Script
         project.BuildMsiCmd();
     }
 
-    static void issue_298b()
+    static void Issue_298b()
     {
         var project =
             new Project("MyProduct",
@@ -359,7 +340,7 @@ static class Script
         // project.BuildMsiCmd();
     }
 
-    static void issue_1114()
+    static void Issue_1114()
     {
         var project = new ManagedProject("MyProductSetup",
                 new Dir(@"%ProgramFiles%\MyCompany\MyProduct\MyApp",
@@ -370,23 +351,48 @@ static class Script
         project.BuildMsi();
     }
 
+    static void Wix4()
+    {
+        var feature1 = new Feature("feature1")
+        {
+            Condition = new FeatureCondition("PROP1 = 1", level: 2)
+        };
+
+        var proj = new Project("MyProduct",
+                               new Dir(@"%ProgramFiles%\My Company\My Product",
+                                   new File("setup.cs")
+                                   {
+                                       Feature = feature1
+                                   }));
+
+        var cmd = proj.BuildMsiCmd();
+    }
+
 #pragma warning disable
 
     static public void Main()
     {
+        // var file = @"E:\PrivateData\Galos\Projects\WixSharp\Source\src\WixSharp.Samples\Support\testpad\test_asm.dll";
+
+        // file = @"E:\PrivateData\Galos\Projects\WixSharp\Source\src\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll";
+        //
+        // var asm = System.Reflection.Assembly.ReflectionOnlyLoad(System.IO.File.ReadAllBytes(file));
+
+        // HiTeach_MSI.Program.Main1(); return;
+        // MsiInstaller.MyMsi.Build(); return;
+        Wix4(); return;
         issue_1075(); return;
-        issue_298(); return;
-        issue_1114(); return;
-        issue_865(); return;
-        issue_825(); return;
-        issue_609(); return;
-        issue_551(); return;
-        issue_606(); return;
-        issue_377(); return;
-        issue_440(); return;
-        issue_386(); return;
-        issue_378(); return;
-        issue_374(); return;
+        Issue_298(); return;
+        Issue_1114(); return;
+        Issue_865(); return;
+        Issue_825(); return;
+        Issue_609(); return;
+        Issue_551(); return;
+        Issue_606(); return;
+        Issue_377(); return;
+        Issue_386(); return;
+        Issue_378(); return;
+        Issue_374(); return;
         // Compiler.AutoGeneration.LegacyDefaultIdAlgorithm = true;
 
         var serverFeature = new Feature("Server");

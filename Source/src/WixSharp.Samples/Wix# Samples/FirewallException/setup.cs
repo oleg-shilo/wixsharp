@@ -1,14 +1,18 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
 using System.Text;
 using WixSharp;
+using WixSharp.CommonTasks;
 
 class Script
 {
     static public void Main()
     {
+        // set Wix 5.0 as a default WiX Toolset version
+        WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.0");
+
         var project =
             new Project("MyProduct",
                 new FirewallException("notepad")  //global exception
@@ -21,6 +25,7 @@ class Script
                     new File(@"Files\Bin\MyApp.exe",
                         new FirewallException("MyApp") //file specific exception
                         {
+                            AttributesDefinition = "Grouping=Contoso",
                             //Scope = FirewallExceptionScope.any,
                             RemoteAddress = "127.0.0.1, 127.0.0.2, 127.0.0.3".Split(',')
                         })));
@@ -28,13 +33,12 @@ class Script
         project.UI = WUI.WixUI_InstallDir;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.EmitConsistentPackageId = true;
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
-        // Localization technique from the #748 "error for FirewallException"
+        // Localization technique from the #748 "error for FirewallException
         project.Codepage = "1251";
-        // project.Language = "ru-ru;en-US"; // wix searches for the missing strings in the en-US culture.
-        project.Language = "ru-ru";
-        project.LocalizationFile = "FirewallExtension.ru.wxl";
+        project.Language = "ru-RU";
+        project.LocalizationFile = "FirewallExtension.ru-RU.wxl"; // provided by the rus-speaking user
         project.Encoding = Encoding.UTF8;
 
         project.BuildMsi();

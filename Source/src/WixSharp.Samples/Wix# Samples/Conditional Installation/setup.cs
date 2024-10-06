@@ -1,10 +1,10 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {
@@ -41,7 +41,7 @@ class Script
         project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
         project.UI = WUI.WixUI_ProgressOnly;
         project.OutFileName = "setup";
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project);
     }

@@ -1,7 +1,8 @@
-using Microsoft.Deployment.WindowsInstaller;
+using System;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Controls;
+using WixToolset.Dtf.WindowsInstaller;
 
 public static class ProductActivationDialogSetup
 {
@@ -11,7 +12,8 @@ public static class ProductActivationDialogSetup
 
         InjectProductActivationDialog(project);
 
-        Compiler.PreserveTempFiles = true;
+        // Compiler.PreserveTempFiles = true;
+
         Compiler.BuildMsi(project);
     }
 
@@ -53,5 +55,7 @@ public static class ProductActivationDialogSetup
         customUI.On(nextDialog, Buttons.Back, new ShowDialog(prevDialog, Condition.ClrDialog_BackPressed));
 
         project.CustomUI = customUI;
+
+        project.WixVariables.Add("WixUICostingPopupOptOut", "0"); // required for WiX4
     }
 }

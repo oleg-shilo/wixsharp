@@ -1,6 +1,6 @@
 //css_dir E:\PrivateData\Galos\Projects\WixSharp\Source\src\WixSharp.Samples\Wix# Samples\Registry;
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
 using System.Diagnostics;
@@ -51,7 +51,9 @@ class Script
         //                     .ForEach(x => x.Add(WixExtension.Util.XElement("PermissionEx",
         //                                                                    "User=[WIX_ACCOUNT_USERS]; GenericAll=yes; CreateSubkeys=yes")));
         //              };
-        project.PreserveTempFiles = true;
+
+        // project.PreserveTempFiles = true;
+
         project.BuildMsi();
     }
 }

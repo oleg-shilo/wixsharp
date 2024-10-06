@@ -1,5 +1,6 @@
 //css_dir ..\..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Mba.Core.dll;
 //css_ref WixSharp.UI;
 //css_ref System.Core;
 //css_ref System.Xml;
@@ -10,9 +11,9 @@ using System.Linq;
 using System.Security.Principal;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 public static class Script
 {
@@ -56,6 +57,7 @@ public static class Script
         project.UIInitialized += Project_UIInitialized;
 
         project.Load += project_Load;
+
         project.BeforeInstall += project_BeforeInstall;
         project.AfterInstall += project_AfterInstall;
 
@@ -63,6 +65,10 @@ public static class Script
 
         project.BeforeInstall += args =>
         {
+            var encryptedProp = args.Session["user_pwrd"];
+            var dencryptedProp = encryptedProp.ToUpper();
+            args.Session["user_pwrd"] = dencryptedProp;
+
             if (!args.IsUninstalling)
                 Tasks.StopService("some_service", throwOnError: false);
         };
@@ -74,9 +80,10 @@ public static class Script
         };
 
         // project.UnelevateAfterInstallEvent(); // just for demo purposes
+        Compiler.AutoGeneration.AddManagedCustomActionDependencies = true;
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project);
     }
@@ -95,6 +102,13 @@ public static class Script
 
     static void Project_UIInitialized(SetupEventArgs e)
     {
+        Func<string, string> localizationRoutine = e.ManagedUI.Shell.MsiRuntime().Localize;
+
+        MessageBox.Show("This is the localized text:\n[WelcomeDlgDescription]".LocalizeWith(localizationRoutine),
+                        "Message localization example.");
+
+        ////////////////////////////
+
         // just an example of restarting the setup UI elevated. Old fashioned but... convenient and reliable.
         if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
         {
@@ -125,7 +139,7 @@ public static class Script
 
     static void project_UIInit(SetupEventArgs e)
     {
-        MessageBox.Show(e.Session.GetMainWindow(), "Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - UIInit");
+        MessageBox.Show(e.Session.GetMainWindow(), "Hello World! \nCLR: v" + Environment.Version + ", \nOS: " + Utils.GetWinVer(), "Managed Setup - UIInit");
         e.Session["TOOLSDIR"] = @"C:\Temp\Doc";
         //set custom installdir
         //This event is fired before Wix# ManagedUI loaded (disabled for demo purposes)

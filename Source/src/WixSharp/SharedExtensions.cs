@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 #if WIXSHARP_MSI
 
 namespace WixSharp.Msi
 #else
+
 namespace WixSharp
 #endif
 {
@@ -52,57 +55,85 @@ namespace WixSharp
         /// <returns></returns>
         public static string AsWixVarToPath(this string path)
         {
-            switch (path)
+            // https://wixtoolset.org/docs/schema/wxs/standarddirectorytype/
+
+            var map = new Dictionary<string, string>
             {
-                case "AdminToolsFolder":
-                    return Environment.SpecialFolder.ApplicationData.ToPath().PathJoin(@"Microsoft\Windows\Start Menu\Programs\Administrative Tools");
+                { "AdminToolsFolder", Environment.SpecialFolder.ApplicationData.ToPath().PathJoin(@"Microsoft\Windows\Start Menu\Programs\Administrative Tools") },
+                { "AppDataFolder", Environment.SpecialFolder.ApplicationData.ToPath() },
 
-                case "AppDataFolder": return Environment.SpecialFolder.ApplicationData.ToPath();
-                case "CommonAppDataFolder": return Environment.SpecialFolder.CommonApplicationData.ToPath();
+                { "CommonAppDataFolder", Environment.SpecialFolder.CommonApplicationData.ToPath() },
+                { "CommonFilesFolder", Environment.SpecialFolder.CommonProgramFiles.ToPath() },
+                { "CommonFiles64Folder", Environment.SpecialFolder.CommonProgramFiles.ToPath().Replace(" (x86)", "") },
 
-                case "CommonFiles64Folder": return Environment.SpecialFolder.CommonProgramFiles.ToPath().Replace(" (x86)", "");
-                case "CommonFilesFolder": return Environment.SpecialFolder.CommonProgramFiles.ToPath();
+                //{ "CommonFiles6432Folder", ????Environment.SpecialFolder.CommonProgramFiles.ToPath().Replace(" (x86)", "") },
 
-                case "DesktopFolder": return Environment.SpecialFolder.Desktop.ToPath();
-                case "FavoritesFolder": return Environment.SpecialFolder.Favorites.ToPath();
+                { "DesktopFolder", Environment.SpecialFolder.Desktop.ToPath() },
+                { "FavoritesFolder", Environment.SpecialFolder.Favorites.ToPath() },
+                { "FontsFolder", Environment.SpecialFolder.System.ToPath().PathGetDirName().PathJoin("Fonts") },
+                { "LocalAppDataFolder", Environment.SpecialFolder.LocalApplicationData.ToPath() },
+                { "MyPicturesFolder", Environment.SpecialFolder.MyPictures.ToPath() },
+                
+                //{ "NetHoodFolder", ???Environment.SpecialFolder.MyPictures.ToPath() },
+                
+                { "PersonalFolder", Environment.SpecialFolder.Personal.ToPath() },
+                
+                //{ "PrintHoodFolder", ???Environment.SpecialFolder.MyPictures.ToPath() },
 
-                case "ProgramFiles64Folder": return Environment.SpecialFolder.ProgramFiles.ToPath().Replace(" (x86)", "");
-                case "ProgramFilesFolder": return Environment.SpecialFolder.ProgramFiles.ToPath();
+                { "ProgramFilesFolder", Environment.SpecialFolder.ProgramFiles.ToPath() },
+                { "ProgramFiles64Folder", Environment.SpecialFolder.ProgramFiles.ToPath().Replace(" (x86)", "") },
+                
+                //{ "ProgramFiles6432Folder", ???Environment.SpecialFolder.ProgramFiles.ToPath().Replace(" (x86)", "") },
+                
+                { "ProgramMenuFolder", Environment.SpecialFolder.Programs.ToPath() },
 
-                case "MyPicturesFolder": return Environment.SpecialFolder.MyPictures.ToPath();
-                case "SendToFolder": return Environment.SpecialFolder.SendTo.ToPath();
-                case "LocalAppDataFolder": return Environment.SpecialFolder.LocalApplicationData.ToPath();
-                case "PersonalFolder": return Environment.SpecialFolder.Personal.ToPath();
+                //{ "RecentFolder", ???Environment.SpecialFolder.Programs.ToPath() },
+                
+                { "SendToFolder", Environment.SpecialFolder.SendTo.ToPath() },
+                { "StartMenuFolder", Environment.SpecialFolder.StartMenu.ToPath() },
+                { "StartupFolder", Environment.SpecialFolder.Startup.ToPath() },
 
-                case "StartMenuFolder": return Environment.SpecialFolder.StartMenu.ToPath();
-                case "StartupFolder": return Environment.SpecialFolder.Startup.ToPath();
-                case "ProgramMenuFolder": return Environment.SpecialFolder.Programs.ToPath();
+                // WiX4 introduced new constants `PFiles64` and `PFiles`
+                { "PFiles", Environment.SpecialFolder.ProgramFiles.ToPath() },
+                { "PFiles64", "ProgramW6432".GetEnvVar(defaultValue: Environment.SpecialFolder.ProgramFiles.ToPath()) }, // ProgramW6432 returns PF64 even if it is called from the 32-bit process
+                
+                { "SystemFolder", Is64OS() ? Path.Combine(Environment.SpecialFolder.System.ToPath().PathGetDirName(), "SysWow64") : Environment.SpecialFolder.System.ToPath() },
+                { "System16Folder", Path.Combine(Environment.SpecialFolder.System.ToPath().PathGetDirName(), "System") },
+                { "System64Folder", Environment.SpecialFolder.System.ToPath() },
+                
+                //{ "System6432Folder", ???Environment.SpecialFolder.System.ToPath() },
+                
+                { "TempFolder", Path.GetTempPath() },
+                { "TemplateFolder", Environment.SpecialFolder.Templates.ToPath() },
+                { "WindowsFolder", Environment.SpecialFolder.System.ToPath().PathGetDirName() },
+                { "WindowsVolume", Path.GetPathRoot(Environment.SpecialFolder.Programs.ToPath()) },
+            };
 
-                case "System16Folder": return Path.Combine("WindowsFolder".AsWixVarToPath(), "System");
-                case "System64Folder": return Environment.SpecialFolder.System.ToPath();
-                case "SystemFolder": return Is64OS() ? Path.Combine("WindowsFolder".AsWixVarToPath(), "SysWow64") : Environment.SpecialFolder.System.ToPath();
-
-                case "TemplateFolder": return Environment.SpecialFolder.Templates.ToPath();
-                case "WindowsVolume": return Path.GetPathRoot(Environment.SpecialFolder.Programs.ToPath());
-                case "WindowsFolder": return Environment.SpecialFolder.System.ToPath().PathGetDirName();
-                case "FontsFolder": return Environment.SpecialFolder.System.ToPath().PathGetDirName().PathJoin("Fonts");
-                case "TempFolder": return Path.GetTempPath();
-                // case "TempFolder": return Path.GetDirectoryName(Environment.SpecialFolder.Desktop.ToPath().Ge, @"Local Settings\Temp");
-                default:
-                    return path;
-            }
+            var wix3Constant = path; // coming from old WiX3 targeting WixSharp user project
+            var wix4Constant = path + "Folder";
+            if (map.ContainsKey(wix3Constant))
+                return map[wix3Constant];
+            else if (map.ContainsKey(wix4Constant))
+                return map[wix4Constant];
+            else
+                return path;
         }
 
-#pragma warning disable CS0419 // Ambiguous reference in cref attribute
+        /// <summary>
+        /// Gets the environment variable by the `name`.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns></returns>
+        public static string GetEnvVar(this string name, string defaultValue = null)
+            => Environment.GetEnvironmentVariable(name) ?? defaultValue;
 
         /// <summary>
-        /// Equivalent of <see cref="Path.Combine"/>.
+        /// Equivalent of <see cref="Path.Combine(string[])"/>.
         /// </summary>
         /// <param name="path"></param>
         /// <param name="items"></param>
         /// <returns></returns>
-#pragma warning restore CS0419 // Ambiguous reference in cref attribute
-
         public static string PathJoin(this string path, params string[] items)
         {
             foreach (var item in items)

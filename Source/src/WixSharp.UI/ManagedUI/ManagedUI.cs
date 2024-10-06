@@ -2,6 +2,8 @@ using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -10,6 +12,7 @@ using System.Xml.Linq;
 using WixSharp.CommonTasks;
 using WixSharp.UI.Forms;
 using WixSharp.UI.ManagedUI;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp
 {
@@ -103,12 +106,25 @@ namespace WixSharp
         /// <param name="project">The project.</param>
         public void BeforeBuild(ManagedProject project)
         {
-            var file = LocalizationFileFor(project);
+            // it's important to use full path for `file` as CerrentDir will be reset before compiling msi
+            // and `file` is the only path that user may specify as relative.
+            // All other bin files are always returned as full path already (e.g. LicenceFileFor)
+            var file = LocalizationFileFor(project).PathGetFullPath();
             ValidateUITextFile(file);
-            project.AddBinary(new Binary(new Id("WixSharp_UIText"), file));
-            project.AddBinary(new Binary(new Id("WixSharp_LicenceFile"), LicenceFileFor(project)));
-            project.AddBinary(new Binary(new Id("WixUI_Bmp_Dialog"), DialogBitmapFileFor(project)));
-            project.AddBinary(new Binary(new Id("WixUI_Bmp_Banner"), DialogBannerFileFor(project)));
+
+            // The project may already have tis element injected.
+            // But calling "extraction" methods like `DialogBitmapFileFor` will ensure binary files exist.
+            // Otherwise they might be collected by the cleaning temp files routines.
+            void addBinary(string id, string path)
+            {
+                if (!project.Binaries.Any(x => x.Id == id))
+                    project.AddBinary(new Binary(new Id(id), path));
+            };
+
+            addBinary("WixSharp_UIText", file);
+            addBinary("WixSharp_LicenceFile", LicenceFileFor(project));
+            addBinary("WixSharpUI_Bmp_Dialog", DialogBitmapFileFor(project));
+            addBinary("WixSharpUI_Bmp_Banner", DialogBannerFileFor(project));
         }
 
         /// <summary>
@@ -144,24 +160,120 @@ namespace WixSharp
         /// </value>
         public string InstallDirId { get; set; }
 
-        internal string LocalizationFileFor(Project project)
+        /// <summary>
+        /// Gets the localization files location.
+        /// </summary>
+        /// <value>
+        /// The localization files location.
+        /// </value>
+        public static string LocalizationFilesLocation
         {
-            return UIExtensions.UserOrDefaultContentOf(project.LocalizationFile, project.SourceBaseDir, project.OutDir, project.Name + ".wxl", Resources.WixUI_en_us);
+            get
+            {
+                var versionedDir = Environment.SpecialFolder.CommonApplicationData.GetPath()
+                                              .PathCombine("WixSharp", typeof(ManagedUI).Assembly.GetVersion());
+
+                if (!Directory.Exists(versionedDir))
+                {
+                    versionedDir.EnsureDirExists();
+
+                    var zipFile = versionedDir.PathCombine("wixui.zip");
+
+                    System.IO.File.WriteAllBytes(zipFile, Resources.wixui_zip);
+                    ZipFile.ExtractToDirectory(zipFile, versionedDir);
+
+                    foreach (var oldVersionedDir in Directory.GetDirectories(versionedDir.PathGetDirName()).Where(x => x != versionedDir))
+                        oldVersionedDir.DeleteIfExists();
+                }
+
+                return versionedDir;
+            }
         }
 
-        internal string LicenceFileFor(Project project)
+        internal static string LocalizationFileFor(Project project)
+        {
+            // return UIExtensions.UserOrDefaultContentOf(project.LocalizationFile, project.SourceBaseDir, project.OutDir, project.Name + ".wxl", Resources.WixUI_en_us);
+
+            // - if localization file specified by the user then just return it but merge with
+            //   the stock localization if found.
+            // - if user did not specify it then find the stock localization file (in SDK folder) for the language
+            //   of the project
+            // - if the stock localization file cannot be found then use the `en-US` localization data from the
+            //   WixSharp.UI.dll embedded resource.
+
+            var stockWxlFileForTheLanguage = LocalizationFilesLocation.PathCombine($"WixUI_{project.Language}.wxl");
+
+            var localizationFile = project.SourceBaseDir.PathCombine(project.LocalizationFile);
+
+            if (stockWxlFileForTheLanguage.FileExists())
+            {
+                if (localizationFile.FileExists())
+                {
+                    try
+                    {
+                        var xml = System.IO.File.ReadAllText(stockWxlFileForTheLanguage);
+
+                        // the stock WXL file is in the old format. We need to convert it to the new format
+                        xml = xml.Replace(
+                            "http://schemas.microsoft.com/wix/2006/localization",
+                            "http://wixtoolset.org/schemas/v4/wxl");
+
+                        var baseLocalization = XDocument.Parse(xml);
+                        var userLocalization = XDocument.Load(localizationFile);
+
+                        var replacementIds = userLocalization.Root.Elements().Select(x => x.Attr("Id"));
+
+                        baseLocalization.Root
+                            .Elements()
+                            .Where(x => replacementIds.Contains(x.Attr("Id")))
+                            .ForEach(x => x.Remove());
+
+                        userLocalization.Root
+                            .Elements()
+                            .ForEach(x =>
+                            {
+                                x.Remove();
+                                baseLocalization.Root.Add(x);
+                            });
+
+                        var wxlFile = project.OutDir.PathCombine(project.Name + ".wxl");
+                        baseLocalization.Save(wxlFile);
+                        return wxlFile;
+                    }
+                    catch (Exception e)
+                    {
+                        Compiler.OutputWriteLine(
+                            $"Warning: Cannot merge user localization file ({project.LocalizationFile}) with " +
+                            $"the stock WXL file `{localizationFile}`. \n {e.Message} ");
+                        return localizationFile;
+                    }
+                }
+                else
+                    return stockWxlFileForTheLanguage;
+            }
+            else
+            {
+                var wxlFile = project.OutDir.PathCombine(project.Name + ".wxl");
+
+                System.IO.File.WriteAllBytes(wxlFile, Resources.WixUI_en_us);
+
+                return wxlFile;
+            }
+        }
+
+        internal static string LicenceFileFor(Project project)
         {
             return UIExtensions.UserOrDefaultContentOf(project.LicenceFile, project.SourceBaseDir, project.OutDir, project.Name + ".licence.rtf", Resources.WixSharp_LicenceFile);
         }
 
-        internal string DialogBitmapFileFor(Project project)
+        internal static string DialogBitmapFileFor(Project project)
         {
-            return UIExtensions.UserOrDefaultContentOf(project.BackgroundImage, project.SourceBaseDir, project.OutDir, project.Name + ".dialog_bmp.png", Resources.WixUI_Bmp_Dialog);
+            return UIExtensions.UserOrDefaultContentOf(project.BackgroundImage, project.SourceBaseDir, project.OutDir, project.Name + ".dialog_bmp.png", Resources.WixSharpUI_Bmp_Dialog);
         }
 
-        internal string DialogBannerFileFor(Project project)
+        internal static string DialogBannerFileFor(Project project)
         {
-            return UIExtensions.UserOrDefaultContentOf(project.BannerImage, project.SourceBaseDir, project.OutDir, project.Name + ".dialog_banner.png", Resources.WixUI_Bmp_Banner);
+            return UIExtensions.UserOrDefaultContentOf(project.BannerImage, project.SourceBaseDir, project.OutDir, project.Name + ".dialog_banner.png", Resources.WixSharpUI_Bmp_Banner);
         }
 
         /// <summary>
@@ -210,7 +322,7 @@ namespace WixSharp
         /// <param name="resourcePath">The resource path.</param>
         /// <param name="uiLevel">The UI level.</param>
         /// <returns></returns>
-        /// <exception cref="Microsoft.Deployment.WindowsInstaller.InstallCanceledException"></exception>
+        /// <exception cref="WixToolset.Dtf.WindowsInstaller.InstallCanceledException"></exception>
         public bool Initialize(Session session, string resourcePath, ref InstallUIOptions uiLevel)
         {
             if (session != null && (session.IsUninstalling() || uiLevel.IsBasic()))
@@ -233,26 +345,36 @@ namespace WixSharp
 
                     var uiThread = new Thread(() =>
                     {
-                        session["WIXSHARP_MANAGED_UI"] = System.Reflection.Assembly.GetExecutingAssembly().ToString();
-                        shell = new UIShell(); //important to create the instance in the same thread that call ShowModal
-                        shell.ShowModal(
-                            new MsiRuntime(session)
-                            {
-                                StartExecute = () => startEvent.Set(),
-                                CancelExecute = () =>
+                        try
+                        {
+                            session["WIXSHARP_MANAGED_UI"] = System.Reflection.Assembly.GetExecutingAssembly().ToString();
+                            shell = new UIShell(); //important to create the instance in the same thread that call ShowModal
+                            shell.ShowModal(
+                                new MsiRuntime(session)
                                 {
-                                    // NOTE: IEmbeddedUI interface has no way to cancel the installation, which has been started
-                                    // (e.g. ProgressDialog is displayed). What is even worse is that UI can pass back to here
-                                    // a signal the user pressed 'Cancel' but nothing we can do with it. Install is already started
-                                    // and session object is now invalid.
-                                    // To solve this we use this work around - set a unique "cancel request mutex" form here
-                                    // and ManagedProjectActions.CancelRequestHandler built-in CA will pick the request and yield
-                                    // return code UserExit.
-                                    cancelRequest = new Mutex(true, "WIXSHARP_UI_CANCEL_REQUEST." + upgradeCode);
-                                }
-                            },
-                            this);
-                        uiExitEvent.Set();
+                                    StartExecute = () => startEvent.Set(),
+                                    CancelExecute = () =>
+                                    {
+                                        // NOTE: IEmbeddedUI interface has no way to cancel the installation, which has been started
+                                        // (e.g. ProgressDialog is displayed). What is even worse is that UI can pass back to here
+                                        // a signal the user pressed 'Cancel' but nothing we can do with it. Install is already started
+                                        // and session object is now invalid.
+                                        // To solve this we use this work around - set a unique "cancel request mutex" form here
+                                        // and ManagedProjectActions.CancelRequestHandler built-in CA will pick the request and yield
+                                        // return code UserExit.
+                                        cancelRequest = new Mutex(true, "WIXSHARP_UI_CANCEL_REQUEST." + upgradeCode);
+                                    }
+                                },
+                                this);
+                            uiExitEvent.Set();
+                        }
+                        catch (Exception e)
+                        {
+                            ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
+                            session.Log("ManagedUI unhandled Exception: " + e);
+
+                            uiExitEvent.Set();
+                        }
                     });
 
                     uiThread.SetApartmentState(ApartmentState.STA);
@@ -261,7 +383,7 @@ namespace WixSharp
                     int waitResult = WaitHandle.WaitAny(new[] { startEvent, uiExitEvent });
                     if (waitResult == 1)
                     {
-                        //UI exited without starting the install. Cancel the installation.
+                        // UI exited without starting the install. Cancel the installation.
                         throw new InstallCanceledException();
                     }
                     else
@@ -273,8 +395,13 @@ namespace WixSharp
                         return true;
                     }
                 }
+                catch (InstallCanceledException)
+                {
+                    throw;
+                }
                 catch (Exception e)
                 {
+                    ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
                     session.Log("Cannot attach ManagedUI: " + e);
                     throw;
                 }

@@ -27,6 +27,8 @@ THE SOFTWARE.
 
 #endregion Licence...
 
+using System.Xml.Linq;
+
 namespace WixSharp
 {
     /// <summary>
@@ -173,6 +175,8 @@ namespace WixSharp
         /// determine if the actions should be executed.
         /// </summary>
         public Condition Condition = Condition.NOT_Installed;
+
+        internal XAttribute ToXmlCondition() => new XAttribute("Condition", this.Condition.ToString());
 
         /// <summary>
         /// The sequence number for this action. Mutually exclusive with Before, After, and OnExit of <see cref="When"/> field.

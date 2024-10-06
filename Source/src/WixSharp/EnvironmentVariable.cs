@@ -168,8 +168,7 @@ namespace WixSharp
 
             if (Condition != null)
             {
-                component.AddElement(new XElement("Condition", Condition.ToXValue())
-                         .AddAttributes(Condition.Attributes));
+                component.AddAttributes("Condition=" + Condition.ToXValue());
             }
         }
     }

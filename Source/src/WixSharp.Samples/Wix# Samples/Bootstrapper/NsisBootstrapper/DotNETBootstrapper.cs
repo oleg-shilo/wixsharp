@@ -6,6 +6,9 @@
 using System;
 using WixSharp.Nsis;
 
+// DotNETBootstrapper.cs cannot be executed and it is presented for demo purposes only as an example
+// of a .NET bootstrapper.
+
 class Script
 {
     static public void Main()
@@ -20,6 +23,3 @@ class Script
         setup.Build();
     }
 }
-
-
-

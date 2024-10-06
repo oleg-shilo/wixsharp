@@ -1,16 +1,17 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {
@@ -32,10 +33,14 @@ class Script
                             new FileShortcut("My App", "INSTALLDIR") { Advertise = true })));
 
         project.UI = WUI.WixUI_InstallDir;
-        project.PreserveTempFiles = true;
+        project.LocalizeErrorAndProgressText = false;
+
+        // project.PreserveTempFiles = true;
 
         project.BeforeInstall += args =>
         {
+            AppSearch.GetRelatedProducts(project.UpgradeCode.ToString());
+
             if (args.IsUninstalling)
                 MessageBox.Show(args.InstallDir, "Uninstalling...");
             else

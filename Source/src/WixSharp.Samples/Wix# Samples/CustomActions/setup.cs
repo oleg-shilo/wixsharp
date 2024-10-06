@@ -1,5 +1,5 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
 using WixSharp;
@@ -35,14 +35,14 @@ class Script
                 new PathFileAction(@"%WindowsFolder%\notepad.exe", @"C:\boot.ini", "INSTALLDIR", Return.asyncNoWait, When.After, Step.PreviousAction, Condition.NOT_Installed),
 
                 // execute VBS code
-                new ScriptAction(@"MsgBox ""Executing VBScript code...""", Return.ignore, When.After, Step.PreviousAction, Condition.NOT_Installed),
+                // new ScriptAction(@"MsgBox ""Executing VBScript code...""", Return.ignore, When.After, Step.PreviousAction, Condition.NOT_Installed),
 
                 // execute embedded VBS file
                 new ScriptFileAction(@"Files\Sample.vbs", "Execute" , Return.ignore, When.After, Step.PreviousAction, "NOT Installed"), //raw string can be used as Condition as well
 
                 // see http://wixtoolset.org/documentation/manual/v3/customactions/wixfailwhendeferred.html
                 // Commented for demo purposes. If enabled WixExtension.Util will need to be added to the project.
-                // new CustomActionRef ("WixFailWhenDeferred", When.Before, Step.InstallFinalize, "WIXFAILWHENDEFERRED=1"),
+                // new CustomActionRef ("FailWhenDeferred", When.Before, Step.InstallFinalize, "WIXFAILWHENDEFERRED=1"),
 
                 new BinaryFileAction("EchoBin", "Executing Binary file...", Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed)
                 {

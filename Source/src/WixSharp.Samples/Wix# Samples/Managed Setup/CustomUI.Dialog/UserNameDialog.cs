@@ -12,20 +12,22 @@ namespace WixSharp.UI.WPF
     {
         public UserNameDialog()
         {
-            MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - UserNameDialog");
+            // MessageBox.Show("Hello World! (CLR: v" + Environment.Version + ")", "Managed Setup - UserNameDialog");
             InitializeComponent();
         }
 
         void dialog_Load(object sender, EventArgs e)
         {
-            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner") ??
+                           Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner");
 
             name.Text = Defaults.UserName;
             password.Text = Runtime.Session["PASSWORD"];
 
             localDomain.Checked = true;
 
-            ResetLayout();
+            if (banner.Image != null)
+                ResetLayout();
         }
 
         void ResetLayout()

@@ -1,5 +1,5 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
 using System.Windows.Forms;
@@ -25,7 +25,7 @@ class Script
         project.MajorUpgradeStrategy = MajorUpgradeStrategy.Default;
         project.MajorUpgradeStrategy.RemoveExistingProductAfter = Step.InstallInitialize;
         project.BeforeInstall += project_BeforeInstall;
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project, "setup.1.msi");
     }

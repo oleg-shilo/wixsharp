@@ -7,9 +7,22 @@ using System.Threading;
 namespace WixSharp
 {
     /// <summary>
+    /// Container for signing context as well as the implementation of the signing algotrithm (<see cref="IDigitalSignature.Apply(string)"/> ).
+    /// </summary>
+    public interface IDigitalSignature
+    {
+        /// <summary>
+        /// Applies digital signature to a file
+        /// </summary>
+        /// <param name="fileToSign">The file to sign.</param>
+        /// <returns>Exit code of the signing tool.</returns>
+        int Apply(string fileToSign);
+    }
+
+    /// <summary>
     /// Container with the parameters of the digital signature
     /// </summary>
-    public class DigitalSignature
+    public class DigitalSignature : IDigitalSignature
     {
         private SecureString _password;
 
@@ -30,7 +43,7 @@ namespace WixSharp
         /// <summary>
         /// Selects the hash algorithm to apply. Default sha1
         /// </summary>
-        public HashAlgorithmType HashAlgorithm { get; set; } = HashAlgorithmType.sha1;
+        public HashAlgorithmType HashAlgorithm { get; set; } = HashAlgorithmType.sha256;
 
         /// <summary>The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
         /// A warning is generated if timestamping fails.

@@ -27,6 +27,8 @@ THE SOFTWARE.
 
 #endregion Licence...
 
+using System;
+
 namespace WixSharp
 {
     /// <summary>
@@ -116,6 +118,7 @@ namespace WixSharp
         /// <param name="when"><see cref="T:WixSharp.When"/> the action should be executed with respect to the <paramref name="step"/> parameter.</param>
         /// <param name="step"><see cref="T:WixSharp.Step"/> the action should be executed before/after during the installation.</param>
         /// <param name="condition">The launch condition for the <see cref="ScriptAction"/>.</param>
+        [Obsolete("Not supported in WiX4. `CustomAction` element cannot longer be set to the script code ", true)]
         public ScriptAction(string code, Return returnType, When when, Step step, Condition condition)
             : base(returnType, when, step, condition)
         {

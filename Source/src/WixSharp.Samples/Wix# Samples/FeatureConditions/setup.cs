@@ -1,9 +1,9 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 
-using File = WixSharp.File;
 using WixSharp;
+using File = WixSharp.File;
 
 class Script
 {
@@ -23,6 +23,15 @@ class Script
     /// </remarks>
     static public void Main()
     {
+        /*
+         * Feature.Level attribute:
+         * Level (Integer) : Sets the install level of this feature. A value of 0 will disable the feature.
+         * Processing the Condition Table can modify the level value (this is set via the Condition child element).
+         * The default value is "1".
+         *
+         * Meaning that the condition can only be set via the child Condition element
+         * https://wixtoolset.org/docs/schema/wxs/feature/
+         */
         //featureA - a normal feature
         var featureA = new Feature("Feature A");
 
@@ -67,7 +76,7 @@ class Script
         project.UI = WUI.WixUI_FeatureTree;
 
         project.LaunchConditions.Add(new LaunchCondition("PROP1 or Installed", "PROP1 is required"));
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project);
     }

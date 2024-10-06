@@ -1,28 +1,27 @@
 //css_ref ..\..\WixSharp.dll;
 //css_ref System.Core.dll;
-//css_ref ..\..\Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
-using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
-using WixSharp;
+//css_ref ..\..\Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 using Microsoft.Win32;
 using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using System.Xml;
-using System.Diagnostics;
+using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 
 static class Script
 {
     static public void Main()
     {
-        var project = new Project("CustomActionTest",
-
+        var project =
+            new Project("CustomActionTest",
                 new ManagedAction(CustomActions.RunAsAdminInstall, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed, Sequence.InstallUISequence),
                 new ManagedAction(CustomActions.MyCheckSql, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed, Sequence.InstallUISequence),
                 new ManagedAction(CustomActions.MyCheckMvc4, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed, Sequence.InstallUISequence),
                 new ManagedAction(CustomActions.CompareVersionAtUpgrade, Return.check, When.Before, Step.LaunchConditions, Condition.NOT_Installed, Sequence.InstallUISequence),
-
                 new ManagedAction(CustomActions.MyAdminAction, Return.check, When.After, Step.InstallInitialize, Condition.NOT_Installed, Sequence.AdminExecuteSequence));
 
         Compiler.BuildMsi(project);

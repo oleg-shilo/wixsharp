@@ -1,0 +1,248 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWindowsForms>true</UseWindowsForms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!--<PublishAot>true</PublishAot>-->
+    <RootNamespace>WixSharp</RootNamespace>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\WixSharp\WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <FileVersion>2.2.0</FileVersion>
+    <AssemblyVersion>2.2.0</AssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageVersion>2.4.1</PackageVersion>
+    <Title>WixSharp (.NET Core)</Title>
+    <Description>.NET Core edition of WixSharp package</Description>
+    <Copyright>Oleg Shilo</Copyright>
+    <PackageProjectUrl>https://github.com/oleg-shilo/wixsharp</PackageProjectUrl>
+    <PackageIcon>wixsharp_logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/oleg-shilo/wixsharp</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>MSI, WiX, WIxSharp, C#</PackageTags>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants); CSS_PROJECT; NETCORE;</DefineConstants>
+    <NoWarn>1701;1702; CA1416; CS0108</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants); CSS_PROJECT; NETCORE;</DefineConstants>
+    <NoWarn>1701;1702; CA1416; CS0108</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="outdir\**" />
+    <EmbeddedResource Remove="outdir\**" />
+    <None Remove="outdir\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Nsis\macros.nsh" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\WixSharp\Action.cs" Link="Action.cs" />
+    <Compile Include="..\..\WixSharp\AppSearch.cs" Link="AppSearch.cs" />
+    <Compile Include="..\..\WixSharp\Assembly.cs" Link="Assembly.cs" />
+    <Compile Include="..\..\WixSharp\AutoElements.cs" Link="AutoElements.cs" />
+    <Compile Include="..\..\WixSharp\BalCondition.cs" Link="BalCondition.cs" />
+    <Compile Include="..\..\WixSharp\Binary.cs" Link="Binary.cs" />
+    <Compile Include="..\..\WixSharp\BinaryFileAction.cs" Link="BinaryFileAction.cs" />
+    <Compile Include="..\..\WixSharp\Bootstrapper\BootstrapperApplication.cs" Link="Bootstrapper\BootstrapperApplication.cs" />
+    <Compile Include="..\..\WixSharp\Bootstrapper\Bundle.cs" Link="Bootstrapper\Bundle.cs" />
+    <Compile Include="..\..\WixSharp\Bootstrapper\Packages.cs" Link="Bootstrapper\Packages.cs" />
+    <Compile Include="..\..\WixSharp\Bootstrapper\UtilFileSearch.cs" Link="Bootstrapper\UtilFileSearch.cs" />
+    <Compile Include="..\..\WixSharp\Bootstrapper\UtilProductSearch.cs" Link="Bootstrapper\UtilProductSearch.cs" />
+    <Compile Include="..\..\WixSharp\Bootstrapper\UtilRegistrySearch.cs" Link="Bootstrapper\UtilRegistrySearch.cs" />
+    <Compile Include="..\..\WixSharp\Bootstrapper\Variable.cs" Link="Bootstrapper\Variable.cs" />
+    <Compile Include="..\..\WixSharp\Certificate.cs" Link="Certificate.cs" />
+    <Compile Include="..\..\WixSharp\CloseApplication.cs" Link="CloseApplication.cs" />
+    <Compile Include="..\..\WixSharp\CommonTasks.cs" Link="CommonTasks.cs" />
+    <Compile Include="..\..\WixSharp\Compiler.Bootstrapper.cs" Link="Compiler.Bootstrapper.cs" />
+    <Compile Include="..\..\WixSharp\Compiler.cs" Link="Compiler.cs" />
+    <Compile Include="..\..\WixSharp\ComRegistration.cs" Link="ComRegistration.cs" />
+    <Compile Include="..\..\WixSharp\Condition.cs" Link="Condition.cs" />
+    <Compile Include="..\..\WixSharp\Controls\Control.cs" Link="Controls\Control.cs" />
+    <Compile Include="..\..\WixSharp\Controls\ControlType.cs" Link="Controls\ControlType.cs" />
+    <Compile Include="..\..\WixSharp\Controls\CustomUI.cs" Link="Controls\CustomUI.cs" />
+    <Compile Include="..\..\WixSharp\Controls\Dialog.cs" Link="Controls\Dialog.cs" />
+    <Compile Include="..\..\WixSharp\Controls\Extensions.cs" Link="Controls\Extensions.cs" />
+    <Compile Include="..\..\WixSharp\Controls\WixButton.cs" Link="Controls\WixButton.cs" />
+    <Compile Include="..\..\WixSharp\Controls\WixCheckBox.cs" Link="Controls\WixCheckBox.cs" />
+    <Compile Include="..\..\WixSharp\Controls\WixControl.cs" Link="Controls\WixControl.cs" />
+    <Compile Include="..\..\WixSharp\Controls\WixControlCondition.cs" Link="Controls\WixControlCondition.cs" />
+    <Compile Include="..\..\WixSharp\Controls\WixControlDesigner.cs" Link="Controls\WixControlDesigner.cs" />
+    <Compile Include="..\..\WixSharp\Controls\WixForm.cs" Link="Controls\WixForm.cs" />
+    <Compile Include="..\..\WixSharp\Controls\WixLabel.cs" Link="Controls\WixLabel.cs" />
+    <Compile Include="..\..\WixSharp\Controls\WixTextBox.cs" Link="Controls\WixTextBox.cs" />
+    <Compile Include="..\..\WixSharp\CopyFile.cs" Link="CopyFile.cs" />
+    <Compile Include="..\..\WixSharp\CustomActionRef.cs" Link="CustomActionRef.cs" />
+    <Compile Include="..\..\WixSharp\DigitalSignature.cs" Link="DigitalSignature.cs" />
+    <Compile Include="..\..\WixSharp\DigitalSignatureBootstrapper.cs" Link="DigitalSignatureBootstrapper.cs" />
+    <Compile Include="..\..\WixSharp\Dir.cs" Link="Dir.cs" />
+    <Compile Include="..\..\WixSharp\DirectoryShortcut.cs" Link="DirectoryShortcut.cs" />
+    <Compile Include="..\..\WixSharp\DirFiles.cs" Link="DirFiles.cs" />
+    <Compile Include="..\..\WixSharp\DriverInstaller.cs" Link="DriverInstaller.cs" />
+    <Compile Include="..\..\WixSharp\ElevatedManagedAction.cs" Link="ElevatedManagedAction.cs" />
+    <Compile Include="..\..\WixSharp\EmbeddedFileAction.cs" Link="EmbeddedFileAction.cs" />
+    <Compile Include="..\..\WixSharp\Enums.cs" Link="Enums.cs" />
+    <Compile Include="..\..\WixSharp\EnvironmentVariable.cs" Link="EnvironmentVariable.cs" />
+    <Compile Include="..\..\WixSharp\Error.cs" Link="Error.cs" />
+    <Compile Include="..\..\WixSharp\EventSource.cs" Link="EventSource.cs" />
+    <Compile Include="..\..\WixSharp\Exceptions.cs" Link="Exceptions.cs" />
+    <Compile Include="..\..\WixSharp\ExeFileShortcut.cs" Link="ExeFileShortcut.cs" />
+    <Compile Include="..\..\WixSharp\Extensions.cs" Link="Extensions.cs" />
+    <Compile Include="..\..\WixSharp\Feature.cs" Link="Feature.cs" />
+    <Compile Include="..\..\WixSharp\File.cs" Link="File.cs" />
+    <Compile Include="..\..\WixSharp\FileAssosiation.cs" Link="FileAssosiation.cs" />
+    <Compile Include="..\..\WixSharp\Files.cs" Link="Files.cs" />
+    <Compile Include="..\..\WixSharp\FileSearch.cs" Link="FileSearch.cs" />
+    <Compile Include="..\..\WixSharp\FileShortcut.cs" Link="FileShortcut.cs" />
+    <Compile Include="..\..\WixSharp\FirewallException.cs" Link="FirewallException.cs" />
+    <Compile Include="..\..\WixSharp\FontFile.cs" Link="FontFile.cs" />
+    <Compile Include="..\..\WixSharp\GenericEntity.cs" Link="GenericEntity.cs" />
+    <Compile Include="..\..\WixSharp\Heat\Harvester.cs" Link="Heat\Harvester.cs" />
+    <Compile Include="..\..\WixSharp\IconFile.cs" Link="IconFile.cs" />
+    <Compile Include="..\..\WixSharp\Id.cs" Link="Id.cs" />
+    <Compile Include="..\..\WixSharp\IISCertificate.cs" Link="IISCertificate.cs" />
+    <Compile Include="..\..\WixSharp\IISWebSite.cs" Link="IISWebSite.cs" />
+    <Compile Include="..\..\WixSharp\IniFile.cs" Link="IniFile.cs" />
+    <Compile Include="..\..\WixSharp\InstalledFileAction.cs" Link="InstalledFileAction.cs" />
+    <Compile Include="..\..\WixSharp\InternetShortcut.cs" Link="InternetShortcut.cs" />
+    <Compile Include="..\..\WixSharp\LaunchApplicationFromExitDialog.cs" Link="LaunchApplicationFromExitDialog.cs" />
+    <Compile Include="..\..\WixSharp\LaunchCondition.cs" Link="LaunchCondition.cs" />
+    <Compile Include="..\..\WixSharp\MajorUpgrade.cs" Link="MajorUpgrade.cs" />
+    <Compile Include="..\..\WixSharp\ManagedAction.cs" Link="ManagedAction.cs" />
+    <Compile Include="..\..\WixSharp\ManagedProject\Interfaces.cs" Link="ManagedProject\Interfaces.cs" />
+    <Compile Include="..\..\WixSharp\ManagedProject\ManagedProject.cs" Link="ManagedProject\ManagedProject.cs" />
+    <Compile Include="..\..\WixSharp\ManagedProject\ManagedProjectActions.cs" Link="ManagedProject\ManagedProjectActions.cs" />
+    <Compile Include="..\..\WixSharp\ManagedProject\SetupEventArgs.cs" Link="ManagedProject\SetupEventArgs.cs" />
+    <Compile Include="..\..\WixSharp\Media.cs" Link="Media.cs" />
+    <Compile Include="..\..\WixSharp\Merge.cs" Link="Merge.cs" />
+    <Compile Include="..\..\WixSharp\NativeBootstrapper.cs" Link="NativeBootstrapper.cs" />
+    <Compile Include="..\..\WixSharp\NativeImage.cs" Link="NativeImage.cs" />
+    <Compile Include="..\..\WixSharp\Nsis\Compressor.cs" Link="Nsis\Compressor.cs" />
+    <Compile Include="..\..\WixSharp\Nsis\NsisBootstrapper.cs" Link="Nsis\NsisBootstrapper.cs" />
+    <Compile Include="..\..\WixSharp\Nsis\NsisBootstrapperLegacy.cs" Link="Nsis\NsisBootstrapperLegacy.cs" />
+    <Compile Include="..\..\WixSharp\Nsis\Package.cs" Link="Nsis\Package.cs" />
+    <Compile Include="..\..\WixSharp\Nsis\Payload.cs" Link="Nsis\Payload.cs" />
+    <Compile Include="..\..\WixSharp\Nsis\RequestExecutionLevel.cs" Link="Nsis\RequestExecutionLevel.cs" />
+    <Compile Include="..\..\WixSharp\Nsis\SplashScreen.cs" Link="Nsis\SplashScreen.cs" />
+    <Compile Include="..\..\WixSharp\Nsis\VersionInformation.cs" Link="Nsis\VersionInformation.cs" />
+    <Compile Include="..\..\WixSharp\Nsis\WinVer\OSValidation.cs" Link="Nsis\WinVer\OSValidation.cs" />
+    <Compile Include="..\..\WixSharp\Nsis\WinVer\WindowsVersion.cs" Link="Nsis\WinVer\WindowsVersion.cs" />
+    <Compile Include="..\..\WixSharp\Nsis\WinVer\WindowsVersionNumber.cs" Link="Nsis\WinVer\WindowsVersionNumber.cs" />
+    <Compile Include="..\..\WixSharp\ODBCDataSource.cs" Link="ODBCDataSource.cs" />
+    <Compile Include="..\..\WixSharp\PathFileAction.cs" Link="PathFileAction.cs" />
+    <Compile Include="..\..\WixSharp\PermissionEx.cs" Link="PermissionEx.cs" />
+    <Compile Include="..\..\WixSharp\Permissions.cs" Link="Permissions.cs" />
+    <Compile Include="..\..\WixSharp\ProductInfo.cs" Link="ProductInfo.cs" />
+    <Compile Include="..\..\WixSharp\Project.cs" Link="Project.cs" />
+    <Compile Include="..\..\WixSharp\ProjectValidator.cs" Link="ProjectValidator.cs" />
+    <Compile Include="..\..\WixSharp\Properties\AssemblyInfo.version.cs" Link="Properties\AssemblyInfo.version.cs" />
+    <Compile Include="..\..\WixSharp\Property.cs" Link="Property.cs" />
+    <Compile Include="..\..\WixSharp\QtCmdLineAction.cs" Link="QtCmdLineAction.cs" />
+    <Compile Include="..\..\WixSharp\Reboot.cs" Link="Reboot.cs" />
+    <Compile Include="..\..\WixSharp\RegFileImporter.cs" Link="RegFileImporter.cs" />
+    <Compile Include="..\..\WixSharp\RegisterAsCom.cs" Link="RegisterAsCom.cs" />
+    <Compile Include="..\..\WixSharp\RegistrySearch.cs" Link="RegistrySearch.cs" />
+    <Compile Include="..\..\WixSharp\RegKey.cs" Link="RegKey.cs" />
+    <Compile Include="..\..\WixSharp\RegValue.cs" Link="RegValue.cs" />
+    <Compile Include="..\..\WixSharp\RegValueProperty.cs" Link="RegValueProperty.cs" />
+    <Compile Include="..\..\WixSharp\RemoveRegistryKey.cs" Link="RemoveRegistryKey.cs" />
+    <Compile Include="..\..\WixSharp\RemoveRegistryValue.cs" Link="RemoveRegistryValue.cs" />
+    <Compile Include="..\..\WixSharp\ResilientPackage.cs" Link="ResilientPackage.cs" />
+    <Compile Include="..\..\WixSharp\ScriptAction.cs" Link="ScriptAction.cs" />
+    <Compile Include="..\..\WixSharp\ScriptFileAction.cs" Link="ScriptFileAction.cs" />
+    <Compile Include="..\..\WixSharp\ServiceConfig.cs" Link="ServiceConfig.cs" />
+    <Compile Include="..\..\WixSharp\ServiceConfigUtil.cs" Link="ServiceConfigUtil.cs" />
+    <Compile Include="..\..\WixSharp\ServiceDependency.cs" Link="ServiceDependency.cs" />
+    <Compile Include="..\..\WixSharp\ServiceInstaller.cs" Link="ServiceInstaller.cs" />
+    <Compile Include="..\..\WixSharp\SetPropertyAction.cs" Link="SetPropertyAction.cs" />
+    <Compile Include="..\..\WixSharp\SharedExtensions.cs" Link="SharedExtensions.cs" />
+    <Compile Include="..\..\WixSharp\Shortcut.cs" Link="Shortcut.cs" />
+    <Compile Include="..\..\WixSharp\SqlDatabase.cs" Link="SqlDatabase.cs" />
+    <Compile Include="..\..\WixSharp\SqlScript.cs" Link="SqlScript.cs" />
+    <Compile Include="..\..\WixSharp\SqlString.cs" Link="SqlString.cs" />
+    <Compile Include="..\..\WixSharp\Step.cs" Link="Step.cs" />
+    <Compile Include="..\..\WixSharp\StringEnum.cs" Link="StringEnum.cs" />
+    <Compile Include="..\..\WixSharp\SvcEvent.cs" Link="SvcEvent.cs" />
+    <Compile Include="..\..\WixSharp\UACRevealer.cs" Link="UACRevealer.cs" />
+    <Compile Include="..\..\WixSharp\UninstallFullUI.cs" Link="UninstallFullUI.cs" />
+    <Compile Include="..\..\WixSharp\UpgradeStrategy.cs" Link="UpgradeStrategy.cs" />
+    <Compile Include="..\..\WixSharp\UrlAce.cs" Link="UrlAce.cs" />
+    <Compile Include="..\..\WixSharp\UrlReservation.cs" Link="UrlReservation.cs" />
+    <Compile Include="..\..\WixSharp\User.cs" Link="User.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\RegistryWOW6432.cs" Link="Utilities\RegistryWOW6432.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\WixBinLocator.cs" Link="Utilities\WixBinLocator.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\VerifyFileSignature.cs" Link="Utilities\VerifyFileSignature.cs" />
+    <Compile Include="..\..\WixSharp\Utils.cs" Link="Utils.cs" />
+    <Compile Include="..\..\WixSharp\ProjectFileSigner.cs" Link="ProjectFileSigner.cs" />
+    <Compile Include="..\..\WixSharp\VersionRange.cs" Link="VersionRange.cs" />
+    <Compile Include="..\..\WixSharp\WebSite.cs" Link="WebSite.cs" />
+    <Compile Include="..\..\WixSharp\WixEntity.cs" Link="WixEntity.cs" />
+    <Compile Include="..\..\WixSharp\WixExtension.cs" Link="WixExtension.cs" />
+    <Compile Include="..\..\WixSharp\WixGuid.cs" Link="WixGuid.cs" />
+    <Compile Include="..\..\WixSharp\WixObject.cs" Link="WixObject.cs" />
+    <Compile Include="..\..\WixSharp\WixProject.cs" Link="WixProject.cs" />
+    <Compile Include="..\..\WixSharp\WixQuietExec.cs" Link="WixQuietExec.cs" />
+    <Compile Include="..\..\WixSharp\XmlFile.cs" Link="XmlFile.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\WixTools.cs" Link="Utilities\WixTools.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\Utils.cs" Link="Utils.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\XmlMapping.cs" Link="XmlMapping.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\XmlAttribute.cs" Link="XmlAttribute.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\ProjectLocalization.cs" Link="ProjectLocalization.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\SerializingExtensions.cs" Link="SerializingExtensions.cs" />
+    <Compile Include="..\..\WixSharp\Utilities\AttachedProperties.cs" Link="AttachedProperties.cs" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Nsis\macros.nsh">
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\WixSharp\Bootstrapper\runtime\win-x86\mbanative.dll" Link="Bootstrapper\runtime\win-x86\mbanative.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\Templates.2022\WixSharpVSIX\WixSharpVSIX\wixsharp_logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="4.0.4" />
+    <PackageReference Include="WixToolset.Mba.Core" Version="4.0.4" />
+  </ItemGroup>
+
+
+  <Target Name="PrePackage" BeforeTargets="BuildPackage">
+    <PropertyGroup>
+      <BuildCommand>$(BuildCommand) -IncludeReferencedProjects</BuildCommand>
+    </PropertyGroup>
+  </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WixSharp.Msi.Core\WixSharp.Msi.Core.csproj" />
+  </ItemGroup>
+
+</Project>

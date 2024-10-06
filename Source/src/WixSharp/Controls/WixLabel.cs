@@ -1,10 +1,12 @@
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms;
 using Wix = WixSharp;
-using System.Collections.Generic;
+
+#pragma warning disable CA1416 // Validate platform compatibility
 
 namespace WixSharp.Controls
 {

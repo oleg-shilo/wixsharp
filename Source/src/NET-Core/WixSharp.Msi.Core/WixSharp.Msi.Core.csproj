@@ -1,0 +1,62 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWindowsForms>true</UseWindowsForms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!--<PublishAot>true</PublishAot>-->
+    <NoWarn>$(NoWarn);SYSLIB0003</NoWarn>
+  </PropertyGroup>
+
+  <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">-->
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);CSS_PROJECT;WIXSHARP_MSI</DefineConstants>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>D:\dev\wixsharp-wix4\Source\src\WixSharp.Msi\WixSharp.Msi\WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);CSS_PROJECT;WIXSHARP_MSI;NETCORE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageVersion>2.4.1</PackageVersion>
+    <Title>WixSharp (.NET Core)</Title>
+    <Description>.NET Core edition of WixSharp.Msi package</Description>
+    <Copyright>Oleg Shilo</Copyright>
+    <PackageProjectUrl>https://github.com/oleg-shilo/wixsharp</PackageProjectUrl>
+    <PackageIcon>wixsharp_logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/oleg-shilo/wixsharp</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>MSI, WiX, WIxSharp, C#</PackageTags>
+    <PackageLicenseExpression>  MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\WixSharp.Msi\WixSharp.Msi\GenericSetup.cs" Link="GenericSetup.cs" />
+    <Compile Include="..\..\WixSharp.Msi\WixSharp.Msi\MsiExtensions.cs" Link="MsiExtensions.cs" />
+    <Compile Include="..\..\WixSharp.Msi\WixSharp.Msi\MsiInterop.cs" Link="MsiInterop.cs" />
+    <Compile Include="..\..\WixSharp.Msi\WixSharp.Msi\MsiParser.cs" Link="MsiParser.cs" />
+    <Compile Include="..\..\WixSharp.Msi\WixSharp.Msi\MsiSession.cs" Link="MsiSession.cs" />
+    <Compile Include="..\..\WixSharp.Msi\WixSharp.Msi\Program.cs" Link="Program.cs" />
+    <Compile Include="..\..\WixSharp\Properties\AssemblyInfo.version.cs" Link="Properties\AssemblyInfo.version.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\Templates.2022\WixSharpVSIX\WixSharpVSIX\wixsharp_logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

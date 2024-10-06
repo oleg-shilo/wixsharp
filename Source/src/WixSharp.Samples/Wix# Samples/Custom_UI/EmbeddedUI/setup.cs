@@ -1,9 +1,8 @@
-﻿using Microsoft.Deployment.WindowsInstaller;
+﻿using System;
 using System.Diagnostics;
-using sys = System.Reflection;
 using WixSharp;
 using WixSharp.CommonTasks;
-using System;
+using sys = System.Reflection;
 
 public class Script
 {
@@ -17,7 +16,7 @@ public class Script
         project.EmbeddedUI = new EmbeddedAssembly(sys.Assembly.GetExecutingAssembly().Location);
 
         project.CAConfigFile = "CustomAction.config"; // optional step just for demo
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         project.BuildMsi();
     }

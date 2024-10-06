@@ -1,6 +1,4 @@
-﻿using Microsoft.Deployment.Samples.EmbeddedUI;
-using Microsoft.Deployment.WindowsInstaller;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -10,8 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Microsoft.Deployment.Samples.EmbeddedUI;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
+using WixToolset.Dtf.WindowsInstaller;
 
 using forms = System.Windows.Forms;
 
@@ -25,7 +25,7 @@ namespace WixSharp
     interface IUIContainer
     {
         /// <summary>
-        /// Shows the modal window of the MSI UI. This method is called by the <see cref="T:Microsoft.Deployment.WindowsInstaller.IEmbeddedUI"/>
+        /// Shows the modal window of the MSI UI. This method is called by the <see cref="T:WixToolset.Dtf.WindowsInstaller.IEmbeddedUI"/>
         /// when it is initialized at runtime.
         /// </summary>
         /// <param name="runtime">The MSI runtime.</param>
@@ -185,6 +185,13 @@ namespace WixSharp
                 {
                     if (currentViewIndex >= 0 && currentViewIndex < Dialogs.Count)
                     {
+                        Form oldForm = shellView.Controls.OfType<Form>().FirstOrDefault();
+
+                        if (oldForm != null)
+                        {
+                            oldForm.TextChanged -= View_TextChanged;
+                        }
+
                         shellView.ClearChildren();
 
                         Type viewType = Dialogs[currentViewIndex];
@@ -229,7 +236,6 @@ namespace WixSharp
                         view.FormBorderStyle = forms.FormBorderStyle.None;
                         shellView.ControlBox = view.ControlBox;
                         view.TopLevel = false;
-                        //view.Dock = DockStyle.Fill; //do not use Dock as it interferes with scaling
                         view.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
                         view.Size = shellView.ClientSize;
                         view.Location = new System.Drawing.Point(0, 0);
@@ -242,10 +248,12 @@ namespace WixSharp
                         shellView.Text = view.Text; // the title is already set in `SetDialogContent` for WPF but for winform dialogs
                                                     // it needs to be set now
 
-                        if (shellView is ShellView)
+                        view.TextChanged += View_TextChanged;
+
+                        if (shellView is ShellView sv)
                         {
-                            (shellView as ShellView).CurrentDialog = CurrentDialog;
-                            (shellView as ShellView).RaiseCurrentDialogChanged(CurrentDialog);
+                            sv.CurrentDialog = CurrentDialog;
+                            sv.RaiseCurrentDialogChanged(CurrentDialog);
                         }
 
                         try
@@ -255,7 +263,23 @@ namespace WixSharp
                         catch { /*expected to fail on deferred actions stage*/}
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Session msiSession = (Session)Runtime.Session.SessionContext;
+
+                    ManagedProject.InvokeClientHandlers("UnhandledException", msiSession, e);
+                    msiSession.Log("Managed Dialog unhandled Exception: " + e);
+
+                    this.Cancel();
+                }
+            }
+        }
+
+        private void View_TextChanged(object sender, EventArgs e)
+        {
+            if (sender is Form view)
+            {
+                this.shellView.Text = view.Text;
             }
         }
 
@@ -284,15 +308,7 @@ namespace WixSharp
                 Dialogs = ui.ModifyDialogs;
 
             if (Dialogs.Any())
-            {
                 shellView = new ShellView { Shell = this };
-
-                var scalingModeValue = runtime.Session.Property("UI_AUTOSCALEMODE");
-                if (scalingModeValue.IsNotEmpty())
-                {
-                    (shellView as ShellView).AutoScaleMode = (AutoScaleMode)Enum.Parse(typeof(AutoScaleMode), scalingModeValue);
-                }
-            }
 
             try
             {
@@ -322,12 +338,17 @@ namespace WixSharp
                         catch { }
 
                         result = runtime.InvokeClientHandlers("UILoaded", (IShellView)shellView);
+
                         if (result != ActionResult.Success)
                         {
                             // aborting UI dialogs sequence from here is not possible as this event is
                             // simply called when Shell is loaded but not when dialogs are progressing in the sequence.
                             runtime.Session.Log("UILoaded returned " + result);
                         }
+
+                        if (result == ActionResult.Failure)
+                            this.Exit();
+
                         runtime.Data.MergeReplace(runtime.Session["WIXSHARP_RUNTIME_DATA"]); ; //data may be changed in the client handler
                     };
 
@@ -440,15 +461,15 @@ namespace WixSharp
 
                 project.OutDir = dir;
 
-                string licence = ManagedUI.Default.LicenceFileFor(project);
-                string localization = ManagedUI.Default.LocalizationFileFor(project);
-                string bitmap = ManagedUI.Default.DialogBitmapFileFor(project);
-                string banner = ManagedUI.Default.DialogBannerFileFor(project);
+                string licence = ManagedUI.LicenceFileFor(project);
+                string localization = ManagedUI.LocalizationFileFor(project);
+                string bitmap = ManagedUI.DialogBitmapFileFor(project);
+                string banner = ManagedUI.DialogBannerFileFor(project);
 
                 project.AddBinaries(new Binary(new Id("WixSharp_UIText"), localization),
                                     new Binary(new Id("WixSharp_LicenceFile"), licence),
-                                    new Binary(new Id("WixUI_Bmp_Dialog"), bitmap),
-                                    new Binary(new Id("WixUI_Bmp_Banner"), banner));
+                                    new Binary(new Id("WixSharpUI_Bmp_Dialog"), bitmap),
+                                    new Binary(new Id("WixSharpUI_Bmp_Banner"), banner));
 
                 project.UI = WUI.WixUI_ProgressOnly;
                 return project.BuildMsi();

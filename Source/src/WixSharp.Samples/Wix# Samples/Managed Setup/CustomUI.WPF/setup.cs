@@ -1,8 +1,7 @@
-using ConsoleApplication1;
 using System;
-using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
-using System.Windows.Forms;
+using ConsoleApplication1;
 using WixSharp;
 using WixSharp.UI.WPF;
 
@@ -17,20 +16,34 @@ public class Script
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         project.ManagedUI = new ManagedUI();
         project.ManagedUI.InstallDialogs.Add<WixSharp.UI.Forms.WelcomeDialog>()     // stock WinForm dialog
-                                        .Add<FeaturesDialog>()                      // stock WinForm dialog
-                                        .Add<CustomDialogWith<CustomDialogPanel>>() // custom WPF dialog (minimalistic);
-                                        .Add<CustomDialogRawView>()                 // custom WPF dialog
                                         .Add<CustomDialogView>()                    // custom WPF dialog (with Claiburn.Micro as MVVM)
+                                        .Add<CustomDialogWith<CustomDialogPanel>>() // custom WPF dialog (minimalistic);
+                                        .Add<FeaturesDialog>()                      // stock WinForm dialog
+                                        .Add<CustomDialogRawView>()                 // custom WPF dialog
                                         .Add<WixSharp.UI.Forms.ProgressDialog>()    // stock WinForm dialog
                                         .Add<WixSharp.UI.Forms.ExitDialog>();       // stock WinForm dialog
 
         project.ManagedUI.ModifyDialogs.Add<ProgressDialog>()
                                        .Add<ExitDialog>();
 
-        project.ManagedUI.AutoScaleMode = AutoScaleMode.Dpi;
+        project.UIInitialized += e =>
+        {
+            // Since the default MSI localization data has no entry for 'CustomDlgTitle' (and other custom labels) we
+            // need to add this new content dynamically. Alternatively, you can use WiX localization files (wxl).
 
-        project.PreserveTempFiles = true;
+            MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
+
+            runtime.UIText["CustomDlgTitle"] = "My Custom Dialog";
+            runtime.UIText["CustomDlgTitleDescription"] = "My Custom Dialog Description";
+        };
+
+        // project.PreserveTempFiles = true;
         project.SourceBaseDir = @"..\..\";
+
+        project.DefaultRefAssemblies.Add(typeof(Caliburn.Micro.ActivateExtensions).Assembly.Location);  // Caliburn.Micro.dll
+        project.DefaultRefAssemblies.Add(typeof(Caliburn.Micro.Bind).Assembly.Location);                // Caliburn.Micro.Platform.dll
+        project.DefaultRefAssemblies.Add(typeof(Caliburn.Micro.NameTransformer).Assembly.Location);     // Caliburn.Micro.Platform.Core.dll
+        project.DefaultRefAssemblies.Add(typeof(Microsoft.Xaml.Behaviors.Behavior).Assembly.Location);  // Microsoft.Xaml.Behaviors.dll
 
         project.BuildMsi();
     }

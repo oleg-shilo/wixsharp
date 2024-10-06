@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <PublishAot>true</PublishAot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="outdir\**" />
+    <EmbeddedResource Remove="outdir\**" />
+    <None Remove="outdir\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="4.0.0-preview.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PrivateSdkAssemblies Remove="outdir\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkAssemblies Remove="outdir\**" />
+  </ItemGroup>
+
+</Project>

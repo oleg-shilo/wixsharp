@@ -1,6 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Media.Imaging;
-using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
 
@@ -8,8 +8,6 @@ namespace WixSharp.UI.WPF
 {
     /// <summary>
     /// The standard InstallDirDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro View (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
     /// <seealso cref="WixSharp.UI.WPF.WpfDialog" />
     /// <seealso cref="System.Windows.Markup.IComponentConnector" />
@@ -30,22 +28,35 @@ namespace WixSharp.UI.WPF
         /// </summary>
         public void Init()
         {
-            ViewModelBinder.Bind(new InstallDirDialogModel { Host = ManagedFormHost, }, this, null);
+            DataContext = model = new InstallDirDialogModel { Host = ManagedFormHost, };
         }
+
+        InstallDirDialogModel model;
+
+        void GoPrev_Click(object sender, RoutedEventArgs e)
+            => model.GoPrev();
+
+        void GoNext_Click(object sender, RoutedEventArgs e)
+            => model.GoNext();
+
+        void Cancel_Click(object sender, RoutedEventArgs e)
+            => model.Cancel();
+
+        void ChangeInstallDir_Click(object sender, RoutedEventArgs e)
+            => model.ChangeInstallDir();
     }
 
     /// <summary>
     /// ViewModel for standard InstallDirDialog.
-    /// <para>Follows the design of the canonical Caliburn.Micro ViewModel (MVVM).</para>
-    /// <para>See https://caliburnmicro.com/documentation/cheat-sheet</para>
     /// </summary>
-    class InstallDirDialogModel : Caliburn.Micro.Screen
+    class InstallDirDialogModel : NotifyPropertyChangedBase
     {
         public ManagedForm Host;
         ISession session => Host?.Runtime.Session;
         IManagedUIShell shell => Host?.Shell;
 
-        public BitmapImage Banner => session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource() ??
+                                     session?.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
 
         string installDirProperty => session?.Property("WixSharp_UI_INSTALLDIR");
 
@@ -81,7 +92,7 @@ namespace WixSharp.UI.WPF
             set
             {
                 session[installDirProperty] = value;
-                base.NotifyOfPropertyChange(() => InstallDirPath);
+                base.NotifyOfPropertyChange(nameof(InstallDirPath));
             }
         }
 

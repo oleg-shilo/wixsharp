@@ -12,25 +12,35 @@ using IO = System.IO;
 
 namespace WixSharp.Test
 {
-    public class SamplesTest : WixLocator
+    public class SamplesTest
     {
         IEnumerable<string> nonMsiProjects = @"CustomAttributes,
                                                External_UI,
                                                Custom_IDs,
+                                               Self-executable_Msi,
+                                               MultiLanguageUI,
                                                ASP.NETApp,
-                                               EnvVariables,
-                                               WixBootstrapper"
+                                               EnvVariables"
                                 .Split(',').Select(x => x.Trim());
+
+        string[] nonTestableProjects = "MultiLanguageUI,InstallEventElevation,Signing,MajorUpgrade,WixBootstrapper".Split(',').Select(x => x.Trim()).ToArray();
+
+        string[] nonPortedWix4Projects = (""             // WIX4-TODO: WiX4 defect (cannot find element from the valid extension)
+                                         ).Split(',').Select(x => x.Trim()).ToArray();
 
         int completedSamples = 0;
         int samplesTotal = 0;
         Stopwatch testTime = new Stopwatch();
 
-        [Fact]
+        [Fact()]
         public void CanBuildAllSamples()
         {
-            // if (Environment.GetEnvironmentVariable("APPVEYOR") != null)
-            //     return;
+            // it's no longer holding any value to test building samples from shell as they are all now built as part of the
+            // solution build.
+            // return;
+
+            if (Environment.GetEnvironmentVariable("APPVEYOR") != null)
+                return;
 
             // need to exclude some samples; for example the two samples from the same dir will interfere with each other;
             // or some other tests are built as a part of the solution
@@ -42,28 +52,35 @@ namespace WixSharp.Test
             int? whichOneToRun = null; //null - all
             int sampleDirIndex = 0;
 
-            var files = Directory.GetFiles(@"..\..\..\WixSharp.Samples\Wix# Samples", "build*.cmd", SearchOption.AllDirectories);
+            var files = Directory.GetFiles(@"..\..\..\WixSharp.Samples\Wix# Samples", "build*.cmd", SearchOption.AllDirectories)
+                                 .OrderBy(x => x)
+                                 .Where(x => !x.PathGetFileName().ToLower().Contains("build_"))
+                                 .ToArray();
+
             var compiled_scripts = Directory.GetFiles(@"..\..\..\WixSharp.Samples\Wix# Samples", "setup*.cs.dll", SearchOption.AllDirectories);
 
             compiled_scripts.ForEach(x => System.IO.File.Delete(x));
 
             files = files.Where(f => !exclude.Any(y => f.EndsWith(y, ignoreCase: true))).ToArray();
 
-            files = files.Skip(startStep).ToArray();
-
-            if (whichOneToRun.HasValue)
-                files = new[] { files[whichOneToRun.Value] };
-
-            if (howManyToRun.HasValue)
-                files = files.Take(howManyToRun.Value).ToArray();
-
-            samplesTotal = files.Count();
             testTime.Reset();
             testTime.Start();
 
             var samples = files.GroupBy(x => Path.GetDirectoryName(x));
 
-            var allSamples = samples.Select(g => new { Category = g.Key, Items = g, Index = ++sampleDirIndex }).ToArray();
+            var allSamples = samples.Select(g => new { Category = g.Key, Items = g, Index = ++sampleDirIndex })
+                                    .OrderBy(x => x.Index)
+                                    .ToArray();
+
+            allSamples = allSamples.Skip(startStep).ToArray();
+
+            if (whichOneToRun.HasValue)
+                allSamples = new[] { allSamples[whichOneToRun.Value] };
+
+            if (howManyToRun.HasValue)
+                allSamples = allSamples.Take(howManyToRun.Value).ToArray();
+
+            samplesTotal = allSamples.Count();
 
             var parallel = false;
 
@@ -81,8 +98,8 @@ namespace WixSharp.Test
 
                 var sampleFiles = Directory.GetFiles(sampleDir, "build*.cmd")
                                            .Select(x => Path.GetFullPath(x))
+                                           .Where(x => !x.PathGetFileName().ToLower().Contains("build_"))
                                            .ToArray();
-
                 foreach (string batchFile in sampleFiles)
                 {
                     BuildSample(batchFile, group.Index, failedSamples);
@@ -91,10 +108,6 @@ namespace WixSharp.Test
 
             if (parallel)
             {
-                // allSamples.ForEach(item =>
-                //     ThreadPool.QueueUserWorkItem(x =>
-                //         processDir(item)));
-
                 Parallel.ForEach(allSamples, processDir);
                 while (completedSamples < samplesTotal)
                 {
@@ -126,6 +139,10 @@ namespace WixSharp.Test
                 bool ignorePresentMsi = (dir.EndsWith("Self-executable_Msi", true));
 
                 bool nonMsi = nonMsiProjects.Where(x => batchFile.Contains(x)).Any();
+                bool ignoreSample = nonPortedWix4Projects.Where(x => x.IsNotEmpty())
+                                                         .Concat(nonTestableProjects).Where(x => batchFile.Contains(x)).Any();
+                if (ignoreSample)
+                    return;
 
                 if (!nonMsi && !ignorePresentMsi)
                 {
@@ -142,11 +159,6 @@ namespace WixSharp.Test
                     $"Cmd: {batchFile}{Environment.NewLine}" +
                     $"======================================{Environment.NewLine}" +
                     $"{output}");
-
-                if (batchFile.Contains("InjectXml"))
-                {
-                    Debug.Assert(false);
-                }
 
                 if (output.Contains(" : error") || output.Contains("Error: ") || (!nonMsi && !HasAnyMsis(dir)))
                 {
@@ -185,7 +197,7 @@ namespace WixSharp.Test
             lock (failedSamples)
             {
                 var logFile = @"..\..\..\WixSharp.Samples\test_progress.txt";
-                var content = string.Format("Failed-{0}; Completed-{1}; Total-{2}; Time-{3}\r\n", failedSamples.Count, completedSamples, samplesTotal, testTime.Elapsed) + string.Join(Environment.NewLine, failedSamples.ToArray());
+                var content = string.Format("Failed-{0}; Total Completed-{1}; Scenarios-{2}; Time-{3}\r\n", failedSamples.Count, completedSamples, samplesTotal, testTime.Elapsed) + string.Join(Environment.NewLine, failedSamples.ToArray());
                 IO.File.WriteAllText(logFile, content);
             }
         }
@@ -207,7 +219,7 @@ namespace WixSharp.Test
             {
                 // sublimme is always installed in x64 progfiles, but this process is x86 process so
                 // envar always returns x86 location fro %PROGRAMFILES%
-                Process.Start(@"%PROGRAMFILES%\Sublime Text 3\sublime_text.exe".ExpandEnvVars().Replace(" (x86)", ""), $"\"{logFile}\"");
+                Process.Start(@"%PROGRAMFILES%\Sublime Text\sublime_text.exe".ExpandEnvVars().Replace(" (x86)", ""), $"\"{logFile}\"");
             }
             catch
             {

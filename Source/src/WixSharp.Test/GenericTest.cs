@@ -4,16 +4,17 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
+using System.Windows.Controls;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
 using static WixSharp.SetupEventArgs;
 using WixSharp.UI;
+using WixToolset.Dtf.WindowsInstaller;
 using Xunit;
 using io = System.IO;
-
 using WixMsi = WixSharpMsi::WixSharp;
 
 namespace WixSharp.Test
@@ -28,6 +29,41 @@ namespace WixSharp.Test
 
             var result = path.MakeRelativeTo(baseDir);
             Assert.Equal(@"..\Content\readme.txt", result);
+        }
+
+        [Fact]
+        public void SemanticVersionToVersion()
+        {
+            var expected = new Version(1, 0, 0);
+            var actual = "1.0.0-beta.1".SemanticVersionToVersion();
+            Assert.Equal(expected, actual);
+
+            expected = new Version(4, 0, 4);
+            actual = "4.0.4+41e11442".SemanticVersionToVersion();
+            Assert.Equal(expected, actual);
+
+            expected = new Version(4, 0, 4);
+            actual = "4.0.4 rc.2".SemanticVersionToVersion();
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void FindWixExtensionDll()
+        {
+            if ("APPVEYOR".GetEnvVar().IsEmpty())
+            {
+                var actual = WixTools.FindWixExtensionDll("WixToolset.Bal.wixext");
+                Assert.True(actual.IsNotEmpty());
+
+                actual = WixTools.FindWixExtensionDll("WixToolset.UI.wixext");
+                Assert.True(actual.IsNotEmpty());
+
+                actual = WixTools.FindWixExtensionDll("WixToolset.UI.wixext", "5.0.0");
+                Assert.True(actual.IsNotEmpty());
+
+                actual = WixTools.FindWixExtensionDll("WixToolset.UI.wixext", "4.0.4");
+                Assert.True(actual.IsEmpty());
+            }
         }
 
         [Fact]
@@ -116,6 +152,34 @@ namespace WixSharp.Test
         }
 
         [Fact]
+        public void TestWxlCompatibilityOfCodebase()
+        {
+            // wixsharp\Source\src
+            var dir = @"..\..\..";
+
+            var files = io.Directory.GetFiles(dir, "*.wxl", io.SearchOption.AllDirectories)
+                                    .Where(x => !x.Contains("Wix_bin") && x.PathGetFileName() != ".wxl") // WixSharp and test data files
+                                    .Where(x => XDocument.Load(x).Root.GetDefaultNamespace().NamespaceName == "http://schemas.microsoft.com/wix/2006/localization")
+                                    .ToArray();
+
+            files.ForEach(x => Debug.WriteLine(x));
+
+            // files.ForEach(x => x.Wxl3_to_Wxl4(x));
+
+            Assert.Equal(0, files.Count());
+        }
+
+        [Fact]
+        public void Can_Init_ManagedUI_Licalization_From_WiX3_Wxl()
+        {
+            var data = new ResourcesData();
+
+            // var wxlFile = @"D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Managed Setup\MultiLanguageUI\WixUI_de-DE.wxl".MakeRelativeTo(Environment.CurrentDirectory);
+            var wxlFile = @"..\..\..\WixSharp.Samples\Wix# Samples\Managed Setup\MultiLanguageUI\WixUI_de-DE.wxl";
+            data.InitFromWxl(io.File.ReadAllBytes(wxlFile));
+        }
+
+        [Fact]
         public void AttributesInjection3()
         {
             var expectedNamespace = "http://schemas.microsoft.com/wix/DependencyExtension";
@@ -180,7 +244,7 @@ namespace WixSharp.Test
             Assert.Throws<Exception>(() => project.BuildWxs());
         }
 
-        //[Fact] //xUnit/VSTest runtime doesn't play nice with MSI interop
+        // [Fact] //xUnit/VSTest runtime doesn't play nice with MSI interop
         public void AppSearchTest()
         {
             var keyExist = AppSearch.RegKeyExists(Registry.LocalMachine, @"System\CurrentControlSet\services");
@@ -315,8 +379,7 @@ namespace WixSharp.Test
         //[Fact]
         public void FeaturesAPI()
         {
-            //var installedPackage = new Microsoft.Deployment.WindowsInstaller.ProductInstallation("{A6801CC8-AC2A-4BF4-BEAA-6EE4DCF17056}");
-            var installedPackage = new Microsoft.Deployment.WindowsInstaller.ProductInstallation("A6801CC8-AC2A-4BF4-BEAA-6EE4DCF17056");
+            var installedPackage = new WixToolset.Dtf.WindowsInstaller.ProductInstallation("A6801CC8-AC2A-4BF4-BEAA-6EE4DCF17056");
             if (!installedPackage.IsInstalled)
             {
             }

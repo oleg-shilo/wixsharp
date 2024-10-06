@@ -50,7 +50,8 @@ namespace WixSharp
     public class RegisterAsCom : WixEntity, IGenericEntity
     {
         // Get the path to heat.exe
-        private static readonly string _heat = Path.Combine(Compiler.WixLocation, "heat.exe");
+        // private static readonly string _heat = Path.Combine(Compiler.WixLocation, "heat.exe");
+        static string heat = WixTools.Heat;
 
         /// <summary>
         /// Whether to create the output as COM objects or plain registry entries (adds argument '-scom' if false).<br/>
@@ -126,7 +127,7 @@ namespace WixSharp
             // Define the start info for heat.exe
             var pi = new ProcessStartInfo
             {
-                FileName = _heat,
+                FileName = heat,
                 Arguments = string.Join(" ", heatArgs),
                 CreateNoWindow = true,
                 UseShellExecute = false,

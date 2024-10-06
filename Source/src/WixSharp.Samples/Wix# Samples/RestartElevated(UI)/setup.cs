@@ -1,14 +1,14 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref WixSharp.UI.dll;
 using System;
-using System.Linq;
-using System.Windows.Forms;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Principal;
-using Microsoft.Deployment.WindowsInstaller;
+using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Forms;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {
@@ -17,7 +17,7 @@ class Script
         var project =
             new ManagedProject("ElevatedSetupUI",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                     new File("readme.txt")));
+                    new File("readme.txt")));
 
         project.ManagedUI = ManagedUI.Default;
         project.UIInitialized += (SetupEventArgs e) =>

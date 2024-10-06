@@ -1,5 +1,5 @@
-﻿using Caliburn.Micro;
-using System;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -76,7 +76,7 @@ namespace WixSharp.UI.WPF
         public Button GoNextButton => Buttons.FirstOrDefault(b => b.Name == "GoNext");
 
         /// <summary>
-        /// Gets the standard 'Beck' navigation button.
+        /// Gets the standard 'Back' navigation button.
         /// </summary>
         /// <value>
         /// The 'Beck' button.
@@ -97,8 +97,10 @@ namespace WixSharp.UI.WPF
         /// </summary>
         public void Init()
         {
-            ViewModelBinder.Bind(new CustomDialogBaseModel { Host = ManagedFormHost }, this, null);
+            this.DataContext = model = new CustomDialogBaseModel { Host = ManagedFormHost };
         }
+
+        CustomDialogBaseModel model;
 
         /// <summary>
         /// Sets the content of the user defined custom dialog panel. This method is to be only invoked by WixSHarp runtime.
@@ -113,13 +115,41 @@ namespace WixSharp.UI.WPF
                 standardUserPanel.Init(this);
             }
         }
+
+        void GoPrev_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.GoPrev();
+
+        void GoNext_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.GoNext();
+
+        void Cancel_Click(object sender, System.Windows.RoutedEventArgs e)
+            => model.Cancel();
     }
 
-    internal class CustomDialogBaseModel : Caliburn.Micro.Screen
+    /// <summary>
+    ///
+    /// </summary>
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    public class NotifyPropertyChangedBase : INotifyPropertyChanged
+    {
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Notifies the of property change.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        public void NotifyOfPropertyChange(string propertyName)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    internal class CustomDialogBaseModel : NotifyPropertyChangedBase
     {
         public ManagedForm Host { get; set; }
 
-        public BitmapImage Banner => Host?.Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner").ToImageSource();
+        public BitmapImage Banner => Host?.Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner").ToImageSource();
 
         bool canProceed;
 
@@ -129,8 +159,8 @@ namespace WixSharp.UI.WPF
             set
             {
                 canProceed = value;
-                NotifyOfPropertyChange(() => CanProceedIsChecked);
-                NotifyOfPropertyChange(() => CanGoNext);
+                NotifyOfPropertyChange(nameof(CanProceedIsChecked));
+                NotifyOfPropertyChange(nameof(CanGoNext));
             }
         }
 

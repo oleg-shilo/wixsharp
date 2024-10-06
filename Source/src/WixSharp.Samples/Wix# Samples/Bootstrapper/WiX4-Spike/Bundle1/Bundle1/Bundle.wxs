@@ -1,0 +1,41 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:bal="http://wixtoolset.org/schemas/v4/wxs/bal">
+	<Bundle Name="Bundle1" Manufacturer="TODO Manufacturer" Version="1.0.0.1" UpgradeCode="1c4f0354-a1f2-4f01-99d1-eec5f77ab98b">
+		<!--<BootstrapperApplication>
+			<bal:WixStandardBootstrapperApplication LicenseUrl="https://www.example.com/license" Theme="hyperlinkLicense" />
+		</BootstrapperApplication>-->
+
+		<BootstrapperApplication>
+			<Payload Name="WixToolset.Mba.Host.config" SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\WixBA.BootstrapperCore.config" />
+			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\mbanative.dll" />
+			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\WixToolset.Mba.Core.dll" />
+			<Payload SourceFile="..\WixToolset.WixBA\bin\Debug\net472\win-x86\WixToolset.WixBA.dll" />
+			<bal:WixManagedBootstrapperApplicationHost />
+		</BootstrapperApplication>
+
+		<!--
+		The description of the MBA building algorithm is here:
+		https://wixtoolset.org/docs/fourthree/faqs/#upgrading-v3-managed-bootstrapper-applications
+        https://github.com/wixtoolset/wix4/blob/develop/src/test/burn/TestData/TestBA/TestBAWixlib/WixBA.wxs
+		Though there is no a single COMPLETE WORKING example that exists as of 15-Apr-2023.
+		The example that would show how to create a working bundle with MBA.
+		This one can be build built but it fails to load the MBA.
+
+		      bundle1.exe -l .\run.log
+
+		[...][...]i000: Loading managed bootstrapper application.
+        [...][...]e000: Error 0x8013101b: Failed to create the bootstrapper application.
+        [...][...]e000: Error 0x8013101b: Failed to create the managed bootstrapper application.
+        [...][...]e000: Error 0x8013101b: Failed to create BA.
+        [...][...]e000: Error 0x8013101b: Failed to load BA.
+        [...][...]e000: Error 0x8013101b: Failed while running
+
+		There is no indication why :(
+		-->
+
+		<Chain>
+			<!-- TODO: Define the list of chained packages. -->
+			<PackageGroupRef Id="NetFx481WebAsPrereq" />
+			<MsiPackage bal:PrereqPackage="yes" SourceFile="..\Package1\bin\x64\Debug\en-US\Package1.msi" />
+		</Chain>
+	</Bundle>
+</Wix>

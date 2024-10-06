@@ -1,15 +1,14 @@
 //css_dir ..\..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref WixSharp.UI.dll;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixSharp.Forms;
@@ -37,7 +36,6 @@ public static class Script
         project.SetNetFxPrerequisite(Condition.Net45_Installed, "Please install .Net 4.5 First");
 
         // project.PreserveTempFiles = true;
-        project.SourceBaseDir = @"..\..\";
 
         project.Localize();
 
@@ -46,16 +44,19 @@ public static class Script
 
     static SupportedLanguages DetectLanguage()
     {
-        // in production you can do something smarter like analysing OS language
-        // current thread UI culture most likely will not work as it will be set to the language of the project
+        // In production you can do something smarter like analyzing OS language.
+        // Current thread UI culture most likely will not work as it will be set to the language of the project
+        // Consider using WixSharp.Native.GetPreferredIsoTwoLetterUILanguages to get OS preferred languages info
+
+        string[] OS_PreferredLanguages = Native.GetPreferredIsoTwoLetterUILanguages();
 
         var input = new Form
         {
-            Size = new Size(140, 50),
+            Size = new Size(140, 60),
             Text = "Language Selection",
             FormBorderStyle = FormBorderStyle.FixedToolWindow,
             ShowIcon = false,
-            KeyPreview = true,
+            TopMost = true,
             StartPosition = FormStartPosition.CenterScreen
         };
 
@@ -67,13 +68,6 @@ public static class Script
         langSelection.SelectedIndexChanged += (s, e) => input.Close();
 
         input.Controls.Add(langSelection);
-
-        input.Load += (s, e) => Win32.SetForegroundWindow(input.Handle);
-        langSelection.KeyDown += (s, e) =>
-        {
-            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Escape)
-                input.Close();
-        };
 
         input.ShowDialog();
 
@@ -87,21 +81,33 @@ public static class Script
 
         project.UIInitialized += (SetupEventArgs e) =>
         {
-            MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
+            // Debug.Assert(false);
 
-            // runtime.UIText.Add("Copy", "C-O-P-Y");
-            //runtime.Session["Copy"] = "C.O.P.Y";
+            MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
 
             switch (DetectLanguage())
             {
                 case SupportedLanguages.German:
-                    runtime.UIText.InitFromWxl(e.Session.ReadBinary("de_xsl"), merge: true);
+                    runtime.UIText.InitFromWxl(e.Session.ReadBinary("de_xsl"));
                     break;
 
                 case SupportedLanguages.Greek:
-                    runtime.UIText.InitFromWxl(e.Session.ReadBinary("gr_xsl"), merge: true);
+                    runtime.UIText.InitFromWxl(e.Session.ReadBinary("gr_xsl"));
+
                     break;
             }
+        };
+
+        project.UILoaded += (SetupEventArgs e) =>
+        {
+            // first dialog is loaded
+            MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
+            runtime.UIText.InitFromWxl(e.Session.ReadBinary("WixSharp_UIText")); // translate back to English
+
+            e.ManagedUI.OnCurrentDialogChanged += (IManagedDialog obj) =>
+            {
+                // any dialog after the first one is loaded
+            };
         };
     }
 }

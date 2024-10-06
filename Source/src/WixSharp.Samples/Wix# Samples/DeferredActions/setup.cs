@@ -1,5 +1,5 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 using Microsoft.Deployment.WindowsInstaller;
@@ -13,6 +13,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 using IO = System.IO;
 
 class Script
@@ -36,6 +37,7 @@ class Script
 
             project.GUID = new Guid("6fe30b47-2577-43ad-9195-1861ba25889b");
             project.AfterInstall += Project_AfterInstall;
+
             Compiler.PreserveTempFiles = true;
             Compiler.BuildMsi(project);
         }

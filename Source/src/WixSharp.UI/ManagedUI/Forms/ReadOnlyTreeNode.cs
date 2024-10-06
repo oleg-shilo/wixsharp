@@ -4,10 +4,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
-using Microsoft.Deployment.WindowsInstaller;
+using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp.UI.Forms
 {
@@ -23,8 +24,15 @@ namespace WixSharp.UI.Forms
         /// <returns></returns>
         public static bool IsViewChecked(this FeatureItem feature)
         {
-            if (feature.View is TreeNode)
-                return (feature.View as TreeNode).Checked;
+            if (feature.ViewModel is TreeNode)
+                return (feature.ViewModel as TreeNode).Checked;
+
+            try
+            {
+                // can be a WPF TreeView custom node
+                return (bool)feature.ViewModel.GetType().GetProperty("Checked").GetValue(feature.ViewModel);
+            }
+            catch { }
 
             return false;
         }
@@ -35,8 +43,8 @@ namespace WixSharp.UI.Forms
         /// <param name="feature">The feature.</param>
         public static void ResetViewChecked(this FeatureItem feature)
         {
-            if (feature.View is TreeNode)
-                (feature.View as TreeNode).Checked = feature.DefaultIsToBeInstalled();
+            if (feature.ViewModel is TreeNode)
+                (feature.ViewModel as TreeNode).Checked = feature.DefaultIsToBeInstalled();
         }
 
         /// <summary>

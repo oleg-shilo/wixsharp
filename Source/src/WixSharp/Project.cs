@@ -183,9 +183,32 @@ namespace WixSharp
         public string Description = "";
 
         /// <summary>
-        /// Parameters of digitally sign of this project
+        /// Parameters of digitally sign of this project.
+        /// <para>You can overwrite signing algorithm by implementing
+        /// <see cref="IDigitalSignature"/> in your own user defined class.</para>
         /// </summary>
-        public DigitalSignature DigitalSignature;
+        public IDigitalSignature DigitalSignature;
+
+        /// <summary>
+        /// Controls whether all files in the project should be digitally signed.
+        /// Supported file formats can be configured by setting <see cref="SignAllFilesOptions.SupportedFileFormats"/>.
+        /// When set to <c>true</c>, all files will be signed.
+        /// <p>Note, the digital signing will be performed on the original files specified in the <see cref="WixSharp.Project"/>
+        /// initialization.</p>
+        /// </summary>
+        public bool SignAllFiles
+        {
+            get => signAllFiles;
+
+            set
+            {
+                signAllFiles = value;
+                signAllFilesSet = true;
+            }
+        }
+
+        bool signAllFiles = true;
+        internal bool signAllFilesSet = false;
 
         internal virtual void Preprocess()
         {
@@ -201,7 +224,7 @@ namespace WixSharp
                 actions.ForEach(a => a.RefAssemblies = refAsms);
             }
 
-            if (WixSharp.Compiler.AutoGeneration.Map64InstallDirs && this.Platform.HasValue && this.Platform.Value == WixSharp.Platform.x64)
+            if (WixSharp.Compiler.AutoGeneration.Map64InstallDirs && this.Platform.HasValue && this.Is64Bit)
             {
                 foreach (var dir in this.AllDirs)
                 {
@@ -255,9 +278,16 @@ namespace WixSharp
         /// </summary>
         public Platform? Platform;
 
+        internal bool Is64Bit => Platform == WixSharp.Platform.x64 || Platform == WixSharp.Platform.arm64;
+
+        /// <summary>
+        /// Schedules the FailWhenDeferred custom action for the current platform.
+        /// </summary>
+        public bool FailWhenDeferred = false;
+
         /// <summary>
         /// Collection of Media generic <see cref="T:WixSharp.WixEntity"/> containers for defining WiX <c>Media</c> elements
-        /// attributes. Project is always initialized with a sinle Media item. Though if you add multiples media items via
+        /// attributes. Project is always initialized with a single Media item. Though if you add multiples media items via
         /// <see cref="T:WixSharp.Project"/> constructor it removes the initial Media item before adding any new items.
         /// <para>These attributes describe a disk that makes up the source media for the installation.</para>
         ///<example>The following is an example of defining the <c>Package</c> attributes.
@@ -275,7 +305,7 @@ namespace WixSharp
         /// </code>
         /// </example>
         /// </summary>
-        public List<Media> Media = new List<Media>(new[] { new Media() });
+        public List<Media> Media = new List<Media>(new[] { new Media { IsSetByUser = false } });
 
         /// <summary>
         /// The REINSTALLMODE property is a string that contains letters specifying the type of reinstall to perform.
@@ -304,6 +334,17 @@ namespace WixSharp
         /// If not specified <see cref="WUI.WixUI_Minimal"/> will used.
         /// </summary>
         public WUI UI = WUI.WixUI_Minimal;
+
+        /// <summary>
+        /// <para>Note this setting is only applicable to native MSI/WiX UI.</para>
+        /// By default, WixUI will not include any translated Error or ProgressText elements.
+        /// You can include them by referencing the WixUI_ErrorProgressText UI element in the wxs file.
+        /// You can control referencing WixUI_ErrorProgressText element by setting by setting this field.
+        /// <para>
+        /// True (default): WixUI_ErrorProgressText will be referenced, otherwise it will not.
+        /// </para>
+        /// </summary>
+        public bool LocalizeErrorAndProgressText = true;
 
         /// <summary>
         /// The Binary (assembly) implementing WiX embedded UI
@@ -343,7 +384,7 @@ namespace WixSharp
         /// </para>
         /// <remarks>This value should not be confused with MSI <c>ProductId</c>, which is in fact
         /// not an identifier of the product but rather an identifier of the product particular version.
-        /// MSI uses <c>UpgradeCode</c> as a common identification of the product regardless of it's version.
+        /// MSI uses <c>UpgradeCode</c> as a common identification of the product regardless of its version.
         /// <para>In a way <see cref="GUID"/> is an alias for <see cref="UpgradeCode"/>.</para>
         /// </remarks>
         /// </summary>
@@ -418,11 +459,22 @@ namespace WixSharp
         /// <summary>
         /// Use this attribute if you need to specify the installation scope of this package: per-machine or per-user.
         /// </summary>
-        public InstallScope? InstallScope;
+        [Obsolete("`InstallScope` is not supported in WiX4, use `Scope` instead", true)]
+        public InstallScope? InstallScope
+        {
+            get => Scope;
+            set => Scope = value;
+        }
+
+        /// <summary>
+        /// Use this attribute if you need to specify the installation scope of this package: per-machine or per-user.
+        /// </summary>
+        public InstallScope? Scope;
 
         /// <summary>
         /// Use this attribute to specify the privileges required to install the package on Windows Vista and above.
         /// </summary>
+        [Obsolete("This attribute is depreciated in WiX4", true)]
         public InstallPrivileges? InstallPrivileges;
 
         /// <summary>
@@ -566,8 +618,6 @@ namespace WixSharp
         /// </summary>
         public bool EmitConsistentPackageId = false;
 
-        internal bool SuppressSettingPackageLanguages = false;
-
         /// <summary>
         /// Collection of WiX/MSI <see cref="Binary"/> objects to be embedded into MSI database.
         /// Normally you doe not need to deal with this property as <see cref="Compiler"/> will populate
@@ -586,12 +636,12 @@ namespace WixSharp
         public List<LaunchCondition> LaunchConditions = new List<LaunchCondition>();
 
         /// <summary>
-        /// Path to the file containing the image (e.g. bmp) setup dialogs banner. If not specified default image will be used.
+        /// Path to the file containing the image (e.g. png) setup dialogs banner. If not specified default image will be used.
         /// </summary>
         public string BannerImage = "";
 
         /// <summary>
-        /// Path to the file containing the image (e.g. bmp) setup dialogs background. If not specified default image will be used.
+        /// Path to the file containing the image (e.g. png) setup dialogs background. If not specified default image will be used.
         /// <remarks>
         /// <para>If the image is to be used in the default ManagedUI dialogs it will be left-docked at runtime and will effectively
         /// play the role of a left-aligned dialog banner. Thus if it is too wide it can push away (to right) the all other UI elements.
@@ -621,14 +671,9 @@ namespace WixSharp
 
         /// <summary>
         /// The wild card deduplication algorithm to be used during wild card resolution (<c>ResolveWildCards</c>).
-        /// <para>When ResolveWildCards is invoked, it inserts the files discovered from project's DirFiles and Files
-        /// definitions. The dedup delegate Project.WildCardDedup will be invoked or every Dir, which gets new
-        /// discovered files,
-        /// </para>
-        /// <para>
         /// <para>The default implementation does nothing but you can assign a custom routine that
-        /// can be used to do post-resolving deduplication of the <see cref="Dir"/> items.
-        /// </para>
+        /// can be used to do post-resolving deduplication of the <see cref="Dir"/> items.</para>
+        /// <para>
         /// The following sample demonstrates how to remove files with the same file name:
         /// </para>
         /// <code>
@@ -644,17 +689,15 @@ namespace WixSharp
         /// ...
         /// Compiler.BuildMsi(project);
         /// </code>
-        /// <para>Note, the need for <c>project.WildCardDedup</c> may arise only for very specific
-        /// deployment scenarios when the same files exist in multiple source locations.
+        /// <para>Note, the need for <c>project.WildCardDedup</c> may araise only for very specific
+        /// deployment scenarios. Some of them are discussed in this thread: https://github.com/oleg-shilo/wixsharp/issues/270
         /// </para>
         /// </summary>
-        /// <remarks>
-        ///
-        /// </remarks>
         public Action<Dir> WildCardDedup = dir =>
-        {
-            // sample dedup
-        };
+            {
+                // Issue #270: Deduplication of files added with wildcards
+                // sample dedup
+            };
 
         /// <summary>
         /// The unique file name deduplication algorithm to be used as <see cref="Project.WildCardDedup"/>.
@@ -692,27 +735,24 @@ namespace WixSharp
             int iterator = 0;
             var dirList = new List<Dir>();
             var fileList = new List<File>();
-            var impactedDirs = new List<Dir>();
 
             dirList.AddRange(Dirs);
 
             while (iterator < dirList.Count)
             {
                 var dir = dirList[iterator];
-
-                foreach (Files dirItems in dir.FilesCollections)
+                foreach (Files dirItems in dir.FileCollections)
                 {
-                    var discoveredItems = dirItems.GetAllItems(SourceBaseDir, dir);
-                    foreach (WixEntity item in discoveredItems)
+                    foreach (WixEntity item in dirItems.GetAllItems(SourceBaseDir, dir))
                     {
                         if (item is DirFiles)
                         {
-                            dir.AddDirFileCollection(item as DirFiles);
+                            dirList[iterator].AddDirFileCollection(item as DirFiles);
                         }
                         else if (item is Dir discoveredDir && !dir.Dirs.Contains(item))
                         {
-                            // WildCardDedup?.Invoke(discoveredDir);
-                            dir.AddDir(discoveredDir);
+                            WildCardDedup?.Invoke(discoveredDir);
+                            dirList[iterator].AddDir(discoveredDir);
                         }
                     }
                 }
@@ -720,23 +760,18 @@ namespace WixSharp
                 foreach (Dir item in dir.Dirs)
                     dirList.Add(item);
 
-                foreach (DirFiles coll in dir.DirFilesCollections)
+                foreach (DirFiles coll in dir.DirFileCollections)
                 {
                     dir.Files = dir.Files.Combine(coll.GetFiles(SourceBaseDir));
-
-                    if (dir.Files.Any() && !impactedDirs.Contains(dir))
-                        impactedDirs.Add(dir);
+                    WildCardDedup?.Invoke(dir);
                 }
 
                 //clear resolved collections
-                dir.FilesCollections = new Files[0];
-                dir.DirFilesCollections = new DirFiles[0];
+                dir.FileCollections = new Files[0];
+                dir.DirFileCollections = new DirFiles[0];
 
                 iterator++;
             }
-
-            foreach (var dir in impactedDirs)
-                WildCardDedup?.Invoke(dir);
 
             if (pruneEmptyDirectories)
             {
@@ -844,15 +879,17 @@ namespace WixSharp
         /// <returns></returns>
         public string GetTargetPathOf(File file)
         {
+            // var filename = file?.Name.Split(System.IO.Path.DirectorySeparatorChar).LastOrDefault() ?? string.Empty;
+
             var dir = this.AllDirs.FirstOrDefault(d => d.Files.Contains(file));
-            var path = new List<string> { file.Name };
+            var path = new List<string> { file?.Name.PathGetFileName() ?? "" };
 
             while (dir != null)
             {
                 path.Insert(0, dir.Name);
                 dir = this.AllDirs.FirstOrDefault(d => d.Dirs.Contains(dir));
             }
-            return path.JoinBy("\\");
+            return path.JoinBy(System.IO.Path.DirectorySeparatorChar.ToString());
         }
 
         /// <summary>
@@ -923,7 +960,7 @@ namespace WixSharp
         /// </summary>
         public int InstallerVersion = 200;
 
-        private string codepage = "";
+        private string codepage = "Windows-1252";
 
         /// <summary>
         /// Installation UI Code Page. If not specified
@@ -956,16 +993,6 @@ namespace WixSharp
                                                 .ToArray());
             }
         }
-
-        internal bool IsLocalized
-        {
-            get { return (Language.ToLower() != "en-us" && Language.ToLower() != "en") || !LocalizationFile.IsEmpty(); }
-        }
-
-        /// <summary>
-        /// Path to the Localization file.
-        /// </summary>
-        public string LocalizationFile = "";
 
         /// <summary>
         /// Name (path) of the directory which was assigned <see cref="T:WixSharp.Compiler.AutoGeneration.InstallDirDefaultId"/> ID as part of XML auto-generation (see <see cref="T:WixSharp.AutoGenerationOptions"/>).

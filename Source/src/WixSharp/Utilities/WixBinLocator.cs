@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace WixSharp
 {
@@ -167,6 +168,63 @@ namespace WixSharp
                                             "WIXSHARP_WIXDIR or WixSharp.Compiler.WixLocation to the valid path to the WiX binaries.\n" +
                                             "WiX binaries can be brought to the build environment by either installing WiX Toolset, " +
                                             "downloading Wix# suite or by adding WixSharp.wix.bin NuGet package to your project.");
+            return null;
+        }
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    public static class VSLocator
+    {
+        /// <summary>
+        /// Searches for the specified Visual Studio project implementing custom Managed UI and adds corresponding 'include wxi'
+        /// statement of the WXS definition.
+        /// </summary>
+        /// <param name="project">The project to add custom UI to.</param>
+        /// <param name="projectName">Name of the custom UI definition project.</param>
+        /// <exception cref="System.Exception">Cannot find UI project `{projectName}`. You may solve this problem by explicitly adding " +
+        ///                     $"UI wxi file with `project.AddXmlInclude(@\"..\\{projectName}\\wix\\{projectName}.wxi\"`</exception>
+        public static void AddUIProject(this ManagedProject project, string projectName)
+        {
+            var solutionDir = FindVsProjectPath().PathGetDirName();
+            var uiProjectDir = System.IO.Directory
+                .GetFiles(solutionDir, $"{projectName}*.csproj", System.IO.SearchOption.AllDirectories)
+                .FirstOrDefault()?
+                .PathGetDirName();
+
+            var wxiFile = (uiProjectDir ?? "").PathJoin($"wix\\{projectName}.wxi");
+
+            if (uiProjectDir.IsEmpty() || !wxiFile.FileExists())
+            {
+                var error = $"Error: Cannot find UI project `{projectName}`. Ensure the project name is specified correctly. " +
+                    $"You may solve this problem by explicitly adding UI wxi file with " +
+                    $"`project.AddXmlInclude(@\"..\\{projectName}\\wix\\{projectName}.wxi\"`";
+                Compiler.OutputWriteLine(error);
+                throw new Exception(error);
+            }
+
+            project.AddXmlInclude(wxiFile);
+        }
+
+        static string FindVsProjectPath()
+        {
+            var asm = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            var outdir = asm.PathGetDirName();
+
+            // running from the proj dir
+            if (outdir.PathCombine("bin").PathExists() && outdir.PathCombine("obj").PathExists())
+                return outdir;
+
+            // running from the proj/bin/debug dir
+            for (int i = 0; i < 6; i++)
+            {
+                if (outdir.PathGetFileName() == "bin")
+                    return outdir.PathGetDirName();
+
+                outdir = outdir.PathGetDirName();
+            }
+
             return null;
         }
     }

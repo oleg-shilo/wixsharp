@@ -1,19 +1,19 @@
+using Microsoft.Win32;
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using System.Security.Principal;
 using System.Text;
-using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
-using Microsoft.Win32;
-using System.Globalization;
-using System.Reflection;
 using System.Text.RegularExpressions;
-using static WixSharp.SetupEventArgs;
+using System.Xml.Linq;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
+using static WixSharp.SetupEventArgs;
 
 namespace WixSharp
 {

@@ -1,13 +1,13 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 public class Script
 {
@@ -28,7 +28,7 @@ public class Script
         //Of course you can use 'bool VersionRange.MigrateFeatures'. The following is just an
         //example of how to access WiX attributes if they are not covered by Wix#
         Compiler.WixSourceGenerated += doc => doc.Root
-                                                 .Select("Product/Upgrade/UpgradeVersion")
+                                                 .Select("Package/Upgrade/UpgradeVersion")
                                                  .AddAttributes("MigrateFeatures=yes");
         project.BeforeInstall += project_BeforeInstall;
 

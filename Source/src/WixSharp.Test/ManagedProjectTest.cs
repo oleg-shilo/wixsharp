@@ -33,6 +33,13 @@ namespace WixSharp.Test
         }
 
         [Fact]
+        public void Can_Extract_WixLocalization_Files_Test()
+        {
+            var localizationFile = ManagedUI.LocalizationFilesLocation.PathCombine("WixUI_uk-UA.wxl");
+            Assert.True(localizationFile.FileExists());
+        }
+
+        [Fact]
         public void CanAutoRef_WpfDialogs_Test()
         {
             var dialog = System.Reflection.Assembly.Load("WixSharp.UI.WPF").GetTypes().FirstOrDefault(x => x.Name == "WpfDialogMock");

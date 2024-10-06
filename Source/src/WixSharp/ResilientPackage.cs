@@ -2,10 +2,20 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
 using WixSharp.Utilities;
+
+#if WIX3
+using WixToolset.Dtf.WindowsInstaller;
+#else
+
+using WixToolset.Dtf.WindowsInstaller;
+
+#endif
+
 using IO = System.IO;
+
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
 
 namespace WixSharp
 {
@@ -65,7 +75,7 @@ namespace WixSharp
                     Return.check,
                     When.Before, Step.PublishProduct,
                     Condition.NOT_Installed)
-            );
+                              );
 
             var assembly = typeof(ResilientPackage).Assembly.Location;
 
@@ -93,7 +103,7 @@ namespace WixSharp
                 {
                     UsesProperties = $"UserSID,OriginalDatabase,ALLUSERS,{WIXSHARP_RESILIENT_SOURCE_DIR}"
                 }
-            );
+                              );
         }
 
         /// <summary>

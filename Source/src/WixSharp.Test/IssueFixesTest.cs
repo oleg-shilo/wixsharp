@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Xml.Linq;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
+using WixSharp.Nsis;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
@@ -19,7 +20,7 @@ using Xunit.Sdk;
 
 namespace WixSharp.Test
 {
-    public class IssueFixesTest : WixLocator
+    public class IssueFixesTest
     {
         /// <summary>
         /// Fixes the issue 803.
@@ -58,7 +59,7 @@ namespace WixSharp.Test
                             // new Feature("extra"),
                             @"Logs")));
 
-            project.PreserveTempFiles = true;
+            // project.PreserveTempFiles = true;
             project.WixSourceGenerated += document =>
             {
                 var xml = document.ToString();
@@ -262,26 +263,119 @@ namespace WixSharp.Test
             assert(projPlatform: null, is64Reg1: true, is64Reg2: true,
                    assertHandler: (doc, reg, reg2, file) =>
                    {
-                       Assert.True(reg.HasAttribute("Win64", "yes"));
-                       Assert.True(reg2.HasAttribute("Win64", "yes"));
-                       Assert.False(file.HasAttribute("Win64", "yes"));
+                       Assert.True(reg.HasAttribute("Bitness", "always64"));
+                       Assert.True(reg2.HasAttribute("Bitness", "always64"));
+                       Assert.False(file.HasAttribute("Bitness", "always64"));
                    });
 
             assert(projPlatform: Platform.x64, is64Reg1: null, is64Reg2: null,
                    assertHandler: (doc, reg, reg2, file) =>
                    {
-                       Assert.True(reg.HasAttribute("Win64", "yes"));
-                       Assert.True(reg2.HasAttribute("Win64", "yes"));
-                       Assert.True(file.HasAttribute("Win64", "yes"));
+                       Assert.True(reg.HasAttribute("Bitness", "always64"));
+                       Assert.True(reg2.HasAttribute("Bitness", "always64"));
+                       Assert.True(file.HasAttribute("Bitness", "always64"));
                    });
 
             assert(projPlatform: Platform.x64, is64Reg1: false, is64Reg2: false,
                    assertHandler: (doc, reg, reg2, file) =>
                    {
-                       Assert.False(reg.HasAttribute("Win64", "yes"));
-                       Assert.False(reg2.HasAttribute("Win64", "yes"));
-                       Assert.True(file.HasAttribute("Win64", "yes"));
+                       Assert.False(reg.HasAttribute("Bitness", "always64"));
+                       Assert.False(reg2.HasAttribute("Bitness", "always64"));
+                       Assert.True(file.HasAttribute("Bitness", "always64"));
                    });
+        }
+
+        [Fact]
+        [Description("WiX 4 Bugs (Feature condition) #1282")]
+        public void WiX4_Issue_1_1282()
+        {
+            var feature1 = new Feature("feature1")
+            {
+                Condition = new FeatureCondition("PROP1 = 1", level: 2)
+            };
+
+            var project = new Project("MyProduct",
+                                  new Dir(@"%ProgramFiles%\My Company\My Product",
+                                      new File("setup.cs")
+                                      {
+                                          Feature = feature1
+                                      }));
+
+            var xmlFile = project.BuildWxs();
+        }
+
+        [Fact]
+        [Description("WiX4: RemotePayload instead of ExeRemotePayload #1404")]
+        public void WiX4_Issue_1401()
+        {
+            var edgeWebView2 = new ExePackage
+            {
+                InstallArguments = "/silent /install",
+                PerMachine = true,
+                Permanent = true,
+                Compressed = true,
+                DownloadUrl = "https://go.microsoft.com/fwlink/p/?LinkId=2124703",
+                DetectCondition = "WEB_VIEW_RUNTIME_INSTALLED"
+            };
+
+            var edgeWebView2Payload = new ExePackagePayload
+            {
+                Name = "MicrosoftEdgeWebview2Setup.exe",
+                Compressed = true,
+                DownloadUrl = "https://go.microsoft.com/fwlink/p/?LinkId=2124703",
+                Hash = "4c4d256",
+                Size = 201708,
+                SourceFile = "src.file"
+            };
+
+            // will check that the obsolete `RemotePayloads` is still channeling the payloads to the XML
+#pragma warning disable CS0618 // Type or member is obsolete
+            edgeWebView2.RemotePayloads = new Bootstrapper.RemotePayload[]
+                {
+                    new MsuPackagePayload{ SourceFile = "MsuPackagePayload.file", Size = 333 }
+                };
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            edgeWebView2.Payloads = new Bootstrapper.Payload[]
+            {
+                edgeWebView2Payload,
+                "script.dll".ToPayload(),
+                new BundlePackagePayload{ SourceFile = "BundlePackagePayload.file" },
+                new MsiPackagePayload{ SourceFile = "MsiPackagePayload.file" },
+                new MspPackagePayload{ SourceFile = "MspPackagePayload.file" },
+            };
+
+            var bootstrapper = new Bundle("My Product", edgeWebView2);
+
+            var package = bootstrapper.ToXml().First().FindFirst("ExePackage");
+
+            var payload = package.FindFirst("Payload");
+            var bundlePayload = package.FindFirst("BundlePackagePayload");
+            var exePayload = package.FindFirst("ExePackagePayload");
+            var msiPayload = package.FindFirst("MsiPackagePayload");
+            var mspPayload = package.FindFirst("MspPackagePayload");
+            var msuPayload = package.FindFirst("MsuPackagePayload");
+
+            Assert.NotNull(payload);
+            Assert.NotNull(bundlePayload);
+            Assert.NotNull(exePayload);
+            Assert.NotNull(msiPayload);
+            Assert.NotNull(mspPayload);
+            Assert.NotNull(msuPayload);
+
+            Assert.Equal("script.dll", payload.Attr("SourceFile"));
+            Assert.Equal("BundlePackagePayload.file", bundlePayload.Attr("SourceFile"));
+            Assert.Equal("MsiPackagePayload.file", msiPayload.Attr("SourceFile"));
+            Assert.Equal("MspPackagePayload.file", mspPayload.Attr("SourceFile"));
+
+            Assert.Equal("MsuPackagePayload.file", msuPayload.Attr("SourceFile"));
+            Assert.Equal("333", msuPayload.Attr("Size"));
+
+            Assert.Equal("yes", exePayload.Attr("Compressed"));
+            Assert.Equal("MicrosoftEdgeWebview2Setup.exe", exePayload.Attr("Name"));
+            Assert.Equal("https://go.microsoft.com/fwlink/p/?LinkId=2124703", exePayload.Attr("DownloadUrl"));
+            Assert.Equal("201708", exePayload.Attr("Size"));
+            Assert.Equal("src.file", exePayload.Attr("SourceFile"));
         }
 
         [Fact]
@@ -305,15 +399,49 @@ namespace WixSharp.Test
             }
         }
 
+        private void Project1_WixSourceGenerated(XDocument document)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        [Description("Issue #1398: Underscore in String Id in wxl breaks localization ")]
+        public void Fix_Issue_1398()
+        {
+            var project = new Project();
+
+            project.LocalizationFile = "WixUI_de-de.extra.wxl";
+            project.Language = "de-de";
+
+            System.IO.File.WriteAllText(project.LocalizationFile,
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<WixLocalization Culture=""de-de"" Codepage=""1252"" xmlns=""http://wixtoolset.org/schemas/v4/wxl"">
+    <String Id=""TestName"" >TheNextman</String>
+    <String Id=""TestNameX"" >TheNextman2 </String>
+    <String Id=""TestNameXX"" >TheNextman3 </String>
+</WixLocalization>");
+
+            var mergedFile = ManagedUI.LocalizationFileFor(project);
+
+            var items = XDocument.Load(mergedFile).Root.Elements().ToArray();
+
+            Assert.NotNull(items.Where(x => x.Attribute("Id").Value == "TestName" && x.Value == "TheNextman"));
+            Assert.NotNull(items.Where(x => x.Attribute("Id").Value == "TestNameX" && x.Value == "TheNextman2"));
+            Assert.NotNull(items.Where(x => x.Attribute("Id").Value == "TestNameXX" && x.Value == "TheNextman3"));
+        }
+
         [Fact]
         [Description("Issue #656: ExeFileShortcut changing folder name ")]
         public void Fix_Issue_656()
         {
             // 'MySystem' should not be converted to 'MySystemFolder`
             var raw_path = @"[INSTALLDIR]\MySystem\MyProduct.exe";
-
             var normalized_path = raw_path.NormalizeWixString();
 
+            Assert.Equal(raw_path, normalized_path);
+
+            raw_path = @"[WindowsFolder]\MySystem\MyProduct.exe";
+            normalized_path = raw_path.NormalizeWixString();
             Assert.Equal(raw_path, normalized_path);
         }
 
@@ -455,8 +583,7 @@ namespace WixSharp.Test
                              .Where(x => x.HasAttribute("Name", "PersonalFolder"))
                              //.Where(x => x.HasAttribute("Name", v => v == "PersonalFolder"))
                              .SelectMany(x => x.FindAll("Component"))
-                             .ForEach(comp => comp.InsertUserProfileRegValue()
-                                                  .InsertUserProfileRemoveFolder());
+                             .ForEach(comp => comp.InsertUserProfileRegValue());
             };
             string wxs = project.BuildWxs();
 
@@ -486,8 +613,9 @@ namespace WixSharp.Test
 
         void Project_WixSourceGenerated(XDocument document)
         {
+            // var dir = document.FindAll("StandardDirectory")
             var dir = document.FindAll("Directory")
-                              .Where(x => x.HasAttribute("Name", "Test Project") && x.Parent.HasAttribute("Name", "PersonalFolder"))
+                              .Where(x => x.HasAttribute("Name", "Test Project") && x.Parent.HasAttribute("Id", "PersonalFolder"))
                               .First();
 
             dir.FindFirst("Component")

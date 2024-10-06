@@ -45,7 +45,8 @@ namespace WixSharp.UI.Forms
                 this.userScopeRadioButton.Checked = true;
             }
 
-            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner");
+            banner.Image = Runtime.Session.GetResourceBitmap("WixUI_Bmp_Banner") ??
+                           Runtime.Session.GetResourceBitmap("WixSharpUI_Bmp_Banner");
 
             this.installDirProperty = Runtime.Session.Property("WixSharp_UI_INSTALLDIR");
 
@@ -68,7 +69,8 @@ namespace WixSharp.UI.Forms
                 installDir.Text = Environment.ExpandEnvironmentVariables(installDirPropertyValue);
             }
 
-            ResetLayout();
+            if (banner.Image != null)
+                ResetLayout();
         }
 
         void ResetLayout()

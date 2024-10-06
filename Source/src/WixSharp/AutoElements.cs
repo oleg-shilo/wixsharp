@@ -29,7 +29,9 @@ THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Xml.Linq;
 using IO = System.IO;
 using Path = System.IO.Path;
@@ -43,13 +45,6 @@ namespace WixSharp
     /// </summary>
     public enum CompilerSupportState
     {
-        /// <summary>
-        /// The feature will be enabled automatically when needed
-        /// </summary>
-        [Obsolete(message: "This value is no longer used by any of the compiler features. " +
-                  "Use `CompilerSupportState.Enabled` instead.", error: false)]
-        Automatic = 0,
-
         /// <summary>
         /// The feature will be enabled
         /// </summary>
@@ -77,6 +72,11 @@ namespace WixSharp
     /// </para>
     /// <para>The following link is a good example of the technique:
     /// http://stackoverflow.com/questions/16119708/component-testcomp-installs-to-user-profile-it-must-use-a-registry-key-under-hk</para>
+    /// <para>
+    /// Note, there is also additional configuration settings class that controls other aspects of auto-generation:
+    /// <see cref="WixSharp.Compiler.AutoGeneration"/>. The reason for two classes is not strong and rather legacy-based.
+    /// The intention is to merge them together in the near future (as of 10-Jul-204).
+    /// </para>
     /// </summary>
     public static class AutoElements
     {
@@ -130,7 +130,7 @@ namespace WixSharp
         /// https://msdn.microsoft.com/en-us/library/bb756922.aspx
         /// </para>
         /// </summary>
-        public static bool EnableUACRevealer = true;
+        public static bool EnableUACRevealer = false;
 
         /// <summary>
         /// The UAC warning message to be displayed at the start of the actual installation (Progress dialog)
@@ -169,18 +169,7 @@ namespace WixSharp
         /// Enables scheduling deferred actions just after their corresponding
         /// "SetDeferredActionProperties" custom action. Enabled by default.
         /// </summary>
-        [Obsolete("This property obsolete. Its name is misspelled. Please use `ScheduleDeferredActionsAfterTunnellingTheirProperties` instead.")]
-        public static bool ScheduleDeferredActionsAfterTunnellingTheirProperties = true;
-
-        /// <summary>
-        /// Enables scheduling deferred actions just after their corresponding
-        /// "SetDeferredActionProperties" custom action. Enabled by default.
-        /// </summary>
-        public static bool ScheduleDeferredActionsAfterTunnelingTheirProperties
-        {
-            get => ScheduleDeferredActionsAfterTunnellingTheirProperties;
-            set => ScheduleDeferredActionsAfterTunnellingTheirProperties = value;
-        }
+        public static bool ScheduleDeferredActionsAfterTunnelingTheirProperties { get; set; } = true;
 
         /// <summary>
         /// Disables automatic insertion of user profile registry elements.
@@ -189,6 +178,25 @@ namespace WixSharp
         /// <para>Can also be managed by disabling ICE validation via Light.exe command line arguments.</para>
         /// </summary>
         public static bool DisableAutoUserProfileRegistry = false;
+
+        /// <summary>
+        /// Forces automatic insertion of the user profile registry. It is a controversial feature that is only required
+        /// for some exotic scenarios. See Issue #1326 (https://github.com/oleg-shilo/wixsharp/issues/1326).
+        /// <para>
+        /// If inserting user profile for all components is undesirable then you can do it for a specific component manually:
+        /// <code>
+        /// project.WixSourceGenerated += doc =>
+        /// {
+        ///     doc.FindAll("Component")
+        ///        .Where(x => x.HasAttribute("Id", val => val.Contains("my_component")))
+        ///        .ForEach(AutoElements.InsertUserProfileRegValue);
+        ///     };
+        /// </code>
+        /// </para>
+        /// <para>The problem this feature is trying to solve is closely related to the one handled by
+        /// <see cref="WixSharp.AutoElements.DisableAutoUserProfileRegistry"/> </para>
+        /// </summary>
+        public static bool ForceUserProfileRegistry = false;
 
         static void InsertRemoveFolder(XElement xDir, XElement xComponent, string when = "uninstall")
         {
@@ -203,17 +211,6 @@ namespace WixSharp
                                                 new XAttribute("Id", xDir.Attribute("Id").Value),
                                                 new XAttribute("On", when)));
             }
-        }
-
-        internal static XElement InsertUserProfileRemoveFolder(this XElement xComponent)
-        {
-            var xDir = xComponent.Parent("Directory");
-            if (!xDir.Descendants("RemoveFolder").Any() && !xDir.IsUserProfileRoot())
-                xComponent.Add(new XElement("RemoveFolder",
-                                            new XAttribute("Id", xDir.Attribute("Id").Value),
-                                            new XAttribute("On", "uninstall")));
-
-            return xComponent;
         }
 
         static void InsertCreateFolder(XElement xComponent)
@@ -244,6 +241,22 @@ namespace WixSharp
             return null;
         }
 
+        internal static void SetStandardDirs(this XElement product)
+        {
+            var topLevelDirs = product.Elements("Directory").ToArray();
+
+            var standardFiolderNames = Compiler.EnvironmentConstantsMapping.Values;
+            foreach (var item in topLevelDirs)
+            {
+                var id = item.Attribute("Id")?.Value;
+                if (standardFiolderNames.Contains(id))
+                {
+                    item.Name = "StandardDirectory";
+                    item.Attribute("Name")?.Remove();
+                }
+            }
+        }
+
         internal static bool HasKeyPathElements(this XElement xComponent)
         {
             return xComponent.Descendants()
@@ -265,9 +278,16 @@ namespace WixSharp
             return false;
         }
 
-        internal static XElement InsertUserProfileRegValue(this XElement xComponent)
+        /// <summary>
+        /// Inserts the user profile reg value. It is a dummy registry value that is required for some
+        /// deployment scenarios to work correctly. See <see cref="WixSharp.AutoElements.DisableAutoUserProfileRegistry"/>
+        /// for details.
+        /// </summary>
+        /// <param name="xComponent">The component.</param>
+        /// <returns></returns>
+        public static XElement InsertUserProfileRegValue(this XElement xComponent)
         {
-            //UserProfileRegValue has to be a KeyPath fo need to remove any KeyPath on other elements
+            //UserProfileRegValue has to be a KeyPath so need to remove any KeyPath on other elements
             var keyPathes = xComponent.Descendants()
                                       .ForEach(e => e.ClearKeyPath());
 
@@ -361,23 +381,20 @@ namespace WixSharp
             return xComponent;
         }
 
-        private static string[] GetUserProfileFolders()
-        {
-            return new[]
-                   {
-                       "ProgramMenuFolder",
-                       "AppDataFolder",
-                       "LocalAppDataFolder",
-                       "TempFolder",
-                       "PersonalFolder",
-                       "DesktopFolder",
-                       "StartupFolder"
-                   };
-        }
+        private static string[] UserProfileFolders = new[]
+                                                         {
+                                                             "ProgramMenuFolder",
+                                                             "AppDataFolder",
+                                                             "LocalAppDataFolder",
+                                                             "TempFolder",
+                                                             "PersonalFolder",
+                                                             "DesktopFolder",
+                                                             "StartupFolder"
+                                                         };
 
         static bool InUserProfile(this XElement xDir)
         {
-            string[] userProfileFolders = GetUserProfileFolders();
+            string[] userProfileFolders = UserProfileFolders;
 
             XElement xParentDir = xDir;
             do
@@ -398,7 +415,7 @@ namespace WixSharp
 
         static bool IsUserProfileRoot(this XElement xDir)
         {
-            string[] userProfileFolders = GetUserProfileFolders();
+            string[] userProfileFolders = UserProfileFolders;
 
             return userProfileFolders.Contains(xDir.Attribute("Name").Value);
         }
@@ -426,7 +443,7 @@ namespace WixSharp
                 shortcut.Attribute("Icon").Value = iconId;
             }
 
-            XElement product = doc.Root.Select("Product");
+            XElement product = doc.Root.Select(Compiler.ProductElementName);
 
             foreach (string file in icons.Keys)
                 product.AddElement(
@@ -437,17 +454,23 @@ namespace WixSharp
 
         static void InjectPlatformAttributes(XDocument doc)
         {
-            var is64BitPlatform = doc.Root.Select("Product/Package").HasAttribute("Platform", val => val == "x64");
+            var is64BitPlatform = doc.Root.Select("Package").HasAttribute("Platform", val => val.EndsWith("64"));
 
             if (is64BitPlatform)
             {
+                // doc says Component.Bitness may have value `default` that means "will be
+                // installed using the same bitness as the package. But package element does not have `bitness`.
+
                 doc.Descendants("Component")
                    .ForEach(comp =>
                    {
-                       if (!comp.HasAttribute("Win64"))
-                           comp.SetAttributeValue("Win64", "yes");
+                       if (!comp.HasAttribute("Bitness"))
+                           comp.SetAttributeValue("Bitness", "always64");
                    });
             }
+
+            var platform = doc.Root.Select("Package").Attribute("Platform");
+            platform?.Remove();
         }
 
         internal static void ExpandCustomAttributes(XDocument doc, WixProject project)
@@ -521,7 +544,7 @@ namespace WixSharp
                         if (data.StartsWith("base64_"))
                             data = data.Replace("base64_", "").Base64Decode();
 
-                        destElement.AddElement(name, null, data);
+                        destElement.AddAttributes($"{name}={data}");
                     }
                     else if (key == "Id")
                     {
@@ -610,7 +633,7 @@ namespace WixSharp
 
         static void CreateEmptyComponentsInDirectoriesToRemove(XDocument doc)
         {
-            XElement product = doc.Root.Select("Product");
+            XElement product = doc.Root.Select(Compiler.ProductElementName);
 
             // Create new empty components in parent directories of components with no files or registry
             var dirsWithNoFilesOrRegistryComponents = product.Descendants("Directory")
@@ -626,7 +649,7 @@ namespace WixSharp
 
         internal static void HandleEmptyDirectories(XDocument doc)
         {
-            XElement product = doc.Root.Select("Product");
+            XElement product = doc.Root.Select(Compiler.ProductElementName);
 
             var dummyDirs = product.Descendants("Directory")
                                    .SelectMany(x => x.Elements("Component"))
@@ -665,23 +688,9 @@ namespace WixSharp
                             //
                             // OMG!!!! If it is not over-engineering I don't know what is.
 
-                            bool oldAlgorithm = false;
-
-                            if (!oldAlgorithm)
-                            {
-                                //current approach
-                                InsertCreateFolder(item);
-                                if (!xDir.ContainsAnyRemoveFolder())
-                                    InsertRemoveFolder(xDir, item, "uninstall");
-                            }
-                            else
-                            {
-                                //old approach
-                                if (!item.Attribute("Id").Value.EndsWith(".EmptyDirectory"))
-                                    InsertCreateFolder(item);
-                                else if (!xDir.ContainsAnyRemoveFolder())
-                                    InsertRemoveFolder(xDir, item, "uninstall"); //to keep WiX/compiler happy and allow removal of the dummy directory
-                            }
+                            InsertCreateFolder(item);
+                            if (!xDir.ContainsAnyRemoveFolder())
+                                InsertRemoveFolder(xDir, item, "uninstall");
                         }
                     }
                 }
@@ -694,10 +703,11 @@ namespace WixSharp
             InjectShortcutIcons(doc);
             HandleEmptyDirectories(doc);
 
-            XElement product = doc.Root.Select("Product");
+            XElement product = doc.Root.Select(Compiler.ProductElementName);
 
             int? absPathCount = null;
-            foreach (XElement dir in product.Element("Directory").Elements("Directory"))
+
+            foreach (XElement dir in product.Elements("Directory"))
             {
                 XElement installDir = dir;
 
@@ -706,7 +716,7 @@ namespace WixSharp
                 {
                     string absolutePath = installDirName.Value;
 
-                    if (dir == product.Element("Directory").Elements("Directory").First()) //only for the first root dir
+                    if (dir == product.Elements("Directory").First()) //only for the first root dir
                     {
                         //ManagedUI will need some hint on the install dir as it cannot rely on the session action (e.g. Set_INSTALLDIR_AbsolutePath)
                         //because it is running outside of the sequence and analyses the tables directly for the INSTALLDIR
@@ -728,12 +738,14 @@ namespace WixSharp
                                 new XAttribute("Value", absolutePath)));
 
                     product.SelectOrCreate("InstallExecuteSequence").Add(
-                            new XElement("Custom", $"(NOT Installed) AND (UILevel < 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
+                            new XElement("Custom",
+                                new XAttribute("Condition", $"(NOT Installed) AND (UILevel < 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})"),
                                 new XAttribute("Action", customAction),
                                 new XAttribute("Before", "AppSearch")));
 
                     product.SelectOrCreate("InstallUISequence").Add(
-                            new XElement("Custom", $"(NOT Installed) AND (UILevel = 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})",
+                            new XElement("Custom",
+                                new XAttribute("Condition", $"(NOT Installed) AND (UILevel = 5) AND ({actualDirName} = ABSOLUTEPATH{absPathCount})"),
                                 new XAttribute("Action", customAction),
                                 new XAttribute("Before", "AppSearch")));
 
@@ -842,7 +854,19 @@ namespace WixSharp
                 }
             }
 
+            if (ForceUserProfileRegistry)
+            {
+                product
+                    .FindAll("Component")
+                    .ForEach(x =>
+                    {
+                        if (!x.ContainsDummyUserProfileRegistry())
+                            InsertUserProfileRegValue(x);
+                    });
+            }
+
             InjectPlatformAttributes(doc);
+            SetStandardDirs(product);
         }
 
         internal static void NormalizeFilePaths(XDocument doc, string sourceBaseDir, bool emitRelativePaths)

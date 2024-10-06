@@ -1,5 +1,5 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
 using WixSharp;
@@ -18,7 +18,7 @@ class Script
 
         project.UI = WUI.WixUI_InstallDir;
         project.GUID = new Guid("1ADF5503-75F1-4EBC-ADC5-8260C1808A5B");
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
         project.BuildMsi();
     }
 }

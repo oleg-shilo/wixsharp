@@ -4,7 +4,7 @@ using System.Xml.Linq;
 namespace WixSharp.Controls
 {
     /// <summary>
-    /// Defines generic WiX Control.  
+    /// Defines generic WiX Control.
     /// </summary>
     public partial class Control : WixEntity
     {
@@ -129,7 +129,7 @@ namespace WixSharp.Controls
                 var publishElement = control.AddElement(new XElement("Publish",
                                                             new XAttribute("Value", data.Value),
                                                             new XAttribute("Order", index),
-                                                            data.Condition));
+                                                            new XAttribute("Condition", data.Condition)));
                 if (!data.Event.IsEmpty())
                     publishElement.Add(new XAttribute("Event", data.Event));
 

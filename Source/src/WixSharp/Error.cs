@@ -31,7 +31,7 @@
         /// <summary>
         /// Error message.
         /// </summary>
-        [Xml(true)]
+        [Xml]
         private string Message { get; set; }
 
         /// <summary>
@@ -42,7 +42,6 @@
         public void Process(ProcessingContext context)
         {
             var ui = context.XParent.SelectOrCreate("UI");
-
             ui.Add(this.ToXElement());
         }
     }

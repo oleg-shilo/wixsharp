@@ -36,11 +36,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 using IO = System.IO;
 using Reflection = System.Reflection;
+
+// I am checking it for null anyway but when compiling AOT the output becomes too noisy
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
 
 namespace WixSharp
 {
@@ -189,11 +192,13 @@ namespace WixSharp
 
             if (Compiler.AutoGeneration.ValidateCAAssemblies == CAValidation.InRemoteAppDomain)
             {
+                // throw new NotImplementedException("The method is not implemented on .NET Core");
+
                 // will not lock the file and will unload the assembly
-                Utils.ExecuteInTempDomain<AsmReflector>(asmReflector =>
-                    {
-                        asmReflector.ValidateCAAssembly(caAssembly, dtfAssembly);
-                    });
+                // Utils.ExecuteInTempDomain<AsmReflector>(asmReflector =>
+                //     {
+                //         asmReflector.ValidateCAAssembly(caAssembly, dtfAssembly);
+                //     });
             }
             else if (Compiler.AutoGeneration.ValidateCAAssemblies == CAValidation.InCurrentAppDomain)
             {
@@ -216,7 +221,25 @@ namespace WixSharp
 
         public string AssemblyScopeName(string file)
         {
+#if !NETCORE
             return Reflection.Assembly.ReflectionOnlyLoad(System.IO.File.ReadAllBytes(file)).ManifestModule.ScopeName;
+#else
+            throw new NotImplementedException("Not supported on .NET Core builds");
+#endif
+        }
+
+        public bool ValidateCustomBaAssembly(string assembly)
+        {
+            var asm = System.Reflection.Assembly.LoadFrom(assembly);
+            var valid = asm.GetCustomAttributes(false)
+                           .Any(x => x.GetType().FullName == "WixToolset.Mba.Core.BootstrapperApplicationFactoryAttribute");
+
+            return valid;
+        }
+
+        public string[] GetRefAssemblies(string file)
+        {
+            return ReflectionExtensions.GetRefAssembliesOf(file);
         }
 
         public void ValidateCAAssembly(string file, string dtfAsm)

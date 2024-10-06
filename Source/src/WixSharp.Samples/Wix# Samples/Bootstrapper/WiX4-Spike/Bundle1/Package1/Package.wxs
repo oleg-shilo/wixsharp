@@ -1,0 +1,9 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<Package Name="Package1" Manufacturer="TODO Manufacturer" Version="1.0.0.0" UpgradeCode="10c7dbd9-758d-44c1-a6b9-88297726d284">
+		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
+
+		<Feature Id="Main">
+			<ComponentGroupRef Id="ExampleComponents" />
+		</Feature>
+	</Package>
+</Wix>

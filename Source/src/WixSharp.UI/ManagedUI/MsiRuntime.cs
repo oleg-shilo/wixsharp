@@ -1,14 +1,15 @@
-using Microsoft.Deployment.WindowsInstaller;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using WixToolset.Dtf.WindowsInstaller;
 
 using io = System.IO;
 
@@ -145,6 +146,7 @@ namespace WixSharp
         /// <param name="session">The session.</param>
         public InstallerRuntime(ISession session)
         {
+            // Debug.Assert(false);
             this.Session = session;
             try
             {
@@ -208,6 +210,15 @@ namespace WixSharp
         /// <para>The localization is performed according two possible scenarios. The method will return the match form the MSI embedded localization file.
         /// However if it cannot find the match the method will try to find the and return the match from the MSI session properties.</para>
         /// <para>This method is mainly used by 'LocalizeWith' extension for a single step localization of WinForm controls.</para>
+        /// <remarks>
+        /// Note, this method is a single step localization routine and does not resolve any properties embedded in the localization result text
+        /// (e.g. "[ProductName] Setup"). For a deep/full localization it is better to use <see cref="WixSharp.UIExtensions.LocalizeWith(string, Func{string, string})"/>.
+        /// <para>IE: "[ProductName] Setup".LocalizeWith(MsiRuntime.Localize)</para>
+        /// <code>
+        /// Func&lt;string, string&gt; localizer = e.ManagedUI.Shell.MsiRuntime().Localize;
+        /// var localizedText =  "[ProductName] Setup".LocalizeWith(localizer);
+        /// </code>
+        /// </remarks>
         /// </summary>
         /// <param name="text">The text.</param>
         /// <returns></returns>
@@ -260,7 +271,7 @@ namespace WixSharp
         /// </summary>
         /// <param name="wxlData">The WXL file bytes.</param>
         /// <param name="merge">if set to <c>true</c> merge with existing content instead of replacing.</param>
-        /// <exception cref="System.Exception">The localization XML data is in invalid format.</exception>
+        /// <returns></returns>
         public void InitFromWxl(byte[] wxlData, bool merge = false)
         {
             if (!merge)
@@ -285,15 +296,23 @@ namespace WixSharp
                     System.IO.File.Delete(tempXmlFile);
                 }
 
+                Func<XElement, string> getValue;
+
+                // later do more restrictive WXL parsing
+                // if (doc.Root.GetDefaultNamespace().NamespaceName == "http://schemas.microsoft.com/wix/2006/localization")
+                //     getValue = element => element.Value;                                     // WiX3
+                // else
+                //     getValue = element => element.GetAttribute("Value") ?? element.Value;    // WiX4
+
+                // but for now, do fall back from WXL WiX4 format to WiX3
+                getValue = element => element.GetAttribute("Value") ?? element.Value;
+
                 var data = doc.Descendants()
                               .Where(x => x.Name.LocalName == "String")
-                              .ToDictionary(x => x.Attribute("Id").Value, x => x.Value);
+                              .ToDictionary(x => x.Attribute("Id").Value, getValue);
 
                 foreach (var item in data)
-                    if (merge)
-                        this[item.Key] = item.Value;
-                    else
-                        this.Add(item.Key, item.Value);
+                    this.Add(item.Key, item.Value);
             }
         }
 

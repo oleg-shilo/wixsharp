@@ -1,15 +1,20 @@
-using Microsoft.Deployment.WindowsInstaller;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows.Forms;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 using IO = System.IO;
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
 
 namespace WixSharp
 {
@@ -136,6 +141,12 @@ namespace WixSharp
         public delegate void SetupEventHandler(SetupEventArgs e);
 
         /// <summary>
+        /// Occurs when an exception thrown in one of the project runtime events or Managed UI dialog is not caught.
+        /// </summary>
+        /// <param name="e">The <see cref="ExceptionEventArgs"/> instance containing the event data.</param>
+        public delegate void UnhandledExceptionEventHandler(ExceptionEventArgs e);
+
+        /// <summary>
         /// Indicates if the installations should be aborted if managed event handler throws an
         /// unhanded exception.
         /// <para>Aborting is the default behavior if this field is not set.</para>
@@ -172,8 +183,31 @@ namespace WixSharp
         /// <summary>
         /// Occurs after InstallFiles standard action. The event is fired from the elevated
         /// execution context.
+        /// <para>If it is required that the event handler is invoked without elevation then you can
+        /// call <see cref="WixSharp.CommonTasks.Tasks.UnelevateAfterInstallEvent(ManagedProject)"/> so the `Project.AfterInstall` event is
+        /// scheduled for unelevated execution.</para>
         /// </summary>
         public event SetupEventHandler AfterInstall;
+
+        /// <summary>
+        /// The execution model for <see cref="BeforeInstall"/> event.
+        /// </summary>
+        public EventExecution BeforeInstallEventExecution = EventExecution.MsiSessionScopeImmediate;
+
+        /// <summary>
+        /// The execution model for <see cref="Load"/> event.
+        /// </summary>
+        public EventExecution LoadEventExecution = EventExecution.MsiSessionScopeImmediate;
+
+        /// <summary>
+        /// The execution model for <see cref="AfterInstall"/> event.
+        /// </summary>
+        public EventExecution AfterInstallEventExecution = EventExecution.MsiSessionScopeDeferred;
+
+        /// <summary>
+        /// Occurs when an unhandled exception is thrown either from Managed UI or from ManagedProject event (e.g. <see cref="WixSharp.ManagedProject.BeforeInstall"/>).
+        /// </summary>
+        public event UnhandledExceptionEventHandler UnhandledException;
 
         /// <summary>
         /// An instance of ManagedUI defining MSI UI dialogs sequence. User should set it if he/she
@@ -192,7 +226,9 @@ namespace WixSharp
             return (handler != null);
         }
 
-        void Bind<T>(Expression<Func<T>> expression, When when = When.Before, Step step = null, bool elevated = false)
+        internal static Dictionary<string, string> HandlerAotDeclaringTypes = new Dictionary<string, string>();
+
+        void Bind<T>(Expression<Func<T>> expression, When when = When.Before, Step step = null, EventExecution eventExecution = default)
         {
             var name = Reflect.NameOf(expression);
             var handler = expression.Compile()() as Delegate;
@@ -209,10 +245,16 @@ namespace WixSharp
                         this.AddProperty(new Property(abortOnErrorName, this.AbortSetupOnUnhandledExceptions.Value.ToString()));
                 }
 
-                //foreach (string handlerAsm in handler.GetInvocationList().Select(x => x.Method.DeclaringType.Assembly.Location))
                 foreach (var type in handler.GetInvocationList().Select(x => x.Method.DeclaringType))
                 {
                     string location = type.Assembly.Location;
+
+                    var rootType = type.RootDeclaringType();
+
+                    if (HandlerAotDeclaringTypes.ContainsKey(location))
+                        HandlerAotDeclaringTypes[location] += "," + rootType.FullName;
+                    else
+                        HandlerAotDeclaringTypes[location] = rootType.FullName;
 
                     //Resolving scriptAsmLocation is not properly tested yet
                     bool resolveInMemAsms = true;
@@ -237,7 +279,7 @@ namespace WixSharp
                 string dllEntry = "WixSharp_{0}_Action".FormatWith(name);
                 if (step != null)
                 {
-                    if (elevated)
+                    if (eventExecution == EventExecution.MsiSessionScopeDeferred)
                         this.AddAction(new ElevatedManagedAction(dllEntry)
                         {
                             Id = new Id(dllEntry),
@@ -249,8 +291,50 @@ namespace WixSharp
                             UsesProperties = "WixSharp_{0}_Handlers,{1},{2}".FormatWith(name, wixSharpProperties, DefaultDeferredProperties),
                         });
                     else
-                        this.AddAction(new ManagedAction(dllEntry) { Id = new Id(dllEntry), ActionAssembly = thisAsm, Return = Return.check, When = when, Step = step, Condition = Condition.Create("1") });
+                        this.AddAction(new ManagedAction(dllEntry)
+                        {
+                            Id = new Id(dllEntry),
+                            ActionAssembly = thisAsm,
+                            Return = Return.check,
+                            When = when,
+                            Step = step,
+
+                            Condition = Condition.Create("1")
+                        });
                 }
+            }
+        }
+
+        void BindUnhandledExceptionHadler<T>(Expression<Func<T>> expression)
+        {
+            var name = Reflect.NameOf(expression);
+            var handler = expression.Compile()() as Delegate;
+
+            if (handler != null)
+            {
+                foreach (var type in handler.GetInvocationList().Select(x => x.Method.DeclaringType))
+                {
+                    string location = type.Assembly.Location;
+
+                    // Resolving scriptAsmLocation is not properly tested yet
+                    bool resolveInMemAsms = true;
+
+                    if (resolveInMemAsms)
+                    {
+                        if (location.IsEmpty())
+                            location = type.Assembly.GetLocation();
+                    }
+
+                    if (location.IsEmpty())
+                        throw new ApplicationException($"The location of the assembly for ManagedProject event handler ({type}) cannot be obtained.\n" +
+                                                        "The assembly must be a file based one but it looks like it was loaded from memory.\n" +
+                                                        "If you are using CS-Script to build MSI ensure it has 'InMemoryAssembly' set to false.");
+
+                    if (!this.DefaultRefAssemblies.Contains(location))
+                        this.DefaultRefAssemblies.Add(location);
+                }
+
+                this.AddProperty(new Property("WixSharp_UnhandledException_Handlers".FormatWith(name), GetHandlersInfo(handler as MulticastDelegate)));
             }
         }
 
@@ -270,7 +354,7 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// The default properties mapped for use with the deferred custom actions. See <see
+        /// The default properties mapped for use with the setup events (deferred custom actions). See <see
         /// cref="ManagedAction.UsesProperties"/> for the details.
         /// <para>The default value is "INSTALLDIR,UILevel"</para>
         /// </summary>
@@ -292,7 +376,7 @@ namespace WixSharp
             }
         }
 
-        string defaultDeferredProperties = "INSTALLDIR,UILevel,ProductName,FOUNDPREVIOUSVERSION";
+        string defaultDeferredProperties = "INSTALLDIR,UILevel,ProductName,FOUNDPREVIOUSVERSION,UpgradeCode,ManagedProjectElevatedEvents";
 
         /// <summary>
         /// Flags that indicates if <c>WixSharp_InitRuntime_Action</c> custom action should be
@@ -336,9 +420,11 @@ namespace WixSharp
         /// </summary>
         public bool AlwaysScheduleInitRuntime = true;
 
+        internal bool IsNetCore = Environment.Version.Major > 5;
+
         override internal void Preprocess()
         {
-            //Debug.Assert(false);
+            // Debug.Assert(false);
             base.Preprocess();
 
             if (!preprocessed)
@@ -353,11 +439,6 @@ namespace WixSharp
                     this.AddBinary(new Binary(new Id("ui_shell_icon"), ManagedUI.Icon));
                 }
 
-                if (ManagedUI != null)
-                {
-                    this.AddProperty(new Property("UI_AUTOSCALEMODE", ManagedUI.AutoScaleMode.ToString()));
-                }
-
                 string dllEntry = "WixSharp_InitRuntime_Action";
 
                 bool needInvokeInitRuntime = (IsHandlerSet(() => UIInitialized)
@@ -366,6 +447,16 @@ namespace WixSharp
                                               || IsHandlerSet(() => BeforeInstall)
                                               || IsHandlerSet(() => AfterInstall)
                                               || AlwaysScheduleInitRuntime);
+
+                // With .NET-Core we do not schedule any CA to initialize reflection based algorithm for invoking
+                // event handlers at runtime. All event handlers will be exported as entry points of the AOT compiled
+                // client assembly instead.
+                if (this.IsNetCore)
+                {
+                    needInvokeInitRuntime = false;
+                    ValidateAotReadiness();
+                }
+
                 if (needInvokeInitRuntime)
                     this.AddAction(new ManagedAction(dllEntry)
                     {
@@ -377,6 +468,38 @@ namespace WixSharp
                         Condition = Condition.Always
                     });
 
+                var elevatedEvents = new List<string>();
+                if (this.BeforeInstallEventExecution == EventExecution.ExternalElevatedProcess)
+                    elevatedEvents.Add("BeforeInstall");
+                if (this.LoadEventExecution == EventExecution.ExternalElevatedProcess)
+                    elevatedEvents.Add("Load");
+                if (this.AfterInstallEventExecution == EventExecution.ExternalElevatedProcess)
+                    elevatedEvents.Add("AfterInstall");
+
+                if (elevatedEvents.Any())
+                {
+                    if (this.IsNetCore)
+                    {
+                        Compiler.OutputWriteLine(
+                            $"Error: Event execution model `{EventExecution.ExternalElevatedProcess}` " +
+                            $"is not supported on .NET (Core family). Either use different model (e.g. " +
+                            $"{nameof(EventExecution.MsiSessionScopeDeferred)}). Or use WixSharp Visual Studio " +
+                            $"project template targetting .NET Framework.");
+                    }
+
+                    this.AddProperty(new Property("ManagedProjectElevatedEvents", elevatedEvents.JoinBy("|")));
+                    this.DefaultDeferredProperties = ",ManagedProjectElevatedEvents";
+
+                    // to be picked by the session serialization
+                    this.AddProperty(new Property("DefaultDeferredProperties", DefaultDeferredProperties));
+
+                    var eventHostAsm = this.GetType().Assembly.Location.PathChangeFileName("WixSharp.MsiEventHost.exe");
+                    if (eventHostAsm.FileExists())
+                        this.DefaultRefAssemblies.Add(eventHostAsm);
+                    else
+                        Compiler.OutputWriteLine($"Error: {eventHostAsm} is not found. Elevated events will not be executed.");
+                }
+
                 if (ManagedUI != null)
                 {
                     this.AddProperty(new Property("WixSharp_UI_INSTALLDIR", ManagedUI.InstallDirId ?? "INSTALLDIR"));
@@ -386,8 +509,6 @@ namespace WixSharp
 
                     if (AutoElements.UACWarning.IsNotEmpty())
                         this.AddProperty(new Property("UAC_WARNING", AutoElements.UACWarning));
-
-                    ManagedUI.BeforeBuild(this);
 
                     InjectDialogs("WixSharp_InstallDialogs", ManagedUI.InstallDialogs);
                     InjectDialogs("WixSharp_ModifyDialogs", ManagedUI.ModifyDialogs);
@@ -407,12 +528,66 @@ namespace WixSharp
                     AddCancelFromUIIHandler();
                 }
 
-                Bind(() => Load, When.Before, Step.AppSearch);
-                Bind(() => BeforeInstall, When.Before, Step.InstallFiles);
-                Bind(() => AfterInstall, When.After, Step.InstallFiles, true);
+                Bind(() => Load, When.Before, Step.AppSearch, this.LoadEventExecution);
+                Bind(() => BeforeInstall, When.Before, Step.InstallFiles, this.BeforeInstallEventExecution);
+                Bind(() => AfterInstall, When.After, Step.InstallFiles, this.AfterInstallEventExecution);
+                BindUnhandledExceptionHadler(() => UnhandledException);
             }
+
+            if (ManagedUI != null)
+                ManagedUI.BeforeBuild(this);
         }
 
+        /// <summary>
+        /// Validates the aot readiness.
+        /// </summary>
+        void ValidateAotReadiness()
+        {
+            ValidateAotHandler(() => this.Load);
+            ValidateAotHandler(() => this.BeforeInstall);
+            ValidateAotHandler(() => this.AfterInstall);
+            ValidateAotHandler(() => this.UnhandledException);
+        }
+
+        static void ValidateAotHandler<T>(Expression<Func<T>> expression)
+        {
+            // check if the types declaring event handlers are public or handlers assemblies are
+            // listed in this assembly `InternalsVisibleTo` attribute (usually in AssemblyInfo.cs file)
+            // Debug.Assert(false);
+
+            var name = Reflect.NameOf(expression);
+            var handler = expression.Compile()() as Delegate;
+
+            if (handler != null)
+                foreach (var type in handler.GetInvocationList().Select(x => x.Method.DeclaringType))
+                {
+                    if (type.RootDeclaringType().IsNotPublic)
+                    {
+                        var friendAsm = type.Assembly.GetName().Name + ".aot";
+                        var markedAsFriendly = type.Assembly.GetCustomAttributes(false)
+                            .OfType<InternalsVisibleToAttribute>()
+                            .Any(x => x.AssemblyName == friendAsm);
+
+                        if (!markedAsFriendly)
+                        {
+                            var error =
+                                $"Event handler of `{type.FullName}` is invisible at runtime. " +
+                                $"Either make it public or mark `{type.Assembly.GetName().Name}` assembly as visible with " +
+                                $"`[assembly: InternalsVisibleTo(assemblyName: \"{type.Assembly.GetName().Name}.aot\")]` " +
+                                $"attribute (e.g. in the AssemblyInfo.cs file).";
+
+                            Compiler.OutputWriteLine($"Error: " + error);
+                            throw new Exception(error);
+                        }
+                    }
+                }
+        }
+
+        /// <summary>
+        /// Gets the UI dialogs dependencies.
+        /// </summary>
+        /// <param name="ui">The UI.</param>
+        /// <returns></returns>
         string[] GetUiDialogsDependencies(IManagedUI ui)
         {
             var dependsOnWpfDialogsBase = ui.InstallDialogs
@@ -425,13 +600,25 @@ namespace WixSharp
                                         .Any(a => a.Assembly.GetName().Name == "WixSharp.UI.WPF");
 
             if (usngWpfStockDialogs || dependsOnWpfDialogsBase)
-                return new[]
-                {
-                    System.Reflection.Assembly.Load("Caliburn.Micro").Location,
-                    System.Reflection.Assembly.Load("Caliburn.Micro.Platform").Location,
-                    System.Reflection.Assembly.Load("Caliburn.Micro.Platform.Core").Location,
-                    System.Reflection.Assembly.Load("System.Windows.Interactivity").Location
-                };
+            {
+                var result = new List<string>();
+
+                // Caliburn.Micro renamed Caliburn.Micro.dll into Caliburn.Micro.Core.dll in the 4.0 version.
+                // Or any other MVVM framework that is used by the WPF dialogs.
+
+                // bool TryToLoad(string asmName)
+                // {
+                //     try
+                //     {
+                //         result.Add(System.Reflection.Assembly.Load(asmName).Location);
+                //         return true;
+                //     }
+                //     catch { }
+                //     return false;
+                // }
+
+                return result.ToArray();
+            }
             else
                 return new string[0];
         }
@@ -445,7 +632,14 @@ namespace WixSharp
                 foreach (var item in dialogs)
                 {
                     if (!this.DefaultRefAssemblies.Contains(item.Assembly.GetLocation()))
+                    {
                         this.DefaultRefAssemblies.Add(item.Assembly.GetLocation());
+                        try
+                        {
+                            this.DefaultRefAssemblies.Add(Type.GetType("WixToolset.Mba.Core.Engine").Assembly.Location);
+                        }
+                        catch { }
+                    }
 
                     var info = GetDialogInfo(item);
 
@@ -568,23 +762,145 @@ namespace WixSharp
             if (type == null)
                 type = assembly.GetType(parts[1]);
 
-            var method = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Static)
-                             .Single(m => m.Name == parts[2]);
+            var method = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.InvokeMethod | BindingFlags.Static)
+                             .Single(m => m.Name.Split('|').First() == parts[2]);
 
             return method;
         }
 
-        static void InvokeClientHandler(string info, SetupEventArgs eventArgs)
+        internal static void InvokeClientHandlers(string eventName, Session session, Exception e)
         {
-            MethodInfo method = GetHandler(info);
+            var args = new ExceptionEventArgs { Session = session, Exception = e };
+            var handlerName = $"WixSharp_{eventName}_Handlers";
+            try
+            {
+                string handlersInfo = args.Session.Property(handlerName);
 
-            if (method.IsStatic)
-                method.Invoke(null, new object[] { eventArgs });
-            else
-                method.Invoke(Activator.CreateInstance(method.DeclaringType), new object[] { eventArgs });
+                if (handlersInfo.IsNotEmpty())
+                {
+                    foreach (string item in handlersInfo.Trim().Split('\n').Select(x => x.Trim()))
+                    {
+                        MethodInfo method = GetHandler(item);
+                        method.Call(args);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                args.Session.Log($"WixSharp failed to invoke {handlerName} :" + Environment.NewLine + ex.ToPublicString());
+            }
         }
 
-        internal static ActionResult InvokeClientHandlers(Session session, string eventName, IShellView UIShell = null)
+        /// <summary>
+        /// Invokes the MSI event handlers.
+        /// <p>
+        /// This method is not intended to be used by the WixSharp users but by WixSharp internally.
+        /// Though it is public because it needs to be invoked by other assemblies.
+        /// </p>
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="eventName">Name of the event.</param>
+        /// <returns></returns>
+        public static ActionResult InvokeClientHandlersExternally(Session session, string eventName)
+        {
+            // Debug.Assert(false);
+            var sessionFile = Path.GetTempFileName();
+            var logFile = sessionFile + ".log";
+            var eventHost = System.Reflection.Assembly.GetExecutingAssembly().Location.PathChangeFileName("WixSharp.MsiEventHost.exe");
+
+            var evenHandler = "WixSharp_{0}_Handlers".FormatWith(eventName);
+
+            ActionResult result = default;
+            try
+            {
+                var sessionData = session.Serialize(evenHandler);
+                IO.File.WriteAllText(sessionFile, sessionData);
+
+                // Note, we are using eventHost executed with "runas". The proper Windows elevation scenario requires
+                // the executable to be compiled with the elevation request embedded in the exe manifest.
+                // however in this case Windows Defender may block the execution of the exe. Even though the file is signed,
+                // executed from the elevated context.
+                // And yet it is happy to allow the execution of the exe if it is executed with "runas".
+                // Yes that crazy!!!!
+
+                using (var process = eventHost.StartElevated($"-event:{eventName} \"-session:{sessionFile}\" \"-log:{logFile}\""))
+                {
+                    process.WaitForExit();
+
+                    var output = "";
+                    if (logFile.FileExists())
+                        output = IO.File.ReadAllText(logFile);
+
+                    // ExitCode == 0 is success regardless of output
+                    // ExitCode != 0 && output.HasText is failure as the exception was thrown in the external process
+                    // ExitCode != 0 && output.IsEmpty is a normal flow where the ExitCode may simply carry user the user cancellation value
+                    if (process.ExitCode != 0 && output.IsNotEmpty())
+                        throw new Exception(output);
+
+                    bool shoudReadPropertiesBack = false; // not sure if this is needed
+
+                    if (shoudReadPropertiesBack)
+                    {
+                        var updatedSessionData = IO.File.ReadAllText(sessionFile);
+                        if (updatedSessionData != sessionData)
+                            session.DeserializeAndUpdateFrom(updatedSessionData);
+                    }
+
+                    return (ActionResult)process.ExitCode;
+                }
+            }
+            catch (Exception e)
+            {
+                session.Log("WixSharp aborted the session because of the error:" + Environment.NewLine + e.ToPublicString());
+                if (session.AbortOnError())
+                    result = ActionResult.Failure;
+
+                ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
+            }
+            finally
+            {
+                sessionFile.DeleteIfExists();
+                logFile.DeleteIfExists();
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Invokes the msi event handlers.
+        /// <p>
+        /// This method is not intended to be used by the WixSharp users but by WixSharp internally.
+        /// Though it is public because it needs to be invoked by other assemblies.
+        /// </p>
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="eventName">Name of the event.</param>
+        /// <param name="UIShell">The UI shell.</param>
+        /// <returns></returns>
+        public static ActionResult InvokeClientHandlers(Session session, string eventName, IShellView UIShell = null)
+        {
+            // Debug.Assert(false);
+            var runAsElevated = session.Property("ManagedProjectElevatedEvents").Split('|').Contains(eventName);
+
+            ActionResult result = runAsElevated ?
+                InvokeClientHandlersExternally(session, eventName) :
+                InvokeClientHandlersInternally(session, eventName, UIShell);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Invokes the MSI event handlers.
+        /// <p>
+        /// This method is not intended to be used by the WixSharp users but by WixSharp internally.
+        /// Though it is public because it needs to be invoked by other assemblies.
+        /// </p>
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <param name="eventName">Name of the event.</param>
+        /// <param name="UIShell">The UI shell.</param>
+        /// <returns></returns>
+        public static ActionResult InvokeClientHandlersInternally(Session session, string eventName, IShellView UIShell)
         {
             var eventArgs = Convert(session);
             eventArgs.ManagedUI = UIShell;
@@ -595,9 +911,11 @@ namespace WixSharp
 
                 if (!string.IsNullOrEmpty(handlersInfo))
                 {
-                    foreach (string item in handlersInfo.Trim().Split('\n'))
+                    foreach (string item in handlersInfo.Trim().Split('\n').Select(x => x.Trim()))
                     {
-                        InvokeClientHandler(item.Trim(), eventArgs);
+                        MethodInfo method = GetHandler(item);
+                        method.Call(eventArgs);
+
                         if (eventArgs.Result == ActionResult.Failure || eventArgs.Result == ActionResult.UserExit)
                             break;
                     }
@@ -610,37 +928,47 @@ namespace WixSharp
                 session.Log("WixSharp aborted the session because of the error:" + Environment.NewLine + e.ToPublicString());
                 if (session.AbortOnError())
                     eventArgs.Result = ActionResult.Failure;
+
+                ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
             }
             return eventArgs.Result;
         }
 
+        internal static string[] SessionSerializableProperties = new[]
+        {
+            "Installed",
+            "REMOVE",
+            "ProductName",
+            "ProductCode",
+            "UpgradeCode",
+            "REINSTALL",
+            "MsiFile",
+            "UPGRADINGPRODUCTCODE",
+            "FOUNDPREVIOUSVERSION",
+            "UILevel",
+            "WIXSHARP_MANAGED_UI",
+            "WIXSHARP_MANAGED_UI_HANDLE",
+        };
+
         internal static ActionResult Init(Session session)
         {
             //System.Diagnostics.Debugger.Launch();
+
+            // need to push these properties into runtime data so it is available in the deferred actions
             var data = new SetupEventArgs.AppData();
             try
             {
-                data["Installed"] = session["Installed"];
-                data["REMOVE"] = session["REMOVE"];
-                data["ProductName"] = session["ProductName"];
-                data["ProductCode"] = session["ProductCode"];
-                data["UpgradeCode"] = session["UpgradeCode"];
-                data["REINSTALL"] = session["REINSTALL"];
-                data["MsiFile"] = session["OriginalDatabase"];
-                data["UPGRADINGPRODUCTCODE"] = session["UPGRADINGPRODUCTCODE"];
-                data["FOUNDPREVIOUSVERSION"] = session["FOUNDPREVIOUSVERSION"];
-                data["UILevel"] = session["UILevel"];
-                data["WIXSHARP_MANAGED_UI"] = session["WIXSHARP_MANAGED_UI"];
-                data["WIXSHARP_MANAGED_UI_HANDLE"] = session["WIXSHARP_MANAGED_UI_HANDLE"];
+                foreach (var name in SessionSerializableProperties)
+                    data[name] = session.Property(name);
             }
             catch (Exception e)
             {
                 session.Log(e.Message);
             }
 
-            data.MergeReplace(session["WIXSHARP_RUNTIME_DATA"]);
+            data.MergeReplace(session.Property("WIXSHARP_RUNTIME_DATA"));
 
-            session["WIXSHARP_RUNTIME_DATA"] = data.ToString();
+            session.SetProperty("WIXSHARP_RUNTIME_DATA", data.ToString());
 
             return ActionResult.Success;
         }
@@ -653,12 +981,15 @@ namespace WixSharp
             {
                 string data = session.Property("WIXSHARP_RUNTIME_DATA");
                 result.Data.InitFrom(data);
+
                 result.Data.SetEnvironmentVariables();
-                session.CustomActionData.SetEnvironmentVariables();
+                if (!session.IsDisconnected())
+                    session.CustomActionData.SetEnvironmentVariables();
             }
             catch (Exception e)
             {
-                session.Log(e.Message);
+                if (session.IsActive())
+                    session.Log(e.Message);
             }
             return result;
         }

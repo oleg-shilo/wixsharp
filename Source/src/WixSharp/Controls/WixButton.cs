@@ -6,6 +6,8 @@ using System.Drawing.Design;
 using System.Windows.Forms;
 using Wix = WixSharp;
 
+#pragma warning disable CA1416 // Validate platform compatibility
+
 namespace WixSharp.Controls
 {
     /// <summary>
@@ -141,6 +143,4 @@ namespace WixSharp.Controls
             return this.ConvertToWControl(ControlType.PushButton);
         }
     }
-
-   
 }

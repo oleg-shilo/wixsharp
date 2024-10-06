@@ -1,14 +1,14 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 internal static class Script
 {
@@ -45,10 +45,6 @@ internal static class Script
                     new InstalledFileAction("registrator_exe", "", Return.check, When.After, Step.InstallExecute, Condition.NOT_Installed),
                     new InstalledFileAction("registrator_exe", "/u", Return.check, When.Before, Step.InstallExecute, Condition.Installed),
 
-                    new ScriptAction(@"MsgBox ""Executing VBScript code...""", Return.ignore, When.After, Step.InstallFinalize, Condition.NOT_Installed),
-
-                    new ScriptFileAction(@"CustomActions\Sample.vbs", "Execute", Return.ignore, When.After, Step.InstallFinalize, Condition.NOT_Installed),
-
                     new PathFileAction(@"%WindowsFolder%\notepad.exe", "readme.txt", @"INSTALLDIR", Return.asyncNoWait, When.After, Step.InstallFinalize, Condition.NOT_Installed),
 
                     new ManagedAction(CustomActions.MyManagedAction, "%this%"),
@@ -62,8 +58,6 @@ internal static class Script
             project.UI = WUI.WixUI_Mondo;
             project.SourceBaseDir = Environment.CurrentDirectory;
             project.OutFileName = "MyApp";
-
-            project.InstallPrivileges = InstallPrivileges.elevated;
 
             // Optionally enable an ability to repair the installation even when the original MSI is no longer available.
             project.EnableResilientPackage();

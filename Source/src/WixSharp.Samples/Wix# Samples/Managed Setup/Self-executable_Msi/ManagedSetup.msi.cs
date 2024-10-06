@@ -1,5 +1,6 @@
 //css_dir ..\..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Mba.Core.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref WixSharp.UI;
 //css_ref System.Core;
 //css_ref System.Xml;
@@ -10,7 +11,6 @@ using System.Linq;
 using System.Security.Principal;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
 
@@ -23,7 +23,7 @@ public static class Script
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File(@"..\Files\bin\MyApp.exe")));
 
-        project.ManagedUI = ManagedUI.Default; //Wix# ManagedUI
+        // project.ManagedUI = ManagedUI.Default; //Wix# ManagedUI
 
         Compiler.BuildMsi(project);
     }

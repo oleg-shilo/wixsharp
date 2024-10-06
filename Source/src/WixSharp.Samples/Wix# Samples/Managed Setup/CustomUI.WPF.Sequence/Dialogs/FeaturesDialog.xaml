@@ -10,6 +10,9 @@
     d:DesignWidth="512"
     DialogTitle="[ProductName] Setup"
     mc:Ignorable="d">
+    <wixsharp:WpfDialog.Resources>
+        <wixsharp:BoolToBackgroundConverter x:Key="BoolToBackgroundConverter" />
+    </wixsharp:WpfDialog.Resources>
 
     <Grid x:Name="Root">
         <Grid.Resources>
@@ -43,7 +46,6 @@
             Margin="-1,-1,-1,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Background="White"
             BorderBrush="Gray"
             BorderThickness="1">
             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -61,7 +63,6 @@
                 <StackPanel Margin="9">
                     <TextBlock
                         Grid.Column="0"
-                        Background="White"
                         FontSize="12"
                         FontWeight="Bold">
                         [CustomizeDlgTitle]
@@ -70,7 +71,6 @@
                         x:Name="DialogDescription"
                         Margin="17,5"
                         VerticalAlignment="Stretch"
-                        Background="White"
                         TextWrapping="WrapWithOverflow">
                         [CustomizeDlgDescription]
                     </TextBlock>
@@ -99,12 +99,19 @@
                 x:Name="FeaturesTree"
                 Grid.Row="1"
                 Grid.Column="0"
-                ItemsSource="{Binding RootNodes}">
+                ItemsSource="{Binding RootNodes}"
+                SelectedItemChanged="Features_SelectedItemChanged">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
                         <StackPanel Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding Checked}" IsEnabled="{Binding IsEditable}" />
-                            <TextBlock Margin="5, 0" VerticalAlignment="Center" Text="{Binding Name}" />
+                            <CheckBox
+                                Background="{Binding IsPartialChecked, Converter={StaticResource BoolToBackgroundConverter}}"
+                                IsChecked="{Binding Checked}"
+                                IsEnabled="{Binding IsEditable}" />
+                            <TextBlock
+                                Margin="5,0"
+                                VerticalAlignment="Center"
+                                Text="{Binding Name}" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>

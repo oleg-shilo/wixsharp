@@ -1,11 +1,11 @@
 //css_dir ..\..\;
-//css_ref Wix_bin\SDK\Microsoft.Deployment.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
 using System.Windows.Forms;
-using Microsoft.Deployment.WindowsInstaller;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {
@@ -35,13 +35,13 @@ class Script
 
                     //setting property to be used in install condition
                     new Property("INSTALLDESKTOPSHORTCUT", "no"),
-                    new Property("ALLUSERS", "1"),
                     new ManagedAction(CustomActions.MyAction, Return.ignore, When.Before, Step.LaunchConditions, Condition.NOT_Installed, Sequence.InstallUISequence));
 
         project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
         project.UI = WUI.WixUI_ProgressOnly;
+        project.Scope = InstallScope.perMachine;
         project.OutFileName = "setup";
-        project.PreserveTempFiles = true;
+        // project.PreserveTempFiles = true;
 
         Compiler.BuildMsi(project);
     }
