@@ -32,7 +32,7 @@ class Script
                 //if 'HKEY_LOCAL_MACHINE\SOFTWARE\My Company\My Product' is required set `RegValue(...){ Win64 = true }`
                 new RegKey(fullSetup, RegistryHive.LocalMachine, @"Software\My Company\My Product",
                     new RegValue("Message", "Hello"),
-                    new RegValue("Count", 777),
+                    new RegValue("Count", 777).SetComponentPermanent(true),
                     new RegValue("Index", "333") { AttributesDefinition = "Type=integer", Win64 = true }),
                 new RegValue(fullSetup, RegistryHive.ClassesRoot, @"test\shell\open\command", "", "\"[INSTALLDIR]test.exe\" \"%1\""),
                 new RegValue(fullSetup, RegistryHive.ClassesRoot, @"test\shell\open\command2", "", "\"[CommonAppDataFolder]test.exe\" \"%1\""),

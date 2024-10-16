@@ -104,7 +104,6 @@ namespace WixSharp.Bootstrapper
         /// <summary>
         /// Initializes a new instance of the <see cref="DotNetCompatibilityCheck"/> class.
         /// </summary>
-        /// <param name="id">The identifier of the compatibility check.</param>
         /// <param name="property">The name of the property to set.</param>
         /// <param name="rollForward">The roll forward policy.</param>
         /// <param name="runtime">The runtime type.</param>

@@ -1551,7 +1551,6 @@ namespace WixSharp.CommonTasks
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="entity">The entity.</param>
-        /// of the XML document.</param>
         /// <returns></returns>
         static public WixProject AddXml(this WixProject project, IXmlAware entity)
             => project.AddXml(null, entity);
