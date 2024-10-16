@@ -64,6 +64,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -108,12 +109,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>cd "$(ProjectDir)"
-"$(ProjectDir)build_msi.cmd"</PreBuildEvent>
+    <PreBuildEvent>rem cd "$(ProjectDir)"
+rem "$(ProjectDir)build_msi.cmd"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>cd ..\..\
-copy "$(TargetPath)" "$(ProjectDir)ManagedSetup.exe"
+rem copy "$(TargetPath)" "$(ProjectDir)ManagedSetup.exe"
+"$(TargetPath)" 
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

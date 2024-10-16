@@ -12,10 +12,10 @@ public static class Launcher
 {
     static public int Main(string[] args)
     {
-        var msi = Path.GetFullPath(@"..\..\ManagedSetup.msi");
-        Console.WriteLine(Environment.CurrentDirectory);
+        var msi = Path.GetFullPath(@"..\..\Install Files\MyProduct.msi");
+        var msiExe = Path.GetFullPath(@"..\..\MyProduct.exe");
 
-        (int exitCode, string output) = msi.CompleSelfHostedMsi(Path.ChangeExtension(msi, ".exe"));
+        (int exitCode, string output) = msi.CompleSelfHostedMsi(msiExe);
 
         if (exitCode != 0)
             Console.WriteLine(output);
@@ -28,6 +28,7 @@ static class ExeGen
 {
     public static (int exitCode, string output) CompleSelfHostedMsi(this string msiFile, string outFile)
     {
+        //System.Diagnostics.Debug.Assert(false);
         var csc = LocateCsc();
         var csFile = GenerateCSharpSource(outFile + ".cs");
         try
@@ -64,7 +65,7 @@ class Program
         string msi = Path.GetTempFileName();
         try
         {
-            // Debug.Assert(false);
+            // Debug.Assert(false); 
             ExtractMsi(msi);
             string msi_args = args.Any() ? string.Join("" "", args) : ""/i"";
 
