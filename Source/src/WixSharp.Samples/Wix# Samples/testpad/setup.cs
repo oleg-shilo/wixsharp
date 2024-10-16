@@ -30,6 +30,6 @@ static class Script
 
         Compiler.EmitRelativePaths = false;
 
-        project.BuildMsi();
+        //project.BuildMsi();
     }
 }

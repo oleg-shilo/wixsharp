@@ -14,7 +14,7 @@ class Script
 {
     static void Main()
     {
-        WixTools.SetWixVersion(Environment.CurrentDirectory, "4.0.2");
+        WixTools.SetWixVersion(Environment.CurrentDirectory, "4.0.6");
 
         // As of 22 Jul 2023
         // `Driver` support in WiX4 is somewhat incomplete.
@@ -40,7 +40,7 @@ class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
-        project.LibFiles.Add(@"%userprofile%\.wix\extensions\WixToolset.DifxApp.wixext\4.0.2\wixext4\difxapp_x64.wixlib");
+        project.LibFiles.Add(@"%userprofile%\.wix\extensions\WixToolset.DifxApp.wixext\4.0.6\wixext4\difxapp_x64.wixlib");
 
         // project.PreserveTempFiles = true;
 

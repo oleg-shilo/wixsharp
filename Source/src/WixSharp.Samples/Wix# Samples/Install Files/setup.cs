@@ -24,7 +24,7 @@ static class Script
             new ManagedProject("MyProduct",
                     // new Dir(@"AppDataFolder\My ICompany\My Product",
                     new Dir(new Id("MY_INSTALLDIR"), @"%ProgramFiles%\My ICompany\My Product",
-                    f = new File("MyApp_file".ToId(),
+                        f = new File("MyApp_file".ToId(),
                                  @"Files\Bin\MyApp.exe",
                                  new FileAssociation("cstm", "application/custom", "open", "\"%1\"")
                                  {
