@@ -25,9 +25,7 @@ static class Script
                     // new Dir(@"AppDataFolder\My ICompany\My Product",
                     new Dir(new Id("MY_INSTALLDIR"), @"%ProgramFiles%\My ICompany\My Product",
                     f = new File("MyApp_file".ToId(),
-                                 @"C:\sourceFiles\MyApp.exe",
-                                 // @"Files\Bin\MyApp.exe",
-                                 // @"D:\dev\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\Files\Bin\MyApp.exe",
+                                 @"Files\Bin\MyApp.exe",
                                  new FileAssociation("cstm", "application/custom", "open", "\"%1\"")
                                  {
                                      Advertise = true,
@@ -37,8 +35,7 @@ static class Script
                         TargetFileName = "app.exe"
                     },
                     new Dir(@"Docs\Manual",
-                        // new File(@"Files\Docs\Manual.txt")
-                        new File(@"D:\dev\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\Files\Docs\Manual.txt")
+                        new File(@"Files\Docs\Manual.txt")
                         {
                             NeverOverwrite = true
                         })),
