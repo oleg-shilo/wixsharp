@@ -2737,13 +2737,13 @@ namespace WixSharp
                 if (wAction.ProgressText.IsNotEmpty())
                 {
                     uis.ForEach(ui =>
-                        ui.Add(new XElement("ProgressText", wAction.ProgressText,
+                        ui.Add(new XElement("ProgressText", new XAttribute("Value", wAction.ProgressText),
                             new XAttribute("Action", wAction.Id))));
                 }
                 if (wAction.RollbackProgressText != null)
                 {
                     uis.ForEach(ui =>
-                        ui.Add(new XElement("ProgressText", wAction.RollbackProgressText,
+                        ui.Add(new XElement("ProgressText",  new XAttribute("Value", wAction.RollbackProgressText),
                             new XAttribute("Action", roollbackActionId))));
                 }
 
