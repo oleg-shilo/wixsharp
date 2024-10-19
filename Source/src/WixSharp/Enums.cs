@@ -775,6 +775,11 @@ namespace WixSharp
         @string,
 
         /// <summary>
+        /// The formatted type
+        /// </summary>
+        formatted,
+
+        /// <summary>
         /// The numeric type
         /// </summary>
         numeric,
