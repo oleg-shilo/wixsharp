@@ -23,10 +23,10 @@ public class InstallScript
         var crtMsi = BuildCrtMsi();
         var productMsi = BuildMainMsi();
 
-        SimpleMsiInternalUI(crtMsi);
-        // SimpleGlobalInternalUI(crtMsi);
+        //SimpleMsiInternalUI(crtMsi);
+        SimpleGlobalInternalUI(crtMsi);
         // Standard(crtMsi, productMsi);
-        Complex(crtMsi, productMsi);
+        //Complex(crtMsi, productMsi);
     }
 
     static public void SimpleMsiInternalUI(string msi)
@@ -242,7 +242,8 @@ public class InstallScript
                     new File("readme.txt")))
             { };
 
-        crtProj.UI = WUI.WixUI_InstallDir;
+        //crtProj.UI = WUI.WixUI_InstallDir;
+        crtProj.ManagedUI = ManagedUI.Default;
         crtProj.Load += CrtProj_Load;
 
         // crtProj.BeforeInstall += args =>

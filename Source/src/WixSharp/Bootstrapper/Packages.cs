@@ -466,6 +466,8 @@ namespace WixSharp.Bootstrapper
         /// then it is problematic. WiX team has not solved this problem since WiX3 despite the intent (https://github.com/wixtoolset/issues/issues/4921)
         /// Thus the only working options for displaying custom Managed UI are:
         /// </para>
+        /// <para>- Follow `WixBootstrapper` sample (SimpleGlobalInternalUI case). It suspends Bootstrapper UI and instead
+        /// shows the UIs for all packages in the bundle.</para>
         /// <para> - Follow 'WixBootstrapper_MsiEmbeddedUI' sample, which shows a very simple technique of wrapping msi into a self-hosted executable included in the bundle that happily shows the MSI UI regardless of whether it is a native or a managed one.
         /// </para>
         /// <para>- Use NSIS bootstrapper instead. Sadly. WiX Bundle seems to be too fragile and inflexible.</para>
