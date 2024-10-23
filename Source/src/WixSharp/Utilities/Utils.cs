@@ -92,12 +92,12 @@ namespace WixSharp
     /// </summary>
     public static class ExeGen
     {
-        /// <summary>Comples the self hosted msi.</summary>
+        /// <summary>Compiles the self hosted msi.</summary>
         /// <param name="msiFile">The msi file.</param>
         /// <param name="outFile">The out file.</param>
         /// <returns>
         /// </returns>
-        public static (int exitCode, string output) CompleSelfHostedMsi(this string msiFile, string outFile)
+        public static (int exitCode, string output) CompileSelfHostedMsi(this string msiFile, string outFile)
         {
             var parser = new MsiParser(msiFile);
             var csc = LocateCsc();

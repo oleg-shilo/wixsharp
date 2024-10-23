@@ -15,6 +15,9 @@ public static class Launcher
         var msi = Path.GetFullPath(@"..\..\Install Files\MyProduct.msi");
         var msiExe = Path.GetFullPath(@"..\..\MyProduct.exe");
 
+        // Note WixSharp you do CompleSelfHostedMsi implementation in this file
+        // (see below) is provided for demo purposes. The identical implementation
+        // of this extension method is available from WixSharp library out of the box.
         (int exitCode, string output) = msi.CompleSelfHostedMsi(msiExe);
 
         if (exitCode != 0)
@@ -65,7 +68,7 @@ class Program
         string msi = Path.GetTempFileName();
         try
         {
-            // Debug.Assert(false); 
+            // Debug.Assert(false);
             ExtractMsi(msi);
             string msi_args = args.Any() ? string.Join("" "", args) : ""/i"";
 

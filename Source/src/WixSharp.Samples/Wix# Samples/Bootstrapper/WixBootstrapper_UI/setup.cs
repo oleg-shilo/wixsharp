@@ -40,6 +40,7 @@ public class Script
         // See WixBootstrapper_MsiEmbeddedUI.csproj sample
 
         string productMsi = BuildMsi();
+        // string productMsi = BuildMsiWithManaged();
 
         var bundle = new Bundle("My Product Bundle",
                          new MsiPackage(productMsi)
