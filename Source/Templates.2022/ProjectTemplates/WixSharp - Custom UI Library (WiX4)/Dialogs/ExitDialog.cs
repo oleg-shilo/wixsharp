@@ -65,6 +65,9 @@ namespace $safeprojectname$.Dialogs
             imgPanel.Height = this.ClientRectangle.Height - bottomPanel.Height;
             float ratio = (float)image.Image.Width / (float)image.Image.Height;
             image.Width = (int)(image.Height * ratio);
+
+            textPanel.Left = image.Right + 5;
+            textPanel.Width = (bottomPanel.Width - image.Width) - 10;
         }
 
         void finish_Click(object sender, System.EventArgs e)

@@ -28,7 +28,7 @@ updateWixSharpPackages(
     @"..\..\Templates.2022\ProjectTemplates", "(WiX3)", "1.26.0");
 
 updateWixSharpPackages(
-    @"..\..\Templates.2022\ProjectTemplates", "(WiX4)", "2.4.1");
+    @"..\..\Templates.2022\ProjectTemplates", "(WiX4)", "2.4.2");
 
 foreach (var file in Directory.GetFiles(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI (WiX3)\Dialogs",
         "*.xaml.cs"))
