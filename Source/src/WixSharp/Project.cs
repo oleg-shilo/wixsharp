@@ -32,7 +32,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
 using WixSharp.CommonTasks;
 
 namespace WixSharp
@@ -400,7 +399,20 @@ namespace WixSharp
 
         internal void ResetWixGuidStartValue()
         {
-            WixGuid.ConsistentGenerationStartValue = this.ProductId ?? this.GUID ?? Guid.NewGuid();
+            switch (Compiler.PreferredComponentGuidConsistency)
+            {
+                case ComponentGuidConsistency.WithinSingleVersion:
+                    WixGuid.ConsistentGenerationStartValue = this.ProductId ?? this.GUID ?? Guid.NewGuid();
+                    break;
+
+                case ComponentGuidConsistency.WithinAllVersions:
+                    WixGuid.ConsistentGenerationStartValue = this.UpgradeCode ?? this.GUID ?? Guid.NewGuid();
+                    break;
+
+                default:
+                    WixGuid.ConsistentGenerationStartValue = Guid.NewGuid();
+                    break;
+            }
         }
 
         internal void ResetAutoIdGeneration(bool supressWarning)
