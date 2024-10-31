@@ -98,13 +98,19 @@ public static class Script
 
     static void Project_UILoaded(SetupEventArgs e)
     {
+        MessageBox.Show("Project_UILoaded");
         var msiFile = e.Session.Database.FilePath;
 
         // Simulate analyzing the runtime conditions with the message box.
-        // Make a decision to show (or not) Licence dialog by injecting it in the Dialogs collection
-        // if (MessageBox.Show("Do you want to inject 'Licence Dialog'?", "Wix#", MessageBoxButtons.YesNo) == DialogResult.Yes)
-        //     e.ManagedUIShell.CurrentDialog.Shell.Dialogs.Insert(1, Dialogs.Licence);
+        // Make a decision to show (or not) Licence dialog.
 
+        // There are two options for skipping dialogs:
+        // - by modifying dialog sequence (next two commented lines)
+
+        // if (MessageBox.Show("Do you want to remove 'Licence Dialog'?", "Wix#", MessageBoxButtons.YesNo) == DialogResult.Yes)
+        //     e.ManagedUI.CurrentDialog.Shell.Dialogs.Remove(Dialogs.Licence);
+
+        // - by handling OnCurrentDialogChanged event
         e.ManagedUI.OnCurrentDialogChanged += ManagedUIShell_OnCurrentDialogChanged;
     }
 
