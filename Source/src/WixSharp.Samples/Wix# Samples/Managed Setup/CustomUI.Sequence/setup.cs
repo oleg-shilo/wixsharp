@@ -108,23 +108,15 @@ public static class Script
         e.ManagedUI.OnCurrentDialogChanged += ManagedUIShell_OnCurrentDialogChanged;
     }
 
-    static Type LastDialog;
-
     static void ManagedUIShell_OnCurrentDialogChanged(IManagedDialog obj)
     {
-        var prevDialog = LastDialog;
-        LastDialog = obj.GetType();
-
         if (obj.GetType() == Dialogs.Licence)
         {
             // Simulate analyzing the runtime conditions with the message box.
             // Make a decision to jump over the dialog in the sequence
             if (MessageBox.Show("Do you want to skip 'Licence Dialog'?", "Wix#", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                if (prevDialog == Dialogs.Welcome)
-                    obj.Shell.GoNext();
-                else
-                    obj.Shell.GoPrev();
+                obj.Shell.GoNext();
             }
         }
     }
