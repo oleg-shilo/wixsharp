@@ -53,10 +53,10 @@ public static class Script
 
         //removing all entry dialogs and installdir
         project.ManagedUI.InstallDialogs.Add(Dialogs.Welcome)
-                                        // .Add(Dialogs.Licence) // decide if to show (or not) this dialog at runtime
-                                        // .Add(Dialogs.Features)
-                                        // .Add(Dialogs.SetupType)
-                                        // .Add(Dialogs.InstallDir)
+                                        .Add(Dialogs.Licence) // decide if to show (or not) this dialog at runtime
+                                        .Add(Dialogs.Features)
+                                        .Add(Dialogs.SetupType)
+                                        .Add(Dialogs.InstallDir)
                                         .Add(Dialogs.Progress)
                                         .Add(Dialogs.Exit);
 
@@ -81,10 +81,10 @@ public static class Script
         project.PreserveTempFiles = true;
         project.SourceBaseDir = @"..\..\";
 
-        // Set the whole UI to French.
+        // Set the whole UI to French - example.
         // Replace the text of "Next" button (exta_fr-fr.wxl).
-        project.Language = "fr-FR";
-        project.LocalizationFile = "exta_fr-fr.wxl";
+        // project.Language = "fr-FR";
+        // project.LocalizationFile = "exta_fr-fr.wxl";
 
         project.BuildMsi();
     }
@@ -100,30 +100,27 @@ public static class Script
         var msiFile = e.Session.Database.FilePath;
 
         // Simulate analyzing the runtime conditions with the message box.
-        // Make a decision to show (or not) Licence dialog by injecting it in the Dialogs collection
-        // if (MessageBox.Show("Do you want to inject 'Licence Dialog'?", "Wix#", MessageBoxButtons.YesNo) == DialogResult.Yes)
-        //     e.ManagedUIShell.CurrentDialog.Shell.Dialogs.Insert(1, Dialogs.Licence);
+        // Make a decision to show (or not) Licence dialog.
 
+        // There are two options for skipping dialogs:
+        // - by modifying dialog sequence (next two commented lines)
+
+        // if (MessageBox.Show("Do you want to remove 'Licence Dialog'?", "Wix#", MessageBoxButtons.YesNo) == DialogResult.Yes)
+        //     e.ManagedUI.CurrentDialog.Shell.Dialogs.Remove(Dialogs.Licence);
+
+        // - by handling OnCurrentDialogChanged event
         e.ManagedUI.OnCurrentDialogChanged += ManagedUIShell_OnCurrentDialogChanged;
     }
 
-    static Type LastDialog;
-
     static void ManagedUIShell_OnCurrentDialogChanged(IManagedDialog obj)
     {
-        var prevDialog = LastDialog;
-        LastDialog = obj.GetType();
-
         if (obj.GetType() == Dialogs.Licence)
         {
             // Simulate analyzing the runtime conditions with the message box.
             // Make a decision to jump over the dialog in the sequence
             if (MessageBox.Show("Do you want to skip 'Licence Dialog'?", "Wix#", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                if (prevDialog == Dialogs.Welcome)
-                    obj.Shell.GoNext();
-                else
-                    obj.Shell.GoPrev();
+                obj.Shell.GoNext();
             }
         }
     }
