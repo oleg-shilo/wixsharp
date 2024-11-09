@@ -2014,9 +2014,9 @@ namespace WixSharp
 
                 doc.Root.RemoveAll();
 
-                //need to add namespaces (via attributes) as well
-                doc.Root.Add(newRoot.Attributes());
-                doc.Root.Add(newRoot.Elements());
+                // Walking all nodes will pick up XProcessingInstruction too
+                foreach (XNode node in newRoot.Nodes())
+                    doc.Root.Add(node);
             }
             return doc;
         }
