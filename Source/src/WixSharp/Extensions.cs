@@ -2026,12 +2026,12 @@ namespace WixSharp
 
         internal static XDocument AddDefaultNamespaces(this XDocument doc)
         {
-            //part of Issue#67 workaround
-            //For some reason after changing the XML namespace dox.ToString() triggers exception "The prefix '' cannot be redefined
-            //from 'http://schemas.microsoft.com/wix/2006/wi' to '' within the same start element tag."
-            //This error leads to the failure of the XML serialization with StringWriterWithEncoding (in BuildWxs).
-            //Strangle enough serialization is affected by presence of WixVariable element !!??
-            //While ToString fails always
+            // part of Issue#67 workaround
+            // For some reason after changing the XML namespace doc.ToString() triggers exception
+            // "The prefix '' cannot be redefined //from 'http://schemas.microsoft.com/wix/2006/wi' to '' within the same start element tag."
+            // This error leads to the failure of the XML serialization with StringWriterWithEncoding (in BuildWxs).
+            // Strangle enough serialization is affected by presence of WixVariable element !!??
+            // While ToString fails always
             if (CanSetXmlNamespaceSafely)
             {
                 XNamespace ns = doc.Root.Name.NamespaceName;
@@ -2049,9 +2049,9 @@ namespace WixSharp
 
                 doc.Root.RemoveAll();
 
-                //need to add namespaces (via attributes) as well
-                doc.Root.Add(newRoot.Attributes());
-                doc.Root.Add(newRoot.Elements());
+                // Walking all nodes will pick up XProcessingInstruction too
+                foreach (XNode node in newRoot.Nodes())
+                    doc.Root.Add(node);
             }
             return doc;
         }
