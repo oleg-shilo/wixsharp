@@ -88,7 +88,7 @@ namespace WixSharp.Bootstrapper
         /// Whether to cache the package. The default is "yes".
         /// </summary>
         [Xml]
-        public bool? Cache;
+        public PackageCacheAction? Cache;
 
         /// <summary>
         /// Name of a Variable that will hold the path to the log file.
@@ -906,6 +906,27 @@ namespace WixSharp.Bootstrapper
         /// Saves the assignment type of the product: per-user (0), or per-machine (1).
         /// </summary>
         assignment
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    public enum PackageCacheAction
+    {
+        /// <summary>
+        /// Always cache the package during Cache, Install, Modify, Repair, and Layout.
+        /// </summary>
+        force,
+
+        /// <summary>
+        /// Keep the package cached when the package is requested to be present.
+        /// </summary>
+        keep,
+
+        /// <summary>
+        /// Always uncache the package after Cache, Install, Modify, Repair, Uninstall, and Layout.
+        /// </summary>
+        remove
     }
 
 #pragma warning restore 1591
