@@ -1327,6 +1327,9 @@ namespace WixSharp
                 project.Include(WixExtension.UI);
             }
 
+            if (project.UI == WUI.WixUI_Common)
+                product.AddElement("UIRef", $"Id={project.UI}");
+
             if (project.EmbeddedUI != null)
             {
                 string bynaryPath = project.EmbeddedUI.Name;
