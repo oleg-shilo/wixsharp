@@ -1,3 +1,7 @@
+v2.2.11
+- Updated NuGet versions of WoxSharp packages
+- Fixed ExitDialog (form) layout problem
+
 v2.2.10
 - Updated NuGet versions
 - Updated UI dialogs

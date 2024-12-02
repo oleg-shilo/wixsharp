@@ -200,10 +200,6 @@ namespace WixSharp
         /// <returns></returns>
         static public Guid NewGuid()
         {
-            //if (ConsistentGenerationStartValue != null)
-            //    return ConsistentGenerationStartValue++;
-            //else
-            //    return Guid.NewGuid();
             var seed = rnd.Next(int.MaxValue);
             return Generator(seed);
         }
@@ -292,7 +288,9 @@ namespace WixSharp
         /// <returns></returns>
         public static Guid Default(object seed)
         {
-            return WixGuid.HashGuidByInteger(WixGuid.ConsistentGenerationStartValue.CurrentGuid, seed.ToString().GetHashCode32());
+            Guid result = WixGuid.HashGuidByInteger(WixGuid.ConsistentGenerationStartValue.CurrentGuid, seed.ToString().GetHashCode32());
+            // Debug.WriteLine($"{seed}: {result}");
+            return result;
         }
     }
 }

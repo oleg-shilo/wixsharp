@@ -12,10 +12,13 @@ public static class Launcher
 {
     static public int Main(string[] args)
     {
-        var msi = Path.GetFullPath(@"..\..\ManagedSetup.msi");
-        Console.WriteLine(Environment.CurrentDirectory);
+        var msi = Path.GetFullPath(@"..\..\Install Files\MyProduct.msi");
+        var msiExe = Path.GetFullPath(@"..\..\MyProduct.exe");
 
-        (int exitCode, string output) = msi.CompleSelfHostedMsi(Path.ChangeExtension(msi, ".exe"));
+        // Note WixSharp you do CompleSelfHostedMsi implementation in this file
+        // (see below) is provided for demo purposes. The identical implementation
+        // of this extension method is available from WixSharp library out of the box.
+        (int exitCode, string output) = msi.CompleSelfHostedMsi(msiExe);
 
         if (exitCode != 0)
             Console.WriteLine(output);
@@ -28,6 +31,7 @@ static class ExeGen
 {
     public static (int exitCode, string output) CompleSelfHostedMsi(this string msiFile, string outFile)
     {
+        //System.Diagnostics.Debug.Assert(false);
         var csc = LocateCsc();
         var csFile = GenerateCSharpSource(outFile + ".cs");
         try

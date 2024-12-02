@@ -636,7 +636,9 @@ namespace WixSharp
                         this.DefaultRefAssemblies.Add(item.Assembly.GetLocation());
                         try
                         {
-                            this.DefaultRefAssemblies.Add(Type.GetType("WixToolset.Mba.Core.Engine").Assembly.Location);
+                            var asm = Type.GetType("WixToolset.Mba.Core.Engine")?.Assembly?.Location;
+                            if (asm != null)
+                                this.DefaultRefAssemblies.Add(asm);
                         }
                         catch { }
                     }

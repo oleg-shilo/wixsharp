@@ -31,9 +31,11 @@ public class CustomSilentBA : WixToolset.Mba.Core.BootstrapperApplication
         this.PlanMsiPackage += (object sender, PlanMsiPackageEventArgs e) =>
         {
             if (e.PackageId == "MyProductPackageId")
+            {
                 e.UiLevel = e.Action == ActionState.Uninstall ?
                                 INSTALLUILEVEL.ProgressOnly :
                                 INSTALLUILEVEL.Full;
+            }
         };
         this.Command = command;
     }

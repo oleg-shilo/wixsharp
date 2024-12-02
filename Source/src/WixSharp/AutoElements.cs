@@ -57,6 +57,29 @@ namespace WixSharp
     }
 
     /// <summary>
+    /// The consistency level of the auto-generated Component GUIDs.
+    /// </summary>
+    public enum ComponentGuidConsistency
+    {
+        /// <summary>
+        /// The components' GUIDs are consistent (unchanged) within a single version of the product setup builds.
+        /// The increment in the version will trigger the regeneration of all components GUIDs.
+        /// </summary>
+        WithinSingleVersion,
+
+        /// <summary>
+        /// The components' GUIDs are consistent (unchanged) across all versions of the product setup builds.
+        /// The increment in the version will not trigger the regeneration of all components GUIDs.
+        /// </summary>
+        WithinAllVersions,
+
+        /// <summary>
+        /// The components' GUIDs are always unique. Every build will trigger the regeneration of all components GUIDs.
+        /// </summary>
+        AlwaysUnique,
+    }
+
+    /// <summary>
     /// Automatically insert elements required for satisfy odd MSI restrictions.
     /// <para>- You must set KeyPath you install in the user profile.</para>
     /// <para>- You must use a registry key under HKCU as component's KeyPath, not a file. </para>

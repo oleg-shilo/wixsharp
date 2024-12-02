@@ -8,6 +8,10 @@ namespace $safeprojectname$
     {
         static void Main()
         {
+            // If you are using WiX5 tools then your Custom BA needs to be built as a separate assembly because as WiX5 uses completely different hosting model.
+            // See this sample for WiX5 Custom BA https://github.com/oleg-shilo/wixsharp/tree/master/Source/src/WixSharp.Samples/Wix%23%20Samples/Bootstrapper/WiX5-Spike/WixToolset.WixBA
+            WixTools.SetWixVersion(Environment.CurrentDirectory, "4.0.0");
+
             string productMsi = BuildMsi();
 
             var bootstrapper =

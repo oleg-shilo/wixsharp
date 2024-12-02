@@ -40,6 +40,7 @@ public class Script
         // See WixBootstrapper_MsiEmbeddedUI.csproj sample
 
         string productMsi = BuildMsi();
+        // string productMsi = BuildMsiWithManaged();
 
         var bundle = new Bundle("My Product Bundle",
                          new MsiPackage(productMsi)
@@ -54,7 +55,7 @@ public class Script
 
         if (WixTools.GlobalWixVersion.Major >= 5)
         {
-            // this is an officil WiX5 BA sample
+            // this is an official WiX5 BA sample
             // from https://github.com/wixtoolset/wix/tree/HEAD/src/test/burn/WixToolset.WixBA
             var customBa_Wix5_Sample = @"..\WiX5-Spike\WixToolset.WixBA\output\net472\WixToolset.WixBA.exe";
             bundle.Application = new ManagedBootstrapperApplication(customBa_Wix5_Sample);

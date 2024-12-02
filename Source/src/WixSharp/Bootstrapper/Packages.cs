@@ -88,7 +88,7 @@ namespace WixSharp.Bootstrapper
         /// Whether to cache the package. The default is "yes".
         /// </summary>
         [Xml]
-        public bool? Cache;
+        public PackageCacheAction? Cache;
 
         /// <summary>
         /// Name of a Variable that will hold the path to the log file.
@@ -199,7 +199,7 @@ namespace WixSharp.Bootstrapper
         {
             var msi_exe = msi + ".exe";
 
-            (int exitCode, string output) = msi.CompleSelfHostedMsi(msi_exe);
+            (int exitCode, string output) = msi.CompileSelfHostedMsi(msi_exe);
             if (exitCode != 0)
             {
                 Compiler.OutputWriteLine("Error: " + output);
@@ -452,13 +452,27 @@ namespace WixSharp.Bootstrapper
         /// all information is routed to the bootstrapper application to provide a unified installation experience.
         /// If "yes" is specified the UI authored into the msi package will be displayed on top of any bootstrapper
         /// application UI.
-        /// <para>Note, this field is only applicable for the stock bootstrapper applications.
+        /// <para>
+        /// Note, this field is only applicable for the stock bootstrapper applications.
         /// This is because when standard BA is used, WixSharp compiler can detect DisplayInternalUI and inject a "magic"
         /// attribute (bal:DisplayInternalUICondition="WixBundleAction = 6") into the bundle WXS definition. This condition
         /// is evaluated at runtime by the standard BA and the msi UI is displayed accordingly.</para>
-        /// <para>However when custom UI is used, it is a responsibility of custom BA to manage msi UI visibility.
+        /// <para>
+        /// However when custom BA UI is used, it is a responsibility of custom BA to manage msi UI visibility.
         /// It is normally done by adjusting `PlanMsiPackageEventArgs.UiLevel` value of the specific MsiPackages from the
         /// `BootstrapperApplication.PlanMsiPackage` event of the BA.</para>
+        /// <para>
+        /// Note, if you want to display the MSI UI that is not a stock but a custom Managed UI (inMSI terminology EmbeddedUI)
+        /// then it is problematic. WiX team has not solved this problem since WiX3 despite the intent (https://github.com/wixtoolset/issues/issues/4921)
+        /// Thus the only working options for displaying custom Managed UI are:
+        /// </para>
+        /// <para>- Follow `WixBootstrapper` sample (SimpleGlobalInternalUI case). It suspends Bootstrapper UI and instead
+        /// shows the UIs for all packages in the bundle.</para>
+        /// <para> - Follow 'WixBootstrapper_MsiEmbeddedUI' sample, which shows a very simple technique of wrapping msi into a self-hosted executable included in the bundle that happily shows the MSI UI regardless of whether it is a native or a managed one.
+        /// </para>
+        /// <para>- Use NSIS bootstrapper instead. Sadly. WiX Bundle seems to be too fragile and inflexible.</para>
+        /// <para>- If the only reason for using a bootstrapper is to do a few simple actions (e.g. assess the environment) before product installation, then you can use an incredibly simple bootstrapper/launcher that is a pure custom CLI application.
+        /// See 'Self-executable_Msi' sample.</para>
         /// </summary>
         public bool? DisplayInternalUI;
 
@@ -892,6 +906,27 @@ namespace WixSharp.Bootstrapper
         /// Saves the assignment type of the product: per-user (0), or per-machine (1).
         /// </summary>
         assignment
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    public enum PackageCacheAction
+    {
+        /// <summary>
+        /// Always cache the package during Cache, Install, Modify, Repair, and Layout.
+        /// </summary>
+        force,
+
+        /// <summary>
+        /// Keep the package cached when the package is requested to be present.
+        /// </summary>
+        keep,
+
+        /// <summary>
+        /// Always uncache the package after Cache, Install, Modify, Repair, Uninstall, and Layout.
+        /// </summary>
+        remove
     }
 
 #pragma warning restore 1591

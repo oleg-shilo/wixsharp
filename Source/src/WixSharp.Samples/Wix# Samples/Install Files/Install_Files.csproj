@@ -13,6 +13,7 @@
     <None Remove="*.wixpdb" />
     <None Remove="*.msi" />
     <Compile Remove="Files\Bin\MyApp.cs" />
+    <Compile Remove="MyProduct.exe.cs" />
     <None Remove="readme.txt" />
     <None Remove="*.cs.dll" />
     <None Remove="WixSharp.CA.dll" />

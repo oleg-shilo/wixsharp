@@ -69,7 +69,7 @@ namespace $safeprojectname$.Dialogs
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
             this.copyToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
-            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Text = "[Copy]";
             // 
             // middlePanel
             // 

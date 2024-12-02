@@ -454,6 +454,10 @@ namespace WixSharp
         static public bool PreserveDbgFiles = false;
 
         /// <summary>
+        /// The preferred consistency level of the auto-generated Component GUIDs.
+        /// </summary>
+        static public ComponentGuidConsistency PreferredComponentGuidConsistency = ComponentGuidConsistency.WithinAllVersions;
+        /// <summary>
         /// Indicates whether compiler should emit relative or absolute paths in the WiX XML source.
         /// </summary>
         static public bool EmitRelativePaths = true;
@@ -2746,7 +2750,7 @@ namespace WixSharp
                 if (wAction.RollbackProgressText != null)
                 {
                     uis.ForEach(ui =>
-                        ui.Add(new XElement("ProgressText",  new XAttribute("Value", wAction.RollbackProgressText),
+                        ui.Add(new XElement("ProgressText", new XAttribute("Value", wAction.RollbackProgressText),
                             new XAttribute("Action", roollbackActionId))));
                 }
 

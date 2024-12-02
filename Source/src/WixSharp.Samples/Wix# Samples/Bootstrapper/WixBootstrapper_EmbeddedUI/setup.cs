@@ -51,7 +51,7 @@ public class Script
         var msi_exe = msi + ".exe";
         var msi_product_code = new MsiParser(msi).GetProductCode();
 
-        (int exitCode, string output) = msi.CompleSelfHostedMsi(msi_exe);
+        (int exitCode, string output) = msi.CompileSelfHostedMsi(msi_exe);
         if (exitCode != 0)
         {
             Console.WriteLine("Error: " + output);

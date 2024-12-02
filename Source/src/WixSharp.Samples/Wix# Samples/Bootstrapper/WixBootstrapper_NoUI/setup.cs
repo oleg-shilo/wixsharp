@@ -28,13 +28,14 @@ public class InstallScript
         EnsureCompatibleWixVersion();
 
         var productProj =
-            new Project("My Product",
+            new ManagedProject("My Product",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("readme.txt")))
             { };
 
         productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
         productProj.LicenceFile = "License.rtf";
+        productProj.ManagedUI = ManagedUI.Default;
 
         var productMsi = productProj.BuildMsi();
 
@@ -84,10 +85,11 @@ public class InstallScript
         // Thus, for now, Wix# is still using the WiX4 model of the custom BA.
 
         if (WixTools.GlobalWixVersion.Major == 5)
-            WixTools.SetWixVersion(Environment.CurrentDirectory, "4.0.4");
+            WixTools.SetWixVersion(Environment.CurrentDirectory, "4.0.4"); // force to use the old BA model of WiX4
 
         if (WixTools.GlobalWixVersion.Major == 4)
         {
+            // some of the WiX4 extensions are present only in specific WiX packages
             WixExtension.UI.PreferredVersion = "4.0.4";
             WixExtension.Bal.PreferredVersion = "4.0.2";
             WixExtension.NetFx.PreferredVersion = "4.0.2";
