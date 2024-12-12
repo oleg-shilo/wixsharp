@@ -150,7 +150,7 @@ namespace WixSharp
                 CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
                                                PrepareOptionalArguments(), WellKnownLocations, CertificateStore, OutputLevel, HashAlgorithm);
 
-            Console.WriteLine("Signing with DigitasSignature");
+            Console.WriteLine("Signing with DigitalSignature.");
 
             if (TimeUrls.Any())
                 foreach (Uri uri in TimeUrls)
