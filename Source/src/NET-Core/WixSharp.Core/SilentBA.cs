@@ -16,6 +16,9 @@ using WixToolset.Mba.Core;
 
 namespace WixSharp.Bootstrapper
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class WixBAFactory : BaseBootstrapperApplicationFactory
     {
         /// <summary>
@@ -106,12 +109,27 @@ namespace WixSharp.Bootstrapper
     /// </summary>
     public class SilentManagedBA : BootstrapperApplication
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SilentManagedBA"/> class.
+        /// </summary>
+        /// <param name="engine">The engine.</param>
+        /// <param name="command">The command.</param>
         public SilentManagedBA(IEngine engine, IBootstrapperCommand command) : base(engine)
         {
             this.Command = command;
         }
 
+        /// <summary>
+        /// Gets the engine.
+        /// </summary>
+        /// <value>
+        /// The engine.
+        /// </value>
         public IEngine Engine => base.engine;
+
+        /// <summary>
+        /// The command
+        /// </summary>
         public IBootstrapperCommand Command;
 
         AutoResetEvent done = new AutoResetEvent(false);
