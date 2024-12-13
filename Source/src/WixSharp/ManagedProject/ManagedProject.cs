@@ -688,18 +688,71 @@ namespace WixSharp
             return info;
         }
 
+        /// <summary>
+        /// Gets the dialog type specified by a vertical pipe-concatenated assembly name and class.
+        /// </summary>
+        /// <param name="info">Vertical pipe-concatenated assembly name and class.</param>
+        /// <returns><Dialog type./returns>
         internal static Type GetDialog(string info)
         {
             string[] parts = info.Split('|');
 
-            var assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name.StartsWith(parts[0]))
-                           ??
-                           System.Reflection.Assembly.Load(parts[0]);
+            string assemblyName = parts[0];
+            string dialogTypeName = parts[1];
 
-            var dialogType = assembly.GetType(parts[1]);
+            //
+            // Try to load the assembly first from execution context.
+            //
+            // When not yet available, load dynamically.
+            //
+            System.Reflection.Assembly assembly;
+
+            assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name.StartsWith(assemblyName));
+
+            if (assembly == null)
+            {
+                try
+                {
+                    assembly = System.Reflection.Assembly.Load(assemblyName);
+                }
+                catch (FileLoadException flex)
+                {
+                    Exception newEx = new Exception
+                    ($"The assembly with name '{assemblyName}' could not be loaded dynamically for retrieval of the type for '{dialogTypeName}'. "
+                      + $" The fusion log was: '{flex.FusionLog}'. "
+                      + $"Make sure the loaded file '{flex.FileName}' is contained in the installation in a loadable fashion."
+                    , innerException: flex
+                    );
+
+                    newEx.Data.Add($"{nameof(GetDialog)}-info", info);
+
+                    throw newEx;
+                }
+                catch (Exception ex)
+                {
+                    Exception newEx = new Exception
+                    ( $"The assembly with name '{assemblyName}' could not be loaded dynamically for retrieval of the type for '{dialogTypeName}'. "
+                      + "Make sure it is contained in the installation in a loadable fashion."
+                    , innerException: ex
+                    );
+
+                    newEx.Data.Add($"{nameof(GetDialog)}-info", info);
+
+                    throw newEx;
+                }
+            }
+
+            //
+            // Retrieve the type of the dialog.
+            //
+            var dialogType = assembly.GetType(dialogTypeName);
             if (dialogType == null)
-                throw new Exception($"Cannot instantiate '{parts[1]}'. " +
-                                    $"Make sure you added this type assembly to your setup with 'project.{nameof(DefaultRefAssemblies)}'");
+            {
+                throw new Exception
+                ( $"Cannot instantiate '{dialogTypeName}'. "
+                  + $"Make sure you added this type assembly to your setup with 'project.{nameof(DefaultRefAssemblies)}'."
+                );
+            }
 
             return dialogType;
         }
