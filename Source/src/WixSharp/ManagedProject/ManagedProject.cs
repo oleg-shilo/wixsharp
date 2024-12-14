@@ -334,7 +334,7 @@ namespace WixSharp
                         this.DefaultRefAssemblies.Add(location);
                 }
 
-                this.AddProperty(new Property("WixSharp_UnhandledException_Handlers".FormatWith(name), GetHandlersInfo(handler as MulticastDelegate)));
+                this.AddProperty(new Property("WixSharp_UnhandledException_Handlers", GetHandlersInfo(handler as MulticastDelegate)));
             }
         }
 
