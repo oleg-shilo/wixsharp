@@ -130,7 +130,8 @@ namespace WixSharp
 
         internal XElement ToXml()
         {
-            return new XElement(this.GetType().Name, Condition.ToXValue())
+            return new XElement(this.GetType().Name)
+                               .SetAttribute("Condition", Condition.ToXValue())
                                .SetAttribute("Overridable", Overridable)
                                .SetAttribute("Suppress", Suppress)
                                .SetAttribute(When.ToString(), Step)
