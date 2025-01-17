@@ -1,1 +1,1 @@
-This sample demonstrates how to deploy multiple files on the target system.Execute corresponding .cmd file to build desired msi. Then execute the .msi to start the installation.
+This sample demonstrates how to build an MSIX file from a given MSI file.
