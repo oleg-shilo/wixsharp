@@ -13,7 +13,7 @@
 
 **_Framework for building a complete MSI or WiX source code by using script files written with the C# syntax._**
 
-_In July 2014 WixSharp was migrated to CodePlex [WixSharp](https://wixsharp.codeplex.com/) and re-released under MIT license. It was subsequently migrated from CodePlex to GitHub. You can still find old releases and some useful content from the past discussions on CodePlex._
+_In July 2014 WixSharp was migrated to CodePlex [WixSharp](https://wixsharp.codeplex.com/) and re-released under MIT license. It was subsequently migrated from CodePlex to GitHub. You can still find old releases and some useful content from past discussions on CodePlex._
 
 ## Project Description
 
