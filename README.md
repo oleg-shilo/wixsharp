@@ -13,7 +13,7 @@
 
 **_Framework for building a complete MSI or WiX source code by using script files written with the C# syntax._**
 
-_In July 2014 WixSharp was migrated to CodePlex [WixSharp](https://wixsharp.codeplex.com/) and re-released under MIT license. It was subsequently migrated from CodePlex to GitHub. You can still find old releases and some useful content from the past discussions on CodePlex._
+_Note: WixSharp support for WiX3 Toolset has been discontinued from 2025. WixSharp Nuget packages and Visual Studio templates that target WiX3 will still work but there will no longer be any development in the WiX3 targeting codebase. Please follow the WiX team guidelines for migrating to the actively supported versions of their tools. YOu can continue using WixSharp as usual. For details on how to install WiX5 see [this page](https://github.com/oleg-shilo/wixsharp/wiki#dependencies)._
 
 ## Project Description
 
