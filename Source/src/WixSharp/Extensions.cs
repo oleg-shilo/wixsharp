@@ -3753,6 +3753,47 @@ namespace WixSharp
         /// process, or null, if no process resource is started (for example, if an existing process
         /// is reused).
         /// </returns>
+        public static Process Run(this string fileName, string args = "", Action<string> onOutput = null)
+        {
+            using (var proc = Process.Start(
+                new ProcessStartInfo
+                {
+                    WorkingDirectory = fileName.PathGetFullPath().PathGetDirName(),
+                    FileName = fileName,
+                    Arguments = args,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }))
+            {
+                string line = null;
+                while (null != (line = proc.StandardOutput.ReadLine()))
+                    onOutput?.Invoke(line);
+
+                string error = proc.StandardError.ReadToEnd();
+                if (!error.IsEmpty())
+                    onOutput?.Invoke(error);
+                proc.WaitForExit();
+
+                return proc;
+            }
+        }
+
+        /// <summary>
+        /// Starts a process resource by specifying the name of an application and a set of
+        /// command-line arguments, and associates the resource with a new
+        /// System.Diagnostics.Process component.
+        /// </summary>
+        /// <param name="fileName">Gets or sets the application or document to start.</param>
+        /// <param name="args">
+        /// Gets or sets the set of command-line arguments to use when starting the application.
+        /// </param>
+        /// <returns>
+        /// A new <see cref="System.Diagnostics.Process"/> component that is associated with the
+        /// process, or null, if no process resource is started (for example, if an existing process
+        /// is reused).
+        /// </returns>
         public static Process Start(this string fileName, string args = "")
         {
             return Process.Start(new ProcessStartInfo

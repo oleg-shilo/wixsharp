@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using WixSharp.UI.Forms;
@@ -162,7 +163,7 @@ namespace WixSharp
             // issue. When part of the logging system does not work, it reduces
             // analysis time when other parts are still fed with relevant messages.
             //
-            List<Exception> exceptions = new List<Exception>();
+            var exceptions = new List<Exception>();
 
             try
             {

@@ -17,7 +17,7 @@ using WixSharp.UI;
 
 static class Script
 {
-    static public void Main()
+    static public void Main(string[] args)
     {
         var project =
             new ManagedProject("MyProduct",
@@ -27,7 +27,6 @@ static class Script
                             TargetFileName = "app.exe"
                         }));
 
-        project.ManagedUI = ManagedUI.DefaultWpf;
         project.GUID = new Guid("6fe30b47-2577-43ad-9a95-1861ba25889b");
 
         var msi = project.BuildMsi();

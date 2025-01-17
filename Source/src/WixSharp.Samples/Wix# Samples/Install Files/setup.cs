@@ -8,6 +8,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Principal;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using WixSharp;
@@ -22,22 +23,22 @@ static class Script
 
         var project =
             new ManagedProject("MyProduct",
-                    // new Dir(@"AppDataFolder\My ICompany\My Product",
-                    new Dir(new Id("MY_INSTALLDIR"), @"%ProgramFiles%\My ICompany\My Product",
+                    new Dir(@"%ProgramFiles%\My Company\My Product",
                         f = new File("MyApp_file".ToId(),
-                                 @"Files\Bin\MyApp.exe",
-                                 new FileAssociation("cstm", "application/custom", "open", "\"%1\"")
-                                 {
-                                     Advertise = true,
-                                     Icon = "wixsharp.ico"
-                                 })
-                    {
-                        TargetFileName = "app.exe"
-                    },
+                                @"Files\Bin\MyApp.exe",
+                                new FileAssociation("cstm", "application/custom", "open", "\"%1\"")
+                                {
+                                    Advertise = true,
+                                    Icon = "wixsharp.ico"
+                                })
+                        {
+                            TargetFileName = "app.exe"
+                        },
                     new Dir(@"Docs\Manual",
                         new File(@"Files\Docs\Manual.txt")
                         {
-                            NeverOverwrite = true
+                            NeverOverwrite = true,
+                            Condition = new Condition("IS64=yes")
                         })),
                     new Property("PropName", "<your value>"));
 
