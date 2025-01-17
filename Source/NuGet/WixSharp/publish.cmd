@@ -1,3 +1,6 @@
+echo !!!! Set nuget authentication key envar
+echo !!!! Note: symbols are pushed automatically with nupkg 
+
 set ver=2.4.3
 dotnet nuget push WixSharp.Msi.Core.%ver%.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
 dotnet nuget push WixSharp.Core.%ver%.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
