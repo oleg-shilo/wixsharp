@@ -775,17 +775,21 @@ namespace WixSharp
         @string,
 
         /// <summary>
-        /// The formatted type
+        /// The formatted type.
         /// </summary>
+        /// <remarks>
+        /// <p>In v4, the formatted type of the Variable element must be used to get the v3 behavior. To specify a literal variable, use the string type.</p>
+        /// <p>See: https://wixtoolset.org/docs/fourthree/faqs/#the-v3-variables-string-type-is-now-called-formatted</p>
+        /// </remarks>
         formatted,
 
         /// <summary>
-        /// The numeric type
+        /// The numeric type.
         /// </summary>
         numeric,
 
         /// <summary>
-        /// The version type
+        /// The version type.
         /// </summary>
         version
     }
