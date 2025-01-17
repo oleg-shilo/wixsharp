@@ -6,7 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MSIX\**" />
+    <EmbeddedResource Remove="MSIX\**" />
     <None Remove="*.cmd" />
+    <None Remove="MSIX\**" />
     <None Remove="CustomAction.config" />
     <None Remove="*.exe" />
     <None Remove="*.pdb" />

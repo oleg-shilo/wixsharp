@@ -19,8 +19,6 @@ static class Script
 {
     static public void Main()
     {
-        // "msiexec".Run("/uninstall MyProduct.msi -");
-        // return;
         var project =
             new ManagedProject("MyProduct",
                     new Dir(@"%ProgramFiles%\My Company\My Product",
@@ -29,15 +27,12 @@ static class Script
                             TargetFileName = "app.exe"
                         }));
 
-        project.ManagedUI = ManagedUI.DefaultWpf; // all stock UI dialogs
+        project.ManagedUI = ManagedUI.DefaultWpf;
         project.GUID = new Guid("6fe30b47-2577-43ad-9a95-1861ba25889b");
 
-        var msi = @".\MyProduct.msi";
-        project.UpdateTemplate(msi, @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\Build-MSIX\MyProduct.msix.xml");
-        return;
-        // var msi = project.BuildMsi();
+        var msi = project.BuildMsi();
 
-        // var msi = @".\MyProduct.msi";
+        project.UpdateTemplate(@".\MyProduct.msix.xml", msi);
 
         if (WindowsIdentity.GetCurrent().IsAdmin())
         {
@@ -52,9 +47,29 @@ static class Script
 
 static class Msix
 {
-    public static void UpdateTemplate(this Project project, string msi, string msixTemplate)
+    public static void UpdateTemplate(this Project project, string msixTemplate, string msi)
     {
+        XNamespace ns = "http://schemas.microsoft.com/msix/msixpackagingtool/template/1910";
+
         var doc = XDocument.Load(msixTemplate);
+
+        doc.Root.FindFirst("SaveLocation")
+           .SetAttribute("PackagePath", msi.PathChangeExtension(".msix"))
+           .SetAttribute("TemplatePath", msixTemplate.PathChangeExtension(".g.xml"));
+
+        doc.Root.FindFirst("Installer")
+           .SetAttribute("Path", msi)
+           // the dir where msi will be installed so MsixPackagingTool can monitor it
+           .SetAttribute("InstallLocation", @"C:\Program Files (x86)\My Company");
+
+        doc.Root.FindFirst("PackageInformation")
+           .SetAttribute("PackageName", project.Name)
+           .SetAttribute("PackageDisplayName", project.Name)
+           .SetAttribute(ns + "PackageDescription", project.Name)
+           .SetAttribute("PublisherName", $"CN={project.ControlPanelInfo.Manufacturer}")
+           .SetAttribute("PublisherDisplayName", project.ControlPanelInfo.Manufacturer)
+           .SetAttribute("Version", project.Version);
+
         doc.Save(msixTemplate);
     }
 
@@ -65,6 +80,10 @@ static class Msix
 
     public static void ConvertToMsix(this string msi, string msixTemplate)
     {
+        // Note MsixPackagingTool builds msix by installing msi and analyzing system changes and then embedding detected
+        // changes (e.g. files) in the produced msix.
+        // Thus it is important to clean up the system after the msi installation.
+
         using (var msiInfo = new MsiParser(msi))
         {
             var productCode = msiInfo.GetProductCode();
@@ -75,7 +94,7 @@ static class Msix
             var startInfo = new ProcessStartInfo
             {
                 FileName = "MsixPackagingTool.exe",
-                Arguments = $@"create-package --template {msixTemplate} -v",
+                Arguments = $@"create-package --template {msixTemplate}", //  use "-v" for more detailed build output
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -98,7 +117,7 @@ static class Msix
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Error: {ex.Message}. Ensure you have installed MsixPackagingTool and MSIX driver.");
             }
             finally
             {

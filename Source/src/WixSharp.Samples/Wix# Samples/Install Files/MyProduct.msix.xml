@@ -297,7 +297,7 @@
     </ExclusionItems>
   </Settings>
   <PrepareComputer DisableWindowsSearchService="false" />
-  <SaveLocation PackagePath="D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\MyProduct_1.0.0.0_x64__yw5rxyn2chjm8.msix" TemplatePath="C:\Users\olegs\OneDrive\Desktop\MyProduct_1.0.0.0_x64__yw5rxyn2chjm8_template.xml" />
-  <Installer Path="D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\MyProduct.msi" InstallLocation="C:\Program Files (x86)" />
+  <SaveLocation PackagePath="D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\MyProduct.msix" TemplatePath="D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\MyProduct.msix.xml" />
+  <Installer Path="D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\MyProduct.msi" InstallLocation="C:\Program Files (x86)\My Company" />
   <PackageInformation PackageName="MyProduct" PackageDisplayName="MyProduct" PublisherName="CN=MyApp" PublisherDisplayName="oleg" Version="1.0.0.0" p4:PackageDescription="MyProduct" xmlns:p4="http://schemas.microsoft.com/msix/msixpackagingtool/template/1910" />
 </MsixPackagingToolTemplate>
