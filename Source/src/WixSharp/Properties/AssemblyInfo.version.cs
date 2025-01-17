@@ -8,4 +8,4 @@ using System.Reflection;
 //      Revision
 //
 [assembly: AssemblyVersion("1.26.0.0")]
-[assembly: AssemblyFileVersion("1.26.0.0")]
+[assembly: AssemblyFileVersion("1.26.1.0")]
