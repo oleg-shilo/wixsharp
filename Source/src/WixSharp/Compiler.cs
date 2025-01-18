@@ -749,7 +749,7 @@ namespace WixSharp
             var platform = (project as Project)?.Platform ?? (project as Bundle)?.Platform;
 
             if (platform.HasValue) // non-default architecture
-                candleCmdLineParams.Append($" -arch {platform}");
+                candleCmdLineParams.Append($" -arch {platform} ");
 
             if (extraWxsFiles.IsNotEmpty())
                 candleCmdLineParams.Append(extraWxsFiles);
