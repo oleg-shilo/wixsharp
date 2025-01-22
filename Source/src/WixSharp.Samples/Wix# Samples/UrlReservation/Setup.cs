@@ -21,7 +21,7 @@ namespace FutoRollbackGeneration
                             {
                                 ServiceInstaller = new ServiceInstaller("WixSharp.TestSvc")
                                 {
-                                    StartOn = SvcEvent.Install, //set it to null if you don't want service to start as during deployment
+                                    StartOn = SvcEvent.Install, //set it to null if you don't want service to start during deployment
                                     StopOn = SvcEvent.InstallUninstall_Wait,
                                     RemoveOn = SvcEvent.Uninstall_Wait,
                                     DelayedAutoStart = true,
