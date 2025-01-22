@@ -692,7 +692,7 @@ namespace WixSharp
         /// Gets the dialog type specified by a vertical pipe-concatenated assembly name and class.
         /// </summary>
         /// <param name="info">Vertical pipe-concatenated assembly name and class.</param>
-        /// <returns><Dialog type./returns>
+        /// <returns>Dialog type.</returns>
         internal static Type GetDialog(string info)
         {
             string[] parts = info.Split('|');
@@ -731,7 +731,7 @@ namespace WixSharp
                 catch (Exception ex)
                 {
                     Exception newEx = new Exception
-                    ( $"The assembly with name '{assemblyName}' could not be loaded dynamically for retrieval of the type for '{dialogTypeName}'. "
+                    ($"The assembly with name '{assemblyName}' could not be loaded dynamically for retrieval of the type for '{dialogTypeName}'. "
                       + "Make sure it is contained in the installation in a loadable fashion."
                     , innerException: ex
                     );
@@ -749,7 +749,7 @@ namespace WixSharp
             if (dialogType == null)
             {
                 throw new Exception
-                ( $"Cannot instantiate '{dialogTypeName}'. "
+                ($"Cannot instantiate '{dialogTypeName}'. "
                   + $"Make sure you added this type assembly to your setup with 'project.{nameof(DefaultRefAssemblies)}'."
                 );
             }
@@ -845,7 +845,7 @@ namespace WixSharp
                         catch (MissingMethodException mex)
                         {
                             Exception ex = new Exception
-                            ( $"The method for '{item}' was found to be missing when called in the context of the handler '{handlerName}'."
+                            ($"The method for '{item}' was found to be missing when called in the context of the handler '{handlerName}'."
                             , innerException: mex
                             );
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32;
+using WixToolset.Dtf.WindowsInstaller;
 using IO = System.IO;
 
 #pragma warning disable CA1416 // Validate platform compatibility
@@ -327,5 +328,68 @@ namespace WixSharp.CommonTasks
                     return key.GetValue(valueName);
             return null;
         }
+
+        /// <summary>
+        /// <remarks>This feature is implemented as part of the #1730 feature request.</remarks>
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        public static Project EnableUpgradingFromPerUserToPerMachine(this Project project)
+        {
+            project.AddActions(
+                new ManagedAction(CustomActions.FindAllRelatedProducts)
+                {
+                    Condition = Condition.Always,
+                    Sequence = Sequence.InstallExecuteSequence,
+                    ActionAssembly = typeof(CustomActions).Assembly.Location,
+                    SequenceNumber = 5
+                },
+                new ManagedAction(CustomActions.FindAllRelatedProducts)
+                {
+                    Condition = Condition.Always,
+                    Sequence = Sequence.InstallUISequence,
+                    ActionAssembly = typeof(CustomActions).Assembly.Location,
+                    SequenceNumber = 5
+                });
+            return project;
+        }
+
+        /// <summary>
+        /// WixSharp stock custom actions for implementing AppSearch tasks.
+        /// <remarks>Do not call any methods of this class directly. This class is made public because it is required for 
+        /// provisioning managed custom actions with WiX but not to allow user interaction with this class.</remarks>
+        /// </summary>
+        public class CustomActions
+        {
+            /// <summary>
+            /// Finds all related products and manually schedules their upgrade.
+            /// <remarks>Do not call any method directly. This method is made public because it is required for 
+            /// provisioning managed custom actions with WiX but not to allow user interaction with this method.</remarks>
+            /// </summary>
+            /// <param name="session"></param>
+            /// <returns></returns>
+            [CustomAction]
+            public static ActionResult FindAllRelatedProducts(Session session)
+            {
+                var upgradeCode = session.QueryProperty("UpgradeCode");
+                var productCode = session.QueryProperty("ProductCode");
+
+                var productToUpgrade = AppSearch
+                    .GetRelatedProducts(upgradeCode)
+                    .FirstOrDefault(x => x != productCode);
+
+                if (productToUpgrade.IsNotEmpty())
+                {
+                    session.SetProperty("WIX_UPGRADE_DETECTED", productToUpgrade);
+                    session.SetProperty("MIGRATE", productToUpgrade);
+                    session.SetProperty("UPGRADINGPRODUCTCODE", productToUpgrade);
+                }
+
+                return ActionResult.Success;
+            }
+        }
+
+
     }
+
 }

@@ -3748,6 +3748,7 @@ namespace WixSharp
         /// <param name="args">
         /// Gets or sets the set of command-line arguments to use when starting the application.
         /// </param>
+        /// <param name="onOutput">A delegate for handling output process standard and error output.</param>
         /// <returns>
         /// A new <see cref="System.Diagnostics.Process"/> component that is associated with the
         /// process, or null, if no process resource is started (for example, if an existing process
