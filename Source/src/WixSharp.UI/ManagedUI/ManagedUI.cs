@@ -191,8 +191,6 @@ namespace WixSharp
 
         internal static string LocalizationFileFor(Project project)
         {
-            // return UIExtensions.UserOrDefaultContentOf(project.LocalizationFile, project.SourceBaseDir, project.OutDir, project.Name + ".wxl", Resources.WixUI_en_us);
-
             // - if localization file specified by the user then just return it but merge with
             //   the stock localization if found.
             // - if user did not specify it then find the stock localization file (in SDK folder) for the language

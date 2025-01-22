@@ -334,7 +334,7 @@ namespace WixSharp
                         this.DefaultRefAssemblies.Add(location);
                 }
 
-                this.AddProperty(new Property("WixSharp_UnhandledException_Handlers".FormatWith(name), GetHandlersInfo(handler as MulticastDelegate)));
+                this.AddProperty(new Property("WixSharp_UnhandledException_Handlers", GetHandlersInfo(handler as MulticastDelegate)));
             }
         }
 
@@ -825,8 +825,9 @@ namespace WixSharp
 
         internal static void InvokeClientHandlers(string eventName, Session session, Exception e)
         {
-            var args = new ExceptionEventArgs { Session = session, Exception = e };
-            var handlerName = $"WixSharp_{eventName}_Handlers";
+            ExceptionEventArgs args = new ExceptionEventArgs { Session = session, Exception = e };
+            string handlerName = $"WixSharp_{eventName}_Handlers";
+
             try
             {
                 string handlersInfo = args.Session.Property(handlerName);
@@ -836,7 +837,22 @@ namespace WixSharp
                     foreach (string item in handlersInfo.Trim().Split('\n').Select(x => x.Trim()))
                     {
                         MethodInfo method = GetHandler(item);
-                        method.Call(args);
+
+                        try
+                        {
+                            method.Call(args);
+                        }
+                        catch (MissingMethodException mex)
+                        {
+                            Exception ex = new Exception
+                            ( $"The method for '{item}' was found to be missing when called in the context of the handler '{handlerName}'."
+                            , innerException: mex
+                            );
+
+                            ex.Data.Add($"{nameof(InvokeClientHandlers)}-item", item);
+
+                            throw;
+                        }
                     }
                 }
             }

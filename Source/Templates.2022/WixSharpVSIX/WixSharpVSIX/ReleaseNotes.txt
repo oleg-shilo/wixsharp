@@ -1,3 +1,6 @@
+v2.2.12
+- #1673: Error on using template "WixSharp Managed Setup - Custom Dialog (Wix 3)"
+
 v2.2.11
 - Updated NuGet versions of WoxSharp packages
 - Fixed ExitDialog (form) layout problem

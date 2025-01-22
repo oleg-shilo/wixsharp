@@ -1,6 +1,7 @@
-﻿//using PirrosLibrary;
+﻿//using Test1Library;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
 using System.Security.Cryptography;
 using WixSharp;
@@ -10,7 +11,7 @@ class Constants
     public static string PluginVersion = "2.3.0";
 }
 
-namespace Pirros.installer.wixsharp
+namespace Test1.installer.wixsharp
 {
     class Program
     {
@@ -20,19 +21,72 @@ namespace Pirros.installer.wixsharp
     private static readonly string Configuration = "Release";
 #endif
 
-        public static void Main()
+        static string companyName = "Demo Inc.";
+        static string productName = "DllExample";
+        static string productVersion = "1.0.0";
+
+        static void Main()
+        {
+            Environment.CurrentDirectory = @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\Install Files";
+            var msixTemplate = @".\MyProduct.msix.xml";
+
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "MsixPackagingTool.exe",
+                Arguments = $@"create-package --template {msixTemplate} -v",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            try
+            {
+                using (Process process = Process.Start(startInfo))
+                {
+                    string line = null;
+                    while (null != (line = process.StandardOutput.ReadLine()))
+                        Console.WriteLine(line);
+
+                    string error = process.StandardError.ReadToEnd();
+                    if (!error.IsEmpty())
+                        Console.WriteLine(error);
+                    process.WaitForExit();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        static void Main1()
+        {
+            var project = new ManagedProject(productName,
+                              new Dir(@"%ProgramFiles%\" + companyName + @"\" + productName + @"\" + productVersion,
+                                  Files.FromBuildDir(@"D:\dev\support\wixsharp-issues\DllErrorExample\Contents")));
+
+            project.GUID = new Guid("5de17d40-9e25-49fe-a835-36d7e0b64062");
+            project.Version = new Version(productVersion);
+
+            project.ManagedUI = ManagedUI.DefaultWpf; // all stock UI dialogs
+
+            project.BuildMsi();
+        }
+
+        public static void Test1()
         {
             return; // REMOVE THIS LINE TO ENABLE BUILDING
 
-            Environment.CurrentDirectory = @"D:\dev\support\wixsharp-issues\Pirros\WixSharp Setup1\WixSharp Setup1";
+            Environment.CurrentDirectory = @"D:\dev\support\wixsharp-issues\Test1\WixSharp Setup1\WixSharp Setup1";
             Constants.PluginVersion = "2.4.0";
 
-            string Version = Constants.PluginVersion; // READ FROM PIRROS LIBRARY
-            Guid ProductId = GenerateProductId("Pirros" + Constants.PluginVersion);
+            string Version = Constants.PluginVersion; // READ FROM Test1 LIBRARY
+            Guid ProductId = GenerateProductId("Test1" + Constants.PluginVersion);
             Guid UpgradeCode = new Guid("6476F6DF-EB27-4CAB-9790-5FE5F1C39731"); // DO NOT TOUCH
 
             Project project =
-            new Project("Pirros",
+            new Project("Test1",
                 new Media { EmbedCab = true }, // copied from old installer, don't know what it does
                 CreateRevitAddinDir(2020)// ,
                                          // CreateRevitAddinDir(2021),
@@ -44,20 +98,20 @@ namespace Pirros.installer.wixsharp
 
             project.Scope = InstallScope.perUser;
 
-            project.Name = "Pirros Revit Plugin";
+            project.Name = "Test1 Revit Plugin";
             project.ProductId = ProductId;
             project.UpgradeCode = UpgradeCode;
             //project.GUID = new Guid("6476F6DF-EB27-4CAB-9790-5FE5F1C39735");
 
             project.Version = new Version(Version);
-            project.Description = "Revit Plugin to interact with Pirros.com";
-            project.ControlPanelInfo.Manufacturer = "Pirros Inc";
+            project.Description = "Revit Plugin to interact with Test1.com";
+            project.ControlPanelInfo.Manufacturer = "Test1 Inc";
             project.ControlPanelInfo.ProductIcon = @".\Assets\icon.ico";
-            project.ControlPanelInfo.UrlInfoAbout = "https://www.pirros.com";
+            project.ControlPanelInfo.UrlInfoAbout = "https://www.Test1.com";
 
             project.MajorUpgrade = new MajorUpgrade
             {
-                DowngradeErrorMessage = "A newer version of Pirros Plugin is already installed.",
+                DowngradeErrorMessage = "A newer version of Test1 Plugin is already installed.",
             };
 
             project.UI = WUI.WixUI_Minimal;
@@ -69,9 +123,9 @@ namespace Pirros.installer.wixsharp
                 { "WixUIDialogBmp", @".\Assets\Background.png" }
             };
 
-            project.OutFileName = $"Pirros.installer-V{Version}{(Configuration == "Debug" ? "-dev" : "")}";
+            project.OutFileName = $"Test1.installer-V{Version}{(Configuration == "Debug" ? "-dev" : "")}";
 
-            project.SourceBaseDir = @"D:\dev\support\wixsharp-issues\Pirros\WixSharp Setup1\WixSharp Setup1";
+            project.SourceBaseDir = @"D:\dev\support\wixsharp-issues\Test1\WixSharp Setup1\WixSharp Setup1";
 
             // Compiler.PreserveTempFiles = true;
             Compiler.EmitRelativePaths = false;
@@ -88,11 +142,11 @@ namespace Pirros.installer.wixsharp
             string framework = GetFrameworkForYear(year);
 
             return new Dir($@"%AppDataFolder%\Autodesk\Revit\Addins\{year}",
-                new File(@"..\Pirros\Pirros.addin"),
-                new Dir("Pirros",
-                    Files.FromBuildDir($@"..\Pirros\bin\{Configuration}{year}\{framework}"),
+                new File(@"..\Test1\Test1.addin"),
+                new Dir("Test1",
+                    Files.FromBuildDir($@"..\Test1\bin\{Configuration}{year}\{framework}"),
                     new Dir("Resources",
-                        new Files(@"..\Pirros\Resources\*.*"))));
+                        new Files(@"..\Test1\Resources\*.*"))));
         }
 
         private static Guid GenerateProductId(string input)

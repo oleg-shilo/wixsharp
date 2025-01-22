@@ -52,6 +52,8 @@ namespace WixSharp.UI.Forms
             // resizing. However the initial sizing by WinForm runtime doesn't do a good job with DPI
             // other than 96. Thus manual resizing is the only reliable option apart from going WPF.
 
+            // MessageBox.Show($"w:{image.Width}, h:{image.Height}");
+
             var bHeight = (int)(next.Height * 2.3);
 
             var upShift = bHeight - bottomPanel.Height;
@@ -62,8 +64,7 @@ namespace WixSharp.UI.Forms
             float ratio = (float)image.Image.Width / (float)image.Image.Height;
             image.Width = (int)(image.Height * ratio);
 
-            textPanel.Left = image.Right + 5;
-            textPanel.Width = (bottomPanel.Width - image.Width) - 10;
+            // MessageBox.Show($"w:{image.Width}, h:{image.Height}");
         }
 
         void finish_Click(object sender, System.EventArgs e)

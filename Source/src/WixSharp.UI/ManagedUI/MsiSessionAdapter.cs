@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using WixSharp.UI.Forms;
@@ -156,8 +157,54 @@ namespace WixSharp
         /// <param name="msg">The line to be written to the log</param>
         public void Log(string msg)
         {
-            MsiSession.Log(msg);
-            InstallerRuntime.VirtualLog.AppendLine(msg);
+            //
+            // The call to MSI session can fail, making the second logging disappear.
+            // However, especially logging can be very helpful when analyzing an
+            // issue. When part of the logging system does not work, it reduces
+            // analysis time when other parts are still fed with relevant messages.
+            //
+            var exceptions = new List<Exception>();
+
+            try
+            {
+                try
+                {
+                    MsiSession.Log(msg);
+                }
+                catch (Exception ex)
+                {
+                    exceptions.Add(ex);
+                }
+
+                try
+                {
+                    InstallerRuntime.VirtualLog.AppendLine(msg);
+                }
+                catch (Exception ex)
+                {
+                    exceptions.Add(ex);
+                }
+            }
+            finally
+            {
+                if (exceptions.Count > 0)
+                {
+                    Exception ex;
+
+                    if (exceptions.Count == 1)
+                    {
+                        ex = exceptions[0];
+                    }
+                    else
+                    {
+                        ex = new AggregateException(exceptions);
+                    }
+
+                    ex.Data.Add($"{nameof(Log)}-msg", msg);
+
+                    throw ex;
+                }
+            }
         }
 
         /// <summary>

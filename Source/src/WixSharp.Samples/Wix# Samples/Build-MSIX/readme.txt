@@ -1,0 +1,1 @@
+This sample demonstrates how to build an MSIX file from a given MSI file.
