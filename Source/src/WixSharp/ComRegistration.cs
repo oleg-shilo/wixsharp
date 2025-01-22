@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
+using WixSharp.CommonTasks;
 
 namespace WixSharp
 {
@@ -507,7 +509,27 @@ namespace WixSharp
                     _ = ProgIds.ForEach(progId => progId.Process(progIdContext));
             }
 
-            context.XParent.Add(element);
+            if (context.XParent.LocalName() == "Class" || context.XParent.LocalName() == "ProgId")
+            {
+                context.XParent.Add(element);
+            }
+            else
+            {
+                var findComponent = context.XParent.FindFirst("Component");
+
+                if (findComponent != null)
+                {
+                    findComponent.Add(element);
+                }
+                else
+                {
+                    XElement newComponent = this.WrapInNewParentComponent(element);
+                    context.XParent.Add(newComponent);
+
+                    MapComponentToFeatures(newComponent.Attr("Id"), ActualFeatures, context);
+                }
+            }
+
         }
     }
 

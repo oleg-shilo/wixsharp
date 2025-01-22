@@ -1612,6 +1612,13 @@ namespace WixSharp.CommonTasks
             return config;
         }
 
+        static public XElement WrapInNewParentComponent(this WixEntity entity, XElement element)
+        {
+            XElement newComponent = entity.CreateParentComponent();
+            newComponent.Add(element);
+            return newComponent;
+        }
+
         /// <summary>
         /// Creates the parent component for a given <see cref="WixSharp.WixEntity"/>.
         /// </summary>
