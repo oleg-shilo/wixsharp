@@ -2,6 +2,7 @@
 //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
+using System.Diagnostics;
 using WixSharp;
 
 class Script
@@ -25,7 +26,7 @@ class Script
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File(@"Files\Bin\MyApp.exe",
+                    new File(new Id("MyApp.exe"), @"Files\Bin\MyApp.exe",
                              new TypeLib
                              {
                                  Id = new Guid("6f330b47-2577-43ad-9095-1861ba25889b"),
@@ -50,6 +51,21 @@ class Script
                                              {
                                                  Id = "prog.id",
                                                  Description="some description"
+                                                 ,Extensions = new[]
+                                                 {
+                                                     new Extension
+                                                     {
+                                                         ContentType = "text/plain",
+                                                         Verbs = new []
+                                                         {
+                                                             new Verb
+                                                             {
+                                                                 TargetFile = "MyApp.exe",
+                                                             }
+                                                         },
+
+                                                     }
+                                                 }
                                              }
                                          }
                                      }
@@ -58,7 +74,6 @@ class Script
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         // project.PreserveTempFiles = true;
-
         project.BuildMsi();
     }
 

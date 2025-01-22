@@ -576,17 +576,17 @@ namespace WixSharp
         /// Extensibility point in the WiX XML Schema.
         /// Schema extensions can register additional attributes at this point in the schema.
         /// </summary>
-        public IGenericEntity[] GenericEntities;
+        public IGenericEntity[] GenericEntities = new IGenericEntity[0];
 
         /// <summary>
         /// MIME content-types for an <see cref="Extension"/>.
         /// </summary>
-        public MimeType[] MIMETypes;
+        public MimeType[] MIMETypes = new MimeType[0];
 
         /// <summary>
         /// Verb definitions for an <see cref="Extension"/>.
         /// </summary>
-        public Verb[] Verbs;
+        public Verb[] Verbs = new Verb[0];
 
         /// <summary>
         /// Adds itself as an XML content into the WiX source being generated from the <see cref="Project" />.
@@ -606,20 +606,17 @@ namespace WixSharp
             if (!Advertise.HasValue)
                 Advertise = false;
 
-            if (GenericEntities?.Length > 0 || MIMETypes?.Length > 0 || Verbs?.Length > 0)
+            var extensionContext = new ProcessingContext
             {
-                var extensionContext = new ProcessingContext
-                {
-                    Project = context.Project,
-                    Parent = this,
-                    FeatureComponents = context.FeatureComponents,
-                    XParent = element
-                };
+                Project = context.Project,
+                Parent = this,
+                FeatureComponents = context.FeatureComponents,
+                XParent = element
+            };
 
-                _ = GenericEntities.ForEach(e => e.Process(extensionContext));
-                _ = MIMETypes.ForEach(t => t.Process(extensionContext));
-                _ = Verbs.ForEach(v => v.Process(extensionContext));
-            }
+            GenericEntities.ForEach(e => e.Process(extensionContext));
+            MIMETypes.ForEach(t => t.Process(extensionContext));
+            Verbs.ForEach(v => v.Process(extensionContext));
 
             context.XParent.Add(element);
         }
