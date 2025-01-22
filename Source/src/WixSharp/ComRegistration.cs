@@ -515,7 +515,10 @@ namespace WixSharp
             }
             else
             {
-                var findComponent = context.XParent.FindFirst("Component");
+                //Debug.Assert(false);
+
+                var findComponent = context.XParent.Parent("Component") ?? // lookup upwards
+                                    context.XParent.FindFirst("Component"); // lookup downwards
 
                 if (findComponent != null)
                 {
@@ -523,10 +526,11 @@ namespace WixSharp
                 }
                 else
                 {
-                    XElement newComponent = this.WrapInNewParentComponent(element);
-                    context.XParent.Add(newComponent);
+                    context.XParent.Add(element);
+                    //XElement newComponent = this.WrapInNewParentComponent(element);
+                    //context.XParent.Add(newComponent);
 
-                    MapComponentToFeatures(newComponent.Attr("Id"), ActualFeatures, context);
+                    //MapComponentToFeatures(newComponent.Attr("Id"), ActualFeatures, context);
                 }
             }
 
