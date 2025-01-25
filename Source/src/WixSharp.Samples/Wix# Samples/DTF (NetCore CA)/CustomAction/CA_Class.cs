@@ -17,14 +17,12 @@ public class Class1
     {
         using Session session = Session.FromHandle(handle, false);
 
-        // uncommenting next line will increate AOT compilation overhead, but it will work nevertheless
+        // uncommenting next line will create AOT compilation overhead, but it will work nevertheless
         // System.Windows.Forms.MessageBox.Show("Hello from .NET Core! (007)", "WixSharp.Core", 0);
 
         MessageBox(GetForegroundWindow(), "Hello from .NET Core!", "WixSharp", 0);
 
         // Assembly.LoadFrom();
-
-        MessageBox(GetForegroundWindow(), typeof(Class1).Assembly.Location, "WixSharp", 0);
         // session.Log("CustomActionCore invoked");
 
         return (uint)ActionResult.UserExit;

@@ -76,7 +76,7 @@ namespace Test1.installer.wixsharp
 
         public static void Test1()
         {
-            return; // REMOVE THIS LINE TO ENABLE BUILDING
+            // return; // REMOVE THIS LINE TO ENABLE BUILDING
 
             Environment.CurrentDirectory = @"D:\dev\support\wixsharp-issues\Test1\WixSharp Setup1\WixSharp Setup1";
             Constants.PluginVersion = "2.4.0";
