@@ -17,8 +17,16 @@ using WixSharp.UI;
 
 static class Script
 {
-    static public void Main()
+    [STAThread]
+    static public void Main(string[] args)
     {
+        if (args.Contains("-test")) //for demo only
+        {
+            ManagedUI.DefaultWpf.PlayInstallDialogs();
+            // ManagedUI.Default.PlayInstallDialogs();
+            return;
+        }
+
         File f;
 
         var project =
@@ -47,8 +55,8 @@ static class Script
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         Compiler.EmitRelativePaths = false;
         // possible UIs
-        project.ManagedUI = ManagedUI.Default;
-        // project.ManagedUI = ManagedUI.DefaultWpf;
+        // project.ManagedUI = ManagedUI.Default;
+        project.ManagedUI = ManagedUI.DefaultWpf;
         // project.UI = WUI.WixUI_Mondo;
         // project.UI = WUI.WixUI_InstallDir;
 

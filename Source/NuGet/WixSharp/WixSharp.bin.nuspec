@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>2.4.4.0</version>
+    <version>2.5.0.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,13 +16,11 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.4.4.0
-- #1732: If any of Extensions.GenericEntities, MIMETypes, or Verbs are set, all must be set
-- #1733: Should be possible to attach a ProgId directly to a component, without a COM registration
-- #1728: .net core: project.Platform is incompatible with project.WxsFiles.Add()
-- #1725 Bootstrapper formatted variables
-- #1681: Dialog images not shown in Wix4 with UI=WixUI_Common unless UIRef Id=WixUI_Common is added
-</releaseNotes>
+    <releaseNotes>Release v2.5.0.0
+- #1736: Issue with Special Characters in WixSharp Bootstrapper Custom BA after Upgrading from Wix3 to Wix4
+- Improved positioning of the background images for WPF UI Dialogs
+- WIP: Added support for modern style folder selection dialog (triggered by #1734 discussion)
+- Added a more convenient option to play dialogs in demo mode during development</releaseNotes>
     <copyright>Copyright (C) 2008-2022 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
