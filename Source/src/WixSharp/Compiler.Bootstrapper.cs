@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -40,6 +41,7 @@ using System.Xml.Linq;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
+
 using IO = System.IO;
 
 namespace WixSharp
@@ -272,7 +274,7 @@ namespace WixSharp
                         if (WixSourceFormated != null)
                             WixSourceFormated(ref xml);
 
-                        using (var sw = new IO.StreamWriter(file, false, Encoding.Default))
+                        using (var sw = new IO.StreamWriter(file, false, project.Encoding))
                             sw.WriteLine(xml);
 
                         Compiler.OutputWriteLine("\n----------------------------------------------------------\n");

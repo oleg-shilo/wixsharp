@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Xml.Linq;
 
@@ -169,6 +170,12 @@ namespace WixSharp
                 catch { }
             }
         }
+
+        /// <summary>
+        /// The Encoding to be used for generating WSX. If not specified the
+        /// <c>System.Text.Encoding.UTF8</c> will be used.
+        /// </summary>
+        public Encoding Encoding = Encoding.UTF8;
 
         /// <summary>
         /// WiX linker <c>Light.exe</c> options (e.g. "-sice:ICE30 -sw1076" (disable warning 1076 and ICE warning 30).
