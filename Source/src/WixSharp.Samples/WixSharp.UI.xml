@@ -860,6 +860,18 @@
             The log file.
             </value>
         </member>
+        <member name="T:WixSharp.OpenFolderDialog">
+            <summary>
+            A custom UI class for showing the new style folder selection dialog.
+            </summary>
+        </member>
+        <member name="M:WixSharp.OpenFolderDialog.Select(System.String)">
+            <summary>
+            Shows the folder selection dialog. This method is a wrapper around Windows Shell Folder Picker dialog, which uses modern style UI.
+            </summary>
+            <param name="initialFolderPath">The initial folder path.</param>
+            <returns></returns>
+        </member>
         <member name="T:WixSharp.ManagedUI">
              <summary>
              Implements as standard dialog-based MSI embedded UI.
@@ -1463,6 +1475,24 @@
             <param name="textToLocalize">The text to localize.</param>
             <param name="localize">The localize.</param>
             <returns></returns>
+        </member>
+        <member name="M:WixSharp.UIExtensions.Play(WixSharp.ManagedDialogs)">
+            <summary>
+            Plays the specified dialogs in demo mode.
+            </summary>
+            <param name="dialogs">The dialogs.</param>
+        </member>
+        <member name="M:WixSharp.UIExtensions.PlayInstallDialogs(WixSharp.IManagedUI)">
+            <summary>
+            Plays the install dialogs in demo mode.
+            </summary>
+            <param name="ui">The UI.</param>
+        </member>
+        <member name="M:WixSharp.UIExtensions.PlayModifyDialogs(WixSharp.IManagedUI)">
+            <summary>
+            Plays the modify dialogs in demo mode.
+            </summary>
+            <param name="ui">The UI.</param>
         </member>
         <member name="T:WixSharp.IUIContainer">
             <summary>

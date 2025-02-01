@@ -1,5 +1,4 @@
-﻿using Caliburn.Micro;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -7,8 +6,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
+using Caliburn.Micro;
 using WixSharp;
 using WixSharp.UI.Forms;
+
 using IO = System.IO;
 
 namespace WixSharp.UI.WPF.Sequence
@@ -74,11 +75,23 @@ namespace WixSharp.UI.WPF.Sequence
 
         public void ChangeInstallDir()
         {
+            // `OpenFolderDialog.Select` is still under development so disabling it for now
+
+            // try
+            // {
+            //     var (isSelected, path) = OpenFolderDialog.Select(InstallDirPath);
+            //     if (isSelected)
+            //         InstallDirPath = path;
+            //     return;
+            // }
+            // catch
+            // {
             using (var dialog = new FolderBrowserDialog { SelectedPath = InstallDirPath })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                     InstallDirPath = dialog.SelectedPath;
             }
+            // }
         }
 
         public void GoPrev()

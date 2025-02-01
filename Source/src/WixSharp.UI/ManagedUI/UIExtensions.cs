@@ -346,5 +346,26 @@ namespace WixSharp
             }
             return cleanRegex.Replace(result.ToString(), "");
         }
+
+        /// <summary>
+        /// Plays the specified dialogs in demo mode.
+        /// </summary>
+        /// <param name="dialogs">The dialogs.</param>
+        public static void Play(this ManagedDialogs dialogs)
+        {
+            UIShell.Play(dialogs);
+        }
+
+        /// <summary>
+        /// Plays the install dialogs in demo mode.
+        /// </summary>
+        /// <param name="ui">The UI.</param>
+        public static void PlayInstallDialogs(this IManagedUI ui) => UIShell.Play(ui.InstallDialogs);
+
+        /// <summary>
+        /// Plays the modify dialogs in demo mode.
+        /// </summary>
+        /// <param name="ui">The UI.</param>
+        public static void PlayModifyDialogs(this IManagedUI ui) => UIShell.Play(ui.ModifyDialogs);
     }
 }

@@ -83,6 +83,16 @@ namespace WixSharp.UI.Forms
 
         void change_Click(object sender, EventArgs e)
         {
+            // `OpenFolderDialog.Select` is still under development so disabling it for now
+
+            // try
+            // {
+            //     var (isSelected, path) = OpenFolderDialog.Select(installDir.Text);
+            //     if (isSelected)
+            //         installDir.Text = path;
+            // }
+            // catch
+            // {
             using (var dialog = new FolderBrowserDialog { SelectedPath = installDir.Text })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
@@ -90,6 +100,7 @@ namespace WixSharp.UI.Forms
                     installDir.Text = dialog.SelectedPath;
                 }
             }
+            // }
         }
     }
 }

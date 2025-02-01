@@ -270,6 +270,12 @@ namespace WixSharp
                     ManagedProject.InvokeClientHandlers("UnhandledException", msiSession, e);
                     msiSession.Log("Managed Dialog unhandled Exception: " + e);
 
+                    try
+                    {
+                        // it's useful to print in console (if available) for troubleshooting
+                        Console.WriteLine("Managed Dialog unhandled Exception: " + e.InnerException?.Message ?? e.Message);
+                    }
+                    catch { }
                     this.Cancel();
                 }
             }
@@ -432,6 +438,8 @@ namespace WixSharp
 
             var resourcesMsi = BuildUiPlayerResources();
             var dummySession = Installer.OpenPackage(resourcesMsi, true);
+
+            dummySession["WixSharp_UI_INSTALLDIR"] = "INSTALLDIR";
 
             foreach (var pair in demoProperties.ToDictionary())
                 dummySession[pair.Key] = pair.Value;

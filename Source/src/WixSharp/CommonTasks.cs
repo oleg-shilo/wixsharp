@@ -1613,7 +1613,7 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
-        /// Creates the parent XElement component for a given <see cref="WixSharp.WixEntity"/> and adds the specified XElement to it. 
+        /// Creates the parent XElement component for a given <see cref="WixSharp.WixEntity"/> and adds the specified XElement to it.
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="element"></param>

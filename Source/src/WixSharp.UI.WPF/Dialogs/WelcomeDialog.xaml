@@ -20,7 +20,10 @@
             VerticalAlignment="Stretch"
             BorderBrush="Gray"
             BorderThickness="1">
-            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Background="White">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="75" />
                     <RowDefinition />
@@ -33,21 +36,23 @@
                 <Image
                     x:Name="Banner"
                     Grid.RowSpan="2"
-                    Source="{Binding Banner}" />
+                    Source="{Binding Banner}"
+                    Stretch="UniformToFill" />
                 <TextBlock
                     Grid.RowSpan="1"
                     Grid.Column="1"
-                    Margin="10,25,10,10"
+                    Margin="20,25,10,10"
                     VerticalAlignment="Top"
                     FontSize="16"
-                    FontWeight="Normal">
+                    FontWeight="Normal"
+                    TextWrapping="WrapWithOverflow">
                     [WelcomeDlgTitle]
                 </TextBlock>
                 <TextBlock
                     x:Name="DialogDescription"
                     Grid.Row="2"
                     Grid.Column="1"
-                    Margin="10"
+                    Margin="20,10"
                     TextWrapping="WrapWithOverflow">
                     [WelcomeDlgDescription]
                 </TextBlock>

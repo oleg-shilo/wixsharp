@@ -58,6 +58,11 @@ namespace WixSharp.Forms
 
     class ShellView : Form, IShellView
     {
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+        }
+
         public ShellView()
         {
             InitializeComponent();
