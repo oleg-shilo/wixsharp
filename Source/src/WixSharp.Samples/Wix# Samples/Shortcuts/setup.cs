@@ -9,6 +9,7 @@ using System.Xml;
 using Microsoft.Win32;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Script
 {
@@ -17,7 +18,7 @@ class Script
         try
         {
             var project =
-                new Project("My Product",
+                new ManagedProject("My Product",
                     new Dir(@"%ProgramFiles%\My Company\My Product",
                         new InternetShortcut
                         {
@@ -55,6 +56,12 @@ class Script
                     new Dir(@"%ProgramMenu%\My Company\My Product",
                         new DirectoryShortcut("Samples", "[Samples]"),
                         new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")));
+
+            // Create a directory for the startup folder
+            var autoStartDir = new Dir("[StartupFolder]");
+
+            // Add the directory to the project
+            project.AddDirs(autoStartDir);
 
             project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
             project.UI = WUI.WixUI_ProgressOnly;

@@ -1945,7 +1945,7 @@ namespace WixSharp
                     comp.AddAttributes("Condition=" + wShortcut.Condition.ToXValue())
                         .AddAttributes(wShortcut.Condition.Attributes);
 
-                string workingDir = wShortcut.WorkingDirectory.IsNotEmpty() ? wShortcut.WorkingDirectory : GetShortcutWorkingDirectopry(wShortcut.Target);
+                string workingDir = wShortcut.WorkingDirectory.IsNotEmpty() ? wShortcut.WorkingDirectory : GetShortcutWorkingDirectory(wShortcut.Target);
 
                 XElement sc = comp.AddElement(
                    new XElement("Shortcut",
@@ -3796,12 +3796,12 @@ namespace WixSharp
             }
         }
 
-        static string GetShortcutWorkingDirectopry(string targetPath)
+        static string GetShortcutWorkingDirectory(string targetPath)
         {
             string workingDir = targetPath;
             var pos = workingDir.LastIndexOfAny(@"\/]".ToCharArray());
             if (pos != -1)
-                workingDir = workingDir.Substring(0, pos + 1)
+                workingDir = workingDir.Substring(0, pos)
                                        .Replace("[", "")
                                        .Replace("]", "");
             return workingDir;
