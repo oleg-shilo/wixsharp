@@ -71,6 +71,8 @@ public class Script
 
         Compiler.VerboseOutput = true;
 
+        project.DefaultRefAssemblies.Add(@"D:\dev\wixsharp4\Source\src\WixSharp.UI\ManagedUI\ShellFileDialogs\ShellFileDialogs.dll");
+
         project.DefaultRefAssemblies.Add(typeof(Caliburn.Micro.ActivateExtensions).Assembly.Location);  // Caliburn.Micro.dll
         project.DefaultRefAssemblies.Add(typeof(Caliburn.Micro.Bind).Assembly.Location);                // Caliburn.Micro.Platform.dll
         project.DefaultRefAssemblies.Add(typeof(Caliburn.Micro.NameTransformer).Assembly.Location);     // Caliburn.Micro.Platform.Core.dll

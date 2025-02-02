@@ -77,21 +77,24 @@ namespace WixSharp.UI.WPF.Sequence
         {
             // `OpenFolderDialog.Select` is still under development so disabling it for now
 
-            // try
-            // {
-            //     var (isSelected, path) = OpenFolderDialog.Select(InstallDirPath);
-            //     if (isSelected)
-            //         InstallDirPath = path;
-            //     return;
-            // }
-            // catch
-            // {
-            using (var dialog = new FolderBrowserDialog { SelectedPath = InstallDirPath })
+            try
             {
-                if (dialog.ShowDialog() == DialogResult.OK)
-                    InstallDirPath = dialog.SelectedPath;
+                var (isSelected, path) = OpenFolderDialog.Select(InstallDirPath);
+                if (isSelected.HasValue)
+                {
+                    if (isSelected == true)
+                        InstallDirPath = path;
+                    return;
+                }
             }
-            // }
+            catch
+            {
+                using (var dialog = new FolderBrowserDialog { SelectedPath = InstallDirPath })
+                {
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                        InstallDirPath = dialog.SelectedPath;
+                }
+            }
         }
 
         public void GoPrev()

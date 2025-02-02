@@ -1,0 +1,506 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ShellFileDialogs</name>
+    </assembly>
+    <members>
+        <member name="M:ShellFileDialogs.FileOpenDialog.ShowMultiSelectDialog(System.IntPtr,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyCollection{ShellFileDialogs.Filter},System.Nullable{System.Int32})">
+            <summary>Shows the file open dialog for multiple filename selections. Returns <see langword="null"/> if the user cancelled the dialog, otherwise returns all selected paths.</summary>
+            <param name="selectedFilterZeroBasedIndex">0-based index of the filter to select.</param>
+        </member>
+        <member name="M:ShellFileDialogs.FileOpenDialog.ShowSingleSelectDialog(System.IntPtr,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyCollection{ShellFileDialogs.Filter},System.Nullable{System.Int32})">
+            <summary>Shows the file open dialog for a single filename selection. Returns <see langword="null"/> if the user cancelled the dialog, otherwise returns the selected path.</summary>
+            <param name="selectedFilterZeroBasedIndex">0-based index of the filter to select.</param>
+        </member>
+        <member name="M:ShellFileDialogs.FileSaveDialog.ShowDialog(System.IntPtr,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyCollection{ShellFileDialogs.Filter},System.Int32)">
+            <summary>Shows the file-save dialog. Returns <see langword="null"/> if the user canceled the dialog - otherwise returns the user-selected path.</summary>
+            <param name="selectedFilterZeroBasedIndex">0-based index of the filter to select. Use <c>-1</c> to indicate no default selection.</param>
+        </member>
+        <member name="M:ShellFileDialogs.FolderBrowserDialog.ShowDialog(System.IntPtr,System.String,System.String)">
+            <summary>Shows the folder browser dialog. Returns <see langword="null"/> if the user cancelled the dialog. Otherwise returns the selected path.</summary>
+        </member>
+        <member name="M:ShellFileDialogs.Filter.#ctor(System.String,System.String[])">
+            <summary></summary>
+            <param name="displayName">Required. Cannot be <see langword="null"/>, empty, nor whitespace.</param>
+            <param name="extensions">Required. Cannot be <see langword="null"/> or empty (i.e. at least one extension filter must be specified).</param>
+        </member>
+        <member name="M:ShellFileDialogs.Filter.#ctor(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary></summary>
+            <param name="displayName">Required. Cannot be <see langword="null"/>, empty, nor whitespace.</param>
+            <param name="extensions">Required. The collection cannot be <see langword="null"/> or empty - and it cannot contain null, empty, or whitespace values - nor duplicate values.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="displayName"/> or <paramref name="extensions"/> is <see langword="null"/>.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="extensions"/> is empty or contains only empty file extensions.</exception>
+        </member>
+        <member name="P:ShellFileDialogs.Filter.Extensions">
+            <summary>All extension values have their leading dot and any leading asterisk filter trimmed, so if &quot;<c>*.wav</c>&quot; is passed as an extension string to <see cref="M:ShellFileDialogs.Filter.#ctor(System.String,System.String[])"/> then it will appear in this list as &quot;<c>wav</c>&quot;.</summary>
+        </member>
+        <member name="M:ShellFileDialogs.Filter.ParseWindowsFormsFilter(System.String)">
+            <summary>Returns <see langword="null"/> if the string couldn't be parsed.</summary>
+        </member>
+        <member name="M:ShellFileDialogs.HResults.CreateWin32(ShellFileDialogs.Win32ErrorCodes)">
+            <summary>Creates a Win32 <see cref="T:ShellFileDialogs.HResult"/> value.</summary>
+        </member>
+        <member name="M:ShellFileDialogs.HResults.Create(System.Boolean,System.Boolean,ShellFileDialogs.HResultFacility,System.UInt16)">
+            <summary>Creates a non-NTSTATUS <see cref="T:ShellFileDialogs.HResult"/> value.</summary>
+        </member>
+        <member name="M:ShellFileDialogs.HResults.IsValidHResult(ShellFileDialogs.HResult)">
+            <summary>Indicates if the required zeros for reserved bits are indeed zero - otherwise <paramref name="hr"/> may be an <c>NTSTATUS</c> value or some other 32-bit value.</summary>
+        </member>
+        <member name="F:ShellFileDialogs.HResultFacility.Null">
+            <summary>FACILITY_NULL - The default facility code.</summary>
+        </member>
+        <member name="F:ShellFileDialogs.HResultFacility.Rpc">
+            <summary>FACILITY_RPC - The source of the error code is an RPC subsystem.</summary>
+        </member>
+        <member name="F:ShellFileDialogs.HResultFacility.Win32">
+            <summary>FACILITY_WIN32 - This region is reserved to map undecorated error codes into HRESULTs.</summary>
+        </member>
+        <member name="F:ShellFileDialogs.HResultFacility.Windows">
+            <summary>FACILITY_WINDOWS - The source of the error code is the Windows subsystem.</summary>
+        </member>
+        <member name="T:ShellFileDialogs.Win32ErrorCodes">
+            <summary>Note: these are *not* HResult codes. But Win32 errors can be converted to HResults!</summary>
+            <remarks>See https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/18d8fbe8-a967-4f1c-ae50-99ca8e491d2d
+            &quot;All Win32 error codes MUST be in the range 0x0000 to 0xFFFF, although Win32 error codes can be used both in 16-bit fields (such as within the HRESULT type specified in section 2.1) as well as 32-bit fields.&quot;
+            </remarks>
+        </member>
+        <member name="F:ShellFileDialogs.Win32ErrorCodes.Success">
+            <summary><c>ERROR_SUCCESS = 0x0000 == 0</c></summary>
+        </member>
+        <member name="F:ShellFileDialogs.Win32ErrorCodes.ErrorCancelled">
+            <summary><c>ERROR_CANCELLED = 0x000004C7 == 1223</c></summary>
+        </member>
+        <member name="T:ShellFileDialogs.HResult">
+            <summary>Remember that HRESULT values are actually 32-bit packed structures which *encapsulate* 16-bit Win32 error codes - and other error codes. Use the methods in <see cref="T:ShellFileDialogs.HResults"/> to correctly inspect a <see cref="T:ShellFileDialogs.HResult"/> value.</summary>
+        </member>
+        <member name="F:ShellFileDialogs.HResult.Ok">
+            <summary>S_OK</summary>    
+        </member>
+        <member name="F:ShellFileDialogs.HResult.InvalidArguments">
+            <summary>E_INVALIDARG</summary>
+        </member>
+        <member name="F:ShellFileDialogs.HResult.OutOfMemory">
+            <summary>E_OUTOFMEMORY</summary>
+        </member>
+        <member name="F:ShellFileDialogs.HResult.NoInterface">
+            <summary>E_NOINTERFACE</summary>
+        </member>
+        <member name="F:ShellFileDialogs.HResult.Fail">
+            <summary>E_FAIL</summary>
+        </member>
+        <member name="F:ShellFileDialogs.HResult.ElementNotFound">
+            <summary>E_ELEMENTNOTFOUND</summary>
+        </member>
+        <member name="F:ShellFileDialogs.HResult.TypeElementNotFound">
+            <summary>TYPE_E_ELEMENTNOTFOUND</summary>
+        </member>
+        <member name="F:ShellFileDialogs.HResult.NoObject">
+            <summary>NO_OBJECT</summary>
+        </member>
+        <member name="F:ShellFileDialogs.HResult.Canceled">
+            <summary>ERROR_CANCELLED</summary>
+        </member>
+        <member name="F:ShellFileDialogs.HResult.ResourceInUse">
+            <summary>The requested resource is in use</summary>
+        </member>
+        <member name="F:ShellFileDialogs.HResult.AccessDenied">
+            <summary>The requested resources is read-only.</summary>
+        </member>
+        <member name="T:ShellFileDialogs.GetPropertyStoreOptions">
+            <summary>
+            Indicate flags that modify the property store object retrieved by methods 
+            that create a property store, such as IShellItem2::GetPropertyStore or 
+            IPropertyStoreFactory::GetPropertyStore.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.GetPropertyStoreOptions.Default">
+            <summary>
+            Meaning to a calling process: Return a read-only property store that contains all 
+            properties. Slow items (offline files) are not opened. 
+            Combination with other flags: Can be overridden by other flags.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.GetPropertyStoreOptions.HandlePropertiesOnly">
+            <summary>
+            Meaning to a calling process: Include only properties directly from the property
+            handler, which opens the file on the disk, network, or device. Meaning to a file 
+            folder: Only include properties directly from the handler.
+            
+            Meaning to other folders: When delegating to a file folder, pass this flag on 
+            to the file folder; do not do any multiplexing (MUX). When not delegating to a 
+            file folder, ignore this flag instead of returning a failure code.
+            
+            Combination with other flags: Cannot be combined with GPS_TEMPORARY, 
+            GPS_FASTPROPERTIESONLY, or GPS_BESTEFFORT.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.GetPropertyStoreOptions.ReadWrite">
+            <summary>
+            Meaning to a calling process: Can write properties to the item. 
+            Note: The store may contain fewer properties than a read-only store. 
+            
+            Meaning to a file folder: ReadWrite.
+            
+            Meaning to other folders: ReadWrite. Note: When using default MUX, 
+            return a single unmultiplexed store because the default MUX does not support ReadWrite.
+            
+            Combination with other flags: Cannot be combined with GPS_TEMPORARY, GPS_FASTPROPERTIESONLY, 
+            GPS_BESTEFFORT, or GPS_DELAYCREATION. Implies GPS_HANDLERPROPERTIESONLY.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.GetPropertyStoreOptions.Temporary">
+            <summary>
+            Meaning to a calling process: Provides a writable store, with no initial properties, 
+            that exists for the lifetime of the Shell item instance; basically, a property bag 
+            attached to the item instance. 
+            
+            Meaning to a file folder: Not applicable. Handled by the Shell item.
+            
+            Meaning to other folders: Not applicable. Handled by the Shell item.
+            
+            Combination with other flags: Cannot be combined with any other flag. Implies GPS_READWRITE
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.GetPropertyStoreOptions.FastPropertiesOnly">
+            <summary>
+            Meaning to a calling process: Provides a store that does not involve reading from the 
+            disk or network. Note: Some values may be different, or missing, compared to a store 
+            without this flag. 
+            
+            Meaning to a file folder: Include the "innate" and "fallback" stores only. Do not load the handler.
+            
+            Meaning to other folders: Include only properties that are available in memory or can 
+            be computed very quickly (no properties from disk, network, or peripheral IO devices). 
+            This is normally only data sources from the IDLIST. When delegating to other folders, pass this flag on to them.
+            
+            Combination with other flags: Cannot be combined with GPS_TEMPORARY, GPS_READWRITE, 
+            GPS_HANDLERPROPERTIESONLY, or GPS_DELAYCREATION.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.GetPropertyStoreOptions.OpensLowItem">
+            <summary>
+            Meaning to a calling process: Open a slow item (offline file) if necessary. 
+            Meaning to a file folder: Retrieve a file from offline storage, if necessary. 
+            Note: Without this flag, the handler is not created for offline files.
+            
+            Meaning to other folders: Do not return any properties that are very slow.
+            
+            Combination with other flags: Cannot be combined with GPS_TEMPORARY or GPS_FASTPROPERTIESONLY.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.GetPropertyStoreOptions.DelayCreation">
+            <summary>
+            Meaning to a calling process: Delay memory-intensive operations, such as file access, until 
+            a property is requested that requires such access. 
+            
+            Meaning to a file folder: Do not create the handler until needed; for example, either 
+            GetCount/GetAt or GetValue, where the innate store does not satisfy the request. 
+            Note: GetValue might fail due to file access problems.
+            
+            Meaning to other folders: If the folder has memory-intensive properties, such as 
+            delegating to a file folder or network access, it can optimize performance by 
+            supporting IDelayedPropertyStoreFactory and splitting up its properties into a 
+            fast and a slow store. It can then use delayed MUX to recombine them.
+            
+            Combination with other flags: Cannot be combined with GPS_TEMPORARY or 
+            GPS_READWRITE
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.GetPropertyStoreOptions.BestEffort">
+            <summary>
+            Meaning to a calling process: Succeed at getting the store, even if some 
+            properties are not returned. Note: Some values may be different, or missing,
+            compared to a store without this flag. 
+            
+            Meaning to a file folder: Succeed and return a store, even if the handler or 
+            innate store has an error during creation. Only fail if substores fail.
+            
+            Meaning to other folders: Succeed on getting the store, even if some properties 
+            are not returned.
+            
+            Combination with other flags: Cannot be combined with GPS_TEMPORARY, 
+            GPS_READWRITE, or GPS_HANDLERPROPERTIESONLY.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.GetPropertyStoreOptions.MaskValid">
+            <summary>
+            Mask for valid GETPROPERTYSTOREFLAGS values.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.CanCopy">
+            <summary>
+            The specified items can be copied.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.CanMove">
+            <summary>
+            The specified items can be moved.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.CanLink">
+            <summary>
+            Shortcuts can be created for the specified items. This flag has the same value as DROPEFFECT. 
+            The normal use of this flag is to add a Create Shortcut item to the shortcut menu that is displayed 
+            during drag-and-drop operations. However, SFGAO_CANLINK also adds a Create Shortcut item to the Microsoft 
+            Windows Explorer's File menu and to normal shortcut menus. 
+            If this item is selected, your application's IContextMenu::InvokeCommand is invoked with the lpVerb 
+            member of the CMINVOKECOMMANDINFO structure set to "link." Your application is responsible for creating the link.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.Storage">
+            <summary>
+            The specified items can be bound to an IStorage interface through IShellFolder::BindToObject.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.CanRename">
+            <summary>
+            The specified items can be renamed.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.CanDelete">
+            <summary>
+            The specified items can be deleted.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.HasPropertySheet">
+            <summary>
+            The specified items have property sheets.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.DropTarget">
+            <summary>
+            The specified items are drop targets.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.CapabilityMask">
+            <summary>
+            This flag is a mask for the capability flags.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.System">
+            <summary>
+            Windows 7 and later. The specified items are system items.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.Encrypted">
+            <summary>
+            The specified items are encrypted.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.IsSlow">
+            <summary>
+            Indicates that accessing the object = through IStream or other storage interfaces, 
+            is a slow operation. 
+            Applications should avoid accessing items flagged with SFGAO_ISSLOW.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.Ghosted">
+            <summary>
+            The specified items are ghosted icons.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.Link">
+            <summary>
+            The specified items are shortcuts.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.Share">
+            <summary>
+            The specified folder objects are shared.
+            </summary>    
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.ReadOnly">
+            <summary>
+            The specified items are read-only. In the case of folders, this means 
+            that new items cannot be created in those folders.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.Hidden">
+            <summary>
+            The item is hidden and should not be displayed unless the 
+            Show hidden files and folders option is enabled in Folder Settings.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.DisplayAttributeMask">
+            <summary>
+            This flag is a mask for the display attributes.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.FileSystemAncestor">
+            <summary>
+            The specified folders contain one or more file system folders.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.Folder">
+            <summary>
+            The specified items are folders.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.FileSystem">
+            <summary>
+            The specified folders or file objects are part of the file system 
+            that is, they are files, directories, or root directories).
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.HasSubFolder">
+            <summary>
+            The specified folders have subfolders = and are, therefore, 
+            expandable in the left pane of Windows Explorer).
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.ContentsMask">
+            <summary>
+            This flag is a mask for the contents attributes.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.Validate">
+            <summary>
+            When specified as input, SFGAO_VALIDATE instructs the folder to validate that the items 
+            pointed to by the contents of apidl exist. If one or more of those items do not exist, 
+            IShellFolder::GetAttributesOf returns a failure code. 
+            When used with the file system folder, SFGAO_VALIDATE instructs the folder to discard cached 
+            properties retrieved by clients of IShellFolder2::GetDetailsEx that may 
+            have accumulated for the specified items.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.Removable">
+            <summary>
+            The specified items are on removable media or are themselves removable devices.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.Compressed">
+            <summary>
+            The specified items are compressed.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.Browsable">
+            <summary>
+            The specified items can be browsed in place.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.Nonenumerated">
+            <summary>
+            The items are nonenumerated items.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.NewContent">
+            <summary>
+            The objects contain new content.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.CanMoniker">
+            <summary>
+            It is possible to create monikers for the specified file objects or folders.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.HasStorage">
+            <summary>
+            Not supported.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.Stream">
+            <summary>
+            Indicates that the item has a stream associated with it that can be accessed 
+            by a call to IShellFolder::BindToObject with IID_IStream in the riid parameter.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.StorageAncestor">
+            <summary>
+            Children of this item are accessible through IStream or IStorage. 
+            Those children are flagged with SFGAO_STORAGE or SFGAO_STREAM.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.StorageCapabilityMask">
+            <summary>
+            This flag is a mask for the storage capability attributes.
+            </summary>
+        </member>
+        <member name="F:ShellFileDialogs.ShellFileGetAttributesOptions.PkeyMask">
+            <summary>
+            Mask used by PKEY_SFGAOFlags to remove certain values that are considered 
+            to cause slow calculations or lack context. 
+            Equal to SFGAO_VALIDATE | SFGAO_ISSLOW | SFGAO_HASSUBFOLDER.
+            </summary>
+        </member>
+        <member name="T:ShellFileDialogs.PropertyKey">
+            <summary>
+            Defines a unique key for a Shell Property
+            </summary>
+        </member>
+        <member name="P:ShellFileDialogs.PropertyKey.FormatId">
+            <summary>
+            A unique GUID for the property
+            </summary>
+        </member>
+        <member name="P:ShellFileDialogs.PropertyKey.PropertyId">
+            <summary>
+             Property identifier (PID)
+            </summary>
+        </member>
+        <member name="M:ShellFileDialogs.PropertyKey.#ctor(System.Guid,System.Int32)">
+            <summary>
+            PropertyKey Constructor
+            </summary>
+            <param name="formatId">A unique GUID for the property</param>
+            <param name="propertyId">Property identifier (PID)</param>
+        </member>
+        <member name="M:ShellFileDialogs.PropertyKey.#ctor(System.String,System.Int32)">
+            <summary>
+            PropertyKey Constructor
+            </summary>
+            <param name="formatId">A string represenstion of a GUID for the property</param>
+            <param name="propertyId">Property identifier (PID)</param>
+        </member>
+        <member name="M:ShellFileDialogs.PropertyKey.Equals(ShellFileDialogs.PropertyKey)">
+            <summary>
+            Returns whether this object is equal to another. This is vital for performance of value types.
+            </summary>
+            <param name="other">The object to compare against.</param>
+            <returns>Equality result.</returns>
+        </member>
+        <member name="M:ShellFileDialogs.PropertyKey.GetHashCode">
+            <summary>
+            Returns the hash code of the object. This is vital for performance of value types.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ShellFileDialogs.PropertyKey.Equals(System.Object)">
+            <summary>
+            Returns whether this object is equal to another. This is vital for performance of value types.
+            </summary>
+            <param name="obj">The object to compare against.</param>
+            <returns>Equality result.</returns>
+        </member>
+        <member name="M:ShellFileDialogs.PropertyKey.op_Equality(ShellFileDialogs.PropertyKey,ShellFileDialogs.PropertyKey)">
+            <summary>
+            Implements the == (equality) operator.
+            </summary>
+            <param name="propKey1">First property key to compare.</param>
+            <param name="propKey2">Second property key to compare.</param>
+            <returns>true if object a equals object b. false otherwise.</returns>        
+        </member>
+        <member name="M:ShellFileDialogs.PropertyKey.op_Inequality(ShellFileDialogs.PropertyKey,ShellFileDialogs.PropertyKey)">
+            <summary>
+            Implements the != (inequality) operator.
+            </summary>
+            <param name="propKey1">First property key to compare</param>
+            <param name="propKey2">Second property key to compare.</param>
+            <returns>true if object a does not equal object b. false otherwise.</returns>
+        </member>
+        <member name="M:ShellFileDialogs.PropertyKey.ToString">
+            <summary>
+            Override ToString() to provide a user friendly string representation
+            </summary>
+            <returns>String representing the property key</returns>        
+        </member>
+        <member name="M:ShellFileDialogs.Utility.SetFilters(ShellFileDialogs.IFileDialog,System.Collections.Generic.IReadOnlyCollection{ShellFileDialogs.Filter},System.Int32)">
+            <summary>Sets the file extension filters on <paramref name="dialog"/>.</summary>
+            <param name="dialog">Required. Cannot be <see langword="null"/>.</param>
+            <param name="filters">If this is <see langword="null"/> or empty, then this method returns immediately (i.e. it does nothing).</param>
+            <param name="selectedFilterZeroBasedIndex">0-based index of the filter in in <paramref name="filters"/> to use. If this value is out-of-range then this method does nothing.</param>
+        </member>
+        <member name="M:ShellFileDialogs.Utility.ValidateDialogShowHResult(ShellFileDialogs.HResult)">
+            <summary>Returns <see langword="false"/> if the user cancelled-out of the dialog. Returns <see langword="true"/> if the user completed the dialog. All other cases result in a thrown <see cref="T:System.ComponentModel.Win32Exception"/> or <see cref="T:System.Runtime.InteropServices.ExternalException"/> depending on the HRESULT returned from <see cref="M:ShellFileDialogs.IModalWindow.Show(System.IntPtr)"/>.</summary>
+        </member>
+    </members>
+</doc>
