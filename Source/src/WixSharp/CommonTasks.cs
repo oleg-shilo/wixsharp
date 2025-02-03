@@ -205,19 +205,24 @@ namespace WixSharp.CommonTasks
             bool shouldSignSHA1 = (hashAlgorithm & HashAlgorithmType.sha1) == HashAlgorithmType.sha1;
             bool shouldSignSHA256 = (hashAlgorithm & HashAlgorithmType.sha256) == HashAlgorithmType.sha256;
 
-            string certPlace;
+            string certOption;
             switch (certificateStore)
             {
                 case StoreType.commonName:
-                    certPlace = "/n";
+                    certOption = "/n";
                     break;
 
                 case StoreType.sha1Hash:
-                    certPlace = "/sha1";
+                    certOption = "/sha1";
                     break;
 
+                case StoreType.file:
+                    certOption = "/f";
+                    break;
+
+                case StoreType.unspecified:
                 default:
-                    certPlace = "/f";
+                    certOption = string.Empty;
                     break;
             }
 
@@ -240,7 +245,9 @@ namespace WixSharp.CommonTasks
                     break;
             }
 
-            string args = $"sign {outputLevelArg}{certPlace} \"{certificateId}\"";
+            string certPart = certOption.IsEmpty() ? string.Empty : $"{certOption} \"{certificateId}\"";
+
+            string args = $"sign {outputLevelArg}{certPart}";
             if (password.IsNotEmpty())
                 args += $" /p \"{password}\"";
 
