@@ -35,6 +35,7 @@ build:
 
 build_script:
     - cd "%APPVEYOR_BUILD_FOLDER%"\Source\src
+    - prepare-environment.cmd
     - if "%PlatformToolset%"=="v141" msbuild WixSharp.Suite.sln -t:restore /p:configuration="%configuration%" /p:platform="%platform_input%" /p:PlatformToolset="%PlatformToolset%" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
     # - if "%PlatformToolset%"=="v141" msbuild WixSharp.Suite.sln  /p:configuration="Release" /p:platform="Any CPU" /p:PlatformToolset="Any CPU"
 
