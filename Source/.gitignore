@@ -9,6 +9,7 @@ bin/
 tmp/
 *.tmp
 *.bak
+*.snk
 *.swp
 *~.nib
 local.properties
