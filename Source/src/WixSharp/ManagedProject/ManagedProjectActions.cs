@@ -35,7 +35,7 @@ namespace WixSharp
             }
             catch (Exception e)
             {
-                ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
+                ManagedProject.InvokeClientHandlersInternal("UnhandledException", session, e);
                 throw;
             }
         }

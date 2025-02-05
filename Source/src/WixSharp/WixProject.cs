@@ -52,7 +52,14 @@ namespace WixSharp
         public string OutFileName = "setup";
 
         string outDir;
-        internal bool IsOutDirSet => !outDir.IsEmpty();
+
+        /// <summary>
+        /// Gets a value indicating whether the OutDir is set.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is out dir set; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsOutDirSet => !outDir.IsEmpty();
 
         /// <summary>
         /// The output directory. The directory where all msi and temporary files should be assembled. The <c>CurrentDirectory</c> will be used if <see cref="OutDir"/> is left unassigned.

@@ -32,7 +32,7 @@ using Microsoft.Win32;
 
 namespace WixSharp
 {
-    internal static class RegFileImporter
+    public static class RegFileImporter
     {
         public static bool SkipUnknownTypes = false;
 

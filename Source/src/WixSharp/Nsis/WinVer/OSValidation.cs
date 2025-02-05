@@ -26,7 +26,7 @@ namespace WixSharp.Nsis.WinVer
         /// <summary>
         ///     Initializes a new instance of NotSupportedWindowsVersions
         /// </summary>
-        internal OSValidation()
+        public OSValidation()
         {
         }
 
@@ -60,7 +60,7 @@ namespace WixSharp.Nsis.WinVer
 
         internal bool Any => MinVersion.HasValue || UnsupportedVersions.Any();
 
-        internal string BuildVersionCheckScriptPart()
+        public string BuildVersionCheckScriptPart()
         {
             if (!Any)
             {
@@ -133,7 +133,7 @@ namespace WixSharp.Nsis.WinVer
         }
 
         private void WriteBody(StringWriter writer)
-        {   
+        {
             writer.WriteLine("    ClearErrors");
             writer.WriteLine("    ${GetOptions} $R0 \"/S\" $0");
             writer.WriteLine("    ${If} ${Errors}");

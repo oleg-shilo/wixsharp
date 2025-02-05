@@ -860,18 +860,6 @@
             The log file.
             </value>
         </member>
-        <member name="T:WixSharp.OpenFolderDialog">
-            <summary>
-            A custom UI class for showing the new style folder selection dialog.
-            </summary>
-        </member>
-        <member name="M:WixSharp.OpenFolderDialog.Select(System.String)">
-            <summary>
-            Shows the folder selection dialog. This method is a wrapper around Windows Shell Folder Picker dialog, which uses modern style UI.
-            </summary>
-            <param name="initialFolderPath">The initial folder path.</param>
-            <returns></returns>
-        </member>
         <member name="T:WixSharp.ManagedUI">
              <summary>
              Implements as standard dialog-based MSI embedded UI.

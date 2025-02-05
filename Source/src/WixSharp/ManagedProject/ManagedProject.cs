@@ -422,7 +422,7 @@ namespace WixSharp
 
         internal bool IsNetCore = Environment.Version.Major > 5;
 
-        override internal void Preprocess()
+        override public void Preprocess()
         {
             // Debug.Assert(false);
             base.Preprocess();
@@ -719,9 +719,9 @@ namespace WixSharp
                 {
                     Exception newEx = new Exception
                     ($"The assembly with name '{assemblyName}' could not be loaded dynamically for retrieval of the type for '{dialogTypeName}'. "
-                      + $" The fusion log was: '{flex.FusionLog}'. "
-                      + $"Make sure the loaded file '{flex.FileName}' is contained in the installation in a loadable fashion."
-                    , innerException: flex
+                        + $" The fusion log was: '{flex.FusionLog}'. "
+                              + $"Make sure the loaded file '{flex.FileName}' is contained in the installation in a loadable fashion."
+                        , innerException: flex
                     );
 
                     newEx.Data.Add($"{nameof(GetDialog)}-info", info);
@@ -732,8 +732,8 @@ namespace WixSharp
                 {
                     Exception newEx = new Exception
                     ($"The assembly with name '{assemblyName}' could not be loaded dynamically for retrieval of the type for '{dialogTypeName}'. "
-                      + "Make sure it is contained in the installation in a loadable fashion."
-                    , innerException: ex
+                        + "Make sure it is contained in the installation in a loadable fashion."
+                        , innerException: ex
                     );
 
                     newEx.Data.Add($"{nameof(GetDialog)}-info", info);
@@ -823,7 +823,7 @@ namespace WixSharp
             return method;
         }
 
-        internal static void InvokeClientHandlers(string eventName, Session session, Exception e)
+        public static void InvokeClientHandlersInternal(string eventName, Session session, Exception e)
         {
             ExceptionEventArgs args = new ExceptionEventArgs { Session = session, Exception = e };
             string handlerName = $"WixSharp_{eventName}_Handlers";
@@ -846,7 +846,7 @@ namespace WixSharp
                         {
                             Exception ex = new Exception
                             ($"The method for '{item}' was found to be missing when called in the context of the handler '{handlerName}'."
-                            , innerException: mex
+                                , innerException: mex
                             );
 
                             ex.Data.Add($"{nameof(InvokeClientHandlers)}-item", item);
@@ -926,7 +926,7 @@ namespace WixSharp
                 if (session.AbortOnError())
                     result = ActionResult.Failure;
 
-                ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
+                ManagedProject.InvokeClientHandlersInternal("UnhandledException", session, e);
             }
             finally
             {
@@ -1000,7 +1000,7 @@ namespace WixSharp
                 if (session.AbortOnError())
                     eventArgs.Result = ActionResult.Failure;
 
-                ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
+                ManagedProject.InvokeClientHandlersInternal("UnhandledException", session, e);
             }
             return eventArgs.Result;
         }

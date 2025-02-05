@@ -189,7 +189,7 @@ namespace WixSharp
             }
         }
 
-        internal static string LocalizationFileFor(Project project)
+        public static string LocalizationFileFor(Project project)
         {
             // - if localization file specified by the user then just return it but merge with
             //   the stock localization if found.
@@ -358,7 +358,7 @@ namespace WixSharp
                         }
                         catch (Exception e)
                         {
-                            ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
+                            ManagedProject.InvokeClientHandlersInternal("UnhandledException", session, e);
                             session.Log("ManagedUI unhandled Exception: " + e);
 
                             uiExitEvent.Set();
@@ -389,7 +389,7 @@ namespace WixSharp
                 }
                 catch (Exception e)
                 {
-                    ManagedProject.InvokeClientHandlers("UnhandledException", session, e);
+                    ManagedProject.InvokeClientHandlersInternal("UnhandledException", session, e);
                     session.Log("Cannot attach ManagedUI: " + e);
                     throw;
                 }

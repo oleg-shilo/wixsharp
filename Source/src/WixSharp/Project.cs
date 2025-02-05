@@ -209,7 +209,7 @@ namespace WixSharp
         bool signAllFiles = true;
         internal bool signAllFilesSet = false;
 
-        internal virtual void Preprocess()
+        public virtual void Preprocess()
         {
             var managedActions = this.Actions.OfType<ManagedAction>()
                                              .Select(x => new { Action = x, Asm = x.ActionAssembly })

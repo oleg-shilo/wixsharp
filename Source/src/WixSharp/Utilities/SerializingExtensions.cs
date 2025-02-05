@@ -63,7 +63,7 @@ namespace WixSharp
             return session;
         }
 
-        internal static string Serialize(this Session session, params string[] extraProperties)
+        public static string Serialize(this Session session, params string[] extraProperties)
         {
             // connected session does not offer any mechanism for exploring properties.
             // On needs to know exactly properties names.

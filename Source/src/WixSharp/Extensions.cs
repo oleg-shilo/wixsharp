@@ -2395,7 +2395,12 @@ namespace WixSharp
             return value.Replace(" ", "_");
         }
 
-        internal static string Serialize(this Dictionary<string, string> data)
+        /// <summary>
+        /// Serializes the specified data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <returns></returns>
+        public static string Serialize(this Dictionary<string, string> data)
         {
             return string.Join("\n", data.Select(x => x.Key + "=" + x.Value.EscapeKeyValue()).ToArray());
         }

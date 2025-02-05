@@ -267,7 +267,7 @@ namespace WixSharp
                 {
                     Session msiSession = (Session)Runtime.Session.SessionContext;
 
-                    ManagedProject.InvokeClientHandlers("UnhandledException", msiSession, e);
+                    ManagedProject.InvokeClientHandlersInternal("UnhandledException", msiSession, e);
                     msiSession.Log("Managed Dialog unhandled Exception: " + e);
 
                     try
