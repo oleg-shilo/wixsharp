@@ -450,7 +450,8 @@ namespace WixSharp
     {
         file,
         commonName,
-        sha1Hash
+        sha1Hash,
+        unspecified
     }
 
     [Flags]
