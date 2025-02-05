@@ -130,11 +130,12 @@ namespace WixSharp
 
         internal XElement ToXml()
         {
-            return new XElement(this.GetType().Name, Condition.ToXValue())
-                               .SetAttribute("Overridable", Overridable)
-                               .SetAttribute("Suppress", Suppress)
-                               .SetAttribute(When.ToString(), Step)
-                               .AddAttributes(this.Attributes);
+            return new XElement(this.GetType().Name)
+                                .SetAttribute("Condition", Condition.ToXValue())
+                                .SetAttribute("Overridable", Overridable)
+                                .SetAttribute("Suppress", Suppress)
+                                .SetAttribute(When.ToString(), Step)
+                                .AddAttributes(this.Attributes);
         }
 
         //not sure support for SequenceNumber is required; disable it out until it's truly needed
