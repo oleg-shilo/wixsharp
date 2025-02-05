@@ -60,6 +60,10 @@ namespace WixSharp.Nsis.WinVer
 
         internal bool Any => MinVersion.HasValue || UnsupportedVersions.Any();
 
+        /// <summary>
+        /// Builds the version check script part.
+        /// </summary>
+        /// <returns></returns>
         public string BuildVersionCheckScriptPart()
         {
             if (!Any)

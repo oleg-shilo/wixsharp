@@ -209,6 +209,10 @@ namespace WixSharp
         bool signAllFiles = true;
         internal bool signAllFilesSet = false;
 
+        /// <summary>
+        /// Preprocesses this setup definition before building WXS source.
+        /// <p>This method is not to be called by the users directly but by the unit tests and derived classes.</p>
+        /// </summary>
         public virtual void Preprocess()
         {
             var managedActions = this.Actions.OfType<ManagedAction>()

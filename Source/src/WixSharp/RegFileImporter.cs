@@ -32,10 +32,21 @@ using Microsoft.Win32;
 
 namespace WixSharp
 {
+    /// <summary>
+    ///
+    /// </summary>
     public static class RegFileImporter
     {
+        /// <summary>
+        /// The skip unknown registry value types
+        /// </summary>
         public static bool SkipUnknownTypes = false;
 
+        /// <summary>
+        /// Imports from.
+        /// </summary>
+        /// <param name="regFile">The reg file.</param>
+        /// <returns></returns>
         static public RegValue[] ImportFrom(string regFile)
         {
             var result = new List<RegValue>();
@@ -82,6 +93,13 @@ namespace WixSharp
          hex(b): REG_QWORD
          */
 
+        /// <summary>
+        /// Deserializes the specified text.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="encoding">The encoding.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception">Cannot deserialize RegFile value: '" + text + "'</exception>
         public static object Deserialize(string text, Encoding encoding)
         {
             //Note all string are encoded as Encoding.Unicode (UTF16LE)
@@ -147,6 +165,11 @@ namespace WixSharp
                 throw new Exception("Cannot deserialize RegFile value: '" + text + "'");
         }
 
+        /// <summary>
+        /// Decodes from reg hexadecimal.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns></returns>
         public static byte[] DecodeFromRegHex(this string obj)
         {
             var data = new List<byte>();

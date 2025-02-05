@@ -189,6 +189,11 @@ namespace WixSharp
             }
         }
 
+        /// <summary>
+        /// Creates and returns the appropriate localizations the file for the project.
+        /// </summary>
+        /// <param name="project">The project.</param>
+        /// <returns></returns>
         public static string LocalizationFileFor(Project project)
         {
             // - if localization file specified by the user then just return it but merge with

@@ -941,6 +941,13 @@
             The localization files location.
             </value>
         </member>
+        <member name="M:WixSharp.ManagedUI.LocalizationFileFor(WixSharp.Project)">
+            <summary>
+            Creates and returns the appropriate localizations the file for the project.
+            </summary>
+            <param name="project">The project.</param>
+            <returns></returns>
+        </member>
         <member name="P:WixSharp.ManagedUI.InstallDialogs">
             <summary>
             Sequence of the dialogs to be displayed during the installation of the product.

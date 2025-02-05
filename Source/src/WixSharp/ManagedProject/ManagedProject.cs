@@ -422,6 +422,10 @@ namespace WixSharp
 
         internal bool IsNetCore = Environment.Version.Major > 5;
 
+        /// <summary>
+        /// Preprocesses this setup definition before building WXS source.
+        /// <p>This method is not to be called by the users directly but by the unit tests and derived classes.</p>
+        /// </summary>
         override public void Preprocess()
         {
             // Debug.Assert(false);
@@ -823,6 +827,15 @@ namespace WixSharp
             return method;
         }
 
+        /// <summary>
+        /// Invokes the client handlers from the MSI session.
+        /// <p>This method is not to be called by the users directly but by the unit tests and WIX managed custom actions packaging
+        /// utility, which requires the method to be public
+        /// </p>
+        /// </summary>
+        /// <param name="eventName">Name of the event.</param>
+        /// <param name="session">The session.</param>
+        /// <param name="e">The e.</param>
         public static void InvokeClientHandlersInternal(string eventName, Session session, Exception e)
         {
             ExceptionEventArgs args = new ExceptionEventArgs { Session = session, Exception = e };
