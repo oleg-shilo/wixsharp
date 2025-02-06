@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp.WPF</id>
-    <version>2.5.0.0</version>
+    <version>2.5.1.0</version>
     <title>Wix# (WixSharp) - Binaries</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,16 +16,13 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.5.0.0
-- #1736: Issue with Special Characters in WixSharp Bootstrapper Custom BA after Upgrading from Wix3 to Wix4
-- Improved positioning of the background images for WPF UI Dialogs
-- WIP: Added support for modern style folder selection dialog (triggered by #1734 discussion)
-- Added a more convenient option to play dialogs in demo mode during development</releaseNotes>
+    <releaseNotes>Release v2.5.1.0
+- #1735: ExeFileShortcut no longer works after update from wix3 to wix4</releaseNotes>
     <copyright>Copyright (C) 2008-2021 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="2.5.0.0" />
+      <dependency id="WixSharp.bin" version="2.5.1.0" />
       <dependency id="Caliburn.Micro" version="4.0.212" />
     </dependencies>
     <references>
