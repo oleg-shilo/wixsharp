@@ -2829,7 +2829,8 @@ namespace WixSharp
         /// <value><c>true</c> if this instance is upgrading installed version; otherwise, <c>false</c>.</value>
         static public bool IsUpgradingInstalledVersion(this Session session)
         {
-            return session.IsInstalling() && !session.IsModifying() && session.Property("FOUNDPREVIOUSVERSION").IsNotEmpty();
+            return session.IsInstalling() && !session.IsModifying() &&
+                (session.Property("FOUNDPREVIOUSVERSION").IsNotEmpty() || session.LookupInstalledVersion() != null);
         }
 
         /// <summary>
