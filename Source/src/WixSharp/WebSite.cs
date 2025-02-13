@@ -212,7 +212,7 @@ namespace WixSharp
         ///         new WebSite.WebAddress
         ///         {
         ///             Address = "*",
-        ///             Port = 80
+        ///             Port = 90
         ///         }
         ///     }
         /// </code>
