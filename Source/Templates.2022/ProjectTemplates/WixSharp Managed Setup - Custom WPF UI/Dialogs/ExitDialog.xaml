@@ -42,7 +42,10 @@
             VerticalAlignment="Stretch"
             BorderBrush="Gray"
             BorderThickness="1">
-            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Background="White">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="75" />
                     <RowDefinition />
@@ -55,7 +58,8 @@
                 <Image
                     x:Name="Banner"
                     Grid.RowSpan="2"
-                    Source="{Binding Banner}" />
+                    Source="{Binding Banner}"
+                    Stretch="UniformToFill" />
 
                 <TextBlock
                     x:Name="DialogTitleLabel"
@@ -64,7 +68,8 @@
                     Margin="13,25,7,0"
                     VerticalAlignment="Top"
                     FontSize="16"
-                    FontWeight="Normal">
+                    FontWeight="Normal"
+                    TextWrapping="WrapWithOverflow">
                     [ExitDialogTitle]
                 </TextBlock>
                 <TextBlock

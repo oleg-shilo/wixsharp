@@ -65,11 +65,12 @@ namespace $safeprojectname$.Dialogs
             // 
             // textPanel
             // 
+            this.textPanel.BackColor = System.Drawing.Color.Transparent;
             this.textPanel.Controls.Add(this.title);
             this.textPanel.Controls.Add(this.description);
-            this.textPanel.Location = new System.Drawing.Point(177, 17);
+            this.textPanel.Location = new System.Drawing.Point(190, 12);
             this.textPanel.Name = "textPanel";
-            this.textPanel.Size = new System.Drawing.Size(305, 289);
+            this.textPanel.Size = new System.Drawing.Size(292, 289);
             this.textPanel.TabIndex = 8;
             // 
             // title
@@ -80,7 +81,7 @@ namespace $safeprojectname$.Dialogs
             this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.title.Location = new System.Drawing.Point(3, 0);
             this.title.Name = "title";
-            this.title.Size = new System.Drawing.Size(299, 61);
+            this.title.Size = new System.Drawing.Size(286, 61);
             this.title.TabIndex = 6;
             this.title.Text = "[ExitDialogTitle]";
             // 
@@ -92,7 +93,7 @@ namespace $safeprojectname$.Dialogs
             this.description.BackColor = System.Drawing.Color.Transparent;
             this.description.Location = new System.Drawing.Point(4, 88);
             this.description.Name = "description";
-            this.description.Size = new System.Drawing.Size(298, 201);
+            this.description.Size = new System.Drawing.Size(285, 201);
             this.description.TabIndex = 7;
             this.description.Text = "[ExitDialogDescription]";
             // 
@@ -127,7 +128,7 @@ namespace $safeprojectname$.Dialogs
             this.viewLog.BackColor = System.Drawing.Color.Transparent;
             this.viewLog.Location = new System.Drawing.Point(16, 17);
             this.viewLog.Name = "viewLog";
-            this.viewLog.Size = new System.Drawing.Size(54, 13);
+            this.viewLog.Size = new System.Drawing.Size(67, 16);
             this.viewLog.TabIndex = 1;
             this.viewLog.TabStop = true;
             this.viewLog.Text = "[ViewLog]";
@@ -157,10 +158,10 @@ namespace $safeprojectname$.Dialogs
             this.back.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.back.AutoSize = true;
             this.back.Enabled = false;
-            this.back.Location = new System.Drawing.Point(218, 10);
+            this.back.Location = new System.Drawing.Point(174, 8);
             this.back.MinimumSize = new System.Drawing.Size(75, 0);
             this.back.Name = "back";
-            this.back.Size = new System.Drawing.Size(77, 23);
+            this.back.Size = new System.Drawing.Size(91, 26);
             this.back.TabIndex = 0;
             this.back.Text = "[WixUIBack]";
             this.back.UseVisualStyleBackColor = true;
@@ -169,10 +170,10 @@ namespace $safeprojectname$.Dialogs
             // 
             this.next.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.next.AutoSize = true;
-            this.next.Location = new System.Drawing.Point(301, 10);
+            this.next.Location = new System.Drawing.Point(271, 8);
             this.next.MinimumSize = new System.Drawing.Size(75, 0);
             this.next.Name = "next";
-            this.next.Size = new System.Drawing.Size(81, 23);
+            this.next.Size = new System.Drawing.Size(95, 26);
             this.next.TabIndex = 0;
             this.next.Text = "[WixUIFinish]";
             this.next.UseVisualStyleBackColor = true;
@@ -183,10 +184,10 @@ namespace $safeprojectname$.Dialogs
             this.cancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.cancel.AutoSize = true;
             this.cancel.Enabled = false;
-            this.cancel.Location = new System.Drawing.Point(402, 10);
+            this.cancel.Location = new System.Drawing.Point(386, 8);
             this.cancel.MinimumSize = new System.Drawing.Size(75, 0);
             this.cancel.Name = "cancel";
-            this.cancel.Size = new System.Drawing.Size(86, 23);
+            this.cancel.Size = new System.Drawing.Size(102, 26);
             this.cancel.TabIndex = 0;
             this.cancel.Text = "[WixUICancel]";
             this.cancel.UseVisualStyleBackColor = true;

@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using WixSharp;
 using WixSharp.UI.Forms;
+using WixToolset.Dtf.WindowsInstaller;
 
 using WixSharp.UI.WPF;
 
@@ -100,11 +101,21 @@ namespace $safeprojectname$
 
         public void ChangeInstallDir()
         {
+            // `OpenFolderDialog.Select` is still under development so disabling it for now
+            // try
+            // {
+            //     var (isSelected, path) = OpenFolderDialog.Select(InstallDirPath);
+            //     if (isSelected)
+            //         InstallDirPath = path;
+            // }
+            // catch
+            // {
             using (var dialog = new FolderBrowserDialog { SelectedPath = InstallDirPath })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                     InstallDirPath = dialog.SelectedPath;
             }
+            // }
         }
 
         public void GoPrev()

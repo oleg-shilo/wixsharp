@@ -10,11 +10,11 @@ updateWinFormDialogs(
 
 updateWinFormDialogs(
     @"..\..\src\WixSharp.UI\ManagedUI\Forms",
-    @"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom UI (WiX4)\Dialogs");
+    @"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom UI\Dialogs");
 
 updateWinFormDialogs(
     @"..\..\src\WixSharp.UI\ManagedUI\Forms",
-    @"..\..\Templates.2022\ProjectTemplates\WixSharp - Custom UI Library (WiX4)\Dialogs");
+    @"..\..\Templates.2022\ProjectTemplates\WixSharp - Custom UI Library\Dialogs");
 
 updateWpfDialogs(
     @"..\..\src\WixSharp.UI.WPF\Dialogs",
@@ -22,13 +22,13 @@ updateWpfDialogs(
 
 updateWpfDialogs(
     @"..\..\src\WixSharp.UI.WPF\Dialogs",
-    @"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI (WiX4)\Dialogs");
+    @"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI\Dialogs");
 
-updateWixSharpPackages(
-    @"..\..\Templates.2022\ProjectTemplates", "(WiX3)", "1.26.0");
+var proj3Files = Directory.GetFiles(@"..\..\Templates.2022\ProjectTemplates", "*.csproj", SearchOption.AllDirectories).Where(x => x.Contains(" (WiX3)")); // WiX3
+var projFiles = proj3Files.Select(x => x.Replace(" (WiX3)", "")); // WiX4+
 
-updateWixSharpPackages(
-    @"..\..\Templates.2022\ProjectTemplates", "(WiX4)", "2.4.2");
+updateWixSharpPackages(proj3Files, "1.26.0");
+updateWixSharpPackages(projFiles, "2.4.2");
 
 foreach (var file in Directory.GetFiles(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI (WiX3)\Dialogs",
         "*.xaml.cs"))
@@ -39,20 +39,20 @@ foreach (var file in Directory.GetFiles(@"..\..\Templates.2022\ProjectTemplates\
 
 "------------------------------------".print();
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup (WiX3)");
-packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup (WiX4)");
+packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom UI (WiX3)");
-packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom UI (WiX4)");
-packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp - Custom UI Library (WiX4)");
+packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom UI");
+packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp - Custom UI Library");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom Dialog (WiX3)");
-packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom Dialog (WiX4)");
+packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom Dialog");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI (WiX3)");
-packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI (WiX4)");
+packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper (WiX3)");
-packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper (WiX4)");
+packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper Custom BA (WiX3)");
-packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper Custom BA (WiX4)");
+packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper Custom BA");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup (WiX3)");
-packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup (WiX4)");
+packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup");
 "------------------------------------".print();
 
 void updateWpfDialogs(string inputDir, string outDir)
@@ -130,9 +130,9 @@ void CopyFiles(string srcDir, string pattern, string destDir, Func<string, bool>
     }
 }
 
-void updateWixSharpPackages(string dir, string projTypePattern, string version)
+void updateWixSharpPackages(IEnumerable<string> projFiles, string version)
 {
-    foreach (string file in Directory.GetFiles(dir, "*.csproj", SearchOption.AllDirectories).Where(x => x.Contains(projTypePattern)))
+    foreach (string file in projFiles)
     {
         Console.WriteLine("Package for: " + file);
         var lines = File.ReadLines(file);
