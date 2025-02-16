@@ -2744,13 +2744,15 @@ namespace WixSharp
                 if (wAction.ProgressText.IsNotEmpty())
                 {
                     uis.ForEach(ui =>
-                        ui.Add(new XElement("ProgressText", new XAttribute("Value", wAction.ProgressText),
+                        ui.Add(new XElement("ProgressText",
+                            new XAttribute("Message", wAction.ProgressText),
                             new XAttribute("Action", wAction.Id))));
                 }
                 if (wAction.RollbackProgressText != null)
                 {
                     uis.ForEach(ui =>
-                        ui.Add(new XElement("ProgressText", new XAttribute("Value", wAction.RollbackProgressText),
+                        ui.Add(new XElement("ProgressText",
+                            new XAttribute("Message", wAction.RollbackProgressText),
                             new XAttribute("Action", roollbackActionId))));
                 }
 
@@ -2860,6 +2862,9 @@ namespace WixSharp
 
                     if (wManagedAction.IsNetCore)
                     {
+                        // Only generate the accurate AOT compiled assembly (native CA dll) but do not compile this assembly.
+                        // Why? Because the user may already supply this assembly under its expected name thus we only need to
+                        // compile the assembly if it does not exist yet (a few lines below). 
                         packageFile = asmFile.ConvertToAotAssembly(previewOnly: true);
                     }
 
