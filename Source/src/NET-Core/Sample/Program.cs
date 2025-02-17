@@ -17,6 +17,7 @@ project.UI = WUI.WixUI_ProgressOnly;
 project.BuildMsi();
 
 // -----------------------------------------------
+
 public class Actions
 {
     [CustomAction]

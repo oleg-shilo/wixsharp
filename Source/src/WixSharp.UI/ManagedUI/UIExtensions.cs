@@ -150,6 +150,15 @@ namespace WixSharp
             label.BackColor = Color.Transparent;
         }
 
+        /// <summary>
+        /// The use modern folder browser dialog that is themed and has a new look consistent with modern Windows theme.
+        /// <p>Since .NET does not provide API tor this dialog the COM Interop needs to be used instead.</p>
+        /// <remarks>Use of COM Interop can have unexpected side effects at runtime so tis option is disabled by default and
+        /// the old style <see cref="System.Windows.Forms.FolderBrowserDialog"/> used instead. However as soon as the field usage
+        /// statistics can show the stability of COM Interop approach it will be made the default option instead.</remarks>
+        /// </summary>
+        public static bool UseModernFolderBrowserDialog(this ISession session) => ((Session)session.SessionContext).UseModernFolderBrowserDialog();
+
         public static sys.Control ClearChildren(this sys.Control control)
         {
             foreach (sys.Control item in control.Controls)

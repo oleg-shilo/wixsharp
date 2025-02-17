@@ -511,6 +511,9 @@ namespace WixSharp
                     if (AutoElements.EnableUACRevealer)
                         this.AddProperty(new Property("UAC_REVEALER_ENABLED", "true"));
 
+                    if (AutoElements.UseModernFolderBrowserDialog)
+                        this.AddProperty(new Property("ManagedUI_MODERN_FOLDER_BROWSER_DIALOG", "true"));
+
                     if (AutoElements.UACWarning.IsNotEmpty())
                         this.AddProperty(new Property("UAC_WARNING", AutoElements.UACWarning));
 

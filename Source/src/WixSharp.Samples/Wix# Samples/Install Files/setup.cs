@@ -60,6 +60,8 @@ static class Script
         // project.UI = WUI.WixUI_Mondo;
         // project.UI = WUI.WixUI_InstallDir;
 
+        AutoElements.UseModernFolderBrowserDialog = true;
+
         project.EmitConsistentPackageId = true;
         project.Scope = InstallScope.perMachine;
         // project.PreserveTempFiles = true;

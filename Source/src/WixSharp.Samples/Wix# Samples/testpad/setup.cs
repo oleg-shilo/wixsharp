@@ -5,6 +5,7 @@ using System.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
 using System.Security.Cryptography;
 using WixSharp;
+using WixToolset.Dtf.WindowsInstaller;
 
 class Constants
 {
@@ -26,6 +27,11 @@ namespace Test1.installer.wixsharp
         static string productVersion = "1.0.0";
 
         static void Main()
+        {
+            issue_1727();
+        }
+
+        static void Main2()
         {
             Environment.CurrentDirectory = @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\Install Files";
             var msixTemplate = @".\MyProduct.msix.xml";
@@ -70,6 +76,31 @@ namespace Test1.installer.wixsharp
             project.Version = new Version(productVersion);
 
             project.ManagedUI = ManagedUI.DefaultWpf; // all stock UI dialogs
+
+            project.BuildMsi();
+        }
+
+        static void issue_1727()
+        {
+            var project =
+                new ManagedProject(
+                    "My Product",
+                    new Dir(@"%ProgramFiles%\My Company\My Product",
+                        new File(
+                            // "program.cs",
+                            @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\setup.cs",
+                            new FileShortcut("program cs", @"%Desktop%\My Product"))
+                           ),
+                    new Dir(@"%Desktop%\My Product"),
+                    new Property("PropName", "<your value>"));
+
+            // project.AddUIProject("Setup1.UI"); // name of the 'Custom UI Library' project in the solution
+
+            project.Load += (e) =>
+            {
+                Native.MessageBox("OnLoad", "WixSharp - .NET8");
+                e.Result = ActionResult.Failure;
+            };
 
             project.BuildMsi();
         }

@@ -100,14 +100,20 @@ namespace WixSharp.UI.WPF
         public void ChangeInstallDir()
         {
             // `OpenFolderDialog.Select` is still under development so disabling it for now
-            // try
-            // {
-            //     var (isSelected, path) = OpenFolderDialog.Select(InstallDirPath);
-            //     if (isSelected)
-            //         InstallDirPath = path;
-            // }
-            // catch
-            // {
+            if (session.UseModernFolderBrowserDialog())
+            {
+                //     try
+                //     {
+                //         var (isSelected, path) = OpenFolderDialog.Select(installDir.Text);
+                //         if (isSelected)
+                //             installDir.Text = path;
+                //         return;
+                //     }
+                //     catch
+                //     {
+                //     }
+            }
+
             using (var dialog = new FolderBrowserDialog { SelectedPath = InstallDirPath })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
