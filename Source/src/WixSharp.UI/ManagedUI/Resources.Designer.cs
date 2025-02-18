@@ -8,11 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WixSharp.UI.ManagedUI
-{
+namespace WixSharp.UI.ManagedUI {
     using System;
-
-
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -23,52 +22,54 @@ namespace WixSharp.UI.ManagedUI
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources
-    {
-
+    public class Resources {
+        
         private static global::System.Resources.ResourceManager resourceMan;
-
+        
         private static global::System.Globalization.CultureInfo resourceCulture;
-
+        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources()
-        {
+        internal Resources() {
         }
-
+        
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if (object.ReferenceEquals(resourceMan, null))
-                {
+        public static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WixSharp.UI.ManagedUI.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-
+        
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        public static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
             }
         }
-
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] ShellFileDialogs_dll {
+            get {
+                object obj = ResourceManager.GetObject("ShellFileDialogs_dll", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to {\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang3081{\fonttbl{\f0\fswiss\fprq2\fcharset0 Tahoma;}{\f1\fnil\fcharset0 Calibri;}}
         ///{\*\generator Riched20 6.3.9600}\viewkind4\uc1 
@@ -81,57 +82,47 @@ namespace WixSharp.UI.ManagedUI
         ///\par
         ///&quot;Contri [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string WixSharp_LicenceFile
-        {
-            get
-            {
+        public static string WixSharp_LicenceFile {
+            get {
                 return ResourceManager.GetString("WixSharp_LicenceFile", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WixSharpUI_Bmp_Banner
-        {
-            get
-            {
+        public static System.Drawing.Bitmap WixSharpUI_Bmp_Banner {
+            get {
                 object obj = ResourceManager.GetObject("WixSharpUI_Bmp_Banner", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap WixSharpUI_Bmp_Dialog
-        {
-            get
-            {
+        public static System.Drawing.Bitmap WixSharpUI_Bmp_Dialog {
+            get {
                 object obj = ResourceManager.GetObject("WixSharpUI_Bmp_Dialog", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] WixUI_en_us
-        {
-            get
-            {
+        public static byte[] WixUI_en_us {
+            get {
                 object obj = ResourceManager.GetObject("WixUI_en_us", resourceCulture);
                 return ((byte[])(obj));
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] wixui_zip
-        {
-            get
-            {
+        public static byte[] wixui_zip {
+            get {
                 object obj = ResourceManager.GetObject("wixui_zip", resourceCulture);
                 return ((byte[])(obj));
             }

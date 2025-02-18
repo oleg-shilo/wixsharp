@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using WixSharp;
@@ -102,19 +103,19 @@ namespace WixSharp.UI.WPF
             // `OpenFolderDialog.Select` is still under development so disabling it for now
             if (session.UseModernFolderBrowserDialog())
             {
-                //     try
-                //     {
-                //         var (isSelected, path) = OpenFolderDialog.Select(installDir.Text);
-                //         if (isSelected)
-                //             installDir.Text = path;
-                //         return;
-                //     }
-                //     catch
-                //     {
-                //     }
+                try
+                {
+                    var newFoledrPath = WixSharp.FolderBrowserDialog.ShowDialog(IntPtr.Zero, "Select Folder", InstallDirPath);
+                    if (newFoledrPath != null)
+                        InstallDirPath = newFoledrPath;
+                    return;
+                }
+                catch
+                {
+                }
             }
 
-            using (var dialog = new FolderBrowserDialog { SelectedPath = InstallDirPath })
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog { SelectedPath = InstallDirPath })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                     InstallDirPath = dialog.SelectedPath;

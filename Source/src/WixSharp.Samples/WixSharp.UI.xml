@@ -597,6 +597,11 @@
               resource lookups using this strongly typed resource class.
             </summary>
         </member>
+        <member name="P:WixSharp.UI.ManagedUI.Resources.ShellFileDialogs_dll">
+            <summary>
+              Looks up a localized resource of type System.Byte[].
+            </summary>
+        </member>
         <member name="P:WixSharp.UI.ManagedUI.Resources.WixSharp_LicenceFile">
              <summary>
                Looks up a localized string similar to {\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang3081{\fonttbl{\f0\fswiss\fprq2\fcharset0 Tahoma;}{\f1\fnil\fcharset0 Calibri;}}
@@ -1228,6 +1233,26 @@
             <param name="key">The key.</param>
             <returns></returns>
         </member>
+        <member name="T:WixSharp.FolderBrowserDialog">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:WixSharp.FolderBrowserDialog.ShowDialog(System.IntPtr,System.String,System.String)">
+             <summary>
+             Shows the folder selection dialog. Returns <see langword="null"/> if the user cancelled the dialog.
+             Otherwise returns the selected path.
+             <remarks>
+             Since .NET does not provide API for this dialog the COM Interop is used instead.
+             <p>This is a fork of rather excellent https://github.com/daiplusplus/ShellFileDialogs, which
+             is an extract from Microsoft Windows API Code Pack.</p></remarks>
+            
+             </summary>
+             <param name="parentHWnd">The parent h WND.</param>
+             <param name="title">The title.</param>
+             <param name="initialDirectory">The initial directory.</param>
+             <returns></returns>
+        </member>
         <member name="T:WixSharp.Forms.Dialogs">
             <summary>
             Set of ManagedUI dialogs (WinForm) that implement all standard MSI UI dialogs.
@@ -1424,7 +1449,7 @@
         <member name="M:WixSharp.UIExtensions.UseModernFolderBrowserDialog(WixSharp.ISession)">
             <summary>
             The use modern folder browser dialog that is themed and has a new look consistent with modern Windows theme.
-            <p>Since .NET does not provide API tor this dialog the COM Interop needs to be used instead.</p>
+            <p>Since .NET does not provide API for this dialog the COM Interop needs to be used instead.</p>
             <remarks>Use of COM Interop can have unexpected side effects at runtime so tis option is disabled by default and
             the old style <see cref="T:System.Windows.Forms.FolderBrowserDialog"/> used instead. However as soon as the field usage
             statistics can show the stability of COM Interop approach it will be made the default option instead.</remarks>

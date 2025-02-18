@@ -123,7 +123,21 @@ namespace WixSharp.UI.Forms
 
         void change_Click(object sender, EventArgs e)
         {
-            using (var dialog = new FolderBrowserDialog { SelectedPath = installDir.Text })
+            if (this.Session().UseModernFolderBrowserDialog())
+            {
+                try
+                {
+                    var newFoledrPath = WixSharp.FolderBrowserDialog.ShowDialog(this.Handle, "Select Folder", installDir.Text);
+                    if (newFoledrPath != null)
+                        installDir.Text = newFoledrPath;
+                    return;
+                }
+                catch
+                {
+                }
+            }
+
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog { SelectedPath = installDir.Text })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {

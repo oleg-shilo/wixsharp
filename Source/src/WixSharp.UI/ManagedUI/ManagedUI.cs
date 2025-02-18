@@ -11,6 +11,8 @@ using System.Xml.Linq;
 using WixSharp.CommonTasks;
 using WixSharp.UI.Forms;
 using WixSharp.UI.ManagedUI;
+
+// using WixSharp.UI.ManagedUI;
 using WixToolset.Dtf.WindowsInstaller;
 
 namespace WixSharp

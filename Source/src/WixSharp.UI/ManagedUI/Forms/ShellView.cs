@@ -2,6 +2,42 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using WixSharp.UI.Forms;
+using WixSharp.UI.ManagedUI;
+
+namespace WixSharp
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public static class FolderBrowserDialog
+    {
+        static FolderBrowserDialog()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += (s, e) =>
+            {
+                if (e.Name.StartsWith("ShellFileDialogs"))
+                    return System.Reflection.Assembly.Load(Resources.ShellFileDialogs_dll);
+                return null;
+            };
+        }
+
+        /// <summary>
+        /// Shows the folder selection dialog. Returns <see langword="null"/> if the user cancelled the dialog.
+        /// Otherwise returns the selected path.
+        /// <remarks>
+        /// Since .NET does not provide API for this dialog the COM Interop is used instead.
+        /// <p>This is a fork of rather excellent https://github.com/daiplusplus/ShellFileDialogs, which
+        /// is an extract from Microsoft Windows API Code Pack.</p></remarks>
+        ///
+        /// </summary>
+        /// <param name="parentHWnd">The parent h WND.</param>
+        /// <param name="title">The title.</param>
+        /// <param name="initialDirectory">The initial directory.</param>
+        /// <returns></returns>
+        public static string ShowDialog(IntPtr parentHWnd, string title, string initialDirectory) =>
+            ShellFileDialogs.FolderBrowserDialog.ShowDialog(parentHWnd, title, initialDirectory);
+    }
+}
 
 namespace WixSharp.Forms
 {
