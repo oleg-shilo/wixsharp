@@ -173,6 +173,14 @@ namespace WixSharp.CommonTasks
                 if (IO.File.Exists(localAsm))
                     return localAsm;
 
+                var loadedAsm = System.AppDomain.CurrentDomain
+                    .GetAssemblies()
+                    .FirstOrDefault(x => x.GetName().Name.StartsWith("WixToolset.Dtf.WindowsInstaller"))?
+                    .GetLocation();
+
+                if (loadedAsm != null && IO.File.Exists(loadedAsm))
+                    return loadedAsm;
+
                 EnsureDtfTool();
                 return WixSharpToolDir.PathCombine(@"wix.tools\publish\WixToolset.Dtf.WindowsInstaller.dll");
             }

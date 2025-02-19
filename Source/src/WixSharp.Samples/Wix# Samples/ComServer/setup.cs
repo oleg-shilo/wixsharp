@@ -26,51 +26,50 @@ class Script
         var project =
             new Project("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File(new Id("MyApp.exe"), @"Files\Bin\MyApp.exe",
-                             new TypeLib
-                             {
-                                 Id = new Guid("6f330b47-2577-43ad-9095-1861ba25889b"),
-                                 Language = 33,
-                                 MajorVersion = 23
-                             },
-                             new ComRegistration
-                             {
-                                 Id = new Guid("6f330b47-2577-43ad-9095-1861ba25889b"),
-                                 Description = "MY DESCRIPTION",
-                                 ThreadingModel = ThreadingModel.apartment,
-                                 Context = "InprocServer32",
-                                 ProgIds = new[]
-                                 {
-                                     new ProgId
-                                     {
-                                         Id = "PROG.ID.1",
-                                         Description ="Version independent ProgID ",
-                                         ProgIds = new[]
-                                         {
-                                             new ProgId
-                                             {
-                                                 Id = "prog.id",
-                                                 Description="some description"
-                                                 ,Extensions = new[]
-                                                 {
-                                                     new Extension
-                                                     {
-                                                         ContentType = "text/plain",
-                                                         Verbs = new []
-                                                         {
-                                                             new Verb
-                                                             {
-                                                                 TargetFile = "MyApp.exe",
-                                                             }
-                                                         },
-
-                                                     }
-                                                 }
-                                             }
-                                         }
-                                     }
-                                 }
-                             })));
+                    new WixSharp.File(new Id("MyApp.exe"), @"Files\Bin\MyApp.exe",
+                            new TypeLib
+                            {
+                                Id = new Guid("6f330b47-2577-43ad-9095-1861ba25889b"),
+                                Language = 33,
+                                MajorVersion = 23
+                            },
+                            new ComRegistration
+                            {
+                                Id = new Guid("6f330b47-2577-43ad-9095-1861ba25889b"),
+                                Description = "MY DESCRIPTION",
+                                ThreadingModel = ThreadingModel.apartment,
+                                Context = "InprocServer32",
+                                ProgIds = new[]
+                                {
+                                    new ProgId
+                                    {
+                                        Id = "PROG.ID.1",
+                                        Description ="Version independent ProgID ",
+                                        ProgIds = new[]
+                                        {
+                                            new ProgId
+                                            {
+                                                Id = "prog.id",
+                                                Description="some description"
+                                                ,Extensions = new[]
+                                                {
+                                                    new WixSharp.Extension
+                                                    {
+                                                        ContentType = "text/plain",
+                                                        Verbs = new []
+                                                        {
+                                                            new Verb
+                                                            {
+                                                                TargetFile = "MyApp.exe",
+                                                            }
+                                                        },
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            })));
 
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         // project.PreserveTempFiles = true;
@@ -108,9 +107,9 @@ class Script
             new Project("MyProduct2",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     // Either use the extension,
-                    new File(@"Files\bin\CSScriptLibrary.dll").RegisterAsCom(),
+                    new WixSharp.File(@"Files\bin\CSScriptLibrary.dll").RegisterAsCom(),
                     // or create a new WixEntity.
-                    new File(@"Files\bin\CSScriptLibrary2.dll",
+                    new WixSharp.File(@"Files\bin\CSScriptLibrary2.dll",
                         new RegisterAsCom()
                         {
                             CreateComObjects = true,

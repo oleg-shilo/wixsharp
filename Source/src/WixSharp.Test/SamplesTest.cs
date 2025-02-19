@@ -19,6 +19,9 @@ namespace WixSharp.Test
                                                Custom_IDs,
                                                Self-executable_Msi,
                                                MultiLanguageUI,
+                                               Build-MSIX,
+                                               Embedding_CA_Package,
+                                               Building MergeModule,
                                                ASP.NETApp,
                                                EnvVariables"
                                 .Split(',').Select(x => x.Trim());
@@ -81,6 +84,8 @@ namespace WixSharp.Test
                 allSamples = allSamples.Take(howManyToRun.Value).ToArray();
 
             samplesTotal = allSamples.Count();
+
+            allSamples = allSamples.Where(x => !nonMsiProjects.Contains(x.Category.PathGetFileName())).ToArray();
 
             var parallel = false;
 

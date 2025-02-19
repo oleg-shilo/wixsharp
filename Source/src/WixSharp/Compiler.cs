@@ -3502,7 +3502,7 @@ namespace WixSharp
 
             if (batchFile == null)
             {
-                Run(makeSfxCA, makeSfxCA_args);
+                var output = Run(makeSfxCA, makeSfxCA_args);
 
                 if (!IO.File.Exists(outDll))
                     throw new ApplicationException("Cannot package ManagedCA assembly(" + asm + ")");

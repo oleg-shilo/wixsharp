@@ -1,7 +1,7 @@
-//css_dir E:\PrivateData\Galos\Projects\WixSharp\Source\src\WixSharp.Samples\Wix# Samples\Registry;
 //css_dir ..\..\;
 //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
+//css_ref System.Xml;
 using System;
 using System.Diagnostics;
 using System.Linq;

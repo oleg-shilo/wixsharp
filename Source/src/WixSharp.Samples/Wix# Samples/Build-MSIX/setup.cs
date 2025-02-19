@@ -1,7 +1,7 @@
 ﻿//css_dir ..\..\;
-// //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
-//css_ref D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\bin\Debug\net472\WixToolset.Dtf.WindowsInstaller.dll
-//css_ref D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\bin\Debug\net472\WixToolset.Mba.Core.dll
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll
+//css_ref Wix_bin\WixToolset.Mba.Core.dll
+//css_ref WixSharp.Msi.dll
 
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
@@ -65,7 +65,7 @@ static class Msix
            .SetAttribute("PackageName", project.Name)
            .SetAttribute("PackageDisplayName", project.Name)
            .SetAttribute(ns + "PackageDescription", project.Name)
-           .SetAttribute("PublisherName", $"CN={project.ControlPanelInfo.Manufacturer}")
+           .SetAttribute("PublisherName", "CN=" + project.ControlPanelInfo.Manufacturer)
            .SetAttribute("PublisherDisplayName", project.ControlPanelInfo.Manufacturer)
            .SetAttribute("Version", project.Version);
 
@@ -88,12 +88,12 @@ static class Msix
             var productCode = msiInfo.GetProductCode();
 
             if (MsiParser.IsInstalled(productCode))
-                "msiexec".Run($"/x {productCode} /q");
+                "msiexec".Run("/x " + productCode + " /q");
 
             var startInfo = new ProcessStartInfo
             {
                 FileName = "MsixPackagingTool.exe",
-                Arguments = $@"create-package --template {msixTemplate}", //  use "-v" for more detailed build output
+                Arguments = @"create-package --template " + msixTemplate, //  use "-v" for more detailed build output
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -116,12 +116,12 @@ static class Msix
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}. Ensure you have installed MsixPackagingTool and MSIX driver.");
+                Console.WriteLine("Error: " + ex.Message + ". Ensure you have installed MsixPackagingTool and MSIX driver.");
             }
             finally
             {
                 if (MsiParser.IsInstalled(productCode))
-                    "msiexec".Run($"/x {productCode} /q");
+                    "msiexec".Run("/x " + productCode + " /q");
             }
         }
     }
