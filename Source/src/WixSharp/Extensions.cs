@@ -3152,7 +3152,14 @@ namespace WixSharp
         /// <returns></returns>
         public static string QueryProperty(this Session session, string name)
         {
-            return (string)session.Database.ExecuteScalar($"SELECT `Value` FROM `Property` WHERE `Property` = '{name}'");
+            try
+            {
+                return (string)session.Database.ExecuteScalar($"SELECT `Value` FROM `Property` WHERE `Property` = '{name}'");
+            }
+            catch (Exception)
+            {
+                return session.Property(name); // in case the db is disposed already
+            }
         }
 
         /// <summary>

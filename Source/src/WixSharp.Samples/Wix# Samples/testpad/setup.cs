@@ -1,10 +1,13 @@
 ﻿//using Test1Library;
 using System;
 using System.Collections.Generic;
+using static System.Collections.Specialized.BitVector32;
 using System.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
 using System.Security.Cryptography;
+using System.Windows.Forms;
 using WixSharp;
+using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
 
 class Constants
@@ -28,7 +31,43 @@ namespace Test1.installer.wixsharp
 
         static void Main()
         {
-            issue_1727();
+            issue_1739();
+        }
+
+        static void issue_1739()
+        {
+            void build(string version)
+            {
+                var project =
+                    new ManagedProject("My Product",
+                        new Dir(@"%ProgramFiles%\My Company\My Product",
+                            new File(
+                                @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\setup.cs")));
+
+                project.GUID = new Guid("6f330b47-2577-43ad-9095-1361ba25889b");
+
+                project.UI = WUI.WixUI_ProgressOnly;
+                project.MajorUpgradeStrategy = MajorUpgradeStrategy.Default;
+
+                project.Version = new Version(version);
+
+                project.AfterInstall += (e) =>
+                {
+                    if (e.Session.MyIsUpgradingInstalledVersion())
+                    {
+                        var isUpgrading = e.Session.IsUpgradingInstalledVersion();
+                        MessageBox.Show(isUpgrading.ToString(), "");
+                    }
+                    // e.Result = ActionResult.Failure;
+                };
+
+                project.OutFileName = $"MyProduct.{project.Version}";
+                project.DefaultDeferredProperties += ";REMOVE;REINSTALL;Installed";
+
+                project.BuildMsi();
+            }
+            build("1.0.1");
+            build("1.0.2");
         }
 
         static void Main2()
