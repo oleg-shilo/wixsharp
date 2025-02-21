@@ -2,8 +2,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp_wix4.bin</id>
-    <version>2.5.1.0</version>
-    <title>Wix# (WixSharp) - Binaries</title>
+    <version>2.6.0.0</version>
+    <title>Wix# (WixSharp) - Binaries (targeting WiX4 and later)</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
     <license type="expression">MIT</license>
@@ -16,8 +16,11 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed: `dotnet tool install --global wix`
 The package is tested against WIX (Windows Installer Xml) Toolset v4.0.1.0</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.5.1.0
-- #1735: ExeFileShortcut no longer works after update from wix3 to wix4</releaseNotes>
+    <releaseNotes>Release v2.6.0.0
+- #1739: Detection of upgrading in events
+- Integrating ShellFileDialogs.dll with modern folder selection dialog
+- #1752: WiX5 | Action.ProgressText | Error due to invalid Attribute
+- #1750: Renaming VS templates</releaseNotes>
     <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>

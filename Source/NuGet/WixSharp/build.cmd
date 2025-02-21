@@ -1,6 +1,4 @@
-nuget pack WixSharp.bin.nuspec
-nuget pack WixSharp.lab.nuspec
-nuget pack WixSharp.WPF.nuspec
-nuget pack WixSharp.nuspec
-rem nuget pack WixSharp.wix.bin.nuspec
+nuget pack WixSharp_wix4.bin.nuspec
+nuget pack WixSharp_wix4.WPF.nuspec
+nuget pack WixSharp_wix4.nuspec
 pause

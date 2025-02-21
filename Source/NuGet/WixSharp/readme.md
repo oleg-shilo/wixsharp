@@ -5,6 +5,6 @@ In order to build the packages execute the following steps:
   ```
   Make sure you have CS-Script installed (e.g. from https://community.chocolatey.org/packages/cs-script)
 
-- Execute build.WiX4.cmd
+- Execute build.cmd
 
 That's it.🅾️

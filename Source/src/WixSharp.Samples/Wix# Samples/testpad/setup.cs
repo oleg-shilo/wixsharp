@@ -53,7 +53,7 @@ namespace Test1.installer.wixsharp
 
                 project.AfterInstall += (e) =>
                 {
-                    if (e.Session.MyIsUpgradingInstalledVersion())
+                    if (e.Session.IsUpgradingInstalledVersion())
                     {
                         var isUpgrading = e.Session.IsUpgradingInstalledVersion();
                         MessageBox.Show(isUpgrading.ToString(), "");
