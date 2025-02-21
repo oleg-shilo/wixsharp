@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
@@ -102,15 +103,21 @@ namespace $safeprojectname$
         public void ChangeInstallDir()
         {
             // `OpenFolderDialog.Select` is still under development so disabling it for now
-            // try
-            // {
-            //     var (isSelected, path) = OpenFolderDialog.Select(InstallDirPath);
-            //     if (isSelected)
-            //         InstallDirPath = path;
-            // }
-            // catch
-            // {
-            using (var dialog = new FolderBrowserDialog { SelectedPath = InstallDirPath })
+            if (session.UseModernFolderBrowserDialog())
+            {
+                try
+                {
+                    var newFoledrPath = WixSharp.FolderBrowserDialog.ShowDialog(IntPtr.Zero, "Select Folder", InstallDirPath);
+                    if (newFoledrPath != null)
+                        InstallDirPath = newFoledrPath;
+                    return;
+                }
+                catch
+                {
+                }
+            }
+
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog { SelectedPath = InstallDirPath })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                     InstallDirPath = dialog.SelectedPath;
