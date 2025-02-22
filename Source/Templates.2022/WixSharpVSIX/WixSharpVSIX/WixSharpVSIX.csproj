@@ -80,8 +80,8 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Setup %28WiX4%29.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Setup %28WiX4%29.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp Setup.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Setup.zip</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -90,28 +90,28 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup %28WiX4%29.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup %28WiX4%29.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Custom UI %28WiX4%29.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Custom UI %28WiX4%29.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Custom UI.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Custom UI.zip</Link>
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Custom Dialog %28WiX4%29.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Custom Dialog %28WiX4%29.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Custom Dialog.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Custom Dialog.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI %28WiX4%29.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Custom WPF UI %28WiX4%29.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Managed Setup - Custom WPF UI.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Setup - Bootstrapper %28WiX4%29.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Setup - Bootstrapper %28WiX4%29.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp Setup - Bootstrapper.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Setup - Bootstrapper.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -120,8 +120,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp Setup - Bootstrapper Custom BA %28WiX4%29.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp Setup - Bootstrapper Custom BA %28WiX4%29.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp Setup - Bootstrapper Custom BA.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Setup - Bootstrapper Custom BA.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -130,8 +130,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\ProjectTemplates\WixSharp - Custom UI Library %28WiX4%29.zip">
-      <Link>ProjectTemplates\WixSharp\WixSharp - Custom UI Library %28WiX4%29.zip</Link>
+    <Content Include="..\..\ProjectTemplates\WixSharp - Custom UI Library.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp - Custom UI Library.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

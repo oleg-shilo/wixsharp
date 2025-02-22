@@ -1,6 +1,6 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
 	<TemplateData>
-		<Name>WixSharp Managed Setup - Custom UI (WiX4)</Name>
+		<Name>WixSharp Managed Setup - Custom UI</Name>
 		<Description>A WixSharp project for WiX/MSI setup. The project is based on the 'Managed Setup' WixSharp API model. Project allows customizing the complete UI dialogs sequence. The project uses WiX4 toolset compilers.</Description>
 		<ProjectType>CSharp</ProjectType>
 		<ProjectSubType>WixSharp</ProjectSubType>
