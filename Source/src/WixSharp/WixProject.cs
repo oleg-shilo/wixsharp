@@ -187,11 +187,13 @@ namespace WixSharp
         /// <summary>
         /// WiX linker <c>Light.exe</c> options (e.g. "-sice:ICE30 -sw1076" (disable warning 1076 and ICE warning 30).
         /// </summary>
+        [Obsolete("WiX4 (and higher) does not use Candle/Light any more but wix.exe. Thus use WixOptions instead", true)]
         public string LightOptions = "";
 
         /// <summary>
         /// WiX compiler <c>Candle.exe</c> options (e.g. "-sw1076" to disable warning 1026).
         /// </summary>
+        [Obsolete("WiX4 (and higher) does not use Candle/Light any more but wix.exe. Thus use WixOptions instead", true)]
         public string CandleOptions = "";
 
         /// <summary>
