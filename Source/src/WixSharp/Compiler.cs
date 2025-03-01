@@ -1356,9 +1356,6 @@ namespace WixSharp
                        .Add(new XElement("EmbeddedUI",
                                 new XAttribute("Id", project.EmbeddedUI.Id),
                                 new XAttribute("SourceFile", bynaryPath)));
-
-                product.Select("UIRef")
-                      ?.With(el => el.Remove());
             }
 
             if (!project.BannerImage.IsEmpty())

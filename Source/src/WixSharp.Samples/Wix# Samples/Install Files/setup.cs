@@ -1,8 +1,6 @@
 ﻿//css_dir ..\..\;
-// //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
-//css_ref D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\bin\Debug\net472\WixToolset.Dtf.WindowsInstaller.dll
-//css_ref D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Install Files\bin\Debug\net472\WixToolset.Mba.Core.dll
-
+//css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
+//css_ref Wix_bin\WixToolset.Mba.Core.dll
 //css_ref System.Core.dll;
 //css_ref System.Xml.dll;
 using System;
@@ -55,8 +53,8 @@ static class Script
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
         Compiler.EmitRelativePaths = false;
         // possible UIs
-        // project.ManagedUI = ManagedUI.Default;
-        project.ManagedUI = ManagedUI.DefaultWpf;
+        project.ManagedUI = ManagedUI.Default;
+        // project.ManagedUI = ManagedUI.DefaultWpf;
         // project.UI = WUI.WixUI_Mondo;
         // project.UI = WUI.WixUI_InstallDir;
 
