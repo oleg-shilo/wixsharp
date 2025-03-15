@@ -273,7 +273,7 @@ namespace WixSharp
                 this.project.AddXml("Wix", fragment.ToString());
 
             // As intended the TargetDir for candle is the sourceDir
-            this.project.CandleOptions +=
+            this.project.WixOptions +=
                 $" -d\"{project.Name}.TargetDir\"=\"{sourceDir}\" " +
                 $" -d\"{project.Name}.ProjectDir\"=\"{projectDir}\" ";
             components.Add(project);
