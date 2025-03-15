@@ -340,6 +340,17 @@ namespace WixSharp
 
                     var uiThread = new Thread(() =>
                     {
+                        Application.ThreadException += (s, e) =>
+                        {
+                            if (!e.Exception.IsInternalSystemException())
+                            {
+                                ManagedProject.InvokeClientHandlersInternal("UnhandledException", session, e.Exception);
+                                session.Log("ManagedUI unhandled Exception: " + e);
+
+                                uiExitEvent.Set();
+                            }
+                        };
+
                         try
                         {
                             session["WIXSHARP_MANAGED_UI"] = System.Reflection.Assembly.GetExecutingAssembly().ToString();
@@ -365,7 +376,9 @@ namespace WixSharp
                         }
                         catch (Exception e)
                         {
-                            ManagedProject.InvokeClientHandlersInternal("UnhandledException", session, e);
+                            if (!e.IsInternalSystemException())
+                                ManagedProject.InvokeClientHandlersInternal("UnhandledException", session, e);
+
                             session.Log("ManagedUI unhandled Exception: " + e);
 
                             uiExitEvent.Set();
@@ -396,7 +409,8 @@ namespace WixSharp
                 }
                 catch (Exception e)
                 {
-                    ManagedProject.InvokeClientHandlersInternal("UnhandledException", session, e);
+                    if (!e.IsInternalSystemException())
+                        ManagedProject.InvokeClientHandlersInternal("UnhandledException", session, e);
                     session.Log("Cannot attach ManagedUI: " + e);
                     throw;
                 }

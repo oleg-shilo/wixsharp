@@ -21,6 +21,7 @@ using System.Security;
 using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -3195,6 +3196,18 @@ namespace WixSharp
         internal static AppData InitFrom(this AppData data, Session session)
         {
             return data.InitFrom(session.Property("WIXSHARP_RUNTIME_DATA"));
+        }
+
+        /// <summary>
+        /// Determines whether is internal system exception.IE session shutdown/control exceptions.
+        /// </summary>
+        /// <param name="ex">The exception object.</param>
+        /// <returns>
+        ///   <c>true</c> if it is internal system exception; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsInternalSystemException(this Exception ex)
+        {
+            return (ex is ThreadAbortException); // ignore session shutdown/control exceptions
         }
 
         internal static bool AbortOnError(this Session session)

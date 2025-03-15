@@ -62,7 +62,7 @@ public class Script
         project.BeforeInstall += msi_BeforeInstall;
         project.AfterInstall += Project_AfterInstall;
 
-        // just to demo how to detect unhandled exceptions in the ManagedProject costom
+        // just to demo how to detect unhandled exceptions in the ManagedProject custom
         // routines (CA and ManagedUI)
         project.UnhandledException += e =>
         {

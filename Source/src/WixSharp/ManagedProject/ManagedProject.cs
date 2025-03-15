@@ -9,6 +9,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
@@ -942,7 +943,8 @@ namespace WixSharp
                 if (session.AbortOnError())
                     result = ActionResult.Failure;
 
-                ManagedProject.InvokeClientHandlersInternal("UnhandledException", session, e);
+                if (!e.IsInternalSystemException())
+                    ManagedProject.InvokeClientHandlersInternal("UnhandledException", session, e);
             }
             finally
             {
@@ -1016,7 +1018,8 @@ namespace WixSharp
                 if (session.AbortOnError())
                     eventArgs.Result = ActionResult.Failure;
 
-                ManagedProject.InvokeClientHandlersInternal("UnhandledException", session, e);
+                if (!e.IsInternalSystemException())
+                    ManagedProject.InvokeClientHandlersInternal("UnhandledException", session, e);
             }
             return eventArgs.Result;
         }

@@ -267,7 +267,9 @@ namespace WixSharp
                 {
                     Session msiSession = (Session)Runtime.Session.SessionContext;
 
-                    ManagedProject.InvokeClientHandlersInternal("UnhandledException", msiSession, e);
+                    if (!e.IsInternalSystemException())
+                        ManagedProject.InvokeClientHandlersInternal("UnhandledException", msiSession, e);
+
                     msiSession.Log("Managed Dialog unhandled Exception: " + e);
 
                     try
@@ -370,8 +372,14 @@ namespace WixSharp
                         GoToLast();
                     else
                         GoNext();
-
-                    shellView.ShowDialog();
+                    try
+                    {
+                        shellView.ShowDialog();
+                    }
+                    catch (Exception e)
+                    {
+                        runtime.Session.Log("ManagedUI ShellView.ShowDialog() failed: " + e.Message);
+                    }
                 }
                 else
                 {
