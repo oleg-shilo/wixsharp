@@ -715,9 +715,13 @@ namespace WixSharp
 
                                        if (dllPath.IsEmpty())
                                        {
+                                           var versionSuffix = "";
+                                           if (!preferredVersion.IsEmpty())
+                                               versionSuffix = "/" + preferredVersion;
+
                                            Compiler.OutputWriteLine($"Error: Cannot find WiX extension '{dll}'. " +
                                                $"WixSharp attempted to install the extension but did not succeed. Please install the " +
-                                               $"extension manually with: `wix.exe extension add -g {dll}`");
+                                               $"extension manually with: `wix.exe extension add -g {dll}{versionSuffix}`");
                                        }
 
                                        return $"-ext \"{dllPath}\"";
