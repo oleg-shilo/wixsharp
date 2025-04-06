@@ -1322,6 +1322,11 @@ namespace WixSharp
                     product.AddElement("Property")
                            .SetAttribute("Id=WIXUI_INSTALLDIR")
                            .SetAttribute("Value", installDirId);
+
+                    product.AddElement("Property")
+                           .SetAttribute("Id=INSTALLDIR")
+                           .SetAttribute("Secure=yes"); // Set INSTALLDIR as Secure by default #1774
+
                 }
 
                 product.AddElement(WixExtension.UI.XElement("WixUI", $"Id={project.UI}"));
