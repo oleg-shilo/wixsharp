@@ -126,7 +126,7 @@ namespace WixSharp
             started = true;
             if (!IsDemoMode)
             {
-                Runtime.StartExecute();
+                Runtime.StartExecute(); // will signal (via event) IEmbeddedUI.Initialize implementionr that it is time to start the msi session
             }
         }
 

@@ -46,7 +46,7 @@ static class Script
                             NeverOverwrite = true,
                             Condition = new Condition("IS64=yes")
                         })),
-                    new Property("PropName", "<your value>"));
+                    new Property("PropName", "test"));
 
         project.SetVersionFrom("MyApp_file");
 

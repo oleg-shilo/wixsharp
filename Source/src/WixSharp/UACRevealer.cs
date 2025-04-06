@@ -72,12 +72,12 @@ namespace WixSharp.CommonTasks
             if (Enabled)
                 try
                 {
-                    approach_3();
+                    approach_4();
                 }
                 catch { }
         }
 
-        static void approach_1()   // doesn't longer work
+        public static void approach_1()   // doesn't longer work
         {
             var exe = "notepad.exe";
             UAC_revealer = System.Diagnostics.Process.Start(exe);
@@ -88,7 +88,7 @@ namespace WixSharp.CommonTasks
             }
         }
 
-        static void approach_2() // works great but only with taskbar that has an empty spot at the end
+        public static void approach_2() // works great but only with taskbar that has an empty spot at the end
         {
             Win32.SetFocusOnTaskbar();
 
@@ -102,13 +102,43 @@ namespace WixSharp.CommonTasks
             });
         }
 
-        static void approach_3() // works great but pops up the taskbar item preview. Nevertheless it is the safest
+        public static void approach_3() // works great but pops up the taskbar item preview. Nevertheless it is the safest
         {
             ThreadPool.QueueUserWorkItem(x =>
             {
                 Thread.Sleep(3000);
                 Win32.SetForegroundWindow(Win32.GetTaskbarWindow());
             });
+        }
+
+        public static void approach_4() // works well according this post: https://github.com/oleg-shilo/wixsharp/issues/301#issuecomment-2781184505
+        {
+            try
+            {
+                var taskbar = Win32.FindWindow("Shell_TrayWnd", null);
+
+                ThreadPool.QueueUserWorkItem(x =>
+                {
+                    try
+                    {
+                        Thread.Sleep(3000);
+
+                        for (int i = 0; i < 3; i++)
+                        {
+                            Thread.Sleep(1000);
+                            Win32.SetForegroundWindow(taskbar);
+                        }
+                    }
+                    catch
+                    {
+                        //Ignore it
+                    }
+                });
+            }
+            catch
+            {
+                //Ignore it
+            }
         }
 
         /// <summary>
