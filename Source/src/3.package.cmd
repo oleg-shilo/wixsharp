@@ -4,6 +4,6 @@ css ..\bin\package.cs
 css ..\NuGet\WixSharp\UpdatePackage.cs
 
 cd ..\NuGet\WixSharp
-build.WiX4.cmd
+build.cmd
 cd ..\..\src
 pause

@@ -77,6 +77,9 @@ namespace WixSharp.CommonTasks
                 catch { }
         }
 
+        /// <summary>
+        /// Approach #1.
+        /// </summary>
         public static void approach_1()   // doesn't longer work
         {
             var exe = "notepad.exe";
@@ -88,6 +91,9 @@ namespace WixSharp.CommonTasks
             }
         }
 
+        /// <summary>
+        /// Approach #2.
+        /// </summary>
         public static void approach_2() // works great but only with taskbar that has an empty spot at the end
         {
             Win32.SetFocusOnTaskbar();
@@ -102,6 +108,9 @@ namespace WixSharp.CommonTasks
             });
         }
 
+        /// <summary>
+        /// Approach #3.
+        /// </summary>
         public static void approach_3() // works great but pops up the taskbar item preview. Nevertheless it is the safest
         {
             ThreadPool.QueueUserWorkItem(x =>
@@ -111,6 +120,9 @@ namespace WixSharp.CommonTasks
             });
         }
 
+        /// <summary>
+        /// Approach #4.
+        /// </summary>
         public static void approach_4() // works well according this post: https://github.com/oleg-shilo/wixsharp/issues/301#issuecomment-2781184505
         {
             try
