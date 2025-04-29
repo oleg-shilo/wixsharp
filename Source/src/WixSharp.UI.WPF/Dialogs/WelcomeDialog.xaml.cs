@@ -54,8 +54,6 @@ namespace WixSharp.UI.WPF
         public BitmapImage Banner => session?.GetResourceBitmap("WixSharpUI_Bmp_Dialog")?.ToImageSource() ??
                                      session?.GetResourceBitmap("WixUI_Bmp_Dialog")?.ToImageSource();
 
-        public bool CanGoPrev => false;
-
         public void GoPrev()
             => shell?.GoPrev();
 
