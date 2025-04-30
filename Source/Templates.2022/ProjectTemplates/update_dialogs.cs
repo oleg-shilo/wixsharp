@@ -28,7 +28,7 @@ var proj3Files = Directory.GetFiles(@"..\..\Templates.2022\ProjectTemplates", "*
 var projFiles = proj3Files.Select(x => x.Replace(" (WiX3)", "")); // WiX4+
 
 updateWixSharpPackages(proj3Files, "1.26.0");
-updateWixSharpPackages(projFiles, "2.6.0");
+updateWixSharpPackages(projFiles, "2.6.2");
 
 foreach (var file in Directory.GetFiles(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI (WiX3)\Dialogs",
         "*.xaml.cs"))

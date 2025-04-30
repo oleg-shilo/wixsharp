@@ -75,7 +75,8 @@
                     x:Name="GoPrev"
                     Height="23"
                     MinWidth="73"
-                    Click="GoPrev_Click">
+                    Click="GoPrev_Click"
+                    IsEnabled="False">
                     [WixUIBack]
                 </Button>
                 <Separator Width="10" Opacity="0" />
