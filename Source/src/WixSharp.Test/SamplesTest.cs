@@ -31,6 +31,7 @@ namespace WixSharp.Test
         string[] nonPortedWix4Projects = (""             // WIX4-TODO: WiX4 defect (cannot find element from the valid extension)
                                          ).Split(',').Select(x => x.Trim()).ToArray();
 
+        List<string> samplesInProgress = new List<string>();
         int completedSamples = 0;
         int samplesTotal = 0;
         Stopwatch testTime = new Stopwatch();
@@ -83,8 +84,6 @@ namespace WixSharp.Test
             if (howManyToRun.HasValue)
                 allSamples = allSamples.Take(howManyToRun.Value).ToArray();
 
-            samplesTotal = allSamples.Count();
-
             allSamples = allSamples.Where(x => !nonMsiProjects.Contains(x.Category.PathGetFileName())).ToArray();
 
             var parallel = false;
@@ -105,11 +104,17 @@ namespace WixSharp.Test
                                            .Select(x => Path.GetFullPath(x))
                                            .Where(x => !x.PathGetFileName().ToLower().Contains("build_"))
                                            .ToArray();
+
                 foreach (string batchFile in sampleFiles)
                 {
+                    Debug.WriteLine(">>> building sample >>>>: " + batchFile);
+                    samplesInProgress.Add(batchFile);
                     BuildSample(batchFile, group.Index, failedSamples);
+                    samplesInProgress.Remove(batchFile);
                 }
             };
+
+            samplesTotal = allSamples.Count();
 
             if (parallel)
             {
