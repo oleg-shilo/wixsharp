@@ -29,14 +29,12 @@
 
                 <Image
                     x:Name="Banner"
-                    Grid.Row="1"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Source="{Binding Banner}" />
-                <StackPanel Margin="9">
+                <StackPanel Grid.Column="0" Margin="9">
                     <TextBlock
-                        Grid.Column="0"
                         FontSize="12"
                         FontWeight="Bold">
                         [MaintenanceTypeDlgTitle]
@@ -60,6 +58,7 @@
             </Grid.RowDefinitions>
             <Button
                 x:Name="Change"
+                Grid.Row="0"
                 Height="23"
                 MinWidth="112"
                 HorizontalAlignment="Left"
@@ -68,6 +67,7 @@
                 [MaintenanceTypeDlgChangeButton]
             </Button>
             <TextBlock
+                Grid.Row="0"
                 MinHeight="35"
                 Margin="20,35,0,0"
                 HorizontalAlignment="Stretch"
