@@ -32,9 +32,8 @@
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch" />
-                <StackPanel Margin="9">
+                <StackPanel Grid.Column="0" Margin="9">
                     <TextBlock
-                        Grid.Column="0"
                         FontSize="12"
                         FontWeight="Bold">
                         [CustomDlgTitle]
