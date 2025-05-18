@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>2.6.2.0</version>
+    <version>2.7.0.0</version>
     <title>Wix# (WixSharp) - Binaries (targeting WiX3)</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,8 +16,9 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.6.2.0
-- #1784: WPF Welcome dialog has Back button enabled.</releaseNotes>
+    <releaseNotes>Release v2.7.0.0
+- Add DirectorySearch and a sample
+- Fix Grid layout usage across WPF dialogs (XAML)</releaseNotes>
     <copyright>Copyright (C) 2008-2022 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp_wix4</id>
-    <version>2.6.2.0</version>
+    <version>2.7.0.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX4 and later</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,13 +18,14 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed: `dotnet tool install --global wix`
 The package is tested against WIX (Windows Installer Xml) Toolset v4.0.1.0</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.6.2.0
-- #1784: WPF Welcome dialog has Back button enabled.</releaseNotes>
+    <releaseNotes>Release v2.7.0.0
+- Add DirectorySearch and a sample
+- Fix Grid layout usage across WPF dialogs (XAML)</releaseNotes>
     <copyright>Copyright (C) 2008-2023 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp_wix4.bin" version="2.6.2.0" />
+      <dependency id="WixSharp_wix4.bin" version="2.7.0.0" />
     </dependencies>
   </metadata>
   <files>

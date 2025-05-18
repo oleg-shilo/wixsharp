@@ -11,11 +11,11 @@ class Script
     {
         var project = new Project("Setup",
             new Dir(@"%ProgramFiles%\My Company\My Product",
-                new File(@"Files\MyApp.exe")),
+                new File(@"setup.cs")), // or whatever file you want to include
             new Property("EXISTING_FILE",
                 new DirectorySearch(@"%ProgramFiles%\My Company\My Product", true, 1,
                     new FileSearch("product.exe")))
-            );
+                                 );
 
         // project.PreserveTempFiles = true;
         project.BuildMsi();

@@ -98,7 +98,7 @@ namespace WixSharp.CommonTasks
         /// Gets the related products (products with the same <c>UpgradeCode</c>).
         /// </summary>
         /// <param name="upgradeCode">The upgrade code.</param>
-        /// <returns></returns>
+        /// <returns>List of ProductCodes</returns>
         static public string[] GetRelatedProducts(string upgradeCode)
         {
             var result = new List<string>();
@@ -356,14 +356,14 @@ namespace WixSharp.CommonTasks
 
         /// <summary>
         /// WixSharp stock custom actions for implementing AppSearch tasks.
-        /// <remarks>Do not call any methods of this class directly. This class is made public because it is required for 
+        /// <remarks>Do not call any methods of this class directly. This class is made public because it is required for
         /// provisioning managed custom actions with WiX but not to allow user interaction with this class.</remarks>
         /// </summary>
         public class CustomActions
         {
             /// <summary>
             /// Finds all related products and manually schedules their upgrade.
-            /// <remarks>Do not call any method directly. This method is made public because it is required for 
+            /// <remarks>Do not call any method directly. This method is made public because it is required for
             /// provisioning managed custom actions with WiX but not to allow user interaction with this method.</remarks>
             /// </summary>
             /// <param name="session"></param>
@@ -388,8 +388,5 @@ namespace WixSharp.CommonTasks
                 return ActionResult.Success;
             }
         }
-
-
     }
-
 }
