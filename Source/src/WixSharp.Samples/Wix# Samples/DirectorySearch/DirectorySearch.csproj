@@ -16,12 +16,7 @@
         <None Remove="*.CA.dll" />
         <None Remove="*.cs.dll" />
         <Compile Remove="Files\MyApp.cs" />
-        <Compile Remove="Properties\AssemblyInfo.cs" />
         <None Remove="Build.cmd.log" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
 
     <ItemGroup>

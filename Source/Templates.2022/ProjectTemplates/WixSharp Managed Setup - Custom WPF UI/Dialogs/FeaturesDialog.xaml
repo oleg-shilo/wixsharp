@@ -55,14 +55,12 @@
 
                 <Image
                     x:Name="Banner"
-                    Grid.Row="1"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Source="{Binding Banner}" />
-                <StackPanel Margin="9">
+                <StackPanel Grid.Column="0" Margin="9">
                     <TextBlock
-                        Grid.Column="0"
                         FontSize="12"
                         FontWeight="Bold">
                         [CustomizeDlgTitle]
@@ -130,6 +128,7 @@
             <Button
                 x:Name="Reset"
                 Grid.Row="2"
+                Grid.Column="0"
                 Margin="0,10,0,0"
                 HorizontalAlignment="Left"
                 Click="Reset_Click"

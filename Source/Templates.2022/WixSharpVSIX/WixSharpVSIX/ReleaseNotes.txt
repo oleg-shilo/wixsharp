@@ -1,3 +1,6 @@
+v2.3.2
+- Fix Grid layout usage across WPF dialogs (XAML)
+
 v2.2.12
 - #1673: Error on using template "WixSharp Managed Setup - Custom Dialog (Wix 3)"
 
