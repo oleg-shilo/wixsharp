@@ -93,6 +93,7 @@
         <Compile Include="..\..\WixSharp\DigitalSignature.cs" Link="DigitalSignature.cs" />
         <Compile Include="..\..\WixSharp\DigitalSignatureBootstrapper.cs" Link="DigitalSignatureBootstrapper.cs" />
         <Compile Include="..\..\WixSharp\Dir.cs" Link="Dir.cs" />
+        <Compile Include="..\..\WixSharp\DirectorySearch.cs" Link="DirectorySearch.cs" />
         <Compile Include="..\..\WixSharp\DirectoryShortcut.cs" Link="DirectoryShortcut.cs" />
         <Compile Include="..\..\WixSharp\DirFiles.cs" Link="DirFiles.cs" />
         <Compile Include="..\..\WixSharp\DriverInstaller.cs" Link="DriverInstaller.cs" />
