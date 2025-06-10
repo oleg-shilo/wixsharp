@@ -267,12 +267,21 @@ namespace WixSharp
     public class ResourcesData : Dictionary<string, string>
     {
         /// <summary>
+        /// Updates the UI mapping with WiX localization data (*.wxl).
+        /// <p>This is the preferred method to update MSI localization as it preserves some mapped entries that
+        /// may not be present in the incoming data (e.g. ProductName)</p>
+        /// </summary>
+        /// <param name="wxlData">The WXL file bytes.</param>
+        /// <returns></returns>
+        public ResourcesData UpdateFromWxl(byte[] wxlData) => this.InitFromWxl(wxlData, true);
+
+        /// <summary>
         /// Initializes from WiX localization data (*.wxl).
         /// </summary>
         /// <param name="wxlData">The WXL file bytes.</param>
         /// <param name="merge">if set to <c>true</c> merge with existing content instead of replacing.</param>
         /// <returns></returns>
-        public void InitFromWxl(byte[] wxlData, bool merge = false)
+        public ResourcesData InitFromWxl(byte[] wxlData, bool merge = false)
         {
             if (!merge)
                 this.Clear();
@@ -312,8 +321,10 @@ namespace WixSharp
                               .ToDictionary(x => x.Attribute("Id").Value, getValue);
 
                 foreach (var item in data)
-                    this.Add(item.Key, item.Value);
+                    this[item.Key] = item.Value;
             }
+
+            return this;
         }
 
         /// <summary>

@@ -88,11 +88,11 @@ public static class Script
             switch (DetectLanguage())
             {
                 case SupportedLanguages.German:
-                    runtime.UIText.InitFromWxl(e.Session.ReadBinary("de_xsl"));
+                    runtime.UIText.UpdateFromWxl(e.Session.ReadBinary("de_xsl"));
                     break;
 
                 case SupportedLanguages.Greek:
-                    runtime.UIText.InitFromWxl(e.Session.ReadBinary("gr_xsl"));
+                    runtime.UIText.UpdateFromWxl(e.Session.ReadBinary("gr_xsl"));
 
                     break;
             }
@@ -102,7 +102,7 @@ public static class Script
         {
             // first dialog is loaded
             MsiRuntime runtime = e.ManagedUI.Shell.MsiRuntime();
-            runtime.UIText.InitFromWxl(e.Session.ReadBinary("WixSharp_UIText")); // translate back to English
+            runtime.UIText.UpdateFromWxl(e.Session.ReadBinary("WixSharp_UIText")); // translate back to English
 
             e.ManagedUI.OnCurrentDialogChanged += (IManagedDialog obj) =>
             {

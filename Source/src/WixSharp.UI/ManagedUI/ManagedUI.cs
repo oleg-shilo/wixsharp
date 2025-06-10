@@ -120,7 +120,8 @@ namespace WixSharp
             {
                 if (!project.Binaries.Any(x => x.Id == id))
                     project.AddBinary(new Binary(new Id(id), path));
-            };
+            }
+            ;
 
             addBinary("WixSharp_UIText", file);
             addBinary("WixSharp_LicenceFile", LicenceFileFor(project));
@@ -139,7 +140,7 @@ namespace WixSharp
             try
             {
                 var data = new ResourcesData();
-                data.InitFromWxl(System.IO.File.ReadAllBytes(file));
+                data.UpdateFromWxl(System.IO.File.ReadAllBytes(file));
             }
             catch (Exception e)
             {
