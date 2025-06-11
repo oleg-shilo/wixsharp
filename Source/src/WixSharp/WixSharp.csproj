@@ -128,7 +128,6 @@
     <Compile Include="CustomActionRef.cs" />
     <Compile Include="DigitalSignature.cs" />
     <Compile Include="DigitalSignatureBootstrapper.cs" />
-    <Compile Include="DirectorySearch.cs" />
     <Compile Include="DirectoryShortcut.cs" />
     <Compile Include="DriverInstaller.cs" />
     <Compile Include="BinaryFileAction.cs" />

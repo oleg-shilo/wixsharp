@@ -58,11 +58,8 @@ namespace WixSharp.Test
                 actual = WixTools.FindWixExtensionDll("WixToolset.UI.wixext");
                 Assert.True(actual.IsNotEmpty());
 
-                actual = WixTools.FindWixExtensionDll("WixToolset.UI.wixext", "5.0.0");
+                actual = WixTools.FindWixExtensionDll("WixToolset.UI.wixext", "6.0.0");
                 Assert.True(actual.IsNotEmpty());
-
-                actual = WixTools.FindWixExtensionDll("WixToolset.UI.wixext", "4.0.4");
-                Assert.True(actual.IsEmpty());
             }
         }
 

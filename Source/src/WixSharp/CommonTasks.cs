@@ -1741,30 +1741,6 @@ namespace WixSharp.CommonTasks
             return null;
         }
 
-        /// <summary>
-        /// Registers the classes in a managed assembly to enable creation from COM.
-        /// <para>Note, this technique has limitations. It uses the assembly <see cref="System.Runtime.InteropServices.RegistrationServices"/>
-        /// for registration, which requires the assembly being registered to be loaded in the current AppDomain.
-        /// Thus the method will fail if the assembly cannot be loaded for whatever reason. IE AppDomain is x86 and the assembly
-        /// is x64 architecture.</para>
-        /// </summary>
-        /// <param name="assemblyFile">The assembly file.</param>
-        /// <param name="isInstalling">if set to <c>true</c> is installing/registering
-        /// COM server, otherwise uninstalling/unregistering.</param>
-        /// <returns></returns>
-        [Obsolete("The method is not implemented on .NET Core", true)]
-        static public bool RegisterComAssembly(this string assemblyFile, bool isInstalling)
-        {
-            // var asm = System.Reflection.Assembly.LoadFrom(assemblyFile);
-
-            // var regAsm = new System.Runtime.InteropServices.RegistrationServices();
-            // if (isInstalling)
-            //     return regAsm.RegisterAssembly(asm, System.Runtime.InteropServices.AssemblyRegistrationFlags.SetCodeBase);
-            // else
-            //     return regAsm.UnregisterAssembly(asm);
-            throw new NotImplementedException("The method is not implemented on .NET Core");
-        }
-
         static string GenerateAotEntryPoints(this string assemblyPath)
         {
             var assembly = System.Reflection.Assembly.LoadFile(assemblyPath);

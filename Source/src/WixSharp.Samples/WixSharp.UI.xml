@@ -1218,6 +1218,15 @@
             Localization map. It is nothing else but a specialized version of a generic string-to-string Dictionary.
             </summary>
         </member>
+        <member name="M:WixSharp.ResourcesData.UpdateFromWxl(System.Byte[])">
+            <summary>
+            Updates the UI mapping with WiX localization data (*.wxl).
+            <p>This is the preferred method to update MSI localization as it preserves some mapped entries that
+            may not be present in the incoming data (e.g. ProductName)</p>
+            </summary>
+            <param name="wxlData">The WXL file bytes.</param>
+            <returns></returns>
+        </member>
         <member name="M:WixSharp.ResourcesData.InitFromWxl(System.Byte[],System.Boolean)">
             <summary>
             Initializes from WiX localization data (*.wxl).
