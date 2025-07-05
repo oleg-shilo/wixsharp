@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="WixToolset.Dtf.WindowsInstaller" Version="4.0.2" />
         <PackageReference Include="WixToolset.UI.wixext" Version="5.0.1" />
     </ItemGroup>

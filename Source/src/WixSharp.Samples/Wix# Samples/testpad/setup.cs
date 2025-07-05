@@ -3,9 +3,12 @@ using System;
 using System.Collections.Generic;
 using static System.Collections.Specialized.BitVector32;
 using System.Diagnostics;
+using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
 using System.Security.Cryptography;
 using System.Windows.Forms;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
@@ -31,7 +34,54 @@ namespace Test1.installer.wixsharp
 
         static void Main()
         {
-            issue_1739();
+            // issue_1739();
+            issue_1810();
+        }
+
+        static void issue_1810()
+        {
+            Environment.CurrentDirectory = @"..\..\..\";
+
+            var project =
+                    new ManagedProject("My Product",
+                        new Dir(@"%ProgramFiles%\My Company\My Product",
+                            new File(
+                                @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\setup.cs")),
+                        new Property("TEST", "TEST-VALUE"));
+
+            project.GUID = new Guid("6f330b47-2577-43ad-9095-1361ba25889b");
+
+            project.UI = WUI.WixUI_ProgressOnly;
+            project.MajorUpgradeStrategy = MajorUpgradeStrategy.Default;
+
+            project.Version = new Version(1, 0, 0, 0);
+
+            project.Load += (e) =>
+            // project.BeforeInstall += (e) =>
+            {
+                var jsonTest = typeof(JObject).FullName;
+
+                MessageBox.Show($"OnLoad: {e.Session.Property("TEST")}\n{jsonTest}", $"WixSharp - {(e.IsElevated ? "Admin" : "NonAdmin")}");
+                e.Result = ActionResult.Failure;
+            };
+
+            project.DefaultRefAssemblies.Add(typeof(JObject).Assembly.Location);
+            project.LoadEventExecution = EventExecution.MsiSessionScopeDeferred;
+
+            project.OutFileName = $"MyProduct.{project.Version}";
+            project.DefaultDeferredProperties += ";TEST;REMOVE;REINSTALL;Installed";
+            project.PreserveTempFiles = true;
+
+            // project.WixSourceGenerated += (doc) =>
+            // {
+            //     // make `<Custom Action="Set_WixSharp_Load_Action_Props" Before="AppSearch" />`
+            //     // to be executed before the InstallFile action
+            //     doc.FindAll("Custom")
+            //         .FirstOrDefault(x => x.Attribute("Action")?.Value == "Set_WixSharp_Load_Action_Props")?
+            //         .SetAttributeValue("Before", "InstallFiles");
+            // };
+
+            project.BuildMsi();
         }
 
         static void issue_1739()
