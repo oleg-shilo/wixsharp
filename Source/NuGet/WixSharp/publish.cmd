@@ -1,6 +1,7 @@
 set ver=2.7.1
 echo !!!! Note: symbols are pushed automatically with nupkg 
 
+set nugetkey=%nuget_key%
 dotnet nuget push WixSharp.Msi.Core.%ver%.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
 dotnet nuget push WixSharp.Core.%ver%.nupkg -k %nugetkey% -s https://api.nuget.org/v3/index.json
 
