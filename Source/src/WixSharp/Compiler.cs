@@ -2939,6 +2939,20 @@ namespace WixSharp
                                 // to the deferred actions defined by WixSharp itself only.
 
                                 stepAttr = sequenceNumberAttr;
+
+                                if (setPropValuesId == "Set_WixSharp_Load_Action_Props" &&
+                                    sequenceNumberAttr.LocalName() == "Before" &&
+                                    sequenceNumberAttr.Value == "AppSearch")
+                                {
+                                    // Set_[action]_Props for it is always scheduled just before [action] itself.
+                                    // However WixSharp_Load_Action is scheduled so early in the sequence (before:AppSearch)
+                                    // that any Set_[action]_Props becomes illegal and the compiler exception asking to schedule it
+                                    // later in the sequence. Thus if WixSharp_Load_Action is deferred then move it to the
+                                    // before:InstallFiles
+                                    // This is the fix for #1810
+                                    stepAttr.Value = "InstallFiles";
+                                }
+
                                 sequenceNumberAttr = new XAttribute("After", setPropValuesId);
                             }
 

@@ -24,7 +24,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-    <PackageVersion>2.7.1</PackageVersion>
+    <PackageVersion>2.7.2</PackageVersion>
         <Title>WixSharp (.NET Core)</Title>
         <Description>.NET Core edition of WixSharp.Msi package</Description>
         <Copyright>Oleg Shilo</Copyright>
