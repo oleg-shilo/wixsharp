@@ -2398,8 +2398,12 @@ namespace WixSharp
 
                     if (regValEl.Attribute("Type").Value == "multiString")
                     {
-                        foreach (string line in stringValue.GetLines())
-                            regValEl.Add(new XElement("MultiStringValue", line));
+                        foreach (string line in stringValue.GetLines()) 
+						{
+							var lineEl = new XElement("MultiStringValue");
+							lineEl.SetAttribute("Value", line);
+                            regValEl.Add(lineEl);
+						}
                     }
                     else
                         regValEl.Add(new XAttribute("Value", stringValue));
