@@ -77,21 +77,32 @@ namespace WixSharp.CommonTasks
         /// Gets or sets the well known locations for probing the tool's exe file.
         /// <para>
         /// By default probing is conducted in the locations defined in the system environment variable <c>PATH</c>.
-        /// By setting <c>WellKnownLocations</c> you can add some extra probing locations. The directories must be separated by the ';' character.
+        /// By setting <c>WellKnownLocations</c> you can add some extra probing locations.
         /// </para>
         /// </summary>
         /// <value>The well known locations.</value>
-        static public List<string> WellKnownLocations = new List<string>
+        static public List<string> WellKnownLocations =
+               DiscoverWellKnownLocations()
+               .Concat(new[]
+                {
+                    @"C:\Program Files (x86)\Windows Kits\10\App Certification Kit",
+                    @"C:\Program Files (x86)\Windows Kits\8.1\bin\x86",
+                    @"C:\Program Files (x86)\Windows Kits\8.0\bin\x86",
+                    @"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool",
+                    @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin",
+                    @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin"
+                })
+               .ToList();
+
+        static IEnumerable<string> DiscoverWellKnownLocations()
         {
-            @"C:\Program Files (x86)\Windows Kits\10\App Certification Kit",
-            @"C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x86",
-            @"C:\Program Files (x86)\Windows Kits\10\bin\x86",
-            @"C:\Program Files (x86)\Windows Kits\8.1\bin\x86",
-            @"C:\Program Files (x86)\Windows Kits\8.0\bin\x86",
-            @"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool",
-            @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin",
-            @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin"
-        };
+            //  @"C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x86",
+            var win10sdk = Environment.SpecialFolder.ProgramFilesX86.GetPath().PathJoin("Windows Kits", "10", "bin");
+            return Directory
+                .GetDirectories(win10sdk, "10.*")
+                .OrderByDescending(x => new Version(x.PathGetFileName()))
+                .Select(x => x.PathCombine("x86"));
+        }
 
         static string signTool;
 
