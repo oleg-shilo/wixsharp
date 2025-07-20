@@ -81,8 +81,7 @@ namespace WixSharp.CommonTasks
         /// </para>
         /// </summary>
         /// <value>The well known locations.</value>
-        static public List<string> WellKnownLocations =
-               DiscoverWellKnownLocations()
+        static public List<string> WellKnownLocations = DiscoverWellKnownLocations()
                .Concat(new[]
                 {
                     @"C:\Program Files (x86)\Windows Kits\10\App Certification Kit",
