@@ -1802,6 +1802,12 @@ namespace WixSharp.CommonTasks
                 .Select(x => new { Method = x, Attribute = x.GetCustomAttribute<CustomActionAttribute>() })
                 .Where(x => x.Method.IsStatic && x.Attribute != null);
 
+            var wixSarpCustomActions = typeof(CommonTasks.AppSearch.CustomActions).Assembly
+                .GetTypes()
+                .SelectMany(x => x.GetMethods())
+                .Select(x => new { Method = x, Attribute = x.GetCustomAttribute<CustomActionAttribute>() })
+                .Where(x => x.Method.IsStatic && x.Attribute != null).ToArray();
+
             var groups = customActions.GroupBy(v => v.Method.Name);
             foreach (var group in groups)
                 if (group.Count() > 1)
@@ -1813,7 +1819,8 @@ namespace WixSharp.CommonTasks
                 .AppendLine("public class AotEnrtyPoints")
                 .AppendLine("{")
                 .AppendLine("    static AotEnrtyPoints()")
-                .AppendLine("    {");
+                .AppendLine("    {")
+                .AppendLine("        // expressions below ensure that the types in the expressions are not AOT optimized out");
 
             var publicTypes = assembly.GetExportedTypes().Select(x => x.FullName).ToList();
 
@@ -1826,23 +1833,19 @@ namespace WixSharp.CommonTasks
             code.AppendLine("    }")
                 .AppendLine("");
 
-            foreach (var info in customActions)
-                code.AppendLine($"    [UnmanagedCallersOnly(EntryPoint = \"{info.Method.Name}\")]")
-                    .AppendLine($"    public static uint {info.Method.Name}(IntPtr handle)")
-                    .AppendLine($"        => (uint){info.Method.DeclaringType?.FullName}.{info.Method.Name}(Session.FromHandle(handle, false));")
-                    .AppendLine("");
-
-            void insertEP(string name)
+            void insertEP(string type, string name)
             {
                 code.AppendLine($"    [UnmanagedCallersOnly(EntryPoint = \"{name}\")]")
                     .AppendLine($"    public static uint {name}(IntPtr handle)")
-                    .AppendLine($"        => (uint)WixSharp.ManagedProjectActions.{name}(Session.FromHandle(handle, false));")
+                    .AppendLine($"        => (uint){type}.{name}(Session.FromHandle(handle, false));")
                     .AppendLine("");
             }
 
-            insertEP("WixSharp_Load_Action");
-            insertEP("WixSharp_BeforeInstall_Action");
-            insertEP("WixSharp_AfterInstall_Action");
+            foreach (var info in customActions)
+                insertEP(info.Method.DeclaringType?.FullName.Replace("+", "."), info.Method.Name);
+
+            foreach (var item in wixSarpCustomActions)
+                insertEP(item.Method.DeclaringType.FullName.Replace("+", "."), item.Method.Name);
 
             code.AppendLine("}");
 
