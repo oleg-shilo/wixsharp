@@ -37,6 +37,9 @@ void DeleteFiles(string dir, string pattern)
 
 void DeleteDir(string dir)
 {
+    if (!Directory.Exists(dir))
+        return;
+
     var dirsToDelete = Directory.GetDirectories(dir, "*", SearchOption.AllDirectories)
                                 .OrderByDescending(x => x);
 

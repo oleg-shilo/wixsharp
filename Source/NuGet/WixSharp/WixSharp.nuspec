@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>2.7.2.0</version>
+    <version>2.7.3.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX3</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,13 +18,15 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.7.2.0
-- #1810: Fixed scheduling `Set_WixSharp_Load_Action_Props` too early for `project.Load` event</releaseNotes>
+    <releaseNotes>Release v2.7.3.0
+'#1730-triggered: Implemented exporting all WixSharp own custom actions during APT build'
+'#1816: The documentation around search paths is outdated and misleading'
+'#1813: fix serialization of MultiString RegValue</releaseNotes>
     <copyright>Copyright (C) 2008-2022 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="2.7.2.0" />
+      <dependency id="WixSharp.bin" version="2.7.3.0" />
     </dependencies>
   </metadata>
   <files>
