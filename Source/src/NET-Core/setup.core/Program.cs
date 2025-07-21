@@ -1,17 +1,18 @@
 using System.Linq.Expressions;
 using System.Reflection;
-
+using System.Runtime.CompilerServices;
 using WixSharp;
 using WixToolset.Dtf.WindowsInstaller;
 using File = WixSharp.File;
 
+[assembly: InternalsVisibleTo(assemblyName: "setup.core.aot")] // assembly name + '.aot suffix
 var project =
     new ManagedProject("My Product",
         new Dir(@"%ProgramFiles%\My Company\My Product",
             new File("program.cs")),
         new Property("PropName", "<your value>"));
 
-project.PreserveTempFiles = true;
+   project.PreserveTempFiles = true;
 
 project.BeforeInstall += e =>
 {

@@ -220,7 +220,6 @@ namespace WixSharp.CommonTasks
         /// A warning is generated if timestamping fails.</param>
         /// <param name="password">The password to use when opening the PFX file. Should be <c>null</c> if no password required.</param>
         /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
-        /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
         /// <param name="certificateStore">Where to load the certificate from.
         /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
         /// <param name="outputLevel">A flag indicating the output level</param>
@@ -1931,9 +1930,13 @@ namespace WixSharp.CommonTasks
   </ItemGroup>
 </Project>";
 
-            IO.File.WriteAllText(actualProjectFile, projDefinition);
+            var entryPointCs = projDir.PathJoin("aot.entrypoints.cs");
 
-            IO.File.WriteAllText(projDir.PathJoin("aot.entrypoints.cs"), assembly.GenerateAotEntryPoints());
+            IO.File.WriteAllText(actualProjectFile, projDefinition);
+            IO.File.WriteAllText(entryPointCs, assembly.GenerateAotEntryPoints());
+
+            Console.WriteLine($"Exporting native entry points of AOT assembly:");
+            Console.WriteLine($"    {entryPointCs}");
 
             // IO.File.Copy(assembly.PathChangeFileName("aot.cs"), projDir.PathJoin("aot.cs"));
 

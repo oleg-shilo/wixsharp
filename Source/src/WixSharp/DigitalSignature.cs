@@ -148,7 +148,7 @@ namespace WixSharp
 
             int apply(string url) =>
                 CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
-                                               PrepareOptionalArguments(), WellKnownLocations, CertificateStore, OutputLevel, HashAlgorithm);
+                                               PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
 
             Console.WriteLine("Signing with DigitalSignature.");
 

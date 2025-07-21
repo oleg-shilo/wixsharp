@@ -1,54 +1,54 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <!--<PublishAot>true</PublishAot>-->
-    <Nullable>enable</Nullable>
-    <UseWindowsForms>true</UseWindowsForms>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <!--<PublishAot>true</PublishAot>-->
+        <Nullable>enable</Nullable>
+        <UseWindowsForms>true</UseWindowsForms>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
-    <NoWarn>1701;1702;IL3000</NoWarn>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+        <NoWarn>1701;1702;IL3000</NoWarn>
+    </PropertyGroup>
 
 
 
-  <ItemGroup>
-    <Compile Remove="aot\**" />
-    <Compile Remove="outdir\**" />
-    <Compile Remove="setup.core\**" />
-    <EmbeddedResource Remove="aot\**" />
-    <EmbeddedResource Remove="outdir\**" />
-    <EmbeddedResource Remove="setup.core\**" />
-    <None Remove="aot\**" />
-    <None Remove="outdir\**" />
-    <None Remove="setup.core\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="aot\**" />
+        <Compile Remove="outdir\**" />
+        <Compile Remove="setup.core\**" />
+        <EmbeddedResource Remove="aot\**" />
+        <EmbeddedResource Remove="outdir\**" />
+        <EmbeddedResource Remove="setup.core\**" />
+        <None Remove="aot\**" />
+        <None Remove="outdir\**" />
+        <None Remove="setup.core\**" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Script.cs" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Script.cs" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="CustomAction.config" />
-    <None Remove="My Product.msi" />
-    <None Remove="MyProduct.msi" />
-    <None Remove="Program.cs.WORKING" />
-    <None Remove="readme.md" />
-    <None Remove="setup.core.7z" />
-    <None Remove="setup.core.dll" />
-    <None Remove="setup.core.pdb" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Remove="CustomAction.config" />
+        <None Remove="My Product.msi" />
+        <None Remove="MyProduct.msi" />
+        <None Remove="Program.cs.WORKING" />
+        <None Remove="readme.md" />
+        <None Remove="setup.core.7z" />
+        <None Remove="setup.core.dll" />
+        <None Remove="setup.core.pdb" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WixSharp.Core\WixSharp.Core.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\WixSharp.Core\WixSharp.Core.csproj" />
+    </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;rem dotnet &quot;$(TargetPath)&quot;" />
-  </Target>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;dotnet &quot;$(TargetPath)&quot;" />
+    </Target>
 
 </Project>

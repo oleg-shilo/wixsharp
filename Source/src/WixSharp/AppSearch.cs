@@ -341,12 +341,14 @@ namespace WixSharp.CommonTasks
                 {
                     Condition = Condition.Always,
                     Sequence = Sequence.InstallExecuteSequence,
+                    ActionAssembly = typeof(CustomActions).Assembly.Location,
                     SequenceNumber = 5,
                 },
                 new ManagedAction(CustomActions.FindAllRelatedProducts)
                 {
                     Condition = Condition.Always,
                     Sequence = Sequence.InstallUISequence,
+                    ActionAssembly = typeof(CustomActions).Assembly.Location,
                     SequenceNumber = 5
                 });
             return project;

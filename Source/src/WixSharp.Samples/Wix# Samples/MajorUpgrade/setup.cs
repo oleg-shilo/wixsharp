@@ -37,7 +37,7 @@ class Script
             Schedule = UpgradeSchedule.afterInstallInitialize,
             DowngradeErrorMessage = "A later version of [ProductName] is already installed. Setup will now exit."
         };
-         
+
         project.EnableUpgradingFromPerUserToPerMachine();
 
         project.Load +=
