@@ -97,10 +97,12 @@ namespace WixSharp.CommonTasks
         {
             //  @"C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x86",
             var win10sdk = Environment.SpecialFolder.ProgramFilesX86.GetPath().PathJoin("Windows Kits", "10", "bin");
-            return Directory
-                .GetDirectories(win10sdk, "10.*")
-                .OrderByDescending(x => new Version(x.PathGetFileName()))
-                .Select(x => x.PathCombine("x86"));
+            return Directory.Exists(win10sdk)
+                ? Directory
+                    .GetDirectories(win10sdk, "10.*")
+                    .OrderByDescending(x => new Version(x.PathGetFileName()))
+                    .Select(x => x.PathCombine("x86"))
+                : Enumerable.Empty<string>();
         }
 
         static string signTool;
