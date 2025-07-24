@@ -18,6 +18,8 @@ static class Script
     [STAThread]
     static public void Main(string[] args)
     {
+        var ttt = WixTools.WellKnownLocations;
+
         if (args.Contains("-test")) //for demo only
         {
             ManagedUI.DefaultWpf.PlayInstallDialogs();
