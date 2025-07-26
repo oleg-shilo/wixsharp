@@ -84,12 +84,12 @@ namespace WixSharp.CommonTasks
         static public List<string> WellKnownLocations = DiscoverWellKnownLocations()
                .Concat(new[]
                 {
-                    @"C:\Program Files (x86)\Windows Kits\10\App Certification Kit",
-                    @"C:\Program Files (x86)\Windows Kits\8.1\bin\x86",
-                    @"C:\Program Files (x86)\Windows Kits\8.0\bin\x86",
-                    @"C:\Program Files (x86)\Microsoft SDKs\ClickOnce\SignTool",
-                    @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin",
-                    @"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin"
+                    Environment.SpecialFolder.ProgramFilesX86.GetPath().PathJoin(@"Windows Kits\10\App Certification Kit"),
+                    Environment.SpecialFolder.ProgramFilesX86.GetPath().PathJoin(@"Windows Kits\8.1\bin\x86"),
+                    Environment.SpecialFolder.ProgramFilesX86.GetPath().PathJoin(@"Windows Kits\8.0\bin\x86"),
+                    Environment.SpecialFolder.ProgramFilesX86.GetPath().PathJoin(@"Microsoft SDKs\ClickOnce\SignTool"),
+                    Environment.SpecialFolder.ProgramFilesX86.GetPath().PathJoin(@"Microsoft SDKs\Windows\v7.1A\Bin"),
+                    Environment.SpecialFolder.ProgramFiles.GetPath().PathJoin(@"Microsoft SDKs\Windows\v6.0A\bin")
                 })
                .ToList();
 
