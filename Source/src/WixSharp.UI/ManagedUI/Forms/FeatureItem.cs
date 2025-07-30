@@ -133,9 +133,11 @@ namespace WixSharp.UI.Forms
                 if (session.IsInstalling()
                     && conditionRow?["Condition"] != null
                     && session.EvaluateCondition(conditionRow["Condition"].ToString())  // If condition is true...
-                    && Convert.ToInt32(conditionRow["Level"]) <= installLevel)          // ...set state according to condition level.
                 {
-                    defaultState = InstallState.Local;
+                    // ...set state according to condition level.
+                    defaultState = (Convert.ToInt32(conditionRow["Level"]) <= installLevel)
+                       ? InstallState.Local 
+                       : InstallState.Absent;
                 }
 
                 CurrentState = DetectFeatureState(session, name);
