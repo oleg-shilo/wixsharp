@@ -132,11 +132,11 @@ namespace WixSharp.UI.Forms
                 var defaultState = (Convert.ToInt32(row["Level"]) <= installLevel) ? InstallState.Local : InstallState.Absent;
                 if (session.IsInstalling()
                     && conditionRow?["Condition"] != null
-                    && session.EvaluateCondition(conditionRow["Condition"].ToString())  // If condition is true...
+                    && session.EvaluateCondition(conditionRow["Condition"].ToString()))  // If condition is true...
                 {
                     // ...set state according to condition level.
                     defaultState = (Convert.ToInt32(conditionRow["Level"]) <= installLevel)
-                       ? InstallState.Local 
+                       ? InstallState.Local
                        : InstallState.Absent;
                 }
 
