@@ -99,8 +99,8 @@ namespace WixSharp.CommonTasks
             var win10sdk = Environment.SpecialFolder.ProgramFilesX86.GetPath().PathJoin("Windows Kits", "10", "bin");
             if (!win10sdk.PathExists())
                 win10sdk = (Microsoft.Win32.Registry.GetValue(
-                        @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Kits\Installed Roots", "KitsRoot10",
-                        null) as string)?
+                            @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Kits\Installed Roots", "KitsRoot10",
+                            null) as string)?
                     .PathJoin("bin");
 
             return Directory.Exists(win10sdk)

@@ -73,22 +73,22 @@ namespace WixSharp
                 { "FontsFolder", Environment.SpecialFolder.System.ToPath().PathGetDirName().PathJoin("Fonts") },
                 { "LocalAppDataFolder", Environment.SpecialFolder.LocalApplicationData.ToPath() },
                 { "MyPicturesFolder", Environment.SpecialFolder.MyPictures.ToPath() },
-                
+
                 //{ "NetHoodFolder", ???Environment.SpecialFolder.MyPictures.ToPath() },
-                
+
                 { "PersonalFolder", Environment.SpecialFolder.Personal.ToPath() },
-                
+
                 //{ "PrintHoodFolder", ???Environment.SpecialFolder.MyPictures.ToPath() },
 
                 { "ProgramFilesFolder", Environment.SpecialFolder.ProgramFiles.ToPath() },
                 { "ProgramFiles64Folder", Environment.SpecialFolder.ProgramFiles.ToPath().Replace(" (x86)", "") },
-                
+
                 //{ "ProgramFiles6432Folder", ???Environment.SpecialFolder.ProgramFiles.ToPath().Replace(" (x86)", "") },
-                
+
                 { "ProgramMenuFolder", Environment.SpecialFolder.Programs.ToPath() },
 
                 //{ "RecentFolder", ???Environment.SpecialFolder.Programs.ToPath() },
-                
+
                 { "SendToFolder", Environment.SpecialFolder.SendTo.ToPath() },
                 { "StartMenuFolder", Environment.SpecialFolder.StartMenu.ToPath() },
                 { "StartupFolder", Environment.SpecialFolder.Startup.ToPath() },
@@ -96,13 +96,13 @@ namespace WixSharp
                 // WiX4 introduced new constants `PFiles64` and `PFiles`
                 { "PFiles", Environment.SpecialFolder.ProgramFiles.ToPath() },
                 { "PFiles64", "ProgramW6432".GetEnvVar(defaultValue: Environment.SpecialFolder.ProgramFiles.ToPath()) }, // ProgramW6432 returns PF64 even if it is called from the 32-bit process
-                
+
                 { "SystemFolder", Is64OS() ? Path.Combine(Environment.SpecialFolder.System.ToPath().PathGetDirName(), "SysWow64") : Environment.SpecialFolder.System.ToPath() },
                 { "System16Folder", Path.Combine(Environment.SpecialFolder.System.ToPath().PathGetDirName(), "System") },
                 { "System64Folder", Environment.SpecialFolder.System.ToPath() },
-                
+
                 //{ "System6432Folder", ???Environment.SpecialFolder.System.ToPath() },
-                
+
                 { "TempFolder", Path.GetTempPath() },
                 { "TemplateFolder", Environment.SpecialFolder.Templates.ToPath() },
                 { "WindowsFolder", Environment.SpecialFolder.System.ToPath().PathGetDirName() },
