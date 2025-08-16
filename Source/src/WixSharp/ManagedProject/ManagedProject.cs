@@ -892,7 +892,7 @@ namespace WixSharp
         public static ActionResult InvokeClientHandlersExternally(Session session, string eventName)
         {
             // Debug.Assert(false);
-            var sessionFile = Path.GetTempFileName();
+            var sessionFile = Path.GetTempFileName().DeleteIfExists();
             var logFile = sessionFile + ".log";
             var eventHost = System.Reflection.Assembly.GetExecutingAssembly().Location.PathChangeFileName("WixSharp.MsiEventHost.exe");
 

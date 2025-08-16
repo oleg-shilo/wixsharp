@@ -290,7 +290,7 @@ namespace WixSharp
             {
                 XDocument doc;
 
-                var tempXmlFile = System.IO.Path.GetTempFileName();
+                var tempXmlFile = System.IO.Path.GetTempFileName().DeleteIfExists();
                 try
                 {
                     System.IO.File.WriteAllBytes(tempXmlFile, wxlData);
@@ -302,7 +302,7 @@ namespace WixSharp
                 }
                 finally
                 {
-                    System.IO.File.Delete(tempXmlFile);
+                    tempXmlFile.DeleteIfExists();
                 }
 
                 Func<XElement, string> getValue;

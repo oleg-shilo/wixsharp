@@ -2398,7 +2398,7 @@ namespace WixSharp
 
                     if (regValEl.Attribute("Type").Value == "multiString")
                     {
-                        foreach (string line in stringValue.GetLines()) 
+                        foreach (string line in stringValue.GetLines())
                         {
                             var lineEl = new XElement("MultiStringValue");
                             lineEl.SetAttribute("Value", line);
@@ -3444,7 +3444,7 @@ namespace WixSharp
                     requiredAsms.Add(wixSharpAsm);
             }
 
-            string tempDir = IO.Path.GetTempFileName();
+            string tempDir = Utils.GetTempDirectory();
 
             var referencedAssemblies = "";
             foreach (string file in requiredAsms.OrderBy(x => x))
@@ -3704,7 +3704,23 @@ namespace WixSharp
 
         internal static object WiX_Tools = new object();
 
-        internal static string Run(string exe, string args, string workingDir = null, bool supressEcho = false)
+        /// <summary>
+        /// Runs the specified executable.
+        /// <p>WixSharp has a few helper methods for running executables (e.g. <see cref="WixSharp.CommonTasks.ExternalTool.ConsoleRun()"/>).
+        /// However this method allows detecting and running the .NET tools installed locally within the project file structure. IE if you 
+        /// installed a specific version of wix.exe for a project and then run it manually:</p>
+        /// <code >
+        /// string wix = ExternalTool.Locate("wix.exe"); // may return "localtool:wix"
+        /// var retval = Run(wix, ...
+        /// </code>
+        /// 
+        /// </summary>
+        /// <param name="exe">The executable.</param>
+        /// <param name="args">The arguments.</param>
+        /// <param name="workingDir">The working dir.</param>
+        /// <param name="suppressEcho">if set to <c>true</c> [suppress echo].</param>
+        /// <returns></returns>
+        public static string Run(string exe, string args, string workingDir = null, bool suppressEcho = false)
         {
             lock (WiX_Tools)
             {
@@ -3736,7 +3752,7 @@ namespace WixSharp
 
                 void OnOutputLine(string line)
                 {
-                    if (!supressEcho)
+                    if (!suppressEcho)
                     {
                         Compiler.OutputWriteLine(line);
                         Trace.WriteLine(line);

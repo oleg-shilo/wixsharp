@@ -150,10 +150,11 @@ namespace WixSharp
 
         internal static string GetTempDirectory()
         {
-            string tempDir = IO.Path.GetTempFileName();
+            string tempDir = IO.Path.GetTempFileName(); // always creates the file
 
-            if (!IO.Directory.Exists(tempDir))
-                IO.Directory.CreateDirectory(tempDir);
+            // delete the file and create the dir instead
+            tempDir.DeleteIfExists();
+            tempDir.EnsureDirExists();
 
             return tempDir;
         }

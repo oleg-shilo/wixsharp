@@ -423,7 +423,7 @@ namespace WixSharp.CommonTasks
         static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
-            string enginePath = IO.Path.GetTempFileName();
+            string enginePath = IO.Path.GetTempFileName().DeleteIfExists();
 
             try
             {

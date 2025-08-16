@@ -418,7 +418,7 @@ namespace WixSharp.CommonTasks
             {
                 try
                 {
-                    Compiler.Run("wix.exe", "--version", supressEcho: true);
+                    Compiler.Run("wix.exe", "--version", suppressEcho: true);
                     return "wix.exe";
                 }
                 catch
@@ -440,7 +440,7 @@ namespace WixSharp.CommonTasks
                 {
                     try
                     {
-                        Compiler.Run("dotnet.exe", "--version", supressEcho: true);
+                        Compiler.Run("dotnet.exe", "--version", suppressEcho: true);
                         dotnet_exe = "dotnet.exe";
                     }
                     catch
@@ -611,6 +611,14 @@ namespace WixSharp.CommonTasks
         public string WellKnownLocations { set; get; }
 
         /// <summary>
+        /// Gets or sets the working dir.
+        /// </summary>
+        /// <value>
+        /// The working dir.
+        /// </value>
+        public string WorkingDirectory { set; get; }
+
+        /// <summary>
         /// Runs the exec file with the console output completely hidden and discarded.
         /// </summary>
         /// <returns>The process exit code.</returns>
@@ -626,6 +634,7 @@ namespace WixSharp.CommonTasks
                 process.StartInfo.Arguments = this.Arguments;
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.WorkingDirectory = WorkingDirectory;
                 process.StartInfo.StandardOutputEncoding = this.Encoding ?? DefaultEncoding;
                 process.Start();
 
@@ -689,6 +698,7 @@ namespace WixSharp.CommonTasks
                     process.StartInfo.UseShellExecute = false;
                     process.StartInfo.RedirectStandardOutput = true;
                     process.StartInfo.RedirectStandardError = true;
+                    process.StartInfo.WorkingDirectory = WorkingDirectory;
                     process.StartInfo.StandardOutputEncoding = this.Encoding ?? DefaultEncoding;
                     process.StartInfo.CreateNoWindow = true;
                     process.Start();
