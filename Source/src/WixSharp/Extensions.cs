@@ -2875,7 +2875,8 @@ namespace WixSharp
         /// <returns></returns>
         static public bool IsUninstalling(this Session session)
         {
-            return session.Property("REMOVE").SameAs("All", true);
+            return session.Property("REMOVE").SameAs("All", true) ||
+                   session.Property("REMOVE").SameAs("Complete", true); // see #1832
         }
 
         /// <summary>

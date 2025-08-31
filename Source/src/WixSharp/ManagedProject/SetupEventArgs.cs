@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static System.Collections.Specialized.BitVector32;
 using System.Linq;
 using System.Security.Principal;
 using WixSharp.CommonTasks;
@@ -215,7 +216,19 @@ namespace WixSharp
         /// <value>
         /// <c>true</c> if uninstalling; otherwise, <c>false</c>.
         /// </value>
-        public bool IsUninstalling { get { return Data["REMOVE"].SameAs("ALL", ignoreCase: true); } }
+        public bool IsUninstalling
+        {
+            get
+            {
+                // If it is a deferred action then REMOVE=ALL may not be tunneled via CustomActionData so Session.Property may not return correct data
+                // since user may not have explicitly set REMOVE=ALL in the command line or UI.
+                // However Data["REMOVE"] is managed by WixSharp itself
+                return Data["REMOVE"].SameAs("ALL", ignoreCase: true) ||
+                       Data["REMOVE"].SameAs("Complete", true) ||
+                       Session.Property("REMOVE").SameAs("Complete", true) ||  // If NativeUI triggered uninstall it sets this property to Complete
+                       Session.Property("REMOVE").SameAs("ALL", true);         // If uninstall is triggered from ControlPanel it sets this property to ALL
+            }
+        }
 
         /// <summary>
         /// Gets the action name from the standard Change/Modify dialog. The action is stored in <c>MODIFY_ACTION</c>

@@ -35,7 +35,44 @@ namespace Test1.installer.wixsharp
         static void Main()
         {
             // issue_1739();
-            issue_1810();
+            issue_1832();
+        }
+
+        static void issue_1832()
+        {
+            Environment.CurrentDirectory = @"..\..\..\";
+
+            var project =
+                    new ManagedProject("My Product",
+                        new Dir(@"%ProgramFiles%\My Company\My Product",
+                            new File(
+                                @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\setup.cs")),
+                        new Property("TEST", "TEST-VALUE"));
+
+            project.GUID = new Guid("6f330b47-2577-43ad-9095-1361ba25889b");
+
+            project.UI = WUI.WixUI_Mondo;
+            project.Version = new Version(1, 0, 0, 0);
+
+            project.Load += e =>
+            {
+                MessageBox.Show(
+                    $"Data[\"REMOVE\"]: {e.Data["REMOVE"]}\n" +
+                    $"Session.Property(\"REMOVE\"): {e.Session.Property("REMOVE")}\n" +
+                    $"IsUninstalling: {e.IsUninstalling}",
+                    "WixSharp - Load");
+            };
+
+            project.AfterInstall += e =>
+            {
+                MessageBox.Show(
+                    $"Data[\"REMOVE\"]: {e.Data["REMOVE"]}\n" +
+                    $"Session.Property(\"REMOVE\"): {e.Session.Property("REMOVE")}\n" +
+                    $"IsUninstalling: {e.IsUninstalling}",
+                    "WixSharp - AfterInstall");
+            };
+
+            project.BuildMsi();
         }
 
         static void issue_1810()
