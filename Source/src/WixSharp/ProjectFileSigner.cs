@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using WixSharp.Utilities;
+
 using IO = System.IO;
 
 namespace WixSharp
@@ -14,14 +15,23 @@ namespace WixSharp
         /// <summary>
         /// Gets or sets the supported file formats for signing.
         /// </summary>
-        public string[] SupportedFileFormats { get; set; } = {
-                ".dll", ".exe", ".cab", ".msi"
-            };
+        public string[] SupportedFileFormats { get; set; } =
+        {
+            ".dll", ".exe", ".cab", ".msi"
+        };
 
         /// <summary>
         /// Determines whether to skip signing already signed files.
         /// </summary>
         public bool SkipSignedFiles { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether sign WixSharp own embedded assemblies. IE, WixSharp.UI.dll.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if should sign the embedded assemblies; otherwise, <c>false</c>.
+        /// </value>
+        public bool SignEmbeddedAssemblies { get; set; } = true;
 
         /// <summary>
         /// Determines the behavior when an exception occurs during the signing of a specific file.

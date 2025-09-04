@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -104,6 +105,42 @@ namespace WixSharp.Test
             var xml = System.IO.File.ReadAllText(wsx);
 
             Assert.True(xml.Contains("<Shortcut Id="));
+        }
+
+        class TestSigner : IDigitalSignature
+        {
+            public int Apply(string fileToSign) => ApplyImplementation(fileToSign);
+
+            public Func<string, int> ApplyImplementation;
+        }
+
+        [Fact]
+        [Description("Issue #1833")]
+        public void Fix_Issue_1833()
+        {
+            // the test cannot be executed under xUnit runtime as it locks the executing assembly
+            // So providing it here as a code snippet for manual testing
+            return;
+
+            var signedFiles = new List<string>();
+
+            Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true; // the default is true anyway
+            var project = new ManagedProject("MyProduct",
+                          new Dir(@"%ProgramFiles%\My Company\My Product",
+                              new File("setup.cs")));
+
+            project.ManagedUI = ManagedUI.DefaultWpf;
+
+            project.DigitalSignature = new TestSigner
+            {
+                ApplyImplementation = (x) =>
+                {
+                    signedFiles.Add(x);
+                    return 0;
+                }
+            };
+
+            project.BuildMsi();
         }
 
         [Fact]

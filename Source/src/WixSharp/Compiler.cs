@@ -42,6 +42,7 @@ using System.Xml;
 using System.Xml.Linq;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
+using WixSharp.Utilities;
 using WixToolset.Dtf.WindowsInstaller;
 using IO = System.IO;
 
@@ -1358,7 +1359,7 @@ namespace WixSharp
                                                       .Distinct()
                                                       .ToArray();
 
-                    PackageManagedAsm(asmBin.Name, bynaryPath, refAsms, project.OutDir, project.CustomActionConfig, null, true);
+                    PackageManagedAsm(asmBin.Name, bynaryPath, refAsms, project.OutDir, project.CustomActionConfig, null, true, signing: project.ContentSigningSignature);
                 }
 
                 product.AddElement("UI")
@@ -2696,7 +2697,7 @@ namespace WixSharp
                     bynaryPath = asmBin.Name.PathChangeDirectory(wProject.OutDir.PathGetFullPath())
                                             .PathChangeExtension(".CA.dll");
 
-                    PackageManagedAsm(asmBin.Name, bynaryPath, asmBin.RefAssemblies.Concat(wProject.DefaultRefAssemblies).Distinct().ToArray(), wProject.OutDir, wProject.CustomActionConfig);
+                    PackageManagedAsm(asmBin.Name, bynaryPath, asmBin.RefAssemblies.Concat(wProject.DefaultRefAssemblies).Distinct().ToArray(), wProject.OutDir, wProject.CustomActionConfig, signing: wProject.ContentSigningSignature);
                 }
 
                 product.Add(new XElement("Binary",
@@ -2894,14 +2895,20 @@ namespace WixSharp
                         }
                         else if (wManagedAction.CreateInteropWrapper)
                         {
+                            var assemblies = wManagedAction
+                                .RefAssemblies
+                                .Concat(wProject.DefaultRefAssemblies)
+                                .Distinct().ToArray();
+
                             PackageManagedAsm(
                                 asmFile,
                                 packageFile,
-                                wManagedAction.RefAssemblies.Concat(wProject.DefaultRefAssemblies).Distinct().ToArray(),
+                                assemblies,
                                 wProject.OutDir,
                                 wProject.CustomActionConfig,
                                 wProject.Platform,
-                                false);
+                                false,
+                                signing: wProject.ContentSigningSignature);
 
                             nativeCAdll = packageFile;
                         }
@@ -3324,8 +3331,11 @@ namespace WixSharp
         /// <param name="configFilePath">The app config file path.</param>
         /// <param name="platform">The platform.</param>
         /// <param name="embeddedUI">if set to <c>true</c> the assembly as an 'EmbeddedUI' assembly.</param>
-        /// <returns>Batch file path.</returns>
-        static public string BuildPackageAsmCmd(string asm, string nativeDll = null, string[] refAssemblies = null, string outDir = null, string configFilePath = null, Platform? platform = null, bool embeddedUI = false)
+        /// <param name="signature">The signing interface for file signing.</param>
+        /// <returns>
+        /// Batch file path.
+        /// </returns>
+        static public string BuildPackageAsmCmd(string asm, string nativeDll = null, string[] refAssemblies = null, string outDir = null, string configFilePath = null, Platform? platform = null, bool embeddedUI = false, IDigitalSignature signature = null)
         {
             string batchFile = IO.Path.Combine(outDir, "Build_CA_DLL.cmd");
 
@@ -3336,7 +3346,8 @@ namespace WixSharp
                               configFilePath,
                               platform,
                               embeddedUI,
-                              batchFile);
+                              batchFile,
+                              signature);
             return batchFile;
         }
         /// <summary>
@@ -3349,17 +3360,31 @@ namespace WixSharp
         /// <param name="configFilePath">The app config file path.</param>
         /// <param name="platform">The platform.</param>
         /// <param name="embeddedUI">if set to <c>true</c> the assembly as an 'EmbeddedUI' assembly.</param>
-        /// <returns>Package file path.</returns>
-        static public string BuildPackageAsm(string asm, string nativeDll = null, string[] refAssemblies = null, string outDir = null, string configFilePath = null, Platform? platform = null, bool embeddedUI = false)
+        /// <param name="signature">The signing.</param>
+        /// <returns>
+        /// Package file path.
+        /// </returns>
+        static public string BuildPackageAsm(string asm, string nativeDll = null, string[] refAssemblies = null, string outDir = null, string configFilePath = null, Platform? platform = null, bool embeddedUI = false, IDigitalSignature signature = null)
         {
             nativeDll = nativeDll ?? IO.Path.ChangeExtension(asm, ".CA.dll");
 
-            PackageManagedAsm(asm, nativeDll ?? IO.Path.ChangeExtension(asm, ".CA.dll"), refAssemblies ?? new string[0], outDir ?? Environment.CurrentDirectory, configFilePath, platform, embeddedUI);
+            PackageManagedAsm(asm, nativeDll ?? IO.Path.ChangeExtension(asm, ".CA.dll"), refAssemblies ?? new string[0], outDir ?? Environment.CurrentDirectory, configFilePath, platform, embeddedUI, signing: signature);
             return IO.Path.GetFullPath(nativeDll);
         }
 
-        static void PackageManagedAsm(string asm, string nativeDll, string[] refAssemblies, string outDir, string configFilePath, Platform? platform = null, bool embeddedUI = false, string batchFile = null)
+        static void PackageManagedAsm(string asm, string nativeDll, string[] refAssemblies, string outDir, string configFilePath, Platform? platform = null, bool embeddedUI = false, string batchFile = null, IDigitalSignature signing = null)
         {
+            if (signing != null && Compiler.SignAllFilesOptions.SignEmbeddedAssemblies)
+            {
+                foreach (string file in refAssemblies.Combine(asm).Distinct())
+                {
+                    if (Compiler.SignAllFilesOptions.SkipSignedFiles && VerifyFileSignature.IsSigned(file))
+                        continue;
+
+                    signing.Apply(file);
+                }
+            }
+
             bool is64 = false;
             if (platform.HasValue && platform.Value == Platform.x64)
                 is64 = true;

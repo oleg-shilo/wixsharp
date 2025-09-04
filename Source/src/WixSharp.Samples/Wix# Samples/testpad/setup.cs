@@ -35,7 +35,36 @@ namespace Test1.installer.wixsharp
         static void Main()
         {
             // issue_1739();
-            issue_1832();
+            issue_1833();
+        }
+
+        class CustomSigner : DigitalSignature
+        {
+            public override int Apply(string fileToSign)
+            {
+                Console.WriteLine("Signing: " + fileToSign);
+                return 1;
+            }
+        }
+
+        static void issue_1833()
+        {
+            Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true; // the default is true anyway
+
+            Environment.CurrentDirectory = @"..\..\..\";
+
+            var project =
+                    new ManagedProject("My Product",
+                        new Dir(@"%ProgramFiles%\My Company\My Product",
+                            new File(
+                                @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\setup.cs")),
+                        new Property("TEST", "TEST-VALUE"));
+
+            project.ManagedUI = ManagedUI.DefaultWpf;
+            project.SignAllFiles = true;
+            project.DigitalSignature = new CustomSigner();
+
+            project.BuildMsi();
         }
 
         static void issue_1832()

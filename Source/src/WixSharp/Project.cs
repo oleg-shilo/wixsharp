@@ -189,6 +189,14 @@ namespace WixSharp
         public IDigitalSignature DigitalSignature;
 
         /// <summary>
+        /// Gets the digital signature for signing the MSI content (SignAllFiles: true), not the MSI itself (SignAllFiles: false).
+        /// </summary>
+        /// <value>
+        /// The applicable digital signature.
+        /// </value>
+        internal IDigitalSignature ContentSigningSignature => SignAllFiles ? DigitalSignature : null;
+
+        /// <summary>
         /// Controls whether all files in the project should be digitally signed.
         /// Supported file formats can be configured by setting <see cref="SignAllFilesOptions.SupportedFileFormats"/>.
         /// When set to <c>true</c>, all files will be signed.
