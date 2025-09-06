@@ -107,13 +107,6 @@ namespace WixSharp.Test
             Assert.True(xml.Contains("<Shortcut Id="));
         }
 
-        class TestSigner : IDigitalSignature
-        {
-            public int Apply(string fileToSign) => ApplyImplementation(fileToSign);
-
-            public Func<string, int> ApplyImplementation;
-        }
-
         [Fact]
         [Description("Issue #1833")]
         public void Fix_Issue_1833()
@@ -131,9 +124,9 @@ namespace WixSharp.Test
 
             project.ManagedUI = ManagedUI.DefaultWpf;
 
-            project.DigitalSignature = new TestSigner
+            project.DigitalSignature = new GenericSigner
             {
-                ApplyImplementation = (x) =>
+                Implementation = (x) =>
                 {
                     signedFiles.Add(x);
                     return 0;

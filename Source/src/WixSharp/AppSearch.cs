@@ -127,10 +127,17 @@ namespace WixSharp.CommonTasks
         /// <summary>
         /// Gets the version of the installed product from its 'upgrade code'.
         /// <code>
-        /// static void project_BeforeInstall(SetupEventArgs e)
+        /// project.DigitalSignature = new GenericSigner
         /// {
-        ///    var detectedVersion = AppSearch.GetProductVersionFromUpgradeCode(e.UpgradeCode);
-        /// }
+        ///     Implementation = (file) =>
+        ///     {
+        ///         byte[] unsignedContent = IO.File.ReadAllBytes(file);
+        ///         byte[] signedContent = SigningService.Sign(unsignedContent);
+        ///
+        ///         System.IO.File.WriteAllBytes(file, signedContent);
+        ///         return 0;
+        ///     }
+        /// };
         /// </code>
         /// </summary>
         /// <param name="upgradeCode">The product Version.</param>

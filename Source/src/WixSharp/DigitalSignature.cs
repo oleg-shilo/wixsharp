@@ -20,6 +20,36 @@ namespace WixSharp
     }
 
     /// <summary>
+    ///
+    /// </summary>
+    /// <seealso cref="WixSharp.IDigitalSignature" />
+    public class GenericSigner : IDigitalSignature
+    {
+        /// <summary>
+        /// Applies digital signature to a file.
+        /// </summary>
+        /// <param name="fileToSign">The file to sign.</param>
+        /// <returns>
+        /// Exit code of the signing tool.
+        /// </returns>
+        public int Apply(string fileToSign) => Implementation(fileToSign);
+
+        /// <summary>
+        /// The implementation of <see cref="GenericSigner.Apply(string)"/>. This is a convenient method to inject
+        /// the implementation (e.g. lambda) instead of creating an inherited class.
+        /// <code>
+        /// static void project_BeforeInstall(SetupEventArgs e)
+        /// {
+        ///    var detectedVersion = AppSearch.GetProductVersionFromUpgradeCode(e.UpgradeCode);
+        /// }
+        /// </code>
+        /// </summary>
+        public Func<string, int> Implementation =
+            x => throw new NotImplementedException(
+                "You need to initialize <see cref=\"GenericSigner.Implementation\"/> with the appropriate signing routine.");
+    }
+
+    /// <summary>
     /// Container with the parameters of the digital signature
     /// </summary>
     public class DigitalSignature : IDigitalSignature
