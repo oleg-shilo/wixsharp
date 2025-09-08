@@ -107,9 +107,11 @@ namespace WixSharp
                     string imageFile = Utils.PathCombine(project.SourceBaseDir, project.BackgroundImage);
                     if (IO.File.Exists(imageFile))
                     {
-                        var img = Bitmap.FromFile(imageFile);
-                        if (img.Width > img.Height)
-                            invalidAspectRatio = true;
+                        using (var img = Bitmap.FromFile(imageFile))
+                        {
+                            if (img.Width > img.Height)
+                                invalidAspectRatio = true;
+                        }
                     }
                 }
                 catch { }
