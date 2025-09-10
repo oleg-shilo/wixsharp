@@ -2472,6 +2472,10 @@ namespace WixSharp
                                                             new XAttribute("Port", address.Port)));
 
                 xAddress.AddAttributes(address.Attributes);
+
+                if (!string.IsNullOrEmpty(address.Header))
+                    xAddress.SetAttribute("Header", address.Header)
+
             }
 
             if (webSite.Certificate != null)
