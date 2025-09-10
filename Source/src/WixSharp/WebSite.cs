@@ -179,6 +179,11 @@ namespace WixSharp
             public int Port = 0;
 
             /// <summary>
+            /// Sets the host name.
+            /// </summary>
+            public string Header = "";
+
+            /// <summary>
             /// Optional attributes of the <c>WebAddress Element</c> (e.g. Secure:YesNoPath).
             /// </summary>
             /// <example>
