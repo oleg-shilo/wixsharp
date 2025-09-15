@@ -2471,10 +2471,8 @@ namespace WixSharp
                                                             new XAttribute("IP", address.Address),
                                                             new XAttribute("Port", address.Port)));
 
-                xAddress.AddAttributes(address.Attributes);
-
-                if (!string.IsNullOrEmpty(address.Header))
-                    xAddress.SetAttribute("Header", address.Header)
+                xAddress.AddAttributes(address.Attributes)
+                        .SetAttribute("Header", address.Header);
 
             }
 
