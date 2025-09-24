@@ -1857,8 +1857,9 @@ namespace WixSharp.CommonTasks
         /// </summary>
         /// <param name="assemblyPath">The assembly path.</param>
         /// <param name="previewOnly">if set to <c>true</c> [preview only].</param>
+        /// <param name="buildParameters">The optional build parameters.</param>
         /// <returns></returns>
-        public static string ConvertToAotAssembly(this string assemblyPath, bool previewOnly = false)
+        public static string ConvertToAotAssembly(this string assemblyPath, bool previewOnly = false, string buildParameters = "")
         {
             string assembly = assemblyPath;
 
@@ -1944,7 +1945,7 @@ namespace WixSharp.CommonTasks
             using (var process = new Process())
             {
                 process.StartInfo.FileName = WixTools.dotnet;
-                process.StartInfo.Arguments = $"publish {actualProjectFile.Enquote()} /p:NativeLib=Shared -r win-x64 -c release -o {outDir}";
+                process.StartInfo.Arguments = $"publish {actualProjectFile.Enquote()} /p:NativeLib=Shared -r win-x64 -c release -o {outDir} -p:ImportDirectoryBuildProps=false {buildParameters}";
                 process.StartInfo.WorkingDirectory = projDir;
                 process.StartInfo.UseShellExecute = false;
                 process.Start();

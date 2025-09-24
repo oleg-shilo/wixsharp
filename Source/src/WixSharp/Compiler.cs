@@ -77,6 +77,16 @@ namespace WixSharp
         /// </summary>
         public string InstallDirDefaultId = "INSTALLDIR";
 
+
+        /// <summary>
+        /// Extra parameters that is passed to the `dotnet publish` command when AOT compiling .NET Core custom actions.
+        /// <code language="C#">
+        /// // ignore the directory build props that are not compatible with AOT compilation
+        /// WixSharp.Compiler.AutoGeneration.AotBuildParameters = "-p:ImportDirectoryBuildProps=false";
+        /// </code>
+        /// </summary>
+        public string AotBuildParameters = "";
+
         /// <summary>
         /// Flag indicating if all system folders (e.g. %ProgramFiles%) should be auto-mapped into their x64 equivalents
         /// when 'project.Platform = Platform.x64'
@@ -2473,7 +2483,6 @@ namespace WixSharp
 
                 xAddress.AddAttributes(address.Attributes)
                         .SetAttribute("Header", address.Header);
-
             }
 
             if (webSite.Certificate != null)
@@ -2878,7 +2887,7 @@ namespace WixSharp
                         // Only generate the accurate AOT compiled assembly (native CA dll) but do not compile this assembly.
                         // Why? Because the user may already supply this assembly under its expected name thus we only need to
                         // compile the assembly if it does not exist yet (a few lines below). 
-                        packageFile = asmFile.ConvertToAotAssembly(previewOnly: true);
+                        packageFile = asmFile.ConvertToAotAssembly(previewOnly: true, buildParameters: Compiler.AutoGeneration.AotBuildParameters);
                     }
 
                     var existingBinary = product.Descendants("Binary")
@@ -2893,7 +2902,7 @@ namespace WixSharp
 
                         if (wManagedAction.IsNetCore)
                         {
-                            nativeCAdll = asmFile.ConvertToAotAssembly();
+                            nativeCAdll = asmFile.ConvertToAotAssembly(buildParameters: Compiler.AutoGeneration.AotBuildParameters);
                         }
                         else if (wManagedAction.CreateInteropWrapper)
                         {
