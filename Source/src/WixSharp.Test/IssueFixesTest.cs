@@ -117,7 +117,7 @@ namespace WixSharp.Test
 
             var signedFiles = new List<string>();
 
-            Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true; // the default is true anyway
+            Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
             var project = new ManagedProject("MyProduct",
                           new Dir(@"%ProgramFiles%\My Company\My Product",
                               new File("setup.cs")));
