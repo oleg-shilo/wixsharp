@@ -35,6 +35,7 @@ namespace Test1.installer.wixsharp
         static void Main()
         {
             // issue_1739();
+            // issue_1847();
             issue_1833();
         }
 
@@ -47,9 +48,30 @@ namespace Test1.installer.wixsharp
             }
         }
 
+        static void issue_1847()
+        {
+            var project =
+                new ManagedProject("My Product",
+                    new InstallDir(@"%ProgramFiles%\My Company\My Product",
+                        new Dir("Samples",
+                            new File(@"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\setup.cs",
+                                new FileShortcut("MyApp2", @"%ProgramMenu%\My Company\My Product")))),
+                    new Dir(@"%ProgramMenu%\My Company\My Product",
+                        new DirectoryShortcut("Samples", "[Samples]"),
+                        new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")));
+
+            project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
+            project.UI = WUI.WixUI_ProgressOnly;
+
+            // project.OutFileName = "setup";
+            project.PreserveTempFiles = true;
+
+            Compiler.BuildMsi(project);
+        }
+
         static void issue_1833()
         {
-            Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true; // the default is true anyway
+            Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
 
             Environment.CurrentDirectory = @"..\..\..\";
 

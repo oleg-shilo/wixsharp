@@ -43,7 +43,8 @@ class Script
                                 WorkingDirectory = "Samples",
                                 Arguments = "777",
                                 Description = "My Application"
-                            })
+                            },
+                            new FileShortcut("MyApp2", @"%ProgramMenu%\My Company\My Product"))
                            //,
                            // // new ExeFileShortcut("Uninstall MyApp", "[System64Folder]msiexec.exe", "/x [ProductCode]")
                            // new ExeFileShortcut("MyApp Setup", @"%ProgramFiles%\dotnet\dotnet.exe",
