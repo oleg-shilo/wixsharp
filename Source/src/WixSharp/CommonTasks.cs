@@ -2257,6 +2257,31 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Inserts the file content into the Binary table of the existing msi file.
+        /// </summary>
+        /// <param name="msiPath">The msi path.</param>
+        /// <param name="binaryKey">The binary key.</param>
+        /// <param name="fileToInsert">The file to insert.</param>
+        public static void InsertToBinaryTable(this string msiPath, string binaryKey, string fileToInsert)
+        {
+            // Open MSI database in Direct mode (allows modifications)
+            using (var db = new Database(msiPath, DatabaseOpenMode.Direct))
+            {
+                using (var view = db.OpenView("INSERT INTO `Binary` (`Name`, `Data`) VALUES (?, ?)"))
+                {
+                    using (var rec = new Record(2))
+                    {
+                        rec.SetString(1, binaryKey);
+                        rec.SetStream(2, fileToInsert); // stream inserts the file content
+                        view.Execute(rec);
+                    }
+                }
+
+                db.Commit();
+            }
+        }
+
+        /// <summary>
         /// Reads the persisted data.
         /// </summary>
         /// <example>The following is an example of reading persisted data from the project `Load` event handler:
