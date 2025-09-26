@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
+using WixSharp.Msi;
 using WixToolset.Dtf.WindowsInstaller;
 
 class Constants
@@ -36,7 +37,8 @@ namespace Test1.installer.wixsharp
         {
             // issue_1739();
             // issue_1847();
-            issue_1833();
+            // issue_1833();
+            discussions_1846();
         }
 
         class CustomSigner : DigitalSignature
@@ -67,6 +69,13 @@ namespace Test1.installer.wixsharp
             project.PreserveTempFiles = true;
 
             Compiler.BuildMsi(project);
+        }
+
+        static void discussions_1846()
+        {
+            @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\IniFile\MyProduct.msi".InsertToBinaryTable(
+                "config_file",
+                @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\IniFile\test.ini");
         }
 
         static void issue_1833()
