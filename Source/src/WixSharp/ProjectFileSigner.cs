@@ -27,11 +27,15 @@ namespace WixSharp
 
         /// <summary>
         /// Gets or sets a value indicating whether sign WixSharp own embedded assemblies. IE, WixSharp.UI.dll.
+        /// <p>Note, signing embedded assemblies have some logical constrains. IE you assembly being executed cannot be
+        /// signed as it is locked by its own process. Thus you should either skip signing such assemblies form the
+        /// <see cref="IDigitalSignature.Apply(string)"/> method, or sign the locked assemblies before you build the msi file.
+        /// This will work because WixSharp detect already signed assemblies and gracefully skip them.</p>
         /// </summary>
         /// <value>
         ///   <c>true</c> if should sign the embedded assemblies; otherwise, <c>false</c>.
         /// </value>
-        public bool SignEmbeddedAssemblies { get; set; } = true;
+        public bool SignEmbeddedAssemblies { get; set; } = false;
 
         /// <summary>
         /// Determines the behavior when an exception occurs during the signing of a specific file.

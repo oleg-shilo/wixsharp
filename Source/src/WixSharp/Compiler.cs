@@ -3385,17 +3385,6 @@ namespace WixSharp
 
         static void PackageManagedAsm(string asm, string nativeDll, string[] refAssemblies, string outDir, string configFilePath, Platform? platform = null, bool embeddedUI = false, string batchFile = null, IDigitalSignature signing = null)
         {
-            if (signing != null && Compiler.SignAllFilesOptions.SignEmbeddedAssemblies)
-            {
-                foreach (string file in refAssemblies.Combine(asm).Distinct())
-                {
-                    if (Compiler.SignAllFilesOptions.SkipSignedFiles && VerifyFileSignature.IsSigned(file))
-                        continue;
-
-                    signing.Apply(file);
-                }
-            }
-
             bool is64 = false;
             if (platform.HasValue && platform.Value == Platform.x64)
                 is64 = true;
@@ -3481,6 +3470,20 @@ namespace WixSharp
             }
 
             string tempDir = Utils.GetTempDirectory();
+
+
+            if (signing != null && Compiler.SignAllFilesOptions.SignEmbeddedAssemblies)
+            {
+                var assembliesToSign = refAssemblies.Combine(asm).Distinct();
+                foreach (string file in assembliesToSign)
+                {
+                    if (Compiler.SignAllFilesOptions.SkipSignedFiles && VerifyFileSignature.IsSigned(file))
+                        continue;
+
+                    signing.Apply(file);
+                }
+            }
+
 
             var referencedAssemblies = "";
             foreach (string file in requiredAsms.OrderBy(x => x))
