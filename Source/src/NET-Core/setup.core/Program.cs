@@ -31,9 +31,6 @@ project.Load += (e) =>
     // e.Result = ActionResult.Failure;
 };
 
-WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.2");
-
-//project.BuildMsi();
-project.BuildMsiCmd();
+project.BuildMsi();
 
 // -----------------------------------------------
