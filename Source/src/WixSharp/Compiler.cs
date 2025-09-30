@@ -623,7 +623,7 @@ namespace WixSharp
             using (var sw = new IO.StreamWriter(batchFile))
             {
                 sw.WriteLine("echo off");
-                sw.WriteLine($"{exe.Replace("localtool:", "dotnet")} build {wixCmd} -o \"{outDir.PathJoin(msiFile)}\"");
+                sw.WriteLine($"{exe.Replace("localtool:", "dotnet ")} build {wixCmd} -o \"{outDir.PathJoin(msiFile)}\"");
             }
         }
 

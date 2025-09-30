@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using WixSharp;
+using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
 using File = WixSharp.File;
 
@@ -12,7 +13,7 @@ var project =
             new File("program.cs")),
         new Property("PropName", "<your value>"));
 
-   project.PreserveTempFiles = true;
+project.PreserveTempFiles = true;
 
 project.BeforeInstall += e =>
 {
@@ -30,6 +31,9 @@ project.Load += (e) =>
     // e.Result = ActionResult.Failure;
 };
 
-project.BuildMsi();
+WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.2");
+
+//project.BuildMsi();
+project.BuildMsiCmd();
 
 // -----------------------------------------------
