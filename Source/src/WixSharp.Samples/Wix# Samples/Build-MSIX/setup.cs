@@ -88,7 +88,7 @@ static class Msix
             var productCode = msiInfo.GetProductCode();
 
             if (MsiParser.IsInstalled(productCode))
-                "msiexec".Run("/x " + productCode + " /q");
+                "msiexec".Run("/x " + productCode + " /q")?.Dispose();
 
             var startInfo = new ProcessStartInfo
             {
@@ -121,7 +121,7 @@ static class Msix
             finally
             {
                 if (MsiParser.IsInstalled(productCode))
-                    "msiexec".Run("/x " + productCode + " /q");
+                    "msiexec".Run("/x " + productCode + " /q")?.Dispose();
             }
         }
     }
