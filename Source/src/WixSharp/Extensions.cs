@@ -3797,7 +3797,7 @@ namespace WixSharp
         /// </returns>
         public static Process Run(this string fileName, string args = "", Action<string> onOutput = null)
         {
-            using (var proc = Process.Start(
+            var proc = Process.Start(
                 new ProcessStartInfo
                 {
                     WorkingDirectory = fileName.PathGetFullPath().PathGetDirName(),
@@ -3807,19 +3807,21 @@ namespace WixSharp
                     RedirectStandardError = true,
                     UseShellExecute = false,
                     CreateNoWindow = true
-                }))
-            {
-                string line = null;
-                while (null != (line = proc.StandardOutput.ReadLine()))
-                    onOutput?.Invoke(line);
+                });
 
-                string error = proc.StandardError.ReadToEnd();
-                if (!error.IsEmpty())
-                    onOutput?.Invoke(error);
-                proc.WaitForExit();
+            if (proc == null)
+                return null;
+            
+            string line = null;
+            while (null != (line = proc.StandardOutput.ReadLine()))
+                onOutput?.Invoke(line);
 
-                return proc;
-            }
+            string error = proc.StandardError.ReadToEnd();
+            if (!error.IsEmpty())
+                onOutput?.Invoke(error);
+            proc.WaitForExit();
+
+            return proc;
         }
 
         /// <summary>
