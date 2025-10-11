@@ -91,6 +91,8 @@ namespace WixSharp
         /// <para>Despite being an instance property the property value is shared by the all instances of the extension of a specific
         /// stored WiX extension type.</para>
         /// IE `WixExtension.UI.PreferredVersion = "4.0.4"`.
+        /// <para>If this property has default value (<c>null</c>) then WiX extension/package manager (wix.exe) will
+        /// pick the extension binaries the highest available version. </para>
         /// </summary>
         public string PreferredVersion
         {

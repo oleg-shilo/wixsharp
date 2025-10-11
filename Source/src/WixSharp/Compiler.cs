@@ -717,11 +717,17 @@ namespace WixSharp
 
                                        dllPath = WixTools.FindWixExtensionDll(dll, preferredVersion);
 
+                                       bool isInNugetCache = dllPath?.StartsWith(WixTools.NuGetDir) == true;
+
                                        if (preferredVersion.IsEmpty())
                                        {
-                                           if (dllPath.PathGetFileNameWithoutExtension() == dll && WixTools.IsHighestAvailableVersion(dllPath))
-                                               dllPath = dll;
-
+                                           if (!isInNugetCache &&
+                                                dllPath.PathGetFileNameWithoutExtension() == dll && // not custom dll path
+                                                WixTools.WixExtensionsDir.PathExists() &&
+                                                WixTools.IsHighestAvailableVersion(dllPath)) // highest version in the WixTools.WixExtensionsDir
+                                           {
+                                               dllPath = dll; // let wix.exe to find the extension itself by specifying the extension ID only
+                                           }
                                        }
 
                                        if (dllPath.IsEmpty())

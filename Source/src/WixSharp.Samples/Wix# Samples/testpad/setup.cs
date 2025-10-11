@@ -35,10 +35,10 @@ namespace Test1.installer.wixsharp
 
         static void Main()
         {
+            issue_1851();
             // issue_1739();
             // issue_1847();
-            // issue_1833();
-            discussions_1846();
+            // discussions_1846();
         }
 
         class CustomSigner : DigitalSignature
@@ -76,6 +76,24 @@ namespace Test1.installer.wixsharp
             @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\IniFile\MyProduct.msi".InsertToBinaryTable(
                 "config_file",
                 @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\IniFile\test.ini");
+        }
+
+        static void issue_1851()
+        {
+            WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.1");
+            Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
+
+            Environment.CurrentDirectory = @"..\..\..\";
+
+            var project =
+                    new ManagedProject("My Product",
+                        new Dir(@"%ProgramFiles%\My Company\My Product",
+                            new File(
+                                @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\setup.cs")));
+
+            project.WixExtensions.Add("WixToolset.UI.wixext");
+
+            project.BuildMsi();
         }
 
         static void issue_1833()

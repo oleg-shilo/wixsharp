@@ -250,6 +250,7 @@ namespace WixSharp.CommonTasks
         /// <summary>
         /// Sets the wix.exe version for the specific directory. The mapping of the executable is managed by the .NET Tool
         /// mechanism through "dotnet-tools.json" config file, which is created when this method is called.
+        /// <para>IE `WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.1");`</para>
         /// <para>Note, if version argument is null the config file will be deleted.</para>
         /// </summary>
         /// <param name="directory">The directory.</param>
