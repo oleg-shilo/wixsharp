@@ -3783,19 +3783,16 @@ namespace WixSharp
         /// <summary>
         /// Starts a process resource by specifying the name of an application and a set of
         /// command-line arguments, and associates the resource with a new
-        /// System.Diagnostics.Process component.
+        /// System.Diagnostics.Process component. Returns exit code when the process exists.
         /// </summary>
         /// <param name="fileName">Gets or sets the application or document to start.</param>
         /// <param name="args">
         /// Gets or sets the set of command-line arguments to use when starting the application.
         /// </param>
         /// <param name="onOutput">A delegate for handling output process standard and error output.</param>
-        /// <returns>
-        /// A new <see cref="System.Diagnostics.Process"/> component that is associated with the
-        /// process, or null, if no process resource is started (for example, if an existing process
-        /// is reused).
+        /// <returns>Process exit code.
         /// </returns>
-        public static Process Run(this string fileName, string args = "", Action<string> onOutput = null)
+        public static int Run(this string fileName, string args = "", Action<string> onOutput = null)
         {
             using (var proc = Process.Start(
                 new ProcessStartInfo
@@ -3818,7 +3815,7 @@ namespace WixSharp
                     onOutput?.Invoke(error);
                 proc.WaitForExit();
 
-                return proc;
+                return proc.ExitCode;
             }
         }
 
