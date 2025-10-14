@@ -1162,6 +1162,12 @@ namespace WixSharp.CommonTasks
             project.DefaultRefAssemblies.AddRange(dependencies);
         }
 
+        static public Project SetProductIcon(this ManagedProject project, string iconFile)
+        {
+            project.ControlPanelInfo.ProductIcon = iconFile;
+            project.ManagedUI.Icon = iconFile;
+        }
+
         /// <summary>
         /// Sets the Project version from the file version of the file specified by it's ID.
         /// <para>This method sets project WixSourceGenerated event handler and injects

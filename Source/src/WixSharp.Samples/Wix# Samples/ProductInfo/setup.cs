@@ -9,11 +9,11 @@ class Script
     static public void Main()
     {
         var project =
-            new Project("MyProduct",
+            new ManagedProject("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
                     new File("readme.txt")));
 
-        project.UI = WUI.WixUI_Minimal;
+        project.ManagedUI = ManagedUI.Default;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
         project.ControlPanelInfo.Comments = "Simple test msi";
@@ -27,6 +27,14 @@ class Script
         project.ControlPanelInfo.Manufacturer = "My Company";
         project.ControlPanelInfo.InstallLocation = "[INSTALLDIR]";
         project.ControlPanelInfo.NoModify = true;
+        project.ManagedUI.Icon = "app_icon.ico";
+
+        // project.WixSourceGenerated += doc =>
+        // {
+        //     //   no longer allowed in WiX v5 and higher. There is no work around
+        //     doc.FindFirst("SummaryInformation").SetAttribute($"Icon=app_icon.ico");
+        // };
+
         //project.ControlPanelInfo.NoRepair = true,
         //project.ControlPanelInfo.NoRemove = true,
         //project.ControlPanelInfo.SystemComponent = true, //if set will not be shown in Control Panel
