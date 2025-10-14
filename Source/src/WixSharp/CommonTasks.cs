@@ -1162,10 +1162,50 @@ namespace WixSharp.CommonTasks
             project.DefaultRefAssemblies.AddRange(dependencies);
         }
 
+        /// <summary>
+        /// Sets the product icon for both the Control Panel and the Managed UI.
+        /// This method configures the icon that will be displayed in Add/Remove Programs
+        /// and as the main window icon for the managed UI dialogs.
+        /// </summary>
+        /// <param name="project">The managed project to configure.</param>
+        /// <param name="iconFile">The path to the icon file (.ico format recommended).
+        /// Can be a relative or absolute path to the icon file.</param>
+        /// <returns>The project instance to enable method chaining.</returns>
+        /// <remarks>
+        /// This method sets both <see cref="ProductInfo.ProductIcon"/> and <see cref="IManagedUI.Icon"/>
+        /// to the same icon file. The icon will be:
+        /// <list type="bullet">
+        /// <item><description>Displayed in Windows Add/Remove Programs (Control Panel)</description></item>
+        /// <item><description>Used as the window icon for all managed UI dialogs</description></item>
+        /// </list>
+        /// <para>
+        /// The icon file should be in .ico format for best compatibility. The path can be relative
+        /// to the project's source directory or an absolute path.
+        /// </para>
+        /// </remarks>
+        /// <example>
+        /// The following example shows how to set a product icon for a managed project:
+        /// <code>
+        /// var project = new ManagedProject("MyProduct",
+        ///     new Dir(@"%ProgramFiles%\My Company\My Product",
+        ///         new File("MyApp.exe")));
+        ///
+        /// project.SetProductIcon("app_icon.ico");
+        ///
+        /// // This is equivalent to:
+        /// // project.ControlPanelInfo.ProductIcon = "app_icon.ico";
+        /// // project.ManagedUI.Icon = "app_icon.ico";
+        ///
+        /// project.BuildMsi();
+        /// </code>
+        /// </example>
+        /// <seealso cref="ProductInfo.ProductIcon"/>
+        /// <seealso cref="IManagedUI.Icon"/>
         static public Project SetProductIcon(this ManagedProject project, string iconFile)
         {
             project.ControlPanelInfo.ProductIcon = iconFile;
             project.ManagedUI.Icon = iconFile;
+            return project;
         }
 
         /// <summary>
