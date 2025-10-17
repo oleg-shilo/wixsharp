@@ -9,12 +9,12 @@ class Script
 {
     static string root = Path.GetFullPath(@"..\..\");
 
-    static public void Main()
+    static public void Main(string[] context)
     {
         var version = Directory.GetFiles(root + @"\bin", "WixSharp.*.*.*.*.7z", SearchOption.TopDirectoryOnly)
                                .Select(x => new Version(Path.GetFileName(x).Replace("WixSharp.", "").Replace(".7z", "")))
                                .OrderByDescending(x => x)
-                               .FirstOrDefault()?.ToString();
+                               .FirstOrDefault()?.ToString() + context.FirstOrDefault();
 
         Console.WriteLine("Version: " + version);
 
@@ -28,7 +28,7 @@ class Script
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.WPF.nuspec", releaseNotes, version);
         UpdateReleaseNotesAndVersion(root + @"\NuGet\WixSharp\WixSharp_wix4.bin.nuspec", releaseNotes, version);
 
-        UpdatePublish(root + @"\NuGet\WixSharp\publish.cmd", string.Join(".", version.Split('.').Take(3)));
+        UpdatePublish(root + @"\NuGet\WixSharp\publish.cmd", string.Join(".", version.Split('.').Take(3)) + context.FirstOrDefault());
 
         CopyFiles(root + @"\bin\WixSharp", "WixSharp.MsiEventHost.exe", "lib");
         CopyFiles(root + @"\bin\WixSharp", "nbsbuilder.exe", "lib");
@@ -66,10 +66,12 @@ class Script
 
     static void ValidateDllVersions(string version)
     {
+        var versionToCheck = version.Split('-').FirstOrDefault(); // normalize version string that can be a prerelease one (file is always normal version)
+
         var versions = Directory.GetFiles(Environment.CurrentDirectory, "WixSharp*.dll", SearchOption.AllDirectories)
                 .Select(x => new { version = FileVersionInfo.GetVersionInfo(x).FileVersion, path = x });
 
-        if (versions.Select(x => version).Distinct().Count() > 1 || versions.FirstOrDefault().version != version)
+        if (versions.Select(x => x.version).Distinct().Count() > 1 || versions.FirstOrDefault().version != versionToCheck)
         {
             Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             throw new Exception("ERROR: Inconsistent dll versions: \n" + string.Join('\n', versions));
@@ -87,7 +89,7 @@ class Script
 
     static string ValidateReleaseNotes(string version)
     {
-        string releaseNotes = root + @"\bin\ReleaseNotes." + version + ".txt";
+        string releaseNotes = Path.GetFullPath(root + @"\bin\ReleaseNotes." + version + ".txt");
 
         if (!File.Exists(releaseNotes))
             File.WriteAllText(releaseNotes, "");
@@ -99,7 +101,7 @@ class Script
             Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             Console.WriteLine("Release notes are not ready!");
             Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            Process.Start(releaseNotes);
+            Process.Start("notepad", $"\"{releaseNotes}\"");
         }
 
         return retval;
