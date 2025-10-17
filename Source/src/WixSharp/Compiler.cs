@@ -3322,6 +3322,11 @@ namespace WixSharp
             newName = newName.PathChangeDirectory(outDir);
             IO.Directory.CreateDirectory(outDir);
 
+            if (newName.IsFileLocked())
+            {
+                newName = newName.PathChangeExtension(".shadow" + newName.PathGetExtension());
+            }
+
             if (!ClientAssembly.SamePathAs(newName))
             {
                 IO.File.Copy(ClientAssembly, newName, true);
@@ -3477,10 +3482,48 @@ namespace WixSharp
 
             string tempDir = Utils.GetTempDirectory();
 
+            // may need top create shadow copies of the assemblies to avoid locking issues during signing/packaging
+
+            string ShadowIfLocked(string file)
+            {
+                if (signing != null && Compiler.SignAllFilesOptions.SignEmbeddedAssemblies)
+                    if (file.IsFileLocked())
+                    {
+                        string shadowCopy = IO.Path.Combine(tempDir, IO.Path.GetFileName(file));
+                        IO.File.Copy(file, shadowCopy, true);
+                        Compiler.TempFiles.Add(shadowCopy);
+                        return shadowCopy;
+                    }
+                return file;
+            }
+
+            var referencedAssembliesToPackage = new List<string>();
+            var assemblyToPackage = ShadowIfLocked(asmFile);
+
+            var referencedAssemblies = "";
+            foreach (string file in requiredAsms.OrderBy(x => x))
+            {
+                string refAasmFile = Utils.OriginalAssemblyFile(file);
+
+                if (!file.SamePathAs(refAasmFile))
+                {
+                    refAasmFile = refAasmFile.PathChangeDirectory(outDir);
+                    IO.File.Copy(file, refAasmFile, true);
+                    Compiler.TempFiles.Add(refAasmFile);
+                }
+
+                refAasmFile = ShadowIfLocked(refAasmFile);
+
+                if (!asmFile.SamePathAs(refAasmFile))
+                {
+                    referencedAssemblies += "\"" + IO.Path.GetFullPath(refAasmFile) + "\" ";
+                    referencedAssembliesToPackage.Add(refAasmFile);
+                }
+            }
 
             if (signing != null && Compiler.SignAllFilesOptions.SignEmbeddedAssemblies)
             {
-                var assembliesToSign = refAssemblies.Combine(asm).Distinct();
+                var assembliesToSign = referencedAssembliesToPackage.ToArray().Combine(assemblyToPackage).Distinct().ToArray();
                 foreach (string file in assembliesToSign)
                 {
                     if (Compiler.SignAllFilesOptions.SkipSignedFiles && VerifyFileSignature.IsSigned(file))
@@ -3488,33 +3531,6 @@ namespace WixSharp
 
                     signing.Apply(file);
                 }
-            }
-
-
-            var referencedAssemblies = "";
-            foreach (string file in requiredAsms.OrderBy(x => x))
-            {
-                string refAasmFile;
-
-                if (file == "%this%")
-                {
-                    refAasmFile = ResolveClientAsm(outDir);
-                }
-                else
-                {
-                    refAasmFile = Utils.OriginalAssemblyFile(file);
-
-                    if (!file.SamePathAs(refAasmFile))
-                    {
-                        refAasmFile = refAasmFile.PathChangeDirectory(outDir);
-                        IO.File.Copy(file, refAasmFile, true);
-                        Compiler.TempFiles.Add(refAasmFile);
-                    }
-                }
-
-                if (!asmFile.SamePathAs(refAasmFile))
-
-                    referencedAssemblies += "\"" + IO.Path.GetFullPath(refAasmFile) + "\" ";
             }
 
             var configFile = outDir.PathCombine(embeddedUI ? "EmbeddedUI.config" : "CustomAction.config");

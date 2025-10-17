@@ -11,12 +11,23 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WixSharp;
 using WixSharp.CommonTasks;
+using static WixSharp.CommonTasks.AppSearch;
 using WixSharp.Msi;
 using WixToolset.Dtf.WindowsInstaller;
 
 class Constants
 {
     public static string PluginVersion = "2.3.0";
+}
+
+public class TestCustomActions
+{
+    [CustomAction]
+    public static ActionResult MyAction(Session session)
+    {
+        MessageBox.Show("Custom Action Invoked (canonical CA)");
+        return ActionResult.UserExit;
+    }
 }
 
 namespace Test1.installer.wixsharp
@@ -35,7 +46,8 @@ namespace Test1.installer.wixsharp
 
         static void Main()
         {
-            issue_1851();
+            issue_1856();
+            // issue_1851();
             // issue_1739();
             // issue_1847();
             // discussions_1846();
@@ -76,6 +88,43 @@ namespace Test1.installer.wixsharp
             @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\IniFile\MyProduct.msi".InsertToBinaryTable(
                 "config_file",
                 @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\IniFile\test.ini");
+        }
+
+        static void issue_1856()
+        {
+            // WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.1");
+            Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
+
+            Environment.CurrentDirectory = @"..\..\..\";
+
+            var project =
+                    new ManagedProject("My Product",
+                        new Dir(@"%ProgramFiles%\My Company\My Product",
+                            new File(
+                                @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\setup.cs")));
+
+            project.SignAllFiles = true;
+            project.DigitalSignature = new GenericSigner
+            {
+                Implementation = (file) =>
+                {
+                    var locked = file.IsFileLocked();
+                    if (locked)
+                        throw new Exception($"File is locked: {file}");
+                    return 0;
+                }
+            };
+
+            // project.AddActions(new ElevatedManagedAction(TestCustomActions.MyAction, Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed));
+
+            project.Load += e =>
+            {
+                MessageBox.Show("Load event called", "WixSharp");
+            };
+
+            project.WixExtensions.Add("WixToolset.UI.wixext");
+
+            project.BuildMsi();
         }
 
         static void issue_1851()

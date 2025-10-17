@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
 using WixSharp.Nsis;
+using WixToolset.Dtf.WindowsInstaller;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
@@ -17,6 +18,15 @@ using Xunit.Sdk;
 
 namespace WixSharp.Test
 {
+    public class TestCustomActions
+    {
+        [CustomAction]
+        public static ActionResult MyAction(Session session)
+        {
+            return ActionResult.UserExit;
+        }
+    }
+
     public class IssueFixesTest
     {
         /// <summary>
@@ -108,14 +118,11 @@ namespace WixSharp.Test
         }
 
         [Fact]
-        [Description("Issue #1833")]
-        public void Fix_Issue_1833()
+        [Description("Issue #1833 and #1856")]
+        public void Fix_Issue_1833_1856()
         {
-            // the test cannot be executed under xUnit runtime as it locks the executing assembly
-            // So providing it here as a code snippet for manual testing
-            return;
-
             var signedFiles = new List<string>();
+            var lockedFiles = new List<string>();
 
             Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
             var project = new ManagedProject("MyProduct",
@@ -129,11 +136,29 @@ namespace WixSharp.Test
                 Implementation = (x) =>
                 {
                     signedFiles.Add(x);
+                    if (x.IsFileLocked())
+                        lockedFiles.Add(x);
                     return 0;
                 }
             };
 
-            project.BuildMsi();
+            project.AddActions(new ElevatedManagedAction(TestCustomActions.MyAction, Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed));
+
+            project.Load += e =>
+            {
+            };
+
+            var msi = project.BuildMsi();
+
+            signedFiles = signedFiles.Select(x => x.PathGetFileName()).Distinct().ToList();
+
+            Assert.Empty(lockedFiles);
+
+            Assert.Contains("WixSharp.UI.WPF.dll", signedFiles);
+            Assert.Contains("WixSharp.dll", signedFiles);
+            Assert.Contains("WixSharp.Test.dll", signedFiles);
+            Assert.Contains("WixSharp.UI.dll", signedFiles);
+            Assert.Contains("WixSharp.Test.shadow.dll", signedFiles);
         }
 
         [Fact]

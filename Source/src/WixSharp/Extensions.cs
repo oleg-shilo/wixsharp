@@ -1157,6 +1157,35 @@ namespace WixSharp
         public static bool FileExists(this string path)
             => IO.File.Exists(path);
 
+        public static bool IsFileLocked(this string filePath)
+        {
+            if (!filePath.FileExists())
+                return false;
+
+            try
+            {
+                // Try opening for read/write access exclusively
+                using (FileStream stream = new FileStream(
+                    filePath,
+                    FileMode.Open,
+                    FileAccess.ReadWrite,
+                    FileShare.None))
+                {
+                    return false;
+                }
+            }
+            catch (IOException)
+            {
+                // File is locked by another process or in use
+                return true;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // Access denied (may indicate file is in use or read-only)
+                return true;
+            }
+        }
+
         /// <summary>
         /// Determines whether this instance is directory.
         /// </summary>
