@@ -1157,6 +1157,13 @@ namespace WixSharp
         public static bool FileExists(this string path)
             => IO.File.Exists(path);
 
+        /// <summary>
+        /// Determines whether is the specified file locked or not.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>
+        ///   <c>true</c> if [is file locked] [the specified file path]; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsFileLocked(this string filePath)
         {
             if (!filePath.FileExists())
