@@ -3788,66 +3788,67 @@ namespace WixSharp
                 var runOutput = new StringBuilder();
                 string file = exe.IsAbsolutePath() ? exe : ExternalTool.Locate(exe);
 
-                Process p = new Process();
-
-                if (file?.StartsWith("localtool:") == true)
+                using (Process p = new Process())
                 {
-                    var toolName = file.Split(':').Last();
-                    p.StartInfo.FileName = WixTools.dotnet;
-                    p.StartInfo.Arguments = $"{toolName} {args}";
-                }
-                else
-                {
-                    p.StartInfo.FileName = file;
-                    p.StartInfo.Arguments = args;
-                }
-
-                Trace.WriteLine("\"" + p.StartInfo.FileName + "\" " + p.StartInfo.Arguments);
-
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.WorkingDirectory = workingDir ?? Environment.CurrentDirectory;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.RedirectStandardError = true;
-                p.StartInfo.CreateNoWindow = true;
-                p.Start();
-
-                void OnOutputLine(string line)
-                {
-                    if (!suppressEcho)
+                    if (file?.StartsWith("localtool:") == true)
                     {
-                        Compiler.OutputWriteLine(line);
-                        Trace.WriteLine(line);
+                        var toolName = file.Split(':').Last();
+                        p.StartInfo.FileName = WixTools.dotnet;
+                        p.StartInfo.Arguments = $"{toolName} {args}";
+                    }
+                    else
+                    {
+                        p.StartInfo.FileName = file;
+                        p.StartInfo.Arguments = args;
                     }
 
-                    ToolsOutputReceived?.Invoke(line + Environment.NewLine);
-                    runOutput.AppendLine(line);
-                }
+                    Trace.WriteLine("\"" + p.StartInfo.FileName + "\" " + p.StartInfo.Arguments);
 
-                ThreadPool.QueueUserWorkItem(x =>
-                {
-                    string line = "";
-                    while (null != (line = p.StandardError.ReadLine()))
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.WorkingDirectory = workingDir ?? Environment.CurrentDirectory;
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.RedirectStandardError = true;
+                    p.StartInfo.CreateNoWindow = true;
+                    p.Start();
+
+                    void OnOutputLine(string line)
                     {
-                        lock (p)
+                        if (!suppressEcho)
                         {
-                            OnOutputLine(line);
+                            Compiler.OutputWriteLine(line);
+                            Trace.WriteLine(line);
+                        }
+
+                        ToolsOutputReceived?.Invoke(line + Environment.NewLine);
+                        runOutput.AppendLine(line);
+                    }
+
+                    ThreadPool.QueueUserWorkItem(x =>
+                    {
+                        string line = "";
+                        while (null != (line = p.StandardError.ReadLine()))
+                        {
+                            lock (p)
+                            {
+                                OnOutputLine(line);
+                            }
+                        }
+                    });
+
+                    {
+                        string line = null;
+                        while (null != (line = p.StandardOutput.ReadLine()))
+                        {
+                            lock (p)
+                            {
+                                OnOutputLine(line);
+                            }
                         }
                     }
-                });
 
-                {
-                    string line = null;
-                    while (null != (line = p.StandardOutput.ReadLine()))
-                    {
-                        lock (p)
-                        {
-                            OnOutputLine(line);
-                        }
-                    }
+                    p.WaitForExit();
+                    return runOutput.ToString();
                 }
-
-                p.WaitForExit();
-                return runOutput.ToString();
             }
         }
 
