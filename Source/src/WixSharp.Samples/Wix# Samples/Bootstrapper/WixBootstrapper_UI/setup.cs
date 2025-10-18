@@ -34,6 +34,7 @@ public class Script
     {
         // if you don't have WiX5 but want to experiment with it then uncomment the line below
         // WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.0");
+        WixTools.SetWixVersion(Environment.CurrentDirectory, "4.0.0");
 
         // if you want to use msi with custom managed UI then use BuildMsiWithManaged() instead of BuildMsi()
         // You will also need to use MsiExePackage instead of MsiPackage.
@@ -64,6 +65,15 @@ public class Script
         {
             bundle.Application = new ManagedBootstrapperApplication("%this%");
         }
+
+        bundle.DigitalSignature = new GenericSigner
+        {
+            Implementation = (x) =>
+            {
+                Console.WriteLine($"Signing bootstrapper {x} (simulation)");
+                return 0;
+            }
+        };
 
         Compiler.VerboseOutput = true;
 

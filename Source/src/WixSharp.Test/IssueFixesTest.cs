@@ -127,7 +127,7 @@ namespace WixSharp.Test
             Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
             var project = new ManagedProject("MyProduct",
                           new Dir(@"%ProgramFiles%\My Company\My Product",
-                              new File("setup.cs")));
+                              new File(this.GetType().Assembly.Location)));
 
             project.ManagedUI = ManagedUI.DefaultWpf;
 
@@ -148,7 +148,28 @@ namespace WixSharp.Test
             {
             };
 
-            var msi = project.BuildMsi();
+            var productMsi = project.BuildMsi();
+
+            var bootstrapper =
+                    new Bundle("MyProduct",
+                    new MsiPackage(productMsi) { DisplayInternalUI = true });
+
+            bootstrapper.Version = new Version("1.0.0.0");
+            bootstrapper.UpgradeCode = new Guid("67aea76c-ab9e-4cf4-96b9-9593081ad765");
+            // bootstrapper.PreserveTempFiles = true;
+
+            bootstrapper.DigitalSignature = new GenericSigner
+            {
+                Implementation = (x) =>
+                {
+                    if (x.IsFileLocked())
+                        throw new Exception("The file is locked!!!");
+                    Console.WriteLine($"Signing bootstrapper {x}");
+                    return 0;
+                }
+            };
+
+            bootstrapper.Build("MyProduct.exe");
 
             signedFiles = signedFiles.Select(x => x.PathGetFileName()).Distinct().ToList();
 
