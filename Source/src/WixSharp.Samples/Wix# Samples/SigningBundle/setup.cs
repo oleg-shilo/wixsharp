@@ -14,10 +14,9 @@ static class Script
     static public void Main()
     {
         // The sample is likely to fail as TempTestCert.pfx is not a term certificate that may expire.
-        // If it is the case, either use a proper certificate ot regenerate a temporary one by following the instructions
-        // from the certificates.readme.md file in this folder.
+        // If it is the case, either use a proper certificate or regenerate a temporary by executing create-temp-certificates.ps1.
 
-        System.Diagnostics.Debugger.Launch();
+        // System.Diagnostics.Debugger.Launch();
 
         var genericFileSigning = new DigitalSignature
         {

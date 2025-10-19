@@ -76,14 +76,6 @@ public class Script
         //     }
         // };
 
-        bundle.DigitalSignature = new DigitalSignatureBootstrapper
-        {
-            PfxFilePath = "TempTestCert.pfx",
-            Password = "password123",
-            Description = "MyProductBundle",
-            TimeUrl = new Uri("http://timestamp.digicert.com")
-        };
-
         Compiler.VerboseOutput = true;
 
         bundle.Build("my_setup.exe");
