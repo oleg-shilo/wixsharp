@@ -180,7 +180,7 @@ namespace WixSharp
                 CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
                                                PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
 
-            Console.WriteLine("Signing with DigitalSignature.");
+            Console.WriteLine($"Signing {fileToSign.PathGetFileName()} with DigitalSignature."); // full path will be printed by the signing tool
 
             if (TimeUrls.Any())
                 foreach (Uri uri in TimeUrls)

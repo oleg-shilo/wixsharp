@@ -41,6 +41,7 @@ public class Script
         // See WixBootstrapper_MsiEmbeddedUI.csproj sample
 
         string productMsi = BuildMsi();
+        return;
         // string productMsi = BuildMsiWithManaged();
 
         var bundle = new Bundle("My Product Bundle",
@@ -66,13 +67,21 @@ public class Script
             bundle.Application = new ManagedBootstrapperApplication("%this%");
         }
 
-        bundle.DigitalSignature = new GenericSigner
+        // bundle.DigitalSignature = new GenericSigner
+        // {
+        //     Implementation = (x) =>
+        //     {
+        //         Console.WriteLine($"Signing bootstrapper {x} (simulation)");
+        //         return 0;
+        //     }
+        // };
+
+        bundle.DigitalSignature = new DigitalSignatureBootstrapper
         {
-            Implementation = (x) =>
-            {
-                Console.WriteLine($"Signing bootstrapper {x} (simulation)");
-                return 0;
-            }
+            PfxFilePath = "TempTestCert.pfx",
+            Password = "password123",
+            Description = "MyProductBundle",
+            TimeUrl = new Uri("http://timestamp.digicert.com")
         };
 
         Compiler.VerboseOutput = true;
@@ -116,6 +125,19 @@ public class Script
         {
             MessageBox.Show("MSI session is completed", "My Product");
         };
+
+        productProj.DigitalSignature = new DigitalSignatureBootstrapper
+        {
+            PfxFilePath = "TempTestCert.pfx",
+            Password = "password123",
+            Description = "MyProductMsi",
+            TimeUrl = new Uri("http://timestamp.digicert.com")
+        };
+
+        productProj.SignAllFiles = true;
+        Compiler.SignAllFilesOptions.SupportedFileFormats = new[] { "msi", "exe" };
+        Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = false;
+        Compiler.VerboseOutput = true;
 
         return productProj.BuildMsi();
     }

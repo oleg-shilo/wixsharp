@@ -371,17 +371,23 @@ namespace WixSharp.CommonTasks
         /// "SetupBootstrapper.exe",
         /// "MyCert.pfx",
         /// "http://timestamp.verisign.com/scripts/timstamp.dll",
-        /// "MyPassword",
-        /// null);
+        /// "MyPassword");
         /// </code></example>
+        static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password)
+        {
+            return DigitalySign(fileToSign, pfxFile, timeURL, password, null, StoreType.file, SignOutputLevel.Verbose, HashAlgorithmType.sha1);
+        }
+
         static public int DigitalySignBootstrapper(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
+            Compiler.OutputWriteLine?.Invoke($"Signing the bootstrapper engine detached from {bootstrapperFileToSign.PathGetFileName()}...");
             var retval = DigitalySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
             if (retval != 0)
                 return retval;
 
-            return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
+            Compiler.OutputWriteLine?.Invoke($"Signing the bootstrapper {bootstrapperFileToSign.PathGetFileName()}...");
+            return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
         }
 
         const string unknown_sign_exe_location = "<unknown insignia.exe/signtool.exe Path>";
@@ -522,11 +528,6 @@ namespace WixSharp.CommonTasks
         ///     "MyPassword");
         /// </code>
         /// </example>
-        static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password)
-        {
-            return DigitalySign(fileToSign, pfxFile, timeURL, password, null, null);
-        }
-
         /// <summary>
         /// Imports the reg file.
         /// </summary>

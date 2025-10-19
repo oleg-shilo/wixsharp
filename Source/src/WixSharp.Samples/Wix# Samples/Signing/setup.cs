@@ -12,6 +12,8 @@ class Script
         // The sample will fail as wixsharp.pfx is not a real certificate
         // Uncomment last line of the code (`project.BuildMsi()`) if you want to run this sample
 
+        Environment.CurrentDirectory = @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\Signing";
+
         Project project =
             new ManagedProject("MyProduct",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
@@ -19,10 +21,10 @@ class Script
             {
                 DigitalSignature = new DigitalSignature
                 {
-                    PfxFilePath = "wixsharp.pfx",
-                    Password = "my_password",
+                    PfxFilePath = "TempTestCert.pfx",
+                    Password = "password123",
                     Description = "MyProduct",
-                    TimeUrl = new Uri("http://timestamp.verisign.com/scripts/timstamp.dll")
+                    //TimeUrl = new Uri("http://timestamp.verisign.com/scripts/timstamp.dll")
                 }
 
                 /// alternative approach by using a store certificate
@@ -43,6 +45,6 @@ class Script
         project.UI = WUI.WixUI_ProgressOnly;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
 
-        // project.BuildMsi();
+        project.BuildMsi();
     }
 }

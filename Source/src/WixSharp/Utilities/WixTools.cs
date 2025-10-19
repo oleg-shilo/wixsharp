@@ -712,7 +712,8 @@ namespace WixSharp.CommonTasks
                         string line = null;
                         while (null != (line = process.StandardOutput.ReadLine()))
                         {
-                            onConsoleOut(line);
+                            if (!line.IsEmpty())
+                                onConsoleOut(line);
                         }
 
                         string error = process.StandardError.ReadToEnd();

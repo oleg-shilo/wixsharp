@@ -77,7 +77,10 @@ namespace WixSharp
                         continue;
 
                     // Skip if file is not supported
-                    if (!options.SupportedFileFormats.Contains(Path.GetExtension(filePath).ToLowerInvariant()))
+                    var fileExt = Path.GetExtension(filePath).ToLower();
+                    var fileFormat = fileExt.TrimStart('.');
+
+                    if (!options.SupportedFileFormats.Any(x => x.IsOneOf(fileExt, fileFormat)))
                         continue;
 
                     // Skip if file is already signed
