@@ -346,6 +346,32 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Applies digital signature to a file (e.g. msi, exe, dll) with MS <c>SignTool.exe</c> utility.
+        /// <para>If you need to specify extra SignTool.exe parameters or the location of the tool use the overloaded <c>DigitalySign</c> signature </para>
+        /// </summary>
+        /// <param name="fileToSign">The file to sign.</param>
+        /// <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
+        /// with the <c>password</c> parameter.</param>
+        /// <param name="timeURL">The timestamp server's URL. If this option is not present, the signed file will not be timestamped.
+        /// A warning is generated if timestamping fails.</param>
+        /// <param name="password">The password to use when opening the PFX file.</param>
+        /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
+        ///
+        /// <example>The following is an example of signing <c>Setup.msi</c> file.
+        /// <code>
+        /// WixSharp.CommonTasks.Tasks.DigitalySign(
+        ///     "Setup.msi",
+        ///     "MyCert.pfx",
+        ///     "http://timestamp.verisign.com/scripts/timstamp.dll",
+        ///     "MyPassword");
+        /// </code>
+        /// </example>
+        static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password)
+        {
+            return DigitalySign(fileToSign, pfxFile, timeURL, password, null, StoreType.file, SignOutputLevel.Verbose, HashAlgorithmType.sha1);
+        }
+
+        /// <summary>
         /// Applies digital signature to a bootstrapper and the bootstrapper engine with MS <c>SignTool.exe</c> utility.
         /// <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about bootstrapper engine signing</a>
         /// </summary>
@@ -373,11 +399,6 @@ namespace WixSharp.CommonTasks
         /// "http://timestamp.verisign.com/scripts/timstamp.dll",
         /// "MyPassword");
         /// </code></example>
-        static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password)
-        {
-            return DigitalySign(fileToSign, pfxFile, timeURL, password, null, StoreType.file, SignOutputLevel.Verbose, HashAlgorithmType.sha1);
-        }
-
         static public int DigitalySignBootstrapper(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
@@ -507,27 +528,6 @@ namespace WixSharp.CommonTasks
         //        return null;
         //}
 
-        /// <summary>
-        /// Applies digital signature to a file (e.g. msi, exe, dll) with MS <c>SignTool.exe</c> utility.
-        /// <para>If you need to specify extra SignTool.exe parameters or the location of the tool use the overloaded <c>DigitalySign</c> signature </para>
-        /// </summary>
-        /// <param name="fileToSign">The file to sign.</param>
-        /// <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
-        /// with the <c>password</c> parameter.</param>
-        /// <param name="timeURL">The timestamp server's URL. If this option is not present, the signed file will not be timestamped.
-        /// A warning is generated if timestamping fails.</param>
-        /// <param name="password">The password to use when opening the PFX file.</param>
-        /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
-        ///
-        /// <example>The following is an example of signing <c>Setup.msi</c> file.
-        /// <code>
-        /// WixSharp.CommonTasks.Tasks.DigitalySign(
-        ///     "Setup.msi",
-        ///     "MyCert.pfx",
-        ///     "http://timestamp.verisign.com/scripts/timstamp.dll",
-        ///     "MyPassword");
-        /// </code>
-        /// </example>
         /// <summary>
         /// Imports the reg file.
         /// </summary>
