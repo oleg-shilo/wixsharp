@@ -692,6 +692,11 @@ namespace WixSharp.CommonTasks
                     return 1;
                 }
 
+                if (exePath?.StartsWith("localtool:") == true)
+                {
+                    exePath = exePath.Split(':').Last();
+                }
+
                 if (EchoOn)
                     onConsoleOut("Execute:\n\"" + this.ExePath + "\" " + this.Arguments);
 

@@ -25,13 +25,18 @@ public class InstallScript
 {
     static public void Main()
     {
+        // This is a custom BA sample that shows no dialogs of its own but only the MSI UI.
+        // It only pops a few message boxes to verify that the BA is running.
+        // This is a legacy sample the requires WiX v4.0.0 to build. If you need to build it with WiX5+
+        // you will need to modify the custom BA implementation accordingly. See WixBootstrapper_UI sample for reference.
+        WixTools.SetWixVersion(Environment.CurrentDirectory, "4.0.0");
+
         EnsureCompatibleWixVersion();
 
         var productProj =
             new ManagedProject("My Product",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
-                    new File("readme.txt")))
-            { };
+                    new File("readme.txt")));
 
         productProj.GUID = new Guid("6f330b47-2577-43ad-9095-1861bb258777");
         productProj.LicenceFile = "License.rtf";

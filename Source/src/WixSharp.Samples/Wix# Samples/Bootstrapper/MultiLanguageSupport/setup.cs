@@ -15,7 +15,7 @@ public static class Script
     [STAThread]
     static void Main()
     {
-        if (appFileName == "setup.exe")
+        if ("IDE".GetEnvVar() == null)
             RunAsBA();          // msi-running session
         else
             RunAsMsiBuilder();  // msi-building session
@@ -25,10 +25,16 @@ public static class Script
 
     static void RunAsMsiBuilder()
     {
+        // This sample uses a very simple custom BA to select the language. The rest of the UI is provided by the MSI.
+        // This is a BA implementation is based on the WiX v4.0.0 API. If you need to build it with WiX5+
+        // you will need to modify the custom BA implementation accordingly. See WixBootstrapper_UI sample for reference.
+        WixTools.SetWixVersion(Environment.CurrentDirectory, "4.0.0");
+
         // A custom BA with the language selection will be prepared
         BuildMsiWithLanguageSelectionBootstrapper();
 
-        // a custom msi launcher with the language selection will be prepared
+        // An alternative approach
+        // A custom msi launcher with the language selection will be prepared
         // It is an alternative technique for building a simplistic managed bootstrapper that is nothing else but simple
         // .NET executable.
         {

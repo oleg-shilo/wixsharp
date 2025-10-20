@@ -9,7 +9,6 @@ using io = System.IO;
 
 public class Script
 {
-    // ------
     // NOTE: This sample demonstrates the new old BA hosting model obsoleted in WiX5.
     // This model requires the BA to be a DLL (not an external exe).
     // ------
