@@ -5,58 +5,59 @@ using System.Linq;
 using System.Security.Principal;
 using System.Windows;
 using WixSharp;
-using WixToolset.Mba.Core;
+using WixToolset.BootstrapperApplicationApi;
 
-using mba = WixToolset.Mba.Core;
-
-using PackageState = WixToolset.Mba.Core.PackageState;
-
-[assembly: BootstrapperApplicationFactory(typeof(WixToolset.WixBA.WixBAFactory))]
-
-namespace WixToolset.WixBA
-{
-    public class WixBAFactory : BaseBootstrapperApplicationFactory
-    {
-        protected override mba.IBootstrapperApplication Create(IEngine engine, IBootstrapperCommand command)
-        {
-            return new ManagedBA(engine, command);
-        }
-    }
-}
+// namespace WixToolset.WixBA
+// {
+//     public class WixBAFactory : BaseBootstrapperApplicationFactory
+//     {
+//         protected override mba.IBootstrapperApplication Create(IEngine engine, IBootstrapperCommand command)
+//         {
+//             return new ManagedBA(engine, command);
+//         }
+//     }
+// }
 
 public static class Runtime
 {
-    public static void RestartItself()
-    {
-        // On startup the bundle app always starts another instance
-        // of itself but with some extra CLI arguments that need to be cleaned up.
+    // public static void RestartItself()
+    // {
+    //     // On startup the bundle app always starts another instance
+    //     // of itself but with some extra CLI arguments that need to be cleaned up.
 
-        var exe = Environment.GetCommandLineArgs()[0];
-        var args = string.Join(", ", Environment.GetCommandLineArgs().Skip(1)
-            .Where(x => !x.StartsWith("-burn.")));
+    //     var exe = Environment.GetCommandLineArgs()[0];
+    //     var args = string.Join(", ", Environment.GetCommandLineArgs().Skip(1)
+    //         .Where(x => !x.StartsWith("-burn.")));
 
-        var startInfo = new ProcessStartInfo();
-        startInfo.UseShellExecute = true;
-        startInfo.WorkingDirectory = Environment.CurrentDirectory;
-        startInfo.FileName = exe;
-        startInfo.Arguments = args;
-        startInfo.Verb = "runas";
+    //     var startInfo = new ProcessStartInfo();
+    //     startInfo.UseShellExecute = true;
+    //     startInfo.WorkingDirectory = Environment.CurrentDirectory;
+    //     startInfo.FileName = exe;
+    //     startInfo.Arguments = args;
+    //     startInfo.Verb = "runas";
 
-        Process.Start(startInfo);
-    }
+    //     Process.Start(startInfo);
+    // }
 
     public static bool IsAdmin => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 }
 
-public class ManagedBA : mba.BootstrapperApplication
+public class ManagedBA : BootstrapperApplication
 {
-    public ManagedBA(mba.IEngine engine, mba.IBootstrapperCommand command) : base(engine)
+    public ManagedBA()
     {
-        this.Command = command;
     }
 
-    public mba.IEngine Engine => base.engine;
-    public mba.IBootstrapperCommand Command;
+    public IEngine Engine => base.engine;
+    public IBootstrapperCommand Command;
+    internal IBootstrapperApplicationData BAManifest { get; private set; }
+
+    protected override void OnCreate(CreateEventArgs args)
+    {
+        base.OnCreate(args);
+        Command = args.Command;
+        BAManifest = new BootstrapperApplicationData();
+    }
 
     /// <summary>
     /// Entry point that is called when the bootstrapper application is ready to run.
@@ -64,14 +65,14 @@ public class ManagedBA : mba.BootstrapperApplication
     protected override void Run()
     {
         // since it is a custom BA we are responsible for elevating the process if it is required.
-        if (Runtime.IsAdmin)
-        {
-            new MainView(this).ShowDialog();
-        }
-        else
-        {
-            Runtime.RestartItself();
-        }
+        // if (Runtime.IsAdmin)
+        // {
+        new MainView(this).ShowDialog();
+        // }
+        // else
+        // {
+        //     Runtime.RestartItself();
+        // }
 
         engine.Quit(0);
     }
@@ -141,7 +142,7 @@ public class MainViewModel : INotifyPropertyChanged
         catch { }
     }
 
-    void OnError(object sender, mba.ErrorEventArgs e)
+    void OnError(object sender, ErrorEventArgs e)
     {
         MessageBox.Show(e.ErrorMessage);
     }
@@ -204,7 +205,7 @@ public class MainViewModel : INotifyPropertyChanged
         UninstallEnabled = false;
 
         Bootstrapper.Engine.SetVariableString("UserInput", UserInput, false);
-        Bootstrapper.Engine.Plan(mba.LaunchAction.Install);
+        Bootstrapper.Engine.Plan(LaunchAction.Install);
     }
 
     public void UninstallExecute()
@@ -213,7 +214,7 @@ public class MainViewModel : INotifyPropertyChanged
         InstallEnabled = false;
         UninstallEnabled = false;
 
-        Bootstrapper.Engine.Plan(mba.LaunchAction.Uninstall);
+        Bootstrapper.Engine.Plan(LaunchAction.Uninstall);
     }
 
     public void ExitExecute()
@@ -225,7 +226,7 @@ public class MainViewModel : INotifyPropertyChanged
     /// Method that gets invoked when the Bootstrapper ApplyComplete event is fired.
     /// This is called after a bundle installation has completed. Make sure we updated the view.
     /// </summary>
-    void OnApplyComplete(object sender, mba.ApplyCompleteEventArgs e)
+    void OnApplyComplete(object sender, ApplyCompleteEventArgs e)
     {
         IsBusy = false;
         InstallEnabled = false;
@@ -238,7 +239,7 @@ public class MainViewModel : INotifyPropertyChanged
     /// specified in one of the package elements (msipackage, exepackage, msppackage,
     /// msupackage) in the WiX bundle.
     /// </summary>
-    void OnDetectPackageComplete(object sender, mba.DetectPackageCompleteEventArgs e)
+    void OnDetectPackageComplete(object sender, DetectPackageCompleteEventArgs e)
     {
         // Debug.Assert(false);
         if (e.PackageId == "MyProductPackageId")
@@ -273,7 +274,7 @@ public class MainViewModel : INotifyPropertyChanged
     /// If the planning was successful, it instructs the Bootstrapper Engine to
     /// install the packages.
     /// </summary>
-    void OnPlanComplete(object sender, mba.PlanCompleteEventArgs e)
+    void OnPlanComplete(object sender, PlanCompleteEventArgs e)
     {
         if (e.Status >= 0)
             Bootstrapper.Engine.Apply(ViewHandle);

@@ -9,7 +9,11 @@ namespace WixToolset.WixBA
     {
         private static int Main()
         {
-            MessageBox.Show("Hello 7777777!");
+            MessageBox.Show(
+                "This is custom BA stand-alone application!\n" +
+                "The rest of the dialogs is nothing else but a WiX BA sample.",
+                "WixSharp - WiX5+");
+
             var application = new WixBA();
 
             ManagedBootstrapperApplication.Run(application);

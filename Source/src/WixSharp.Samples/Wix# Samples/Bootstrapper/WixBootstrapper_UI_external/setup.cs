@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Bootstrapper;
@@ -8,43 +7,12 @@ using WixSharp.CommonTasks;
 using WixToolset.Dtf.WindowsInstaller;
 using io = System.IO;
 
-public class Program
+public class Script
 {
-    static public void Main(string[] args)
-    {
-        if (Environment.GetEnvironmentVariable("IDE") == null)
-        {
-            BAHost.Run(args); // run as a bundle application
-        }
-        else
-        {
-            BuildScript.Run(args); // run as a bootstrapper build script
-        }
-    }
-}
-
-class BAHost
-{
-    [DllImport("kernel32.dll")]
-    static extern bool FreeConsole();
-
-    static public void Run(string[] args)
-    {
-        FreeConsole(); // closes the console window
-        var application = new ManagedBA();
-        WixToolset.BootstrapperApplicationApi.ManagedBootstrapperApplication.Run(application);
-        return;
-    }
-}
-
-public class BuildScript
-{
-    // This WixSharp sample uses a simple (Hello-World style) custom BA implemented in the same assembly as the bundle builder
-    // You can also use System.Reflection.Assembly.GetExecutingAssembly().Location instead of "%this%"
+    // This WixSharp sample uses the official WiX5 BA sample (https://github.com/wixtoolset/wix/tree/HEAD/src/test/burn/WixToolset.WixBA)
+    // as an external BA application.
     // NOTE: This sample demonstrates the new custom BA hosting model introduced in WiX5.
-    // This model requires the BA to be a self-contained executable (not a DLL). In this case the BA is built into
-    // the same executable as the bundle builder script. If you want to build the BA into a separate executable
-    // have a look at the WixBootstrapper_UI_external sample.
+    // This model requires the BA to be a self-contained executable (not a DLL).
     // ------
     // Note, passing BootstrapperCore.config is optional and if not provided the default BootstrapperCore.config
     // will be used. The content of the default BootstrapperCore.config can be accessed via
@@ -56,11 +24,8 @@ public class BuildScript
     // ------
     // If you add any more packages, you may need to update `OnDetectPackageComplete` (i.g. to show 'install' button
     // even if one package is already installed).
-    // ------
-    // The UI implementation is based on the work of BRYANPJOHNSTON
-    // http://bryanpjohnston.com/2012/09/28/custom-wix-managed-bootstrapper-application/
 
-    static public void Run(string[] args)
+    static public void Main()
     {
         if (WixTools.GlobalWixVersion.Major < 5)
         {
@@ -68,12 +33,12 @@ public class BuildScript
             return;
         }
 
-        // if you want to use msi with custom managed UI then use BuildMsiWithManagedUI()
-        // instead of BuildMsi(). You will also need to use MsiExePackage instead of MsiPackage.
+        // if you want to use msi with custom managed UI then use BuildMsiWithManaged() instead of BuildMsi()
+        // You will also need to use MsiExePackage instead of MsiPackage.
         // See WixBootstrapper_MsiEmbeddedUI.csproj sample
 
         string productMsi = BuildMsi();
-        //string productMsi = BuildMsiWithManagedUI();
+        // string productMsi = BuildMsiWithManaged();
 
         var bundle = new Bundle("My Product Bundle",
                          new MsiPackage(productMsi)
@@ -85,8 +50,11 @@ public class BuildScript
 
         bundle.Version = new Version("1.0.0.0");
         bundle.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
-        bundle.Application = new ManagedBootstrapperApplication("%this%");
-        bundle.Application.AddPayload(new Payload(bundle.GetType().Assembly.Location)); // WixSharp.dll
+
+        // this is an official WiX5 BA sample
+        // from https://github.com/wixtoolset/wix/tree/HEAD/src/test/burn/WixToolset.WixBA
+        var customBa_Wix5_Sample = @"..\WiX5-Spike\WixToolset.WixBA\output\net472\WixToolset.WixBA.exe";
+        bundle.Application = new ManagedBootstrapperApplication(customBa_Wix5_Sample);
 
         bundle.Build("my_setup.exe");
     }
@@ -121,7 +89,7 @@ public class BuildScript
         return productProj.BuildMsi();
     }
 
-    static string BuildMsiWithManagedUI()
+    static string BuildMsiWithManaged()
     {
         var productProj =
             new ManagedProject("My Product1",
