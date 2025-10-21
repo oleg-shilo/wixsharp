@@ -19,14 +19,12 @@
 
   <ItemGroup>
     <PackageReference Include="WixSharp_wix4" Version="2.6.2" />
-    <PackageReference Include="WixToolset.BootstrapperApplicationApi" Version="6.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
 

@@ -1,28 +1,35 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Security.Principal;
 using System.Windows;
-using WixSharp;
-using WixToolset.BootstrapperApplicationApi;
+using WixToolset.Mba.Core;
 
-public class ManagedBA : BootstrapperApplication
+using mba = WixToolset.Mba.Core;
+
+using PackageState = WixToolset.Mba.Core.PackageState;
+
+[assembly: BootstrapperApplicationFactory(typeof(WixToolset.WixBA.WixBAFactory))]
+
+namespace WixToolset.WixBA
 {
-    public ManagedBA()
+    public class WixBAFactory : BaseBootstrapperApplicationFactory
     {
+        protected override mba.IBootstrapperApplication Create(IEngine engine, IBootstrapperCommand command)
+        {
+            return new ManagedBA(engine, command);
+        }
+    }
+}
+
+public class ManagedBA : mba.BootstrapperApplication
+{
+    public ManagedBA(mba.IEngine engine, mba.IBootstrapperCommand command) : base(engine)
+    {
+        this.Command = command;
     }
 
-    public IEngine Engine => base.engine;
-    public IBootstrapperCommand Command;
-    internal IBootstrapperApplicationData BAManifest { get; private set; }
-
-    protected override void OnCreate(CreateEventArgs args)
-    {
-        base.OnCreate(args);
-        Command = args.Command;
-        BAManifest = new BootstrapperApplicationData();
-    }
+    public mba.IEngine Engine => base.engine;
+    public mba.IBootstrapperCommand Command;
 
     /// <summary>
     /// Entry point that is called when the bootstrapper application is ready to run.
@@ -98,7 +105,7 @@ public class MainViewModel : INotifyPropertyChanged
         catch { }
     }
 
-    void OnError(object sender, ErrorEventArgs e)
+    void OnError(object sender, mba.ErrorEventArgs e)
     {
         MessageBox.Show(e.ErrorMessage);
     }
@@ -151,6 +158,7 @@ public class MainViewModel : INotifyPropertyChanged
             OnPropertyChanged("IsBusy");
         }
     }
+
     public ManagedBA Bootstrapper { get; set; }
 
     public void InstallExecute()
@@ -160,7 +168,7 @@ public class MainViewModel : INotifyPropertyChanged
         UninstallEnabled = false;
 
         Bootstrapper.Engine.SetVariableString("UserInput", UserInput, false);
-        Bootstrapper.Engine.Plan(LaunchAction.Install);
+        Bootstrapper.Engine.Plan(mba.LaunchAction.Install);
     }
 
     public void UninstallExecute()
@@ -169,7 +177,7 @@ public class MainViewModel : INotifyPropertyChanged
         InstallEnabled = false;
         UninstallEnabled = false;
 
-        Bootstrapper.Engine.Plan(LaunchAction.Uninstall);
+        Bootstrapper.Engine.Plan(mba.LaunchAction.Uninstall);
     }
 
     public void ExitExecute()
@@ -181,7 +189,7 @@ public class MainViewModel : INotifyPropertyChanged
     /// Method that gets invoked when the Bootstrapper ApplyComplete event is fired.
     /// This is called after a bundle installation has completed. Make sure we updated the view.
     /// </summary>
-    void OnApplyComplete(object sender, ApplyCompleteEventArgs e)
+    void OnApplyComplete(object sender, mba.ApplyCompleteEventArgs e)
     {
         IsBusy = false;
         InstallEnabled = false;
@@ -194,7 +202,7 @@ public class MainViewModel : INotifyPropertyChanged
     /// specified in one of the package elements (msipackage, exepackage, msppackage,
     /// msupackage) in the WiX bundle.
     /// </summary>
-    void OnDetectPackageComplete(object sender, DetectPackageCompleteEventArgs e)
+    void OnDetectPackageComplete(object sender, mba.DetectPackageCompleteEventArgs e)
     {
         // Debug.Assert(false);
         if (e.PackageId == "MyProductPackageId")
@@ -229,7 +237,7 @@ public class MainViewModel : INotifyPropertyChanged
     /// If the planning was successful, it instructs the Bootstrapper Engine to
     /// install the packages.
     /// </summary>
-    void OnPlanComplete(object sender, PlanCompleteEventArgs e)
+    void OnPlanComplete(object sender, mba.PlanCompleteEventArgs e)
     {
         if (e.Status >= 0)
             Bootstrapper.Engine.Apply(ViewHandle);

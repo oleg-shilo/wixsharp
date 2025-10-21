@@ -8,35 +8,10 @@ namespace $safeprojectname$
     {
         static void Main()
         {
-            // Starting from version 5.0 WiX uses new BA hosting model. 
-            // Read more about it here:https://github.com/oleg-shilo/wixsharp/wiki/Wix%23-Bootstrapper-integration-notes
+            // Ensure you are using a legacy WiX4 toolset
+            if (WixTools.GlobalWixVersion.Major >= 5)
+                WixTools.SetWixVersion(Environment.CurrentDirectory, "4.0.0");
 
-            if (Environment.GetEnvironmentVariable("IDE") == null)
-            {
-                BAHost.Run(args); // running as a bundle application during setup
-            }
-            else
-            {
-                BuildScript.Run(args); // run as a bootstrapper build script
-            }
-        }
-
-        public class BAHost
-        {
-            [DllImport("kernel32.dll")]
-            static extern bool FreeConsole();
-
-            static public void Run(string[] args)
-            {
-                FreeConsole(); // closes the console window; alternatively compile this app as a windows application
-
-                var application = new ManagedBA();
-                WixToolset.BootstrapperApplicationApi.ManagedBootstrapperApplication.Run(application);
-            }
-        }
-
-        public class BuildScript
-        {
             string productMsi = BuildMsi();
 
             var bootstrapper =
