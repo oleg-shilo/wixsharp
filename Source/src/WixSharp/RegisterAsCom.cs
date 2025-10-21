@@ -153,7 +153,7 @@ namespace WixSharp
                 {
                     foreach (var line in output)
                     {
-                        Console.WriteLine(line);
+                        Compiler.OutputWriteLine(line);
                     }
                 }
             }

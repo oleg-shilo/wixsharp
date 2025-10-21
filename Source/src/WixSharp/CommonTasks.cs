@@ -1246,7 +1246,7 @@ namespace WixSharp.CommonTasks
                         project.Version = new Version(FileVersionInfo.GetVersionInfo(file_path).FileVersion);
                 }
                 else
-                    Console.WriteLine($"Warning: cannot set `project.Version` no file with {fileId} found");
+                    Compiler.OutputWriteLine($"Warning: cannot set `project.Version` no file with {fileId} found");
             }
             return project;
         }
@@ -1857,7 +1857,7 @@ namespace WixSharp.CommonTasks
             var groups = customActions.GroupBy(v => v.Method.Name);
             foreach (var group in groups)
                 if (group.Count() > 1)
-                    Console.WriteLine($"WIXSHARP.cs(0): warning IL3000: Custom action `{group.Key}` has multiple entry points in '{assemblyPath}'");
+                    Compiler.OutputWriteLine($"WIXSHARP.cs(0): warning IL3000: Custom action `{group.Key}` has multiple entry points in '{assemblyPath}'");
 
             var code = new StringBuilder();
 
@@ -1983,8 +1983,8 @@ namespace WixSharp.CommonTasks
             IO.File.WriteAllText(actualProjectFile, projDefinition);
             IO.File.WriteAllText(entryPointCs, assembly.GenerateAotEntryPoints());
 
-            Console.WriteLine($"Exporting native entry points of AOT assembly:");
-            Console.WriteLine($"    {entryPointCs}");
+            Compiler.OutputWriteLine($"Exporting native entry points of AOT assembly:");
+            Compiler.OutputWriteLine($"    {entryPointCs}");
 
             // IO.File.Copy(assembly.PathChangeFileName("aot.cs"), projDir.PathJoin("aot.cs"));
 
@@ -1998,7 +1998,7 @@ namespace WixSharp.CommonTasks
                 process.Start();
                 process.WaitForExit();
 
-                Console.WriteLine($"Converted: {sw.Elapsed}");
+                Compiler.OutputWriteLine($"Converted: {sw.Elapsed}");
                 if (process.ExitCode == 0)
                     return aotAsm;
 

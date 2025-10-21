@@ -3713,10 +3713,10 @@ namespace WixSharp
         public static void VerifyLanguage(this Project project)
         {
             if (project.IsMultiLanguage && !project.DefaultLanguage.IsCompatibleWith(CultureInfo.InstalledUICulture))
-                Console.WriteLine(
+                Compiler.OutputWriteLine(
                     $"Warning: Your project default language ({project.DefaultLanguage.IetfLanguageTag}) " +
                     $"does not match the OS language ({CultureInfo.InstalledUICulture.IetfLanguageTag}). " +
-                    $"This may lead to unexpected behavior when building multi-language packages (see Wiki-Localization article).\n" +
+                    $"This may lead to unexpected behavior when building multi-language packages (see Wiki Localization article).\n" +
                     $"Normally you would prefer your project default language to be the same as your OS language.");
         }
 

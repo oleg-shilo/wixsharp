@@ -298,14 +298,14 @@ class Program
                 }
                 else
                 {
-                    Console.WriteLine("GetUserPreferredUILanguages(2) error: " + Marshal.GetLastWin32Error());
+                    Compiler.OutputWriteLine("GetUserPreferredUILanguages(2) error: " + Marshal.GetLastWin32Error());
 
                     return null;
                 }
             }
             else
             {
-                Console.WriteLine("GetUserPreferredUILanguages(1) error: " + Marshal.GetLastWin32Error());
+                Compiler.OutputWriteLine("GetUserPreferredUILanguages(1) error: " + Marshal.GetLastWin32Error());
 
                 return null;
             }

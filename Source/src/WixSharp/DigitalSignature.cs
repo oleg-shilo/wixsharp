@@ -180,7 +180,7 @@ namespace WixSharp
                 CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
                                                PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
 
-            Console.WriteLine($"Signing {fileToSign.PathGetFileName()} with DigitalSignature."); // full path will be printed by the signing tool
+            Compiler.OutputWriteLine($"Signing {fileToSign.PathGetFileName()} with DigitalSignature."); // full path will be printed by the signing tool
 
             if (TimeUrls.Any())
                 foreach (Uri uri in TimeUrls)
@@ -188,7 +188,7 @@ namespace WixSharp
                     for (int i = 0; i < MaxTimeUrlRetry && retValue != 0; i++)
                     {
                         retValue = apply(uri?.AbsoluteUri);
-                        Console.WriteLine("Retrying applying DigitalSignature");
+                        Compiler.OutputWriteLine("Retrying applying DigitalSignature");
                         Thread.Sleep(UrlRetrySleep);
                     }
 

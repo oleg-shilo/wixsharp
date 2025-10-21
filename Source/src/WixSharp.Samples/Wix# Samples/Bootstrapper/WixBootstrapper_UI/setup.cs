@@ -30,10 +30,9 @@ class BAHost
 
     static public void Run(string[] args)
     {
-        FreeConsole(); // closes the console window
+        FreeConsole(); // closes the console window; alternatively compile this app as a windows application
         var application = new ManagedBA();
         WixToolset.BootstrapperApplicationApi.ManagedBootstrapperApplication.Run(application);
-        return;
     }
 }
 
@@ -86,7 +85,6 @@ public class BuildScript
         bundle.Version = new Version("1.0.0.0");
         bundle.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
         bundle.Application = new ManagedBootstrapperApplication("%this%");
-        bundle.Application.AddPayload(new Payload(bundle.GetType().Assembly.Location)); // WixSharp.dll
 
         bundle.Build("my_setup.exe");
     }

@@ -242,7 +242,7 @@ namespace WixSharp.Nsis
             var output = ExecuteNsisMake(nsisMake, $"/INPUTCHARSET UTF8 {nsiFile} {OptionalArguments}");
             if (!string.IsNullOrEmpty(output))
             {
-                Console.WriteLine(output);
+                Compiler.OutputWriteLine(output);
             }
 
             // Return null if the OutputFile is failed to generate

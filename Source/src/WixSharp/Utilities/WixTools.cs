@@ -492,7 +492,7 @@ namespace WixSharp.CommonTasks
                     }}");
 
             var sw = Stopwatch.StartNew();
-            Console.WriteLine("Restoring packages...");
+            Compiler.OutputWriteLine("Restoring packages...");
 
             // need to publish to restore even if we are going to "publish"
             // It is to handle the cases when in user updated project file manually (e.g. to get different version of tools)
