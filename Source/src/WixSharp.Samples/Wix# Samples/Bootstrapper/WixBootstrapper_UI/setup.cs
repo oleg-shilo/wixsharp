@@ -116,6 +116,15 @@ public class BuildScript
             MessageBox.Show("MSI session is completed", "My Product");
         };
 
+        productProj.AddActions(new ElevatedManagedAction(CustomActions.MyAction, Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed)
+        {
+            //RefAssemblies = new[] { typeof(ManagedBootstrapperApplication).Assembly.Location }
+        });
+
+        System.Diagnostics.Debugger.Launch();
+
+        productProj.DefaultRefAssemblies.Add(typeof(WixToolset.BootstrapperApplicationApi.ManagedBootstrapperApplication).Assembly.Location);
+
         return productProj.BuildMsi();
     }
 
@@ -147,5 +156,15 @@ public class BuildScript
         };
 
         return productProj.BuildMsi();
+    }
+}
+
+public class CustomActions
+{
+    [CustomAction]
+    public static ActionResult MyAction(Session session)
+    {
+        System.Diagnostics.Debugger.Launch();
+        return session.HandleErrors(() => MessageBox.Show("Hello world. I am in a custom action"));
     }
 }
