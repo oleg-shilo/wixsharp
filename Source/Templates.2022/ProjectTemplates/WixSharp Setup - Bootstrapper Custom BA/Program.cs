@@ -2,12 +2,13 @@
 using WixSharp;
 using System.Runtime.InteropServices;
 using WixSharp.Bootstrapper;
+using WixSharp.CommonTasks;
 
 namespace $safeprojectname$
 {
     public class Program
     {
-        static void Main()
+        static void Main(string[] args)
         {
             // Starting from version 5.0 WiX uses new BA hosting model. 
             // Read more about it here:https://github.com/oleg-shilo/wixsharp/wiki/Wix%23-Bootstrapper-integration-notes
