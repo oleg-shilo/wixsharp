@@ -116,13 +116,10 @@ public class BuildScript
             MessageBox.Show("MSI session is completed", "My Product");
         };
 
-        productProj.AddActions(new ElevatedManagedAction(CustomActions.MyAction, Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed)
-        {
-            //RefAssemblies = new[] { typeof(ManagedBootstrapperApplication).Assembly.Location }
-        });
-
-        System.Diagnostics.Debugger.Launch();
-
+        productProj.AddActions(new ElevatedManagedAction(CustomActions.MyAction, Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed));
+        // since adding custom actions will trigger dependency checking by MakeSfxCA and this app is referencing the
+        // WixToolset.BootstrapperApplicationApi assembly, you will need to add it as a DefaultRefAssemblies even though
+        // productProj dos not need it but only the bundle. This is a constrain of the current MakeSfxCA implementation.
         productProj.DefaultRefAssemblies.Add(typeof(WixToolset.BootstrapperApplicationApi.ManagedBootstrapperApplication).Assembly.Location);
 
         return productProj.BuildMsi();
