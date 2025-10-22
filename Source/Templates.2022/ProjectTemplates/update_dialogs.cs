@@ -28,7 +28,7 @@ var proj3Files = Directory.GetFiles(@"..\..\Templates.2022\ProjectTemplates", "*
 var projFiles = proj3Files.Select(x => x.Replace(" (WiX3)", "")); // WiX4+
 
 updateWixSharpPackages(proj3Files, "1.26.0");
-updateWixSharpPackages(projFiles, "2.6.2");
+updateWixSharpPackages(projFiles, "2.9.1");
 
 foreach (var file in Directory.GetFiles(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI (WiX3)\Dialogs",
         "*.xaml.cs"))
@@ -49,6 +49,7 @@ packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Cust
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Managed Setup - Custom WPF UI");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper (WiX3)");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper");
+packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper Custom BA (WiX4)");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper Custom BA (WiX3)");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup - Bootstrapper Custom BA");
 packageDir(@"..\..\Templates.2022\ProjectTemplates\WixSharp Setup (WiX3)");

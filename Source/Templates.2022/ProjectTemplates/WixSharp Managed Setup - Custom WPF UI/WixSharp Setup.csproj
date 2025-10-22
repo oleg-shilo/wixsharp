@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WixSharp-wix4.WPF" Version="2.6.2" />
+    <PackageReference Include="WixSharp-wix4.WPF" Version="2.9.1" />
   </ItemGroup>
 
 

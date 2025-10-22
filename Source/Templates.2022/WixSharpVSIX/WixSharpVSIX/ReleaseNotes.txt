@@ -1,3 +1,6 @@
+v2.4.0
+- Updated WixSharp Custom BA template to reflect new WiX5+ BA hosting model
+
 v2.3.2
 - Fix Grid layout usage across WPF dialogs (XAML)
 

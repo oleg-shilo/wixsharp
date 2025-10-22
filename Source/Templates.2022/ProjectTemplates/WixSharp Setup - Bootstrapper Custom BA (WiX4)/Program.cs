@@ -1,6 +1,7 @@
 ﻿using System;
 using WixSharp;
 using WixSharp.Bootstrapper;
+using WixSharp.CommonTasks;
 
 namespace $safeprojectname$
 {

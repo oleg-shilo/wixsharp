@@ -120,6 +120,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="..\..\ProjectTemplates\WixSharp Setup - Bootstrapper Custom BA %28WiX4%29.zip">
+      <Link>ProjectTemplates\WixSharp\WixSharp Setup - Bootstrapper Custom BA %28WiX4%29.zip</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="..\..\ProjectTemplates\WixSharp Setup - Bootstrapper Custom BA.zip">
       <Link>ProjectTemplates\WixSharp\WixSharp Setup - Bootstrapper Custom BA.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -1,5 +1,6 @@
 ﻿using System;
 using WixSharp;
+using System.Runtime.InteropServices;
 using WixSharp.Bootstrapper;
 
 namespace $safeprojectname$
@@ -37,33 +38,41 @@ namespace $safeprojectname$
 
         public class BuildScript
         {
-            string productMsi = BuildMsi();
+            static public void Run(string[] args)
+            {
+                if (WixTools.GlobalWixVersion.Major < 5)
+                {
+                    Console.WriteLine("This sample requires WiX5 or higher.");
+                    return;
+                }
 
-            var bootstrapper =
-                new Bundle("MyProduct",
-                    new MsiPackage(productMsi)
-                    {
-                        Id = "MyProductPackageId",
-                        DisplayInternalUI = true
-                    });
+                string productMsi = BuildMsi();
 
-            bootstrapper.Version = new Version("1.0.0.0");
-            bootstrapper.UpgradeCode = new Guid("$guid1$");
+                var bootstrapper =
+                    new Bundle("MyProduct",
+                        new MsiPackage(productMsi)
+                        {
+                            Id = "MyProductPackageId",
+                            DisplayInternalUI = true
+                        });
 
-            bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
+                bootstrapper.Version = new Version("1.0.0.0");
+                bootstrapper.UpgradeCode = new Guid("$guid1$");
+                bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
 
-            bootstrapper.Build("MyProduct.exe");
-        }
+                bootstrapper.Build("MyProduct.exe");
+            }
 
-        static string BuildMsi()
-        {
-            var project = new Project("MyProduct",
-                              new Dir(@"%ProgramFiles%\My Company\My Product",
-                                  new File("Program.cs")));
+            static string BuildMsi()
+            {
+                var project = new Project("MyProduct",
+                                  new Dir(@"%ProgramFiles%\My Company\My Product",
+                                      new File("Program.cs")));
 
-            project.GUID = new Guid("$guid1$");
+                project.GUID = new Guid("$guid1$");
 
-            return project.BuildMsi();
+                return project.BuildMsi();
+            }
         }
     }
 }

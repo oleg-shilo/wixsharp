@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net462</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
      <RootNamespace>WixSharp</RootNamespace>
     <UseWPF>true</UseWPF>
     <PlatformTarget>x86</PlatformTarget>
