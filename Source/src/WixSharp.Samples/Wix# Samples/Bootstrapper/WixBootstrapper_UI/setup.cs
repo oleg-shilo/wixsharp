@@ -73,8 +73,6 @@ public class BuildScript
         // See WixBootstrapper_MsiEmbeddedUI.csproj sample
 
         string productMsi = BuildMsi();
-        // return;
-        //string productMsi = BuildMsiWithManagedUI();
 
         var bundle = new Bundle("My Product Bundle",
                          new MsiPackage(productMsi)
@@ -96,11 +94,11 @@ public class BuildScript
         };
 
         bundle.OutDir = System.Reflection.Assembly.GetExecutingAssembly().Location.PathGetDirName();
-        System.Diagnostics.Debugger.Launch();
+        // System.Diagnostics.Debugger.Launch();
+
         bundle.OutFileName = "my_setup";
         bundle.PreserveTempFiles = true;
-        var ttt = bundle.Build();
-        // bundle.Build("my_setup.exe");
+        bundle.Build();
     }
 
     static string BuildMsi()
@@ -128,14 +126,15 @@ public class BuildScript
         productProj.AfterInstall += (SetupEventArgs e) =>
         {
             MessageBox.Show("MSI session is completed", "My Product");
+            e.Result = ActionResult.UserExit;
         };
 
         productProj.AddActions(new ElevatedManagedAction(CustomActions.MyAction, Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed));
+
         // since adding custom actions will trigger dependency checking by MakeSfxCA and this app is referencing the
         // WixToolset.BootstrapperApplicationApi assembly, you will need to add it as a DefaultRefAssemblies even though
         // productProj dos not need it but only the bundle. This is a constrain of the current MakeSfxCA implementation.
         productProj.DefaultRefAssemblies.Add(typeof(WixToolset.BootstrapperApplicationApi.ManagedBootstrapperApplication).Assembly.Location);
-        productProj.DefaultRefAssemblies.Add(typeof(CustomActionAttribute).Assembly.Location);
 
         productProj.SignAllFiles = true;
         Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
@@ -146,11 +145,8 @@ public class BuildScript
             Password = "password123",
             Description = "MyProductMsi",
         };
-
+        productProj.OutDir = System.Reflection.Assembly.GetExecutingAssembly().Location.PathGetDirName();
         // System.Diagnostics.Debugger.Launch();
-        productProj.PreserveTempFiles = true;
-        // productProj.OutDir = System.Reflection.Assembly.GetExecutingAssembly().Location.PathGetDirName();
-
         return productProj.BuildMsi();
     }
 

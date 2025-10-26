@@ -30,6 +30,7 @@ using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using WixSharp.CommonTasks;
+using WixSharp.Utilities;
 using WixToolset.Dtf.WindowsInstaller;
 using IO = System.IO;
 using Reflection = System.Reflection;
@@ -43,6 +44,28 @@ namespace WixSharp
     /// </summary>
     public static class Utils
     {
+        internal static bool IsUpToDateCopyOf(this string destAssembly, string srcAssembly)
+        {
+            var srcInfo = new IO.FileInfo(srcAssembly);
+            var dstInfo = new IO.FileInfo(destAssembly);
+
+            // check if the destination file is already copyed and up-to-date
+            if (IO.File.Exists(srcAssembly))
+            {
+                if (srcInfo.Length == dstInfo.Length &&
+                    srcInfo.LastWriteTimeUtc <= dstInfo.LastWriteTimeUtc)
+                    return true;
+
+                // the destination file may be the signed version of the source file
+                if (VerifyFileSignature.IsSigned(destAssembly) && !VerifyFileSignature.IsSigned(srcAssembly) && srcAssembly.Contains(".build."))
+                {
+                    if (srcInfo.LastWriteTimeUtc <= dstInfo.LastWriteTimeUtc)
+                        return true;
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// Combines two path strings.
         /// <para>

@@ -3322,13 +3322,20 @@ namespace WixSharp
             newName = newName.PathChangeDirectory(outDir);
             IO.Directory.CreateDirectory(outDir);
 
-            if (newName.IsFileLocked())
-            {
-                newName = newName.PathChangeExtension(".shadow" + newName.PathGetExtension());
-            }
+            // if (newName.IsFileLocked())
+            // {
+            //     newName = newName.PathChangeExtension(".shadow" + newName.PathGetExtension());
+            // }
 
             if (!ClientAssembly.SamePathAs(newName))
             {
+                var srcInfo = new IO.FileInfo(ClientAssembly);
+                var dstInfo = new IO.FileInfo(newName);
+
+                // check if the destination file is already copyed and up-to-date
+                if (newName.IsUpToDateCopyOf(ClientAssembly))
+                    return newName;
+
                 IO.File.Copy(ClientAssembly, newName, true);
                 Compiler.TempFiles.Add(newName);
 
@@ -3508,8 +3515,11 @@ namespace WixSharp
                 if (!file.SamePathAs(refAasmFile))
                 {
                     refAasmFile = refAasmFile.PathChangeDirectory(outDir);
-                    IO.File.Copy(file, refAasmFile, true);
-                    Compiler.TempFiles.Add(refAasmFile);
+                    if (!refAasmFile.IsUpToDateCopyOf(file))
+                    {
+                        IO.File.Copy(file, refAasmFile, true);
+                        Compiler.TempFiles.Add(refAasmFile);
+                    }
                 }
 
                 refAasmFile = ShadowIfLocked(refAasmFile);

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security;
 using System.Threading;
+using WixSharp.Utilities;
 
 namespace WixSharp
 {
@@ -174,13 +176,37 @@ namespace WixSharp
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         public virtual int Apply(string fileToSign)
         {
+            var signed = VerifyFileSignature.IsSigned(fileToSign);
+
+            if (fileToSign.EndsWith("WixBootstrapper_UI.exe"))
+            {
+                // Debugger.Launch();
+                var info = new System.IO.FileInfo(fileToSign);
+            }
+
             int retValue = -1;
 
-            int apply(string url) =>
-                CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
-                                               PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
+            int apply(string url)
+            {
+                for (int i = 0; i < 2; i++) // keep the loop for possible future use
+                    try
+                    {
+                        if (fileToSign.IsFileLocked())
+                            Debug.Assert(false, $"The file '{fileToSign}' is locked by another process.");
 
-            Compiler.OutputWriteLine($"Signing {fileToSign.PathGetFileName()} with DigitalSignature."); // full path will be printed by the signing tool
+                        return CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
+                                                 PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
+                    }
+                    catch (Exception ex)
+                    {
+                        Compiler.OutputWriteLine($"!!!Error applying DigitalSignature: {ex.Message}");
+                        Thread.Sleep(3000);
+                    }
+                return -1;
+            }
+
+            Compiler.OutputWriteLine($"Signing {fileToSign} with DigitalSignature."); // full path will be printed by the signing tool
+            // Compiler.OutputWriteLine($"Signing {fileToSign.PathGetFileName()} with DigitalSignature."); // full path will be printed by the signing tool
 
             if (TimeUrls.Any())
                 foreach (Uri uri in TimeUrls)
@@ -197,6 +223,10 @@ namespace WixSharp
                 }
             else
                 retValue = apply(null);
+
+            signed = VerifyFileSignature.IsSigned(fileToSign);
+
+            // System.Diagnostics.Debugger.Launch();
 
             return retValue;
         }
