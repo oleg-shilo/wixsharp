@@ -407,7 +407,9 @@ namespace WixSharp.CommonTasks
             if (retval != 0)
                 return retval;
 
-            Compiler.OutputWriteLine?.Invoke($"Signing the bootstrapper {bootstrapperFileToSign.PathGetFileName()}...");
+            bootstrapperFileToSign.WaitUntilFileUnlocked(); // antivirus may lock the file for a while after engine reattachment
+
+            Compiler.OutputWriteLine?.Invoke($"Signing the bootstrapper file {bootstrapperFileToSign.PathGetFileName()}...");
             return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
         }
 
@@ -450,7 +452,14 @@ namespace WixSharp.CommonTasks
         static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
-            string enginePath = IO.Path.GetTempFileName().DeleteIfExists();
+            string enginePath;
+
+            var wixsharpBuildDir = System.Reflection.Assembly.GetExecutingAssembly().Location.PathChangeFileName(".wixsharp");
+
+            if (wixsharpBuildDir.PathExists())
+                enginePath = wixsharpBuildDir.PathCombine(bootstrapperFileToSign.PathGetFileNameWithoutExtension() + ".engine");
+            else
+                enginePath = IO.Path.GetTempFileName().DeleteIfExists();
 
             try
             {
@@ -473,7 +482,8 @@ namespace WixSharp.CommonTasks
             }
             finally
             {
-                IO.File.Delete(enginePath);
+                if (!wixsharpBuildDir.PathExists())
+                    enginePath.DeleteIfExists();
             }
         }
 

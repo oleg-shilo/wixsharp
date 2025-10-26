@@ -47,7 +47,7 @@ namespace WixSharp.Utilities
             }
         }
 
-        public static bool IsSigned2(string filePath)
+        internal static bool IsSignedInterop(string filePath)
         {
             if (filePath == null)
             {

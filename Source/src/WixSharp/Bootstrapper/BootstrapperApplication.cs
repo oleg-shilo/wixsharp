@@ -60,7 +60,7 @@ namespace WixSharp.Bootstrapper
             rawAppAssembly = AppAssembly;
             if (rawAppAssembly.EndsWith("%this%"))
             {
-                rawAppAssembly = Compiler.ResolveClientAsm(outDir); //NOTE: if a new file is generated then the Compiler takes care for cleaning any temps
+                rawAppAssembly = Utils.ResolveClientAsm();
                 if (Payloads.FirstOrDefault(x => x.SourceFile == "%this%") is Payload payload_this)
                 {
                     payload_this.SourceFile = rawAppAssembly;

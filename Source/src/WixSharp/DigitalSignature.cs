@@ -176,34 +176,13 @@ namespace WixSharp
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         public virtual int Apply(string fileToSign)
         {
-            var signed = VerifyFileSignature.IsSigned(fileToSign);
-
-            if (fileToSign.EndsWith("WixBootstrapper_UI.exe"))
-            {
-                // Debugger.Launch();
-                var info = new System.IO.FileInfo(fileToSign);
-            }
+            var signed = VerifyFileSignature.IsSigned(fileToSign); // for investigations
 
             int retValue = -1;
 
             int apply(string url)
-            {
-                for (int i = 0; i < 2; i++) // keep the loop for possible future use
-                    try
-                    {
-                        if (fileToSign.IsFileLocked())
-                            Debug.Assert(false, $"The file '{fileToSign}' is locked by another process.");
-
-                        return CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
-                                                 PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
-                    }
-                    catch (Exception ex)
-                    {
-                        Compiler.OutputWriteLine($"!!!Error applying DigitalSignature: {ex.Message}");
-                        Thread.Sleep(3000);
-                    }
-                return -1;
-            }
+                => CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
+                                                  PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
 
             Compiler.OutputWriteLine($"Signing {fileToSign} with DigitalSignature."); // full path will be printed by the signing tool
             // Compiler.OutputWriteLine($"Signing {fileToSign.PathGetFileName()} with DigitalSignature."); // full path will be printed by the signing tool
@@ -225,8 +204,6 @@ namespace WixSharp
                 retValue = apply(null);
 
             signed = VerifyFileSignature.IsSigned(fileToSign);
-
-            // System.Diagnostics.Debugger.Launch();
 
             return retValue;
         }
