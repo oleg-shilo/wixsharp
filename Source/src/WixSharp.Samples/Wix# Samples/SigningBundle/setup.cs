@@ -2,6 +2,8 @@
 //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 //css_ref System.Core.dll;
 using System;
+using System.Diagnostics;
+using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
@@ -53,7 +55,12 @@ static class Script
 
         project.UI = WUI.WixUI_ProgressOnly;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-        project.Load += (SetupEventArgs e) => e.Result = ActionResult.UserExit;
+        project.Load += (SetupEventArgs e) =>
+        {
+            MessageBox.Show("About to forcefully exit MSI setup...");
+            e.Result = ActionResult.UserExit;
+        };
+
         project.SignAllFiles = true;
         project.DigitalSignature = genericFileSigning;
 
@@ -73,11 +80,14 @@ static class Script
 
         bundle.Application = new ManagedBootstrapperApplication(customBA);
 
+        // Debugger.Launch();
+
         bundle.Build("MyProductBundleSetup.exe");
     }
 
     static string GetSignedCustomBA(DigitalSignature digitalSignature)
     {
+        // Example of signing a custom BA executable prior to embedding it into the bundle.
         // Preserve the original sample BA file.
 
         var customBa_Wix5_Sample = @"..\Bootstrapper\WiX5-Spike\WixToolset.WixBA\output\net472\WixToolset.WixBA.exe";

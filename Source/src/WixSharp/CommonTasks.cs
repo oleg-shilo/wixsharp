@@ -407,7 +407,9 @@ namespace WixSharp.CommonTasks
             if (retval != 0)
                 return retval;
 
-            Compiler.OutputWriteLine?.Invoke($"Signing the bootstrapper {bootstrapperFileToSign.PathGetFileName()}...");
+            bootstrapperFileToSign.WaitUntilFileUnlocked(); // antivirus may lock the file for a while after engine reattachment
+
+            Compiler.OutputWriteLine?.Invoke($"Signing the bootstrapper file {bootstrapperFileToSign.PathGetFileName()}...");
             return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
         }
 
@@ -473,7 +475,7 @@ namespace WixSharp.CommonTasks
             }
             finally
             {
-                IO.File.Delete(enginePath);
+                enginePath.DeleteIfExists();
             }
         }
 

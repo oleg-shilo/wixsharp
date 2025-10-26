@@ -3312,43 +3312,7 @@ namespace WixSharp
         /// </summary>
         static public bool IgnoreClientAssemblyPDB = false;
 
-        internal static string ResolveClientAsm(string outDir)
-        {
-            if (Compiler.ClientAssembly.IsEmpty())
-                Compiler.ClientAssembly = Compiler.FindClientAssemblyInCallStack();
 
-            //restore the original assembly name as MakeSfxCA does not like renamed assemblies
-            string newName = Utils.OriginalAssemblyFile(ClientAssembly);
-            newName = newName.PathChangeDirectory(outDir);
-            IO.Directory.CreateDirectory(outDir);
-
-            // if (newName.IsFileLocked())
-            // {
-            //     newName = newName.PathChangeExtension(".shadow" + newName.PathGetExtension());
-            // }
-
-            if (!ClientAssembly.SamePathAs(newName))
-            {
-                var srcInfo = new IO.FileInfo(ClientAssembly);
-                var dstInfo = new IO.FileInfo(newName);
-
-                // check if the destination file is already copyed and up-to-date
-                if (newName.IsUpToDateCopyOf(ClientAssembly))
-                    return newName;
-
-                IO.File.Copy(ClientAssembly, newName, true);
-                Compiler.TempFiles.Add(newName);
-
-                var clientPdb = IO.Path.ChangeExtension(ClientAssembly, ".pdb");
-
-                if (IO.File.Exists(clientPdb))
-                {
-                    IO.File.Copy(clientPdb, IO.Path.ChangeExtension(newName, ".pdb"), true);
-                    Compiler.TempFiles.Add(IO.Path.ChangeExtension(newName, ".pdb"));
-                }
-            }
-            return newName;
-        }
 
         /// <summary>
         /// Builds the batch file for packaging the assembly containing managed CA or UI.
@@ -3416,9 +3380,12 @@ namespace WixSharp
             var outDll = IO.Path.GetFullPath(nativeDll);
             var asmFile = IO.Path.GetFullPath(asm);
 
-            var clientAsmPath = ResolveClientAsm(outDir);
+            var clientAsmPath = Utils.ResolveClientAsm();
+
             if (asmFile.EndsWith("%this%"))
                 asmFile = clientAsmPath;
+            else
+                asmFile = asmFile.IsolateAsm();
 
             var requiredAsms = new List<string>(refAssemblies);
 
@@ -3487,48 +3454,15 @@ namespace WixSharp
                     requiredAsms.Add(wixSharpAsm);
             }
 
-            string tempDir = Utils.GetTempDirectory();
-
-            // may need top create shadow copies of the assemblies to avoid locking issues during signing/packaging
-
-            string ShadowIfLocked(string file)
-            {
-                if (signing != null && Compiler.SignAllFilesOptions.SignEmbeddedAssemblies)
-                    if (file.IsFileLocked())
-                    {
-                        string shadowCopy = IO.Path.Combine(tempDir, IO.Path.GetFileName(file));
-                        IO.File.Copy(file, shadowCopy, true);
-                        Compiler.TempFiles.Add(shadowCopy);
-                        return shadowCopy;
-                    }
-                return file;
-            }
-
             var referencedAssembliesToPackage = new List<string>();
-            var assemblyToPackage = ShadowIfLocked(asmFile);
+            var assemblyToPackage = asmFile;
 
-            var referencedAssemblies = "";
             foreach (string file in requiredAsms.OrderBy(x => x))
             {
-                string refAasmFile = Utils.OriginalAssemblyFile(file);
-
-                if (!file.SamePathAs(refAasmFile))
-                {
-                    refAasmFile = refAasmFile.PathChangeDirectory(outDir);
-                    if (!refAasmFile.IsUpToDateCopyOf(file))
-                    {
-                        IO.File.Copy(file, refAasmFile, true);
-                        Compiler.TempFiles.Add(refAasmFile);
-                    }
-                }
-
-                refAasmFile = ShadowIfLocked(refAasmFile);
+                string refAasmFile = file.IsolateAsm();
 
                 if (!asmFile.SamePathAs(refAasmFile))
-                {
-                    referencedAssemblies += "\"" + IO.Path.GetFullPath(refAasmFile) + "\" ";
                     referencedAssembliesToPackage.Add(refAasmFile);
-                }
             }
 
             if (signing != null && Compiler.SignAllFilesOptions.SignEmbeddedAssemblies)
@@ -3537,7 +3471,10 @@ namespace WixSharp
                 foreach (string file in assembliesToSign)
                 {
                     if (Compiler.SignAllFilesOptions.SkipSignedFiles && VerifyFileSignature.IsSigned(file))
+                    {
+                        Compiler.OutputWriteLine($"-- Skipping signing of the already signed file: {file}");
                         continue;
+                    }
 
                     signing.Apply(file);
                 }
@@ -3570,21 +3507,25 @@ namespace WixSharp
                 Compiler.TempFiles.Add(configFile);
             }
 
+            var referencedAssemblies = referencedAssembliesToPackage.Select(x => x.Enquote()).JoinBy(" ");
+
             string pdbFileArgument = null;
-            if (!IgnoreClientAssemblyPDB && IO.File.Exists(IO.Path.ChangeExtension(asmFile, ".pdb")))
-                pdbFileArgument = "\"" + IO.Path.ChangeExtension(asmFile, ".pdb") + "\" ";
+            if (!IgnoreClientAssemblyPDB && asmFile.PathChangeExtension(".pdb").FileExists())
+                pdbFileArgument = $"{asmFile.PathChangeExtension(".pdb").Enquote()} ";
 
-            if (IO.File.Exists(outDll))
-                IO.File.Delete(outDll);
+            outDll.DeleteIfExists();
 
-            string makeSfxCA_args = "\"" + outDll + "\" " +
-                        "\"" + sfxcaDll + "\" " +
-                        "\"" + asmFile + "\" " +
-                        "\"" + configFile + "\" " +
-                        (pdbFileArgument ?? " ") +
-                        referencedAssemblies;
-
-            makeSfxCA_args += $" \"{dtfWinInstaller}\"";
+            var makeSfxCA_args = new[]
+            {
+                   outDll.Enquote(),
+                   sfxcaDll.Enquote(),
+                   asmFile.Enquote(),
+                   configFile.Enquote(),
+                   pdbFileArgument ?? "",
+                   referencedAssemblies,
+                   dtfWinInstaller.Enquote()
+            }
+            .JoinBy(" ");
 
             ProjectValidator.ValidateCAAssembly(asmFile);
 
@@ -3606,7 +3547,7 @@ namespace WixSharp
             }
             else
             {
-                IO.File.WriteAllText(batchFile, string.Format("\"{0}\" {1}\r\npause", makeSfxCA, makeSfxCA_args));
+                IO.File.WriteAllText(batchFile, $"\"{makeSfxCA}\" {makeSfxCA_args}{Environment.NewLine}pause");
             }
         }
 
