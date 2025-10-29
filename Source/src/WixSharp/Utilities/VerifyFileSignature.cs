@@ -20,7 +20,7 @@ namespace WixSharp.Utilities
         /// <exception cref="FileNotFoundException">Thrown when the file path is null or the file does not exist.</exception>
         public static bool IsSigned(string filePath)
         {
-            if (string.IsNullOrEmpty(filePath) || !filePath.FileExists())
+            if (filePath.IsNullOrEmpty() || !filePath.FileExists())
             {
                 return false;
             }

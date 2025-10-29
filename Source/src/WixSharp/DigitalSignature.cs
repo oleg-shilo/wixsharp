@@ -185,7 +185,6 @@ namespace WixSharp
                                                   PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
 
             Compiler.OutputWriteLine($"Signing {fileToSign} with DigitalSignature."); // full path will be printed by the signing tool
-            // Compiler.OutputWriteLine($"Signing {fileToSign.PathGetFileName()} with DigitalSignature."); // full path will be printed by the signing tool
 
             if (TimeUrls.Any())
                 foreach (Uri uri in TimeUrls)
@@ -204,6 +203,8 @@ namespace WixSharp
                 retValue = apply(null);
 
             signed = VerifyFileSignature.IsSigned(fileToSign);
+            if (!signed)
+                Compiler.OutputWriteLine($"Signing {fileToSign} may have failed. Check the file manually.");
 
             return retValue;
         }
