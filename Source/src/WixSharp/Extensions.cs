@@ -1163,7 +1163,6 @@ namespace WixSharp
         /// <param name="path">The path.</param>
         /// <param name="destPath">The dest path.</param>
         /// <param name="overwrite">if set to <c>true</c> [overwrite].</param>
-        /// <returns></returns>
         public static void CopyFileTo(this string path, string destPath, bool overwrite = false)
             => IO.File.Copy(path, destPath, overwrite);
 
