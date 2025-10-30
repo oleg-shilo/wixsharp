@@ -1158,6 +1158,29 @@ namespace WixSharp
             => IO.File.Exists(path);
 
         /// <summary>
+        /// Copies the file to the destination.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="destPath">The dest path.</param>
+        /// <param name="overwrite">if set to <c>true</c> [overwrite].</param>
+        public static void CopyFileTo(this string path, string destPath, bool overwrite = false)
+            => IO.File.Copy(path, destPath, overwrite);
+
+        /// <summary>
+        /// Waits until the specified file becomes unlocked by another process or until the timeout expires.
+        /// </summary>
+        /// <param name="filePath">The file path to monitor for lock status.</param>
+        /// <param name="timeout">The timeout in milliseconds. Default is 5000ms (5 seconds).</param>
+        public static void WaitUntilFileUnlocked(this string filePath, int timeout = 5000)
+        {
+            while (filePath.IsFileLocked() && timeout > 0)
+            {
+                timeout -= 500;
+                Thread.Sleep(500);
+            }
+        }
+
+        /// <summary>
         /// Determines whether is the specified file locked or not.
         /// </summary>
         /// <param name="filePath">The file path.</param>

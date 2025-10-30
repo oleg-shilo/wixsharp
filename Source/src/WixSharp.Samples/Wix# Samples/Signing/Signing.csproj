@@ -7,6 +7,8 @@
 
 	<ItemGroup>
 		<None Remove="*.cmd" />
+		<None Remove="certificates.readme.md" />
+		<None Remove="create-temp-certificates.ps1" />
 		<None Remove="CustomAction.config" />
 		<None Remove="*.exe" />
 		<None Remove="*.pdb" />
@@ -25,6 +27,12 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\WixSharp\WixSharp.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="System.Windows.Forms">
+	    <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Windows.Forms.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

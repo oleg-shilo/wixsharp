@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
+
 using IO = System.IO;
 
 namespace WixSharp.Utilities
@@ -17,6 +19,35 @@ namespace WixSharp.Utilities
         /// <returns>True if the file is signed; otherwise, false.</returns>
         /// <exception cref="FileNotFoundException">Thrown when the file path is null or the file does not exist.</exception>
         public static bool IsSigned(string filePath)
+        {
+            if (filePath.IsNullOrEmpty() || !filePath.FileExists())
+            {
+                return false;
+            }
+
+            try
+            {
+                // Attempt to create an X509Certificate from the signed file.
+                // This will throw an exception if the file is not signed.
+                _ = X509Certificate.CreateFromSignedFile(filePath);
+
+                // If the certificate was created successfully, the file is signed.
+                return true;
+            }
+            catch (System.Security.Cryptography.CryptographicException)
+            {
+                // The file is not signed or the signature is invalid.
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Handle other potential exceptions, such as file access errors.
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return false;
+            }
+        }
+
+        internal static bool IsSignedInterop(string filePath)
         {
             if (filePath == null)
             {

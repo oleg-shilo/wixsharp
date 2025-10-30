@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security;
 using System.Threading;
+using WixSharp.Utilities;
 
 namespace WixSharp
 {
@@ -174,13 +176,15 @@ namespace WixSharp
         /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
         public virtual int Apply(string fileToSign)
         {
+            var signed = VerifyFileSignature.IsSigned(fileToSign); // for investigations
+
             int retValue = -1;
 
-            int apply(string url) =>
-                CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
-                                               PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
+            int apply(string url)
+                => CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
+                                                  PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
 
-            Compiler.OutputWriteLine($"Signing {fileToSign.PathGetFileName()} with DigitalSignature."); // full path will be printed by the signing tool
+            Compiler.OutputWriteLine($"Signing {fileToSign} with DigitalSignature."); // full path will be printed by the signing tool
 
             if (TimeUrls.Any())
                 foreach (Uri uri in TimeUrls)
@@ -197,6 +201,11 @@ namespace WixSharp
                 }
             else
                 retValue = apply(null);
+
+            signed = VerifyFileSignature.IsSigned(fileToSign);
+
+            if (!signed)
+                Compiler.OutputWriteLine($"Signing {fileToSign} may have failed. Check the file manually.");
 
             return retValue;
         }

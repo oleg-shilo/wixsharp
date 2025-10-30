@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
+using static WixSharp.CommonTasks.AppSearch;
 using WixToolset.Dtf.WindowsInstaller;
 using io = System.IO;
 
@@ -72,7 +73,6 @@ public class BuildScript
         // See WixBootstrapper_MsiEmbeddedUI.csproj sample
 
         string productMsi = BuildMsi();
-        //string productMsi = BuildMsiWithManagedUI();
 
         var bundle = new Bundle("My Product Bundle",
                          new MsiPackage(productMsi)
@@ -86,7 +86,19 @@ public class BuildScript
         bundle.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
         bundle.Application = new ManagedBootstrapperApplication("%this%");
 
-        bundle.Build("my_setup.exe");
+        bundle.DigitalSignature = new DigitalSignature
+        {
+            PfxFilePath = "D:\\dev\\wixsharp4\\Source\\src\\WixSharp.Samples\\Wix# Samples\\SigningBundle\\TempTestCert.pfx",
+            Password = "password123",
+            Description = "MyProductMsi",
+        };
+
+        bundle.OutDir = System.Reflection.Assembly.GetExecutingAssembly().Location.PathGetDirName();
+        // System.Diagnostics.Debugger.Launch();
+
+        bundle.OutFileName = "my_setup";
+        bundle.PreserveTempFiles = true;
+        bundle.Build();
     }
 
     static string BuildMsi()
@@ -114,14 +126,27 @@ public class BuildScript
         productProj.AfterInstall += (SetupEventArgs e) =>
         {
             MessageBox.Show("MSI session is completed", "My Product");
+            e.Result = ActionResult.UserExit;
         };
 
         productProj.AddActions(new ElevatedManagedAction(CustomActions.MyAction, Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed));
+
         // since adding custom actions will trigger dependency checking by MakeSfxCA and this app is referencing the
         // WixToolset.BootstrapperApplicationApi assembly, you will need to add it as a DefaultRefAssemblies even though
         // productProj dos not need it but only the bundle. This is a constrain of the current MakeSfxCA implementation.
         productProj.DefaultRefAssemblies.Add(typeof(WixToolset.BootstrapperApplicationApi.ManagedBootstrapperApplication).Assembly.Location);
 
+        productProj.SignAllFiles = true;
+        Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
+
+        productProj.DigitalSignature = new DigitalSignature
+        {
+            PfxFilePath = "D:\\dev\\wixsharp4\\Source\\src\\WixSharp.Samples\\Wix# Samples\\SigningBundle\\TempTestCert.pfx",
+            Password = "password123",
+            Description = "MyProductMsi",
+        };
+        productProj.OutDir = System.Reflection.Assembly.GetExecutingAssembly().Location.PathGetDirName();
+        // System.Diagnostics.Debugger.Launch();
         return productProj.BuildMsi();
     }
 
@@ -161,7 +186,6 @@ public class CustomActions
     [CustomAction]
     public static ActionResult MyAction(Session session)
     {
-        System.Diagnostics.Debugger.Launch();
         return session.HandleErrors(() => MessageBox.Show("Hello world. I am in a custom action"));
     }
 }

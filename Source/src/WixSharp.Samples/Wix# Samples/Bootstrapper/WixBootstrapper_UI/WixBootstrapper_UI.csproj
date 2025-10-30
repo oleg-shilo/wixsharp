@@ -63,7 +63,7 @@
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;" />
+        <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;&#xD;&#xA;" />
     </Target>
 
 </Project>

@@ -30,6 +30,7 @@ using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using WixSharp.CommonTasks;
+using WixSharp.Utilities;
 using WixToolset.Dtf.WindowsInstaller;
 using IO = System.IO;
 using Reflection = System.Reflection;
@@ -43,6 +44,80 @@ namespace WixSharp
     /// </summary>
     public static class Utils
     {
+        internal static bool IsUpToDateCopyOf(this string destAssembly, string srcAssembly)
+        {
+            if (!destAssembly.FileExists() || !srcAssembly.FileExists())
+                return false;
+
+            var srcInfo = new IO.FileInfo(srcAssembly);
+            var dstInfo = new IO.FileInfo(destAssembly);
+
+            // check if the destination file is already copied and up-to-date
+            if (srcInfo.Length == dstInfo.Length &&
+                srcInfo.LastWriteTimeUtc <= dstInfo.LastWriteTimeUtc)
+                return true;
+
+            // the destination file may be the signed version of the source file
+            if (VerifyFileSignature.IsSigned(destAssembly) && !VerifyFileSignature.IsSigned(srcAssembly) && destAssembly.Contains(".wixsharp"))
+            {
+                if (srcInfo.LastWriteTimeUtc <= dstInfo.LastWriteTimeUtc)
+                    return true;
+            }
+            return false;
+        }
+
+        internal static string ResolveClientAsm()
+        {
+            if (Compiler.ClientAssembly.IsEmpty())
+                Compiler.ClientAssembly = Compiler.FindClientAssemblyInCallStack();
+
+            return IsolateAsm(Compiler.ClientAssembly);
+        }
+
+        static string wixsharpBuildDir = null;
+
+        internal static string WixsharpBuildDir
+        {
+            get
+            {
+                if (wixsharpBuildDir == null)
+                {
+                    if (Compiler.ClientAssembly.IsEmpty())
+                        Compiler.ClientAssembly = Compiler.FindClientAssemblyInCallStack();
+                    wixsharpBuildDir = Compiler.ClientAssembly.PathGetDirName().PathCombine(".wixsharp").EnsureDirExists();
+                }
+                return wixsharpBuildDir;
+            }
+        }
+
+        internal static string IsolateAsm(this string file)
+        {
+            // restore the original assembly name as tools like MakeSfxCA do not like renamed assemblies
+
+            var originalFile = Utils.OriginalAssemblyFile(file);
+            var originalName = originalFile.PathGetFileNameWithoutExtension(); // assembly name
+
+            var isolatedAssemblyFile = originalFile.PathChangeDirectory(WixsharpBuildDir);
+
+            if (!isolatedAssemblyFile.IsUpToDateCopyOf(file))
+            {
+                IO.File.Copy(file, isolatedAssemblyFile, true);
+
+                var clientPdb = file.PathChangeExtension(".pdb");
+
+                if (clientPdb.FileExists())
+                    clientPdb.CopyFileTo(isolatedAssemblyFile.PathChangeExtension(".pdb"), overwrite: true);
+            }
+
+            // last point of validation
+            if (originalName != isolatedAssemblyFile.PathGetFileNameWithoutExtension())
+            {
+                Compiler.OutputWriteLine($"Error: assembly file name is inconsistent with the assembly name.\n  File name: {isolatedAssemblyFile}\n  Assembly name: {originalName}");
+            }
+
+            return isolatedAssemblyFile;
+        }
+
         /// <summary>
         /// Combines two path strings.
         /// <para>
