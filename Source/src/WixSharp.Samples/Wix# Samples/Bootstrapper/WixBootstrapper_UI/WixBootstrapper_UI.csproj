@@ -63,7 +63,7 @@
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;copy /Y &quot;$(TargetPath)&quot; &quot;$(TargetDir)$(TargetName).build.exe&quot;&#xA;echo Running the build script assembly: &quot;$(TargetDir)$(TargetName).build.exe&quot;&#xD;&#xA;&quot;$(TargetDir)$(TargetName).build.exe&quot;&#xD;&#xA;" />
+        <Exec Command="cd .\&#xD;&#xA;set ide=true&#xD;&#xA;&quot;$(TargetPath)&quot;&#xD;&#xA;" />
     </Target>
 
 </Project>
