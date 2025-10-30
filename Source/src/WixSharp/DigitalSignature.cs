@@ -203,6 +203,7 @@ namespace WixSharp
                 retValue = apply(null);
 
             signed = VerifyFileSignature.IsSigned(fileToSign);
+
             if (!signed)
                 Compiler.OutputWriteLine($"Signing {fileToSign} may have failed. Check the file manually.");
 
