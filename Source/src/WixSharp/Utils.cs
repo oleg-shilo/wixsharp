@@ -52,7 +52,7 @@ namespace WixSharp
             var srcInfo = new IO.FileInfo(srcAssembly);
             var dstInfo = new IO.FileInfo(destAssembly);
 
-            // check if the destination file is already copyed and up-to-date
+            // check if the destination file is already copied and up-to-date
             if (IO.File.Exists(srcAssembly))
             {
                 if (srcInfo.Length == dstInfo.Length &&
