@@ -53,18 +53,15 @@ namespace WixSharp
             var dstInfo = new IO.FileInfo(destAssembly);
 
             // check if the destination file is already copied and up-to-date
-            if (IO.File.Exists(srcAssembly))
-            {
-                if (srcInfo.Length == dstInfo.Length &&
-                    srcInfo.LastWriteTimeUtc <= dstInfo.LastWriteTimeUtc)
-                    return true;
+            if (srcInfo.Length == dstInfo.Length &&
+                srcInfo.LastWriteTimeUtc <= dstInfo.LastWriteTimeUtc)
+                return true;
 
-                // the destination file may be the signed version of the source file
-                if (VerifyFileSignature.IsSigned(destAssembly) && !VerifyFileSignature.IsSigned(srcAssembly) && destAssembly.Contains(".wixsharp"))
-                {
-                    if (srcInfo.LastWriteTimeUtc <= dstInfo.LastWriteTimeUtc)
-                        return true;
-                }
+            // the destination file may be the signed version of the source file
+            if (VerifyFileSignature.IsSigned(destAssembly) && !VerifyFileSignature.IsSigned(srcAssembly) && destAssembly.Contains(".wixsharp"))
+            {
+                if (srcInfo.LastWriteTimeUtc <= dstInfo.LastWriteTimeUtc)
+                    return true;
             }
             return false;
         }
