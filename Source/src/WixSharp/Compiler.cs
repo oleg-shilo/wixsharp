@@ -3454,16 +3454,13 @@ namespace WixSharp
                     requiredAsms.Add(wixSharpAsm);
             }
 
-            var referencedAssembliesToPackage = new List<string>();
             var assemblyToPackage = asmFile;
 
-            foreach (string file in requiredAsms.OrderBy(x => x))
-            {
-                string refAasmFile = file.IsolateAsm();
-
-                if (!asmFile.SamePathAs(refAasmFile))
-                    referencedAssembliesToPackage.Add(refAasmFile);
-            }
+            var referencedAssembliesToPackage = requiredAsms
+                .OrderBy(x => x)
+                .Select(file => file.IsolateAsm())
+                .Where(refAasmFile => !asmFile.SamePathAs(refAasmFile))
+                .ToList();
 
             if (signing != null && Compiler.SignAllFilesOptions.SignEmbeddedAssemblies)
             {
