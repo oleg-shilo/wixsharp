@@ -456,10 +456,9 @@ namespace WixSharp.CommonTasks
 
             var wixsharpBuildDir = System.Reflection.Assembly.GetExecutingAssembly().Location.PathChangeFileName(".wixsharp");
 
-            if (wixsharpBuildDir.PathExists())
-                enginePath = wixsharpBuildDir.PathCombine(bootstrapperFileToSign.PathGetFileNameWithoutExtension() + ".engine");
-            else
-                enginePath = IO.Path.GetTempFileName().DeleteIfExists();
+            enginePath = wixsharpBuildDir.PathExists()
+                ? wixsharpBuildDir.PathCombine(bootstrapperFileToSign.PathGetFileNameWithoutExtension() + ".engine")
+                : IO.Path.GetTempFileName().DeleteIfExists();
 
             try
             {
