@@ -118,6 +118,18 @@ namespace WixSharp
             return isolatedAssemblyFile;
         }
 
+        internal static string IsolateFile(this string file)
+        {
+            var isolatedAssemblyFile = file.PathChangeDirectory(WixsharpBuildDir);
+
+            if (!isolatedAssemblyFile.IsUpToDateCopyOf(file))
+            {
+                IO.File.Copy(file, isolatedAssemblyFile, true);
+            }
+
+            return isolatedAssemblyFile;
+        }
+
         /// <summary>
         /// Combines two path strings.
         /// <para>

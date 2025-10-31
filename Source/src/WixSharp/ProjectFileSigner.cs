@@ -87,7 +87,21 @@ namespace WixSharp
                     if (options.SkipSignedFiles && VerifyFileSignature.IsSigned(filePath))
                         continue;
 
-                    project.DigitalSignature?.Apply(filePath);
+                    if (filePath.IsFileLocked())
+                    {
+                        var isolatedFile = Utils.IsolateFile(filePath);
+
+                        var newName = isolatedFile;
+                        if (!file.Name.IsAbsolutePath())
+                            newName = isolatedFile.MakeRelativeTo(project.SourceBaseDir.IsNotEmpty() ? project.SourceBaseDir : Environment.CurrentDirectory);
+
+                        Compiler.OutputWriteLine($"File {file.Name} is locked.");
+                        file.MapTo(newName);
+
+                        project.DigitalSignature?.Apply(isolatedFile);
+                    }
+                    else
+                        project.DigitalSignature?.Apply(filePath);
                 }
                 catch (Exception ex)
                 {

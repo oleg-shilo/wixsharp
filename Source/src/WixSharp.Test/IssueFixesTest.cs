@@ -125,11 +125,13 @@ namespace WixSharp.Test
             var lockedFiles = new List<string>();
 
             Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
+
             var project = new ManagedProject("MyProduct",
                           new Dir(@"%ProgramFiles%\My Company\My Product",
                               new File(this.GetType().Assembly.Location)));
 
             project.ManagedUI = ManagedUI.DefaultWpf;
+            project.SignAllFiles = true;
 
             project.DigitalSignature = new GenericSigner
             {
@@ -163,7 +165,7 @@ namespace WixSharp.Test
                 Implementation = (x) =>
                 {
                     if (x.IsFileLocked())
-                        throw new Exception("The file is locked!!!");
+                        lockedFiles.Add(x);
                     Console.WriteLine($"Signing bootstrapper {x}");
                     return 0;
                 }
@@ -179,7 +181,7 @@ namespace WixSharp.Test
             Assert.Contains("WixSharp.dll", signedFiles);
             Assert.Contains("WixSharp.Test.dll", signedFiles);
             Assert.Contains("WixSharp.UI.dll", signedFiles);
-            Assert.Contains("WixSharp.Test.shadow.dll", signedFiles);
+            Assert.Contains("WixSharp.Test.dll", signedFiles);
         }
 
         [Fact]

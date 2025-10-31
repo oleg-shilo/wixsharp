@@ -338,11 +338,29 @@ namespace WixSharp
             SetAttributeDefinition("WixSharpCustomAttributes:xml_include", parentElement + "|" + xmlFile, append: true);
         }
 
+        string name = "";
+        string mappedName = null;
+
         /// <summary>
         /// Name of the <see cref="WixEntity"/>.
         /// <para>This value is used as a <c>Name</c> for the corresponding WiX XML element.</para>
         /// </summary>
-        public string Name = "";
+        public string Name
+        {
+            get => mappedName ?? name;
+            set => name = value;
+        }
+
+        /// <summary>
+        /// Maps to alternative path. It is required for scenarios like signing, which cannot be performed if the file is locked.
+        /// </summary>
+        /// <param name="mappedName">Name of the mapped.</param>
+        /// <returns></returns>
+        internal string MapTo(string mappedName)
+        {
+            Compiler.OutputWriteLine($"Remapping {Name} to {mappedName}.");
+            return this.mappedName = mappedName;
+        }
 
         /// <summary>
         /// Gets or sets the <c>Id</c> value of the <see cref="WixEntity"/>.
