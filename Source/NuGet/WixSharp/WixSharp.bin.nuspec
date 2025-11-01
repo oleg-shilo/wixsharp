@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp.bin</id>
-    <version>2.9.1.0-pre</version>
+    <version>2.10.0.0</version>
     <title>Wix# (WixSharp) - Binaries (targeting WiX3)</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,14 +16,20 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.9.1.0-pre
+    <releaseNotes>Release v2.10.0.0
+
 - #1856: New error after upgrading from v2.7.6 to v2.7.7 (or v2.8.0)
-  (Added using shadow copies of the build script assembly to allow signing)
 - #1851: Extension not found if it is only installed via nuget package
 - #1850: Fixed missing null check and returning disposed object in extension method
 - #1848: Missing space in cmd file from BuildMsiCmd
 - Added `CommonTasks.InsertToBinaryTable` (prompted by #1846)
-- Added `Project.SetProductIcon(...)` extension method.</releaseNotes>
+- Added `Project.SetProductIcon(...)` extension method.
+- Added isolating binaries during signing and packaging to acoid file locking
+- Updated Bootstrapper samples
+  - Added WixBootstrapperUI(WiX4) legacy sample
+  - External BA sample is isolated as a separate project
+  - WixBootstrapperUI is updated to use internal (in teh build script) UI implementation
+  - Reworked `SigningBundle` and `Signing` samples to show real end-to-end signing </releaseNotes>
     <copyright>Copyright (C) 2008-2022 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
