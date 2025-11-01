@@ -1375,7 +1375,7 @@ namespace WixSharp
                                                       .Distinct()
                                                       .ToArray();
 
-                    PackageManagedAsm(asmBin.Name, bynaryPath, refAsms, project.OutDir, project.CustomActionConfig, null, true, signing: project.ContentSigningSignature);
+                    PackageManagedAsm(asmBin.Name, bynaryPath, refAsms, project.OutDir, project.CustomActionConfig, project.Platform, true, signing: project.ContentSigningSignature);
                 }
 
                 product.AddElement("UI")
@@ -2714,7 +2714,7 @@ namespace WixSharp
                     bynaryPath = asmBin.Name.PathChangeDirectory(wProject.OutDir.PathGetFullPath())
                                             .PathChangeExtension(".CA.dll");
 
-                    PackageManagedAsm(asmBin.Name, bynaryPath, asmBin.RefAssemblies.Concat(wProject.DefaultRefAssemblies).Distinct().ToArray(), wProject.OutDir, wProject.CustomActionConfig, signing: wProject.ContentSigningSignature);
+                    PackageManagedAsm(asmBin.Name, bynaryPath, asmBin.RefAssemblies.Concat(wProject.DefaultRefAssemblies).Distinct().ToArray(), wProject.OutDir, wProject.CustomActionConfig, platform: wProject.Platform, signing: wProject.ContentSigningSignature);
                 }
 
                 product.Add(new XElement("Binary",
