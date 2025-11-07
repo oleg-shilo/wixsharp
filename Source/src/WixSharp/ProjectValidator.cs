@@ -129,10 +129,10 @@ namespace WixSharp
                 throw new ValidationException("More than a single Dir marked as InstallDir. Ensure that only a single directory marked as InstallDir with Dir.IsInstallDir property or with the id 'INSTALLDIR' value");
 
             foreach (Dir dir in project.AllDirs)
-                if (dir.Name.StartsWith("%") || dir.Name.EndsWith("%"))
+                if (dir.Name != null && (dir.Name.StartsWith("%") || dir.Name.EndsWith("%")))
                     if (!Compiler.EnvironmentConstantsMapping.ContainsKey(dir.Name))
                         throw new ValidationException("WixSharp.Dir.Name is set to unknown environment constant '" + dir.Name + "'.\n" +
-                                                      "For the list of supported constants analyze WixSharp.Compiler.EnvironmentConstantsMapping.Keys.");
+                                      "For the list of supported constants analyze WixSharp.Compiler.EnvironmentConstantsMapping.Keys.");
 
             var incosnistentRefAsmActions =
                     project.Actions.OfType<ManagedAction>()

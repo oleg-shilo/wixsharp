@@ -897,6 +897,35 @@ namespace WixSharp
                     });
             }
 
+            if (Compiler.AutoGeneration.LoadEventScheduling == LoadEventScheduling.InUiAndExecute ||
+                Compiler.AutoGeneration.LoadEventScheduling == LoadEventScheduling.OnMsiLaunch)
+            {
+                // <Custom Condition="1" Action="WixSharp_Load_Action" Before="AppSearch" />
+                var loadEventAction = product.FindFirst("InstallExecuteSequence")?.FindAll("Custom").FirstOrDefault(x => x.HasAttribute("Action", "WixSharp_Load_Action"));
+
+                bool isManagedUI = ((project as ManagedProject)?.ManagedUI != null);
+                bool loadEventConfigured = loadEventAction != null;
+
+                // Save LoadEventScheduling as property so Managed UI can understand that it needs to file Load event.
+                // Note, if LoadEventScheduling.OnMsiLaunch the Load event handler host will track how many
+                // times it has been launched and will prevent multiple invocations of the Load event handlers
+                // even if they are scheduled in both UI and Execute sequences
+
+                if (loadEventConfigured)
+                {
+                    product.AddElement("Property",
+                        $"Id={nameof(Compiler.AutoGeneration.LoadEventScheduling)};" +
+                        $"Value={Compiler.AutoGeneration.LoadEventScheduling.GetName()}");
+
+                    if (!isManagedUI)
+                    {
+                        var clone = new XElement(loadEventAction);
+                        var sequence = product.SelectOrCreate("InstallUISequence");
+                        sequence.Add(clone);
+                    }
+                }
+            }
+
             InjectPlatformAttributes(doc);
             SetStandardDirs(product);
         }

@@ -46,6 +46,7 @@ namespace Test1.installer.wixsharp
 
         static void Main()
         {
+            issue_1864(); return;
             issue_1856();
             // issue_1851();
             // issue_1739();
@@ -60,6 +61,27 @@ namespace Test1.installer.wixsharp
                 Console.WriteLine("Signing: " + fileToSign);
                 return 1;
             }
+        }
+
+        static void issue_1864()
+        {
+            var project =
+                new ManagedProject("My Product",
+                    new InstallDir(@"%ProgramFiles%\My Company\My Product",
+                        new Dir("Samples",
+                            new File(@"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\setup.cs"))));
+
+            project.GUID = new Guid("6fe30b47-2577-43ad-9095-1861ba25889b");
+            project.UI = WUI.WixUI_ProgressOnly;
+
+            // project.OutFileName = "setup";
+            project.PreserveTempFiles = true;
+            project.WixSourceGenerated += doc =>
+                {
+                    doc.FindFirst("StandardDirectory").SetAttribute($"Id=CommonDocumentsFolder");
+                };
+
+            var ttt = Compiler.BuildWxs(project);
         }
 
         static void issue_1847()

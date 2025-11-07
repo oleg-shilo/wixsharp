@@ -94,6 +94,12 @@ namespace WixSharp
         public bool Map64InstallDirs = true;
 
         /// <summary>
+        /// The load event scheduling
+        /// </summary>
+        public LoadEventScheduling LoadEventScheduling = LoadEventScheduling.InUiAndExecute;
+
+
+        /// <summary>
         /// Forces the WXS to be thread-safe. Default value is <c>false</c>.
         /// <para>
         /// If this field is useful when WixShar accesses some shared resources during WXS generation.

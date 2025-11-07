@@ -352,7 +352,7 @@ namespace WixSharp
             {
                 //create nested Dirs on-fly
                 var nestedDirs = targetPath.Split("\\/".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                this.Name = nestedDirs.First();
+                this.Name = nestedDirs.FirstOrDefault();
                 for (int i = 1; i < nestedDirs.Length; i++)
                 {
                     Dir nextSubDir = new Dir(feature, nestedDirs[i]);

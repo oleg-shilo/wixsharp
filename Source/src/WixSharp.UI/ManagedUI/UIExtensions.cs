@@ -159,6 +159,18 @@ namespace WixSharp
         /// </summary>
         public static bool UseModernFolderBrowserDialog(this ISession session) => ((Session)session.SessionContext).UseModernFolderBrowserDialog();
 
+        public static LoadEventScheduling? GetLoadEventScheduling(this WixSharp.ISession session)
+        {
+            string value = ((Session)session.SessionContext).Property(nameof(Compiler.AutoGeneration.LoadEventScheduling));
+
+            if (value.IsNotEmpty())
+            {
+                return (LoadEventScheduling)Enum.Parse(typeof(LoadEventScheduling), value);
+            }
+
+            return null;
+        }
+
         public static sys.Control ClearChildren(this sys.Control control)
         {
             foreach (sys.Control item in control.Controls)

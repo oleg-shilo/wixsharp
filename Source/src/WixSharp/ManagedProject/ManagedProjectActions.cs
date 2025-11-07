@@ -49,6 +49,22 @@ namespace WixSharp
         public static ActionResult WixSharp_Load_Action(Session session)
         {
             // Debugger.Launch();
+
+            var executeOnlyOnce = session.Property(nameof(Compiler.AutoGeneration.LoadEventScheduling)) == LoadEventScheduling.OnMsiLaunch.GetName();
+
+            if (executeOnlyOnce)
+            {
+                try
+                {
+                    if (session.Property("LoadWasInvoked") != "yes")
+                        return ActionResult.Success;
+                }
+                finally
+                {
+                    session.SetProperty("LoadWasInvoked", "yes"); //some MSI engines (like Burn) do not allow setting properties in certain contexts
+                }
+            }
+
             return ManagedProject.InvokeClientHandlers(session, "Load");
         }
 
