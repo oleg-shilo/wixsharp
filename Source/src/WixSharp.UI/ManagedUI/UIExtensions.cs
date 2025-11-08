@@ -161,7 +161,7 @@ namespace WixSharp
 
         public static LoadEventScheduling? GetLoadEventScheduling(this WixSharp.ISession session)
         {
-            string value = ((Session)session.SessionContext).Property(nameof(Compiler.AutoGeneration.LoadEventScheduling));
+            string value = ((Session)session.SessionContext).Property(nameof(ManagedProject.LoadEventScheduling));
 
             if (value.IsNotEmpty())
             {

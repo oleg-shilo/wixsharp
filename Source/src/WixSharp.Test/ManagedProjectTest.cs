@@ -98,7 +98,7 @@ namespace WixSharp.Test
             Test(
                 project =>
                 {
-                    Compiler.AutoGeneration.LoadEventScheduling = LoadEventScheduling.OnMsiLaunch;
+                    project.LoadEventScheduling = LoadEventScheduling.OnMsiLaunch;
                     project.Load += (e) => { };
                 },
                 doc =>
@@ -116,7 +116,7 @@ namespace WixSharp.Test
             Test(
                 project =>
                 {
-                    Compiler.AutoGeneration.LoadEventScheduling = LoadEventScheduling.OnMsiLaunch;
+                    project.LoadEventScheduling = LoadEventScheduling.OnMsiLaunch;
                     // project.Load += (e) => { };
                 },
                 doc =>
@@ -150,7 +150,7 @@ namespace WixSharp.Test
             Test(
                 project =>
                 {
-                    Compiler.AutoGeneration.LoadEventScheduling = LoadEventScheduling.OnMsiLaunch;
+                    project.LoadEventScheduling = LoadEventScheduling.OnMsiLaunch;
                     project.Load += (e) => { };
                 },
                 doc =>
@@ -169,7 +169,7 @@ namespace WixSharp.Test
             Test(
                 project =>
                 {
-                    Compiler.AutoGeneration.LoadEventScheduling = LoadEventScheduling.OnMsiLaunch;
+                    project.LoadEventScheduling = LoadEventScheduling.OnMsiLaunch;
                     // project.Load += (e) => { };
                 },
 

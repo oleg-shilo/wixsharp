@@ -50,19 +50,24 @@ namespace WixSharp
         {
             // Debugger.Launch();
 
-            var executeOnlyOnce = session.Property(nameof(Compiler.AutoGeneration.LoadEventScheduling)) == LoadEventScheduling.OnMsiLaunch.GetName();
+            var executeOnlyOnce = session.Property(nameof(ManagedProject.LoadEventScheduling)) == LoadEventScheduling.OnMsiLaunch.GetName();
 
-            if (executeOnlyOnce)
+            var appData = session.ExtractAppData();
+            try
             {
-                try
+                if (executeOnlyOnce)
                 {
-                    if (session.Property("LoadWasInvoked") != "yes")
+                    if (appData.ContainsKey("LoadWasInvoked") && appData["LoadWasInvoked"] == "yes")
                         return ActionResult.Success;
+                    // if (session.Property("LOADWASINVOKED") == "yes") // must be public (all in capital; otherwise MSI won't persist it across the CAs
+                    //     return ActionResult.Success;
                 }
-                finally
-                {
-                    session.SetProperty("LoadWasInvoked", "yes"); //some MSI engines (like Burn) do not allow setting properties in certain contexts
-                }
+            }
+            finally
+            {
+                appData["LoadWasInvoked"] = "yes";
+                appData.SaveTo(session);
+                // session.SetProperty("LOADWASINVOKED", "yes"); //some MSI engines (like Burn) do not allow setting properties in certain contexts
             }
 
             return ManagedProject.InvokeClientHandlers(session, "Load");
