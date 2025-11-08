@@ -2667,7 +2667,7 @@ namespace WixSharp
 
         /// <summary>
         /// Determines whether the specified property has its default value from one of the MSI database
-        /// tables or not initialized yet..
+        /// tables or not initialized yet.
         /// <para>
         /// This method checks if a property (like INSTALLDIR) still contains its original value
         /// from the msi table (e.g. Directory), or if it has been modified during the installation session.
@@ -2685,10 +2685,10 @@ namespace WixSharp
             /*
              * The `session.Property(name)/session["name"]` returns in-memory property dictionary.
              * Th e values for this dictionary come from
-             * - Property table — the initial values defined in the MSI file itself
+             * - Property table Â— the initial values defined in the MSI file itself
              *   (persistent across sessions if authored in the MSI).
-             * - Engine-defined properties — built-in ones like ProductCode, SourceDir, TARGETDIR, VersionNT, etc.
-             * - Custom action or command-line properties — e.g. passed via msiexec /i MyApp.msi MYPROP=value.
+             * - Engine-defined properties Â— built-in ones like ProductCode, SourceDir, TARGETDIR, VersionNT, etc.
+             * - Custom action or command-line properties Â— e.g. passed via msiexec /i MyApp.msi MYPROP=value.
              * - Transforms or conditions that set properties dynamically.
              *
              * The tables like Directory and Property tables in the MSI database are the source of teh initial values.
