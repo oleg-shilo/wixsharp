@@ -131,7 +131,8 @@ namespace WixSharp
             foreach (Dir dir in project.AllDirs)
                 if (dir.Name != null && (dir.Name.StartsWith("%") || dir.Name.EndsWith("%")))
                     if (!Compiler.EnvironmentConstantsMapping.ContainsKey(dir.Name))
-                        throw new ValidationException("WixSharp.Dir.Name is set to unknown environment constant '" + dir.Name + "'.\n" +
+                        throw new ValidationException(
+                                      "WixSharp.Dir.Name is set to unknown environment constant '" + dir.Name + "'.\n" +
                                       "For the list of supported constants analyze WixSharp.Compiler.EnvironmentConstantsMapping.Keys.");
 
             var incosnistentRefAsmActions =

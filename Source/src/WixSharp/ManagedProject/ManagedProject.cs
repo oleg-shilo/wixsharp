@@ -203,7 +203,7 @@ namespace WixSharp
         /// <summary>
         /// The load event scheduling
         /// </summary>
-        public LoadEventScheduling LoadEventScheduling = LoadEventScheduling.InUiAndExecute;
+        public LoadEventScheduling LoadEventScheduling = LoadEventScheduling.OnMsiLaunch;
 
         /// <summary>
         /// The execution model for <see cref="AfterInstall"/> event.

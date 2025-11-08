@@ -333,8 +333,11 @@ namespace WixSharp
             if (loadEventMode != null &&
                 (loadEventMode == LoadEventScheduling.InUiAndExecute || loadEventMode == LoadEventScheduling.OnMsiLaunch))
             {
-                result = runtime.InvokeClientHandlers("Load", shellView as IShellView);
-                runtime.Data.MergeReplace(runtime.Session["WIXSHARP_RUNTIME_DATA"]); //data may be changed in the client handler
+                if (!ManagedProjectActions.ShouldSupptressLoadEvent(this.MsiRuntime().MsiSession))
+                {
+                    result = runtime.InvokeClientHandlers("Load", shellView as IShellView);
+                    runtime.Data.MergeReplace(runtime.Session["WIXSHARP_RUNTIME_DATA"]); //data may be changed in the client handler
+                }
             }
 
             if (result != ActionResult.Failure)
