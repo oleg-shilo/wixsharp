@@ -2691,7 +2691,7 @@ namespace WixSharp
              * - Custom action or command-line properties  e.g. passed via msiexec /i MyApp.msi MYPROP=value.
              * - Transforms or conditions that set properties dynamically.
              *
-             * The tables like Directory and Property tables in the MSI database are the source of teh initial values.
+             * The tables like Directory and Property tables in the MSI database are the source of the initial values.
              * But during the installation session, these tables are not updated with the resolved values.
              *
              * During the CostFinalize and CostInitialize actions, Windows Installer:
