@@ -87,6 +87,7 @@
     <Compile Include="SamplesTest.cs" />
     <Compile Include="SerializationTest.cs" />
     <Compile Include="ServiceInstallerTest.cs" />
+    <Compile Include="UIAutomationTest.cs" />
     <Compile Include="WixLocator.cs" />
     <Compile Include="XmlInjectionTests.cs" />
   </ItemGroup>
