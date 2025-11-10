@@ -250,6 +250,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixBootstrapper_UI_external
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixBootstrapper_UI(WiX4)", "WixSharp.Samples\Wix# Samples\Bootstrapper\WixBootstrapper_UI(WiX4)\WixBootstrapper_UI(WiX4).csproj", "{964DCEDF-D124-DBCA-B3F6-1B753B6FE83D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixSharp.UI.Automation.Test", "WixSharp.UIAutomation.Test\WixSharp.UI.Automation.Test.csproj", "{3ED6CE6F-605B-0C6D-A827-4289492DA315}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1058,6 +1060,14 @@ Global
 		{964DCEDF-D124-DBCA-B3F6-1B753B6FE83D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{964DCEDF-D124-DBCA-B3F6-1B753B6FE83D}.Release|x86.ActiveCfg = Release|Any CPU
 		{964DCEDF-D124-DBCA-B3F6-1B753B6FE83D}.Release|x86.Build.0 = Release|Any CPU
+		{3ED6CE6F-605B-0C6D-A827-4289492DA315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ED6CE6F-605B-0C6D-A827-4289492DA315}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ED6CE6F-605B-0C6D-A827-4289492DA315}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3ED6CE6F-605B-0C6D-A827-4289492DA315}.Debug|x86.Build.0 = Debug|Any CPU
+		{3ED6CE6F-605B-0C6D-A827-4289492DA315}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ED6CE6F-605B-0C6D-A827-4289492DA315}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ED6CE6F-605B-0C6D-A827-4289492DA315}.Release|x86.ActiveCfg = Release|Any CPU
+		{3ED6CE6F-605B-0C6D-A827-4289492DA315}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

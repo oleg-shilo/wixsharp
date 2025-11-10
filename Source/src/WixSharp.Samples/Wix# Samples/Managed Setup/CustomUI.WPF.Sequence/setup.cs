@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -70,6 +71,11 @@ public class Script
         // project.LocalizationFile = "exta_fr-fr.wxl";
 
         Compiler.VerboseOutput = true;
+
+        project.Platform = Platform.x64;
+        Compiler.VerboseOutput = true;
+
+        // Debugger.Launch();
 
         AutoElements.UseModernFolderBrowserDialog = true;
 

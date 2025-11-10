@@ -269,7 +269,7 @@ namespace WixSharp.UI
             }
         }
 
-        string GetStringValue(string select)
+        public string GetStringValue(string select)
         {
             IntPtr view = IntPtr.Zero;
             try

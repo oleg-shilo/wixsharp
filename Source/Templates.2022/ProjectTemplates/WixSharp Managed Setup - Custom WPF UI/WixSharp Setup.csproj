@@ -3,7 +3,6 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net472</TargetFramework>
     <DebugType>embedded</DebugType>
-    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     <Description>WiX WPF CustomUI Application</Description>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>WixSharp</RootNamespace>

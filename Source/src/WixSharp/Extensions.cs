@@ -1692,6 +1692,9 @@ namespace WixSharp
         /// <returns>Replacement result.</returns>
         public static string ExpandWixEnvConsts(this string path)
         {
+            if (path.IsEmpty())
+                return path;
+
             //directory ID (e.g. %ProgramFiles%\My Company\My Product should be interpreted as ProgramFilesFolder\My Company\My Product)
             foreach (string key in Compiler.EnvironmentConstantsMapping.Keys)
                 path = path.Replace(key, Compiler.EnvironmentConstantsMapping[key])
@@ -2663,6 +2666,69 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Determines whether the specified property has its default value from one of the MSI database
+        /// tables or not initialized yet.
+        /// <para>
+        /// This method checks if a property (like INSTALLDIR) still contains its original value
+        /// from the msi table (e.g. Directory), or if it has been modified during the installation session.
+        /// This is useful for detecting when the properties need to be set before CostFinalize action, which resolves them.
+        /// </para>
+        /// </summary>
+        /// <param name="session">The MSI session.</param>
+        /// <param name="name">The name of the property to check (e.g., "INSTALLDIR").</param>
+        /// <returns>
+        /// <c>true</c> if the property has its default value from the MSI database tables or is not yet initialized;
+        /// <c>false</c> if the property has been modified from its original value.
+        /// </returns>
+        public static bool HasDefaultValueFor(this Session session, string name)
+        {
+            /*
+             * The `session.Property(name)/session["name"]` returns in-memory property dictionary.
+             * Th e values for this dictionary come from
+             * - Property table  the initial values defined in the MSI file itself
+             *   (persistent across sessions if authored in the MSI).
+             * - Engine-defined properties  built-in ones like ProductCode, SourceDir, TARGETDIR, VersionNT, etc.
+             * - Custom action or command-line properties  e.g. passed via msiexec /i MyApp.msi MYPROP=value.
+             * - Transforms or conditions that set properties dynamically.
+             *
+             * The tables like Directory and Property tables in the MSI database are the source of the initial values.
+             * But during the installation session, these tables are not updated with the resolved values.
+             *
+             * During the CostFinalize and CostInitialize actions, Windows Installer:
+             * - Resolves these directory relationships,
+             * - Computes absolute paths, and
+             * - Sets properties (dictionary) whose names match directory keys.
+             *
+             * Because the actions like UIInitialized and Load happen before CostFinalize, the properties
+             * for directories may not yet be set to their final values.
+             */
+            try
+            {
+                var currentDirValue = session.Property(name);
+
+                if (currentDirValue.IsEmpty())
+                {
+                    return true; // not in the dictionary yet, so it's a logical equivalent of being default
+                }
+                else
+                {
+                    var result = session.OpenView($"SELECT `Value` FROM `Property` WHERE `Property` = '{name}'");
+
+                    if (!result.Any())
+                        result = session.OpenView($"SELECT `DefaultDir` FROM `Directory` WHERE `Directory` = '{name}'");
+
+                    // is in the dictionary but may still have the default value from one of the common tables.
+                    return currentDirValue == result.FirstOrDefault()?.Values?.FirstOrDefault()?.ToString();
+                }
+            }
+            catch
+            {
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Determines whether the specified <see
         /// cref="T:Microsoft.Deployment.WindowsInstaller.Session"/> is active.
         /// <para>
@@ -3516,6 +3582,17 @@ namespace WixSharp
         {
             var description = GetAttribute<DescriptionAttribute>(value);
             return description?.Description;
+        }
+
+        /// <summary>
+        /// Gets the name of the Enum value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public static string GetName<T>(this T value)
+        {
+            return Enum.GetName(typeof(T), value);
         }
 
         /// <summary>

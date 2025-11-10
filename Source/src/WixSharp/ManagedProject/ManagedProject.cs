@@ -201,6 +201,11 @@ namespace WixSharp
         public EventExecution LoadEventExecution = EventExecution.MsiSessionScopeImmediate;
 
         /// <summary>
+        /// The load event scheduling
+        /// </summary>
+        public LoadEventScheduling LoadEventScheduling = LoadEventScheduling.OnMsiLaunch;
+
+        /// <summary>
         /// The execution model for <see cref="AfterInstall"/> event.
         /// </summary>
         public EventExecution AfterInstallEventExecution = EventExecution.MsiSessionScopeDeferred;
@@ -377,7 +382,7 @@ namespace WixSharp
             }
         }
 
-        string defaultDeferredProperties = "INSTALLDIR,UILevel,ProductName,FOUNDPREVIOUSVERSION,UpgradeCode,ManagedProjectElevatedEvents;REMOVE;REINSTALL;Installed";
+        string defaultDeferredProperties = "INSTALLDIR,UILevel,ProductName,FOUNDPREVIOUSVERSION,UpgradeCode,ManagedProjectElevatedEvents,REMOVE,REINSTALL,Installed";
 
         /// <summary>
         /// Flags that indicates if <c>WixSharp_InitRuntime_Action</c> custom action should be

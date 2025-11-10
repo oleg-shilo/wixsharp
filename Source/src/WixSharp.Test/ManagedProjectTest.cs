@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows.Shapes;
 using System.Xml.Linq;
 using WixSharp.UI.ManagedUI;
 
@@ -78,6 +80,112 @@ namespace WixSharp.Test
             var locText = text.LocalizeWith(localizer);
 
             Assert.Equal("123 AAA 321 BBB CCC DDD", locText);
+        }
+
+        [Fact]
+        public void Can_ScheduleLoadEvent_WithManagedUI()
+        {
+            void Test(System.Action<ManagedProject> build, System.Action<XDocument> test)
+            {
+                var project = new ManagedProject("MyProduct",
+                              new Dir(@"%ProgramFiles%\My Company\My Product",
+                                  new File(this.GetType().Assembly.Location)));
+
+                project.ManagedUI = ManagedUI.DefaultWpf;
+                build(project);
+                project.WixSourceGenerated += (doc) => test(doc);
+                project.BuildWxs();
+            }
+            // -------------------------------
+            Test(
+                project =>
+                {
+                    project.LoadEventScheduling = LoadEventScheduling.OnMsiLaunch;
+                    project.Load += (e) => { };
+                },
+                doc =>
+                {
+                    Assert.True(
+                        doc.FindAll("Property").FirstOrDefault(x => x.HasAttribute("Id", "LoadEventScheduling"))?.HasAttribute("Value", "OnMsiLaunch"));
+
+                    Assert.True(
+                        doc.FindFirst("InstallExecuteSequence")?.FindAll("Custom").Any(x => x.HasAttribute("Action", "WixSharp_Load_Action")));
+
+                    Assert.Null(
+                        doc.FindFirst("InstallUISequence"));
+                });
+            // -------------------------------
+            Test(
+                project =>
+                {
+                    project.LoadEventScheduling = LoadEventScheduling.OnMsiLaunch;
+                    // project.Load += (e) => { };
+                },
+                doc =>
+                {
+                    Assert.False(
+                        doc.FindAll("Property").FirstOrDefault(x => x.HasAttribute("Id", "LoadEventScheduling"))?.HasAttribute("Value", "OnMsiLaunch") == true);
+
+                    Assert.False(
+                        doc.FindFirst("InstallExecuteSequence")?.FindAll("Custom").Any(x => x.HasAttribute("Action", "WixSharp_Load_Action")));
+
+                    Assert.Null(
+                        doc.FindFirst("InstallUISequence"));
+                });
+        }
+
+        [Fact]
+        public void Can_ScheduleLoadEvent_WithNativeUI()
+        {
+            void Test(System.Action<ManagedProject> build, System.Action<XDocument> test)
+            {
+                var project = new ManagedProject("MyProduct",
+                              new Dir(@"%ProgramFiles%\My Company\My Product",
+                                  new File(this.GetType().Assembly.Location)));
+
+                project.UI = WUI.WixUI_InstallDir;
+                build(project);
+                project.WixSourceGenerated += (doc) => test(doc);
+                project.BuildWxs();
+            }
+            // -------------------------------
+            Test(
+                project =>
+                {
+                    project.LoadEventScheduling = LoadEventScheduling.OnMsiLaunch;
+                    project.Load += (e) => { };
+                },
+                doc =>
+                {
+                    Assert.True(
+                        doc.FindAll("Property").FirstOrDefault(x => x.HasAttribute("Id", "LoadEventScheduling"))?.HasAttribute("Value", "OnMsiLaunch"));
+
+                    Assert.True(
+                        doc.FindFirst("InstallExecuteSequence").FindAll("Custom").Any(x => x.HasAttribute("Action", "WixSharp_Load_Action")));
+
+                    Assert.True(
+                        doc.FindFirst("InstallUISequence").FindAll("Custom").Any(x => x.HasAttribute("Action", "WixSharp_Load_Action")));
+                });
+
+            // -------------------------------
+            Test(
+                project =>
+                {
+                    project.LoadEventScheduling = LoadEventScheduling.OnMsiLaunch;
+                    // project.Load += (e) => { };
+                },
+
+                doc =>
+                {
+                    Assert.False(
+                        doc.FindAll("Property").FirstOrDefault(x => x.HasAttribute("Id", "LoadEventScheduling"))?.HasAttribute("Value", "OnMsiLaunch") == true);
+
+                    Assert.False(
+                        doc.FindFirst("InstallExecuteSequence")?.FindAll("Custom").Any(x => x.HasAttribute("Action", "WixSharp_Load_Action")));
+
+                    Assert.Null(
+                        doc.FindFirst("InstallUISequence"));
+                });
         }
     }
 }

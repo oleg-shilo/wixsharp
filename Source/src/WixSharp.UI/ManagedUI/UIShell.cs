@@ -299,7 +299,7 @@ namespace WixSharp
         /// <param name="ui">The MSI external/embedded UI.</param>
         public void ShowModal(InstallerRuntime runtime, IManagedUI ui)
         {
-            // Debug.Assert(false);
+            // Debug.Assert(false");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -326,8 +326,25 @@ namespace WixSharp
             }
             catch { }
 
-            ActionResult result = runtime.InvokeClientHandlers("UIInitialized", shellView as IShellView);
-            runtime.Data.MergeReplace(runtime.Session["WIXSHARP_RUNTIME_DATA"]); //data may be changed in the client handler
+            // Debug.Assert(false);
+            ActionResult result = default(ActionResult);
+
+            var loadEventMode = runtime.Session.GetLoadEventScheduling();
+            if (loadEventMode != null &&
+                (loadEventMode == LoadEventScheduling.InUiAndExecute || loadEventMode == LoadEventScheduling.OnMsiLaunch))
+            {
+                if (!ManagedProjectActions.ShouldSupptressLoadEvent(this.MsiRuntime().MsiSession))
+                {
+                    result = runtime.InvokeClientHandlers("Load", shellView as IShellView);
+                    runtime.Data.MergeReplace(runtime.Session["WIXSHARP_RUNTIME_DATA"]); //data may be changed in the client handler
+                }
+            }
+
+            if (result != ActionResult.Failure)
+            {
+                result = runtime.InvokeClientHandlers("UIInitialized", shellView as IShellView);
+                runtime.Data.MergeReplace(runtime.Session["WIXSHARP_RUNTIME_DATA"]); //data may be changed in the client handler
+            }
 
             if (result != ActionResult.Failure)
             {

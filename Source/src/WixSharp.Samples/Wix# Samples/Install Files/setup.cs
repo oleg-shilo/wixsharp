@@ -74,6 +74,17 @@ static class Script
 
         project.WixSourceGenerated += Compiler_WixSourceGenerated;
 
+        // project.WixSourceGenerated += doc =>
+        // {
+        //     doc.FindFirst("StandardDirectory").SetAttribute($"Id=CommonDocumentsFolder");
+        // };
+        // project.Include(WixExtension.Util);
+
+        project.WixBuildCommandGenerated += cmd =>
+        {
+            Console.WriteLine("WixBuildCommandGenerated: " + cmd);
+            return cmd;
+        };
         project.BuildMsi();
     }
 

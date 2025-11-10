@@ -223,6 +223,33 @@ namespace WixSharp
     }
 
     /// <summary>
+    ///
+    /// </summary>
+    public enum LoadEventScheduling
+    {
+        /// <summary>
+        /// Execute Load event in:
+        /// <list type="bullet">
+        /// <item><description>InstallUISequence if native UI is used</description></item>
+        /// <item><description>On loading Embedded UI if ManagedUI is used</description></item>
+        /// <item><description>InstallExecuteSequence if UI is suppressed</description></item>
+        /// </list>
+        /// Basically it means "execute as soon as msi file is launched".
+        /// </summary>
+        OnMsiLaunch,
+
+        /// <summary>
+        /// Schedule Load event in InstallExecuteSequence only.
+        /// </summary>
+        InExecute,
+
+        /// <summary>
+        /// Schedule Load event in both InstallUISequence and InstallExecuteSequence (or on loading Embedded UI)
+        /// </summary>
+        InUiAndExecute
+    }
+
+    /// <summary>
     /// Specifies predefined values for <see cref="Action.Execute"/> attribute,
     /// which controls at what stage of installation script <c>Custom Action</c> will be executed.
     /// </summary>
