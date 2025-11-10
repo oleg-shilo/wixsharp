@@ -6,6 +6,11 @@ class Program
 {
     static void print(string text) => Console.WriteLine(text);
 
+    /// <summary>
+    /// Defines the entry point of the application.
+    /// The UI automation test runner must be external as it requires .NET Core and the WixSharp tests are .NET Framework.
+    /// </summary>
+    /// <param name="args">The arguments.</param>
     static void Main(string[] args)
     {
         // Debugger.Launch();

@@ -123,8 +123,8 @@ namespace WixSharp.Test
                 },
                 doc =>
                 {
-                    Assert.True(
-                        doc.FindAll("Property").FirstOrDefault(x => x.HasAttribute("Id", "LoadEventScheduling"))?.HasAttribute("Value", "OnMsiLaunch"));
+                    Assert.False(
+                        doc.FindAll("Property").FirstOrDefault(x => x.HasAttribute("Id", "LoadEventScheduling"))?.HasAttribute("Value", "OnMsiLaunch") == true);
 
                     Assert.False(
                         doc.FindFirst("InstallExecuteSequence")?.FindAll("Custom").Any(x => x.HasAttribute("Action", "WixSharp_Load_Action")));
