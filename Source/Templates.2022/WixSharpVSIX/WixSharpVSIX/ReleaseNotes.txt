@@ -1,3 +1,6 @@
+v2.4.1
+- #1852Managed Setup - Custom WPF UI with custom action fails with a "System.BadImageFormatException" when Platform = Platform.x64
+
 v2.4.0
 - Updated WixSharp Custom BA template to reflect new WiX5+ BA hosting model
 
