@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp_wix4</id>
-    <version>2.10.0.0</version>
+    <version>2.12.0.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX4 and later</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -20,25 +20,21 @@
             The package is tested against WIX (Windows Installer Xml) Toolset v4.0.1.0
         </description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.10.0.0
-
-- #1856: New error after upgrading from v2.7.6 to v2.7.7 (or v2.8.0)
-- #1851: Extension not found if it is only installed via nuget package
-- #1850: Fixed missing null check and returning disposed object in extension method
-- #1848: Missing space in cmd file from BuildMsiCmd
-- Added `CommonTasks.InsertToBinaryTable` (prompted by #1846)
-- Added `Project.SetProductIcon(...)` extension method.
-- Added isolating binaries during signing and packaging to acoid file locking
-- Updated Bootstrapper samples
-  - Added WixBootstrapperUI(WiX4) legacy sample
-  - External BA sample is isolated as a separate project
-  - WixBootstrapperUI is updated to use internal (in teh build script) UI implementation
-  - Reworked `SigningBundle` and `Signing` samples to show real end-to-end signing </releaseNotes>
+    <releaseNotes>Release v2.12.0.0
+#1852: Managed Setup - Custom WPF UI with custom action fails with a "System.BadImageFormatException" when Platform = Platform.x64
+- Added option for scheduling Load event (`project.LoadEventScheduling`). 
+  The possible values:   
+  - `OnMsiLaunch` (new + default)   
+  - `InUiAndExecute` (new)   
+  - `InExecute` (old)
+- Added a complete set of UAT for `project.LoadEventScheduling`'
+- Fixed inconsistency when selecting SfxCA.dll CPU architecture (triggered by #1852)
+</releaseNotes>
     <copyright>Copyright (C) 2008-2025 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp_wix4.bin" version="2.10.0.0" />
+      <dependency id="WixSharp_wix4.bin" version="2.12.0.0" />
     </dependencies>
   </metadata>
   <files>

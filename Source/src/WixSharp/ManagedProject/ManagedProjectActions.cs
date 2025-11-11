@@ -56,6 +56,19 @@ namespace WixSharp
             return ManagedProject.InvokeClientHandlers(session, "Load");
         }
 
+        /// <summary>
+        /// Determines whether the Load event should be suppressed based on the current session state and load event scheduling configuration.
+        /// <para>
+        /// When <see cref="LoadEventScheduling.OnMsiLaunch"/> is configured, this method ensures the Load event is executed only once
+        /// per MSI launch by tracking invocation state in the application data. For other scheduling modes, the Load event
+        /// is allowed to execute normally.
+        /// </para>
+        /// </summary>
+        /// <param name="session">The MSI session containing the load event scheduling configuration and application data.</param>
+        /// <returns>
+        /// <c>true</c> if the Load event should be suppressed (i.e., not executed);
+        /// <c>false</c> if the Load event should proceed normally.
+        /// </returns>
         public static bool ShouldSupptressLoadEvent(Session session)
         {
             var executeOnlyOnce = session.Property(nameof(ManagedProject.LoadEventScheduling)) == LoadEventScheduling.OnMsiLaunch.GetName();

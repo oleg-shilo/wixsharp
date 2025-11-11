@@ -204,6 +204,13 @@
             </summary>
             <param name="disposing"></param>
         </member>
+        <member name="M:WixSharp.UI.MsiParser.GetStringValue(System.String)">
+            <summary>
+            Gets the string value.
+            </summary>
+            <param name="select">The select query expression.</param>
+            <returns></returns>
+        </member>
         <member name="T:WixSharp.UI.MsiSession">
             <summary>
             Generic class that represents runtime properties of the MSI setup session as well as some <c>runtime</c>

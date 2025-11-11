@@ -269,6 +269,11 @@ namespace WixSharp.UI
             }
         }
 
+        /// <summary>
+        /// Gets the string value.
+        /// </summary>
+        /// <param name="select">The select query expression.</param>
+        /// <returns></returns>
         public string GetStringValue(string select)
         {
             IntPtr view = IntPtr.Zero;

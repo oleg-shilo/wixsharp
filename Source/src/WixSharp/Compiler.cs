@@ -3541,7 +3541,7 @@ namespace WixSharp
                 var output = Run(makeSfxCA, makeSfxCA_args);
 
                 if (!IO.File.Exists(outDll))
-                    throw new ApplicationException("Cannot package ManagedCA assembly(" + asm + ")");
+                    throw new ApplicationException("Cannot package ManagedCA assembly(" + asm + ")" + (Compiler.VerboseOutput ? $"\n{output}" : ""));
 
                 Compiler.TempFiles.Add(outDll);
             }
