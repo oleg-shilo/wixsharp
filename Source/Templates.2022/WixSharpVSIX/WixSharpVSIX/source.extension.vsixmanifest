@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="WixSharp Visual Studio project templetes" Version="2.4.1" Language="en-US" Publisher="Oleg Shilo" />
+        <Identity Id="WixSharp Visual Studio project templetes" Version="2.4.2" Language="en-US" Publisher="Oleg Shilo" />
         <DisplayName>WixSharp Project Templates</DisplayName>
         <Description xml:space="preserve">A WixSharp project templates for WiX/MSI setup (C#).
 Compatibility: WixSharp v1.6.4.0 (WiX3) / v2.0.0.0 (WiX4) and higher</Description>
@@ -11,11 +11,8 @@ Compatibility: WixSharp v1.6.4.0 (WiX3) / v2.0.0.0 (WiX4) and higher</Descriptio
         <Tags>WixSharp Wix# WiX MSI C# setup</Tags>
     </Metadata>
     <Installation>
-        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,18.0)">
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,)">
             <ProductArchitecture>amd64</ProductArchitecture>
-        </InstallationTarget>
-        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,18.0)">
-            <ProductArchitecture>arm64</ProductArchitecture>
         </InstallationTarget>
 
         <InstallationTarget Version="[15.0,17.0)" Id="Microsoft.VisualStudio.Community">

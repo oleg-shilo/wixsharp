@@ -1,3 +1,6 @@
+v2.4.2
+- Updated Install Target to "[17.0,19.0)"
+
 v2.4.1
 - #1852Managed Setup - Custom WPF UI with custom action fails with a "System.BadImageFormatException" when Platform = Platform.x64
 
