@@ -1574,7 +1574,8 @@ namespace WixSharp.CommonTasks
         /// <returns></returns>
         static public Project SetNetPrerequisite(this WixSharp.Project project, string version, RuntimeType runtimeType, RollForward rollForward, Platform platform, string errorMessage = null)
         {
-            var condition = Condition.Create("Installed OR DotNetCheckResult = 0");
+            var guid = Guid.NewGuid().ToString("N");
+            var condition = Condition.Create($"Installed OR DotNetCheckResult_{guid} = 0");
             string message = errorMessage ?? $"Please install .NET version {version} first.";
 
             project.LaunchConditions.Add(new LaunchCondition(condition, message));
@@ -1582,7 +1583,7 @@ namespace WixSharp.CommonTasks
             project.WixSourceGenerated += doc =>
                 doc.FindFirst("Package").AddElement(
                     WixExtension.NetFx.ToXName("DotNetCompatibilityCheck"),
-                    $"Property=DotNetCheckResult; RuntimeType={runtimeType}; Version={version}; RollForward={rollForward}; Platform={platform}");
+                    $"Property=DotNetCheckResult_{guid}; RuntimeType={runtimeType}; Version={version}; RollForward={rollForward}; Platform={platform}");
 
             project.Include(WixExtension.NetFx);
 
