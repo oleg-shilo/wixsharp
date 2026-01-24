@@ -410,6 +410,19 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Generates an incremental Id for the specified name. This method allows creating unique names for
+        /// the multiple instances of the same entity. This is required for the deterministic generation of the WXS conde.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        public static string IncrementalIdFor(string name)
+        {
+            var tempEntity = new WixEntity();
+            tempEntity.Name = name;
+            return IncrementalIdFor(tempEntity).Replace(".", "_");
+        }
+
+        /// <summary>
         /// Index based Id generation algorithm.
         /// <para>It is the default algorithm, which generates the most human readable Id. Thus if the
         /// project has two `index.html` files one will be assigned Id `index.html` and another one

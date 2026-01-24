@@ -65,7 +65,7 @@ static class Script
         // project.PreserveTempFiles = true;
         // project.PreserveDbgFiles = true;
 
-        project.SetNetPrerequisite("7.0.0", RuntimeType.desktop, RollForward.minor, Platform.x64);
+        project.SetNetPrerequisite("10.0.0", RuntimeType.desktop, RollForward.minor, Platform.x64);
 
         project.EnableUninstallFullUI();
         project.EnableResilientPackage();
