@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
+using System.Text.RegularExpressions;
 using WixSharp.UI;
 using WixToolset.Dtf.WindowsInstaller;
 
@@ -308,6 +309,91 @@ class Program
                 Compiler.OutputWriteLine("GetUserPreferredUILanguages(1) error: " + Marshal.GetLastWin32Error());
 
                 return null;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Represents a wildcard running on the
+    /// <see cref="T:System.Text.RegularExpressions"/> engine.
+    /// </summary>
+    /// <remarks>
+    /// This class was developed and described by <c>reinux</c> in "Converting Wildcards to Regexes"
+    /// on CodeProject (<c>http://www.codeproject.com/KB/recipes/wildcardtoregex.aspx</c>).
+    /// </remarks>
+    public class Wildcard : Regex
+    {
+        /// <summary>
+        /// Initializes a wildcard with the given search pattern.
+        /// </summary>
+        /// <param name="pattern">The wildcard pattern to match.</param>
+        public Wildcard(string pattern)
+            : base(WildcardToRegex(pattern))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a wildcard with the given search pattern and options.
+        /// </summary>
+        /// <param name="pattern">The wildcard pattern to match.</param>
+        /// <param name="options">A combination of one or more
+        /// <see cref="T:System.Text.RegexOptions"/>.</param>
+        public Wildcard(string pattern, RegexOptions options)
+            : base(WildcardToRegex(pattern), options)
+        {
+        }
+
+        /// <summary>
+        /// Converts a wildcard to a regex.
+        /// </summary>
+        /// <param name="pattern">The wildcard pattern to convert.</param>
+        /// <returns>A regex equivalent of the given wildcard.</returns>
+        public static string WildcardToRegex(string pattern)
+        {
+            return "^" + Regex.Escape(pattern).
+            Replace("\\*", ".*").
+            Replace("\\?", ".") + "$";
+        }
+    }
+
+    //This class is needed to overcome the StringWriter limitation when encoding cannot be changed
+    class StringWriterWithEncoding : IO.StringWriter
+    {
+        public StringWriterWithEncoding(Encoding encoding)
+        {
+            this.encoding = encoding;
+        }
+
+        Encoding encoding = Encoding.Default;
+
+        public override Encoding Encoding { get { return encoding; } }
+    }
+
+    /// <summary>
+    /// Settings class for controlling MSBuild integration.
+    /// </summary>
+    public class MSBuild
+    {
+        /// <summary>
+        /// Indicates whether compiler should emit "&lt;projDir&gt;\wix\&lt;projName&gt;.g.wxs" file.
+        /// <para> If set to <c>true</c> the Wix# compiler will also update the project file with the inclusion
+        /// of the auto-generated file(s) with "Build Action" set to <c>None</c>.
+        /// </para>
+        /// </summary>
+        static public bool EmitAutoGenFiles
+        {
+            get
+            {
+                var suppress_auto_gen = (Environment.GetEnvironmentVariable("WIXSHARP_SuppressMSBuildAutoGenFiles") ?? "false").ToLower();
+                return suppress_auto_gen != "true";
+            }
+
+            set
+            {
+                if (value)
+                    Environment.SetEnvironmentVariable("WIXSHARP_SuppressMSBuildAutoGenFiles", null);
+                else
+                    Environment.SetEnvironmentVariable("WIXSHARP_SuppressMSBuildAutoGenFiles", "true");
             }
         }
     }

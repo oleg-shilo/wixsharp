@@ -179,6 +179,11 @@ namespace WixSharp
         /// </summary>
         public SignOutputLevel OutputLevel { get; set; }
 
+        /// <summary>
+        /// Signs the specified files to sign.
+        /// </summary>
+        /// <param name="filesToSign">The files to sign.</param>
+        /// <returns></returns>
         public int Sign(string[] filesToSign)
         {
             var signed = VerifyFileSignature.IsSigned(filesToSign[0]); // for investigations

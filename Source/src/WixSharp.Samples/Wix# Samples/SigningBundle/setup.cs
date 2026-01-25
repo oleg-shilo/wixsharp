@@ -38,7 +38,7 @@ static class Script
         {
             Implementation = (x) =>
             {
-                Console.WriteLine($"Signing {x} (simulation)");
+                Console.WriteLine("Signing " + x + " (simulation)");
                 return 0;
             }
         };
@@ -94,7 +94,7 @@ static class Script
         var customBa_Wix5_Signed = customBa_Wix5_Sample.PathChangeExtension(".signed.exe");
 
         if (!customBa_Wix5_Sample.FileExists())
-            throw new Exception($"The custom BA sample file '{customBa_Wix5_Sample}' is missing. Build the {customBa_Wix5_Sample.PathGetFileNameWithoutExtension()} project first.");
+            throw new Exception("The custom BA sample file '" + customBa_Wix5_Sample + "' is missing. Build the {customBa_Wix5_Sample.PathGetFileNameWithoutExtension()} project first.");
 
         if (VerifyFileSignature.IsSigned(customBa_Wix5_Sample))
         {

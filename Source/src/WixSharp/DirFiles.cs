@@ -159,7 +159,7 @@ namespace WixSharp
                 rootDirPath = Utils.PathCombine(baseDirectory, Directory);
 
             var files = new List<File>();
-            var excludeWildcards = new List<Compiler.Wildcard>();
+            var excludeWildcards = new List<Wildcard>();
 
             foreach (string file in IO.Directory.GetFiles(rootDirPath, IncludeMask))
             {

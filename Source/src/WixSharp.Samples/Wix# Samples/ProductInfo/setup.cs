@@ -40,7 +40,7 @@ class Script
         //project.ControlPanelInfo.NoRemove = true,
         //project.ControlPanelInfo.SystemComponent = true, //if set will not be shown in Control Panel
 
-        Compiler.PreserveTempFiles = true;
+        // Compiler.PreserveTempFiles = true;
         Compiler.BuildMsi(project);
     }
 }

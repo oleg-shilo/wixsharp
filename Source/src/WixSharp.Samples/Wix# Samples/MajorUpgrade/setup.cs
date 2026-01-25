@@ -52,8 +52,8 @@ class Script
     {
         for (int i = 0; i < 2; i++)
         {
-            ManagedProject project = CreateProject($"1.{i}.209.10040");
-            Compiler.BuildMsi(project, $"setup.v{project.Version}.msi");
+            ManagedProject project = CreateProject("1." + i + ".209.10040");
+            Compiler.BuildMsi(project, "setup.v" + project.Version + ".msi");
         }
     }
 
@@ -63,12 +63,12 @@ class Script
 
         for (int i = 0; i < 2; i++)
         {
-            ManagedProject project = CreateProject($"1.{i}.209.10040");
+            ManagedProject project = CreateProject("1." + i + ".209.10040");
 
             project.ManagedUI = ManagedUI.Default;
             project.MajorUpgrade = MajorUpgrade.Default;
 
-            Compiler.BuildMsi(project, $"setup.v{project.Version}.msi");
+            Compiler.BuildMsi(project, "setup.v" + project.Version + ".msi");
         }
     }
 
@@ -76,7 +76,7 @@ class Script
     {
         for (int i = 0; i < 2; i++)
         {
-            ManagedProject project = CreateProject($"1.{i}.209.10040");
+            ManagedProject project = CreateProject("1." + i + "209.10040");
 
             // Note the `project.UIInitialized += ...` code below is for demo purpose only. It demonstrates custom handling
             // of downgrade condition.
@@ -100,7 +100,7 @@ class Script
                 }
             };
 
-            Compiler.BuildMsi(project, $"setup.v{project.Version}.msi");
+            Compiler.BuildMsi(project, "setup.v" + project.Version + ".msi");
         }
     }
 }

@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35506.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixSharp.Core", "WixSharp.Core.csproj", "{683BDD41-ADE4-4B52-9194-13097A33E436}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixSharp.Msi.Core", "..\WixSharp.Msi.Core\WixSharp.Msi.Core.csproj", "{18D59C57-FABC-4730-AEAA-8D868EE7E977}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "setup.core", "..\setup.core\setup.core.csproj", "{268C7953-8211-3E6C-24AF-3B719F8E0029}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{683BDD41-ADE4-4B52-9194-13097A33E436}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{683BDD41-ADE4-4B52-9194-13097A33E436}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{683BDD41-ADE4-4B52-9194-13097A33E436}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{683BDD41-ADE4-4B52-9194-13097A33E436}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18D59C57-FABC-4730-AEAA-8D868EE7E977}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18D59C57-FABC-4730-AEAA-8D868EE7E977}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18D59C57-FABC-4730-AEAA-8D868EE7E977}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18D59C57-FABC-4730-AEAA-8D868EE7E977}.Release|Any CPU.Build.0 = Release|Any CPU
+		{268C7953-8211-3E6C-24AF-3B719F8E0029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{268C7953-8211-3E6C-24AF-3B719F8E0029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{268C7953-8211-3E6C-24AF-3B719F8E0029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{268C7953-8211-3E6C-24AF-3B719F8E0029}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

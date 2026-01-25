@@ -215,3 +215,29 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+*.msix
+*.msi
+*.msm
+*.mst
+**/wix/**
+**/out/**
+**/outdir/**
+NuGet/WixSharp/lib
+*.snupkg
+*.nupkg
+*.exe
+*.cab
+ManagedSetup.wxl
+MyProduct.wxl
+*.wixpdb
+*.g.wxs
+*.g.xml
+*Product.wxs
+setup.wxs
+**/.config/**
+**/runtimes/**
+Build_*.cmd
+launchSettings.json
+*.CA.dll
+CustomAction.config

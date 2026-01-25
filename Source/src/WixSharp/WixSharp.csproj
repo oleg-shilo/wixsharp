@@ -111,6 +111,7 @@
     <Compile Include="Action.cs" />
     <Compile Include="AppSearch.cs" />
     <Compile Include="Assembly.cs" />
+    <Compile Include="AutoGenerationOptions.cs" />
     <Compile Include="Bootstrapper\DotNetCompatibilityCheck.cs" />
     <Compile Include="DirectorySearch.cs" />
     <Compile Include="Utilities\Utils.cs" />

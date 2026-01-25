@@ -231,3 +231,17 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+/Source/src/NET-Core/WixSharp.Core/out
+/Source/src/WixSharp.Samples/test_progress.txt
+/Source/src/WixSharp.Samples/WixSharp.dll
+/Source/src/WixSharp.Samples/WixSharp.Msi.dll
+/Source/src/WixSharp.Samples/WixSharp.UI.dll
+/Source/src/WixSharp.Samples/WixSharp.UI.WPF.dll
+/Source/src/WixSharp.Samples/WixSharp.UI.WPF.xml
+/Source/src/WixSharp.Samples/WixSharp.xml
+/Source/src/WixSharp.Samples/Wix# Samples/DeferredActions/CustomAction.config
+/Source/src/WixSharp.Samples/Wix# Samples/DTF (ManagedCA)/Different Scenarios/ExternalAssembly/CustomAction.dll
+/Source/src/WixSharp.Samples/Wix# Samples/DTF (ManagedCA)/Different Scenarios/ExternalAssembly/DispalyMessage.dll
+/Source/src/WixSharp.Samples/Wix# Samples/Managed Setup/CustomUI.Dialog/ManagedSetup.wxl
+/Source/src/WixSharp.Samples/Wix# Samples/Managed Setup/SetupEvents/ManagedSetup.wxl
+/Source/src/integrate-snk.cmd
