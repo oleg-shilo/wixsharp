@@ -249,6 +249,49 @@ namespace WixSharp.CommonTasks
             SignOutputLevel outputLevel = SignOutputLevel.Verbose,
             HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
+            return DigitalySign(new[] { fileToSign }, certificateId, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
+        }
+
+        /// <summary>
+        /// Applies digital signature to a file (e.g. msi, exe, dll) with MS <c>SignTool.exe</c> utility.
+        /// Please use <see cref="DigitalySignBootstrapper"/> for signing a bootstrapper.
+        /// </summary>
+        /// <param name="filesToSign">The set of files to sign.</param>
+        /// <param name="certificateId">Specify the signing certificate in a file common name or sha1 hash. If this file is a PFX with a password, the password may be supplied
+        /// with the <c>password</c> parameter.</param>
+        /// <param name="timeURL">The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
+        /// A warning is generated if timestamping fails.</param>
+        /// <param name="password">The password to use when opening the PFX file. Should be <c>null</c> if no password required.</param>
+        /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
+        /// <param name="certificateStore">Where to load the certificate from.
+        /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
+        /// <param name="outputLevel">A flag indicating the output level</param>
+        /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow
+        /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
+        /// </param>
+        /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
+        ///
+        /// <example>The following is an example of signing <c>Setup.msi</c> file.
+        /// <code>
+        /// WixSharp.CommonTasks.Tasks.DigitalySign(
+        ///     "Setup.msi",
+        ///     "MyCert.pfx",
+        ///     "http://timestamp.verisign.com/scripts/timstamp.dll",
+        ///     "MyPassword",
+        ///     null,
+        ///     false);
+        /// </code>
+        /// </example>
+        static public int DigitalySign(
+            string[] filesToSign,
+            string certificateId,
+            string timeURL,
+            string password,
+            string optionalArguments = null,
+            StoreType certificateStore = StoreType.file,
+            SignOutputLevel outputLevel = SignOutputLevel.Verbose,
+            HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
+        {
             // SHA-1 Sample SignTool line: SignTool.exe /f "C:\MyFolder\MyCert.pfx" /p "PFX Password" /t "http://timestamp.comodoca.com/authenticode" "C:\MyFolder\MyFile.exe"
             // SHA-256 Sample SignTool line (NOT dual signing): SignTool.exe /f "C:\MyFolder\MyCert.pfx" /p "PFX Password" /fd sha256 /tr "http://timestamp.comodoca.com?td=sha256" /td sha256 "C:\MyFolder\MyFile.exe"
             // SHA-256 Sample SignTool line (Dual signing): SignTool.exe /f "C:\MyFolder\MyCert.pfx" /p "PFX Password" /fd sha256 /tr "http://timestamp.comodoca.com?td=sha256" /td sha256 /as "C:\MyFolder\MyFile.exe"
@@ -308,7 +351,8 @@ namespace WixSharp.CommonTasks
             if (!optionalArguments.IsEmpty())
                 hash += " " + optionalArguments;
 
-            hash += $" \"{fileToSign}\"";
+            foreach (var fileToSign in filesToSign)
+                hash += $" \"{fileToSign}\"";
 
             var tool = new ExternalTool
             {
@@ -324,9 +368,10 @@ namespace WixSharp.CommonTasks
             if (!shouldSignSHA256 || !sha1Signed)
                 return retval;
 
-            if (shouldSignSHA1 && fileToSign.EndsWith(".msi", StringComparison.OrdinalIgnoreCase))
-                return retval; // Dual signing not allowed for .msi
-                               // (https://social.msdn.microsoft.com/Forums/ie/en-US/d4b70ecd-a883-4289-8047-cc9cde28b492/sha1-sha256-dualsigning-for-msi?forum=windowssecurity)
+            foreach (var fileToSign in filesToSign)
+                if (shouldSignSHA1 && fileToSign.EndsWith(".msi", StringComparison.OrdinalIgnoreCase))
+                    return retval; // Dual signing not allowed for .msi
+                                   // (https://social.msdn.microsoft.com/Forums/ie/en-US/d4b70ecd-a883-4289-8047-cc9cde28b492/sha1-sha256-dualsigning-for-msi?forum=windowssecurity)
 
             // Append SHA-256 signature
             string sha256 = args;
@@ -340,7 +385,9 @@ namespace WixSharp.CommonTasks
             if (!optionalArguments.IsEmpty())
                 sha256 += " " + optionalArguments;
 
-            sha256 += $" \"{fileToSign}\"";
+            foreach (var fileToSign in filesToSign)
+                sha256 += $" \"{fileToSign}\"";
+
             tool.Arguments = sha256;
             return tool.ConsoleRun();
         }

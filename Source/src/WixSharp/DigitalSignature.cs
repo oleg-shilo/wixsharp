@@ -21,6 +21,16 @@ namespace WixSharp
         int Apply(string fileToSign);
     }
 
+    internal interface ISigningTool : IDigitalSignature
+    {
+        /// <summary>
+        /// Signs the specified files to sign.
+        /// </summary>
+        /// <param name="filesToSign">The files to sign.</param>
+        /// <returns></returns>
+        int Sign(string[] filesToSign);
+    }
+
     /// <summary>
     ///
     /// </summary>
@@ -54,7 +64,7 @@ namespace WixSharp
     /// <summary>
     /// Container with the parameters of the digital signature
     /// </summary>
-    public class DigitalSignature : IDigitalSignature
+    public class DigitalSignature : IDigitalSignature, ISigningTool
     {
         private SecureString _password;
 
@@ -168,6 +178,44 @@ namespace WixSharp
         /// A flag indicating the output level of the <c>SignTool.exe</c> utility.
         /// </summary>
         public SignOutputLevel OutputLevel { get; set; }
+
+        public int Sign(string[] filesToSign)
+        {
+            var signed = VerifyFileSignature.IsSigned(filesToSign[0]); // for investigations
+
+            int retValue = -1;
+
+            int apply(string url)
+                => CommonTasks.Tasks.DigitalySign(filesToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
+                                                  PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
+
+            Compiler.OutputWriteLine($"Signing {filesToSign.JoinBy(", ")} with DigitalSignature."); // full path will be printed by the signing tool
+
+            if (TimeUrls.Any())
+                foreach (Uri uri in TimeUrls)
+                {
+                    for (int i = 0; i < MaxTimeUrlRetry && retValue != 0; i++)
+                    {
+                        retValue = apply(uri?.AbsoluteUri);
+                        Compiler.OutputWriteLine("Retrying applying DigitalSignature");
+                        Thread.Sleep(UrlRetrySleep);
+                    }
+
+                    if (retValue == 0)
+                        break;
+                }
+            else
+                retValue = apply(null);
+
+            foreach (var file in filesToSign)
+            {
+                signed = VerifyFileSignature.IsSigned(file);
+
+                if (!signed)
+                    Compiler.OutputWriteLine($"Signing {file} may have failed. Check the file manually.");
+            }
+            return retValue;
+        }
 
         /// <summary>
         /// Applies digital signature to a file

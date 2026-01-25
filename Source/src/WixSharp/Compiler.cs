@@ -77,7 +77,6 @@ namespace WixSharp
         /// </summary>
         public string InstallDirDefaultId = "INSTALLDIR";
 
-
         /// <summary>
         /// Extra parameters that is passed to the `dotnet publish` command when AOT compiling .NET Core custom actions.
         /// <code language="C#">
@@ -92,6 +91,13 @@ namespace WixSharp
         /// when 'project.Platform = Platform.x64'
         /// </summary>
         public bool Map64InstallDirs = true;
+
+        /// <summary>
+        /// The prefer batch signing. When signing sign multiple files this option indicates whether to sign them as a batch or 
+        /// one by one. While it's usually faster to sign multiple files as a batch sometimes it may be difficult to manage. 
+        /// So signing one by one may be preferred at this stage of maturity of this feature.
+        /// </summary>
+        public bool PreferBatchSigning = false;
 
         /// <summary>
         /// Forces the WXS to be thread-safe. Default value is <c>false</c>.
@@ -3468,6 +3474,7 @@ namespace WixSharp
             if (signing != null && Compiler.SignAllFilesOptions.SignEmbeddedAssemblies)
             {
                 var assembliesToSign = referencedAssembliesToPackage.ToArray().Combine(assemblyToPackage).Distinct().ToArray();
+                var actualFilesToSign = new List<string>();
                 foreach (string file in assembliesToSign)
                 {
                     if (Compiler.SignAllFilesOptions.SkipSignedFiles && VerifyFileSignature.IsSigned(file))
@@ -3475,8 +3482,20 @@ namespace WixSharp
                         Compiler.OutputWriteLine($"-- Skipping signing of the already signed file: {file}");
                         continue;
                     }
+                    actualFilesToSign.Add(file);
+                }
 
-                    signing.Apply(file);
+                if (actualFilesToSign.Any())
+                {
+                    if (signing is ISigningTool && WixSharp.Compiler.AutoGeneration.PreferBatchSigning)
+                    {
+                        (signing as ISigningTool).Sign(actualFilesToSign.ToArray());
+                    }
+                    else
+                    {
+                        foreach (var file in actualFilesToSign)
+                            signing.Apply(file);
+                    }
                 }
             }
 

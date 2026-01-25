@@ -15,7 +15,9 @@ class Script
         // The sample will fail as wixsharp.pfx is not a real certificate
         // Uncomment last line of the code (`project.BuildMsi()`) if you want to run this sample
 
-        Environment.CurrentDirectory = @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\Signing";
+        // Environment.CurrentDirectory = @"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\Signing"; // fro debugging purposes
+
+        // Compiler.AutoGeneration.PreferBatchSigning = true; // if you want to use batch signing (signtool.exe) instead of a file-by-file signing
 
         var project =
             new ManagedProject("MyProduct",
