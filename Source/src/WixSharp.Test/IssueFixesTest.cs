@@ -150,6 +150,9 @@ namespace WixSharp.Test
             {
             };
 
+            var xunit = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "xunit.core");
+            project.DefaultRefAssemblies.Add(xunit.Location);
+
             var productMsi = project.BuildMsi();
 
             var bootstrapper =

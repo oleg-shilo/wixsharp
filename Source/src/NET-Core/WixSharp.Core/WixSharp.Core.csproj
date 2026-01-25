@@ -18,7 +18,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-    <PackageVersion>2.12.0</PackageVersion>
+    <PackageVersion>2.12.1</PackageVersion>
         <Title>WixSharp (.NET Core)</Title>
         <Description>.NET Core edition of WixSharp package</Description>
         <Copyright>Oleg Shilo</Copyright>
@@ -58,6 +58,7 @@
         <Compile Include="..\..\WixSharp\AppSearch.cs" Link="AppSearch.cs" />
         <Compile Include="..\..\WixSharp\Assembly.cs" Link="Assembly.cs" />
         <Compile Include="..\..\WixSharp\AutoElements.cs" Link="AutoElements.cs" />
+        <Compile Include="..\..\WixSharp\AutoGenerationOptions.cs" Link="AutoGenerationOptions.cs" />
         <Compile Include="..\..\WixSharp\BalCondition.cs" Link="BalCondition.cs" />
         <Compile Include="..\..\WixSharp\Binary.cs" Link="Binary.cs" />
         <Compile Include="..\..\WixSharp\BinaryFileAction.cs" Link="BinaryFileAction.cs" />
