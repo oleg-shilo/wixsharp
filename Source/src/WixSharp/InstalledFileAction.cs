@@ -293,8 +293,26 @@ namespace WixSharp
         }
 
         /// <summary>
-        /// The key (file name) of the installed file to be executed.
+        /// The key (file name or ID) of the installed file to be executed.
+        /// <para>
+        /// If an exact ID match is not found among the project files, WixSharp will search
+        /// for a file with this name (case-insensitive) and use its ID.
+        /// </para>
+        /// <para>
+        /// This allows using simple file names like "MyApp.exe" instead of having to specify
+        /// the exact WiX-generated file ID.
+        /// </para>
         /// </summary>
+        /// <example>
+        /// Both of these work:
+        /// <code>
+        /// // Using filename (WixSharp resolves to actual file ID)
+        /// new InstalledFileAction("MyApp.exe", "--uninstall", ...)
+        ///
+        /// // Using explicit ID (if you set one on the File)
+        /// new InstalledFileAction("MyApp_exe_ID", "--uninstall", ...)
+        /// </code>
+        /// </example>
         public string Key = "";
 
         /// <summary>
