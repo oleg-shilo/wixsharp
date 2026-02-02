@@ -1679,7 +1679,21 @@ namespace WixSharp
                                                   new XAttribute("Command", wFileAssociation.Command),
                                                   new XAttribute("Argument", wFileAssociation.Arguments)))));
 
-                    if (wFileAssociation.Icon != null)
+                    // Handle icon for file association
+                    // IconFile takes precedence over Icon if both are set
+                    if (wFileAssociation.IconFile.IsNotEmpty())
+                    {
+                        // IconFile is set - auto-register an Icon element and use its ID
+                        var icon = new IconFile { SourceFile = wFileAssociation.IconFile };
+
+                        progId.Parent(Compiler.ProductElementName)
+                              .AddElement(icon.ToXElement("Icon"));
+
+                        progId.Add(
+                            new XAttribute("Icon", icon.Id),
+                            new XAttribute("IconIndex", wFileAssociation.IconIndex));
+                    }
+                    else if (wFileAssociation.Icon != null)
                     {
                         if (wFileAssociation.Advertise)
                         {
