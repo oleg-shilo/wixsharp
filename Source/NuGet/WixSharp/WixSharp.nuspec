@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp</id>
-    <version>2.12.1.0</version>
+    <version>2.12.2.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX3</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -18,16 +18,28 @@ If you need only Wix# binaries you may want to use WixSharp.bin package instead.
 In order to use this package you need have WiX Toolset installed.
 The package is tested against WIX (Windows Installer Xml) Toolset v3.10 (v3.10.2103.0)</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.12.1.0
-- #1887: QOL request: batch files together into fewer signtool invocations
-- #1890: SetNetPrerequisite only works for single .NET runtime requisite.
-- #1852Managed Setup - Custom WPF UI with custom action fails with a "System.BadImageFormatException" when Platform = Platform.x64
+    <releaseNotes>Release v2.12.2.0
+
+- #1887 QOL request: batch files together into fewer signtool invocations
+- ProjectFileSigner is extended to support batch signing for all any files not embedded assemblies only
+
+Curtsey of @dand-oss
+- Added: FileAssociation.IconFile property for auto-registering icon files (curtsey of dand-oss)
+  When IconFile is set to a path, WixSharp automatically registers an Icon element and uses its ID for the file association.
+  This simplifies icon setup for non-advertised file associations where the Icon attribute must be an Icon Id rather than a file path.
+- Added: InstalledFileAction resolves file key by name if ID not found
+  When the Key property doesn't match an exact file ID, WixSharp now searches for a file by name (case-insensitive) and uses its ID.
+  This allows using simple filenames like "MyApp.exe" instead of having to specify the WiX-generated file ID.
+  If multiple files match the name, an exception is thrown with a clear error message listing the matching files.
+
+
+
 </releaseNotes>
     <copyright>Copyright (C) 2008-2022 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp.bin" version="2.12.1.0" />
+      <dependency id="WixSharp.bin" version="2.12.2.0" />
     </dependencies>
   </metadata>
   <files>
