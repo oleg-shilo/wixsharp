@@ -648,6 +648,17 @@ namespace WixSharp
                     Compiler.OutputWriteLine("WARNING: DigitalSignature is set but SignAllFiles is disabled. Not all files are going to be signed, consider setting SignAllFiles property to true.");
                 }
 
+                if (project.DigitalSignature != null && Compiler.AutoGeneration.PreferBatchSigning)
+                {
+                    if (!(project.DigitalSignature is ISigningTool))
+                    {
+                        Compiler.OutputWriteLine(
+                            "WARNING: DigitalSignature does not implement ISigningTool interface " +
+                            "but AutoGeneration.PreferBatchSigning is enabled. Batch signing is going to be ignored, " +
+                            "consider implementing ISigningTool interface in your signing tool class.");
+                    }
+                }
+
                 string compiler = ExternalTool.Locate("wix.exe");
 
                 if (compiler == null)

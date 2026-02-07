@@ -6,7 +6,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Remove="input\**" />
+        <EmbeddedResource Remove="input\**" />
         <None Remove="*.cmd" />
+        <None Remove="input\**" />
         <None Remove="CustomAction.config" />
         <None Remove="*.exe" />
         <None Remove="*.pdb" />

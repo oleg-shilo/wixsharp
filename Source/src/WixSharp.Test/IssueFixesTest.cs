@@ -184,7 +184,7 @@ namespace WixSharp.Test
             Assert.Contains("WixSharp.dll", signedFiles);
             Assert.Contains("WixSharp.Test.dll", signedFiles);
             Assert.Contains("WixSharp.UI.dll", signedFiles);
-            Assert.Contains("WixSharp.Test.dll", signedFiles);
+            Assert.Contains("MyProduct.msi", signedFiles);
         }
 
         [Fact]

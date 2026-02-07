@@ -46,6 +46,7 @@ namespace Test1.installer.wixsharp
 
         static void Main()
         {
+            issue_1887(); return;
             issue_1864(); return;
             issue_1856();
             // issue_1851();
@@ -61,6 +62,27 @@ namespace Test1.installer.wixsharp
                 Console.WriteLine("Signing: " + fileToSign);
                 return 1;
             }
+        }
+
+        static void issue_1887()
+        {
+            Compiler.AutoGeneration.PreferBatchSigning = true;
+
+            var project =
+                    new ManagedProject("My Product",
+                        new Dir(@"%ProgramFiles%\My Company\My Product",
+                            new File(@"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\setup.cs"),
+                            new File(@"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\input\asm1.dll"),
+                            new File(@"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\input\asm2.dll"),
+                            new File(@"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\input\asm3.dll"),
+                            new File(@"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\input\asm4.dll")
+                            ),
+                        new Property("TEST", "TEST-VALUE"));
+
+            project.SignAllFiles = true;
+            project.DigitalSignature = new CustomSigner();
+
+            project.BuildMsi();
         }
 
         static void issue_1864()

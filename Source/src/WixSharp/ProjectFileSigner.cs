@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WixSharp.Utilities;
@@ -63,6 +64,8 @@ namespace WixSharp
             // Resolve wildcards
             project.ResolveWildCards(Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories);
 
+            var actualFilesToSign = new List<string>();
+
             // Sign all files
             foreach (var file in project.AllFiles)
             {
@@ -98,14 +101,27 @@ namespace WixSharp
                         Compiler.OutputWriteLine($"File {file.Name} is locked.");
                         file.MapTo(newName);
 
-                        project.DigitalSignature?.Apply(isolatedFile);
+                        actualFilesToSign.Add(isolatedFile);
                     }
                     else
-                        project.DigitalSignature?.Apply(filePath);
+                        actualFilesToSign.Add(filePath);
                 }
                 catch (Exception ex)
                 {
                     options.ExceptionHandler?.Invoke(file.Name, ex);
+                }
+            }
+
+            if (actualFilesToSign.Any())
+            {
+                if (project.DigitalSignature is ISigningTool && WixSharp.Compiler.AutoGeneration.PreferBatchSigning)
+                {
+                    (project.DigitalSignature as ISigningTool).Sign(actualFilesToSign.ToArray());
+                }
+                else
+                {
+                    foreach (var file in actualFilesToSign)
+                        project.DigitalSignature.Apply(file);
                 }
             }
         }
