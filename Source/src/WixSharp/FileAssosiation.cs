@@ -121,6 +121,27 @@ namespace WixSharp
         public string Icon = "";
 
         /// <summary>
+        /// Path to an icon file (.ico) to be used for the file association.
+        /// <para>
+        /// When set, WixSharp will automatically register an <c>Icon</c> element and use its ID
+        /// for the file association icon. This simplifies icon setup for non-advertised file associations.
+        /// </para>
+        /// <para>
+        /// If both <see cref="IconFile"/> and <see cref="Icon"/> are set, <see cref="IconFile"/> takes precedence.
+        /// </para>
+        /// </summary>
+        ///<example>The following is an example of using <c>IconFile</c> to set a custom icon for a file association:
+        ///<code>
+        /// new File("MyApp.exe",
+        ///     new FileAssociation("myext", "application/myext", "open", "\"%1\"")
+        ///     {
+        ///         IconFile = "MyIcon.ico"
+        ///     });
+        ///</code>
+        /// </example>
+        public string IconFile = "";
+
+        /// <summary>
         /// The zero-based index of the icon associated with this ProgId. The default value is <c>0</c>.
         /// </summary>
         public int IconIndex = 0;

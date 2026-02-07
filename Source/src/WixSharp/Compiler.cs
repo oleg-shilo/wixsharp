@@ -1690,7 +1690,21 @@ namespace WixSharp
                                                   new XAttribute("Command", wFileAssociation.Command),
                                                   new XAttribute("Argument", wFileAssociation.Arguments)))));
 
-                    if (wFileAssociation.Icon != null)
+                    // Handle icon for file association
+                    // IconFile takes precedence over Icon if both are set
+                    if (wFileAssociation.IconFile.IsNotEmpty())
+                    {
+                        // IconFile is set - auto-register an Icon element and use its ID
+                        var icon = new IconFile { SourceFile = wFileAssociation.IconFile };
+
+                        progId.Parent(Compiler.ProductElementName)
+                              .AddElement(icon.ToXElement("Icon"));
+
+                        progId.Add(
+                            new XAttribute("Icon", icon.Id),
+                            new XAttribute("IconIndex", wFileAssociation.IconIndex));
+                    }
+                    else if (wFileAssociation.Icon != null)
                     {
                         if (wFileAssociation.Advertise)
                         {
@@ -2553,6 +2567,45 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Resolves a file key (ID or name) to the actual file ID.
+        /// First tries to find a file with matching ID, then searches by filename.
+        /// </summary>
+        /// <param name="wProject">The project containing the files.</param>
+        /// <param name="key">The file key (ID or filename) to resolve.</param>
+        /// <returns>The resolved file ID.</returns>
+        /// <exception cref="System.Exception">Thrown when multiple files match the name or no file is found.</exception>
+        static string ResolveFileKey(Project wProject, string key)
+        {
+            string result = key; // Default: return key as-is
+
+            // First, check if any file has this exact ID
+            var fileById = wProject.AllFiles.FirstOrDefault(f => f.Id == key);
+            if (fileById != null)
+            {
+                result = fileById.Id;
+            }
+            else
+            {
+                // If not found by ID, search by filename
+                var matchingFiles = wProject.FindFile(f => f.Name.PathGetFileName().SameAs(key, ignoreCase: true));
+
+                if (matchingFiles.Length > 1)
+                {
+                    throw new Exception($"InstalledFileAction key '{key}' matches multiple files in the project. " +
+                        $"Please use an explicit file ID or ensure unique filenames. " +
+                        $"Matching files: {string.Join(", ", matchingFiles.Select(f => f.Name))}");
+                }
+                else if (matchingFiles.Length == 1)
+                {
+                    result = matchingFiles[0].Id;
+                }
+                // else: no match found - result stays as key (original behavior)
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Processes the custom actions.
         /// </summary>
         /// <param name="wProject">The w project.</param>
@@ -2944,6 +2997,9 @@ namespace WixSharp
                 {
                     var fileAction = (InstalledFileAction)wAction;
 
+                    // Resolve the file key - first tries exact ID match, then searches by filename
+                    var resolvedFileKey = ResolveFileKey(wProject, fileAction.Key);
+
                     sequences.ForEach(sequence =>
                         sequence.Add(
                             new XElement("Custom",
@@ -2955,7 +3011,7 @@ namespace WixSharp
                         new XElement("CustomAction",
                                 new XAttribute("Id", wAction.Id),
                                 new XAttribute("ExeCommand", fileAction.Args.ExpandCommandPath()),
-                                new XAttribute("FileRef", fileAction.Key))
+                                new XAttribute("FileRef", resolvedFileKey))
                             .SetAttribute("Return", wAction.Return)
                             .SetAttribute("Impersonate", wAction.Impersonate)
                             .SetAttribute("Execute", wAction.Execute)
@@ -2963,6 +3019,9 @@ namespace WixSharp
 
                     if ((fileAction.Execute == Execute.deferred) && fileAction.Rollback.IsNotEmpty())
                     {
+                        // Resolve the rollback file key as well
+                        var resolvedRollbackKey = ResolveFileKey(wProject, fileAction.Rollback);
+
                         sequences.ForEach(sequence =>
                             sequence.Add(new XElement("Custom",
                                 new XAttribute("Condition", wActionCondition),
@@ -2975,7 +3034,7 @@ namespace WixSharp
                                     new XAttribute("ExeCommand", fileAction.RollbackArg == null
                                         ? fileAction.Args.ExpandCommandPath()
                                         : fileAction.RollbackArg.ExpandCommandPath()),
-                                    new XAttribute("FileRef", fileAction.Rollback))
+                                    new XAttribute("FileRef", resolvedRollbackKey))
                                 .SetAttribute("Return", wAction.Return)
                                 .SetAttribute("Impersonate", wAction.Impersonate)
                                 .SetAttribute("Execute", Execute.rollback)
