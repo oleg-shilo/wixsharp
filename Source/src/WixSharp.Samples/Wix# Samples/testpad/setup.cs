@@ -46,6 +46,7 @@ namespace Test1.installer.wixsharp
 
         static void Main()
         {
+            issue_1900(); return;
             issue_1887(); return;
             issue_1864(); return;
             issue_1856();
@@ -64,6 +65,20 @@ namespace Test1.installer.wixsharp
             }
         }
 
+        static void issue_1900()
+        {
+            var project =
+                    new ManagedProject("My Product",
+                        new Property("TEST", "TEST-VALUE"));
+
+            WixExtension.UI.PreferredVersion = "6.3.3";
+
+            project.SignAllFiles = true;
+            project.DigitalSignature = new CustomSigner();
+
+            project.BuildMsi();
+        }
+
         static void issue_1887()
         {
             Compiler.AutoGeneration.PreferBatchSigning = true;
@@ -76,7 +91,7 @@ namespace Test1.installer.wixsharp
                             new File(@"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\input\asm2.dll"),
                             new File(@"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\input\asm3.dll"),
                             new File(@"D:\dev\wixsharp4\Source\src\WixSharp.Samples\Wix# Samples\testpad\input\asm4.dll")
-                            ),
+                               ),
                         new Property("TEST", "TEST-VALUE"));
 
             project.SignAllFiles = true;

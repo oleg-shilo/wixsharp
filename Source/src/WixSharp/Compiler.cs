@@ -564,9 +564,15 @@ namespace WixSharp
                                            if (!preferredVersion.IsEmpty())
                                                versionSuffix = "/" + preferredVersion;
 
+                                           // Note, unfortunately WiX fails to report missing extensions with non-zero exit code and instead just writes the error to the standard output.
+                                           // Thus we have to check the extension existence beforehand and warn user about missing extension.
                                            Compiler.OutputWriteLine($"Error: Cannot find WiX extension '{dll}'. " +
                                                $"WixSharp attempted to install the extension but did not succeed. Please install the " +
-                                               $"extension manually with: `wix.exe extension add -g {dll}{versionSuffix}`");
+                                               $"extension manually with: `wix.exe extension add -g {dll}{versionSuffix}`\n" +
+                                               $"If you are experiencing WiX extensions compatibility problems try to specify compatible version of the required extension:\n" +
+                                               $"I.e. WixExtension.UI.PreferredVersion = \"5.0.1\";\n");
+
+                                           dllPath = $"<unknown extension {dll}{versionSuffix}>";
                                        }
 
                                        return $"-ext \"{dllPath}\"";
