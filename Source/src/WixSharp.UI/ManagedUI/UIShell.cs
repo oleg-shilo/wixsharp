@@ -357,8 +357,12 @@ namespace WixSharp
                         try
                         {
                             var data = Runtime.Session.GetResourceData("ui_shell_icon");
-                            using (var stream = new System.IO.MemoryStream(data))
-                                shellView.Icon = new Icon(stream);
+
+                            if (data != null)
+                            {
+                                using (var stream = new System.IO.MemoryStream(data))
+                                    shellView.Icon = new Icon(stream);
+                            }
                         }
                         catch { }
 
