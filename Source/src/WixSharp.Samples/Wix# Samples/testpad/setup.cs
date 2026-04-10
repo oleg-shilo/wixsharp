@@ -46,6 +46,7 @@ namespace Test1.installer.wixsharp
 
         static void Main()
         {
+            issue_1917(); return;
             issue_1900(); return;
             issue_1887(); return;
             issue_1864(); return;
@@ -63,6 +64,25 @@ namespace Test1.installer.wixsharp
                 Console.WriteLine("Signing: " + fileToSign);
                 return 1;
             }
+        }
+
+        static void issue_1917()
+        {
+            WixTools.SetWixVersion(Environment.CurrentDirectory, "7.0.0");
+            WixTools.AcceptEulaFor = "wix7";
+            var tt = WixTools.WixDtfPackages;
+            var ttt = WixTools.PackageDir("dummy");
+            ttt = WixTools.PackageDir("WixToolset.Mba.Core");
+            ttt = WixTools.PackageDir("WixToolset.Heat");
+            ttt = WixTools.PackageDir("WixToolset.Dtf.WindowsInstaller");
+            ttt = WixTools.PackageDir("WixToolset.Dtf.CustomAction");
+            WixTools.RestoreDtfPackages();
+
+            Console.WriteLine(WixTools.Heat);
+            Console.WriteLine(WixTools.MakeSfxCA);
+            Console.WriteLine(WixTools.SignTool);
+            Console.WriteLine(WixTools.SfxCAFor(is64: true));
+            Console.WriteLine(WixTools.SfxCAFor(is64: false));
         }
 
         static void issue_1900()

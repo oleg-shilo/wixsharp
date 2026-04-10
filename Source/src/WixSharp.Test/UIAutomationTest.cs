@@ -20,7 +20,7 @@ namespace WixSharp.Test
         string automation = @"..\..\..\WixSharp.UIAutomation.Test\bin\Debug\net9.0-windows\WixSharp.UI.Automation.Test.exe";
         string logFile = $"load_scheduling.log".PathGetFullPath();
 
-        [Fact]
+        [AdminOnlyFact]
         public void WpfUI_OnMsiLaunch()
         {
             var msi = buildLoadSchedulingMsi(project =>
@@ -142,7 +142,7 @@ namespace WixSharp.Test
             Assert.Equal("BeforeInstall event executed", log[2]);
         }
 
-        [Fact]
+        [AdminOnlyFact]
         public void FormsUI_OnMsiLaunch()
         {
             var msi = buildLoadSchedulingMsi(project =>
@@ -203,7 +203,7 @@ namespace WixSharp.Test
             Assert.Equal("BeforeInstall event executed", log[2]);
         }
 
-        [Fact]
+        [AdminOnlyFact]
         public void NativeUI_OnMsiLaunch()
         {
             var msi = buildLoadSchedulingMsi(project =>

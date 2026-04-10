@@ -533,57 +533,6 @@ namespace WixSharp.CommonTasks
             }
         }
 
-        //static Task<T> ExecuteInNewContext<T>(Func<T> action)
-        //{
-        //    var taskResult = new TaskCompletionSource<T>();
-
-        //    var asyncFlow = ExecutionContext.SuppressFlow();
-
-        //    try
-        //    {
-        //        Task.Run(() =>
-        //        {
-        //            try
-        //            {
-        //                var result = action();
-
-        //                taskResult.SetResult(result);
-        //            }
-        //            catch (Exception exception)
-        //            {
-        //                taskResult.SetException(exception);
-        //            }
-        //        })
-        //            .Wait();
-        //    }
-        //    finally
-        //    {
-        //        asyncFlow.Undo();
-        //    }
-
-        //    return taskResult.Task;
-        //}
-        //static public string EmmitComWxs(string fileIn, string fileOut = null, string extraArgs = null)
-        //{
-        //    if (fileOut == null)
-        //        fileOut = IO.Path.ChangeExtension(fileIn, "wxs");
-
-        //    //heat.exe fileIn -gg -out fileOut
-
-        //    string args = $"\"{fileIn}\" -gg -out \"{fileOut}\" {extraArgs}";
-
-        //    var tool = new ExternalTool
-        //    {
-        //        WellKnownLocations = Compiler.WixLocation,
-        //        ExePath = "heat.exe",
-        //        Arguments = args
-        //    };
-        //    if (tool.ConsoleRun() == 0)
-        //        return fileOut;
-        //    else
-        //        return null;
-        //}
-
         /// <summary>
         /// Imports the reg file.
         /// </summary>

@@ -67,11 +67,34 @@ namespace WixSharp.CommonTasks
         /// </value>
         static public string WixExtensionsDir { set; get; } = @"%userprofile%\.wix\extensions".ExpandEnvVars();
 
-        static string PackageDir(string name)
-            => Directory.GetDirectories(NuGetDir.PathCombine(name))
-                        .Select(x => new { Directory = x, Version = x.PathGetFileName().ToRawVersion() })
-                        .OrderBy(x => x.Version)
-                        .LastOrDefault()?.Directory;
+        /// <summary>
+        /// Gets the directory path of the specified NuGet package, selecting the preferred or latest available version.
+        /// </summary>
+        /// <remarks>If a preferred version is specified in the package definition or globally, it is
+        /// selected if available; otherwise, the latest stable version is returned. Supports both standard and
+        /// non-standard version formats, including pre-release versions.</remarks>
+        /// <param name="name">The name of the NuGet package to locate. Cannot be null or empty.</param>
+        /// <returns>The full directory path of the matching package version if found; otherwise, null.</returns>
+        public static string PackageDir(string name)
+        {
+            var package = WixDtfPackagesDefinition.FirstOrDefault(x => x.package == name);
+            var preferredVersion = package.version ?? WixTools.GlobalWixVersion?.ToString() ?? "*";
+
+            var packageDir = NuGetDir.PathCombine(name);
+
+            if (!packageDir.PathExists())
+                return null;
+
+            var latestVersion = Directory.GetDirectories(NuGetDir.PathCombine(name))
+                    .Select(x => new { Directory = x, Version = x.PathGetFileName().ToRawVersion() }) // raw version will ensure picking only the stable non pre-release versions                    .OrderBy(x => x.Version)
+                    .LastOrDefault()?.Directory;
+
+            var matchingVersion = Directory.GetDirectories(NuGetDir.PathCombine(name))
+                    .Select(x => new { Directory = x, Version = x.PathGetFileName() }) // do not convert to Version here as it can be non-standard version like "5.0.0-preview.1" and we want to support it as well
+                    .FirstOrDefault(x => x.Version == preferredVersion)?.Directory;
+
+            return matchingVersion ?? latestVersion;
+        }
 
         /// <summary>
         /// Gets or sets the well known locations for probing the tool's exe file.
@@ -151,7 +174,8 @@ namespace WixSharp.CommonTasks
                 if (makeSfxCA != null)
                     return makeSfxCA;
 
-                EnsureDtfTool();
+                EnsureDtfTools();
+                // find any heat.exe in the package versions. since it is exe, it does not matter what platform it targets (e.g. x86 vs x64)
                 return Directory.GetFiles(PackageDir("wixtoolset.dtf.customaction"), "WixToolset.Dtf.MakeSfxCA.exe", SearchOption.AllDirectories).FirstOrDefault();
             }
         }
@@ -169,7 +193,8 @@ namespace WixSharp.CommonTasks
                 if (heat != null)
                     return heat;
 
-                EnsureDtfTool("wixtoolset.heat");
+                EnsureDtfTools();
+                // find any heat.exe in the package versions. since it is exe, it does not matter what platform it targets (e.g. x86 vs x64)
                 return Directory.GetFiles(PackageDir("wixtoolset.heat"), "heat.exe", SearchOption.AllDirectories).FirstOrDefault();
             }
         }
@@ -199,7 +224,7 @@ namespace WixSharp.CommonTasks
                 if (loadedAsm != null && IO.File.Exists(loadedAsm))
                     return loadedAsm;
 
-                EnsureDtfTool();
+                EnsureDtfTools();
                 return WixSharpToolDir.PathCombine(@"wix.tools\publish\WixToolset.Dtf.WindowsInstaller.dll");
             }
         }
@@ -217,7 +242,7 @@ namespace WixSharp.CommonTasks
                 if (wixToolsetMbaCore != null)
                     return wixToolsetMbaCore;
 
-                EnsureDtfTool();
+                EnsureDtfTools();
                 return PackageDir("wixtoolset.mba.core").PathCombine(@"lib\netstandard2.0\WixToolset.Mba.Core.dll");
             }
         }
@@ -232,7 +257,15 @@ namespace WixSharp.CommonTasks
         /// </summary>
         public static string SfxCAx86;
 
-        internal static string SfxCAFor(bool is64)
+        /// <summary>
+        /// Gets the file path to the appropriate SfxCA.dll for the specified platform architecture.
+        /// </summary>
+        /// <remarks>This method selects the SfxCA.dll based on the specified architecture. If a cached
+        /// path is available, it is returned; otherwise, the path is constructed dynamically. The returned path may
+        /// depend on the presence and configuration of supporting tools.</remarks>
+        /// <param name="is64">true to retrieve the path for the 64-bit version; false for the 32-bit version.</param>
+        /// <returns>A string containing the full file path to the SfxCA.dll for the requested platform architecture.</returns>
+        public static string SfxCAFor(bool is64)
         {
             if (is64 && SfxCAx64 != null)
                 return SfxCAx64;
@@ -240,9 +273,9 @@ namespace WixSharp.CommonTasks
             if (!is64 && SfxCAx86 != null)
                 return SfxCAx64;
 
-            EnsureDtfTool();
-
             string platformDir = is64 ? "x64" : "x86";
+
+            EnsureDtfTools();
 
             return PackageDir("wixtoolset.dtf.customaction").PathCombine($@"tools\{platformDir}\SfxCA.dll");
         }
@@ -458,48 +491,160 @@ namespace WixSharp.CommonTasks
             }
         }
 
-        internal static void EnsureDtfTool(string package = null)
+        /// <summary>
+        /// Specifies the acceptance status of the End User License Agreement (EULA) as a string value.
+        /// </summary>
+        /// <remarks>Set this field to indicate whether the EULA has been accepted. This is required for the WiX v7 and higher. The expected value for
+        /// WiX 7 is "wix7". See https://docs.firegiant.com/wix/osmf/ for details.</remarks>
+        public static string AcceptEulaFor = "";
+
+        static string wixDtfPackages = null;
+
+        /// <summary>
+        /// Gets or sets the NuGet package specification string for the required WiX DTF (Deployment Tools Foundation)
+        /// components.
+        /// </summary>
+        /// <remarks>The returned string lists the package IDs and version requirements (separated by coma) for WiX DTF
+        /// components with every package spec separated by the '|' character. This property is typically
+        /// used to specify dependencies when building or packaging WiX-based installer projects.
+        /// <para>Example: "WixToolset.Dtf.CustomAction,5.0.0|WixToolset.Dtf.WindowsInstaller,5.0.0|WixToolset.Heat,*|WixToolset.Mba.Core,*"</para>
+        /// </remarks>
+        public static string WixDtfPackages
+        {
+            set => wixDtfPackages = value;
+            get
+            {
+                if (wixDtfPackages != null)
+                    return wixDtfPackages;
+
+                var wixVersion = WixTools.GlobalWixVersion?.ToString() ?? "*";
+
+                wixDtfPackages = $"WixToolset.Dtf.CustomAction,{wixVersion}|" +
+                                 $"WixToolset.Dtf.WindowsInstaller,{wixVersion}|" +
+                                  "WixToolset.Heat,*|" +
+                                  "WixToolset.Mba.Core,*";
+                return wixDtfPackages;
+            }
+        }
+
+        static string WixDtfPackagesProjectFragment
+            => WixDtfPackagesDefinition
+                .Select(x => $"<PackageReference Include=\"{x.package}\" Version=\"{x.version}\" />")
+                .JoinBy(Environment.NewLine);
+
+        internal static (string package, string version)[] WixDtfPackagesDefinition => WixDtfPackages.Split('|')
+                .Select(x =>
+                {
+                    var parts = x.Split(',').Select(p => p.Trim()).ToArray();
+                    return (package: parts[0], version: parts.Length > 1 ? parts[1] : "*");
+                })
+                .ToArray();
+
+        /// <summary>
+        /// Restores the DTF tools (installs NuGet packages) that are defined in the <see cref="WixDtfPackages"/> property.
+        /// This method ensures that the required DTF tools are present and up to date by restoring the specified NuGet packages.
+        /// </summary>
+        /// <remarks>
+        /// <para>Calling this method deploys the latest version of all packages that have their version sepcified by `*` .</para>
+        /// operation will bring the overwrite any existing installation of the tools.</remarks>
+        public static void RestoreDtfPackages() => EnsureDtfTools(force: true);
+
+        internal static void EnsureDtfTools(bool force = false)
         {
             var projectDir = WixSharpToolDir.PathCombine("wix.tools");
             var publishDir = projectDir.PathCombine("publish");
 
-            if (Directory.Exists(NuGetDir.PathCombine(package ?? "wixtoolset.dtf.customaction")) &&
-                Directory.Exists(publishDir))
+            bool areDtfPackagesRestored = WixDtfPackagesDefinition
+                .All(x =>
+                {
+                    if (x.version == "*")
+                        return Directory.GetDirectories(NuGetDir.PathCombine(x.package)).Any();
+                    else
+                        return Directory.Exists(NuGetDir.PathCombine(x.package, x.version));
+                });
+
+            if (areDtfPackagesRestored && publishDir.PathExists() && !force)
                 return;
 
             Directory.CreateDirectory(projectDir);
 
-            var projectFile = projectDir.PathJoin("wix.tools.csproj");
+            // create global lock here
+            var mutexName = $"CSS_EnsureDtfTools_{projectDir.GetHashCode()}";
+            bool hasLock = false;
 
-            // if (!IO.File.Exists(projectFile))
-            IO.File.WriteAllText(projectFile, $@"<Project Sdk=""Microsoft.NET.Sdk"">
-                                                      <PropertyGroup>
-                                                        <TargetFramework>net472</TargetFramework>
-                                                      </PropertyGroup>
+            using (var mutex = new System.Threading.Mutex(false, mutexName))
+            {
+                try
+                {
+                    try
+                    {
+                        hasLock = mutex.WaitOne(TimeSpan.FromMinutes(10));
+                    }
+                    catch (System.Threading.AbandonedMutexException)
+                    {
+                        // Previous owner crashed; mutex is acquired by current thread.
+                        hasLock = true;
+                    }
 
-                                                      <ItemGroup>
-                                                        <PackageReference Include=""WixToolset.Dtf.CustomAction"" Version=""*"" />
-                                                        <PackageReference Include=""WixToolset.Dtf.WindowsInstaller"" Version=""*"" />
-                                                        <PackageReference Include=""WixToolset.Heat"" Version=""*"" />
-                                                      </ItemGroup>
-                                                    </Project>");
+                    var projectFile = projectDir.PathJoin("wix.tools.csproj");
 
-            IO.File.WriteAllText(projectDir.PathJoin("dummy.cs"),
-                 $@"using WixToolset.Dtf.WindowsInstaller;
+                    var wixVersion = WixTools.GlobalWixVersion?.ToString() ?? "*";
+
+                    var eulaGroup = AcceptEulaFor.IsNotEmpty() ? $"<PropertyGroup><AcceptEula>{AcceptEulaFor}</AcceptEula></PropertyGroup>" : "";
+
+                    IO.File.WriteAllText(projectDir.PathJoin("dummy.cs"),
+                         $@"using WixToolset.Dtf.WindowsInstaller;
                     public class CustomActions
                     {{
                         [CustomAction] public static ActionResult CustomAction1(Session session) => ActionResult.Success;
                     }}");
 
-            var sw = Stopwatch.StartNew();
-            Compiler.OutputWriteLine("Restoring packages...");
+                    // Note, for WixToolset.Mba.Core we do not specify a version as WiX stopped releasing it with new WiX versions.
+                    // The last package targets WiX v4.0.6 and it is still compatible with later WiX versions
+                    var proj = $@"<Project Sdk=""Microsoft.NET.Sdk"">
+                                                    <PropertyGroup>
+                                                        <TargetFramework>net472</TargetFramework>
+                                                    </PropertyGroup>
 
-            // need to publish to restore even if we are going to "publish"
-            // It is to handle the cases when in user updated project file manually (e.g. to get different version of tools)
-            Compiler.Run(dotnet, "restore", projectDir);
+                                                        {eulaGroup}
 
-            // need to publish to isolate assemblies
-            Compiler.Run(dotnet, @"publish -o .\publish", projectDir);
+                                                    <ItemGroup>
+                                                        {WixDtfPackagesProjectFragment}
+                                                    </ItemGroup>
+                                                </Project>";
+                    IO.File.WriteAllText(projectFile, proj);
+
+                    var sw = Stopwatch.StartNew();
+                    Compiler.OutputWriteLine("Restoring packages...");
+
+                    // need to call restore explicitly as publish does not restore if the assets are already present (e.g. from previous publish)
+                    // even if the project file was changed and has new package references
+                    var output = Compiler.Run(dotnet, "restore", projectDir, suppressEcho: true);
+
+                    // error WIX7015: You must accept the Open Source Maintenance Fee (OSMF) EULA to use WiX Toolset v7. For instructions, see https://wixtoolset.org/osmf/
+                    if (output.Contains("error NU1102") && WixTools.GlobalWixVersion.Major > 6)
+                    {
+                        Compiler.OutputWriteLine("");
+                        Compiler.OutputWriteLine("WARNING: if you are using WiX v7 or later, you may need to acknowledge acceptance of WiX EULA." +
+                            $"You can do this by setting the `WixTools.{nameof(WixTools.AcceptEulaFor)}` property to the value that corresponds to the WiX version you are accepting the " +
+                            "ELUA for. IE \"wix7\". See https://docs.firegiant.com/wix/osmf/ for details.");
+                        Compiler.OutputWriteLine("");
+                        Compiler.OutputWriteLine(output);
+                    }
+                    else
+                    {
+                        // need to publish to restore even if we are going to "publish"
+                        // It is to handle the cases when in user updated project file manually (e.g. to get different version of tools)
+                        // this is because we need to isolate assemblies and to ensure the packages are compatible (it will not publish otherwise)
+                        Compiler.Run(dotnet, @"publish -o .\publish", projectDir);
+                    }
+                }
+                finally
+                {
+                    if (hasLock)
+                        mutex.ReleaseMutex();
+                }
+            }
         }
     }
 
