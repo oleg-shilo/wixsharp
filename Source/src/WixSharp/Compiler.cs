@@ -759,6 +759,8 @@ namespace WixSharp
 
         static void ProcessOutput(string output)
         {
+            if (WixTools.HasEulaError(output))
+                WixTools.PrintEulaWarning();
             // wix.exe : error WIX0144: The extension 'WixToolset.UI.wixext' could not be found. Checked paths: WixToolset.UI.wixext,
             // C:\Users\user\.wix\extensions\WixToolset.UI.wixext\5.0.0-rc.2\wixext4\WixToolset.UI.wixext.dll
 
@@ -3640,10 +3642,20 @@ namespace WixSharp
         /// <returns></returns>
         public static string Run(string exe, string args, string workingDir = null, bool suppressEcho = false)
         {
+            int exitCode;
+            var output = Run(exe, args, out exitCode, workingDir, suppressEcho);
+            return output;
+        }
+        internal static string Run(string exe, string args, out int exitCode, string workingDir = null, bool suppressEcho = false)
+        {
             lock (WiX_Tools)
             {
                 var runOutput = new StringBuilder();
                 string file = exe.IsAbsolutePath() ? exe : ExternalTool.Locate(exe);
+
+                var acceptEula = (exe.EndsWith("wix.exe") || exe.EndsWith("localtool:wix")) && WixTools.AcceptEulaFor.IsNotEmpty() ?
+                    $"-acceptEula {WixTools.AcceptEulaFor}" :
+                    "";
 
                 using (Process p = new Process())
                 {
@@ -3651,12 +3663,12 @@ namespace WixSharp
                     {
                         var toolName = file.Split(':').Last();
                         p.StartInfo.FileName = WixTools.dotnet;
-                        p.StartInfo.Arguments = $"{toolName} {args}";
+                        p.StartInfo.Arguments = $"{toolName} {acceptEula} {args}";
                     }
                     else
                     {
                         p.StartInfo.FileName = file;
-                        p.StartInfo.Arguments = args;
+                        p.StartInfo.Arguments = $"{acceptEula} {args}";
                     }
 
                     Trace.WriteLine("\"" + p.StartInfo.FileName + "\" " + p.StartInfo.Arguments);
@@ -3704,6 +3716,8 @@ namespace WixSharp
                     }
 
                     p.WaitForExit();
+
+                    exitCode = p.ExitCode;
                     return runOutput.ToString();
                 }
             }

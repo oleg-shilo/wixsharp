@@ -66,23 +66,42 @@ namespace Test1.installer.wixsharp
             }
         }
 
-        static void issue_1917()
+        static void issue_1917_2()
         {
-            WixTools.SetWixVersion(Environment.CurrentDirectory, "7.0.0");
-            WixTools.AcceptEulaFor = "wix7";
+            // WixTools.SetWixVersion(Environment.CurrentDirectory, "7.0.0");
+            // WixTools.AcceptEulaFor = "wix7";
             var tt = WixTools.WixDtfPackages;
             var ttt = WixTools.PackageDir("dummy");
             ttt = WixTools.PackageDir("WixToolset.Mba.Core");
             ttt = WixTools.PackageDir("WixToolset.Heat");
             ttt = WixTools.PackageDir("WixToolset.Dtf.WindowsInstaller");
             ttt = WixTools.PackageDir("WixToolset.Dtf.CustomAction");
-            WixTools.RestoreDtfPackages();
+            // WixTools.RestoreDtfPackages();
 
+            Console.WriteLine(WixTools.WixToolsetMbaCore);
             Console.WriteLine(WixTools.Heat);
             Console.WriteLine(WixTools.MakeSfxCA);
             Console.WriteLine(WixTools.SignTool);
             Console.WriteLine(WixTools.SfxCAFor(is64: true));
             Console.WriteLine(WixTools.SfxCAFor(is64: false));
+        }
+
+        static void issue_1917()
+        {
+            // WixTools.AcceptEulaFor = "wix7";
+            WixTools.SetWixVersion(Environment.CurrentDirectory, "7.0.0");
+            Console.WriteLine(WixTools.Heat);
+
+            var project =
+                    new ManagedProject("My Product",
+                        new Property("TEST", "TEST-VALUE"));
+
+            WixExtension.UI.PreferredVersion = "7.0.0";
+
+            project.SignAllFiles = true;
+            project.DigitalSignature = new CustomSigner();
+
+            project.BuildMsi();
         }
 
         static void issue_1900()

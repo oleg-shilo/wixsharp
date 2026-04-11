@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp_wix4</id>
-    <version>2.12.3.0</version>
+    <version>2.13.0.0-pre</version>
     <title>Wix# (WixSharp) - managed interface for WiX4 and later</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -20,19 +20,14 @@
             The package is tested against WIX (Windows Installer Xml) Toolset v4.0.1.0
         </description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.12.3.0
+    <releaseNotes>Release v2.13.0.0-pre
 
-- Issue#1900 Sudden build failures on GitHub with "WixSharp attempted to install the extension but did not succeed"
-- PR #1905 from PatrickHofman/master
-  Fix ArgumentNullException on MemoryStream constructor
-- ProjectFileSigner is extended to support batch signing for all any files not embedded assemblies only
-
-</releaseNotes>
+- #1917: WixSharp generates wix.tools.csproj with floating versions (*) causing unintended upgrade to WiX v7 and build failures (WIX7015)</releaseNotes>
     <copyright>Copyright (C) 2008-2025 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp_wix4.bin" version="2.12.3.0" />
+      <dependency id="WixSharp_wix4.bin" version="2.13.0.0-pre" />
     </dependencies>
   </metadata>
   <files>

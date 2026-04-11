@@ -1,4 +1,4 @@
-set ver=2.12.3
+set ver=2.13.0-pre
 echo !!!! Note: symbols are pushed automatically with nupkg 
 
 set nugetkey=%nuget_key%

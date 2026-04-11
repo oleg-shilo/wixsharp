@@ -419,7 +419,8 @@ namespace WixSharp.CommonTasks
                                          : null,
                              })
                              .Where(x => version == null || x.version.ToString() == version)
-                             .OrderByDescending(x => x.version);
+                             .OrderByDescending(x => x.version)
+                             .ToArray();
 
             return candidates.FirstOrDefault(x => IO.File.Exists(x.file))?.file;
         }
@@ -558,9 +559,14 @@ namespace WixSharp.CommonTasks
                 .All(x =>
                 {
                     if (x.version == "*")
-                        return Directory.GetDirectories(NuGetDir.PathCombine(x.package)).Any();
+                    {
+                        var packageDir = NuGetDir.PathCombine(x.package);
+                        return packageDir.PathExists() && Directory.GetDirectories(packageDir).Any();
+                    }
                     else
+                    {
                         return Directory.Exists(NuGetDir.PathCombine(x.package, x.version));
+                    }
                 });
 
             if (areDtfPackagesRestored && publishDir.PathExists() && !force)
@@ -619,24 +625,21 @@ namespace WixSharp.CommonTasks
 
                     // need to call restore explicitly as publish does not restore if the assets are already present (e.g. from previous publish)
                     // even if the project file was changed and has new package references
-                    var output = Compiler.Run(dotnet, "restore", projectDir, suppressEcho: true);
 
-                    // error WIX7015: You must accept the Open Source Maintenance Fee (OSMF) EULA to use WiX Toolset v7. For instructions, see https://wixtoolset.org/osmf/
-                    if (output.Contains("error NU1102") && WixTools.GlobalWixVersion.Major > 6)
-                    {
-                        Compiler.OutputWriteLine("");
-                        Compiler.OutputWriteLine("WARNING: if you are using WiX v7 or later, you may need to acknowledge acceptance of WiX EULA." +
-                            $"You can do this by setting the `WixTools.{nameof(WixTools.AcceptEulaFor)}` property to the value that corresponds to the WiX version you are accepting the " +
-                            "ELUA for. IE \"wix7\". See https://docs.firegiant.com/wix/osmf/ for details.");
-                        Compiler.OutputWriteLine("");
-                        Compiler.OutputWriteLine(output);
-                    }
-                    else
+                    var output = Compiler.Run(dotnet, "restore", out int exitCode, projectDir, suppressEcho: true);
+
+                    if (output.HasEulaError())
+                        PrintEulaWarning();
+
+                    if (exitCode == 0)
                     {
                         // need to publish to restore even if we are going to "publish"
                         // It is to handle the cases when in user updated project file manually (e.g. to get different version of tools)
                         // this is because we need to isolate assemblies and to ensure the packages are compatible (it will not publish otherwise)
-                        Compiler.Run(dotnet, @"publish -o .\publish", projectDir);
+                        output = Compiler.Run(dotnet, @"publish -o .\publish", projectDir);
+
+                        if (output.HasEulaError()) // restore may swallow the EULA error
+                            PrintEulaWarning();
                     }
                 }
                 finally
@@ -645,6 +648,23 @@ namespace WixSharp.CommonTasks
                         mutex.ReleaseMutex();
                 }
             }
+        }
+
+        internal static bool HasEulaError(this string compilerOutput)
+        => (compilerOutput.Contains("error NU1102") && WixTools.GlobalWixVersion.Major > 6) ||
+            // error WIX7015: You must accept the Open Source Maintenance Fee (OSMF) EULA to use WiX Toolset v7. For instructions, see https://wixtoolset.org/osmf/
+            (compilerOutput.Contains("WIX7015"));
+
+        internal static void PrintEulaWarning()
+        {
+            Compiler.OutputWriteLine("");
+            Compiler.OutputWriteLine("WARNING: if you are using WiX v7 or later, you may need to acknowledge acceptance of WiX EULA." +
+                $"You can do this by setting the `WixTools.{nameof(WixTools.AcceptEulaFor)}` property to the value that corresponds to the WiX version you are accepting the " +
+                "ELUA for. IE \"wix7\". See https://docs.firegiant.com/wix/osmf/ for details. " +
+                "Note, EULA represents the relationship between the user and the WiX Toolset vendor and it is " +
+                "fully managed by the WiX team. While WixSharp only provides a mechanism for acknowledging the EULA in accordance with the WiX team's guidelines.");
+
+            Compiler.OutputWriteLine("");
         }
     }
 
