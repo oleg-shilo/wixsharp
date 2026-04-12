@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp_wix4.bin</id>
-    <version>2.13.0.0-pre</version>
+    <version>2.13.0.0</version>
     <title>Wix# (WixSharp) - Binaries (targeting WiX4 and later)</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>

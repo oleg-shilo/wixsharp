@@ -77,7 +77,7 @@ namespace WixSharp.CommonTasks
         /// <returns>The full directory path of the matching package version if found; otherwise, null.</returns>
         public static string PackageDir(string name)
         {
-            var package = WixDtfPackagesDefinition.FirstOrDefault(x => x.package == name);
+            var package = WixDtfPackages.FirstOrDefault(x => x.package == name);
             var preferredVersion = package.version ?? WixTools.GlobalWixVersion?.ToString() ?? "*";
 
             var packageDir = NuGetDir.PathCombine(name);
@@ -499,18 +499,18 @@ namespace WixSharp.CommonTasks
         /// WiX 7 is "wix7". See https://docs.firegiant.com/wix/osmf/ for details.</remarks>
         public static string AcceptEulaFor = "";
 
-        static string wixDtfPackages = null;
+        static (string package, string version)[] wixDtfPackages = null;
 
         /// <summary>
-        /// Gets or sets the NuGet package specification string for the required WiX DTF (Deployment Tools Foundation)
-        /// components.
+        /// Gets or sets the NuGet package definitions for the required WiX DTF components.
+        /// These components are the secondary WiX compilation tools that are distributed as NuGet packages and
+        /// are essential for the functionality of the WiX DTF (Deployment Tools Foundation).
+        /// They include tools like MakeSfxCA, Heat.exe etc.
+        /// <remarks>If version is specified  as ""*"" the highest version of the package found in the nuget cache will be used.
+        /// If none is found then the latest will be downloaded from the NuGet repository. Thus if the NuGet cache does not have
+        /// the latest publicly available version of the package, you can update the cache with <see cref="WixTools.RestoreDtfPackages"/>.</remarks>
         /// </summary>
-        /// <remarks>The returned string lists the package IDs and version requirements (separated by coma) for WiX DTF
-        /// components with every package spec separated by the '|' character. This property is typically
-        /// used to specify dependencies when building or packaging WiX-based installer projects.
-        /// <para>Example: "WixToolset.Dtf.CustomAction,5.0.0|WixToolset.Dtf.WindowsInstaller,5.0.0|WixToolset.Heat,*|WixToolset.Mba.Core,*"</para>
-        /// </remarks>
-        public static string WixDtfPackages
+        public static (string package, string version)[] WixDtfPackages
         {
             set => wixDtfPackages = value;
             get
@@ -520,26 +520,22 @@ namespace WixSharp.CommonTasks
 
                 var wixVersion = WixTools.GlobalWixVersion?.ToString() ?? "*";
 
-                wixDtfPackages = $"WixToolset.Dtf.CustomAction,{wixVersion}|" +
-                                 $"WixToolset.Dtf.WindowsInstaller,{wixVersion}|" +
-                                  "WixToolset.Heat,*|" +
-                                  "WixToolset.Mba.Core,*";
+                wixDtfPackages = new[]
+                {
+                    (package: "WixToolset.Dtf.CustomAction",    version: wixVersion),
+                    (package: "WixToolset.Dtf.WindowsInstaller",version: wixVersion),
+                    (package: "WixToolset.Heat",                version: "*"),
+                    (package: "WixToolset.Mba.Core",            version: "*")
+                };
+
                 return wixDtfPackages;
             }
         }
 
         static string WixDtfPackagesProjectFragment
-            => WixDtfPackagesDefinition
+            => WixDtfPackages
                 .Select(x => $"<PackageReference Include=\"{x.package}\" Version=\"{x.version}\" />")
                 .JoinBy(Environment.NewLine);
-
-        internal static (string package, string version)[] WixDtfPackagesDefinition => WixDtfPackages.Split('|')
-                .Select(x =>
-                {
-                    var parts = x.Split(',').Select(p => p.Trim()).ToArray();
-                    return (package: parts[0], version: parts.Length > 1 ? parts[1] : "*");
-                })
-                .ToArray();
 
         /// <summary>
         /// Restores the DTF tools (installs NuGet packages) that are defined in the <see cref="WixDtfPackages"/> property.
@@ -555,7 +551,7 @@ namespace WixSharp.CommonTasks
             var projectDir = WixSharpToolDir.PathCombine("wix.tools");
             var publishDir = projectDir.PathCombine("publish");
 
-            bool areDtfPackagesRestored = WixDtfPackagesDefinition
+            bool areDtfPackagesRestored = WixDtfPackages
                 .All(x =>
                 {
                     if (x.version == "*")
