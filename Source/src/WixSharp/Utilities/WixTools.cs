@@ -26,6 +26,7 @@ THE SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using static System.Environment;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -534,7 +535,7 @@ namespace WixSharp.CommonTasks
 
         static string WixDtfPackagesProjectFragment
             => WixDtfPackages
-                .Select(x => $"<PackageReference Include=\"{x.package}\" Version=\"{x.version}\" />")
+                .Select(x => $"        <PackageReference Include=\"{x.package}\" Version=\"{x.version}\" />")
                 .JoinBy(Environment.NewLine);
 
         /// <summary>
@@ -592,7 +593,7 @@ namespace WixSharp.CommonTasks
 
                     var wixVersion = WixTools.GlobalWixVersion?.ToString() ?? "*";
 
-                    var eulaGroup = AcceptEulaFor.IsNotEmpty() ? $"<PropertyGroup><AcceptEula>{AcceptEulaFor}</AcceptEula></PropertyGroup>" : "";
+                    var eulaGroup = AcceptEulaFor.IsNotEmpty() ? $"    <PropertyGroup><AcceptEula>{AcceptEulaFor}</AcceptEula></PropertyGroup>" : "";
 
                     IO.File.WriteAllText(projectDir.PathJoin("dummy.cs"),
                          $@"using WixToolset.Dtf.WindowsInstaller;
@@ -603,17 +604,15 @@ namespace WixSharp.CommonTasks
 
                     // Note, for WixToolset.Mba.Core we do not specify a version as WiX stopped releasing it with new WiX versions.
                     // The last package targets WiX v4.0.6 and it is still compatible with later WiX versions
-                    var proj = $@"<Project Sdk=""Microsoft.NET.Sdk"">
-                                                    <PropertyGroup>
-                                                        <TargetFramework>net472</TargetFramework>
-                                                    </PropertyGroup>
-
-                                                        {eulaGroup}
-
-                                                    <ItemGroup>
-                                                        {WixDtfPackagesProjectFragment}
-                                                    </ItemGroup>
-                                                </Project>";
+                    var proj = $" <Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
+                               $"    <PropertyGroup>{NewLine}" +
+                               $"        <TargetFramework>net472</TargetFramework>{NewLine}" +
+                               $"    </PropertyGroup>{NewLine}" +
+                               $"{eulaGroup}{NewLine}" +
+                               $"    <ItemGroup>{NewLine}" +
+                               $"{WixDtfPackagesProjectFragment}{NewLine}" +
+                               $"    </ItemGroup>{NewLine}" +
+                               $"</Project>";
                     IO.File.WriteAllText(projectFile, proj);
 
                     var sw = Stopwatch.StartNew();

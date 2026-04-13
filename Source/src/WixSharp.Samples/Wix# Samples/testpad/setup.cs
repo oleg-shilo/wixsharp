@@ -92,13 +92,11 @@ namespace Test1.installer.wixsharp
             // WixTools.SetWixVersion(Environment.CurrentDirectory, "7.0.0");
 
             WixTools.SetWixVersion(Environment.CurrentDirectory, "6.0.2");
+            WixTools.RestoreDtfPackages();
 
             var project =
                     new ManagedProject("My Product",
                         new Property("TEST", "TEST-VALUE"));
-
-            // project.SignAllFiles = true;
-            // project.DigitalSignature = new CustomSigner();
 
             project.BuildMsi();
         }
