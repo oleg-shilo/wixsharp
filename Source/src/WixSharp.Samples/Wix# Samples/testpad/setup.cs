@@ -88,18 +88,17 @@ namespace Test1.installer.wixsharp
 
         static void issue_1917()
         {
-            // WixTools.AcceptEulaFor = "wix7";
-            WixTools.SetWixVersion(Environment.CurrentDirectory, "7.0.0");
-            Console.WriteLine(WixTools.Heat);
+            // WixTools.AcceptEulaFor = "wix7"; //enable it only if you indeed want to accept the EULA for Wix 7.0.0
+            // WixTools.SetWixVersion(Environment.CurrentDirectory, "7.0.0");
+
+            WixTools.SetWixVersion(Environment.CurrentDirectory, "6.0.2");
 
             var project =
                     new ManagedProject("My Product",
                         new Property("TEST", "TEST-VALUE"));
 
-            WixExtension.UI.PreferredVersion = "7.0.0";
-
-            project.SignAllFiles = true;
-            project.DigitalSignature = new CustomSigner();
+            // project.SignAllFiles = true;
+            // project.DigitalSignature = new CustomSigner();
 
             project.BuildMsi();
         }
