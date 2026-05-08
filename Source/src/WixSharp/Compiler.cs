@@ -186,6 +186,44 @@ namespace WixSharp
         /// </summary>
         public static bool SuppressAotWarnings = true;
 
+#if NETCORE
+
+        /// <summary>
+        /// Gets or sets the target framework moniker (TFM) used when compiling .NET managed custom actions with AOT.
+        /// <para>The default value is <c>net&lt;latest&gt;-windows</c>.</para>
+        /// </summary>
+        public static string AotTargetFramework
+        {
+            set => aotTargetFramework = value;
+            get => aotTargetFramework ?? (aotTargetFramework = GetDefaultTFM());
+        }
+
+        static string aotTargetFramework;
+        static string GetDefaultTFM()
+        {
+            const string fallback = "net10.0-windows";
+
+            try
+            {
+                var output = new StringBuilder();
+                WixTools.dotnet.Run("--list-sdks", x => output.AppendLine(x));
+                var highestMajor = output.ToString()
+                    .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(line => Regex.Match(line, @"^\s*(\d+)\.\d+\.\d+"))
+                    .Where(match => match.Success)
+                    .Select(match => int.Parse(match.Groups[1].Value))
+                    .DefaultIfEmpty(8)
+                    .Max();
+
+                return $"net{highestMajor}.0-windows";
+            }
+            catch
+            {
+                return fallback;
+            }
+        }
+#endif
+
         /// <summary>
         /// WiX compiler <c>wix.exe</c> options (e.g. "-define DEBUG"). Available only in WiX v4.*
         /// <para>The default value is "-sw1026" (disable warning 1026).</para>

@@ -930,4 +930,49 @@ namespace WixSharp.Bootstrapper
     }
 
 #pragma warning restore 1591
+
+    /// <summary>
+    /// Custom WiX bundle chain item that emits a `netfx:DotNetCoreSearch` element.
+    /// Use this search to detect an installed .NET (Core/modern .NET) runtime and store the result in a Burn variable.
+    /// </summary>
+    /// <remarks>
+    /// Example usage:
+    /// <code>
+    /// bundle.Chain.Add(new DotNetCoreSearch
+    /// {
+    ///     RuntimeType = "aspnet",
+    ///     Platform = "x64",
+    ///     MajorVersion = "9",
+    ///     Variable = "AspNetCoreRuntimeVersion"
+    /// });
+    /// </code>
+    /// </remarks>
+    public class DotNetCoreSearch : ChainItem
+    {
+        /// <summary>
+        /// Runtime type to search for (for example: `aspnet`, `desktop`).
+        /// </summary>
+        [Xml] public string RuntimeType = "aspnet";
+
+        /// <summary>
+        /// Target architecture (for example: `x86`, `x64`, `arm64`).
+        /// </summary>
+        [Xml] public string Platform = "x64";
+
+        /// <summary>
+        /// Major runtime version to search for.
+        /// </summary>
+        [Xml] public string MajorVersion = "10";
+
+        /// <summary>
+        /// Burn variable name that receives the detected runtime version.
+        /// </summary>
+        [Xml] public string Variable = "AspNetCoreRuntimeVersion";
+
+        /// <summary>
+        /// Emits the corresponding WiX XML (`netfx:DotNetCoreSearch`).
+        /// </summary>
+        public override XContainer[] ToXml()
+            => new[] { this.ToXElement(WixExtension.NetFx.ToXName("DotNetCoreSearch")) };
+    }
 }

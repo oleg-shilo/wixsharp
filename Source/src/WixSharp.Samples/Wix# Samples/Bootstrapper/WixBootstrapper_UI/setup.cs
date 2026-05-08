@@ -82,6 +82,8 @@ public class BuildScript
                              DisplayInternalUI = true
                          });
 
+        bundle.Chain.Add(new DotNetCoreSearch { MajorVersion = "9" });
+
         bundle.Version = new Version("1.0.0.0");
         bundle.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
         bundle.Application = new ManagedBootstrapperApplication("%this%");
