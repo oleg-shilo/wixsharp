@@ -947,7 +947,7 @@ namespace WixSharp.Bootstrapper
     /// });
     /// </code>
     /// </remarks>
-    public class DotNetCoreSearch : ChainItem
+    public class DotNetCoreSearch : WixEntity, IGenericEntity
     {
         /// <summary>
         /// Runtime type to search for (for example: `aspnet`, `desktop`).
@@ -970,9 +970,17 @@ namespace WixSharp.Bootstrapper
         [Xml] public string Variable = "AspNetCoreRuntimeVersion";
 
         /// <summary>
-        /// Emits the corresponding WiX XML (`netfx:DotNetCoreSearch`).
+        /// Processes the specified context by including the .NET Framework extension and adding the corresponding
+        /// DotNetCoreSearch element.
         /// </summary>
-        public override XContainer[] ToXml()
-            => new[] { this.ToXElement(WixExtension.NetFx.ToXName("DotNetCoreSearch")) };
+        /// <remarks>Call this method to ensure that the .NET Framework extension is included in the
+        /// project and that the DotNetCoreSearch element is added to the installer XML structure. This method modifies
+        /// the state of the provided context.</remarks>
+        /// <param name="context">The processing context that provides access to the project and XML parent elements. Cannot be null.</param>
+        public void Process(ProcessingContext context)
+        {
+            context.Project.Include(WixExtension.NetFx);
+            context.XParent.Add(this.ToXElement(WixExtension.NetFx.ToXName("DotNetCoreSearch")));
+        }
     }
 }

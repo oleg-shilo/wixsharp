@@ -56,7 +56,8 @@ namespace WixSharp.Bootstrapper
         /// </summary>
         /// <param name="name">The name of the project. Typically it is the name of the product to be installed.</param>
         /// <param name="items">The project installable items (e.g. directories, files, registry keys, Custom Actions).</param>
-        public Bundle(string name, params ChainItem[] items)
+        // public Bundle(string name, params ChainItem[] items)
+        public Bundle(string name, params WixEntity[] items)
         {
             if (!Compiler.AutoGeneration.LegacyDefaultIdAlgorithm)
             {
@@ -66,7 +67,7 @@ namespace WixSharp.Bootstrapper
             this.Include(WixExtension.NetFx);
             this.Include(WixExtension.Bal);
             Name = name;
-            Chain.AddRange(items);
+            Chain.AddRange(items.OfType<ChainItem>());
             var msiExePackages = items.OfType<MsiExePackage>().ToArray();
             if (msiExePackages.Any())
             {

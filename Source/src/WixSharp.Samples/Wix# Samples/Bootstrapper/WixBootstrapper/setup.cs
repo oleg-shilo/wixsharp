@@ -5,6 +5,7 @@
 //css_ref ..\..\..\Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using WixSharp;
@@ -60,6 +61,14 @@ public class InstallScript
             Version = Version.Parse("1.0.0.0"),
             UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb24889b")
         };
+
+        bundle.GenericItems.Add(
+            new DotNetCoreSearch
+            {
+                MajorVersion = "10",
+                Platform = "x64",
+                Variable = "DOTNETDESKTOPVERSION"
+            });
 
         // will show MSI UI instead for all MsiPackages
         bundle.Application = new WixInternalUIBootstrapperApplication { LogoFile = "product_logo.png" };
@@ -260,17 +269,4 @@ public class InstallScript
     {
         MessageBox.Show("DOINSTALL: " + e.Session["DOINSTALL"]);
     }
-}
-
-// This is an example of support for custom Bundle elements that are not directly implemented by WixSharp
-// Usage: `bundle.Chain.Add(new DotNetCoreSearch());`
-public class DotNetCoreSearch : ChainItem
-{
-    [Xml] public string RuntimeType = "aspnet";
-    [Xml] public string Platform = "x64";
-    [Xml] public string MajorVersion = "6";
-    [Xml] public string Variable = "AspNetCoreRuntimeVersion";
-
-    public override XContainer[] ToXml()
-        => new[] { this.ToXElement(WixExtension.NetFx.ToXName("DotNetCoreSearch")) };
 }

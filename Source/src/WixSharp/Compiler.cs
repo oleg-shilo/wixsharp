@@ -186,8 +186,6 @@ namespace WixSharp
         /// </summary>
         public static bool SuppressAotWarnings = true;
 
-#if NETCORE
-
         /// <summary>
         /// Gets or sets the target framework moniker (TFM) used when compiling .NET managed custom actions with AOT.
         /// <para>The default value is <c>net&lt;latest&gt;-windows</c>.</para>
@@ -222,7 +220,6 @@ namespace WixSharp
                 return fallback;
             }
         }
-#endif
 
         /// <summary>
         /// WiX compiler <c>wix.exe</c> options (e.g. "-define DEBUG"). Available only in WiX v4.*
