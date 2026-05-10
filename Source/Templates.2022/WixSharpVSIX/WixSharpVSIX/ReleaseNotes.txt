@@ -1,3 +1,6 @@
+v2.4.3
+- Updated NuGet versions of WixSharp packages to `2.*` to trigger the initial download of the latest versions of the packages. 
+
 v2.4.2
 - Updated Install Target to "[17.0,19.0)"
 
