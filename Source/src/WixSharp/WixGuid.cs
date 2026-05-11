@@ -28,6 +28,7 @@ THE SOFTWARE.
 #endregion Licence...
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace WixSharp
@@ -204,8 +205,6 @@ namespace WixSharp
             return Generator(seed);
         }
 
-        static Random rnd = new Random(1);
-
         /// <summary>
         /// Returns new GUID.
         /// </summary>
@@ -214,6 +213,8 @@ namespace WixSharp
         {
             return Generator(seed);
         }
+
+        static Random rnd = new Random(1);
 
         static Func<object, Guid> generator = null;
 
@@ -289,8 +290,74 @@ namespace WixSharp
         public static Guid Default(object seed)
         {
             Guid result = WixGuid.HashGuidByInteger(WixGuid.ConsistentGenerationStartValue.CurrentGuid, seed.ToString().GetHashCode32());
-            // Debug.WriteLine($"{seed}: {result}");
+
+            // if (seed.ToString().Contains("1080i_"))
+            // {
+            //     Console.WriteLine("---");
+            //     testGuids.Add(result);
+            //     testGuids.PrintWithDiff();
+            // }
+
             return result;
+        }
+
+        static List<Guid> testGuids = new List<Guid>();
+
+        /// <summary>
+        /// Generates a deterministic, collision-free GUID based on the specified seed object.
+        /// </summary>
+        /// <remarks>This method is useful when a stable, repeatable GUID is required for a given input.
+        /// The generated GUID will be the same for identical seed values across invocations.</remarks>
+        /// <param name="seed">The object used as the basis for generating the GUID. The same seed will always produce the same GUID.</param>
+        /// <returns>A GUID that is uniquely derived from the provided seed.</returns>
+        public static Guid CollisionFree(object seed)
+            => WixSharp.CollisionFreeGuidGenerator.Generate(seed);
+    }
+
+    /// <summary>
+    /// Wraps/extends <see cref="GuidGenerators.Default"/> to detect and resolve GUID collisions.
+    /// Two different seed strings can produce the same GUID when their hash codes collide;
+    /// this class detects that situation and increments the GUID until it is unique.
+    /// </summary>
+    internal static class CollisionFreeGuidGenerator
+    {
+        static Dictionary<string, Guid> seedToGuid = new Dictionary<string, Guid>(StringComparer.Ordinal);
+        static HashSet<Guid> usedGuids = new HashSet<Guid>();
+
+        /// <summary>
+        /// Generates a deterministic, collision-free GUID for the given seed.
+        /// Compatible with <see cref="WixGuid.Generator"/> delegate signature.
+        /// </summary>
+        public static Guid Generate(object seed)
+        {
+            var key = seed.ToString();
+            if (seedToGuid.TryGetValue(key, out var cached))
+            {
+                return cached;
+            }
+
+            var candidate = GuidGenerators.Default(seed);
+            var result = usedGuids.Contains(candidate) ? ResolveCollisionIfNeeded(candidate) : candidate;
+
+            seedToGuid[key] = result;
+            usedGuids.Add(result);
+            return result;
+        }
+
+        /// <summary>
+        /// Resolves collision by incrementing the GUID until we find an unused one
+        /// </summary>
+        /// <param name="candidate"></param>
+        /// <returns></returns>
+        static Guid ResolveCollisionIfNeeded(Guid candidate)
+        {
+            var sequential = new WixGuid.SequentialGuid(candidate);
+            do
+            {
+                sequential++;
+            } while (usedGuids.Contains(sequential.CurrentGuid));
+
+            return sequential.CurrentGuid;
         }
     }
 }

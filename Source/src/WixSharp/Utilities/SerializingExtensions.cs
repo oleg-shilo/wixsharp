@@ -187,5 +187,31 @@ namespace WixSharp
         /// <returns></returns>
         public static string Base64Decode(this string data)
             => Convert.FromBase64String(data ?? "").GetString();
+
+        public static void PrintWithDiff(this IEnumerable<Guid> items)
+        {
+            if (items?.Any() != true)
+                return;
+
+            var color = Console.ForegroundColor;
+            var firstGuidChars = items.FirstOrDefault().ToString().ToCharArray();
+            foreach (var item in items)
+            {
+                lock (typeof(Console))
+                {
+                    var chars = item.ToString().ToCharArray();
+                    for (int i = 0; i < chars.Length; i++)
+                    {
+                        if (chars[i] != firstGuidChars[i])
+                            Console.ForegroundColor = ConsoleColor.Red;
+                        else
+                            Console.ForegroundColor = color;
+
+                        Console.Write(chars[i]);
+                    }
+                    Console.WriteLine("");
+                }
+            }
+        }
     }
 }

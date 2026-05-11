@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WixSharp;
+using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
 using static WixSharp.CommonTasks.AppSearch;
 using WixSharp.Msi;
@@ -46,6 +47,7 @@ namespace Test1.installer.wixsharp
 
         static void Main()
         {
+            issue_1927(); return;
             issue_1917(); return;
             issue_1900(); return;
             issue_1887(); return;
@@ -99,6 +101,41 @@ namespace Test1.installer.wixsharp
                         new Property("TEST", "TEST-VALUE"));
 
             project.BuildMsi();
+        }
+
+        static void issue_1926()
+        {
+            var bundle = new Bundle("My Product Bundle")
+            {
+                Version = Version.Parse("1.0.0.0"),
+                UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb24889b")
+            };
+
+            bundle.GenericItems.Add(
+                new DotNetCoreSearch
+                {
+                    MajorVersion = "10",
+                    Platform = "x64",
+                    Variable = "DOTNETDESKTOPVERSION"
+                });
+
+            bundle.Build("my.exe");
+        }
+
+        static void issue_1927()
+        {
+            System.IO.File.WriteAllText("atsc_1080i_50", "atsc_1080i_50");
+            System.IO.File.WriteAllText("atsc_1080i_60", "atsc_1080i_60");
+
+            var project =
+                    new ManagedProject("My Product",
+                        new Dir(@"%ProgramFiles%\My Company\My Product",
+                            new File("atsc_1080i_50"),
+                            new File("atsc_1080i_60")));
+
+            WixGuid.Generator = GuidGenerators.CollisionFree;
+
+            var msiFile = project.BuildMsi();
         }
 
         static void issue_1900()

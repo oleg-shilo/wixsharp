@@ -75,6 +75,48 @@ namespace WixSharp.Test
         }
 
         [Fact]
+        [Description("Issue #1927")]
+        public void Fix_Issue_1927()
+        {
+            // it's not a test of the hashing algorithm but rather a test that the same hashing algorithm is used for
+            // both integer and guid hashing and that the seed string is properly hashed to integer before being
+            // used for guid hashing.
+
+            var seed1 = "Component.atsc_1080i_50_";
+            var seed2 = "Component.atsc_1080i_60_";
+
+            var hash1 = seed1.GetHashCode32();
+            var hash2 = seed2.GetHashCode32();
+
+            var array1 = BitConverter.GetBytes(hash1);
+            var array2 = BitConverter.GetBytes(hash2);
+
+            Assert.NotEqual(hash1, hash2);
+            Assert.NotEqual(array1, array2);
+
+            var baseGuid = new Guid("{1fd37858-ec71-4389-8a5c-38e3646199b5}");
+            var guid1 = WixGuid.HashGuidByInteger(baseGuid, seed1.GetHashCode32());
+            var guid2 = WixGuid.HashGuidByInteger(baseGuid, seed2.GetHashCode32());
+
+            Assert.NotEqual(guid1, guid2);
+            WixGuid.Generator = GuidGenerators.CollisionFree;
+
+            try
+            {
+                var g1 = WixGuid.NewGuid(seed1);
+                var g2 = WixGuid.NewGuid(seed2);
+                var same_as_g1 = WixGuid.NewGuid(seed1);
+
+                Assert.NotEqual(g1, g2);
+                Assert.Equal(g1, same_as_g1);
+            }
+            finally
+            {
+                WixGuid.Generator = GuidGenerators.Default;
+            }
+        }
+
+        [Fact]
         [Description("Issue #1171")]
         public void Fix_Issue_1171()
         {

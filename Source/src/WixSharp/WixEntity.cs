@@ -461,7 +461,7 @@ namespace WixSharp
                 int maxLength = 30;
                 if (rawName.Length > maxLength)
                 {
-                    //some chars are illegal as star if the ID so work around this with '_' prefix
+                    //some chars are illegal as star of the ID so work around this with '_' prefix
                     rawName = "_..." + rawName.Substring(rawName.Length - maxLength);
                 }
 

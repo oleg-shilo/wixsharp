@@ -947,7 +947,7 @@ namespace WixSharp.Bootstrapper
     /// });
     /// </code>
     /// </remarks>
-    public class DotNetCoreSearch : WixEntity, IGenericEntity
+    public class DotNetCoreSearch : WixObject, IGenericEntity
     {
         /// <summary>
         /// Runtime type to search for (for example: `aspnet`, `desktop`).
