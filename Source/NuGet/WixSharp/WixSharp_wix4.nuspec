@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>WixSharp_wix4</id>
-    <version>2.13.0.0</version>
+    <version>2.14.0.0</version>
     <title>Wix# (WixSharp) - managed interface for WiX4 and later</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -20,14 +20,19 @@
             The package is tested against WIX (Windows Installer Xml) Toolset v4.0.1.0
         </description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.13.0.0-pre
+    <releaseNotes>Release v2.14.0.0
 
-- #1917: WixSharp generates wix.tools.csproj with floating versions (*) causing unintended upgrade to WiX v7 and build failures (WIX7015)</releaseNotes>
+- WixSharp-VS-Templates: updated nuget packeges refs to use the latest package available
+- #1857: .NET 9 Support ?
+- #1926: Added support for `DotNetCoreSearch` element
+  Add DotNetCoreSearch and dynamic AOT TFM selection
+- #1927: LGHT0369 "Component has a @Guid value that duplicates another component in this package." because of a GetHashCode32 collision
+  `WixGuid.Generator = GuidGenerators.CollisionFree;`</releaseNotes>
     <copyright>Copyright (C) 2008-2025 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>
     <dependencies>
-      <dependency id="WixSharp_wix4.bin" version="2.13.0.0" />
+      <dependency id="WixSharp_wix4.bin" version="2.14.0.0" />
     </dependencies>
   </metadata>
   <files>
