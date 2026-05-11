@@ -301,7 +301,7 @@ namespace WixSharp
             return result;
         }
 
-        static List<Guid> testGuids = new List<Guid>();
+        // static List<Guid> testGuids = new List<Guid>();
 
         /// <summary>
         /// Generates a deterministic, collision-free GUID based on the specified seed object.
@@ -309,6 +309,12 @@ namespace WixSharp
         /// <remarks>This method is useful when a stable, repeatable GUID is required for a given input.
         /// The generated GUID will be the same for identical seed values across invocations.</remarks>
         /// <param name="seed">The object used as the basis for generating the GUID. The same seed will always produce the same GUID.</param>
+        /// <remarks>
+        /// Example usage:
+        /// <code>
+        /// WixGuid.Generator = GuidGenerators.CollisionFree;
+        /// </code>
+        /// </remarks>
         /// <returns>A GUID that is uniquely derived from the provided seed.</returns>
         public static Guid CollisionFree(object seed)
             => WixSharp.CollisionFreeGuidGenerator.Generate(seed);
