@@ -1,3 +1,7 @@
+v2.4.5
+- Manifest's dependency pack `Microsoft.Net.Component.4.7.2.TargetingPack` is replaced with `Microsoft.VisualStudio.Component.CoreEditor`.
+  This is to allow install on both VS2022 and VS2026. It's related to #1929. 
+
 v2.4.4
 - Updated WiX3 templates to target net472 (addressing #1929). 
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="WixSharp Visual Studio project templetes" Version="2.4.4" Language="en-US" Publisher="Oleg Shilo" />
+        <Identity Id="WixSharp Visual Studio project templetes" Version="2.4.5" Language="en-US" Publisher="Oleg Shilo" />
         <DisplayName>WixSharp Project Templates</DisplayName>
         <Description xml:space="preserve">A WixSharp project templates for WiX/MSI setup (C#).
 Compatibility: WixSharp v1.6.4.0 (WiX3) / v2.0.0.0 (WiX4) and higher</Description>
@@ -32,6 +32,8 @@ Compatibility: WixSharp v1.6.4.0 (WiX3) / v2.0.0.0 (WiX4) and higher</Descriptio
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\WixSharp\WixSharp Setup - Bootstrapper.zip" />
     </Assets>
     <Prerequisites>
-        <Prerequisite Id="Microsoft.Net.Component.4.7.2.TargetingPack" Version="[18.6.11706.339,)" DisplayName=".NET Framework 4.7.2 targeting pack" />
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor"
+              Version="[17.0,18.0)"
+              DisplayName="Visual Studio core editor" />
     </Prerequisites>
 </PackageManifest>
