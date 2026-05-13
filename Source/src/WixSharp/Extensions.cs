@@ -1232,6 +1232,14 @@ namespace WixSharp
         public static bool PathExists(this string path) => IO.File.Exists(path) ? true : IO.Directory.Exists(path);
 
         /// <summary>
+        /// Determines whether the given path refers to an existing directory on disk.
+        /// </summary>
+        /// <param name="path">The path to test.</param>
+        /// <returns>true if the path refers to an existing directory; false if the directory does not exist or an error occurs
+        /// when trying to determine if the specified directory exists.</returns>
+        public static bool DirectoryExists(this string path) => IO.Directory.Exists(path);
+
+        /// <summary>
         /// Deletes File/Directory from by the specified path if it exists.
         /// </summary>
         /// <param name="path">The path.</param>

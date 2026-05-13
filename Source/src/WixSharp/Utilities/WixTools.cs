@@ -395,7 +395,10 @@ namespace WixSharp.CommonTasks
 
         static string FindWixExtensionDll(string extensionDir, string name, string version)
         {
-            if (!extensionDir.PathCombine(name).PathExists())
+            if (name.FileExists() || name.Contains(Path.DirectorySeparatorChar)) // addresses #1928
+                throw new Exception($"Invalid extension name: '{name}'. It should not be a path but an extension name (e.g. `WixToolset.UI.wixext`).");
+
+            if (!extensionDir.PathCombine(name).DirectoryExists())
                 return null;
 
             // C:\Users\user\.wix\extensions\WixToolset.UI.wixext\5.0.0\wixext5\WixToolset.UI.wixext.dll
