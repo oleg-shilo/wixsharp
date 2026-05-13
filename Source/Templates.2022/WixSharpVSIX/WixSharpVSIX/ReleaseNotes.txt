@@ -1,3 +1,6 @@
+v2.4.4
+- Updated WiX3 templates to target net472 (addressing #1929). 
+
 v2.4.3
 - Updated NuGet versions of WixSharp packages to `2.*` to trigger the initial download of the latest versions of the packages. 
 
