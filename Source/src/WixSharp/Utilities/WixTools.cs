@@ -272,7 +272,7 @@ namespace WixSharp.CommonTasks
                 return SfxCAx64;
 
             if (!is64 && SfxCAx86 != null)
-                return SfxCAx64;
+                return SfxCAx86;
 
             string platformDir = is64 ? "x64" : "x86";
 
