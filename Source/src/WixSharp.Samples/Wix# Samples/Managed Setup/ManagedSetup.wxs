@@ -1,0 +1,84 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Compressed="yes" ProductCode="6f330b47-2577-43ad-9095-1861ca25889c" Name="ManagedSetup" Language="1033" Version="1.0.0.0" UpgradeCode="6f330b47-2577-43ad-9095-1861ba25889b" Manufacturer="master" InstallerVersion="200">
+    <SummaryInformation Codepage="Windows-1252" />
+    <Media Id="1" Cabinet="ManagedSetup.cab" EmbedCab="yes" />
+
+    <StandardDirectory Id="ProgramFilesFolder">
+      <Directory Id="My20Company" Name="My Company">
+        <Directory Id="INSTALLDIR" Name="My Product">
+
+          <Component Id="Component.MyApp.exe_3459324387" Guid="6f330b47-2577-43ad-9095-18614c7a0c75">
+            <File Id="MyApp.exe_3459324387" Source="Files\bin\MyApp.exe" />
+          </Component>
+
+          <Directory Id="Docs" Name="Docs">
+
+            <Component Id="Component.readme.txt_397842600" Guid="6f330b47-2577-43ad-9095-18614039ec6c">
+              <File Id="readme.txt_397842600" Source="readme.txt" />
+            </Component>
+
+            <Component Id="Component.setup.cs_1385570759" Guid="6f330b47-2577-43ad-9095-1861bf7d050d">
+              <File Id="setup.cs_1385570759" Source="setup.cs" />
+            </Component>
+
+          </Directory>
+        </Directory>
+      </Directory>
+    </StandardDirectory>
+
+    <UI />
+
+    <WixUI Id="WixUI_Minimal" xmlns="http://wixtoolset.org/schemas/v4/wxs/ui" />
+
+    <UI>
+      <EmbeddedUI Id="WixSharp_EmbeddedUI_Asm" SourceFile="WixSharp.UI.CA.dll" />
+    </UI>
+
+    <CustomAction Id="WixSharp_InitRuntime_Action" BinaryRef="WixSharp_InitRuntime_Action_File" DllEntry="WixSharp_InitRuntime_Action" Return="check" Execute="immediate" />
+    <CustomAction Id="Set_CancelRequestHandler_Props" Property="CancelRequestHandler" Value="UpgradeCode=[UpgradeCode];INSTALLDIR=[INSTALLDIR];UILevel=[UILevel];ProductCode=[ProductCode];ADDLOCAL=[ADDLOCAL];ADDFEATURES=[ADDFEATURES]" />
+    <CustomAction Id="CancelRequestHandler" BinaryRef="WixSharp_InitRuntime_Action_File" DllEntry="CancelRequestHandler" Return="check" Impersonate="no" Execute="deferred" />
+    <CustomAction Id="WixSharp_Load_Action" BinaryRef="WixSharp_InitRuntime_Action_File" DllEntry="WixSharp_Load_Action" Return="check" Execute="immediate" />
+    <CustomAction Id="Set_WixSharp_AfterInstall_Action_Props" Property="WixSharp_AfterInstall_Action" Value="WixSharp_AfterInstall_Handlers=[WixSharp_AfterInstall_Handlers];WIXSHARP_RUNTIME_DATA=[WIXSHARP_RUNTIME_DATA];INSTALLDIR=[INSTALLDIR];UILevel=[UILevel];ProductName=[ProductName];FOUNDPREVIOUSVERSION=[FOUNDPREVIOUSVERSION];UpgradeCode=[UpgradeCode];ManagedProjectElevatedEvents=[ManagedProjectElevatedEvents];REMOVE=[REMOVE];REINSTALL=[REINSTALL];Installed=[Installed];MsiLogFileLocation=[MsiLogFileLocation];INSTALLDIR=[INSTALLDIR];UILevel=[UILevel];ProductCode=[ProductCode];ADDLOCAL=[ADDLOCAL];ADDFEATURES=[ADDFEATURES]" />
+    <CustomAction Id="WixSharp_AfterInstall_Action" BinaryRef="WixSharp_InitRuntime_Action_File" DllEntry="WixSharp_AfterInstall_Action" Return="check" Impersonate="no" Execute="deferred" />
+
+    <Binary Id="WixSharp_InitRuntime_Action_File" SourceFile="WixSharp.CA.dll" />
+    <Binary Id="en_wxl" SourceFile="..\..\..\..\..\..\..\dev\wixsharp4\Source\src\WixSharp.UI\ManagedUI\Images\WixUI_en-us.wxl" />
+    <Binary Id="WixSharp_UIText" SourceFile="C:\ProgramData\WixSharp\2.14.1.0\WixUI_en-US.wxl" />
+    <Binary Id="WixSharp_LicenceFile" SourceFile="ManagedSetup.licence.rtf" />
+    <Binary Id="WixSharpUI_Bmp_Dialog" SourceFile="ManagedSetup.dialog_bmp.png" />
+    <Binary Id="WixSharpUI_Bmp_Banner" SourceFile="ManagedSetup.dialog_banner.png" />
+
+    <UIRef Id="WixUI_ErrorProgressText" />
+
+    <Property Id="WixSharp_UI_INSTALLDIR" Value="INSTALLDIR" />
+    <Property Id="UAC_WARNING" Value="Please wait for UAC prompt to appear.&#xD;&#xA;&#xD;&#xA;If it appears minimized then activate it from the taskbar." />
+    <Property Id="WixSharp_InstallDialogs" Value="WixSharp.UI, Version=2.14.1.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.WelcomeDialog&#xA;WixSharp.UI, Version=2.14.1.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.ProgressDialog&#xA;WixSharp.UI, Version=2.14.1.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.ExitDialog" />
+    <Property Id="WixSharp_ModifyDialogs" Value="WixSharp.UI, Version=2.14.1.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.MaintenanceTypeDialog&#xA;WixSharp.UI, Version=2.14.1.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.FeaturesDialog&#xA;WixSharp.UI, Version=2.14.1.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.ProgressDialog&#xA;WixSharp.UI, Version=2.14.1.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.ExitDialog" />
+    <Property Id="WixSharp_UIInitialized_Handlers" Value="Managed_Setup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Script|Project_UIInitialized" />
+    <Property Id="WixSharp_Load_Handlers" Value="Managed_Setup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Script|msi_Load" />
+    <Property Id="WixSharp_AfterInstall_Handlers" Value="Managed_Setup, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null|Script|msi_AfterInstall" />
+    <Property Id="LoadEventScheduling" Value="OnMsiLaunch" />
+
+    <Feature Id="Binaries" Title="Binaries" Level="1" Description="Product binaries" AllowAbsent="no">
+      <ComponentRef Id="Component.MyApp.exe_3459324387" />
+    </Feature>
+
+    <Feature Id="Documentation" Title="Documentation" Level="1" Description="Product documentation (manuals and user guides)" AllowAbsent="yes">
+      <ComponentRef Id="Component.readme.txt_397842600" />
+
+      <Feature Id="Tutorials" Title="Tutorials" Level="2" Description="Product tutorials" AllowAbsent="yes">
+        <ComponentRef Id="Component.setup.cs_1385570759" />
+      </Feature>
+    </Feature>
+
+    <InstallExecuteSequence>
+      <Custom Condition=" (1) " Action="WixSharp_InitRuntime_Action" Before="AppSearch" />
+      <Custom Action="Set_CancelRequestHandler_Props" Before="InstallFinalize" />
+      <Custom Condition=" (1) " Action="CancelRequestHandler" After="Set_CancelRequestHandler_Props" />
+      <Custom Condition="1" Action="WixSharp_Load_Action" Before="AppSearch" />
+      <Custom Action="Set_WixSharp_AfterInstall_Action_Props" After="InstallFiles" />
+      <Custom Condition="1" Action="WixSharp_AfterInstall_Action" After="Set_WixSharp_AfterInstall_Action_Props" />
+    </InstallExecuteSequence>
+  </Package>
+</Wix>
+

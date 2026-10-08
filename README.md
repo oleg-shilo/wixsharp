@@ -47,6 +47,7 @@ _However a simpler approach is to use Visual Studio WixSharp Project Template [e
 about the WixSharp VS templates [here](https://github.com/oleg-shilo/wixsharp/wiki/VS2019-%E2%80%93-2022-Templates)._
 
 WixSharp allows a very simple and expressive definition of deployment. This is an example of a simple WixSharp script:
+
 ```C#
 using System;
 using WixSharp;
@@ -66,7 +67,9 @@ class Script
     }
 }
 ```
-One of the most intriguing features of WixSharp is the ability to define/implement managed Custom Actions directly in the script file:
+
+One of the most intriguing features of WixSharp is the ability to define/implement managed Custom Actions directly in the script file
+
 ```C#
 using System;
 using System.Windows.Forms;
@@ -97,7 +100,7 @@ public class CustomActions
         return ActionResult.Success;
     }
 }
-``` 
+```
 
 Another important feature is the support for custom UI including WPF external UI:
 ![image](https://github.com/oleg-shilo/wixsharp/raw/master/Documentation/wiki_images/wpf_ui.png)
@@ -139,3 +142,22 @@ The [Samples Folder](https://github.com/oleg-shilo/wixsharp/tree/master/Source/s
 * Console setup application
 * WinForm setup application
 * WPF setup application
+
+**Building locally**
+
+There are a few build dependencies that you need to install before you can build the entire codebase:
+
+- _**.NET10** (or higher)_
+  `winget install --id Microsoft.DotNet.SDK.10`
+- _**WiX Toolset**_
+  `dotnet tool install --global wix`
+  The command above will install the latest WiX version.
+  
+  Note, starting fro v7 WnGet requires users to accept EULA, which is no longer canonical Open-Source licence. See https://docs.firegiant.com/wix/osmf/ for details.
+  If you choose to use v7 and comply with the licence, you will need to indicate your acceptance in your code before you call any `Build*` methods:   `WixTools.AcceptEulaFor = "wix7";`.
+
+  If you prefer older WiX compilers distributed under more liberal licence you can simply install WiX v6.
+  `dotnet tool install --global wix --version 6.0.2 --allow-downgrade`
+  Thanks WixSharp being an abstraction layer you don't need to implement any changes with regards to (wix6 vs wix7)
+- _**NSIS**_
+  `winget install --id NSIS.NSIS -e`

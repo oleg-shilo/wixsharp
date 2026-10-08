@@ -2,11 +2,23 @@
 //css_ref Wix_bin\WixToolset.Dtf.WindowsInstaller.dll;
 using System;
 using WixSharp;
+using WixSharp.CommonTasks;
 
 class Script
 {
     static public void Main(string[] args)
     {
+        // Enable the line below to indicate whether the EULA has been accepted.
+        // This is required for the WiX v7 and higher. The expected value for WiX 7 is "wix7".
+        // See https://docs.firegiant.com/wix/osmf/ for details.</remarks>
+        // Note, that by enabling the line below you are legally entering EULA between you and WiX Toolset company. 
+        // WixSharp only provides the mechanism for passing your acceptance of EULA to the WiX compiler `wix.exe`.
+        // WixSharp.CommonTasks.WixTools.AcceptEulaFor = "wix7";
+
+        // This is the fall back option to wix v6, which does not require explicit EULA acceptance.
+        WixTools.SetWixVersion(Environment.CurrentDirectory, "6.0.2");
+        WixExtension.UI.PreferredVersion = "6.0.2";
+
         var docs = new Feature("Documentation");
         var binaries = new Feature("Binaries");
 

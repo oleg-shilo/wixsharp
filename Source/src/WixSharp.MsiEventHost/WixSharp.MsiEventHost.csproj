@@ -27,6 +27,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -57,7 +59,8 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>sn.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -73,8 +76,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="WixToolset.Dtf.WindowsInstaller, Version=4.0.0.0, Culture=neutral, PublicKeyToken=a7d136314861246c, processorArchitecture=MSIL">
-      <HintPath>..\packages\WixToolset.Dtf.WindowsInstaller.4.0.2\lib\net20\WixToolset.Dtf.WindowsInstaller.dll</HintPath>
+    <Reference Include="WixToolset.Dtf.WindowsInstaller, Version=6.0.0.0, Culture=neutral, PublicKeyToken=a7d136314861246c, processorArchitecture=MSIL">
+      <HintPath>..\packages\WixToolset.Dtf.WindowsInstaller.6.0.2\lib\net20\WixToolset.Dtf.WindowsInstaller.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -85,7 +88,6 @@
     <None Include="App.config" />
     <None Include="app.manifest" />
     <None Include="packages.config" />
-    <None Include="sn.pfx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WixSharp.UI\WixSharp.UI.csproj">

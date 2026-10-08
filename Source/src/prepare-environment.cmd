@@ -4,6 +4,11 @@ setlocal
 set snk_name=WixSharpStrongName.snk
 set is_new_snk=no
 
+if not "%OneDriveConsumer%"=="" (
+    echo "Mappig the snk-folder to OneDrive...""
+    set snk-folder=%OneDriveConsumer%\Dev\signing-keys\
+)
+
 :: Check if the 'snk-folder' environment variable exists
 if "%snk-folder%"=="" (
     echo Environment variable 'snk-folder' not found. Generating new SNK file...
@@ -11,7 +16,6 @@ if "%snk-folder%"=="" (
     set is_new_snk=yes
     :: Generate a new SNK file in the project root
     sn -k %snk_name%
-) else (
     echo 'snk-folder' found: %snk-folder%
     
     :: Check if the SNK file exists in the specified folder
@@ -31,6 +35,8 @@ copy %snk-folder%%snk_name% .\WixSharp\%snk_name%
 copy %snk-folder%%snk_name% .\WixSharp.UI.WPF\%snk_name% 
 copy %snk-folder%%snk_name% .\WixSharp.Test\%snk_name% 
 copy %snk-folder%%snk_name% .\WixSharp.UI\%snk_name% 
+copy %snk-folder%%snk_name% .\WixSharp.MsiEventHost\%snk_name% 
+
 
 if "%is_new_snk%"=="yes" (
     echo deleting temporary snk file...
