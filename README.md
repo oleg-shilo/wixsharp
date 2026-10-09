@@ -148,17 +148,17 @@ The [Samples Folder](https://github.com/oleg-shilo/wixsharp/tree/master/Source/s
 
 There are a few build dependencies that you need to install before you can build the entire codebase:
 
-- _**.NET10** (or higher)_
-  `winget install --id Microsoft.DotNet.SDK.10`
 - _**WiX Toolset**_
   `dotnet tool install --global wix`
   The command above will install the latest WiX version.
   
-  Note, starting fro v7 WnGet requires users to accept EULA, which is no longer canonical Open-Source licence. See https://docs.firegiant.com/wix/osmf/ for details.
-  If you choose to use v7 and comply with the licence, you will need to indicate your acceptance in your code before you call any `Build*` methods:   `WixTools.AcceptEulaFor = "wix7";`.
+  Note: starting from v7 WinGet requires users to accept the EULA, which is no longer a canonical Open-Source licence. See https://docs.firegiant.com/wix/osmf/ for details.
+  If you choose to use v7 and comply with the new licence, you will need to indicate your EULA acceptance in your code before you call any `Build*` methods:   `WixTools.AcceptEulaFor = "wix7";`.
 
-  If you prefer older WiX compilers distributed under more liberal licence you can simply install WiX v6.
+  If you prefer older WiX compilers distributed under a more liberal licence, you can install WiX v6.
   `dotnet tool install --global wix --version 6.0.2 --allow-downgrade`
-  Thanks WixSharp being an abstraction layer you don't need to implement any changes with regards to (wix6 vs wix7)
+  Thanks to WixSharp being an abstraction layer, you don't need to implement any changes concerning (wix6 vs wix7)
 - _**NSIS**_
+  NSIS integration is an extra functionality for building NSIS-based bootstrappers. Even if you are not planning to use it, it is required for building WixSharp binaries.
   `winget install --id NSIS.NSIS -e`
+- Run `<repo>/Source/src/prepare-environment.cmd`to generate local signing certificates. 
