@@ -114,6 +114,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>md "$(ProjectDir)..\..\bin\WixSharp"
-copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\bin\WixSharp\$(TargetFileName)"</PostBuildEvent>
+copy "$(TargetDir)$(TargetFileName)" "$(ProjectDir)..\..\bin\WixSharp\$(TargetFileName)"
+echo  copyed to "$(ProjectDir)..\..\bin\WixSharp\$(TargetFileName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

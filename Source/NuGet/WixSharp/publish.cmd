@@ -1,4 +1,4 @@
-set ver=2.14.1
+set ver=2.14.2
 echo !!!! Note: symbols are pushed automatically with nupkg 
 
 set nugetkey=%nuget_key%
