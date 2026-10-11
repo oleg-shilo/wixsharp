@@ -14,6 +14,7 @@ namespace WindowsInstaller
     public enum MsiError : UInt32
     {
         NoError = 0,
+        ERROR_MORE_DATA = 234,
         NoMoreItems = 259,
         UnknownProduct = 1605
     }
@@ -174,6 +175,16 @@ namespace WindowsInstaller
 
         [DllImport("msi")]
         extern static public MsiError MsiCloseHandle(IntPtr handle);
+
+        [DllImport("msi", CharSet = CharSet.Auto)]
+        extern static public MsiError MsiGetSummaryInformation(IntPtr hDb, string path, uint updateCount, out IntPtr hSummary);
+
+        [DllImport("msi", CharSet = CharSet.Auto)]
+        extern static public MsiError MsiSummaryInfoSetProperty(IntPtr hSummary, uint property, uint dataType,
+            int intValue, ref System.Runtime.InteropServices.ComTypes.FILETIME fileTimeValue, string stringValue);
+
+        [DllImport("msi")]
+        extern static public MsiError MsiSummaryInfoPersist(IntPtr hSummary);
 
         [DllImport("msi", CharSet = CharSet.Auto)]
         extern static public MsiInstallUILevel MsiSetInternalUI(MsiInstallUILevel level, ref IntPtr parentWnd);

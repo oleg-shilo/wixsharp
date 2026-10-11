@@ -616,7 +616,10 @@ namespace WixSharp
         public Property[] Properties = new Property[0];
 
         /// <summary>
-        /// Indicates whether compiler should emit consistent package Id (package code). Set <c>EmitConsistentPackageId</c> to 'false' (default value) if
+        /// <p>NOTE: this code does not longer trigger consistent PackageCode since breaking changes in WiX v6 and later. WiX 6 doesn’t natively 
+        /// guarantee byte-identical MSIs. 
+        /// The WiX maintainers discussed this in their March 2025 meeting notes.</p>
+        /// Indicates whether compiler should emit consistent package Id (package code stored in the binary Summary section of msi file). Set <c>EmitConsistentPackageId</c> to 'false' (default value) if
         /// you want the WiX compilers automatically generate a new package code for each new .msi file built. Or set it to 'true' if you want Wix# to auto generate a
         /// unique consistent package code for a given combination of the product code, product version and product upgrade code.
         /// <para>
@@ -634,7 +637,24 @@ namespace WixSharp
         /// Wix# does not changes the WiX default package code generation it just gives the opportunity to control it when required.
         /// </para>
         /// </summary>
+        [Obsolete("This property is obsolete. Use EmitConsistentMsiPackageCode instead.")]
         public bool EmitConsistentPackageId = false;
+
+        /// <summary>
+        /// <p>WiX v6 doesn’t natively guarantee byte-identical (or even functionally-identical) MSIs. The WiX maintainers discussed this in their March 2025 meeting notes.</p>
+        /// <p>This in turn creates a problem as consecutive builds from the same unchanged code do not create MSIs that would be recognized by the MSI runtime as identical.</p>
+        /// <p>IE if you build the same project twice without any changes, and install one of them, the double-clicking another one will not trigger a repair/uninstall sequence
+        /// but a error message "The product is not installed". While very often the preferred behavior is the repair/uninstall sequence.</p>
+        /// <p>The problem can be solved by ensuring the PackageCode of the generated msi file is set consistently.
+        /// Specifically by generating consistent `_Streams.Summary` stream data of the msi file.</p>
+        /// Starting from v6, WiX API does not provide a mechanism for updating Summary stream. Thus WixSharp uses MSI PInterop to handle this problem.
+        /// <p>
+        /// If you want to ensure that the generated msi files are identical for the same product code, version and upgrade code set this property to true. 
+        /// The default value is false to preserve the WiX default behavior of generating a new package code for each build.
+        /// </p>
+        /// </summary>
+        public bool EmitConsistentMsiPackageCode = false;
+
 
         /// <summary>
         /// Collection of WiX/MSI <see cref="Binary"/> objects to be embedded into MSI database.

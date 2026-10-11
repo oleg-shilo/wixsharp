@@ -71,6 +71,55 @@
             <param name="msi">The MSI file.</param>
             <param name="mst">The MST file.</param>
         </member>
+        <member name="T:WixSharp.Msi.MsiSummary">
+            <summary>
+            Represents the summary information stream of an MSI file.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Msi.MsiSummary.PackageCode">
+            <summary>
+            Gets or sets the package code of the MSI file.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Msi.MsiSummary.CreateTimeUtc">
+            <summary>
+            Gets or sets the creation time of the MSI file in UTC.
+            </summary>
+        </member>
+        <member name="F:WixSharp.Msi.MsiSummary.LastSaveTimeUtc">
+            <summary>
+            Gets or sets the last save time of the MSI file in UTC.
+            </summary>
+        </member>
+        <member name="T:WixSharp.Msi.MsiSummaryIO">
+            <summary>
+            Provides methods for reading and writing MSI summary information.
+            </summary>
+        </member>
+        <member name="M:WixSharp.Msi.MsiSummaryIO.Read(System.String)">
+            <summary>
+            Reads the summary information from the specified MSI file and returns it as an <see cref="T:WixSharp.Msi.MsiSummary"/> object.
+            </summary>
+            <param name="msiPath">The path to the MSI file.</param>
+            <returns>An <see cref="T:WixSharp.Msi.MsiSummary"/> object containing the summary information.</returns>
+        </member>
+        <member name="M:WixSharp.Msi.MsiSummaryIO.PatchSummary(System.String,System.Nullable{System.Guid},System.Nullable{System.DateTime})">
+            <summary>
+            Writes the specified package code and timestamp to the summary information of the MSI file.
+            </summary>
+            <param name="msiPath">The path to the MSI file.</param>
+            <param name="packageCode">The package code to write.</param>
+            <param name="utcTimestamp">The timestamp to write. If null, the timestamp will not be written.</param>
+            <returns>The package code string that was written to the summary information.</returns>
+        </member>
+        <member name="M:WixSharp.Msi.MsiSummaryIO.PatchSummary(System.String,System.String,System.Nullable{System.DateTime})">
+            <summary>
+            Writes the specified package code and timestamp to the summary information of the MSI file.
+            </summary>
+            <param name="msiPath">The path to the MSI file.</param>
+            <param name="packageCode">The package code to write.</param>
+            <param name="utcTimestamp">The timestamp to write. If null, the timestamp will not be written.</param>
+        </member>
         <member name="M:WixSharp.UI.LocalExtensions.GetEnvVar(System.String,System.String)">
             <summary>
             Gets the environment variable by the `name`.

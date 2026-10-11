@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using ComTypes = System.Runtime.InteropServices.ComTypes;
+using System.Security.Cryptography;
 using System.Text;
 using WindowsInstaller;
 
@@ -271,6 +274,172 @@ namespace WixSharp.Msi
 
             MsiInterop.MsiCloseHandle(view).check(nameof(MsiInterop.MsiCloseHandle));
             MsiInterop.MsiCloseHandle(db).check(nameof(MsiInterop.MsiCloseHandle));
+        }
+    }
+
+    /// <summary>
+    /// Represents the summary information stream of an MSI file.
+    /// </summary>
+    public class MsiSummary
+    {
+        /// <summary>
+        /// Gets or sets the package code of the MSI file.
+        /// </summary>
+        public string PackageCode;
+        /// <summary>
+        /// Gets or sets the creation time of the MSI file in UTC.
+        /// </summary>
+        public DateTime? CreateTimeUtc;
+        /// <summary>
+        /// Gets or sets the last save time of the MSI file in UTC.
+        /// </summary>
+        public DateTime? LastSaveTimeUtc;
+    }
+
+
+    /// <summary>
+    /// Provides methods for reading and writing MSI summary information.
+    /// </summary>
+    public static class MsiSummaryIO
+    {
+        const uint VT_EMPTY = 0;
+
+        // Summary information property IDs
+        const uint PID_REVNUMBER = 9;     // Package Code
+        const uint PID_CREATE_DTM = 12;
+        const uint PID_LASTSAVE_DTM = 13;
+
+        // Variant types
+        const uint VT_LPSTR = 30;
+        const uint VT_FILETIME = 64;
+
+        const int MSIDBOPEN_TRANSACT = 1;
+
+        // Overload for string properties
+        [DllImport("msi", CharSet = CharSet.Unicode, EntryPoint = "MsiSummaryInfoGetPropertyW")]
+        static extern MsiError MsiSummaryInfoGetPropertyString(IntPtr hSummary, uint property, out uint dataType, out int intValue, IntPtr fileTimeValue, StringBuilder stringValue, ref uint stringLength);
+        [DllImport("msi", CharSet = CharSet.Unicode, EntryPoint = "MsiSummaryInfoGetPropertyW")]
+        static extern MsiError MsiSummaryInfoGetPropertyTime(IntPtr hSummary, uint property, out uint dataType, out int intValue, out ComTypes.FILETIME fileTimeValue, IntPtr stringValue, IntPtr stringLength);
+
+        /// <summary>
+        /// Reads the summary information from the specified MSI file and returns it as an <see cref="MsiSummary"/> object.
+        /// </summary>
+        /// <param name="msiPath">The path to the MSI file.</param>
+        /// <returns>An <see cref="MsiSummary"/> object containing the summary information.</returns>
+        public static MsiSummary Read(string msiPath)
+        {
+            IntPtr si = IntPtr.Zero;
+            try
+            {
+                MsiInterop.MsiGetSummaryInformation(IntPtr.Zero, msiPath, 0, out si).check(nameof(MsiInterop.MsiGetSummaryInformation));
+
+                var result = new MsiSummary();
+                result.PackageCode = GetString(si, PID_REVNUMBER);
+                result.CreateTimeUtc = GetTime(si, PID_CREATE_DTM);
+                result.LastSaveTimeUtc = GetTime(si, PID_LASTSAVE_DTM);
+                return result;
+            }
+            finally
+            {
+                if (si != IntPtr.Zero) MsiInterop.MsiCloseHandle(si);
+            }
+        }
+
+        static string GetString(IntPtr si, uint property)
+        {
+            uint type;
+            int dummy;
+            uint length = 64;
+            StringBuilder sb = new StringBuilder((int)length);
+
+            var rc = MsiSummaryInfoGetPropertyString(
+                si, property, out type, out dummy, IntPtr.Zero, sb, ref length);
+
+            if (rc == MsiError.ERROR_MORE_DATA)
+            {
+                sb = new StringBuilder((int)length + 1);
+                length++;
+                rc = MsiSummaryInfoGetPropertyString(
+                    si, property, out type, out dummy, IntPtr.Zero, sb, ref length);
+            }
+
+            rc.check("MsiSummaryInfoGetProperty(" + property + ")");
+
+            return type == VT_LPSTR ? sb.ToString() : null;
+        }
+
+        static DateTime? GetTime(IntPtr si, uint property)
+        {
+            uint type;
+            int dummy;
+            System.Runtime.InteropServices.ComTypes.FILETIME ft;
+
+            MsiSummaryInfoGetPropertyTime(
+                    si, property, out type, out dummy, out ft, IntPtr.Zero, IntPtr.Zero).check("MsiSummaryInfoGetProperty(" + property + ")");
+
+            if (type != VT_FILETIME)
+                return null;   // VT_EMPTY: property not present
+
+            long ticks = ((long)(uint)ft.dwHighDateTime << 32) | (uint)ft.dwLowDateTime;
+            return DateTime.FromFileTimeUtc(ticks);
+        }
+
+        /// <summary>
+        /// Writes the specified package code and timestamp to the summary information of the MSI file.
+        /// </summary>
+        /// <param name="msiPath">The path to the MSI file.</param>
+        /// <param name="packageCode">The package code to write.</param>
+        /// <param name="utcTimestamp">The timestamp to write. If null, the timestamp will not be written.</param>
+        /// <returns>The package code string that was written to the summary information.</returns>
+        public static string PatchSummary(this string msiPath, Guid? packageCode, DateTime? utcTimestamp = null)
+        {
+            var packageCodeStr = packageCode?.ToString("B").ToUpperInvariant() ?? "<UNSPECIFIED>";
+            PatchSummary(msiPath, packageCodeStr, utcTimestamp);
+            return packageCodeStr;
+        }
+
+        /// <summary>
+        /// Writes the specified package code and timestamp to the summary information of the MSI file.
+        /// </summary>
+        /// <param name="msiPath">The path to the MSI file.</param>
+        /// <param name="packageCode">The package code to write.</param>
+        /// <param name="utcTimestamp">The timestamp to write. If null, the timestamp will not be written.</param>
+        public static void PatchSummary(this string msiPath, string packageCode, DateTime? utcTimestamp = null)
+        {
+            var db = IntPtr.Zero;
+            var si = IntPtr.Zero;
+            try
+            {
+                MsiInterop.MsiOpenDatabase(msiPath, MsiDbPersistMode.ReadWrite, out db).check("MsiOpenDatabase");
+                MsiInterop.MsiGetSummaryInformation(db, null, 10, out si).check("MsiGetSummaryInformation");
+
+                var none = new ComTypes.FILETIME();
+                MsiInterop.MsiSummaryInfoSetProperty(si, PID_REVNUMBER, VT_LPSTR, 0, ref none, packageCode).check("Set PackageCode");
+
+                if (utcTimestamp != null)
+                {
+                    long ft = utcTimestamp.Value.ToFileTimeUtc();
+                    var time = new ComTypes.FILETIME();
+                    time.dwLowDateTime = unchecked((int)(ft & 0xFFFFFFFFL));
+                    time.dwHighDateTime = (int)(ft >> 32);
+                    MsiInterop.MsiSummaryInfoSetProperty(si, PID_CREATE_DTM, VT_FILETIME, 0, ref time, null).check("Set CreateTime");
+                    MsiInterop.MsiSummaryInfoSetProperty(si, PID_LASTSAVE_DTM, VT_FILETIME, 0, ref time, null).check("Set LastSaveTime");
+                }
+
+                MsiInterop.MsiSummaryInfoPersist(si).check(nameof(MsiInterop.MsiSummaryInfoPersist));
+                MsiInterop.MsiDatabaseCommit(db).check(nameof(MsiInterop.MsiDatabaseCommit));
+            }
+            finally
+            {
+                if (si != IntPtr.Zero) MsiInterop.MsiCloseHandle(si);
+                if (db != IntPtr.Zero) MsiInterop.MsiCloseHandle(db);
+            }
+        }
+
+        static void check(this MsiError result, string errorContext = "")
+        {
+            if (result != MsiError.NoError)
+                throw new ApplicationException($"Error: {errorContext} failed with error {result}");
         }
     }
 }

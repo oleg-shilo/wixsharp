@@ -42,6 +42,7 @@ using System.Xml;
 using System.Xml.Linq;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
+using WixSharp.Msi;
 using WixSharp.Utilities;
 using WixToolset.Dtf.WindowsInstaller;
 using IO = System.IO;
@@ -784,6 +785,16 @@ namespace WixSharp
                         IO.Path.ChangeExtension(path, ".wixpdb").DeleteIfExists();
                     }
 
+                    var isMsiFormatOutput = outFile.PathGetExtension().SameAs(".msi", ignoreCase: true);
+                    isMsiFormatOutput |= outFile.PathGetExtension().SameAs(".msm", ignoreCase: true);
+
+                    if (project.EmitConsistentMsiPackageCode && isMsiFormatOutput)
+                    {
+                        // Handle consistent MSI package code logic here if needed
+                        var packageCode = outFile.PatchSummary(project.ProductId);
+                        Compiler.OutputWriteLine(" MSI file PackageCode set to " + packageCode);
+                    }
+
                     project.DigitalSignature?.Apply(outFile);
                 }
 
@@ -1144,8 +1155,12 @@ namespace WixSharp
                    .SetAttribute("Scope", project.Scope)
                    .SetAttribute("InstallerVersion", project.InstallerVersion);
 
-            if (project.EmitConsistentPackageId)
-                package.CopyAttributeFrom(product, "Id");
+            // no longer needed as EmitConsistentPackageCode is now a default mechanism for this
+            //if (project.EmitConsistentPackageId)
+            //{
+            //    //package.CopyAttributeFrom(product, "Id"); // before wix6
+            //    package.SetAttribute("Id", $"_{project.ProductId}".Replace("-", "")); // After wix6 the Package.Id is a logical equivalent of Product.UpgradeCode (see https://docs.firegiant.com/wix/schema/wxs/package/)
+            //}
 
             package.AddAttributes(project.Package.Attributes);
             foreach (Media item in project.Media)
