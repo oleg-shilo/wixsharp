@@ -32,18 +32,19 @@ same language (C#). This also allows for a homogeneous, simplified, and more con
 
 _NOTE: WixSharp releases come in two streams: Releases v1.* use the WiX3 toolset to author msi setups, and v2.* use WiX4+. For the time being, the two streams will be maintained in parallel, but when WiX4/5 becomes mature enough, the WiX3 stream will be obsolete._
 
-If you use WiX4+ stream, you need to install .NET SDK (not .NET Framework SDK) installed in your build environment. Visual Studio 2022 comes with .NET SDK already. The need for .NET SDK is dictated by the method WiX vendor distributes WiX compiler and its dependencies (via `dotnet tool`). WixSharp fully adheres to this approach. Even though it provides a workaround for the absence of .NET SDK.
+If you use the WiX4+ stream, you need to install .NET SDK (not .NET Framework SDK) installed in your build environment. Visual Studio 2022 comes with .NET SDK already. The need for .NET SDK is dictated by the method the WiX vendor distributes the WiX compiler and its dependencies (via `dotnet tool`). WixSharp fully adheres to this approach. Even though it provides a workaround for the absence of .NET SDK.
 
 If you are planning to use WixSharp on Linux, you may find this [article](https://github.com/oleg-shilo/wixsharp/wiki/WixSharp-on-Linux) useful. Please note that WixSharp builds MSI deployment packages and while MSI can be built on Linux it cannot be run on Linux as MSI is a pure Windows technology.   
 
-Please note that WixSharp NuGet packages (for both WiX3 and WiX4) are targeting .NET Framework only. This is because WiX does not support integration with any other .NET flavours but .NET Framework only.
+Please note that WixSharp NuGet packages (for both WiX3 and WiX4) are targeting .NET Framework only. This is because WiX does not support integration with any other .NET flavours, only .NET Framework. However, WixSharp provides an experimental .NET Core bridge with AOT-compiled CustomActions.
 
 You can find the instructions on how to author MSI setups with WixSharp in the [Documentation](https://github.com/oleg-shilo/wixsharp/wiki) section. And this section only highlights 
 some of the available features.
 
-> _If you prefer a manual approach you can use the Visual Studio console application project and NuGet package as the starting point._
+> _If you prefer a manual approach, you can use the Visual Studio console application project and NuGet package as the starting point._
 ![image](https://github.com/oleg-shilo/wixsharp/raw/master/Documentation/wiki_images/nuget.png) <br>
-_However a simpler approach is to use Visual Studio WixSharp Project Template [extension](https://marketplace.visualstudio.com/items?itemName=OlegShilo.WixSharpProjectTemplates). Read more 
+
+_However, a simpler approach is to use Visual Studio WixSharp Project Template [extension](https://marketplace.visualstudio.com/items?itemName=OlegShilo.WixSharpProjectTemplates). Read more 
 about the WixSharp VS templates [here](https://github.com/oleg-shilo/wixsharp/wiki/VS2019-%E2%80%93-2022-Templates)._
 
 WixSharp allows a very simple and expressive definition of deployment. This is an example of a simple WixSharp script:
@@ -102,10 +103,10 @@ public class CustomActions
 }
 ```
 
-Another important feature is the support for custom UI including WPF external UI:
+Another important feature is the support for custom UI, including WPF external UI:
 ![image](https://github.com/oleg-shilo/wixsharp/raw/master/Documentation/wiki_images/wpf_ui.png)
 
-The [Samples Folder](https://github.com/oleg-shilo/wixsharp/tree/master/Source/src/WixSharp.Samples/Wix%23%20Samples) an extensive collection of WixSharp samples covering the following development scenarios:
+The [Samples Folder](https://github.com/oleg-shilo/wixsharp/tree/master/Source/src/WixSharp.Samples/Wix%23%20Samples) is a very extensive collection of WixSharp samples covering arguably all deployment scenarios possible. Thus, the samples take up 90-95% of the entire WixSharp codebase. Here are some of them:
 
 * Visual Studio integration including [NuGet](https://www.nuget.org/packages/WixSharp/) packages and VS2013/2015 [project templates extension](https://visualstudiogallery.msdn.microsoft.com/4e093ce7-be66-40ed-ab16-61a1186c530e)
 * Installing file(s) into Program Files directory
@@ -131,7 +132,7 @@ The [Samples Folder](https://github.com/oleg-shilo/wixsharp/tree/master/Source/s
 * Major Upgrade deployment
 * Authoring and using MergeModules
 * Pre-install registry search
-* Customization of setup dialogs images
+* Customisation of setup dialogs images
 * Rebooting OS after the installation
 * Building MSI with and without Visual Studio
 * Simplified Managed bootstrapper for UI based deployments
@@ -147,17 +148,17 @@ The [Samples Folder](https://github.com/oleg-shilo/wixsharp/tree/master/Source/s
 
 There are a few build dependencies that you need to install before you can build the entire codebase:
 
-- _**.NET10** (or higher)_
-  `winget install --id Microsoft.DotNet.SDK.10`
 - _**WiX Toolset**_
   `dotnet tool install --global wix`
   The command above will install the latest WiX version.
   
-  Note, starting fro v7 WnGet requires users to accept EULA, which is no longer canonical Open-Source licence. See https://docs.firegiant.com/wix/osmf/ for details.
-  If you choose to use v7 and comply with the licence, you will need to indicate your acceptance in your code before you call any `Build*` methods:   `WixTools.AcceptEulaFor = "wix7";`.
+  Note: starting from v7 WinGet requires users to accept the EULA, which is no longer a canonical Open-Source licence. See https://docs.firegiant.com/wix/osmf/ for details.
+  If you choose to use v7 and comply with the new licence, you will need to indicate your EULA acceptance in your code before you call any `Build*` methods:   `WixTools.AcceptEulaFor = "wix7";`.
 
-  If you prefer older WiX compilers distributed under more liberal licence you can simply install WiX v6.
+  If you prefer older WiX compilers distributed under a more liberal licence, you can install WiX v6.
   `dotnet tool install --global wix --version 6.0.2 --allow-downgrade`
-  Thanks WixSharp being an abstraction layer you don't need to implement any changes with regards to (wix6 vs wix7)
+  Thanks to WixSharp being an abstraction layer, you don't need to implement any changes concerning (wix6 vs wix7)
 - _**NSIS**_
+  NSIS integration is an extra functionality for building NSIS-based bootstrappers. Even if you are not planning to use it, it is required for building WixSharp binaries.
   `winget install --id NSIS.NSIS -e`
+- Run `<repo>/Source/src/prepare-environment.cmd`to generate local signing certificates. 
