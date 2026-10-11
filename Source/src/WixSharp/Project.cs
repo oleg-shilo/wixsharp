@@ -647,7 +647,7 @@ namespace WixSharp
         /// but a error message "The product is not installed". While very often the preferred behavior is the repair/uninstall sequence.</p>
         /// <p>The problem can be solved by ensuring the PackageCode of the generated msi file is set consistently.
         /// Specifically by generating consistent `_Streams.Summary` stream data of the msi file.</p>
-        /// Starting from v6, WiX API does not provide a mechanism for updating Summary stream. Thus WixSharp uses MSI PInterop to handle this problem.
+        /// Starting from v6, WiX API does not provide a mechanism for updating Summary stream. Thus WixSharp uses MSI PInvoke to handle this problem.
         /// <p>
         /// If you want to ensure that the generated msi files are identical for the same product code, version and upgrade code set this property to true. 
         /// The default value is false to preserve the WiX default behavior of generating a new package code for each build.

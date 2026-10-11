@@ -788,7 +788,8 @@ namespace WixSharp
                     var isMsiFormatOutput = outFile.PathGetExtension().SameAs(".msi", ignoreCase: true);
                     isMsiFormatOutput |= outFile.PathGetExtension().SameAs(".msm", ignoreCase: true);
 
-                    if (project.EmitConsistentMsiPackageCode && isMsiFormatOutput)
+                    if ((project.EmitConsistentMsiPackageCode || project.EmitConsistentPackageId)
+                        && isMsiFormatOutput)
                     {
                         // Handle consistent MSI package code logic here if needed
                         var packageCode = outFile.PatchSummary(project.ProductId);

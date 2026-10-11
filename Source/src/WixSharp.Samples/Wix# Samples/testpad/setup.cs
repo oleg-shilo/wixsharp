@@ -492,6 +492,7 @@ namespace Test1.installer.wixsharp
             project.GUID = new Guid("5de17d40-9e25-49fe-a835-36d7e0b64062");
 
             project.EmitConsistentMsiPackageCode = true;
+
             project.Version = new Version(1, 0, 0, 0);
 
             var msiPath = project.BuildMsi();
