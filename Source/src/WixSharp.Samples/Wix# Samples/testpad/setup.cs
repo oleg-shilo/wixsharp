@@ -1,4 +1,7 @@
 ﻿//using Test1Library;
+
+// Ignore Spelling: wixsharp
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -18,6 +21,8 @@ using WixToolset.Dtf.WindowsInstaller;
 using static System.Collections.Specialized.BitVector32;
 using static System.Net.Mime.MediaTypeNames;
 using static WixSharp.CommonTasks.AppSearch;
+
+#pragma warning disable IDE1006, IDE0017, IDE0059, IDE0060, CS0162 // Naming Styles
 
 class Constants
 {
@@ -132,6 +137,7 @@ namespace Test1.installer.wixsharp
 
             var msiFile = project.BuildMsi();
         }
+
 
         static void issue_1936()
         {

@@ -1,3 +1,5 @@
+// Ignore Spelling: Wix Dlgt Msm Wxs Aot Dbg Proj Rtf exe Formated
+
 #region Licence...
 
 /*
@@ -788,6 +790,7 @@ namespace WixSharp
                     var isMsiFormatOutput = outFile.PathGetExtension().SameAs(".msi", ignoreCase: true);
                     isMsiFormatOutput |= outFile.PathGetExtension().SameAs(".msm", ignoreCase: true);
 
+#pragma warning disable CS0618 // Type or member is obsolete
                     if ((project.EmitConsistentMsiPackageCode || project.EmitConsistentPackageId)
                         && isMsiFormatOutput)
                     {
@@ -795,6 +798,7 @@ namespace WixSharp
                         var packageCode = outFile.PatchSummary(project.ProductId);
                         Compiler.OutputWriteLine(" MSI file PackageCode set to " + packageCode);
                     }
+#pragma warning restore CS0618 // Type or member is obsolete
 
                     project.DigitalSignature?.Apply(outFile);
                 }
