@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Ignore Spelling: Wix
+
+using System;
 
 namespace WixSharp
 {
@@ -16,7 +18,7 @@ namespace WixSharp
         {
             Compiler.OutputWriteLine($"Signing bootstrapper {bootstrapperFileToSign} with DigitalSignature."); // full path will be printed by the signing tool
 
-            var retValue = CommonTasks.Tasks.DigitalySignBootstrapper(bootstrapperFileToSign, PfxFilePath, TimeUrl?.AbsoluteUri, Password,
+            var retValue = CommonTasks.Tasks.DigitallySignBootstrapper(bootstrapperFileToSign, PfxFilePath, TimeUrl?.AbsoluteUri, Password,
                 PrepareOptionalArguments(), WellKnownLocations, CertificateStore, OutputLevel, HashAlgorithm);
 
             Compiler.OutputWriteLine(retValue != 0

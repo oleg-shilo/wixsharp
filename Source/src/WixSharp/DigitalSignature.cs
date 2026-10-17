@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Ignore Spelling: Pfx Wix
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,7 +11,7 @@ using WixSharp.Utilities;
 namespace WixSharp
 {
     /// <summary>
-    /// Container for signing context as well as the implementation of the signing algotrithm (<see cref="IDigitalSignature.Apply(string)"/> ).
+    /// Container for signing context as well as the implementation of the signing algorithm (<see cref="IDigitalSignature.Apply(string)"/> ).
     /// </summary>
     public interface IDigitalSignature
     {
@@ -191,7 +193,7 @@ namespace WixSharp
             int retValue = -1;
 
             int apply(string url)
-                => CommonTasks.Tasks.DigitalySign(filesToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
+                => CommonTasks.Tasks.DigitallySign(filesToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
                                                   PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
 
             Compiler.OutputWriteLine($"Signing {filesToSign.JoinBy(", ")} with DigitalSignature."); // full path will be printed by the signing tool
@@ -234,7 +236,7 @@ namespace WixSharp
             int retValue = -1;
 
             int apply(string url)
-                => CommonTasks.Tasks.DigitalySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
+                => CommonTasks.Tasks.DigitallySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
                                                   PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
 
             Compiler.OutputWriteLine($"Signing {fileToSign} with DigitalSignature."); // full path will be printed by the signing tool

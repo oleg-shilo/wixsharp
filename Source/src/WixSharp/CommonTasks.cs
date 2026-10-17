@@ -1,3 +1,5 @@
+// Ignore Spelling: Aot pfx Wix Dirs Clr Fx Wxl Dialogs Exe Unelevate
+
 #region Licence...
 
 /*
@@ -206,7 +208,6 @@ namespace WixSharp.CommonTasks
             StoreType certificateStore = StoreType.file,
             SignOutputLevel outputLevel = SignOutputLevel.Verbose,
             HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
-
         => DigitalySign(fileToSign, certificateId, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
 
         /// <summary>
@@ -239,6 +240,7 @@ namespace WixSharp.CommonTasks
         ///     false);
         /// </code>
         /// </example>
+        [Obsolete("This method is obsolete (API name typo). Use DigitallySign method instead.")]
         static public int DigitalySign(
             string fileToSign,
             string certificateId,
@@ -248,13 +250,53 @@ namespace WixSharp.CommonTasks
             StoreType certificateStore = StoreType.file,
             SignOutputLevel outputLevel = SignOutputLevel.Verbose,
             HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
+            => DigitallySign(fileToSign, certificateId, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
+        /// <summary>
+        /// Applies digital signature to a file (e.g. msi, exe, dll) with MS <c>SignTool.exe</c> utility.
+        /// Please use <see cref="DigitalySignBootstrapper"/> for signing a bootstrapper.
+        /// </summary>
+        /// <param name="fileToSign">The file to sign.</param>
+        /// <param name="certificateId">Specify the signing certificate in a file common name or sha1 hash. If this file is a PFX with a password, the password may be supplied
+        /// with the <c>password</c> parameter.</param>
+        /// <param name="timeURL">The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
+        /// A warning is generated if timestamping fails.</param>
+        /// <param name="password">The password to use when opening the PFX file. Should be <c>null</c> if no password required.</param>
+        /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
+        /// <param name="certificateStore">Where to load the certificate from.
+        /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
+        /// <param name="outputLevel">A flag indicating the output level</param>
+        /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow
+        /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
+        /// </param>
+        /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
+        ///
+        /// <example>The following is an example of signing <c>Setup.msi</c> file.
+        /// <code>
+        /// WixSharp.CommonTasks.Tasks.DigitalySign(
+        ///     "Setup.msi",
+        ///     "MyCert.pfx",
+        ///     "http://timestamp.verisign.com/scripts/timstamp.dll",
+        ///     "MyPassword",
+        ///     null,
+        ///     false);
+        /// </code>
+        /// </example>
+        static public int DigitallySign(
+            string fileToSign,
+            string certificateId,
+            string timeURL,
+            string password,
+            string optionalArguments = null,
+            StoreType certificateStore = StoreType.file,
+            SignOutputLevel outputLevel = SignOutputLevel.Verbose,
+            HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
-            return DigitalySign(new[] { fileToSign }, certificateId, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
+            return DigitallySign(new[] { fileToSign }, certificateId, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
         }
 
         /// <summary>
         /// Applies digital signature to a file (e.g. msi, exe, dll) with MS <c>SignTool.exe</c> utility.
-        /// Please use <see cref="DigitalySignBootstrapper"/> for signing a bootstrapper.
+        /// Please use <see cref="DigitallySignBootstrapper"/> for signing a bootstrapper.
         /// </summary>
         /// <param name="filesToSign">The set of files to sign.</param>
         /// <param name="certificateId">Specify the signing certificate in a file common name or sha1 hash. If this file is a PFX with a password, the password may be supplied
@@ -282,7 +324,49 @@ namespace WixSharp.CommonTasks
         ///     false);
         /// </code>
         /// </example>
+        [Obsolete("This method is obsolete (API name typo). Use DigitallySign method instead.")]
         static public int DigitalySign(
+            string[] filesToSign,
+            string certificateId,
+            string timeURL,
+            string password,
+            string optionalArguments = null,
+            StoreType certificateStore = StoreType.file,
+            SignOutputLevel outputLevel = SignOutputLevel.Verbose,
+            HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
+            => DigitallySign(filesToSign, certificateId, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
+
+        /// <summary>
+        /// Applies digital signature to a file (e.g. msi, exe, dll) with MS <c>SignTool.exe</c> utility.
+        /// Please use <see cref="DigitallySignBootstrapper"/> for signing a bootstrapper.
+        /// </summary>
+        /// <param name="filesToSign">The set of files to sign.</param>
+        /// <param name="certificateId">Specify the signing certificate in a file common name or sha1 hash. If this file is a PFX with a password, the password may be supplied
+        /// with the <c>password</c> parameter.</param>
+        /// <param name="timeURL">The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
+        /// A warning is generated if timestamping fails.</param>
+        /// <param name="password">The password to use when opening the PFX file. Should be <c>null</c> if no password required.</param>
+        /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
+        /// <param name="certificateStore">Where to load the certificate from.
+        /// from the certificate store (as opposite to the certificate file). This value can be a substring of the entire subject name.</param>
+        /// <param name="outputLevel">A flag indicating the output level</param>
+        /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow
+        /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
+        /// </param>
+        /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
+        ///
+        /// <example>The following is an example of signing <c>Setup.msi</c> file.
+        /// <code>
+        /// WixSharp.CommonTasks.Tasks.DigitalySign(
+        ///     "Setup.msi",
+        ///     "MyCert.pfx",
+        ///     "http://timestamp.verisign.com/scripts/timstamp.dll",
+        ///     "MyPassword",
+        ///     null,
+        ///     false);
+        /// </code>
+        /// </example>
+        static public int DigitallySign(
             string[] filesToSign,
             string certificateId,
             string timeURL,
@@ -413,10 +497,35 @@ namespace WixSharp.CommonTasks
         ///     "MyPassword");
         /// </code>
         /// </example>
-        static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password)
+        static public int DigitallySign(string fileToSign, string pfxFile, string timeURL, string password)
         {
-            return DigitalySign(fileToSign, pfxFile, timeURL, password, null, StoreType.file, SignOutputLevel.Verbose, HashAlgorithmType.sha1);
+            return DigitallySign(fileToSign, pfxFile, timeURL, password, null, StoreType.file, SignOutputLevel.Verbose, HashAlgorithmType.sha1);
         }
+
+        /// <summary>
+        /// Applies digital signature to a file (e.g. msi, exe, dll) with MS <c>SignTool.exe</c> utility.
+        /// <para>If you need to specify extra SignTool.exe parameters or the location of the tool use the overloaded <c>DigitalySign</c> signature </para>
+        /// </summary>
+        /// <param name="fileToSign">The file to sign.</param>
+        /// <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
+        /// with the <c>password</c> parameter.</param>
+        /// <param name="timeURL">The timestamp server's URL. If this option is not present, the signed file will not be timestamped.
+        /// A warning is generated if timestamping fails.</param>
+        /// <param name="password">The password to use when opening the PFX file.</param>
+        /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
+        ///
+        /// <example>The following is an example of signing <c>Setup.msi</c> file.
+        /// <code>
+        /// WixSharp.CommonTasks.Tasks.DigitalySign(
+        ///     "Setup.msi",
+        ///     "MyCert.pfx",
+        ///     "http://timestamp.verisign.com/scripts/timstamp.dll",
+        ///     "MyPassword");
+        /// </code>
+        /// </example>
+        [Obsolete("This method is obsolete (API name typo). Use DigitallySign method instead.")]
+        static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password)
+            => DigitallySign(fileToSign, pfxFile, timeURL, password);
 
         /// <summary>
         /// Applies digital signature to a bootstrapper and the bootstrapper engine with MS <c>SignTool.exe</c> utility.
@@ -446,18 +555,51 @@ namespace WixSharp.CommonTasks
         /// "http://timestamp.verisign.com/scripts/timstamp.dll",
         /// "MyPassword");
         /// </code></example>
+        [Obsolete("This method is obsolete (API name typo). Use DigitallySignBootstrapper method instead.")]
         static public int DigitalySignBootstrapper(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
+            => DigitallySignBootstrapper(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
+
+        /// <summary>
+        /// Applies digital signature to a bootstrapper and the bootstrapper engine with MS <c>SignTool.exe</c> utility.
+        /// <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about bootstrapper engine signing</a>
+        /// </summary>
+        /// <param name="bootstrapperFileToSign">The bootstrapper file to sign.</param>
+        /// <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
+        /// with the <c>password</c> parameter.</param>
+        /// <param name="timeURL">The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
+        /// A warning is generated if timestamping fails.</param>
+        /// <param name="password">The password to use when opening the PFX file. Should be <c>null</c> if no password required.</param>
+        /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
+        /// <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
+        /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
+        /// <param name="certificateStore">Type of the certificate store to load it from.</param>
+        /// <param name="outputLevel">A flag indicating the output level</param>
+        /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow
+        /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.</param>
+        /// <returns>
+        /// Exit code of the <c>SignTool.exe</c> process.
+        /// </returns>
+        /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file.
+        /// <code>
+        /// WixSharp.CommonTasks.Tasks.DigitalySignBootstrapper(
+        /// "SetupBootstrapper.exe",
+        /// "MyCert.pfx",
+        /// "http://timestamp.verisign.com/scripts/timstamp.dll",
+        /// "MyPassword");
+        /// </code></example>
+        static public int DigitallySignBootstrapper(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
+        string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
             Compiler.OutputWriteLine?.Invoke($"Signing the bootstrapper engine detached from {bootstrapperFileToSign.PathGetFileName()}...");
-            var retval = DigitalySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
+            var retval = DigitallySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
             if (retval != 0)
                 return retval;
 
             bootstrapperFileToSign.WaitUntilFileUnlocked(); // antivirus may lock the file for a while after engine reattachment
 
             Compiler.OutputWriteLine?.Invoke($"Signing the bootstrapper file {bootstrapperFileToSign.PathGetFileName()}...");
-            return DigitalySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
+            return DigitallySign(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
         }
 
         const string unknown_sign_exe_location = "<unknown insignia.exe/signtool.exe Path>";
@@ -496,8 +638,48 @@ namespace WixSharp.CommonTasks
         /// </example>
         /// <exception cref="ApplicationException">Thrown if <c>wix.exe</c> cannot be found.</exception>
         /// <exception cref="Exception">Thrown if no engine file is found after detaching it from the bundle.</exception>
+        [Obsolete("This method is deprecated (API name typo). Use DigitallySignBootstrapperEngine instead.")]
         static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
+            => DigitallySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
+
+        /// <summary>
+        /// Applies digital signature to a bootstrapper engine with MS <c>SignTool.exe</c> utility.
+        /// Note : this method doesn't sign the bootstrapper file but the engine only.
+        /// Please use <see cref="DigitalySignBootstrapper"/> for signing both (bootstrapper and bootstrapper engine) instead.
+        /// <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about Bootstrapper engine signing</a>
+        /// </summary>
+        /// <param name="bootstrapperFileToSign">The Bootstrapper file to sign.</param>
+        /// <param name="pfxFile">Specify the signing certificate in a file. If this file is a PFX with a password, the password may be supplied
+        /// with the <c>password</c> parameter.</param>
+        /// <param name="timeURL">The timestamp server's URL. If this option is not present (pass to null), the signed file will not be timestamped.
+        /// A warning is generated if timestamping fails.</param>
+        /// <param name="password">The password to use when opening the PFX file. Should be <c>null</c> if no password required.</param>
+        /// <param name="optionalArguments">Extra arguments to pass to the <c>SignTool.exe</c> utility.</param>
+        /// <param name="wellKnownLocations">The optional ';' separated list of directories where SignTool.exe can be located.
+        /// If this parameter is not specified WixSharp will try to locate the SignTool in the built-in well-known locations (system PATH)</param>
+        /// <param name="certificateStore">Type of the certificate store to load it from.</param>
+        /// <param name="outputLevel">A flag indicating the output level</param>
+        /// <param name="hashAlgorithm">the hash algorithm to use. SHA1, SHA256, or both. NOTE: MSIs only allow
+        /// a single signature. If SHA1 | SHA256 is requested, the MSI will be signed with SHA1 only.
+        /// </param>
+        /// <returns>Exit code of the <c>SignTool.exe</c> process.</returns>
+        ///
+        /// <example>The following is an example of signing <c>SetupBootstrapper.exe</c> file engine.
+        /// <code>
+        /// WixSharp.CommonTasks.Tasks.DigitalySignBootstrapperEngine(
+        ///     "SetupBootstrapper.exe",
+        ///     "MyCert.pfx",
+        ///     "http://timestamp.verisign.com/scripts/timstamp.dll",
+        ///     "MyPassword",
+        ///      null);
+        /// </code>
+        /// </example>
+        /// <exception cref="ApplicationException">Thrown if <c>wix.exe</c> cannot be found.</exception>
+        /// <exception cref="Exception">Thrown if no engine file is found after detaching it from the bundle.</exception>
+        static public int DigitallySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
+            string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
+
         {
             string enginePath;
 
@@ -517,7 +699,7 @@ namespace WixSharp.CommonTasks
                     throw new Exception($"The supposedly detached engine file appears to be missing. Expected location: '{enginePath}'");
 
                 // Then sign the detached engine
-                int retval = DigitalySign(enginePath, pfxFile, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
+                int retval = DigitallySign(enginePath, pfxFile, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
                 if (retval != 0)
                     return retval;
 
@@ -2016,15 +2198,15 @@ namespace WixSharp.CommonTasks
         /// <summary>
         /// Compiles the the project file into an aot assembly.
         /// </summary>
-        /// <param name="projFile">The proj file.</param>
+        /// <param name="projectFile">The project file.</param>
         /// <returns></returns>
-        public static string CompileAotAssembly(this string projFile)
+        public static string CompileAotAssembly(this string projectFile)
         {
-            var projDir = projFile.PathGetDirName();
-            var actualProjectFile = projFile.PathChangeExtension(".aot.csproj").PathGetFullPath();
+            var projDir = projectFile.PathGetDirName();
+            var actualProjectFile = projectFile.PathChangeExtension(".aot.csproj").PathGetFullPath();
 
             IO.File.WriteAllText(actualProjectFile,
-                                 IO.File.ReadAllText(projFile)
+                                 IO.File.ReadAllText(projectFile)
                                  .Replace("<OutputType>Exe</OutputType>", "<OutputType>Library</OutputType><PublishAot>true</PublishAot>"));
 
             var asmFileName = actualProjectFile.PathGetFileNameWithoutExtension() + ".dll";
@@ -2036,7 +2218,7 @@ namespace WixSharp.CommonTasks
                 {
                     process.StartInfo.FileName = WixTools.dotnet;
                     process.StartInfo.Arguments = $"publish {actualProjectFile.Enquote()} /p:NativeLib=Shared -r win-x64 -c release -o {outDir}";
-                    process.StartInfo.WorkingDirectory = projFile.PathGetDirName();
+                    process.StartInfo.WorkingDirectory = projectFile.PathGetDirName();
                     process.StartInfo.UseShellExecute = false;
                     process.Start();
                     process.WaitForExit();
@@ -2140,24 +2322,6 @@ namespace WixSharp.CommonTasks
         public static ManagedProject MapAsDeferredProperty(this ManagedProject project, string propertyName)
         {
             project.DefaultDeferredProperties += "," + propertyName;
-            return project;
-        }
-
-        /// <summary>
-        /// Changes the project configuration so `Project.AfterInstall` event is executed unelevated. Otherwise it is elevated.
-        /// </summary>
-        /// <param name="project">The project.</param>
-        /// <returns></returns>
-        [Obsolete("This method is obsolete. Use `project.AfterInstallEventExecution = EventExecution.MsiSessionScopeImmediate;` instead")]
-        public static ManagedProject UnelevateAfterInstallEvent(this ManagedProject project)
-        {
-            project.WixSourceGenerated +=
-                doc =>
-                {
-                    doc.FindAll("CustomAction")
-                       .FirstOrDefault(x => x.HasAttribute("Id", "WixSharp_AfterInstall_Action"))
-                       ?.SetAttribute("Execute", "immediate");
-                };
             return project;
         }
 

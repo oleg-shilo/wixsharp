@@ -16,6 +16,7 @@ if "%snk-folder%"=="" (
     set is_new_snk=yes
     :: Generate a new SNK file in the project root
     sn -k %snk_name%
+) else (
     echo 'snk-folder' found: %snk-folder%
     
     :: Check if the SNK file exists in the specified folder
@@ -24,6 +25,7 @@ if "%snk-folder%"=="" (
     ) else (
         echo SNK file not found in '%snk-folder%'. Generating new one...
         sn -k %snk_name%
+        set is_new_snk=yes
     )
 )
 
