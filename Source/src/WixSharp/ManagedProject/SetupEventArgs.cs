@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Ignore Spelling: Wix
+
+using System;
 using System.Collections.Generic;
 using static System.Collections.Specialized.BitVector32;
 using System.Linq;
@@ -103,7 +105,16 @@ namespace WixSharp
         /// <value>
         /// <c>true</c> if UI is suppressed; otherwise, <c>false</c>.
         /// </value>
+        [Obsolete("This property is obsolete (API name typo). Use IsUISuppressed instead.")]
         public bool IsUISupressed { get { return UILevel <= 4; } }
+
+        /// <summary>
+        /// Gets a value indicating whether Authored UI and wizard dialog boxes suppressed.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if UI is suppressed; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsUISuppressed { get { return UILevel <= 4; } }
 
         /// <summary>
         /// Gets the UIlevel.
