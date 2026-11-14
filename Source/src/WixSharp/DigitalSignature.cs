@@ -225,7 +225,7 @@ namespace WixSharp
 
             int apply(string url)
                 => CommonTasks.Tasks.DigitallySign(filesToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
-                                                  PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
+                                                   PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
 
             Compiler.OutputWriteLine($"Signing {filesToSign.JoinBy(", ")} with DigitalSignature."); // full path will be printed by the signing tool
 
@@ -235,8 +235,11 @@ namespace WixSharp
                     for (int i = 0; i < MaxTimeUrlRetry && retValue != 0; i++)
                     {
                         retValue = apply(uri?.AbsoluteUri);
-                        Compiler.OutputWriteLine("Retrying applying DigitalSignature for a given TimeUrl.");
-                        Thread.Sleep(UrlRetrySleep);
+                        if (retValue != 0)
+                        {
+                            Compiler.OutputWriteLine("Retrying applying DigitalSignature for a given TimeUrl.");
+                            Thread.Sleep(UrlRetrySleep);
+                        }
                     }
 
                     if (retValue == 0)
@@ -268,7 +271,7 @@ namespace WixSharp
 
             int apply(string url)
                 => CommonTasks.Tasks.DigitallySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
-                                                  PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
+                                                   PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
 
             Compiler.OutputWriteLine($"Signing {fileToSign} with DigitalSignature."); // full path will be printed by the signing tool
 
@@ -278,8 +281,11 @@ namespace WixSharp
                     for (int i = 0; i < MaxTimeUrlRetry && retValue != 0; i++)
                     {
                         retValue = apply(uri?.AbsoluteUri);
-                        Compiler.OutputWriteLine("Retrying applying DigitalSignature for a given TimeUrl.");
-                        Thread.Sleep(UrlRetrySleep);
+                        if (retValue != 0)
+                        {
+                            Compiler.OutputWriteLine("Retrying applying DigitalSignature for a given TimeUrl.");
+                            Thread.Sleep(UrlRetrySleep);
+                        }
                     }
 
                     if (retValue == 0)
