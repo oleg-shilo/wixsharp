@@ -1,3 +1,5 @@
+// Ignore Spelling: Wix Dlgt Msm Wxs Aot Dbg Proj Rtf exe Formated
+
 #region Licence...
 
 /*
@@ -42,6 +44,7 @@ using System.Xml;
 using System.Xml.Linq;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
+using WixSharp.Msi;
 using WixSharp.Utilities;
 using WixToolset.Dtf.WindowsInstaller;
 using IO = System.IO;
@@ -601,11 +604,18 @@ namespace WixSharp
 
                                            // Note, unfortunately WiX fails to report missing extensions with non-zero exit code and instead just writes the error to the standard output.
                                            // Thus we have to check the extension existence beforehand and warn user about missing extension.
-                                           Compiler.OutputWriteLine($"Error: Cannot find WiX extension '{dll}'. " +
+                                           Compiler.OutputWriteLine(
+                                               $"Error: Cannot find WiX extension '{dll}'. " +
                                                $"WixSharp attempted to install the extension but did not succeed. Please install the " +
-                                               $"extension manually with: `wix.exe extension add -g {dll}{versionSuffix}`\n" +
-                                               $"If you are experiencing WiX extensions compatibility problems try to specify compatible version of the required extension:\n" +
-                                               $"I.e. WixExtension.UI.PreferredVersion = \"5.0.1\";\n");
+                                               $"extension manually with: `wix.exe extension add -g {dll}{versionSuffix}` (or `wix.exe extension add -g {dll}/{WixTools.GlobalWixVersion})`\n" +
+                                               $"\n" +
+                                               $"Warning: If you are experiencing WiX extensions compatibility problems try to specify compatible version of the required extension.\n" +
+                                               $"I.e. WixExtension.UI.PreferredVersion = \"5.0.1\";\n" +
+                                               $"\n" +
+                                               $"Warning: If wix.exe reports that you need to accept the EULA to use WiX Toolset, then you need explicitly do this from the code.\n" +
+                                               $"I.e. `WixTools.AcceptEulaFor = \"wix7\";`.\n" +
+                                               $"Alternatively you can downgrade your WiX version to the release that does not require " +
+                                               $"explicit EULA acceptance (`dotnet tool install --global wix --version 6.0.2 --allow-downgrade`).\n");
 
                                            dllPath = $"<unknown extension {dll}{versionSuffix}>";
                                        }
@@ -776,6 +786,19 @@ namespace WixSharp
                         IO.Path.ChangeExtension(wxsFile, ".wixpdb").DeleteIfExists();
                         IO.Path.ChangeExtension(path, ".wixpdb").DeleteIfExists();
                     }
+
+                    var isMsiFormatOutput = outFile.PathGetExtension().SameAs(".msi", ignoreCase: true);
+                    isMsiFormatOutput |= outFile.PathGetExtension().SameAs(".msm", ignoreCase: true);
+
+#pragma warning disable CS0618 // Type or member is obsolete
+                    if ((project.EmitConsistentMsiPackageCode || project.EmitConsistentPackageId)
+                        && isMsiFormatOutput)
+                    {
+                        // Handle consistent MSI package code logic here if needed
+                        var packageCode = outFile.PatchSummary(project.ProductId);
+                        Compiler.OutputWriteLine(" MSI file PackageCode set to " + packageCode);
+                    }
+#pragma warning restore CS0618 // Type or member is obsolete
 
                     project.DigitalSignature?.Apply(outFile);
                 }
@@ -1137,8 +1160,12 @@ namespace WixSharp
                    .SetAttribute("Scope", project.Scope)
                    .SetAttribute("InstallerVersion", project.InstallerVersion);
 
-            if (project.EmitConsistentPackageId)
-                package.CopyAttributeFrom(product, "Id");
+            // no longer needed as EmitConsistentPackageCode is now a default mechanism for this
+            //if (project.EmitConsistentPackageId)
+            //{
+            //    //package.CopyAttributeFrom(product, "Id"); // before wix6
+            //    package.SetAttribute("Id", $"_{project.ProductId}".Replace("-", "")); // After wix6 the Package.Id is a logical equivalent of Product.UpgradeCode (see https://docs.firegiant.com/wix/schema/wxs/package/)
+            //}
 
             package.AddAttributes(project.Package.Attributes);
             foreach (Media item in project.Media)

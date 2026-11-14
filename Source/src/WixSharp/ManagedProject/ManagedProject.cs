@@ -1,3 +1,5 @@
+// Ignore Spelling: Wix Preprocess Dialogs
+
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -185,7 +187,7 @@ namespace WixSharp
         /// Occurs after InstallFiles standard action. The event is fired from the elevated
         /// execution context.
         /// <para>If it is required that the event handler is invoked without elevation then you can
-        /// call <see cref="WixSharp.CommonTasks.Tasks.UnelevateAfterInstallEvent(ManagedProject)"/> so the `Project.AfterInstall` event is
+        /// use `project.AfterInstallEventExecution = EventExecution.MsiSessionScopeImmediate;` so the `Project.AfterInstall` event is
         /// scheduled for unelevated execution.</para>
         /// </summary>
         public event SetupEventHandler AfterInstall;

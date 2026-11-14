@@ -15,7 +15,7 @@ class Script
 {
     static public void Main(string[] args)
     {
-        ManagedUIAproach();
+        ManagedUIApproach();
         // NativeUIApproach();
         // ManagedUICustomCheckAproach();
     }
@@ -57,7 +57,7 @@ class Script
         }
     }
 
-    static public void ManagedUIAproach()
+    static public void ManagedUIApproach()
     {
         MSBuild.EmitAutoGenFiles = true;
 
@@ -72,7 +72,7 @@ class Script
         }
     }
 
-    static public void ManagedUICustomCheckAproach()
+    static public void ManagedUICustomCheckApproach()
     {
         for (int i = 0; i < 2; i++)
         {

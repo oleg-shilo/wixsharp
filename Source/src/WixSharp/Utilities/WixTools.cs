@@ -282,6 +282,18 @@ namespace WixSharp.CommonTasks
         }
 
         /// <summary>
+        /// Sets the WiX version to 6.0.2 for the current directory and configures the preferred versions 
+        /// of the WixExtension.UI and WixExtension.Util to match.
+        /// </summary>
+        static public void UseWixVersionWithoutExplicitEula()
+        {
+            // This is the fall back option to wix v6, which does not require explicit EULA acceptance.
+            WixTools.SetWixVersion(Environment.CurrentDirectory, "6.0.2");
+            WixExtension.UI.PreferredVersion = "6.0.2";
+            WixExtension.Util.PreferredVersion = "6.0.2";
+        }
+
+        /// <summary>
         /// Sets the wix.exe version for the specific directory. The mapping of the executable is managed by the .NET Tool
         /// mechanism through "dotnet-tools.json" config file, which is created when this method is called.
         /// <para>IE `WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.1");`</para>
@@ -433,8 +445,14 @@ namespace WixSharp.CommonTasks
         {
             if (version.IsEmpty())
             {
-                if (FindWixExtensionDll(name).IsEmpty())
-                    Compiler.Run(WixTools.wix_global, $"extension add -g {name}");
+                // It's important not to call `extension add` without the version as the latest 
+                // version of the extension may not be compatible with the current WiX version
+                // since WiX allows having multiple versions of the WiX compiler (wix.exe) installed.
+
+                if (FindWixExtensionDll(name, WixTools.GlobalWixVersion.ToString()).IsEmpty())
+                {
+                    Compiler.Run(WixTools.wix_global, $"extension add -g {name}/{WixTools.GlobalWixVersion}");
+                }
             }
             else
             {

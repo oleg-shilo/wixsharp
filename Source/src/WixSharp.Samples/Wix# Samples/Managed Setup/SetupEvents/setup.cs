@@ -185,6 +185,7 @@ public static class Script
 
     static void project_AfterInstall(SetupEventArgs e)
     {
+
         //Note AfterInstall is an event based on deferred Custom Action. All properties that have
         //been pushed to e.Session.CustomActionData with project.DefaultDeferredProperties are
         //also set as environment variables just before invoking this event handler.

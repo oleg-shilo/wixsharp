@@ -32,7 +32,7 @@ class Script
 
         project.UI = WUI.WixUI_InstallDir;
         project.GUID = new Guid("6f330b47-2577-43ad-9095-1861ba25889b");
-        project.EmitConsistentPackageId = true;
+        project.EmitConsistentMsiPackageCode = true;
         // project.PreserveTempFiles = true;
 
         // Localization technique from the #748 "error for FirewallException

@@ -1,20 +1,28 @@
 ﻿//using Test1Library;
-using System;
-using System.Collections.Generic;
-using static System.Collections.Specialized.BitVector32;
-using System.Diagnostics;
-using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
-using System.Security.Cryptography;
-using System.Windows.Forms;
+
+// Ignore Spelling: wixsharp
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+
+//using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
-using static WixSharp.CommonTasks.AppSearch;
 using WixSharp.Msi;
 using WixToolset.Dtf.WindowsInstaller;
+using static System.Collections.Specialized.BitVector32;
+using static System.Net.Mime.MediaTypeNames;
+using static WixSharp.CommonTasks.AppSearch;
+
+#pragma warning disable IDE1006, IDE0017, IDE0059, IDE0060, CS0162 // Naming Styles
 
 class Constants
 {
@@ -47,6 +55,7 @@ namespace Test1.installer.wixsharp
 
         static void Main()
         {
+            issue_1953(); return;
             issue_1936(); return;
             issue_1927(); return;
             issue_1917(); return;
@@ -128,6 +137,7 @@ namespace Test1.installer.wixsharp
 
             var msiFile = project.BuildMsi();
         }
+
 
         static void issue_1936()
         {
@@ -475,6 +485,26 @@ namespace Test1.installer.wixsharp
             project.ManagedUI = ManagedUI.DefaultWpf; // all stock UI dialogs
 
             project.BuildMsi();
+        }
+
+        static void issue_1953()
+        {
+            //WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.1");
+            var project = new ManagedProject(
+                    "My Product",
+                    new Dir(@"%ProgramFiles%\My Company\My Product",
+                        new File(@"..\..\..\test.txt")));
+
+            project.GUID = new Guid("5de17d40-9e25-49fe-a835-36d7e0b64062");
+
+            project.EmitConsistentMsiPackageCode = true;
+
+            project.Version = new Version(1, 0, 0, 0);
+
+            var msiPath = project.BuildMsi();
+
+            //var packageCode = msiPath.PatchSummary(project.ProductId);
+            //Console.WriteLine("PackageCode set to " + packageCode);
         }
 
         static void issue_1727()

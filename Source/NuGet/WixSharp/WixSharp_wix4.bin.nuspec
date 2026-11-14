@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>WixSharp_wix4.bin</id>
-    <version>2.14.1.0</version>
+    <version>2.14.2.0</version>
     <title>Wix# (WixSharp) - Binaries (targeting WiX4 and later)</title>
     <authors>Oleg Shilo</authors>
     <owners>Oleg Shilo</owners>
@@ -16,12 +16,14 @@ The package contains Wix# binaries only.
 In order to use this package you need have WiX Toolset installed: `dotnet tool install --global wix`
 The package is tested against WIX (Windows Installer Xml) Toolset v4.0.1.0</description>
     <summary>Wix# (WixSharp) - Binaries</summary>
-    <releaseNotes>Release v2.14.1.0
-- #1937: Migrating from v3 to v4 automatic MSI authoring issue
-- #1933: WixTools.SfxCAFor return 64 bit property for !is64
-- #1928: [BUG]Adding a Extension DLL with a full path cuases a crash
-- Manifest's dependency pack Microsoft.Net.Component.4.7.2.TargetingPack is replaced with Microsoft.VisualStudio.Component.CoreEditor.
-This is to allow to install on both VS2022 and VS2026. Related to #1929.</releaseNotes>
+    <releaseNotes>Release v2.14.2.0
+* Addressed spelling warnings; Code housekeeping
+* Tighten MSI package code consistency checks
+* #1953: Issue with WixSharp_wix4 2.14.1 nuget package
+* Merge pull request #1942 from MaxFletcher/master
+* Adds display/logging/restart arguments to end of msiexec string when generating self-hosted MSI executable
+
+</releaseNotes>
     <copyright>Copyright (C) 2008-2025 Oleg Shilo</copyright>
     <language>en-AU</language>
     <tags>C# scripting msi install setup wix</tags>

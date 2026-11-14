@@ -60,7 +60,7 @@ static class Script
 
         AutoElements.UseModernFolderBrowserDialog = true;
 
-        project.EmitConsistentPackageId = true;
+        project.EmitConsistentMsiPackageCode = true;
         project.Scope = InstallScope.perMachine;
         // project.PreserveTempFiles = true;
         // project.PreserveDbgFiles = true;

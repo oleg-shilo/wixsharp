@@ -60,6 +60,8 @@ public class BuildScript
     // The UI implementation is based on the work of BRYANPJOHNSTON
     // http://bryanpjohnston.com/2012/09/28/custom-wix-managed-bootstrapper-application/
 
+    static string certificateFile = @"..\..\SigningBundle\TempTestCert.pfx".PathGetFullPath();
+
     static public void Run(string[] args)
     {
         if (WixTools.GlobalWixVersion.Major < 5)
@@ -90,10 +92,16 @@ public class BuildScript
 
         bundle.DigitalSignature = new DigitalSignature
         {
-            PfxFilePath = "D:\\dev\\wixsharp4\\Source\\src\\WixSharp.Samples\\Wix# Samples\\SigningBundle\\TempTestCert.pfx",
+            PfxFilePath = certificateFile,
             Password = "password123",
             Description = "MyProductMsi",
         };
+
+        if (!(bundle.DigitalSignature as DigitalSignature).PfxFilePath.FileExists())
+        {
+            Console.WriteLine("Signing bundle with certificate: " + (bundle.DigitalSignature as DigitalSignature).PfxFilePath);
+            Console.WriteLine("CurrentDir: " + Environment.CurrentDirectory);
+        }
 
         bundle.OutDir = System.Reflection.Assembly.GetExecutingAssembly().Location.PathGetDirName();
         // System.Diagnostics.Debugger.Launch();
@@ -105,6 +113,7 @@ public class BuildScript
 
     static string BuildMsi()
     {
+
         var productProj =
             new ManagedProject("My Product1",
                 new Dir(@"%ProgramFiles%\My Company\My Product",
@@ -143,7 +152,7 @@ public class BuildScript
 
         productProj.DigitalSignature = new DigitalSignature
         {
-            PfxFilePath = "D:\\dev\\wixsharp4\\Source\\src\\WixSharp.Samples\\Wix# Samples\\SigningBundle\\TempTestCert.pfx",
+            PfxFilePath = certificateFile,
             Password = "password123",
             Description = "MyProductMsi",
         };

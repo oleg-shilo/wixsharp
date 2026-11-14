@@ -16,6 +16,8 @@ using WixSharp.UI.Forms;
 using WixToolset.Dtf.WindowsInstaller;
 using io = System.IO;
 
+//#pragma warning disable IDE1006, IDE0017// Naming Styles
+
 public class Script
 {
     static public void Main()
@@ -56,7 +58,7 @@ public class Script
         project.Load += msi_Load;
         project.AfterInstall += msi_AfterInstall;
 
-        project.AddBinary(new Binary(new Id("en_wxl"), @"D:\dev\wixsharp4\Source\src\WixSharp.UI\ManagedUI\Images\WixUI_en-us.wxl"));
+        project.AddBinary(new Binary(new Id("en_wxl"), @"..\..\..\WixSharp.UI\ManagedUI\Images\WixUI_en-us.wxl"));
 
         project.BuildMsi();
     }
