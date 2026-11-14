@@ -21,7 +21,10 @@ namespace WixSharp
         int Apply(string fileToSign);
     }
 
-    internal interface ISigningTool : IDigitalSignature
+    /// <summary>
+    /// Applies digital signature to a set of files
+    /// </summary>
+    public interface ISigningTool : IDigitalSignature
     {
         /// <summary>
         /// Signs the specified files to sign.
@@ -35,7 +38,7 @@ namespace WixSharp
     ///
     /// </summary>
     /// <seealso cref="WixSharp.IDigitalSignature" />
-    public class GenericSigner : IDigitalSignature
+    public class GenericSigner : IDigitalSignature, ISigningTool
     {
         /// <summary>
         /// Applies digital signature to a file.
@@ -44,7 +47,7 @@ namespace WixSharp
         /// <returns>
         /// Exit code of the signing tool.
         /// </returns>
-        public int Apply(string fileToSign) => Implementation(fileToSign);
+        public int Apply(string fileToSign) => ApplyImplementation(fileToSign);
 
         /// <summary>
         /// The implementation of <see cref="GenericSigner.Apply(string)"/>. This is a convenient method to inject
@@ -56,9 +59,37 @@ namespace WixSharp
         /// }
         /// </code>
         /// </summary>
-        public Func<string, int> Implementation =
+        [Obsolete("Use ApplyImplementation instead.", error: false)]
+        public Func<string, int> Implementation
+        {
+            set => ApplyImplementation = value;
+            get => ApplyImplementation;
+        }
+
+        /// <summary>
+        /// The implementation of <see cref="GenericSigner.Apply(string)"/>. This is a convenient method to inject
+        /// the implementation (e.g. lambda) instead of creating an inherited class.
+        /// </summary>
+        public Func<string, int> ApplyImplementation =
             x => throw new NotImplementedException(
-                "You need to initialize <see cref=\"GenericSigner.Implementation\"/> with the appropriate signing routine.");
+                "You need to initialize <see cref=\"GenericSigner.ApplyImplementation\"/> with the appropriate signing routine.");
+
+        /// <summary>
+        /// Signs the specified files to sign.
+        /// </summary>
+        /// <param name="filesToSign">The files to sign.</param>
+        /// <returns></returns>
+        public int Sign(string[] filesToSign) => SignImplementation(filesToSign);
+
+        /// <summary>
+        /// The delegate used to sign file set. Invoked by <see cref="GenericSigner.Sign(string[])"/>. This is a convenient method to inject
+        /// the implementation (e.g. lambda) instead of creating an inherited class.
+        /// </summary>
+        /// <remarks>Initialize this field with the appropriate signing routine before invoking it. The
+        /// default delegate throws a <see cref="NotImplementedException"/>.</remarks>
+        public Func<string[], int> SignImplementation =
+            x => throw new NotImplementedException(
+                "You need to initialize <see cref=\"GenericSigner.SignImplementation\"/> with the appropriate signing routine (delegate).");
     }
 
     /// <summary>
@@ -202,7 +233,7 @@ namespace WixSharp
                     for (int i = 0; i < MaxTimeUrlRetry && retValue != 0; i++)
                     {
                         retValue = apply(uri?.AbsoluteUri);
-                        Compiler.OutputWriteLine("Retrying applying DigitalSignature");
+                        Compiler.OutputWriteLine("Retrying applying DigitalSignature for a given TimeUrl.");
                         Thread.Sleep(UrlRetrySleep);
                     }
 
@@ -245,7 +276,7 @@ namespace WixSharp
                     for (int i = 0; i < MaxTimeUrlRetry && retValue != 0; i++)
                     {
                         retValue = apply(uri?.AbsoluteUri);
-                        Compiler.OutputWriteLine("Retrying applying DigitalSignature");
+                        Compiler.OutputWriteLine("Retrying applying DigitalSignature for a given TimeUrl.");
                         Thread.Sleep(UrlRetrySleep);
                     }
 
