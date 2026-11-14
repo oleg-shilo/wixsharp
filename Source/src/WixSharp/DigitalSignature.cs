@@ -237,7 +237,7 @@ namespace WixSharp
                         retValue = apply(uri?.AbsoluteUri);
                         if (retValue != 0)
                         {
-                            Compiler.OutputWriteLine("Retrying applying DigitalSignature for a given TimeUrl.");
+                            Compiler.OutputWriteLine($"Retrying applying DigitalSignature for {uri?.AbsoluteUri}.");
                             Thread.Sleep(UrlRetrySleep);
                         }
                     }
@@ -283,7 +283,7 @@ namespace WixSharp
                         retValue = apply(uri?.AbsoluteUri);
                         if (retValue != 0)
                         {
-                            Compiler.OutputWriteLine("Retrying applying DigitalSignature for a given TimeUrl.");
+                            Compiler.OutputWriteLine($"Retrying applying DigitalSignature for {uri?.AbsoluteUri}.");
                             Thread.Sleep(UrlRetrySleep);
                         }
                     }
