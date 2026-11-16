@@ -42,6 +42,23 @@ namespace WixSharp
     /// <seealso cref="WixSharp.IDigitalSignature" />
     public class GenericSigner : IDigitalSignature, ISigningTool
     {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericSigner"/> class.
+        /// </summary>
+        public GenericSigner() { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericSigner"/> class.
+        /// </summary>
+        /// <param name="apply">A delegate that accepts a string and returns an integer.</param>
+        public GenericSigner(Func<string, int> apply) => ApplyImplementation = apply;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericSigner"/> class.
+        /// </summary>
+        /// <param name="sign">The delegate that signs an array of strings and returns an integer result.</param>
+        public GenericSigner(Func<string[], int> sign) => SignImplementation = sign;
+
         /// <summary>
         /// Applies digital signature to a file.
         /// </summary>

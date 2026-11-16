@@ -202,6 +202,8 @@ namespace WixSharp
         /// When set to <c>true</c>, all files will be signed.
         /// <p>Note, the digital signing will be performed on the original files specified in the <see cref="WixSharp.Project"/>
         /// initialization.</p>
+        /// <p>The packaged managed custom actions and embedded UI (<c>*.CA.dll</c>) built by WixSharp and the assemblies
+        /// packed into them are signed only if <see cref="SignAllFilesOptions.SignEmbeddedAssemblies"/> is enabled.</p>
         /// </summary>
         public bool SignAllFiles
         {

@@ -259,15 +259,15 @@ namespace Test1.installer.wixsharp
 
             project.SignAllFiles = true;
             project.DigitalSignature = new GenericSigner
-            {
-                Implementation = (file) =>
+            (
+                apply: (file) =>
                 {
                     var locked = file.IsFileLocked();
                     if (locked)
                         throw new Exception($"File is locked: {file}");
                     return 0;
                 }
-            };
+            );
 
             // project.AddActions(new ElevatedManagedAction(TestCustomActions.MyAction, Return.check, When.After, Step.InstallFiles, Condition.NOT_Installed));
 
