@@ -376,6 +376,25 @@ namespace WixSharp.CommonTasks
             SignOutputLevel outputLevel = SignOutputLevel.Verbose,
             HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
         {
+            // Windows limits the command line to 32,767 characters, so a large set of files is signed in several runs.
+            var fixedArgsLength = WixTools.SignTool.Length +
+                (certificateId?.Length ?? 0) + (password?.Length ?? 0) + 2 * ((timeURL?.Length ?? 0) + (optionalArguments?.Length ?? 0)) + 200;
+
+            var fileChunks = SplitByCommandLineLength(filesToSign, MaxCommandLineLength - fixedArgsLength);
+
+            if (fileChunks.Count > 1)
+            {
+                // The file set is too large for Win to handle. Split it and call this very method for every valid-size chank.
+                // Like with a single SignTool.exe run, trying to sign all files and report the first failure
+                foreach (var chunk in fileChunks)
+                {
+                    var chunkRetval = DigitallySign(chunk, certificateId, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
+                    if (chunkRetval != 0)
+                        return chunkRetval;
+                }
+                return 0;
+            }
+
             // SHA-1 Sample SignTool line: SignTool.exe /f "C:\MyFolder\MyCert.pfx" /p "PFX Password" /t "http://timestamp.comodoca.com/authenticode" "C:\MyFolder\MyFile.exe"
             // SHA-256 Sample SignTool line (NOT dual signing): SignTool.exe /f "C:\MyFolder\MyCert.pfx" /p "PFX Password" /fd sha256 /tr "http://timestamp.comodoca.com?td=sha256" /td sha256 "C:\MyFolder\MyFile.exe"
             // SHA-256 Sample SignTool line (Dual signing): SignTool.exe /f "C:\MyFolder\MyCert.pfx" /p "PFX Password" /fd sha256 /tr "http://timestamp.comodoca.com?td=sha256" /td sha256 /as "C:\MyFolder\MyFile.exe"
@@ -474,6 +493,34 @@ namespace WixSharp.CommonTasks
 
             tool.Arguments = sha256;
             return tool.ConsoleRun();
+        }
+
+        const int MaxCommandLineLength = 32767;
+
+        static List<string[]> SplitByCommandLineLength(string[] files, int maxLength)
+        {
+            var chunks = new List<string[]>();
+            var chunk = new List<string>();
+            var chunkLength = 0;
+
+            foreach (var file in files)
+            {
+                var argLength = file.Length + 3; // quotes and separator
+                if (chunk.Any() && chunkLength + argLength > maxLength)
+                {
+                    chunks.Add(chunk.ToArray());
+                    chunk.Clear();
+                    chunkLength = 0;
+                }
+
+                chunk.Add(file);
+                chunkLength += argLength;
+            }
+
+            if (chunk.Any())
+                chunks.Add(chunk.ToArray());
+
+            return chunks;
         }
 
         /// <summary>
