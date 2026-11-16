@@ -197,7 +197,7 @@ namespace WixSharp.CommonTasks
         ///     false);
         /// </code>
         /// </example>
-        [Obsolete("Use the other signature of this method without `wellKnownLocations` parameter that is ignored anyway", false)]
+        [Obsolete("Use the other signature of this method without `wellKnownLocations` parameter that is ignored anyway", error: true)]
         static public int DigitalySign(
             string fileToSign,
             string certificateId,
@@ -240,7 +240,7 @@ namespace WixSharp.CommonTasks
         ///     false);
         /// </code>
         /// </example>
-        [Obsolete("This method is obsolete (API name typo). Use DigitallySign method instead.")]
+        [Obsolete("This method is obsolete (API name typo). Use DigitallySign method instead.", error: true)]
         static public int DigitalySign(
             string fileToSign,
             string certificateId,
@@ -324,7 +324,7 @@ namespace WixSharp.CommonTasks
         ///     false);
         /// </code>
         /// </example>
-        [Obsolete("This method is obsolete (API name typo). Use DigitallySign method instead.")]
+        [Obsolete("This method is obsolete (API name typo). Use DigitallySign method instead.", error: true)]
         static public int DigitalySign(
             string[] filesToSign,
             string certificateId,
@@ -523,7 +523,7 @@ namespace WixSharp.CommonTasks
         ///     "MyPassword");
         /// </code>
         /// </example>
-        [Obsolete("This method is obsolete (API name typo). Use DigitallySign method instead.")]
+        [Obsolete("This method is obsolete (API name typo). Use DigitallySign method instead.", error: true)]
         static public int DigitalySign(string fileToSign, string pfxFile, string timeURL, string password)
             => DigitallySign(fileToSign, pfxFile, timeURL, password);
 
@@ -555,7 +555,7 @@ namespace WixSharp.CommonTasks
         /// "http://timestamp.verisign.com/scripts/timstamp.dll",
         /// "MyPassword");
         /// </code></example>
-        [Obsolete("This method is obsolete (API name typo). Use DigitallySignBootstrapper method instead.")]
+        [Obsolete("This method is obsolete (API name typo). Use DigitallySignBootstrapper method instead.", error: true)]
         static public int DigitalySignBootstrapper(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
             => DigitallySignBootstrapper(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);
@@ -638,7 +638,7 @@ namespace WixSharp.CommonTasks
         /// </example>
         /// <exception cref="ApplicationException">Thrown if <c>wix.exe</c> cannot be found.</exception>
         /// <exception cref="Exception">Thrown if no engine file is found after detaching it from the bundle.</exception>
-        [Obsolete("This method is deprecated (API name typo). Use DigitallySignBootstrapperEngine instead.")]
+        [Obsolete("This method is deprecated (API name typo). Use DigitallySignBootstrapperEngine instead.", error: true)]
         static public int DigitalySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
             => DigitallySignBootstrapperEngine(bootstrapperFileToSign, pfxFile, timeURL, password, optionalArguments, wellKnownLocations, certificateStore, outputLevel, hashAlgorithm);

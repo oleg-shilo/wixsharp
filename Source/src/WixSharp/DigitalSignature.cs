@@ -77,8 +77,7 @@ namespace WixSharp
                 return SignImplementation(new[] { fileToSign });
             }
 
-            throw new NotImplementedException(
-            "You need to initialize <see cref=\"GenericSigner.ApplyImplementation\"/> with the appropriate signing routine.");
+            throw new NotImplementedException("You need to initialize <see cref=\"GenericSigner.ApplyImplementation\"/> with the appropriate signing routine.");
         }
 
         /// <summary>
@@ -126,8 +125,7 @@ namespace WixSharp
                 return 0;
             }
 
-            throw new NotImplementedException(
-            "You need to initialize <see cref=\"GenericSigner.SignImplementation\"/> with the appropriate signing routine.");
+            throw new NotImplementedException("You need to initialize <see cref=\"GenericSigner.SignImplementation\"/> with the appropriate signing routine.");
         }
 
         /// <summary>
@@ -136,9 +134,7 @@ namespace WixSharp
         /// </summary>
         /// <remarks>Initialize this field with the appropriate signing routine before invoking it. The
         /// default delegate throws a <see cref="NotImplementedException"/>.</remarks>
-        public Func<string[], int> SignImplementation =
-            x => throw new NotImplementedException(
-                "You need to initialize <see cref=\"GenericSigner.SignImplementation\"/> with the appropriate signing routine (delegate).");
+        public Func<string[], int> SignImplementation;
     }
 
     /// <summary>

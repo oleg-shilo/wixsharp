@@ -19,24 +19,14 @@ namespace WixSharp.Test
     public class SigningTest
     {
         [Fact]
-        [Description("Issue #1957")]
-        public void Auto_signing_CA_wrapper()
+        [Description("Issue #1957 (point #5)")]
+        public void Signing_CA_wrapper()
         {
+            // see: https://github.com/oleg-shilo/wixsharp/issues/1957#issuecomment-6876430619
             Compiler.AutoGeneration.PreferBatchSigning = true;
             Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
 
-            var signedAsms = new List<string>();
-
-            // signing *.CA.dll 
-            var simulatedFileSigning = new GenericSigner
-            (
-                sign: filesToSign =>
-                {
-                    signedAsms.AddRange(filesToSign);
-                    return 0;
-                }
-            );
-
+            var signedFiles = new List<string>();
 
             // -------------------------------------
 
@@ -45,38 +35,66 @@ namespace WixSharp.Test
                     new Dir(@"%ProgramFiles%\My Company\My Product",
                         new File(this.GetType().Assembly.Location)));
 
-            project.Load += (SetupEventArgs e) => { }; //should trigger CA wrapper generation
-
-            project.DigitalSignature = simulatedFileSigning;
+            project.DigitalSignature = new GenericSigner
+            (
+                sign: filesToSign =>
+                {
+                    signedFiles.AddRange(filesToSign.Select(x => x.PathGetFileName()));
+                    return 0;
+                }
+            );
             project.SignAllFiles = true;
 
+            //The CA wrapper generation will be triggered because it is ManagedProject that always creates a managed Init event.
             project.BuildMsi();
 
             // -------------------------------------
 
-            signedAsms = signedAsms.Select(x => x.PathGetFileName()).ToList();
-
-            Assert.NotEmpty(signedAsms);
-
-            Assert.Contains("WixSharp.Test.dll", signedAsms);
-            Assert.Contains("WixSharp.dll", signedAsms);
-            Assert.Contains("WixSharp.CA.dll", signedAsms); // the critical test
-            Assert.Contains("MyProduct.msi", signedAsms);
+            Assert.Contains("WixSharp.CA.dll", signedFiles);
         }
 
         [Fact]
-        [Description("Issue #1957")]
-        public void Auto_signing_Apply_vs_Sign()
+        [Description("Issue #1957 (point #1-a)")]
+        public void Generic_signer_initialization()
         {
+            // see: https://github.com/oleg-shilo/wixsharp/issues/1957#issuecomment-6876430619
             Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
 
-            var signedAsms = new List<string>();
+            var project =
+                new ManagedProject("MyProduct",
+                    new Dir(@"%ProgramFiles%\My Company\My Product",
+                        new File(this.GetType().Assembly.Location)));
+            project.DigitalSignature = new GenericSigner( /*no lambdas are defined*/ );
+            project.SignAllFiles = true;
 
-            var simulatedFileSigning = new GenericSigner
+            // -------------------------------------
+
+            Compiler.AutoGeneration.PreferBatchSigning = false;
+            var exception = Assert.Throws<NotImplementedException>(() => project.BuildMsi());
+            Assert.Contains("GenericSigner.ApplyImplementation", exception.Message);
+
+            // -------------------------------------
+
+            Compiler.AutoGeneration.PreferBatchSigning = true;
+            exception = Assert.Throws<NotImplementedException>(() => project.BuildMsi());
+            Assert.Contains("GenericSigner.SignImplementation", exception.Message);
+        }
+
+        [Fact]
+        [Description("Issue #1957 (point #1-b)")]
+        public void Generic_signer_fallback()
+        {
+            // see: https://github.com/oleg-shilo/wixsharp/issues/1957#issuecomment-6876430619
+            Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
+
+            var signedFiles = new List<string>();
+
+            // GenericSigner will be handled via ISigningTool.Sign but since only ISigningTool.Apply is defined, it will be used instead.
+            var simulatedSigner = new GenericSigner
             (
-                sign: filesToSign =>
+                apply: fileToSign =>
                 {
-                    signedAsms.AddRange(filesToSign);
+                    signedFiles.Add(fileToSign.PathGetFileName());
                     return 0;
                 }
             );
@@ -88,22 +106,18 @@ namespace WixSharp.Test
                     new Dir(@"%ProgramFiles%\My Company\My Product",
                         new File(this.GetType().Assembly.Location)));
 
-            project.DigitalSignature = simulatedFileSigning;
+            project.DigitalSignature = simulatedSigner;
             project.SignAllFiles = true;
 
             Compiler.AutoGeneration.PreferBatchSigning = false;
             project.BuildMsi();
 
             // -------------------------------------
-
-            signedAsms = signedAsms.Select(x => x.PathGetFileName()).ToList();
-
-            Assert.NotEmpty(signedAsms);
-
-            Assert.Contains("WixSharp.Test.dll", signedAsms);
-            Assert.Contains("WixSharp.dll", signedAsms);
-            Assert.Contains("WixSharp.CA.dll", signedAsms); // the critical test
-            Assert.Contains("MyProduct.msi", signedAsms);
+            Assert.NotEmpty(signedFiles);
+            Assert.Contains("WixSharp.Test.dll", signedFiles);
+            Assert.Contains("WixSharp.dll", signedFiles);
+            Assert.Contains("WixSharp.CA.dll", signedFiles);
+            Assert.Contains("MyProduct.msi", signedFiles);
         }
 
         [Fact]
@@ -154,7 +168,7 @@ namespace WixSharp.Test
 
             bootstrapper.DigitalSignature = new GenericSigner
             {
-                Implementation = (x) =>
+                ApplyImplementation = (x) =>
                 {
                     if (x.IsFileLocked())
                         lockedFiles.Add(x);

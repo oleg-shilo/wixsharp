@@ -1,0 +1,54 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Compressed="yes" ProductCode="6f330b47-2577-43ad-9095-1861cb258772" Name="My Product" Language="1058" Version="1.0.0.0" UpgradeCode="6f330b47-2577-43ad-9095-1861bb258771" Manufacturer="master" InstallerVersion="200">
+    <SummaryInformation Codepage="Windows-1252" />
+    <Media Id="1" Cabinet="My20Product.cab" EmbedCab="yes" />
+
+    <StandardDirectory Id="ProgramFilesFolder">
+      <Directory Id="My20Company" Name="My Company">
+        <Directory Id="INSTALLDIR" Name="My Product">
+
+          <Component Id="Component.readme.txt_1240382565" Guid="6f330b47-2577-43ad-9095-18615105c99a">
+            <File Id="readme.txt_1240382565" Source="readme.txt" />
+          </Component>
+
+        </Directory>
+      </Directory>
+    </StandardDirectory>
+
+    <UI />
+
+    <WixUI Id="WixUI_Minimal" xmlns="http://wixtoolset.org/schemas/v4/wxs/ui" />
+
+    <UI>
+      <EmbeddedUI Id="WixSharp_EmbeddedUI_Asm" SourceFile="WixSharp.UI.CA.dll" />
+    </UI>
+
+    <CustomAction Id="WixSharp_InitRuntime_Action" BinaryRef="WixSharp_InitRuntime_Action_File" DllEntry="WixSharp_InitRuntime_Action" Return="check" Execute="immediate" />
+    <CustomAction Id="Set_CancelRequestHandler_Props" Property="CancelRequestHandler" Value="UpgradeCode=[UpgradeCode];INSTALLDIR=[INSTALLDIR];UILevel=[UILevel];ProductCode=[ProductCode];ADDLOCAL=[ADDLOCAL];ADDFEATURES=[ADDFEATURES]" />
+    <CustomAction Id="CancelRequestHandler" BinaryRef="WixSharp_InitRuntime_Action_File" DllEntry="CancelRequestHandler" Return="check" Impersonate="no" Execute="deferred" />
+
+    <Binary Id="WixSharp_InitRuntime_Action_File" SourceFile="WixSharp.CA.dll" />
+    <Binary Id="WixSharp_UIText" SourceFile="C:\ProgramData\WixSharp\2.14.2.0\WixUI_en-US.wxl" />
+    <Binary Id="WixSharp_LicenceFile" SourceFile="My Product.licence.rtf" />
+    <Binary Id="WixSharpUI_Bmp_Dialog" SourceFile="My Product.dialog_bmp.png" />
+    <Binary Id="WixSharpUI_Bmp_Banner" SourceFile="My Product.dialog_banner.png" />
+
+    <UIRef Id="WixUI_ErrorProgressText" />
+
+    <Property Id="WixSharp_UI_INSTALLDIR" Value="INSTALLDIR" />
+    <Property Id="UAC_WARNING" Value="Please wait for UAC prompt to appear.&#xD;&#xA;&#xD;&#xA;If it appears minimized then activate it from the taskbar." />
+    <Property Id="WixSharp_InstallDialogs" Value="WixSharp.UI, Version=2.14.2.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.WelcomeDialog&#xA;WixSharp.UI, Version=2.14.2.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.LicenceDialog&#xA;WixSharp.UI, Version=2.14.2.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.SetupTypeDialog&#xA;WixSharp.UI, Version=2.14.2.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.FeaturesDialog&#xA;WixSharp.UI, Version=2.14.2.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.InstallDirDialog&#xA;WixSharp.UI, Version=2.14.2.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.ProgressDialog&#xA;WixSharp.UI, Version=2.14.2.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.ExitDialog" />
+    <Property Id="WixSharp_ModifyDialogs" Value="WixSharp.UI, Version=2.14.2.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.MaintenanceTypeDialog&#xA;WixSharp.UI, Version=2.14.2.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.FeaturesDialog&#xA;WixSharp.UI, Version=2.14.2.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.ProgressDialog&#xA;WixSharp.UI, Version=2.14.2.0, Culture=neutral, PublicKeyToken=13407310932706d5|WixSharp.UI.Forms.ExitDialog" />
+
+    <Feature Id="Complete" Title="Complete" Level="1" AllowAbsent="yes">
+      <ComponentRef Id="Component.readme.txt_1240382565" />
+    </Feature>
+
+    <InstallExecuteSequence>
+      <Custom Condition=" (1) " Action="WixSharp_InitRuntime_Action" Before="AppSearch" />
+      <Custom Action="Set_CancelRequestHandler_Props" Before="InstallFinalize" />
+      <Custom Condition=" (1) " Action="CancelRequestHandler" After="Set_CancelRequestHandler_Props" />
+    </InstallExecuteSequence>
+  </Package>
+</Wix>
+
