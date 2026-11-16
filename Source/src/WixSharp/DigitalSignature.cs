@@ -66,7 +66,20 @@ namespace WixSharp
         /// <returns>
         /// Exit code of the signing tool.
         /// </returns>
-        public int Apply(string fileToSign) => ApplyImplementation(fileToSign);
+        public int Apply(string fileToSign)
+        {
+            if (ApplyImplementation != null)
+            {
+                return ApplyImplementation(fileToSign);
+            }
+            else if (SignImplementation != null)
+            {
+                return SignImplementation(new[] { fileToSign });
+            }
+
+            throw new NotImplementedException(
+            "You need to initialize <see cref=\"GenericSigner.ApplyImplementation\"/> with the appropriate signing routine.");
+        }
 
         /// <summary>
         /// The implementation of <see cref="GenericSigner.Apply(string)"/>. This is a convenient method to inject
@@ -89,16 +102,33 @@ namespace WixSharp
         /// The implementation of <see cref="GenericSigner.Apply(string)"/>. This is a convenient method to inject
         /// the implementation (e.g. lambda) instead of creating an inherited class.
         /// </summary>
-        public Func<string, int> ApplyImplementation =
-            x => throw new NotImplementedException(
-                "You need to initialize <see cref=\"GenericSigner.ApplyImplementation\"/> with the appropriate signing routine.");
+        public Func<string, int> ApplyImplementation;
 
         /// <summary>
         /// Signs the specified files to sign.
         /// </summary>
         /// <param name="filesToSign">The files to sign.</param>
         /// <returns></returns>
-        public int Sign(string[] filesToSign) => SignImplementation(filesToSign);
+        public int Sign(string[] filesToSign)
+        {
+            if (SignImplementation != null)
+            {
+                return SignImplementation(filesToSign);
+            }
+            else if (ApplyImplementation != null)
+            {
+                foreach (var file in filesToSign)
+                {
+                    var result = ApplyImplementation(file);
+                    if (result != 0)
+                        return result;
+                }
+                return 0;
+            }
+
+            throw new NotImplementedException(
+            "You need to initialize <see cref=\"GenericSigner.SignImplementation\"/> with the appropriate signing routine.");
+        }
 
         /// <summary>
         /// The delegate used to sign file set. Invoked by <see cref="GenericSigner.Sign(string[])"/>. This is a convenient method to inject
@@ -241,7 +271,7 @@ namespace WixSharp
             int retValue = -1;
 
             int apply(string url)
-                => CommonTasks.Tasks.DigitallySign(filesToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
+                => CommonTasks.Tasks.DigitallySign(filesToSign, CertificateId, url, Password,
                                                    PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
 
             Compiler.OutputWriteLine($"Signing {filesToSign.JoinBy(", ")} with DigitalSignature."); // full path will be printed by the signing tool
@@ -287,7 +317,7 @@ namespace WixSharp
             int retValue = -1;
 
             int apply(string url)
-                => CommonTasks.Tasks.DigitallySign(fileToSign, CertificateId, TimeUrl?.AbsoluteUri, Password,
+                => CommonTasks.Tasks.DigitallySign(fileToSign, CertificateId, url, Password,
                                                    PrepareOptionalArguments(), CertificateStore, OutputLevel, HashAlgorithm);
 
             Compiler.OutputWriteLine($"Signing {fileToSign} with DigitalSignature."); // full path will be printed by the signing tool

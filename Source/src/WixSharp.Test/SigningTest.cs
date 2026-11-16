@@ -54,7 +54,56 @@ namespace WixSharp.Test
 
             // -------------------------------------
 
+            signedAsms = signedAsms.Select(x => x.PathGetFileName()).ToList();
+
             Assert.NotEmpty(signedAsms);
+
+            Assert.Contains("WixSharp.Test.dll", signedAsms);
+            Assert.Contains("WixSharp.dll", signedAsms);
+            Assert.Contains("WixSharp.CA.dll", signedAsms); // the critical test
+            Assert.Contains("MyProduct.msi", signedAsms);
+        }
+
+        [Fact]
+        [Description("Issue #1957")]
+        public void Auto_signing_Apply_vs_Sign()
+        {
+            Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
+
+            var signedAsms = new List<string>();
+
+            var simulatedFileSigning = new GenericSigner
+            (
+                sign: filesToSign =>
+                {
+                    signedAsms.AddRange(filesToSign);
+                    return 0;
+                }
+            );
+
+            // -------------------------------------
+
+            var project =
+                new ManagedProject("MyProduct",
+                    new Dir(@"%ProgramFiles%\My Company\My Product",
+                        new File(this.GetType().Assembly.Location)));
+
+            project.DigitalSignature = simulatedFileSigning;
+            project.SignAllFiles = true;
+
+            Compiler.AutoGeneration.PreferBatchSigning = false;
+            project.BuildMsi();
+
+            // -------------------------------------
+
+            signedAsms = signedAsms.Select(x => x.PathGetFileName()).ToList();
+
+            Assert.NotEmpty(signedAsms);
+
+            Assert.Contains("WixSharp.Test.dll", signedAsms);
+            Assert.Contains("WixSharp.dll", signedAsms);
+            Assert.Contains("WixSharp.CA.dll", signedAsms); // the critical test
+            Assert.Contains("MyProduct.msi", signedAsms);
         }
 
         [Fact]
