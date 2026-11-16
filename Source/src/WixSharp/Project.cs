@@ -639,7 +639,7 @@ namespace WixSharp
         /// Wix# does not changes the WiX default package code generation it just gives the opportunity to control it when required.
         /// </para>
         /// </summary>
-        [Obsolete("This property is obsolete. Use EmitConsistentMsiPackageCode instead.")]
+        [Obsolete("This property is obsolete. Use EmitConsistentMsiPackageCode instead.", error: true)]
         public bool EmitConsistentPackageId = false;
 
         /// <summary>

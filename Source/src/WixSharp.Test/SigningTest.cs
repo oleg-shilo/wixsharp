@@ -37,9 +37,9 @@ namespace WixSharp.Test
 
             project.DigitalSignature = new GenericSigner
             (
-                sign: filesToSign =>
+                apply: fileToSign =>
                 {
-                    signedFiles.AddRange(filesToSign.Select(x => x.PathGetFileName()));
+                    signedFiles.Add(fileToSign.PathGetFileName());
                     return 0;
                 }
             );
