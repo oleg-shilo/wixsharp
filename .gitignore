@@ -245,3 +245,6 @@ _Pvt_Extensions
 /Source/src/WixSharp.Samples/Wix# Samples/Managed Setup/CustomUI.Dialog/ManagedSetup.wxl
 /Source/src/WixSharp.Samples/Wix# Samples/Managed Setup/SetupEvents/ManagedSetup.wxl
 /Source/src/integrate-snk.cmd
+/Source/src/WixSharp.Samples/Wix# Samples/RestartElevated(UI)/ElevatedSetupUI.dialog_banner.png
+/Source/src/WixSharp.Samples/Wix# Samples/RestartElevated(UI)/ElevatedSetupUI.dialog_bmp.png
+/Source/src/WixSharp.Samples/Wix# Samples/RestartElevated(UI)/ElevatedSetupUI.licence.rtf
