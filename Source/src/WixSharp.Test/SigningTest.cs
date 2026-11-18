@@ -43,10 +43,9 @@ namespace WixSharp.Test
         }
 
         [Fact]
-        [Description("Issue #1957 (point #4)")]
+        [Description("Issue #1957 (point #4)")] // see: https://github.com/oleg-shilo/wixsharp/issues/1957
         public void Signing_CA_wrapper()
         {
-            // see: https://github.com/oleg-shilo/wixsharp/issues/1957
             Compiler.AutoGeneration.PreferBatchSigning = true;
             Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
 
