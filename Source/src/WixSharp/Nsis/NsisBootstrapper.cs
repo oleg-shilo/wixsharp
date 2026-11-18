@@ -256,7 +256,7 @@ namespace WixSharp.Nsis
                 IO.File.Delete(nsiFile);
             }
 
-            DigitalSignature?.Apply(OutputFile);
+            DigitalSignature.ApplyAndCheck(OutputFile);
 
             return OutputFile;
         }

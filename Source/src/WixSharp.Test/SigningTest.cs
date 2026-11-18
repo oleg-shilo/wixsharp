@@ -20,9 +20,34 @@ namespace WixSharp.Test
     {
         [Fact]
         [Description("Issue #1957 (point #5)")]
+        public void Custom_signing_return_code()
+        {
+            // see: https://github.com/oleg-shilo/wixsharp/issues/1957
+            Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
+
+            // -------------------------------------
+
+            var project =
+                new ManagedProject("MyProduct",
+                    new Dir(@"%ProgramFiles%\My Company\My Product",
+                        new File(this.GetType().Assembly.Location)));
+
+            project.DigitalSignature = new GenericSigner(apply: fileToSign => 333); // error code
+            project.SignAllFiles = true;
+
+            var exception = Assert.Throws<InvalidOperationException>(() => project.BuildMsi());
+
+            // -------------------------------------
+
+            Assert.Contains("Signing the file", exception.Message);
+            Assert.Contains("failed. Return code: 333", exception.Message);
+        }
+
+        [Fact]
+        [Description("Issue #1957 (point #4)")]
         public void Signing_CA_wrapper()
         {
-            // see: https://github.com/oleg-shilo/wixsharp/issues/1957#issuecomment-6876430619
+            // see: https://github.com/oleg-shilo/wixsharp/issues/1957
             Compiler.AutoGeneration.PreferBatchSigning = true;
             Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
 
@@ -57,7 +82,7 @@ namespace WixSharp.Test
         [Description("Issue #1957 (point #1-a)")]
         public void Generic_signer_initialization()
         {
-            // see: https://github.com/oleg-shilo/wixsharp/issues/1957#issuecomment-6876430619
+            // see: https://github.com/oleg-shilo/wixsharp/issues/1957
             Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
 
             var project =
@@ -84,7 +109,7 @@ namespace WixSharp.Test
         [Description("Issue #1957 (point #1-b)")]
         public void Generic_signer_fallback()
         {
-            // see: https://github.com/oleg-shilo/wixsharp/issues/1957#issuecomment-6876430619
+            // see: https://github.com/oleg-shilo/wixsharp/issues/1957
             Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
 
             var signedFiles = new List<string>();

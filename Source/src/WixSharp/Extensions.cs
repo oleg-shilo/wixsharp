@@ -3709,9 +3709,7 @@ namespace WixSharp
             {
                 // sign the MSI after embedding transforms again (as it won't contain publisher info
                 // in UAC dialog)
-                var signingReturnCode = project.DigitalSignature.Apply(msiFilePath);
-                if (signingReturnCode != 0)
-                    throw new InvalidOperationException($"Signing the file '{msiFilePath}' failed. Return code: {signingReturnCode}");
+                project.DigitalSignature.ApplyAndCheck(msiFilePath);
             }
 
             Compiler.OutputWriteLine($"> Multi-language setup {msiFilePath} is completed.");

@@ -52,6 +52,20 @@ namespace WixSharp
     /// </summary>
     static class ProjectFileSigner
     {
+        public static void ApplyAndCheck(this IDigitalSignature signature, string fileToSign)
+        {
+            var result = signature?.Apply(fileToSign);
+            if (result.HasValue && result != 0)
+                throw new InvalidOperationException($"Signing the file '{fileToSign}' failed. Return code: {result.Value}");
+        }
+
+        public static void SignAndCheck(this ISigningTool tool, string[] filesToSign)
+        {
+            var result = tool?.Sign(filesToSign);
+            if (result.HasValue && result != 0)
+                throw new InvalidOperationException($"Signing at least one of the signable files failed. Return code: {result.Value}. Check the output for errors.");
+        }
+
         /// <summary>
         /// Signs all files in the specified project that match the given options.
         /// </summary>

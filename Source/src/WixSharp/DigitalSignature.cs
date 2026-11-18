@@ -120,7 +120,10 @@ namespace WixSharp
                 {
                     var result = ApplyImplementation(file);
                     if (result != 0)
+                    {
+                        Compiler.OutputWriteLine($"Signing the file '{file}' failed. Return code: {result}");
                         return result;
+                    }
                 }
                 return 0;
             }
