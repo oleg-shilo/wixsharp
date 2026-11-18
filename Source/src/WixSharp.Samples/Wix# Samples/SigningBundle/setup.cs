@@ -104,7 +104,10 @@ static class Script
         else
         {
             IO.File.Copy(customBa_Wix5_Sample, customBa_Wix5_Signed, true);
-            digitalSignature.Apply(customBa_Wix5_Signed);
+            if (0 != digitalSignature.Apply(customBa_Wix5_Signed))
+            {
+                Console.WriteLine("Failed to sign Custom BA.");
+            }
         }
 
         return customBa_Wix5_Signed;

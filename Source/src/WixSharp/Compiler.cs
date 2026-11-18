@@ -798,7 +798,7 @@ namespace WixSharp
                         Compiler.OutputWriteLine(" MSI file PackageCode set to " + packageCode);
                     }
 
-                    project.DigitalSignature?.Apply(outFile);
+                    project.DigitalSignature.ApplyAndCheck(outFile);
                 }
 
 
@@ -3443,7 +3443,7 @@ namespace WixSharp
                     else
                     {
                         foreach (var file in actualFilesToSign)
-                            signing.Apply(file);
+                            signing.ApplyAndCheck(file);
                     }
                 }
             }
@@ -3523,7 +3523,7 @@ namespace WixSharp
                     }
                     else
                     {
-                        signing.Apply(outDll);
+                        signing.ApplyAndCheck(outDll);
                     }
                 }
             }
