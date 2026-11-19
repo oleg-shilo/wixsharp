@@ -160,6 +160,8 @@ namespace WixSharp
         /// <param name="options">The options to configure the signing process.</param>
         internal static void SignAllFiles(Project project, SignAllFilesOptions options)
         {
+            // TODO: should be refactored to use SigningJob.SignFiles
+
             if (project.DigitalSignature == null)
                 return;
 
@@ -235,6 +237,8 @@ namespace WixSharp
         /// <param name="options">The options to configure the signing process.</param>
         internal static void SignApplicationAndPayloads(Bundle project, SignAllFilesOptions options = null)
         {
+            // TODO: should be refactored to use SigningJob.SignFiles
+
             if (project.DigitalSignature == null)
                 return;
 

@@ -283,6 +283,7 @@ namespace WixSharp.Test
                 new BundlePackagePayload{ SourceFile = "BundlePackagePayload.file" },
                 new MsiPackagePayload{ SourceFile = "MsiPackagePayload.file" },
                 new MspPackagePayload{ SourceFile = "MspPackagePayload.file" },
+                new MsuPackagePayload{ SourceFile = "MsuPackagePayload.file" , Size = 333 },
             };
 
             var bootstrapper = new Bundle("My Product", edgeWebView2);
