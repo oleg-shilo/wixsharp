@@ -33,7 +33,7 @@ namespace WixSharp.Test
 
             using (var file = System.IO.File.OpenRead(fileToSign)) // lock the file
             {
-                var signedFiles = digitalSignature.SignFiles(new[] { fileToSign });
+                var signedFiles = digitalSignature.SignFiles(fileToSign);
 
                 // -------------------------------------
 

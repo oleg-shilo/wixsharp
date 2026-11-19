@@ -60,11 +60,21 @@ namespace WixSharp
         /// </summary>
         /// <param name="signature">The digital signature to apply. If <see langword="null"/>, no files are signed.</param>
         /// <param name="filesToSign">The file paths to consider for signing.</param>
+        /// options are used.</param>
+        /// <returns>A mapping from each eligible file path to the path that was signed. Locked files may be isolated to a
+        /// different path.</returns>
+        public static Dictionary<string, string> SignFiles(this IDigitalSignature signature, params string[] filesToSign)
+          => SignFiles(signature, filesToSign, null);
+        /// <summary>
+        /// Signs eligible files using the specified digital signature.
+        /// </summary>
+        /// <param name="signature">The digital signature to apply. If <see langword="null"/>, no files are signed.</param>
+        /// <param name="filesToSign">The file paths to consider for signing.</param>
         /// <param name="options">Options that control file selection and error handling. If <see langword="null"/>, the compiler's default
         /// options are used.</param>
         /// <returns>A mapping from each eligible file path to the path that was signed. Locked files may be isolated to a
         /// different path.</returns>
-        public static Dictionary<string, string> SignFiles(this IDigitalSignature signature, string[] filesToSign, SignAllFilesOptions options = null)
+        public static Dictionary<string, string> SignFiles(this IDigitalSignature signature, string[] filesToSign, SignAllFilesOptions options)
         {
             var actualFilesToSign = new Dictionary<string, string>();
 
