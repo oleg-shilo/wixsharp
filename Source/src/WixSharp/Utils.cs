@@ -137,7 +137,7 @@ namespace WixSharp
         /// <summary>
         /// Combines two path strings.
         /// <para>
-        /// It is a fix for unexpected behavior of System.IO.Path.Combine: Path.Combine(@"C:\Test", @"\Docs\readme.txt") return @"\Docs\readme.txt";
+        /// It is a fix for unexpected behavior of System.IO.Path.Combine: Path.Combine(@"C:\Test", @"\Docs\readme.txt") returning @"\Docs\readme.txt";
         /// </para>
         /// </summary>
         /// <param name="path1">The path1.</param>

@@ -12,6 +12,8 @@ class Script
 {
     static public void Main()
     {
+        // Debugger.Launch();
+
         // The sample will fail as wixsharp.pfx is not a real certificate
         // Uncomment last line of the code (`project.BuildMsi()`) if you want to run this sample
 

@@ -60,7 +60,6 @@ namespace WixSharp
         /// </summary>
         /// <param name="signature">The digital signature to apply. If <see langword="null"/>, no files are signed.</param>
         /// <param name="filesToSign">The file paths to consider for signing.</param>
-        /// options are used.</param>
         /// <returns>A mapping from each eligible file path to the path that was signed. Locked files may be isolated to a
         /// different path.</returns>
         public static Dictionary<string, string> SignFiles(this IDigitalSignature signature, params string[] filesToSign)
@@ -160,73 +159,30 @@ namespace WixSharp
         /// <param name="options">The options to configure the signing process.</param>
         internal static void SignAllFiles(Project project, SignAllFilesOptions options)
         {
-            // TODO: should be refactored to use SigningJob.SignFiles
-
             if (project.DigitalSignature == null)
                 return;
 
-            // Resolve wildcards
             project.ResolveWildCards(Compiler.AutoGeneration.IgnoreWildCardEmptyDirectories);
 
             var actualFilesToSign = new List<string>();
 
-            // Sign all files
-            foreach (var file in project.AllFiles)
+            var filesToSign = project.AllFiles
+                .Where(x => !x.Name.IsNullOrEmpty())
+                .Select(x => new
+                {
+                    File = x,
+                    OriginalPath = Utils.PathCombine(project.SourceBaseDir, x.Name)
+                });
+
+            var fileLocations = filesToSign.Select(x => x.OriginalPath).ToArray();
+
+            var result = project.DigitalSignature.SignFiles(fileLocations, options);
+
+            foreach (var item in filesToSign)
             {
-                try
-                {
-                    if (file.Name.IsNullOrEmpty())
-                        continue;
-
-                    var filePath = Utils.PathCombine(project.SourceBaseDir, file.Name);
-
-                    if (!IO.File.Exists(filePath))
-                        continue;
-
-                    // Skip if file is not supported
-                    var fileExt = Path.GetExtension(filePath).ToLower();
-                    var fileFormat = fileExt.TrimStart('.');
-
-                    if (!options.SupportedFileFormats.Any(x => x.IsOneOf(fileExt, fileFormat)))
-                        continue;
-
-                    // Skip if file is already signed
-                    if (options.SkipSignedFiles && VerifyFileSignature.IsSigned(filePath))
-                        continue;
-
-                    if (filePath.IsFileLocked())
-                    {
-                        var isolatedFile = Utils.IsolateFile(filePath);
-
-                        var newName = isolatedFile;
-                        if (!file.Name.IsAbsolutePath())
-                            newName = isolatedFile.MakeRelativeTo(project.SourceBaseDir.IsNotEmpty() ? project.SourceBaseDir : Environment.CurrentDirectory);
-
-                        Compiler.OutputWriteLine($"File {file.Name} is locked.");
-                        file.MapTo(newName);
-
-                        actualFilesToSign.Add(isolatedFile);
-                    }
-                    else
-                        actualFilesToSign.Add(filePath);
-                }
-                catch (Exception ex)
-                {
-                    options.ExceptionHandler?.Invoke(file.Name, ex);
-                }
-            }
-
-            if (actualFilesToSign.Any())
-            {
-                if (project.DigitalSignature is ISigningTool && WixSharp.Compiler.AutoGeneration.PreferBatchSigning)
-                {
-                    (project.DigitalSignature as ISigningTool).Sign(actualFilesToSign.ToArray());
-                }
-                else
-                {
-                    foreach (var file in actualFilesToSign)
-                        project.DigitalSignature.Apply(file);
-                }
+                if (result.ContainsKey(item.OriginalPath))                  // the file may not be signed (e.g. bc it's already signed)
+                    if (result[item.OriginalPath] != item.OriginalPath)     // was locked and had to be isolated, so needs to be remapped
+                        item.File.MapTo(result[item.OriginalPath]);
             }
         }
 
@@ -237,7 +193,7 @@ namespace WixSharp
         /// <param name="options">The options to configure the signing process.</param>
         internal static void SignApplicationAndPayloads(Bundle project, SignAllFilesOptions options = null)
         {
-            // TODO: should be refactored to use SigningJob.SignFiles
+            // TODO: should be refactored to use SigningJob.SignFiles similar to `void SignAllFiles(Project project, SignAllFilesOptions options)`
 
             if (project.DigitalSignature == null)
                 return;
