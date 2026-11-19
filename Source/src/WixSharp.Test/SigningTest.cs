@@ -185,8 +185,7 @@ namespace WixSharp.Test
                     new MsiPackage(productMsi) { DisplayInternalUI = true });
 
             bootstrapper.Application = new ManagedBootstrapperApplication("%this%"); // will become the BA payload
-
-            Compiler.SignAllFilesOptions.SignBundleAppPayloads = true;
+            bootstrapper.SignApplicationFiles = true;
             bootstrapper.DigitalSignature = new GenericSigner
             (
                 apply: x =>

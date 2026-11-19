@@ -104,7 +104,7 @@ public class BuildScript
         bundle.OutDir = System.Reflection.Assembly.GetExecutingAssembly().Location.PathGetDirName();
 
         // System.Diagnostics.Debugger.Launch();
-        Compiler.SignAllFilesOptions.SignBundleAppPayloads = true;
+        bundle.SignApplicationFiles = true;
 
         bundle.OutFileName = "my_setup";
         bundle.PreserveTempFiles = true;

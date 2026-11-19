@@ -41,11 +41,6 @@ namespace WixSharp
         public bool SignEmbeddedAssemblies { get; set; } = false;
 
         /// <summary>
-        /// Gets or sets whether bundle application payloads are signed.
-        /// </summary>
-        public bool SignBundleAppPayloads { get; set; } = false;
-
-        /// <summary>
         /// Determines the behavior when an exception occurs during the signing of a specific file.
         /// <para>For example, <see cref="ExceptionHandler"/> can be used to skip and continue the process in DEBUG mode
         /// when it is not critical that all files are signed successfully.</para>
@@ -235,7 +230,7 @@ namespace WixSharp
 
             options = options ?? Compiler.SignAllFilesOptions;
 
-            if (!options.SignBundleAppPayloads)
+            if (!project.SignApplicationFiles)
                 return;
 
             var actualFilesToSign = new List<string>();
