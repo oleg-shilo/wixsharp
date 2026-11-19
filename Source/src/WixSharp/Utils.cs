@@ -176,11 +176,13 @@ namespace WixSharp
             //1 - 'Uri.MakeRelativeUri' doesn't work without *.config file
             //2 - Substring doesn't work for paths containing ..\..\
 
+            var baseDirPath = referencePath.IsNotEmpty() ? referencePath : Environment.CurrentDirectory;
+
             char dirSeparator = IO.Path.DirectorySeparatorChar;
             string[] split(string path) => IO.Path.GetFullPath(path).Trim(dirSeparator).Split(dirSeparator);
 
             string[] absParts = split(filePath);
-            string[] relParts = split(referencePath);
+            string[] relParts = split(baseDirPath);
 
             int commonElementsLength = 0;
             do
