@@ -276,14 +276,6 @@ namespace WixSharp.Test
                 SourceFile = "src.file"
             };
 
-            // will check that the obsolete `RemotePayloads` is still channeling the payloads to the XML
-#pragma warning disable CS0618 // Type or member is obsolete
-            edgeWebView2.RemotePayloads = new Bootstrapper.RemotePayload[]
-                {
-                    new MsuPackagePayload{ SourceFile = "MsuPackagePayload.file", Size = 333 }
-                };
-#pragma warning restore CS0618 // Type or member is obsolete
-
             edgeWebView2.Payloads = new Bootstrapper.Payload[]
             {
                 edgeWebView2Payload,

@@ -304,8 +304,11 @@ namespace WixSharp.Bootstrapper
                 }
             }
 
+
             //important to call AutoGenerateSources after PrimaryPackageId is set
             Application.AutoGenerateSources(this.OutDir);
+
+            SigningJob.SignApplicationAndPayloads(this);
 
             root.Add(Application.ToXml());
 

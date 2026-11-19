@@ -355,7 +355,7 @@ namespace WixSharp.Bootstrapper
         /// If set to "true", WixStdBA will show a page allowing the user to restart applications when files are in use.
         /// </summary>
         [Xml]
-        [Obsolete("Note supported by WiX schema")]
+        [Obsolete("Not supported by WiX schema")]
         public bool? ShowFilesInUse;
 
         /// <summary>
@@ -655,7 +655,11 @@ namespace WixSharp.Bootstrapper
         /// Location of the source file.
         /// </summary>
         [Xml]
-        public string SourceFile;
+        public string SourceFile
+        {
+            get => mappedSource ?? source;
+            set => source = value;
+        }
 
         /// <summary>
         /// By default, a Bundle will use a package's Authenticode signature to verify the contents.
@@ -676,6 +680,19 @@ namespace WixSharp.Bootstrapper
         /// The flag to indicate that the payload contains the assembly file implementing bootstrapper application.
         /// </summary>
         public bool IsBootstrapperAppAssembly;
+
+        string source;
+        string mappedSource = null;
+        /// <summary>
+        /// Maps to alternative path. It is required for scenarios like signing, which cannot be performed if the file is locked.
+        /// </summary>
+        /// <param name="mappedSource">Name of the mapped file.</param>
+        /// <returns></returns>
+        internal new string MapTo(string mappedSource)
+        {
+            Compiler.OutputWriteLine($"Remapping Payload {Name} to {mappedSource}.");
+            return this.mappedSource = mappedSource;
+        }
     }
 
     /// <summary>

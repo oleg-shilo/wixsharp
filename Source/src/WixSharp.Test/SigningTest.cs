@@ -19,6 +19,32 @@ namespace WixSharp.Test
     public class SigningTest
     {
         [Fact]
+        public void File_signing_orchestration()
+        {
+            var fileToSign = "custom_BA.unsigned.dll".PathGetFullPath();
+            System.IO.File.Copy(System.Reflection.Assembly.GetExecutingAssembly().Location, fileToSign, true);
+
+            // expected isolated file: <original_dir>/.wixsharp/<original_file>
+            string getParentDirName(string x) => x.PathGetDirName().PathGetFileName();
+
+            var digitalSignature = new GenericSigner(apply: x => 0 /* simulate successful signing */ );
+
+            // -------------------------------------
+
+            using (var file = System.IO.File.OpenRead(fileToSign)) // lock the file
+            {
+                var signedFiles = digitalSignature.SignFiles(new[] { fileToSign });
+
+                // -------------------------------------
+
+                Assert.NotEmpty(signedFiles);
+                Assert.Equal(1, signedFiles.Count);
+                Assert.Equal(fileToSign, signedFiles.Keys.First());
+                Assert.Equal(".wixsharp", getParentDirName(signedFiles[fileToSign]));
+            }
+        }
+
+        [Fact]
         [Description("Issue #1957 (point #5)")] // see: https://github.com/oleg-shilo/wixsharp/issues/1957
         public void Custom_signing_return_code()
         {
@@ -139,6 +165,43 @@ namespace WixSharp.Test
             Assert.Contains("WixSharp.dll", signedFiles);
             Assert.Contains("WixSharp.CA.dll", signedFiles);
             Assert.Contains("MyProduct.msi", signedFiles);
+        }
+
+        [Fact]
+        [Description("Issue #1957 (point #3)")] // see: https://github.com/oleg-shilo/wixsharp/issues/1957
+        public void Signing_bundle_payloads()
+        {
+            var signedFiles = new List<string>();
+
+            var project = new Project("MyProduct",
+                          new Dir(@"%ProgramFiles%\My Company\My Product",
+                              new File(this.GetType().Assembly.Location)));
+            var productMsi = project.BuildMsi();
+
+            // ---------------------
+
+            var bootstrapper =
+                    new Bundle("MyProduct-signed",
+                    new MsiPackage(productMsi) { DisplayInternalUI = true });
+
+            bootstrapper.Application = new ManagedBootstrapperApplication("%this%"); // will become the BA payload
+
+            Compiler.SignAllFilesOptions.SignBundleAppPayloads = true;
+            bootstrapper.DigitalSignature = new GenericSigner
+            (
+                apply: x =>
+                {
+                    signedFiles.Add(x.PathGetFileName());
+                    return 0;
+                }
+            );
+
+            bootstrapper.Build("MyProduct-signed.exe");
+
+            // ---------------------
+
+            Assert.Contains("WixSharp.Test.dll", signedFiles);     // custom BA, which is this executing assembly 
+            Assert.Contains("MyProduct-signed.exe", signedFiles);  // the bundle executable
         }
 
         [Fact]

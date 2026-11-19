@@ -386,7 +386,7 @@ namespace WixSharp.Bootstrapper
         ///              ...
         /// </code>
         /// </example>
-        [Obsolete("Use `Payloads` instead.")]
+        [Obsolete("Use `Payloads` instead.", error: true)]
         public RemotePayload[] RemotePayloads = new RemotePayload[0];
 
         /// <summary>
@@ -406,9 +406,6 @@ namespace WixSharp.Bootstrapper
                 .Add(this.MapToXmlAttributes());
 
             root.AddPayloads(this.Payloads);
-#pragma warning disable CS0618 // Type or member is obsolete
-            root.AddPayloads(this.RemotePayloads);
-#pragma warning restore CS0618 // Type or member is obsolete
 
             foreach (var exitCode in ExitCodes)
             {

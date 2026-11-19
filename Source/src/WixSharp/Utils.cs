@@ -127,6 +127,7 @@ namespace WixSharp
 
             if (!isolatedAssemblyFile.IsUpToDateCopyOf(file))
             {
+                isolatedAssemblyFile.PathGetDirName().EnsureDirExists();
                 IO.File.Copy(file, isolatedAssemblyFile, true);
             }
 

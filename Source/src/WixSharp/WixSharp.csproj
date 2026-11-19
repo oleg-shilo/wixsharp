@@ -179,7 +179,7 @@
     <Compile Include="ResilientPackage.cs" />
     <Compile Include="ServiceConfig.cs" />
     <Compile Include="ServiceConfigUtil.cs" />
-    <Compile Include="ProjectFileSigner.cs" />
+    <Compile Include="SigningJob.cs" />
     <Compile Include="SvcEvent.cs" />
     <Compile Include="ServiceDependency.cs" />
     <Compile Include="SharedExtensions.cs" />

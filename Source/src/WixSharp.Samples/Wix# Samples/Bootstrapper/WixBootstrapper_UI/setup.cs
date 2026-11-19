@@ -1,18 +1,16 @@
 using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using WixSharp;
 using WixSharp.Bootstrapper;
 using WixSharp.CommonTasks;
-using static WixSharp.CommonTasks.AppSearch;
 using WixToolset.Dtf.WindowsInstaller;
-using io = System.IO;
 
 public class Program
 {
     static public void Main(string[] args)
     {
+
         if (Environment.GetEnvironmentVariable("IDE") == null)
         {
             BAHost.Run(args); // run as a bundle application
@@ -104,7 +102,9 @@ public class BuildScript
         }
 
         bundle.OutDir = System.Reflection.Assembly.GetExecutingAssembly().Location.PathGetDirName();
+
         // System.Diagnostics.Debugger.Launch();
+        Compiler.SignAllFilesOptions.SignBundleAppPayloads = true;
 
         bundle.OutFileName = "my_setup";
         bundle.PreserveTempFiles = true;
