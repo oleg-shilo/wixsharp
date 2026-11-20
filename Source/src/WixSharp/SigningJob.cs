@@ -126,12 +126,12 @@ namespace WixSharp
             {
                 if (signature is ISigningTool tool && WixSharp.Compiler.AutoGeneration.PreferBatchSigning)
                 {
-                    tool.Sign(actualFilesToSign.Values.ToArray());
+                    tool.SignAndCheck(actualFilesToSign.Values.ToArray());
                 }
                 else
                 {
                     foreach (var file in actualFilesToSign.Values)
-                        signature.Apply(file);
+                        signature.ApplyAndCheck(file);
                 }
             }
 
