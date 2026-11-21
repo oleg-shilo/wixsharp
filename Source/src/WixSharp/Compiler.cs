@@ -3438,7 +3438,7 @@ namespace WixSharp
                 {
                     if (signing is ISigningTool && WixSharp.Compiler.AutoGeneration.PreferBatchSigning)
                     {
-                        (signing as ISigningTool).Sign(actualFilesToSign.ToArray());
+                        (signing as ISigningTool).SignAndCheck(actualFilesToSign.ToArray());
                     }
                     else
                     {
@@ -3519,7 +3519,7 @@ namespace WixSharp
                 {
                     if (signing is ISigningTool && WixSharp.Compiler.AutoGeneration.PreferBatchSigning)
                     {
-                        (signing as ISigningTool).Sign(new[] { outDll });
+                        (signing as ISigningTool).SignAndCheck(new[] { outDll });
                     }
                     else
                     {
