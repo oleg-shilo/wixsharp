@@ -10,6 +10,7 @@ public class Program
 {
     static public void Main(string[] args)
     {
+        // WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.2");
 
         if (Environment.GetEnvironmentVariable("IDE") == null)
         {
@@ -86,7 +87,8 @@ public class BuildScript
 
         bundle.Version = new Version("1.0.0.0");
         bundle.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
-        bundle.Application = new ManagedBootstrapperApplication("%this%");
+        // bundle.Application = new ManagedBootstrapperApplication("%this%");
+        bundle.Application = new ManagedBootstrapperApplication(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
         bundle.DigitalSignature = new DigitalSignature
         {

@@ -215,13 +215,18 @@ namespace WixSharp.Bootstrapper
             else
                 root.AddElement(WixExtension.Bal.ToXName("WixManagedBootstrapperApplicationHost"));
 
-            var files = new List<Payload>
-            {
-                rawAppAssembly.ToPayload(),
-                bootstrapperCoreConfig.ToPayload("WixToolset.Mba.Host.config")
-            };
+            var files = new List<Payload>();
 
-            files.AddRange(this.Payloads.DistinctBy(x => x.SourceFile)); //note %this% it already resolved at this stage into an absolute path
+            if (rawAppAssembly.IsIsolateAsmNameOf(this.Payloads.FirstOrDefault()?.SourceFile) == false &&
+                this.Payloads.FirstOrDefault()?.SourceFile.IsIsolateAsmNameOf(rawAppAssembly) == false)
+            {
+                rawAppAssembly.ToPayload();
+            }
+
+            files.Add(bootstrapperCoreConfig.ToPayload("WixToolset.Mba.Host.config"));
+            files.AddRange(this.Payloads);
+
+            files = files.DistinctBy(x => x.SourceFile).ToList(); //note %this% it already resolved at this stage into an absolute path
 
             foreach (var item in frameworkAssemblies)
             {

@@ -93,6 +93,19 @@ namespace WixSharp
             }
         }
 
+        internal static bool IsIsolateAsmNameOf(this string path, string sourceFile)
+          => GetIsolateAsmName(path) == sourceFile;
+        internal static string GetIsolateAsmName(this string file)
+        {
+            if (file == null)
+                return file;
+
+            var originalFile = Utils.OriginalAssemblyFile(file);
+            var originalName = originalFile.PathGetFileNameWithoutExtension(); // assembly name
+
+            var isolatedAssemblyFile = originalFile.PathChangeDirectory(WixsharpBuildDir);
+            return isolatedAssemblyFile;
+        }
         internal static string IsolateAsm(this string file)
         {
             // restore the original assembly name as tools like MakeSfxCA do not like renamed assemblies
