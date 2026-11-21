@@ -167,9 +167,11 @@ namespace WixSharp.Test
             Assert.Contains("MyProduct.msi", signedFiles);
         }
 
-        [Fact]
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         [Description("Issue #1957 (point #3)")] // see: https://github.com/oleg-shilo/wixsharp/issues/1957
-        public void Signing_bundle_payloads()
+        public void Signing_bundle_payloads(bool explicitBaAssemblyPath)
         {
             var signedFiles = new List<string>();
 
@@ -185,7 +187,12 @@ namespace WixSharp.Test
                     new MsiPackage(productMsi) { DisplayInternalUI = true });
 
             bootstrapper.Version = new Version("1.0.0.0");
-            bootstrapper.Application = new ManagedBootstrapperApplication("%this%"); // will become the BA payload
+            // the ManagedBootstrapperApplication constructor path will become the BA payload
+            if (explicitBaAssemblyPath)
+                bootstrapper.Application = new ManagedBootstrapperApplication(System.Reflection.Assembly.GetExecutingAssembly().Location); // will become the BA payload
+            else
+                bootstrapper.Application = new ManagedBootstrapperApplication("%this%");
+
             bootstrapper.SignApplicationFiles = true;
             bootstrapper.DigitalSignature = new GenericSigner
             (
