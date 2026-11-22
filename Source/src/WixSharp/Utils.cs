@@ -93,7 +93,7 @@ namespace WixSharp
             }
         }
 
-        internal static bool IsIsolateAsmNameOf(this string path, string sourceFile)
+        internal static bool IsIsolatedAsmNameOf(this string path, string sourceFile)
           => GetIsolateAsmName(path) == sourceFile;
         internal static string GetIsolateAsmName(this string file)
         {

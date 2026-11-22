@@ -217,8 +217,8 @@ namespace WixSharp.Bootstrapper
 
             var files = new List<Payload>();
 
-            if (rawAppAssembly.IsIsolateAsmNameOf(this.Payloads.FirstOrDefault()?.SourceFile) == false &&
-                this.Payloads.FirstOrDefault()?.SourceFile.IsIsolateAsmNameOf(rawAppAssembly) == false)
+            if (rawAppAssembly.IsIsolatedAsmNameOf(this.Payloads.FirstOrDefault()?.SourceFile) == false &&
+                this.Payloads.FirstOrDefault()?.SourceFile.IsIsolatedAsmNameOf(rawAppAssembly) == false)
             {
                 rawAppAssembly.ToPayload();
             }
