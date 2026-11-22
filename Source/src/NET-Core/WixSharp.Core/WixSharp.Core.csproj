@@ -192,7 +192,7 @@
         <Compile Include="..\..\WixSharp\Utilities\WixBinLocator.cs" Link="Utilities\WixBinLocator.cs" />
         <Compile Include="..\..\WixSharp\Utilities\VerifyFileSignature.cs" Link="Utilities\VerifyFileSignature.cs" />
         <Compile Include="..\..\WixSharp\Utils.cs" Link="Utils.cs" />
-        <Compile Include="..\..\WixSharp\ProjectFileSigner.cs" Link="ProjectFileSigner.cs" />
+        <Compile Include="..\..\WixSharp\SigningJob.cs" Link="SigningJob.cs" />
         <Compile Include="..\..\WixSharp\VersionRange.cs" Link="VersionRange.cs" />
         <Compile Include="..\..\WixSharp\WebSite.cs" Link="WebSite.cs" />
         <Compile Include="..\..\WixSharp\WixEntity.cs" Link="WixEntity.cs" />
