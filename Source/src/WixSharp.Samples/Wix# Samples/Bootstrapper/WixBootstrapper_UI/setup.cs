@@ -87,11 +87,12 @@ public class BuildScript
 
         bundle.Version = new Version("1.0.0.0");
         bundle.UpgradeCode = new Guid("6f330b47-2577-43ad-9095-1861bb25889b");
+
         // bundle.Application = new ManagedBootstrapperApplication("%this%");
+        // or
         bundle.Application = new ManagedBootstrapperApplication(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-        bundle.DigitalSignature = new DigitalSignatureBootstrapper   // was: new DigitalSignature
-        // bundle.DigitalSignature = new DigitalSignature
+        bundle.DigitalSignature = new DigitalSignatureBootstrapper
         {
             PfxFilePath = certificateFile,
             Password = "password123",
@@ -106,7 +107,7 @@ public class BuildScript
 
         bundle.OutDir = System.Reflection.Assembly.GetExecutingAssembly().Location.PathGetDirName();
 
-        System.Diagnostics.Debugger.Launch();
+        // System.Diagnostics.Debugger.Launch();
         bundle.SignApplicationFiles = true;
 
         bundle.OutFileName = "my_setup";

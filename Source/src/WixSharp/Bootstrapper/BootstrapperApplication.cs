@@ -220,7 +220,7 @@ namespace WixSharp.Bootstrapper
             if (rawAppAssembly.IsIsolatedAsmNameOf(this.Payloads.FirstOrDefault()?.SourceFile) == false &&
                 this.Payloads.FirstOrDefault()?.SourceFile.IsIsolatedAsmNameOf(rawAppAssembly) == false)
             {
-                rawAppAssembly.ToPayload();
+                files.Add(rawAppAssembly.ToPayload());
             }
 
             files.Add(bootstrapperCoreConfig.ToPayload("WixToolset.Mba.Host.config"));
