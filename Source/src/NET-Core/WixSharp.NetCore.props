@@ -1,13 +1,10 @@
 <Project>
 
     <PropertyGroup>
-        <!-- Shared framework policy for the NET-Core library projects.
-             Normal builds keep the stock net8.0-windows default. A headless
-             build keeps the full authoring API compiled (WinForms UI types
-             included) without the WinForms SDK payload, delegates compilation
-             to wix.exe, and leaves the target framework to the caller: pass
-             TargetFramework and TargetFrameworks on the command line. -->
-        <TargetFramework Condition="'$(TargetFramework)' == '' and '$(WixSharpHeadless)' != 'true'">net8.0-windows</TargetFramework>
+        <!-- Both modes share the stock Windows target unless the consumer supplies one.
+             Headless builds keep the desktop API references for compilation
+             while skipping WinForms SDK integration. -->
+        <TargetFramework Condition="'$(TargetFramework)' == ''">net8.0-windows</TargetFramework>
         <UseWindowsForms Condition="'$(UseWindowsForms)' == '' and '$(WixSharpHeadless)' != 'true'">true</UseWindowsForms>
         <EnableWindowsTargeting>true</EnableWindowsTargeting>
     </PropertyGroup>
