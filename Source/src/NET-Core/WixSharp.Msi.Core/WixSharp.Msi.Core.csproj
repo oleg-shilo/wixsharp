@@ -13,10 +13,10 @@
     <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">-->
     <PropertyGroup>
         <DefineConstants>$(DefineConstants);CSS_PROJECT;WIXSHARP_MSI</DefineConstants>
-        <!-- Sign only when the strong-name key is present; it is not part
-             of the repository, so source builds skip signing. -->
+        <!-- Headless source builds may omit the strong-name key.
+             Ordinary builds require it as usual. -->
         <AssemblyOriginatorKeyFile>..\..\WixSharp.Msi\WixSharp.Msi\WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
-        <SignAssembly Condition="Exists('$(AssemblyOriginatorKeyFile)')">True</SignAssembly>
+        <SignAssembly Condition="'$(WixSharpHeadless)' != 'true' Or Exists('$(AssemblyOriginatorKeyFile)')">True</SignAssembly>
         <GeneratePackageOnBuild Condition="'$(WixSharpHeadless)' != 'true'">True</GeneratePackageOnBuild>
         <IncludeSymbols>True</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
