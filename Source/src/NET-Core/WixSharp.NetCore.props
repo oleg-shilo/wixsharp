@@ -1,0 +1,16 @@
+<Project>
+
+    <PropertyGroup>
+        <!-- Both modes share the stock Windows target unless the consumer supplies one.
+             Headless builds keep the desktop API references for compilation
+             while skipping WinForms SDK integration. -->
+        <TargetFramework Condition="'$(TargetFramework)' == ''">net8.0-windows</TargetFramework>
+        <UseWindowsForms Condition="'$(UseWindowsForms)' == '' and '$(WixSharpHeadless)' != 'true'">true</UseWindowsForms>
+        <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(WixSharpHeadless)' == 'true'">
+        <FrameworkReference Include="Microsoft.WindowsDesktop.App" />
+    </ItemGroup>
+
+</Project>

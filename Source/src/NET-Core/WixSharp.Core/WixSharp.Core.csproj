@@ -1,16 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+    <Import Project="..\WixSharp.NetCore.props" />
+
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net8.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UseWindowsForms>true</UseWindowsForms>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <!--<PublishAot>true</PublishAot>-->
         <RootNamespace>WixSharp</RootNamespace>
-        <SignAssembly>True</SignAssembly>
+        <!-- Headless source builds may omit the strong-name key.
+             Ordinary builds require it as usual. -->
         <AssemblyOriginatorKeyFile>..\..\WixSharp\WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
-        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <SignAssembly Condition="'$(WixSharpHeadless)' != 'true' Or Exists('$(AssemblyOriginatorKeyFile)')">True</SignAssembly>
+        <GeneratePackageOnBuild Condition="'$(WixSharpHeadless)' != 'true'">True</GeneratePackageOnBuild>
         <IncludeSymbols>True</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <FileVersion>2.2.0</FileVersion>
@@ -41,6 +43,12 @@
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <DefineConstants>$(DefineConstants); CSS_PROJECT; NETCORE;</DefineConstants>
         <NoWarn>1701;1702; CA1416; CS0108</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(WixSharpHeadless)' == 'true'">
+        <!-- The WinForms analyzers flag intentional DSL property and getter
+             construction used by the authoring model -->
+        <NoWarn>$(NoWarn);WFO1000;WFO2000</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
