@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+    <Import Project="..\WixSharp.NetCore.props" />
+
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net8.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UseWindowsForms>true</UseWindowsForms>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <!--<PublishAot>true</PublishAot>-->
         <NoWarn>$(NoWarn);SYSLIB0003</NoWarn>
@@ -13,9 +13,11 @@
     <!--<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">-->
     <PropertyGroup>
         <DefineConstants>$(DefineConstants);CSS_PROJECT;WIXSHARP_MSI</DefineConstants>
-        <SignAssembly>True</SignAssembly>
+        <!-- Sign only when the strong-name key is present; it is not part
+             of the repository, so source builds skip signing. -->
         <AssemblyOriginatorKeyFile>..\..\WixSharp.Msi\WixSharp.Msi\WixSharpStrongName.snk</AssemblyOriginatorKeyFile>
-        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <SignAssembly Condition="Exists('$(AssemblyOriginatorKeyFile)')">True</SignAssembly>
+        <GeneratePackageOnBuild Condition="'$(WixSharpHeadless)' != 'true'">True</GeneratePackageOnBuild>
         <IncludeSymbols>True</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
