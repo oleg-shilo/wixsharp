@@ -43,6 +43,7 @@ using WixSharp.Bootstrapper;
 using WixSharp.Controls;
 using WixSharp.Nsis;
 using WixSharp.UI;
+using WixSharp.Utilities;
 using WixToolset.Dtf.WindowsInstaller;
 
 using IO = System.IO;
@@ -745,6 +746,11 @@ namespace WixSharp.CommonTasks
                 if (!IO.File.Exists(enginePath))
                     throw new Exception($"The supposedly detached engine file appears to be missing. Expected location: '{enginePath}'");
 
+                // This is a right verification to do though it seems like detaching always strips the signing info.
+                // still keeping this routine in case if WiX changed detach implementation in future.
+                if (VerifyFileSignature.IsSigned(enginePath))
+                    return 0; // already signed, nothing to do;
+
                 // Then sign the detached engine
                 int retval = DigitallySign(enginePath, pfxFile, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
                 if (retval != 0)
@@ -753,6 +759,7 @@ namespace WixSharp.CommonTasks
                 // Finally reattach the signed engine to the bundle
                 Compiler.Run(WixTools.wix, "burn reattach \"{0}\" -engine \"{1}\" -o \"{0}\"".FormatWith(bootstrapperFileToSign, enginePath));
 
+                bootstrapperFileToSign.WaitUntilFileUnlocked(); // antivirus may lock the file for a while after engine reattachment
                 return 0;
             }
             finally
