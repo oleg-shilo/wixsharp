@@ -1181,6 +1181,87 @@ namespace WixSharp
         }
 
         /// <summary>
+        /// Determines whether a file has the structure of a WiX Burn bundle.
+        /// </summary>
+        /// <param name="file">Path to the file to inspect.</param>
+        /// <returns><c>true</c> for a recognized Burn bundle; otherwise, <c>false</c>.</returns>
+        /// <remarks>
+        /// Recognizes Burn section format version 2. This does not verify the bundle's signature,
+        /// contents, or ability to run. File access errors are propagated to the caller.
+        /// </remarks>
+        public static bool IsBootstrapperFile(this string file)
+        {
+            using (var stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read | FileShare.Delete))
+            using (var reader = new BinaryReader(stream))
+            {
+                try
+                {
+                    if (stream.Length < 64 || reader.ReadUInt16() != 0x5A4D)
+                        return false;
+
+                    stream.Position = 60;
+                    uint peOffset = reader.ReadUInt32();
+                    if (peOffset < 64 || peOffset > stream.Length - 24)
+                        return false;
+
+                    stream.Position = peOffset;
+                    if (reader.ReadUInt32() != 0x00004550)
+                        return false;
+
+                    stream.Position = peOffset + 6;
+                    ushort sectionCount = reader.ReadUInt16();
+                    stream.Position = peOffset + 20;
+                    ushort optionalSize = reader.ReadUInt16();
+                    ushort characteristics = reader.ReadUInt16();
+                    if (sectionCount == 0 || optionalSize < 2 || (characteristics & 0x0002) == 0 || (characteristics & 0x2000) != 0)
+                        return false;
+
+                    long sectionTable = (long)peOffset + 24 + optionalSize;
+                    long sectionTableEnd = sectionTable + (long)sectionCount * 40;
+                    if (sectionTableEnd > stream.Length)
+                        return false;
+
+                    ushort optionalMagic = reader.ReadUInt16();
+                    if (optionalMagic != 0x10B && optionalMagic != 0x20B)
+                        return false;
+
+                    for (int i = 0; i < sectionCount; i++)
+                    {
+                        stream.Position = sectionTable + i * 40L;
+                        if (reader.ReadUInt64() != 0x6E7275627869772EUL) // .wixburn
+                            continue;
+
+                        stream.Position += 8;
+                        uint rawSize = reader.ReadUInt32();
+                        uint rawOffset = reader.ReadUInt32();
+                        if (rawSize < 52 || rawOffset < sectionTableEnd || (long)rawOffset + rawSize > stream.Length)
+                            return false;
+
+                        stream.Position = rawOffset;
+                        if (reader.ReadUInt32() != 0x00F14300 || reader.ReadUInt32() != 2)
+                            return false;
+
+                        stream.Position = (long)rawOffset + 24;
+                        uint stubSize = reader.ReadUInt32();
+                        stream.Position = (long)rawOffset + 40;
+                        uint format = reader.ReadUInt32();
+                        uint containerCount = reader.ReadUInt32();
+                        uint uxSize = reader.ReadUInt32();
+                        return format == 1 && containerCount > 0 && containerCount <= (rawSize - 48) / 4 &&
+                               (long)stubSize >= (long)rawOffset + rawSize && uxSize > 0 &&
+                               (long)stubSize + uxSize <= stream.Length;
+                    }
+
+                    return false;
+                }
+                catch (EndOfStreamException)
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
         /// Determines whether is the specified file locked or not.
         /// </summary>
         /// <param name="filePath">The file path.</param>

@@ -138,18 +138,28 @@ namespace WixSharp
             return actualFilesToSign;
         }
 
+        internal static void CheckSigningResult(this int result, params string[] filesToSign)
+        {
+            if (result != 0)
+            {
+                var message = $"Signing at least one of the signable files failed. Return code: {result}. Check the output for errors.";
+                if (filesToSign.Count() == 1)
+                    message = $"Signing the file '{filesToSign.FirstOrDefault()}' failed. Return code: {result}.";
+
+                throw new InvalidOperationException(message);
+            }
+        }
+
         internal static void ApplyAndCheck(this IDigitalSignature signature, string fileToSign)
         {
             var result = signature?.Apply(fileToSign);
-            if (result.HasValue && result != 0)
-                throw new InvalidOperationException($"Signing the file '{fileToSign}' failed. Return code: {result.Value}");
+            result?.CheckSigningResult(fileToSign);
         }
 
         internal static void SignAndCheck(this ISigningTool tool, string[] filesToSign)
         {
             var result = tool?.Sign(filesToSign);
-            if (result.HasValue && result != 0)
-                throw new InvalidOperationException($"Signing at least one of the signable files failed. Return code: {result.Value}. Check the output for errors.");
+            result?.CheckSigningResult(filesToSign);
         }
 
         /// <summary>

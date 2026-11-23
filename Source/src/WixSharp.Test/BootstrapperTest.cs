@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using WixSharp.Bootstrapper;
@@ -9,6 +10,112 @@ namespace WixSharp.Test
 {
     public class BootstrapperTest
     {
+        [Fact]
+        public void IsBootstrapperFile_RecognizesBurnBundleStructure()
+        {
+            var bundle = CreateBurnBundle();
+            Assert.True(IsBootstrapperFile(bundle));
+
+            // PE32+ uses the same section table layout.
+            bundle[0x98] = 0x0B;
+            bundle[0x99] = 0x02;
+            Assert.True(IsBootstrapperFile(bundle));
+        }
+
+        [Fact]
+        public void IsBootstrapperFile_RejectsOtherAndMalformedFiles()
+        {
+            Assert.False(IsBootstrapperFile(new byte[0]));
+            Assert.False(IsBootstrapperFile(System.Text.Encoding.ASCII.GetBytes(".wixburn")));
+            Assert.False(typeof(BootstrapperTest).Assembly.Location.IsBootstrapperFile());
+
+            var mutations = new Action<byte[]>[]
+            {
+                bytes => bytes[0] = 0,                  // DOS signature
+                bytes => bytes[0x80] = 0,               // PE signature
+                bytes => bytes[0x99] = 3,               // optional header magic
+                bytes => bytes[0x96] |= 0x20,           // DLL characteristic
+                bytes => bytes[0x178] = 0,              // section name
+                bytes => bytes[0x200] = 0,              // Burn magic
+                bytes => bytes[0x204] = 3,              // unsupported version
+                bytes => bytes[0x219] = 0,              // uninitialized stub size
+                bytes => bytes[0x228] = 0,              // container format
+                bytes => bytes[0x22C] = 0,              // uninitialized container count
+                bytes => bytes[0x22C] = 255,            // container count outside section
+                bytes => bytes[0x230] = 0,              // empty UX container
+                bytes => bytes[0x230] = 255,            // truncated UX container
+                bytes => bytes[0x18C] = 0xFF            // section data offset outside file
+            };
+
+            foreach (var mutate in mutations)
+            {
+                var bytes = CreateBurnBundle();
+                mutate(bytes);
+                Assert.False(IsBootstrapperFile(bytes));
+            }
+
+            var bundle = CreateBurnBundle();
+            Assert.False(IsBootstrapperFile(bundle.Take(63).ToArray()));
+            Assert.False(IsBootstrapperFile(bundle.Take(0x190).ToArray()));
+            Assert.False(IsBootstrapperFile(bundle.Take(0x210).ToArray()));
+            Assert.False(IsBootstrapperFile(bundle.Take(0x400).ToArray()));
+        }
+
+        [Fact]
+        public void IsBootstrapperFile_PropagatesFileAccessErrors()
+        {
+            var missing = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            Assert.Throws<FileNotFoundException>(() => missing.IsBootstrapperFile());
+        }
+
+        private static bool IsBootstrapperFile(byte[] bytes)
+        {
+            string path = Path.GetTempFileName();
+            try
+            {
+                System.IO.File.WriteAllBytes(path, bytes);
+                return path.IsBootstrapperFile();
+            }
+            finally
+            {
+                System.IO.File.Delete(path);
+            }
+        }
+
+        private static byte[] CreateBurnBundle()
+        {
+            using (var stream = new MemoryStream(new byte[0x410]))
+            using (var writer = new BinaryWriter(stream))
+            {
+                writer.Write((ushort)0x5A4D);
+                stream.Position = 0x3C;
+                writer.Write(0x80U);
+                stream.Position = 0x80;
+                writer.Write(0x00004550U);
+                writer.Write((ushort)0x14C);
+                writer.Write((ushort)1);
+                stream.Position = 0x94;
+                writer.Write((ushort)0xE0);
+                writer.Write((ushort)2);
+                writer.Write((ushort)0x10B);
+                stream.Position = 0x178;
+                writer.Write(System.Text.Encoding.ASCII.GetBytes(".wixburn"));
+                stream.Position = 0x188;
+                writer.Write(0x200U);
+                writer.Write(0x200U);
+                stream.Position = 0x200;
+                writer.Write(0x00F14300U);
+                writer.Write(2U);
+                stream.Position = 0x218;
+                writer.Write(0x400U);
+                stream.Position = 0x228;
+                writer.Write(1U);
+                writer.Write(1U);
+                writer.Write(16U);
+                return stream.ToArray();
+            }
+        }
+
         [Fact]
         public void Should_Process_XmlAttribute()
         {
