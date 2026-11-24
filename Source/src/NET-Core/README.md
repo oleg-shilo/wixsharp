@@ -16,6 +16,37 @@ This is a .NET Core release that is currently under reliability testing. For the
 
 ## How to use
 
+### Generate WiX source on Linux
+
+Linux CI can use WixSharp to generate WiX source and then compile it with WiX
+under Wine to produce Windows installers. From the repository root, build the
+.NET Core libraries with the headless option.
+
+```sh
+dotnet build Source/src/NET-Core/WixSharp.Core/WixSharp.Core.csproj \
+  -c Release -p:WixSharpHeadless=true
+```
+
+`WixSharpHeadless=true` is an opt-in MSBuild property for building the WixSharp
+libraries. It skips WinForms SDK integration and NuGet packaging. Each library
+is signed when its strong-name key is present and builds unsigned otherwise.
+
+The command builds `WixSharp.Core.dll` and `WixSharp.Msi.Core.dll` in each
+project's `bin/Release/net8.0-windows/` directory by default.
+
+The Windows target lets the libraries compile against the desktop API references.
+
+Reference the DLLs as files in a console app targeting plain .NET and include
+the dependency packages listed in the library projects. Have the app call
+`Compiler.BuildWxs(project)` to generate the `.wxs` file, then run the app with
+`dotnet run` on Linux. The authoring code must avoid WinForms and other
+Windows-only APIs.
+
+Compile the generated `.wxs` with WiX under Wine to produce a Windows MSI.
+The wiki has a
+[legacy Wine walkthrough](https://github.com/oleg-shilo/wixsharp/wiki/WixSharp-on-Linux)
+for the older WiX toolchain.
+
 ### Create project
 
 _Note, when .NET-Core packages are fully released they will come along with the Visual; Studio project templates as .NET-Framework packages do currently. But until it happens you will need to create your project manually or use this [sample](https://github.com/oleg-shilo/wixsharp/blob/wix-v4-master/Source/src/NET-Core/Sample/Program.cs) as a starting point.'_

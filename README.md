@@ -36,6 +36,8 @@ If you use the WiX4+ stream, you need to install .NET SDK (not .NET Framework SD
 
 If you are planning to use WixSharp on Linux, you may find this [article](https://github.com/oleg-shilo/wixsharp/wiki/WixSharp-on-Linux) useful. Please note that WixSharp builds MSI deployment packages and while MSI can be built on Linux it cannot be run on Linux as MSI is a pure Windows technology.   
 
+For .NET Core builds, see [Generate WiX source on Linux](Source/src/NET-Core/README.md#generate-wix-source-on-linux).
+
 Please note that WixSharp NuGet packages (for both WiX3 and WiX4) are targeting .NET Framework only. This is because WiX does not support integration with any other .NET flavours, only .NET Framework. However, WixSharp provides an experimental .NET Core bridge with AOT-compiled CustomActions.
 
 You can find the instructions on how to author MSI setups with WixSharp in the [Documentation](https://github.com/oleg-shilo/wixsharp/wiki) section. And this section only highlights 
