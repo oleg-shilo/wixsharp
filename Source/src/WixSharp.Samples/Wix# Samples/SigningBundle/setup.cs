@@ -18,20 +18,11 @@ static class Script
         // The sample is likely to fail as TempTestCert.pfx is not a term certificate that may expire.
         // If it is the case, either use a proper certificate or regenerate a temporary by executing create-temp-certificates.ps1.
 
-        // System.Diagnostics.Debugger.Launch();
-
         var genericFileSigning = new DigitalSignature
         {
             PfxFilePath = "TempTestCert.pfx",
             Password = "password123",
             Description = "MyProductMsi",
-        };
-
-        var bundleFileSigning = new DigitalSignatureBootstrapper
-        {
-            PfxFilePath = "TempTestCert.pfx",
-            Password = "password123",
-            Description = "MyProductBundleMsi",
         };
 
         Compiler.SignAllFilesOptions.SupportedFileFormats = new[] { ".msi", ".exe", ".dll" };
@@ -64,16 +55,19 @@ static class Script
         Bundle bundle = new Bundle("MyProductBundle", msiPackage)
         {
             Version = new Version(0, 1, 0, 0),
-            DigitalSignature = bundleFileSigning
+            DigitalSignature = genericFileSigning
         };
 
-        var customBA = GetSignedCustomBA(genericFileSigning);
-
-        bundle.Application = new ManagedBootstrapperApplication(customBA);
+        bundle.SignApplicationFiles = true;
 
         // Debugger.Launch();
 
-        bundle.Build("MyProductBundleSetup.exe");
+        var bundleFile = bundle.Build("MyProductBundleSetup.exe");
+
+        var info = BurnEngineInspector.InspectBundle(bundleFile);
+
+        Console.WriteLine($"BundleSigned: {info.BundleSigned}");
+        Console.WriteLine($"EngineSigned: {info.EngineSigned}");
     }
 
     static string GetSignedCustomBA(DigitalSignature digitalSignature)
