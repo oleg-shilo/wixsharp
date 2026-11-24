@@ -132,6 +132,7 @@
         <Compile Include="..\..\WixSharp\IniFile.cs" Link="IniFile.cs" />
         <Compile Include="..\..\WixSharp\InstalledFileAction.cs" Link="InstalledFileAction.cs" />
         <Compile Include="..\..\WixSharp\InternetShortcut.cs" Link="InternetShortcut.cs" />
+        <Compile Include="..\..\WixSharp\InvokeRegister.cs" Link="InvokeRegister.cs" />
         <Compile Include="..\..\WixSharp\LaunchApplicationFromExitDialog.cs" Link="LaunchApplicationFromExitDialog.cs" />
         <Compile Include="..\..\WixSharp\LaunchCondition.cs" Link="LaunchCondition.cs" />
         <Compile Include="..\..\WixSharp\MajorUpgrade.cs" Link="MajorUpgrade.cs" />
