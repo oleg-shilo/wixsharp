@@ -146,7 +146,7 @@ namespace WixSharp
             {
                 var message =
                     $"Signing at least one of the signable files failed. Return code: {result}. Check the output for errors. " +
-                    $"You may enable verbose output of signing tools with `Compiler.VerboseSigningOutput = false`";
+                    $"You may enable verbose output of signing tools with `Compiler.VerboseSigningOutput = true`";
 
                 if (filesToSign.Count() == 1)
                     message = $"Signing the file '{filesToSign.FirstOrDefault()}' failed. Return code: {result}.";
@@ -286,14 +286,14 @@ namespace WixSharp
 
         /// <summary>
         /// Indicates whether the bundle is a Burn bundle.
-        /// </summary>        
+        /// </summary>
         public bool IsBurnBundle;
 
         /// <summary>
         /// Indicates whether the engine is signed.
         /// </summary>
-
         public bool EngineSigned;
+
         /// <summary>
         /// Indicates whether the bundle is signed.
         /// </summary>
