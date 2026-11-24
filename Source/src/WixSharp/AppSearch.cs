@@ -303,7 +303,7 @@ namespace WixSharp.CommonTasks
         {
             try
             {
-                return IniFileToDictionary(file)[section][field];
+                return IniFileToDictionary(file, encoding)[section][field];
             }
             catch { }
             return null;

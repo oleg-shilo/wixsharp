@@ -241,6 +241,24 @@ namespace WixSharp.Test
             Assert.Throws<Exception>(() => project.BuildWxs());
         }
 
+        [Fact]
+        public void IniFileValue_UsesSpecifiedEncoding()
+        {
+            var file = io.Path.GetTempFileName();
+            try
+            {
+                // no BOM, so the encoding cannot be auto-detected and must be taken from the argument
+                var encoding = new UnicodeEncoding(bigEndian: false, byteOrderMark: false);
+                io.File.WriteAllText(file, "[Section]\r\nName=Value\r\n", encoding);
+
+                Assert.Equal("Value", AppSearch.IniFileValue(file, "Section", "Name", encoding));
+            }
+            finally
+            {
+                file.DeleteIfExists();
+            }
+        }
+
         // [Fact] //xUnit/VSTest runtime doesn't play nice with MSI interop
         public void AppSearchTest()
         {
