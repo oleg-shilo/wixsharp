@@ -34,15 +34,6 @@ static class Script
             Description = "MyProductBundleMsi",
         };
 
-        var simulatedFileSigning = new GenericSigner
-        {
-            Implementation = (x) =>
-            {
-                Console.WriteLine("Signing " + x + " (simulation)");
-                return 0;
-            }
-        };
-
         Compiler.SignAllFilesOptions.SupportedFileFormats = new[] { ".msi", ".exe", ".dll" };
         Compiler.SignAllFilesOptions.SignEmbeddedAssemblies = true;
 

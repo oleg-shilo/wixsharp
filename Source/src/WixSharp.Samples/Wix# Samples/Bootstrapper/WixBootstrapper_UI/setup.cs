@@ -10,6 +10,7 @@ public class Program
 {
     static public void Main(string[] args)
     {
+        WixTools.SetWixVersion(Environment.CurrentDirectory, null);
         // WixTools.SetWixVersion(Environment.CurrentDirectory, "5.0.2");
 
         if (Environment.GetEnvironmentVariable("IDE") == null)
@@ -92,7 +93,7 @@ public class BuildScript
         // or
         bundle.Application = new ManagedBootstrapperApplication(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-        bundle.DigitalSignature = new DigitalSignatureBootstrapper
+        bundle.DigitalSignature = new DigitalSignature //Bootstrapper
         {
             PfxFilePath = certificateFile,
             Password = "password123",
@@ -108,6 +109,7 @@ public class BuildScript
         bundle.OutDir = System.Reflection.Assembly.GetExecutingAssembly().Location.PathGetDirName();
 
         // System.Diagnostics.Debugger.Launch();
+        Compiler.VerboseSigningOutput = false;
         bundle.SignApplicationFiles = true;
 
         bundle.OutFileName = "my_setup";

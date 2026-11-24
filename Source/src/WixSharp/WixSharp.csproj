@@ -114,6 +114,7 @@
     <Compile Include="AutoGenerationOptions.cs" />
     <Compile Include="Bootstrapper\DotNetCompatibilityCheck.cs" />
     <Compile Include="DirectorySearch.cs" />
+    <Compile Include="InvokeRegister.cs" />
     <Compile Include="Utilities\Utils.cs" />
     <Compile Include="Utilities\SerializingExtensions.cs" />
     <Compile Include="Utilities\AttachedProperties.cs" />

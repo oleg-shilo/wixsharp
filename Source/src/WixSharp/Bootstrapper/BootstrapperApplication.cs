@@ -223,16 +223,21 @@ namespace WixSharp.Bootstrapper
                 files.Add(rawAppAssembly.ToPayload());
             }
 
-            files.Add(bootstrapperCoreConfig.ToPayload("WixToolset.Mba.Host.config"));
             files.AddRange(this.Payloads);
-
-            files = files.DistinctBy(x => x.SourceFile).ToList(); //note %this% it already resolved at this stage into an absolute path
+            files.Add(bootstrapperCoreConfig.ToPayload("WixToolset.Mba.Host.config"));
 
             foreach (var item in frameworkAssemblies)
             {
                 if (!Payloads.Any(x => Path.GetFileName(x.SourceFile).SameAs(Path.GetFileName(item))))
                     files.Add(item.ToPayload());
             }
+
+            files = files
+                .OrderBy(x => !x.IsBootstrapperAppAssembly).ToList(); // the convention is that the BA assembly is the first payload in the list
+
+            files = files
+                .DistinctBy(x => x.SourceFile)
+                .ToList(); //note %this% it already resolved at this stage into an absolute path
 
             // starting from WiX5 the BA assembly can no longer be a payload but the attribute of the BootstrapperApplication element.
             if (WixTools.GlobalWixVersion.Major >= 5)

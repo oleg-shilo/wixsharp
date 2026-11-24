@@ -127,6 +127,11 @@ namespace WixSharp
         /// The verbose build output (e.g. wix build command output).
         /// </summary>
         static public bool VerboseOutput;
+
+        /// <summary>
+        /// Gets or sets whether signing operations emit verbose output.
+        /// </summary>
+        static public bool VerboseSigningOutput = false;
         /// <summary>
         /// Contains settings for XML auto-generation aspects that are directly related to the 
         /// WXS XML schema. IE enforcement of ComponentId uniqness, ID allocation, etc.

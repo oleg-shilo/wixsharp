@@ -32,6 +32,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -467,6 +468,9 @@ namespace WixSharp.CommonTasks
             if (password.IsNotEmpty())
                 tool.ConsoleOut = (line) => Compiler.OutputWriteLine(line.Replace(password, "***"));
 
+            if (!Compiler.VerboseSigningOutput)
+                tool.ConsoleOut = (line) => { };
+
             var retval = shouldSignSHA1 ? tool.ConsoleRun() : 0;
             var sha1Signed = retval == 0 || retval == 2;
             if (!shouldSignSHA256 || !sha1Signed)
@@ -693,8 +697,7 @@ namespace WixSharp.CommonTasks
 
         /// <summary>
         /// Applies digital signature to a bootstrapper engine with MS <c>SignTool.exe</c> utility.
-        /// Note : this method doesn't sign the bootstrapper file but the engine only.
-        /// Please use <see cref="DigitalySignBootstrapper"/> for signing both (bootstrapper and bootstrapper engine) instead.
+        /// Note : this method doesn't sign the bootstrapper file but its embedded engine only. Thus this method is a preparation step before signing the bootstrapper file.
         /// <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about Bootstrapper engine signing</a>
         /// </summary>
         /// <param name="bootstrapperFileToSign">The Bootstrapper file to sign.</param>
@@ -727,7 +730,28 @@ namespace WixSharp.CommonTasks
         /// <exception cref="Exception">Thrown if no engine file is found after detaching it from the bundle.</exception>
         static public int DigitallySignBootstrapperEngine(string bootstrapperFileToSign, string pfxFile, string timeURL, string password,
             string optionalArguments = null, string wellKnownLocations = null, StoreType certificateStore = StoreType.file, SignOutputLevel outputLevel = SignOutputLevel.Verbose, HashAlgorithmType hashAlgorithm = HashAlgorithmType.sha1)
-
+        {
+            InvokeRegister.Record();
+            return DigitallySignBootstrapperEngineImpl(
+                bootstrapperFileToSign,
+                (fileToSign) => DigitallySign(fileToSign, pfxFile, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm));
+        }
+        /// <summary>
+        /// Applies digital signature to a bootstrapper engine with MS <c>SignTool.exe</c> utility.
+        /// Note : this method doesn't sign the bootstrapper file but its embedded engine only. Thus this method is a preparation step before signing the bootstrapper file.
+        /// <a href="http://wixtoolset.org/documentation/manual/v3/overview/insignia.html">See more about Bootstrapper engine signing</a>
+        /// </summary>
+        /// <param name="signer">The digital signature provider used to sign the file.</param>
+        /// <param name="bootstrapperFileToSign">The path to the bootstrapper engine file to sign.</param>
+        /// <returns>The result of the signing operation.</returns>
+        static public int DigitallySignBootstrapperEngine(this IDigitalSignature signer, string bootstrapperFileToSign)
+        {
+            InvokeRegister.Record();
+            return DigitallySignBootstrapperEngineImpl(
+                bootstrapperFileToSign,
+                (fileToSign) => signer.Apply(fileToSign));
+        }
+        static int DigitallySignBootstrapperEngineImpl(string bootstrapperFileToSign, Func<string, int> signFile)
         {
             string enginePath;
 
@@ -752,7 +776,7 @@ namespace WixSharp.CommonTasks
                     return 0; // already signed, nothing to do;
 
                 // Then sign the detached engine
-                int retval = DigitallySign(enginePath, pfxFile, timeURL, password, optionalArguments, certificateStore, outputLevel, hashAlgorithm);
+                int retval = signFile(enginePath);
                 if (retval != 0)
                     return retval;
 

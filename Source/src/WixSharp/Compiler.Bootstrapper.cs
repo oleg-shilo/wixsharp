@@ -133,7 +133,20 @@ namespace WixSharp
                     Compiler.OutputWriteLine(" UpgradeCode: {" + project.UpgradeCode + "}\n");
 
                     // project.DigitalSignature.ApplyAndCheck(outFile);
-                    project.DigitalSignature.SignFiles(new[] { outFile });
+                    if (project.DigitalSignature != null)
+                    {
+                        if (project.DigitalSignature.GetType() == typeof(DigitalSignatureBootstrapper))
+                        {
+                            // DigitalSignatureBootstrapper is a special case of DigitalSignature that
+                            // signs the bootstrapper engine first.
+                            project.DigitalSignature.ApplyAndCheck(outFile);
+                        }
+                        else
+                        {
+                            project.DigitalSignature.SignBootstrapperEngine(outFile);
+                            project.DigitalSignature.ApplyAndCheck(outFile);
+                        }
+                    }
                 }
                 else
                 {
