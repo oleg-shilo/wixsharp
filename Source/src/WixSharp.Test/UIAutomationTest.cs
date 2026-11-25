@@ -250,6 +250,35 @@ namespace WixSharp.Test
 
     static class TestExtensions
     {
+        public static (int exitCode, string output) run(this string exe, string args = "", string workingDir = "")
+        {
+            var output = new System.Text.StringBuilder();
+
+            using (var proc = Process.Start(
+                new ProcessStartInfo
+                {
+                    WorkingDirectory = workingDir.PathGetFullPath(),
+                    FileName = exe,
+                    Arguments = args,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }))
+            {
+                string line = null;
+                while (null != (line = proc.StandardOutput.ReadLine()))
+                    output.AppendLine(line);
+
+                string error = proc.StandardError.ReadToEnd();
+                if (!error.IsEmpty())
+                    output.AppendLine(error);
+                proc.WaitForExit();
+
+                return (proc.ExitCode, output.ToString());
+            }
+        }
+
         public static void Clear(this string path) => IO.File.WriteAllText(path, "");
 
         public static void AppendLine(this string path, string text)

@@ -64,11 +64,14 @@ namespace WixSharp.Test
         }
 
         [Fact]
-        public void ComServerInstall()
+        public void Can_Build_For_DotnetCore()
         {
-            //string dll = @"WixSharp\src\WixSharp.Samples\Wix# Samples\InstallCom\ATLSimpleServ.dll";
+            // just to verify that the primary codebase changes did not break the build for .NET Core.
+            var solutionDir = @"..\..\..\NET-Core\WixSharp.Core".PathGetFullPath();
 
-            //var wxs = Tasks.EmmitComWxs(dll);
+            var result = "dotnet".run("build", solutionDir);
+
+            Assert.Equal(0, result.exitCode);
         }
 
         [Fact]

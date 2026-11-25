@@ -138,7 +138,7 @@ namespace WixSharp.CommonTasks
         static string signTool;
 
         /// <summary>
-        /// The path to the sign tool (sign.exe or insignia exe). It may not be distributed with WiX SDK.
+        /// The path to the sign tool (signtool.exe or insignia exe). It may not be distributed with WiX SDK.
         /// </summary>
         static public string SignTool
         {
