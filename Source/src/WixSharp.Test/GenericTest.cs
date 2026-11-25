@@ -64,7 +64,7 @@ namespace WixSharp.Test
         }
 
         [Fact]
-        public void Can_Build_For_DotnetCore()
+        public void CanBuildForDotnetCore()
         {
             // just to verify that the primary codebase changes did not break the build for .NET Core.
             var solutionDir = @"..\..\..\NET-Core\WixSharp.Core".PathGetFullPath();
@@ -170,11 +170,10 @@ namespace WixSharp.Test
         }
 
         [Fact]
-        public void Can_Init_ManagedUI_Licalization_From_WiX3_Wxl()
+        public void CanInitManagedUILicalizationFromWiX3Wxl()
         {
             var data = new ResourcesData();
 
-            // var wxlFile = @"D:\dev\Galos\wixsharp-wix4\Source\src\WixSharp.Samples\Wix# Samples\Managed Setup\MultiLanguageUI\WixUI_de-DE.wxl".MakeRelativeTo(Environment.CurrentDirectory);
             var wxlFile = @"..\..\..\WixSharp.Samples\Wix# Samples\Managed Setup\MultiLanguageUI\WixUI_de-DE.wxl";
             data.InitFromWxl(io.File.ReadAllBytes(wxlFile));
         }
@@ -245,7 +244,7 @@ namespace WixSharp.Test
         }
 
         [Fact]
-        public void IniFileValue_UsesSpecifiedEncoding()
+        public void IniFileValueUsesSpecifiedEncoding()
         {
             var file = io.Path.GetTempFileName();
             try
@@ -285,7 +284,7 @@ namespace WixSharp.Test
         }
 
         //[Fact]
-        public void MsiParser_InstallDir()
+        public void MsiParserInstallDir()
         {
             string msi = @"E:\Projects\WixSharp\src\WixSharp.Samples\Wix# Samples\Shortcuts\setup.msi";
             var parser = new WixMsi.UI.MsiParser(msi);
