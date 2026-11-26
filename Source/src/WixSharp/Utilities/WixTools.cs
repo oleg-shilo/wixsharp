@@ -312,7 +312,7 @@ namespace WixSharp.CommonTasks
 
                 if (version == null)
                 {
-                    if (!Directory.GetFiles(configDir).Any() && !Directory.GetDirectories(configDir).Any())
+                    if (configDir.PathExists() && !Directory.GetFiles(configDir).Any() && !Directory.GetDirectories(configDir).Any())
                         configDir.DeleteIfExists();
                     else
                         configFile.DeleteIfExists();

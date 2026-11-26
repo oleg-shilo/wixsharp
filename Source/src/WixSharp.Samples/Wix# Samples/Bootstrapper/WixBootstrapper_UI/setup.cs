@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using WixSharp;
@@ -93,11 +94,11 @@ public class BuildScript
         // or
         bundle.Application = new ManagedBootstrapperApplication(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-        bundle.DigitalSignature = new DigitalSignature //Bootstrapper
+        bundle.DigitalSignature = new DigitalSignature
         {
             PfxFilePath = certificateFile,
             Password = "password123",
-            Description = "MyProductMsi",
+            Description = "MyProductBundle",
         };
 
         if (!(bundle.DigitalSignature as DigitalSignature).PfxFilePath.FileExists())
