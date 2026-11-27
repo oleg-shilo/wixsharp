@@ -78,7 +78,7 @@ namespace WixSharp.CommonTasks
         /// <returns>The full directory path of the matching package version if found; otherwise, null.</returns>
         public static string PackageDir(string name)
         {
-            var package = WixDtfPackages.FirstOrDefault(x => x.package == name);
+            var package = WixDtfPackages.FirstOrDefault(x => string.Equals(x.package, name, StringComparison.OrdinalIgnoreCase)); // NuGet package names are case-insensitive (e.g. "wixtoolset.heat")
             var preferredVersion = package.version ?? WixTools.GlobalWixVersion?.ToString() ?? "*";
 
             var packageDir = NuGetDir.PathCombine(name);
@@ -87,7 +87,9 @@ namespace WixSharp.CommonTasks
                 return null;
 
             var latestVersion = Directory.GetDirectories(NuGetDir.PathCombine(name))
-                    .Select(x => new { Directory = x, Version = x.PathGetFileName().ToRawVersion() }) // raw version will ensure picking only the stable non pre-release versions                    .OrderBy(x => x.Version)
+                    .Where(x => !x.PathGetFileName().Contains("-")) // only stable versions; a pre-release is picked only if it is the preferred version
+                    .Select(x => new { Directory = x, Version = x.PathGetFileName().ToRawVersion() })
+                    .OrderBy(x => x.Version)
                     .LastOrDefault()?.Directory;
 
             var matchingVersion = Directory.GetDirectories(NuGetDir.PathCombine(name))

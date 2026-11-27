@@ -64,6 +64,68 @@ namespace WixSharp.Test
         }
 
         [Fact]
+        public void PackageDirPicksHighestStableVersion()
+        {
+            var nugetDir = io.Path.GetTempPath().PathCombine(Guid.NewGuid().ToString());
+            var originalNugetDir = "NUGET_PACKAGES".GetEnvVar();
+            try
+            {
+                Environment.SetEnvironmentVariable("NUGET_PACKAGES", nugetDir);
+                WixTools.WixDtfPackages = new[] { (package: "test.package", version: "*") };
+
+                string pickedVersion(params string[] versions)
+                {
+                    var packageDir = nugetDir.PathCombine("test.package");
+                    if (io.Directory.Exists(packageDir))
+                        io.Directory.Delete(packageDir, true);
+
+                    foreach (var version in versions)
+                        io.Directory.CreateDirectory(packageDir.PathCombine(version));
+
+                    return WixTools.PackageDir("test.package")?.PathGetFileName();
+                }
+
+                Assert.Equal("5.0.10", pickedVersion("5.0.9", "5.0.10"));     // numeric, not alphabetical order
+                Assert.Equal("5.0.2", pickedVersion("5.0.2", "6.0.0-rc.1"));   // pre-releases are not picked as the latest version
+                Assert.Equal("5.0.2", pickedVersion("5.0.2", "5.0.2-rc.1"));
+                Assert.Null(pickedVersion("6.0.0-rc.1", "6.0.0-rc.2"));         // no stable version available
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("NUGET_PACKAGES", originalNugetDir);
+                WixTools.WixDtfPackages = null;
+                if (io.Directory.Exists(nugetDir))
+                    io.Directory.Delete(nugetDir, true);
+            }
+        }
+
+        [Fact]
+        public void PackageDirUsesConfiguredVersionRegardlessOfNameCase()
+        {
+            var nugetDir = io.Path.GetTempPath().PathCombine(Guid.NewGuid().ToString());
+            var originalNugetDir = "NUGET_PACKAGES".GetEnvVar();
+            try
+            {
+                Environment.SetEnvironmentVariable("NUGET_PACKAGES", nugetDir);
+                io.Directory.CreateDirectory(nugetDir.PathCombine("wixtoolset.dtf.customaction", "4.0.1"));
+                io.Directory.CreateDirectory(nugetDir.PathCombine("wixtoolset.dtf.customaction", "5.0.2"));
+
+                WixTools.WixDtfPackages = new[] { (package: "WixToolset.Dtf.CustomAction", version: "4.0.1") };
+
+                // WixSharp looks the package up by its lower case NuGet folder name (e.g. WixTools.SfxCAFor)
+                Assert.Equal("4.0.1", WixTools.PackageDir("wixtoolset.dtf.customaction").PathGetFileName());
+                Assert.Equal("4.0.1", WixTools.PackageDir("WixToolset.Dtf.CustomAction").PathGetFileName());
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("NUGET_PACKAGES", originalNugetDir);
+                WixTools.WixDtfPackages = null;
+                if (io.Directory.Exists(nugetDir))
+                    io.Directory.Delete(nugetDir, true);
+            }
+        }
+
+        [Fact]
         public void CanBuildForDotnetCore()
         {
             // just to verify that the primary codebase changes did not break the build for .NET Core.
