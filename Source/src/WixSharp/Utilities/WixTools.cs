@@ -78,7 +78,7 @@ namespace WixSharp.CommonTasks
         /// <returns>The full directory path of the matching package version if found; otherwise, null.</returns>
         public static string PackageDir(string name)
         {
-            var package = WixDtfPackages.FirstOrDefault(x => string.Equals(x.package, name, StringComparison.OrdinalIgnoreCase)); // NuGet package names are case-insensitive (e.g. "wixtoolset.heat")
+            var package = WixDtfPackages.FirstOrDefault(x => x.package.SameAs(name, ignoreCase: true)); // NuGet package names are case-insensitive (e.g. "wixtoolset.heat")
             var preferredVersion = package.version ?? WixTools.GlobalWixVersion?.ToString() ?? "*";
 
             var packageDir = NuGetDir.PathCombine(name);
